@@ -16,8 +16,10 @@ skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
 # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
 # skim = "skimmed_SR_Met50GeV"
+# skim = "skimmed_SemimuonicSR_Met50GeV"
 
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
+# base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
 
 applyScaleFactors = {
   "muon": False,
@@ -92,6 +94,12 @@ samples = (
   "collision_data2018/SingleMuon2018D",
   
   # Signal
+  # "signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e2mm_nEvents-100",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-1000",
   # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",

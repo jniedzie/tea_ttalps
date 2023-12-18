@@ -231,6 +231,93 @@ void TTAlpsHistogramFiller::FillJetHistograms(const shared_ptr<Event> event){
   }
 }
 
+void TTAlpsHistogramFiller::FillLooseDSAMuonsHistograms(const shared_ptr<Event> event){
+  float weight = GetEventWeight(event);
+  auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
+
+  float nLooseDSAMuons = looseDSAMuons->size();
+  histogramsHandler->Fill("Event_nLooseDSAMuons", nLooseDSAMuons, weight);
+
+  for(auto dsaMuonObj : *looseDSAMuons){
+    float dxy = dsaMuonObj->Get("dxyPV");
+    float dz = dsaMuonObj->Get("dzPV");
+    float pt = dsaMuonObj->Get("pt");
+    float eta = dsaMuonObj->Get("eta");
+
+    histogramsHandler->Fill("LooseDSAMuons_dxy", dxy, weight);
+    histogramsHandler->Fill("LooseDSAMuons_dz", dz, weight);
+    histogramsHandler->Fill("LooseDSAMuons_pt", pt, weight);
+    histogramsHandler->Fill("LooseDSAMuons_eta", eta, weight);
+  }
+
+
+}
+
+void TTAlpsHistogramFiller::FillAllLooseMuonsHistograms(const shared_ptr<Event> event){
+  float weight = GetEventWeight(event);
+  auto looseMuons = event->GetCollection("LooseMuons");
+  auto looseDsaMuons = event->GetCollection("LooseDSAMuons");
+
+  PhysicsObjects allLooseMuons;
+
+  float min_deltaR = 99999;
+  float pt, eta, dxy, dz, dxyPV, dzPV;
+
+  for(auto muonObj : *looseMuons){
+    auto muon = asMuon(muonObj);
+    auto muonP4 = muon->GetFourVector();
+
+    allLooseMuons.push_back(muonObj);
+
+    float dxy = muonObj->Get("dxy");
+    float dz = muonObj->Get("dz");
+    pt = muonObj->Get("pt");
+    eta = muonObj->Get("eta");
+
+    histogramsHandler->Fill("AllLooseMuons_dxy", dxy, weight);
+    histogramsHandler->Fill("AllLooseMuons_dz", dz, weight);
+    histogramsHandler->Fill("AllLooseMuons_pt", pt, weight);
+    histogramsHandler->Fill("AllLooseMuons_eta", eta, weight);
+
+    for(auto dsaMuonObj : *looseDsaMuons){
+      auto dsaMuon = asMuon(dsaMuonObj);
+      auto dsaMuonP4 = dsaMuon->GetFourVector();
+      
+      if(muonP4.DeltaR(dsaMuonP4) < 0.01) continue;
+
+      float dxyPV = dsaMuonObj->Get("dxyPV");
+      float dzPV = dsaMuonObj->Get("dzPV");
+      pt = dsaMuonObj->Get("pt");
+      eta = dsaMuonObj->Get("eta");
+      histogramsHandler->Fill("AllLooseMuons_pt", pt, weight);
+      histogramsHandler->Fill("AllLooseMuons_eta", eta, weight);
+      histogramsHandler->Fill("AllLooseMuons_dxy", dxyPV, weight);
+      histogramsHandler->Fill("AllLooseMuons_dz", dzPV, weight);
+      allLooseMuons.push_back(dsaMuonObj);
+    }
+  }
+  float nAllLooseMuons = allLooseMuons.size();
+  histogramsHandler->Fill("Event_nAllLooseMuons", nAllLooseMuons, weight);
+  if (nAllLooseMuons < 2) {
+    warn() << "Not enough total muons in event to fill dimuon histograms" << endl;
+    return;
+  }
+
+  for (int iMuon1 = 0; iMuon1 < allLooseMuons.size(); iMuon1++) {
+    auto muon1 = asMuon(allLooseMuons.at(iMuon1));
+    TLorentzVector muon1vector = muon1->GetFourVector();
+
+    for (int iMuon2 = iMuon1 + 1; iMuon2 < allLooseMuons.size(); iMuon2++) {
+      auto muon2 = asMuon(allLooseMuons.at(iMuon2));
+      TLorentzVector muon2vector = muon2->GetFourVector();
+      float deltaR = muon1vector.DeltaR(muon2vector);
+      min_deltaR = std::min(min_deltaR,deltaR);
+      histogramsHandler->Fill("AllLooseMuons_deltaR", deltaR, weight);
+    }
+  }
+  histogramsHandler->Fill("AllLooseMuons_minDeltaR", min_deltaR, weight);
+}
+
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const shared_ptr<Event> event) {
   for (auto &[histName, params] : ttalpsHistVariables) {
     if (params.variable == "subleadingPt") {
@@ -244,3 +331,44 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const shared_ptr<Event> ev
   FillMuonMetHistograms(event);
   FillJetHistograms(event);
 }
+
+void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesFromLLPNanoAOD(const shared_ptr<Event> event) {
+  FillLooseDSAMuonsHistograms(event);
+  FillAllLooseMuonsHistograms(event);
+}
+
+void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> event) {
+  float weight = GetEventWeight(event);
+
+  auto genParticles = event->GetCollection("GenPart");
+  for(auto genpart : *genParticles)
+  {
+    auto genParticle = asGenParticle(genpart);
+    int pdgid = genParticle->GetPdgId();
+    if(abs(pdgid) != 13) continue;
+
+    int motherIndex = genParticle->GetMotherIndex();
+    if (motherIndex < 0) continue;
+    auto mother = asGenParticle(genParticles->at(motherIndex));
+    int mother_pdgid = mother->GetPdgId();
+    if(mother_pdgid != 54) continue;
+    
+    float vx = genpart->Get("vx");
+    float vy = genpart->Get("vy");
+    float vz = genpart->Get("vz");
+    float pt = genpart->Get("pt");
+    float mass = genpart->Get("mass");
+    float boost = abs(pt)/mass;
+    float vxy = sqrt(vx*vx + vy*vy);
+    float proper_vxy = vxy/boost;
+    histogramsHandler->Fill("GenMuonFromALP_vx"         , vx,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_vy"         , vy,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_vz"         , vz,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_pt"         , pt,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_mass"       , mass,        weight);
+    histogramsHandler->Fill("GenMuonFromALP_boost"      , boost,       weight);
+    histogramsHandler->Fill("GenMuonFromALP_vxy"        , vxy,         weight);
+    histogramsHandler->Fill("GenMuonFromALP_proper_vxy" , proper_vxy,  weight);
+  }
+}
+
