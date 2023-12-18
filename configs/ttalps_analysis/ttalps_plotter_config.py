@@ -84,7 +84,7 @@ default_norm = NormalizationType.to_lumi
 
 plots_from_LLPNanoAOD = False
 
-if(plots_from_LLPNanoAOD):
+if plots_from_LLPNanoAOD:
   default_norm = NormalizationType.to_background
 
 histograms = (
@@ -199,7 +199,7 @@ signal_histograms = (
 
 )
 
-if(plots_from_LLPNanoAOD):
+if plots_from_LLPNanoAOD:
   histograms = histograms + signal_histograms
 
 weightsBranchName = "genWeight"

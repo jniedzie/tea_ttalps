@@ -239,15 +239,10 @@ void TTAlpsHistogramFiller::FillLooseDSAMuonsHistograms(const shared_ptr<Event> 
   histogramsHandler->Fill("Event_nLooseDSAMuons", nLooseDSAMuons, weight);
 
   for(auto dsaMuonObj : *looseDSAMuons){
-    float dxy = dsaMuonObj->Get("dxyPV");
-    float dz = dsaMuonObj->Get("dzPV");
-    float pt = dsaMuonObj->Get("pt");
-    float eta = dsaMuonObj->Get("eta");
-
-    histogramsHandler->Fill("LooseDSAMuons_dxy", dxy, weight);
-    histogramsHandler->Fill("LooseDSAMuons_dz", dz, weight);
-    histogramsHandler->Fill("LooseDSAMuons_pt", pt, weight);
-    histogramsHandler->Fill("LooseDSAMuons_eta", eta, weight);
+    histogramsHandler->Fill("LooseDSAMuons_dxy", dsaMuonObj->Get("dxyPV"), weight);
+    histogramsHandler->Fill("LooseDSAMuons_dz", dsaMuonObj->Get("dzPV"), weight);
+    histogramsHandler->Fill("LooseDSAMuons_pt", dsaMuonObj->Get("pt"), weight);
+    histogramsHandler->Fill("LooseDSAMuons_eta", dsaMuonObj->Get("eta"), weight);
   }
 
 

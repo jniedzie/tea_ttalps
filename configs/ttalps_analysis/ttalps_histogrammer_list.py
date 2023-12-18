@@ -94,15 +94,12 @@ samples = (
   "collision_data2018/SingleMuon2018D",
   
   # Signal
-  # "signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
-  # "signals/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100",
-  # "signals/tta_mAlp-0p35GeV_ctau-1e2mm_nEvents-100",
-  # "signals/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100",
-  # "signals/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000",
-  # "signals/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-1000",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e7mm",
 )
 
 # this has to be here, otherwise the script will not work:
