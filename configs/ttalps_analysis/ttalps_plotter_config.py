@@ -291,6 +291,55 @@ samples = (
   
   # Backgrounds
   Sample(
+    name="TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
+    file_path=f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/{hist_path}/histograms.root",
+    type=SampleType.background,
+    cross_sections=cross_sections,
+    line_alpha=0,
+    fill_color=ROOT.kRed+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="tt (semi-leptonic)",
+  ),
+
+  Sample(
+    name="TTToHadronic_TuneCP5_13TeV-powheg-pythia8",
+    file_path=f"{base_path}/backgrounds2018/TTToHadronic/{skim}/{hist_path}/histograms.root",
+    type=SampleType.background,
+    cross_sections=cross_sections,
+    line_alpha=0,
+    fill_color=ROOT.kRed+3,
+    fill_alpha=1.0,
+    marker_size=0,
+    legend_description="tt (hadronic)",
+  ),
+
+  Sample(
+    name="TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8",
+    file_path=f"{base_path}/backgrounds2018/TTTo2L2Nu/{skim}/{hist_path}/histograms.root",
+    type=SampleType.background,
+    cross_sections=cross_sections,
+    line_alpha=0,
+    fill_color=ROOT.kRed+4,
+    fill_alpha=1.0,
+    marker_size=0,
+    legend_description="tt (leptonic)",
+  ),
+
+  Sample(
+    name="ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
+    file_path=f"{base_path}/backgrounds2018/ST_tW_top/{skim}/{hist_path}/histograms.root",
+    type=SampleType.background,
+    cross_sections=cross_sections,
+    line_alpha=0,
+    fill_color=color_palette_wong[1],
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="Single top (tW)",
+    custom_legend=Legend(legend_max_x-2*legend_width, legend_max_y-1*legend_height, legend_max_x-legend_width, legend_max_y-0*legend_height, "f")
+  ),
+
+  Sample(
     name="ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
     file_path=f"{base_path}/backgrounds2018/ST_tW_antitop/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
