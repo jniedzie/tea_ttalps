@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
       ttalpsHistogramsFiller->FillNormCheck(event);
-      histogramFiller->FillDefaultVariables(event);
+      ttalpsHistogramsFiller->FillDefaultVariables(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsVariables(event);
     }
 
