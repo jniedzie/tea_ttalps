@@ -27,6 +27,8 @@ class ScaleFactorsManager {
 
   float GetPileupScaleFactor(int nVertices);
 
+  float GetBTagScaleFactor(float pt, std::string ID);
+
  private:
   ScaleFactorsManager();
   ~ScaleFactorsManager() {}
@@ -43,6 +45,7 @@ class ScaleFactorsManager {
   float GetScaleFactor(std::string name, float eta, float pt);
 
   TH1D *pileupSFvalues;
+  std::map<std::string, TF1*> btaggingSFvalues;
 };
 
 struct MuonID {

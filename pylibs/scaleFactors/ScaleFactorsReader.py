@@ -63,6 +63,58 @@ class ScaleFactorsReader:
 
     return result
 
+  def getBtaggingScaleFactors(self, filePath):
+    with open(filePath) as jsonFile:
+      json_content = json.load(jsonFile)
+    
+    result = {}
+    
+    corrections = json_content["corrections"]
+    
+    for correction_dict in corrections:
+      
+      name = correction_dict["name"]
+      if "deepJet_mujets" not in name:
+        continue
+      print(f"{name=}")
+      
+      if "generic_formulas" in correction_dict:
+        generic_formula = correction_dict["generic_formulas"][0]
+        expression = generic_formula["expression"]
+      
+      data = correction_dict["data"]["content"]
+      
+      central_data = None
+      
+      for data_dict in data:
+        if data_dict["key"] == "central":
+          central_data = data_dict["value"]["content"]
+          break
+      
+      if central_data is None:
+        fatal("Couldn't find the central data in the JSON file: " + filePath)
+        exit(1)
+      
+      for data_dict in central_data:
+        wp_name = data_dict["key"]
+        values_list = data_dict["value"]["content"]
+        
+        params = None
+        
+        for values_dict in values_list:
+          jet_id = values_dict["key"]
+          if jet_id == 5:
+            params = values_dict["value"]["content"][0]["content"][0]["parameters"]
+        
+        if params is None:
+          fatal("Couldn't find the parameters in the JSON file: " + filePath)
+          exit(1)
+          
+        info(f"{wp_name=}, {params=}")
+        result[name+"_"+wp_name] = (expression, params)
+    
+    return result
+
   def __getTriggerSFvalues(self, data):
     sf_values = []
     

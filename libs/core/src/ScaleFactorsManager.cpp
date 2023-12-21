@@ -41,6 +41,21 @@ ScaleFactorsManager::ScaleFactorsManager() {
     info() << "Reading pileup scale factors from file: " << pileupScaleFactorsPath << "\thistogram: " << pileupScaleFactorsHistName << endl;
     pileupSFvalues = (TH1D *)TFile::Open(pileupScaleFactorsPath.c_str())->Get(pileupScaleFactorsHistName.c_str());
   }
+
+  if(applyScaleFactors["bTagging"]) {
+    map<string, ScaleFactorsTuple> bTaggingSFs;
+    config.GetScaleFactors("bTaggingSFs", bTaggingSFs);
+
+    for(auto &[name, values] : bTaggingSFs) {
+      string formula = get<0>(values);
+      auto function = new TF1(name.c_str(), formula.c_str());
+      vector<float> params = get<1>(values);
+      for(int i=0; i<params.size(); i++) {
+        function->SetParameter(i, params[i]);
+      }
+      btaggingSFvalues[name] = function;
+    }
+  }
 }
 
 void ScaleFactorsManager::CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs, string outputPath, string histName) {
@@ -307,5 +322,22 @@ float ScaleFactorsManager::GetPileupScaleFactor(int nVertices) {
   }
 
   float sf = pileupSFvalues->GetBinContent(pileupSFvalues->FindFixBin(nVertices));
+  return sf;
+}
+
+float ScaleFactorsManager::GetBTagScaleFactor(float pt, std::string ID)
+{
+  if(!applyScaleFactors["b_tagging"]) return 1.0;
+
+  if(pt < 20) {
+    warn() << "Jet pt is lower than the lowest allowed value in b-tagging SF histogram" << endl;
+    return 1.0;
+  }
+  if(pt > 1000) {
+    warn() << "Jet pt is higher than the highest allowed value in b-tagging SF histogram" << endl;
+    return 1.0;
+  }
+
+  float sf = btaggingSFvalues["deepJet_mujets_"+ID]->Eval(pt);
   return sf;
 }

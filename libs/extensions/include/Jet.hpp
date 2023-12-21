@@ -29,6 +29,8 @@ class Jet {
 
   TLorentzVector GetFourVector();
 
+  float GetScaleFactor(std::string ID);
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 };

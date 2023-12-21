@@ -342,6 +342,34 @@ void ConfigManager::GetScaleFactors(string name, map<string, ScaleFactorsMap> &s
   }
 }
 
+void ConfigManager::GetScaleFactors(string name, map<string, ScaleFactorsTuple> &scaleFactors) {
+  PyObject *pythonDict = GetPythonDict(name.c_str());
+
+  PyObject *SFname, *SFvalues;
+  Py_ssize_t pos0 = 0;
+
+  while (PyDict_Next(pythonDict, &pos0, &SFname, &SFvalues)) {
+    if (!PyUnicode_Check(SFname)) {
+      error() << "Failed retriving python scale factor name (string)" << endl;
+      continue;
+    }
+    string SFnameStr = PyUnicode_AsUTF8(SFname);
+    scaleFactors[SFnameStr] = ScaleFactorsTuple();
+
+    PyObject *tupleFormula = GetItem(SFvalues, 0);
+    string formulaString = PyUnicode_AsUTF8(tupleFormula);
+    
+    PyObject *tupleParams = GetItem(SFvalues, 1);
+    
+    vector<float> params;
+    for (Py_ssize_t i = 0; i < GetCollectionSize(tupleParams); ++i) {
+      PyObject *item = GetItem(tupleParams, i);
+      params.push_back(PyFloat_AsDouble(item));
+    }
+    scaleFactors[SFnameStr] = {formulaString, params};    
+  }
+}
+
 void ConfigManager::GetHistogramsParams(map<std::string, HistogramParams> &histogramsParams, string collectionName) {
   PyObject *pythonList = GetPythonList(collectionName);
 

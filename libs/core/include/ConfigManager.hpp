@@ -31,6 +31,7 @@ class ConfigManager {
   void GetHistogramsParams(std::map<std::string, HistogramParams2D> &histogramsParams, std::string collectionName);
 
   void GetScaleFactors(std::string name, std::map<std::string, ScaleFactorsMap> &scaleFactors);
+  void GetScaleFactors(std::string name, std::map<std::string, ScaleFactorsTuple> &scaleFactors);
 
   void GetSelections(std::vector<std::pair<std::string, std::pair<float, float>>> &selections);
 

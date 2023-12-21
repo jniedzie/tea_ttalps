@@ -119,6 +119,7 @@ struct ExtraCollection {
 };
 
 typedef std::map<std::tuple<float, float>, std::map<std::tuple<float, float>, std::map<std::string, float>>> ScaleFactorsMap;
+typedef std::tuple<std::string, std::vector<float>> ScaleFactorsTuple;
 
 struct HistogramParams {
   std::string collection, variable, directory;
