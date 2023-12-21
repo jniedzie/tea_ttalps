@@ -18,7 +18,7 @@ muonSFs = {
   **scaleFactorsReader.getMuonTriggerScaleFactors("../data/Efficiencies_muon_generalTracks_Z_Run2018_UL_SingleMuonTriggers_schemaV2.json"),
 }
 
-b_taggingSFs = {
+bTaggingSFs = {
   # B-tagging SFs
   **scaleFactorsReader.getBtaggingScaleFactors("../data/b_tagging/btagging_UL2018.json"),
 }
