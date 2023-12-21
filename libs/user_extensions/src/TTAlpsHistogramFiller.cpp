@@ -46,13 +46,27 @@ bool TTAlpsHistogramFiller::EndsWithTriggerName(string name) {
   return find(triggerNames.begin(), triggerNames.end(), lastPart) != triggerNames.end();
 }
 
+float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> object, string collectionName) {
+  float weight = 1.0;
+  if (collectionName == "Muon" || object->GetOriginalCollection() == "Muon") {
+    weight *= asMuon(object)->GetScaleFactor();
+  }
+  else if (collectionName == "GoodTightBtaggedJets") {
+    weight *= asJet(object)->GetScaleFactor("T");
+  }
+  else if (collectionName == "GoodMediumBtaggedJets") {
+    weight *= asJet(object)->GetScaleFactor("M");
+  }
+  return weight;
+}
+
 void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) {
   for (auto &[title, params] : defaultHistVariables) {
     string collectionName = params.collection;
     string branchName = params.variable;
 
     float value;
-    float weight = GetEventWeight(event);
+    float eventWeight = GetEventWeight(event);
 
     if (collectionName == "Event") {
       if (branchName[0] == 'n') {
@@ -60,15 +74,13 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
       } else {
         value = event->GetAsFloat(branchName);
       }
-      histogramsHandler->Fill(title, value, weight);
+      histogramsHandler->Fill(title, value, eventWeight);
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
         value = object->GetAsFloat(branchName);
-        if (collectionName == "Muon" || object->GetOriginalCollection() == "Muon") {
-          weight *= asMuon(object)->GetScaleFactor();
-        }
-        histogramsHandler->Fill(title, value, weight);
+        float objectWeight = GetObjectWeight(object, collectionName);
+        histogramsHandler->Fill(title, value, eventWeight*objectWeight);
       }
     }
   }
@@ -132,10 +144,7 @@ void TTAlpsHistogramFiller::FillLeadingPt(const shared_ptr<Event> event, string 
   if (!maxPtObject) return;
 
   float weight = GetEventWeight(event);
-
-  if (params.collection == "Muon" || maxPtObject->GetOriginalCollection() == "Muon") {
-    weight *= asMuon(maxPtObject)->GetScaleFactor();
-  }
+  weight *= GetObjectWeight(maxPtObject, params.collection);
   histogramsHandler->Fill(histName, maxPtObject->Get("pt"), weight);
 }
 
@@ -148,10 +157,7 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, s
     float pt = object->Get("pt");
     if (pt == maxPt) continue;
     float weight = GetEventWeight(event);
-
-    if (params.collection == "Muon" || object->GetOriginalCollection() == "Muon") {
-      weight *= asMuon(object)->GetScaleFactor();
-    }
+    weight *= GetObjectWeight(object, params.collection);
     histogramsHandler->Fill(histName, pt, weight);
   }
 }
@@ -212,20 +218,21 @@ void TTAlpsHistogramFiller::FillMuonMetHistograms(const shared_ptr<Event> event)
   histogramsHandler->Fill("TightMuons_minvMuonMET", (leadingMuonVector + metVector).M(), weight * leadingMuonSF);
 }
 
-void TTAlpsHistogramFiller::FillJetHistograms(const shared_ptr<Event> event){
+void TTAlpsHistogramFiller::FillJetHistograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
   auto bJets = event->GetCollection("GoodTightBtaggedJets");
   auto jets = event->GetCollection("GoodNonTightBtaggedJets");
 
   for (auto bJet : *bJets) {
     TLorentzVector bJetVector = asJet(bJet)->GetFourVector();
+    float bjetWeight = GetObjectWeight(bJet, "GoodTightBtaggedJets");
 
     for (int iJet = 0; iJet < jets->size(); iJet++) {
       TLorentzVector jet1vector = asJet(jets->at(iJet))->GetFourVector();
 
       for (int jJet = iJet + 1; jJet < jets->size(); jJet++) {
         TLorentzVector jet2vector = asJet(jets->at(jJet))->GetFourVector();
-        histogramsHandler->Fill("GoodJets_minvBjet2jets", (bJetVector + jet1vector + jet2vector).M(), weight);
+        histogramsHandler->Fill("GoodJets_minvBjet2jets", (bJetVector + jet1vector + jet2vector).M(), weight*bjetWeight);
       }
     }
   }

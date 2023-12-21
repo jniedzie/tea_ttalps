@@ -23,7 +23,8 @@ def main():
   
   # hist_path = "histograms"
   # hist_path = "histograms_pileup"
-  hist_path = "histograms_pileupSFs"
+  # hist_path = "histograms_pileupSFs"
+  hist_path = "histograms_pileupSFs_bTaggingSFs"
   
   sample_paths = (
     # Backgrounds

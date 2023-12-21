@@ -38,6 +38,7 @@ class TTAlpsHistogramFiller {
   bool EndsWithTriggerName(std::string name);
 
   float GetEventWeight(const std::shared_ptr<Event> event);
+  float GetObjectWeight(const std::shared_ptr<PhysicsObject> object, std::string collectionName);
 
   void FillDimuonHistograms(const std::shared_ptr<Event> event);
   void FillDiumonClosestToZhistgrams(const std::shared_ptr<Event> event);

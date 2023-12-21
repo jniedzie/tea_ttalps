@@ -17,6 +17,7 @@ applyScaleFactors = {
   "muon": False,
   "muonTrigger": False,
   "pileup": True,
+  "bTagging": True,
 }
 
 defaultHistParams = (
