@@ -15,7 +15,7 @@ pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {
   "muon": True,
-  "muonTrigger": False,
+  "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
 }

@@ -36,7 +36,7 @@ TTAlpsHistogramFiller::~TTAlpsHistogramFiller() {}
 float TTAlpsHistogramFiller::GetEventWeight(const shared_ptr<Event> event) {
   float genWeight = nanoEventProcessor->GetGenWeight(event);
   float pileupSF = nanoEventProcessor->GetPileupScaleFactor(event);
-  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(event);
+  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(event, "IdTight", "PFIsoTight", "IsoMu24");
 
   return genWeight * pileupSF * muonTriggerSF;
 }

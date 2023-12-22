@@ -21,7 +21,7 @@ base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
 applyScaleFactors = {
   "muon": True,
-  "muonTrigger": False,
+  "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
 }

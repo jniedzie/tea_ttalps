@@ -25,7 +25,8 @@ def main():
   # hist_path = "histograms_pileup"
   # hist_path = "histograms_pileupSFs"
   # hist_path = "histograms_pileupSFs_bTaggingSFs"
-  hist_path = "histograms_muonSFs_pileupSFs_bTaggingSFs"
+  # hist_path = "histograms_muonSFs_pileupSFs_bTaggingSFs"
+  hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
   
   sample_paths = (
     # Backgrounds
