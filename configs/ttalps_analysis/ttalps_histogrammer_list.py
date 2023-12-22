@@ -20,7 +20,7 @@ skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
 applyScaleFactors = {
-  "muon": False,
+  "muon": True,
   "muonTrigger": False,
   "pileup": True,
   "bTagging": True,

@@ -14,7 +14,7 @@ pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_fa
 pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {
-  "muon": False,
+  "muon": True,
   "muonTrigger": False,
   "pileup": True,
   "bTagging": True,
