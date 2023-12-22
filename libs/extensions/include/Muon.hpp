@@ -21,13 +21,15 @@ class Muon {
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
   void Reset() { physicsObject->Reset(); }
 
+  std::shared_ptr<PhysicsObject> GetPhysicsObject() { return physicsObject; }
+
   inline float GetPt() { return physicsObject->Get("pt"); }
   inline float GetEta() { return physicsObject->Get("eta"); }
   inline float GetPhi() { return physicsObject->Get("phi"); }
 
   TLorentzVector GetFourVector();
 
-  float GetScaleFactor();
+  float GetScaleFactor(std::string ptRange, std::string id, std::string iso);
 
   MuonID GetID();
   MuonIso GetIso();

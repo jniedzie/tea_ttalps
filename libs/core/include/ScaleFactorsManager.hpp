@@ -20,9 +20,9 @@ class ScaleFactorsManager {
   ScaleFactorsManager(ScaleFactorsManager const &) = delete;
   void operator=(ScaleFactorsManager const &) = delete;
 
-  float GetMuonRecoScaleFactor(float eta, float pt);
-  float GetMuonIDScaleFactor(float eta, float pt, MuonID id);
-  float GetMuonIsoScaleFactor(float eta, float pt, MuonID id, MuonIso iso);
+  float GetMuonRecoScaleFactor(float eta, float pt, std::string ptRange);
+  float GetMuonIDScaleFactor(float eta, float pt, std::string id);
+  float GetMuonIsoScaleFactor(float eta, float pt, std::string id, std::string iso);
   float GetMuonTriggerScaleFactor(float eta, float pt, MuonID id, MuonIso iso, bool IsoMu24included, bool IsoMu50included);
 
   float GetPileupScaleFactor(int nVertices);

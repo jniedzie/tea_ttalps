@@ -109,8 +109,7 @@ class ScaleFactorsReader:
         if params is None:
           fatal("Couldn't find the parameters in the JSON file: " + filePath)
           exit(1)
-          
-        info(f"{wp_name=}, {params=}")
+        
         result[name+"_"+wp_name] = (expression, params)
     
     return result
