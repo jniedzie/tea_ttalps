@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
 
   cutFlowManager->RegisterCut("initial");
   if(applyLooseSkimming){
+    cutFlowManager->RegisterCut("goldenJson");
     cutFlowManager->RegisterCut("trigger");
     cutFlowManager->RegisterCut("metFilters");
   }
@@ -65,6 +66,9 @@ int main(int argc, char **argv) {
     cutFlowManager->UpdateCutFlow("initial");
 
     if(applyLooseSkimming){
+      if (!eventProcessor->PassesGoldenJson(event)) continue;
+      cutFlowManager->UpdateCutFlow("goldenJson");
+
       if (!eventProcessor->PassesTriggerSelections(event)) continue;
       cutFlowManager->UpdateCutFlow("trigger");
 

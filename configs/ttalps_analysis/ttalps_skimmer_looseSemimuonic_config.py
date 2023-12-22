@@ -1,4 +1,5 @@
 from ttalps_extra_collections import extraEventCollections
+from golden_json_config import goldenJson
 
 nEvents = -1
 printEveryNevents = 10000
