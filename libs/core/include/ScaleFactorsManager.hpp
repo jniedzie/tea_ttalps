@@ -23,7 +23,7 @@ class ScaleFactorsManager {
   float GetMuonRecoScaleFactor(float eta, float pt, std::string ptRange);
   float GetMuonIDScaleFactor(float eta, float pt, std::string id);
   float GetMuonIsoScaleFactor(float eta, float pt, std::string id, std::string iso);
-  float GetMuonTriggerScaleFactor(float eta, float pt, MuonID id, MuonIso iso, bool IsoMu24included, bool IsoMu50included);
+  float GetMuonTriggerScaleFactor(float eta, float pt, std::string id, std::string iso, std::string triggers);
 
   float GetPileupScaleFactor(int nVertices);
 

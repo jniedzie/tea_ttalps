@@ -57,7 +57,8 @@ class ScaleFactorsReader:
         
         for i_pt, sf in enumerate(sf_values):
           pt_bin = (pt_edges[i_pt], pt_edges[i_pt+1])
-          muonSFs[eta_bin][pt_bin] = sf
+          muonSFs[eta_bin][pt_bin] = {}
+          muonSFs[eta_bin][pt_bin]["value"] = sf
     
       result[name] = muonSFs
 

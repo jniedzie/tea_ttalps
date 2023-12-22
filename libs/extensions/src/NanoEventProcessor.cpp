@@ -38,26 +38,10 @@ float NanoEventProcessor::GetPileupScaleFactor(const std::shared_ptr<Event> even
   return pileupSF;
 }
 
-float NanoEventProcessor::GetMuonTriggerScaleFactor(const std::shared_ptr<Event> event) {
+float NanoEventProcessor::GetMuonTriggerScaleFactor(const shared_ptr<Event> event, string id, string iso, string triggers) {
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
-  
-  bool IsoMu24included = false;
-  bool IsoMu50included = false;
-
-  try {
-    IsoMu24included = event->Get("HLT_IsoMu24");
-  } catch (...) {
-  }
-
-  try {
-    IsoMu50included = event->Get("HLT_IsoMu50");
-  } catch (...) {
-  }
-
   auto leadingMuon = asMuon(eventProcessor->GetMaxPtObject(event, "Muon"));
-
-  float scaleFactor = scaleFactorsManager.GetMuonTriggerScaleFactor(leadingMuon->GetEta(), leadingMuon->GetPt(), leadingMuon->GetID(),
-                                                                    leadingMuon->GetIso(), IsoMu24included, IsoMu50included);
+  float scaleFactor = scaleFactorsManager.GetMuonTriggerScaleFactor(leadingMuon->GetEta(), leadingMuon->GetPt(), id, iso, triggers);
 
   return scaleFactor;
 }
