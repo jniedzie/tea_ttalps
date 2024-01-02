@@ -3,7 +3,8 @@ extraEventCollections = {
     "inputCollections": ("Muon",),
     "pt": (30., 9999999.),
     "eta": (-2.4, 2.4),
-    "tightId": True,
+    "pfRelIso04_all": (0., 0.15),
+    # "tightId": True,
     # 1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight
     "pfIsoId": (4, 6),
   },
@@ -11,7 +12,8 @@ extraEventCollections = {
     "inputCollections": ("Muon",),
     "pt": (15., 9999999.),
     "eta": (-2.5, 2.5),
-    "looseId": True,
+    "pfRelIso04_all": (0., 0.25),
+    # "looseId": True,
     # 1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight
     "pfIsoId": (1, 6),
   },

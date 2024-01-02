@@ -10,7 +10,8 @@ max_files = -1
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets"
-skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
+# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
+skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
 
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
