@@ -22,3 +22,6 @@ eventSelections = {
     # "nGoodBtaggedJets": (2, 9999999),
     "nGoodMediumBtaggedJets": (1, 9999999),
 }
+
+branchesToKeep = ["*"]
+branchesToRemove = []
