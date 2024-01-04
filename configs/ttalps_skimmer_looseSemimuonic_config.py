@@ -34,3 +34,6 @@ requiredFlags = (
     "Flag_eeBadScFilter",
     "Flag_ecalBadCalibFilter",
 )
+
+branchesToKeep = ["*"]
+branchesToRemove = []
