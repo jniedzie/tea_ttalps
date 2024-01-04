@@ -17,3 +17,6 @@ eventSelections = {
     "nLooseElectrons": (0, 0),
     "nGoodBtaggedJets": (2, 9999999),
 }
+
+branchesToKeep = ["*"]
+branchesToRemove = []
