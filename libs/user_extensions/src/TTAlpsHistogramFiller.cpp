@@ -53,9 +53,9 @@ float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> obj
   } else if (collectionName == "LooseMuons") {
     weight *= asMuon(object)->GetScaleFactor("midPt", "LooseID", "LooseRelIso");
   } else if (collectionName == "GoodTightBtaggedJets") {
-    weight *= asJet(object)->GetScaleFactor("T");
+    weight *= asJet(object)->GetBtaggingScaleFactor("T");
   } else if (collectionName == "GoodMediumBtaggedJets") {
-    weight *= asJet(object)->GetScaleFactor("M");
+    weight *= asJet(object)->GetBtaggingScaleFactor("M");
   }
   return weight;
 }

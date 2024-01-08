@@ -20,6 +20,9 @@ applyScaleFactors = {
   "bTagging": True,
 }
 
+# putting an incorrect value here will trigger printing of available options:
+bTaggingSFsType = "deepJet_mujets"
+
 defaultHistParams = (
 #  collection             variable               bins    xmin    xmax    dir
   ("Event"              , "PV_npvs"             , 300   , 0     , 300   , ""  ),
