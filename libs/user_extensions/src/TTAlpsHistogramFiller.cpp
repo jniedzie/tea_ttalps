@@ -36,7 +36,7 @@ TTAlpsHistogramFiller::~TTAlpsHistogramFiller() {}
 float TTAlpsHistogramFiller::GetEventWeight(const shared_ptr<Event> event) {
   float genWeight = nanoEventProcessor->GetGenWeight(event);
   float pileupSF = nanoEventProcessor->GetPileupScaleFactor(event);
-  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(event, "IdTight", "PFIsoTight", "IsoMu24");
+  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(event, "muonTriggerIsoMu24");
 
   return genWeight * pileupSF * muonTriggerSF;
 }
@@ -49,13 +49,13 @@ bool TTAlpsHistogramFiller::EndsWithTriggerName(string name) {
 float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> object, string collectionName) {
   float weight = 1.0;
   if (collectionName == "TightMuons") {
-    weight *= asMuon(object)->GetScaleFactor("midPt", "TightID", "TightRelIso");
+    weight *= asMuon(object)->GetScaleFactor("muonIDTight", "muonIsoTight", "muonReco");
   } else if (collectionName == "LooseMuons") {
-    weight *= asMuon(object)->GetScaleFactor("midPt", "LooseID", "LooseRelIso");
+    weight *= asMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
   } else if (collectionName == "GoodTightBtaggedJets") {
-    weight *= asJet(object)->GetBtaggingScaleFactor("T");
+    weight *= asJet(object)->GetBtaggingScaleFactor("bTaggingTight");
   } else if (collectionName == "GoodMediumBtaggedJets") {
-    weight *= asJet(object)->GetBtaggingScaleFactor("M");
+    weight *= asJet(object)->GetBtaggingScaleFactor("bTaggingMedium");
   }
   return weight;
 }
