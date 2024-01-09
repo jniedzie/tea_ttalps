@@ -34,9 +34,12 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
 TTAlpsHistogramFiller::~TTAlpsHistogramFiller() {}
 
 float TTAlpsHistogramFiller::GetEventWeight(const shared_ptr<Event> event) {
-  float genWeight = nanoEventProcessor->GetGenWeight(event);
-  float pileupSF = nanoEventProcessor->GetPileupScaleFactor(event);
-  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(event, "muonTriggerIsoMu24");
+
+  auto nanoEvent = asNanoEvent(event);
+
+  float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
+  float pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent);
+  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(nanoEvent, "muonTriggerIsoMu24");
 
   return genWeight * pileupSF * muonTriggerSF;
 }
@@ -61,12 +64,14 @@ float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> obj
 }
 
 void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) {
+  float eventWeight = GetEventWeight(event);
+  
   for (auto &[title, params] : defaultHistVariables) {
     string collectionName = params.collection;
     string branchName = params.variable;
 
     float value;
-    float eventWeight = GetEventWeight(event);
+    
 
     if (collectionName == "Event") {
       if (branchName[0] == 'n') {
@@ -103,7 +108,9 @@ void TTAlpsHistogramFiller::FillTriggerVariables(const shared_ptr<Event> event, 
   if (prefix != "") prefix = prefix + "_";
   if (suffix != "") suffix = "_" + suffix;
 
-  float weight = nanoEventProcessor->GetGenWeight(event);
+  auto nanoEvent = asNanoEvent(event);
+
+  float weight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
   histogramsHandler->Fill(prefix + "muonMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Muon"), weight);
   histogramsHandler->Fill(prefix + "eleMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Electron"), weight);
@@ -135,7 +142,7 @@ void TTAlpsHistogramFiller::FillTriggerVariablesPerTriggerSet(const shared_ptr<E
 }
 
 void TTAlpsHistogramFiller::FillNormCheck(const shared_ptr<Event> event) {
-  float weight = nanoEventProcessor->GetGenWeight(event);
+  float weight = nanoEventProcessor->GetGenWeight(asNanoEvent(event));
   histogramsHandler->Fill("Event_normCheck", 0.5, weight);
 }
 
@@ -152,13 +159,12 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, s
   float maxPt = eventProcessor->GetMaxPt(event, params.collection);
 
   auto collection = event->GetCollection(params.collection);
+  float weight = GetEventWeight(event);
 
   for (auto object : *collection) {
     float pt = object->Get("pt");
     if (pt == maxPt) continue;
-    float weight = GetEventWeight(event);
-    weight *= GetObjectWeight(object, params.collection);
-    histogramsHandler->Fill(histName, pt, weight);
+    histogramsHandler->Fill(histName, pt, weight * GetObjectWeight(object, params.collection));
   }
 }
 
@@ -192,7 +198,7 @@ void TTAlpsHistogramFiller::FillDiumonClosestToZhistgrams(const shared_ptr<Event
   string collectionName = "LooseMuons";
 
   float weight = GetEventWeight(event);
-  auto [muon1, muon2] = nanoEventProcessor->GetMuonPairClosestToZ(event, collectionName);
+  auto [muon1, muon2] = nanoEventProcessor->GetMuonPairClosestToZ(asNanoEvent(event), collectionName);
 
   TLorentzVector muon1fourVector = muon1->GetFourVector();
   TLorentzVector muon2fourVector = muon2->GetFourVector();
