@@ -39,7 +39,7 @@ skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
 
 # skim = "skimmed_SR_Met50GeV"
 
-output_path = f"../plots_{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}/"
 
 # luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
@@ -147,8 +147,8 @@ histograms = (
   # Histogram("GoodNonTightBtaggedJets_btagDeepB"        , "", True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good non-b jet btagDeepB"                       , "# events (2018)"   ),
   
   Histogram("Event_MET_pt"                         , "", True  , default_norm              , 10 , 0     , 800   , 1e-5  , 1e9   , "MET p_{T} [GeV]"                                , "# events (2018)"   ),
-  # Histogram("Event_PV_npvs"                       , "", True  , default_norm              , 1  , 0     , 150   , 1e-3  , 1e12   , "# Primary vertices"                             , "# events (2018)"   ),
-  # Histogram("Event_PV_npvsGood"                   , "", True  , default_norm              , 1  , 0     , 150   , 1e-3  , 1e6   , "# Good primary vertices"                        , "# events (2018)"   ),
+  Histogram("Event_PV_npvs"                       , "", True  , default_norm              , 1  , 0     , 150   , 1e-3  , 1e12   , "# Primary vertices"                             , "# events (2018)"   ),
+  Histogram("Event_PV_npvsGood"                   , "", True  , default_norm              , 1  , 0     , 150   , 1e-3  , 1e6   , "# Good primary vertices"                        , "# events (2018)"   ),
   
   # Histogram("LooseMuons_dimuonMinv"               , "", True  , default_norm              , 1  , 70    , 110   , 1e0   , 1e4   , "loose muons m_{#mu#mu} [GeV]"                   , "# events (2018)"   ),
   # Histogram("LooseMuons_dimuonMinvClosestToZ"     , "", True  , default_norm              , 1  , 70    , 110   , 1e0   , 1e4   , "loose muons closest to Z m_{#mu#mu} [GeV]"      , "# events (2018)"   ),

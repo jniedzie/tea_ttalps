@@ -38,7 +38,8 @@ float TTAlpsHistogramFiller::GetEventWeight(const shared_ptr<Event> event) {
   auto nanoEvent = asNanoEvent(event);
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
-  float pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // change to "pileup" to use jsonPOG LUM values
+  // change to "pileup" to use jsonPOG LUM values, or "custom" to use our own pileup distribution
+  float pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); 
   float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(nanoEvent, "muonTriggerIsoMu24");
 
   return genWeight * pileupSF * muonTriggerSF;
