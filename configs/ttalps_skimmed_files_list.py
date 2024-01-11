@@ -29,7 +29,8 @@ output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJ
 # input_file_list = ("./skimmed_loose/test_TTToSemileptonic.root",)
 # output_dir = f"./skimmed_ttbar/"
 
-base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
+# base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
+base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
 
 samples = (
   # Backgrounds
@@ -121,7 +122,13 @@ samples = (
   #  "/backgrounds2018/QCDPt800To1000_LLPnanoAOD",
   #  "/backgrounds2018/QCDPt1000_LLPnanoAOD",
   
-  # # Signals
+  # Signals
+   "/signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e2mm_nEvents-100",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-1000",
   #  "/signals/tta_mAlp-0p35GeV_ctau-1e0mm",
   #  "/signals/tta_mAlp-0p35GeV_ctau-1e1mm",
   #  "/signals/tta_mAlp-0p35GeV_ctau-1e2mm",
