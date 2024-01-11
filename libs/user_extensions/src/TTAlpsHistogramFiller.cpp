@@ -273,60 +273,38 @@ void TTAlpsHistogramFiller::FillLooseDSAMuonsHistograms(const shared_ptr<Event> 
 
 void TTAlpsHistogramFiller::FillAllLooseMuonsHistograms(const shared_ptr<Event> event){
   float weight = GetEventWeight(event);
-  auto looseMuons = event->GetCollection("LooseMuons");
-  auto looseDsaMuons = event->GetCollection("LooseDSAMuons");
 
-  PhysicsObjects allLooseMuons;
+  auto allLooseMuons = asNanoEvent(event)->GetAllMuons(0.01);
+  histogramsHandler->Fill("Event_nAllLooseMuons", allLooseMuons->size(), weight);
 
-  float min_deltaR = 99999;
-  float pt, eta, dxy, dz, dxyPV, dzPV;
+  for(auto muonObj : *allLooseMuons){
+    histogramsHandler->Fill("AllLooseMuons_pt", muonObj->Get("pt"), weight);
+    histogramsHandler->Fill("AllLooseMuons_eta", muonObj->Get("eta"), weight);
 
-  for(auto muonObj : *looseMuons){
-    auto muon = asMuon(muonObj);
-    auto muonP4 = muon->GetFourVector();
-
-    allLooseMuons.push_back(muonObj);
-
-    float dxy = muonObj->Get("dxy");
-    float dz = muonObj->Get("dz");
-    pt = muonObj->Get("pt");
-    eta = muonObj->Get("eta");
-
-    histogramsHandler->Fill("AllLooseMuons_dxy", dxy, weight);
-    histogramsHandler->Fill("AllLooseMuons_dz", dz, weight);
-    histogramsHandler->Fill("AllLooseMuons_pt", pt, weight);
-    histogramsHandler->Fill("AllLooseMuons_eta", eta, weight);
-
-    for(auto dsaMuonObj : *looseDsaMuons){
-      auto dsaMuon = asMuon(dsaMuonObj);
-      auto dsaMuonP4 = dsaMuon->GetFourVector();
-      
-      if(muonP4.DeltaR(dsaMuonP4) < 0.01) continue;
-
-      float dxyPV = dsaMuonObj->Get("dxyPV");
-      float dzPV = dsaMuonObj->Get("dzPV");
-      pt = dsaMuonObj->Get("pt");
-      eta = dsaMuonObj->Get("eta");
-      histogramsHandler->Fill("AllLooseMuons_pt", pt, weight);
-      histogramsHandler->Fill("AllLooseMuons_eta", eta, weight);
-      histogramsHandler->Fill("AllLooseMuons_dxy", dxyPV, weight);
-      histogramsHandler->Fill("AllLooseMuons_dz", dzPV, weight);
-      allLooseMuons.push_back(dsaMuonObj);
+    try {
+      histogramsHandler->Fill("AllLooseMuons_dxy", muonObj->Get("dxy"), weight);
+      histogramsHandler->Fill("AllLooseMuons_dz", muonObj->Get("dz"), weight);
+    } catch (const Exception &e) {
+      try {
+        histogramsHandler->Fill("AllLooseMuons_dxy", muonObj->Get("dxyPV"), weight);
+        histogramsHandler->Fill("AllLooseMuons_dz", muonObj->Get("dzPV"), weight);
+      } catch (const Exception &e) {
+        warn() << "dxy, dxyPV, dz and dzPV couldn't be found for muon." << endl;
+      }
     }
   }
-  float nAllLooseMuons = allLooseMuons.size();
-  histogramsHandler->Fill("Event_nAllLooseMuons", nAllLooseMuons, weight);
-  if (nAllLooseMuons < 2) {
+
+  if (allLooseMuons->size() < 2) {
     warn() << "Not enough total muons in event to fill dimuon histograms" << endl;
     return;
   }
-
-  for (int iMuon1 = 0; iMuon1 < allLooseMuons.size(); iMuon1++) {
-    auto muon1 = asMuon(allLooseMuons.at(iMuon1));
+  float min_deltaR=99999;
+  for (int iMuon1 = 0; iMuon1 < allLooseMuons->size(); iMuon1++) {
+    auto muon1 = asMuon(allLooseMuons->at(iMuon1));
     TLorentzVector muon1vector = muon1->GetFourVector();
 
-    for (int iMuon2 = iMuon1 + 1; iMuon2 < allLooseMuons.size(); iMuon2++) {
-      auto muon2 = asMuon(allLooseMuons.at(iMuon2));
+    for (int iMuon2 = iMuon1 + 1; iMuon2 < allLooseMuons->size(); iMuon2++) {
+      auto muon2 = asMuon(allLooseMuons->at(iMuon2));
       TLorentzVector muon2vector = muon2->GetFourVector();
       float deltaR = muon1vector.DeltaR(muon2vector);
       min_deltaR = std::min(min_deltaR,deltaR);

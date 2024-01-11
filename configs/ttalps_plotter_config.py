@@ -52,12 +52,10 @@ ratio_limits = (0.5, 1.5)
 legend_width = 0.17 if show_ratio_plots else 0.20
 legend_min_x = 0.45
 legend_max_x = 0.83
-# legend_max_x = 0.80
 
 legend_height = 0.045 if show_ratio_plots else 0.03
 legend_max_y = 0.89
 
-# n_default_backgrounds = 1
 n_default_backgrounds = 10
 
 show_cms_labels = True
@@ -65,7 +63,6 @@ extraText = "Preliminary"
 
 legends = {
   SampleType.signal: Legend(legend_max_x-3*legend_width, legend_max_y-2*legend_height, legend_max_x-2*legend_width, legend_max_y-legend_height, "l"),
-  # SampleType.signal: Legend(legend_max_x-2.5*legend_width, legend_max_y-2*legend_height, legend_max_x-2*legend_width, legend_max_y, "l"),
   SampleType.background: Legend(legend_max_x-legend_width, legend_max_y-n_default_backgrounds*legend_height, legend_max_x, legend_max_y, "f"),
   SampleType.data: Legend(legend_max_x-3*(legend_width), legend_max_y-legend_height, legend_max_x-2*(legend_width), legend_max_y, "pl"),
 }
