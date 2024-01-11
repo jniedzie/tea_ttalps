@@ -7,7 +7,7 @@ printEveryNevents = 10000
 runDefaultHistograms = True
 runTriggerHistograms = False
 runPileupHistograms = False
-runLLPNanoAODHistograms = False
+runLLPNanoAODHistograms = True
 
 weightsBranchName = "genWeight"
 
@@ -15,10 +15,9 @@ pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_fa
 pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {
-  "muon": True,
-  "muonTrigger": True,
+  "muon": False,
+  "muonTrigger": False,
   "pileup": True,
-  "bTagging": True,
 }
 
 defaultHistParams = (
@@ -104,6 +103,7 @@ defaultHistParams = (
   ("GoodNonTightBtaggedJets"  , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodNonTightBtaggedJets"  , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   ("GoodNonTightBtaggedJets"  , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
+
 )
 
 LLPNanoAOD_defaultHistParams = (
