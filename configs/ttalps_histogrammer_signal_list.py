@@ -1,7 +1,8 @@
 max_files = 10
 
 # skim = "skimmed_SR_Met50GeV"
-skim = "skimmed_SemimuonicSR_Met50GeV"
+# skim = "skimmed_SemimuonicSR_Met50GeV"
+skim = "LLPNanoAOD"
 
 # base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
@@ -15,7 +16,7 @@ applyScaleFactors = {
 
 samples = (
   # Backgrounds
-  "backgrounds2018/TTToSemiLeptonic",
+  # "backgrounds2018/TTToSemiLeptonic",
   # "backgrounds2018/TTToHadronic",
   # "backgrounds2018/TTTo2L2Nu",
   
@@ -80,11 +81,13 @@ samples = (
   # "collision_data2018/SingleMuon2018D",
   
   # Signal
-  "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
+  "signals/tta_mAlp-0p35GeV_ctau-1e2mm_nEvents-100",
+  "signals/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e7mm",
 )
 

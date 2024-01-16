@@ -15,9 +15,10 @@ pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_fa
 pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {
-  "muon": False,
-  "muonTrigger": False,
+  "muon": True,
+  "muonTrigger": True,
   "pileup": True,
+  "bTagging": True,
 }
 
 defaultHistParams = (
@@ -114,26 +115,26 @@ LLPNanoAOD_defaultHistParams = (
   ("DSAMuon"            , "dxy"                 , 1600  , -400  , 400   , ""  ),
   ("DSAMuon"            , "dz"                  , 1600  , -400  , 400   , ""  ),
 
-  ("Event"              , "nMuonVertex"         , 50    , 0     , 50    , ""  ),
-  ("MuonVertex"         , "chi2"                , 500   , 0     , 500   , ""  ),
-  ("MuonVertex"         , "vxy"                 , 500   , 0     , 500   , ""  ),
-  ("MuonVertex"         , "vxySigma"            , 500   , 0     , 500   , ""  ),
-  ("MuonVertex"         , "vz"                  , 1000  , -500  , 500   , ""  ),
-  ("MuonVertex"         , "dR"                  , 500   , 0     , 10    , ""  ),
+  ("Event"              , "nPatMuonVertex"      , 50    , 0     , 50    , ""  ),
+  ("PatMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("PatMuonVertex"      , "vxy"                 , 500   , 0     , 500   , ""  ),
+  ("PatMuonVertex"      , "vxySigma"            , 500   , 0     , 500   , ""  ),
+  ("PatMuonVertex"      , "vz"                  , 1000  , -500  , 500   , ""  ),
+  ("PatMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
 
-  ("Event"              , "nDSAMuonVertex"      , 50    , 0     , 50    , ""  ),
-  ("DSAMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
-  ("DSAMuonVertex"      , "vxy"                 , 500   , 0     , 500   , ""  ),
-  ("DSAMuonVertex"      , "vxySigma"            , 500   , 0     , 500   , ""  ),
-  ("DSAMuonVertex"      , "vz"                  , 1000  , -500  , 500   , ""  ),
-  ("DSAMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
+  ("Event"              , "nPatDsaMuonVertex"   , 50    , 0     , 50    , ""  ),
+  ("PatDsaMuonVertex"   , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("PatDsaMuonVertex"   , "vxy"                 , 500   , 0     , 500   , ""  ),
+  ("PatDsaMuonVertex"   , "vxySigma"            , 500   , 0     , 500   , ""  ),
+  ("PatDsaMuonVertex"   , "vz"                  , 1000  , -500  , 500   , ""  ),
+  ("PatDsaMuonVertex"   , "dR"                  , 500   , 0     , 10    , ""  ),
 
-  ("Event"              , "nMuonCombVertex"     , 50    , 0     , 50    , ""  ),
-  ("MuonCombVertex"     , "chi2"                , 500   , 0     , 500   , ""  ),
-  ("MuonCombVertex"     , "vxy"                 , 500   , 0     , 500   , ""  ),
-  ("MuonCombVertex"     , "vxySigma"            , 500   , 0     , 500   , ""  ),
-  ("MuonCombVertex"     , "vz"                  , 1000  , -500  , 500   , ""  ),
-  ("MuonCombVertex"     , "dR"                  , 500   , 0     , 10    , ""  ),
+  ("Event"              , "nDsaMuonVertex"      , 50    , 0     , 50    , ""  ),
+  ("DsaMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("DsaMuonVertex"      , "vxy"                 , 500   , 0     , 500   , ""  ),
+  ("DsaMuonVertex"      , "vxySigma"            , 500   , 0     , 500   , ""  ),
+  ("DsaMuonVertex"      , "vz"                  , 1000  , -500  , 500   , ""  ),
+  ("DsaMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
 )
 
 if runLLPNanoAODHistograms:
