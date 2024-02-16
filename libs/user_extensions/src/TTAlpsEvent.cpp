@@ -160,7 +160,7 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenALPs() {
   for (int i = 0; i < genParticles->size(); i++)
   {
     auto genParticle = asGenParticle(genParticles->at(i));
-    if(!genParticle->IsGoodALP()) continue;
+    if(!genParticle->IsGoodParticleWithID(54)) continue;
     genALPs->push_back(genParticles->at(i));
   }
   return genALPs;
