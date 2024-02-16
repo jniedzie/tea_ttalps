@@ -100,7 +100,6 @@ bool TTAlpsEvent::IsGoodParticle(int particleIndex, vector<int> topIndices, vect
   return true;
 }
 
-
 bool TTAlpsEvent::ParticlesMotherInIndices(int particleIndex, vector<int> indices) {
   auto genParticles = event->GetCollection("GenPart");
   auto genParticle = asGenParticle(genParticles->at(particleIndex));
@@ -124,4 +123,91 @@ bool TTAlpsEvent::ParticleHasISRmotherAfterTopMother(int particleIndex) {
   if (motherIndex < 0) return false;
 
   return ParticleHasISRmotherAfterTopMother(motherIndex);
+}
+
+bool TTAlpsEvent::IsGoodMuonFromALP(int muonIndex) {
+
+  auto genParticles = event->GetCollection("GenPart");
+  auto muon = asGenParticle(genParticles->at(muonIndex));
+  
+  if (!muon->IsLastCopy()) return false;
+  if(!muon->IsMuon()) return false;
+
+  int motherIndex = muon->GetMotherIndex();
+  if (motherIndex < 0) return false;
+  auto mother = asGenParticle(genParticles->at(motherIndex));
+
+  // loop over pythia copies of the muon
+  if (mother->IsMuon() == 13) {
+    while(mother->IsMuon() == 13) {
+      motherIndex = muon->GetMotherIndex();
+      if (motherIndex < 0) return false;
+      mother = asGenParticle(genParticles->at(motherIndex));
+    }
+  }
+  // mother must be an ALP
+  if (!mother->IsLastCopy()) return false;
+  if (abs(mother->GetPdgId()) != 54) return false;
+
+  return true;
+}
+
+shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenALPs() {
+  auto genParticles = event->GetCollection("GenPart");
+
+  auto genALPs = make_shared<PhysicsObjects>();
+
+  for (int i = 0; i < genParticles->size(); i++)
+  {
+    auto genParticle = asGenParticle(genParticles->at(i));
+    if(!genParticle->IsGoodALP()) continue;
+    genALPs->push_back(genParticles->at(i));
+  }
+  return genALPs;
+}
+
+shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenMuonsFromALP() {
+  auto genParticles = event->GetCollection("GenPart");
+
+  auto genMuons = make_shared<PhysicsObjects>();
+
+  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++)
+  {
+    auto genParticle = asGenParticle(genParticles->at(muon_idx));
+    int motherIndex = genParticle->GetMotherIndex();
+    if (motherIndex < 0) continue;
+    auto mother = asGenParticle(genParticles->at(motherIndex));
+    if(!IsGoodMuonFromALP(muon_idx)) continue;
+    genMuons->push_back(genParticles->at(muon_idx));
+  }
+  return genMuons;
+}
+
+shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsFromALP(shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR) {
+  auto genMuons = GetGenMuonsFromALP();
+
+  auto muonsFromALP = make_shared<PhysicsObjects>();
+  vector<int> savedMuonIndices;
+
+  for (auto genMuon : *genMuons) {
+    auto genMuonp4 = asGenParticle(genMuon)->GetFourVector();
+
+    float minDeltaR = 9999;
+    float minDeltaR_muonIdx = -1;
+
+    for (int i = 0; i < muonCollection->size(); i++) {
+      auto muonp4 = asMuon(muonCollection->at(i))->GetFourVector();
+
+      float deltaR = muonp4.DeltaR(genMuonp4);
+      if(deltaR < maxDeltaR && deltaR < minDeltaR) {
+        minDeltaR = deltaR;
+        minDeltaR_muonIdx = i;
+      }
+    }
+    if(minDeltaR_muonIdx > 0 && find(savedMuonIndices.begin(), savedMuonIndices.end(), minDeltaR_muonIdx) == savedMuonIndices.end()) {
+      muonsFromALP->push_back(muonCollection->at(minDeltaR_muonIdx));
+      savedMuonIndices.push_back(minDeltaR_muonIdx);
+    }
+  }
+  return muonsFromALP;
 }
