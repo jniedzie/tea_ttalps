@@ -67,6 +67,8 @@ inputFilePath = f"{basePath}/{sampleName}/{fileName}"
 treeOutputFilePath = f"{basePath}/{sampleName}/skimmed_looseSemileptonic/{fileName}"
 
 weightsBranchName = "genWeight"
+eventsTreeName = "Events"
+muonMatchingType = ""
 
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",

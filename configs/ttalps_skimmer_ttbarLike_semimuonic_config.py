@@ -9,6 +9,8 @@ applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
+eventsTreeName = "Events"
+muonMatchingType = ""
 
 eventSelections = {
     "MET_pt": (50, 9999999),

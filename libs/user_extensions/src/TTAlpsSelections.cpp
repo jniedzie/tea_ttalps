@@ -17,8 +17,11 @@ void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> c
   cutFlowManager->RegisterCut("nLooseMuonsOrDSAMuons");
 }
 
-bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto allMuons = asNanoEvent(event)->GetAllMuons(0.01);
+bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string muonMatching) {
+  shared_ptr<PhysicsObjects> allMuons;
+  if(muonMatching == "DR") allMuons = asNanoEvent(event)->GetDRMtachedMuons(0.01);
+  if(muonMatching == "OuterDR") allMuons = asNanoEvent(event)->GetOuterDRMatchedMuons(0.01);
+  if(muonMatching == "Segment") allMuons = asNanoEvent(event)->GetSegmentMatchedMuons();
 
   if(allMuons->size() < 3) return false;
   cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");

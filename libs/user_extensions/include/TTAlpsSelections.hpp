@@ -22,7 +22,7 @@ class TTAlpsSelections {
   // - at least 4 good jets
   // - at least 1 good b-tagged jet
   // - some amount of MET
-  bool PassesSignalLikeSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+  bool PassesSignalLikeSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string muonMatching = "Segment");
   void RegisterSignalLikeSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
 
   // Selections targetting semi-leptonic ttbar, and additional leptons. Requires:
