@@ -9,7 +9,7 @@ applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
-eventsTreeName = "Events"
+eventsTreeNames = ("Events",)
 muonMatchingType = ""
 
 eventSelections = {

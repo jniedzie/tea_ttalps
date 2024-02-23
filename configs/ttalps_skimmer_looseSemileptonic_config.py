@@ -67,7 +67,7 @@ inputFilePath = f"{basePath}/{sampleName}/{fileName}"
 treeOutputFilePath = f"{basePath}/{sampleName}/skimmed_looseSemileptonic/{fileName}"
 
 weightsBranchName = "genWeight"
-eventsTreeName = "Events"
+eventsTreeNames = ("Events",)
 muonMatchingType = ""
 
 triggerSelection = (

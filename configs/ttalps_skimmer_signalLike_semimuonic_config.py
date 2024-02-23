@@ -11,8 +11,9 @@ applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
 
 weightsBranchName = "genWeight"
-eventsTreeName = "Events"
+eventsTreeNames = ("Events",)
 
+# muonMatchingType = ""
 # muonMatchingType = "DR"
 # muonMatchingType = "OuterDR"
 muonMatchingType = "Segment"
