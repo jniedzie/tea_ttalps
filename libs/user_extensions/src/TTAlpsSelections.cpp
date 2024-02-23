@@ -19,7 +19,7 @@ void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> c
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string muonMatching) {
   shared_ptr<PhysicsObjects> allMuons;
-  if(muonMatching == "DR") allMuons = asNanoEvent(event)->GetDRMtachedMuons(0.01);
+  if(muonMatching == "DR") allMuons = asNanoEvent(event)->GetDRMatchedMuons(0.01);
   if(muonMatching == "OuterDR") allMuons = asNanoEvent(event)->GetOuterDRMatchedMuons(0.01);
   if(muonMatching == "Segment") allMuons = asNanoEvent(event)->GetSegmentMatchedMuons();
 
@@ -34,10 +34,12 @@ void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager>
 }
 
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  int nLooseMuons = event->GetCollectionSize("LooseMuons");
+  auto looseMuons = event->GetCollection("LooseMuons");
+  int nLooseMuons = looseMuons->size();
   if (nLooseMuons > 1) return false;
 
-  int nTightMuons = event->GetCollectionSize("TightMuons");
+  auto tightMuons = event->GetCollection("TightMuons");
+  int nTightMuons = tightMuons->size();
   if (nTightMuons != 1) return false;
 
   if (nLooseMuons == 1) {
@@ -62,10 +64,10 @@ bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, sh
   double maxDistanceFromZ = 30;
 
   for(int iMuon1=0; iMuon1 < looseMuons->size(); iMuon1++){
-    auto muon1 = asMuon(looseMuons->at(iMuon1))->GetFourVector();
+    auto muon1 = asNanoMuon(looseMuons->at(iMuon1))->GetFourVector();
     
     for(int iMuon2=iMuon1+1; iMuon2 < looseMuons->size(); iMuon2++){
-      auto muon2 = asMuon(looseMuons->at(iMuon2))->GetFourVector();
+      auto muon2 = asNanoMuon(looseMuons->at(iMuon2))->GetFourVector();
       double diMuonMass = (muon1 + muon2).M();
 
       if(fabs(diMuonMass-zMass) < smallestDifferenceToZmass){

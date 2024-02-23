@@ -54,7 +54,7 @@ class TTAlpsHistogramFiller {
   void FillHasMatchHistograms(const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollectionRef, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollectionCheck, std::string branchName, float weight);
   void FillAllLooseMuonsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsHistograms(const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> objectCollection, std::string collectionName, float weight);
-  void FillMuonVertexHistograms(const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> vertexCollection, std::string vertexName, float weight);
+  void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> vertexCollection, std::string vertexName);
 
 
 };
