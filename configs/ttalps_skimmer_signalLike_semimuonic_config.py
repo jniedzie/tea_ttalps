@@ -11,6 +11,12 @@ applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
 
 weightsBranchName = "genWeight"
+eventsTreeNames = ("Events",)
+
+# muonMatchingType = ""
+# muonMatchingType = "DR"
+# muonMatchingType = "OuterDR"
+muonMatchingType = "Segment"
 
 eventSelections = {
     "MET_pt": (50, 9999999),
@@ -25,3 +31,5 @@ eventSelections = {
 
 branchesToKeep = ["*"]
 branchesToRemove = []
+
+specialBranchSizes = {}

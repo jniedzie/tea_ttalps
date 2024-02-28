@@ -1,7 +1,12 @@
-max_files = 10
+max_files = -1
 
 # skim = "skimmed_SR_Met50GeV"
-skim = "skimmed_SemimuonicSR_Met50GeV"
+# skim = "skimmed_looseSemimuonic"
+# skim = "skimmed_looseSemimuonic_SRmuonic"
+# skim = "skimmed_looseSemimuonic_SRmuonic_DR"
+# skim = "skimmed_looseSemimuonic_SRmuonic_OuterDR"
+skim = "skimmed_looseSemimuonic_SRmuonic_Segment"
+# skim = "LLPNanoAOD"
 
 # base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
@@ -15,7 +20,7 @@ applyScaleFactors = {
 
 samples = (
   # Backgrounds
-  "backgrounds2018/TTToSemiLeptonic",
+  # "backgrounds2018/TTToSemiLeptonic",
   # "backgrounds2018/TTToHadronic",
   # "backgrounds2018/TTTo2L2Nu",
   
@@ -83,9 +88,10 @@ samples = (
   "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
   "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
   "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
-  # "signals/tta_mAlp-0p35GeV_ctau-1e7mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  # "LLPtest/signals_all/tta_mAlp-0p35GeV_ctau-1e2mm",
+  # "LLPtest/signals/tta_mAlp-0p35GeV_ctau-1e2mm",
 )
 
 # this has to be here, otherwise the script will not work:
