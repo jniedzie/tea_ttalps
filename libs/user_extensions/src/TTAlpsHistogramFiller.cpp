@@ -223,7 +223,8 @@ void TTAlpsHistogramFiller::FillMuonMetHistograms(const shared_ptr<Event> event)
   string collectionName = "TightMuons";
 
   auto leadingMuonObj = eventProcessor->GetMaxPtObject(event, collectionName);
-
+  if(!leadingMuonObj) return;
+  
   auto leadingTightMuon = asNanoMuon(leadingMuonObj);
   float leadingMuonSF = GetObjectWeight(leadingMuonObj, collectionName);
 

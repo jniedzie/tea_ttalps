@@ -10,6 +10,8 @@ runPileupHistograms = False
 runLLPNanoAODHistograms = False
 
 weightsBranchName = "genWeight"
+eventsTreeNames = ["Events",]
+specialBranchSizes = {}
 
 pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
 pileupScaleFactorsHistName = "pileup_scale_factors"
