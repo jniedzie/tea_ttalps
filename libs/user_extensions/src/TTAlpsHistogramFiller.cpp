@@ -53,13 +53,13 @@ bool TTAlpsHistogramFiller::EndsWithTriggerName(string name) {
 float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> object, string collectionName) {
   float weight = 1.0;
   if (collectionName == "TightMuons") {
-    weight *= asMuon(object)->GetScaleFactor("muonIDTight", "muonIsoTight", "muonReco");
+    weight *= asNanoMuon(object)->GetScaleFactor("muonIDTight", "muonIsoTight", "muonReco");
   } else if (collectionName == "LooseMuons") {
-    weight *= asMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
+    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
   } else if (collectionName == "GoodTightBtaggedJets") {
-    weight *= asJet(object)->GetBtaggingScaleFactor("bTaggingTight");
+    weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingTight");
   } else if (collectionName == "GoodMediumBtaggedJets") {
-    weight *= asJet(object)->GetBtaggingScaleFactor("bTaggingMedium");
+    weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingMedium");
   }
   return weight;
 }
@@ -76,7 +76,7 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
 
     if (collectionName == "Event") {
       if (branchName[0] == 'n') {
-        value = event->GetCollectionSize(branchName.substr(1));
+        value = event->GetCollection(branchName.substr(1))->size();
       } else {
         value = event->GetAsFloat(branchName);
       }
@@ -176,13 +176,13 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<Event> event) 
   auto looseMuons = event->GetCollection(collectionName);
   for (int iMuon1 = 0; iMuon1 < looseMuons->size(); iMuon1++) {
     auto obj1 = looseMuons->at(iMuon1);
-    auto muon1 = asMuon(obj1);
+    auto muon1 = asNanoMuon(obj1);
     float muon1SF = GetObjectWeight(obj1, collectionName);
     TLorentzVector muon1vector = muon1->GetFourVector();
 
     for (int iMuon2 = iMuon1 + 1; iMuon2 < looseMuons->size(); iMuon2++) {
       auto obj2 = looseMuons->at(iMuon2);
-      auto muon2 = asMuon(obj2);
+      auto muon2 = asNanoMuon(obj2);
       float muon2SF = GetObjectWeight(obj2, collectionName);
       TLorentzVector muon2vector = muon2->GetFourVector();
       histogramsHandler->Fill("LooseMuons_dimuonMinv", (muon1vector + muon2vector).M(), weight * muon1SF * muon2SF);
@@ -191,7 +191,7 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<Event> event) 
 }
 
 void TTAlpsHistogramFiller::FillDiumonClosestToZhistgrams(const shared_ptr<Event> event) {
-  if (event->GetCollectionSize("LooseMuons") < 2) {
+  if (event->GetCollection("LooseMuons")->size() < 2) {
     warn() << "Not enough muons in event to fill dimuon histograms" << endl;
     return;
   }
@@ -224,7 +224,7 @@ void TTAlpsHistogramFiller::FillMuonMetHistograms(const shared_ptr<Event> event)
 
   auto leadingMuonObj = eventProcessor->GetMaxPtObject(event, collectionName);
 
-  auto leadingTightMuon = asMuon(leadingMuonObj);
+  auto leadingTightMuon = asNanoMuon(leadingMuonObj);
   float leadingMuonSF = GetObjectWeight(leadingMuonObj, collectionName);
 
   TLorentzVector leadingMuonVector = leadingTightMuon->GetFourVector();
@@ -240,14 +240,14 @@ void TTAlpsHistogramFiller::FillJetHistograms(const shared_ptr<Event> event) {
   auto jets = event->GetCollection("GoodNonTightBtaggedJets");
 
   for (auto bJet : *bJets) {
-    TLorentzVector bJetVector = asJet(bJet)->GetFourVector();
+    TLorentzVector bJetVector = asNanoJet(bJet)->GetFourVector();
     float bjetWeight = GetObjectWeight(bJet, "GoodTightBtaggedJets");
 
     for (int iJet = 0; iJet < jets->size(); iJet++) {
-      TLorentzVector jet1vector = asJet(jets->at(iJet))->GetFourVector();
+      TLorentzVector jet1vector = asNanoJet(jets->at(iJet))->GetFourVector();
 
       for (int jJet = iJet + 1; jJet < jets->size(); jJet++) {
-        TLorentzVector jet2vector = asJet(jets->at(jJet))->GetFourVector();
+        TLorentzVector jet2vector = asNanoJet(jets->at(jJet))->GetFourVector();
         histogramsHandler->Fill("GoodJets_minvBjet2jets", (bJetVector + jet1vector + jet2vector).M(), weight * bjetWeight);
       }
     }
@@ -300,11 +300,11 @@ void TTAlpsHistogramFiller::FillAllLooseMuonsHistograms(const shared_ptr<Event> 
   }
   float min_deltaR=99999;
   for (int iMuon1 = 0; iMuon1 < allLooseMuons->size(); iMuon1++) {
-    auto muon1 = asMuon(allLooseMuons->at(iMuon1));
+    auto muon1 = asNanoMuon(allLooseMuons->at(iMuon1));
     TLorentzVector muon1vector = muon1->GetFourVector();
 
     for (int iMuon2 = iMuon1 + 1; iMuon2 < allLooseMuons->size(); iMuon2++) {
-      auto muon2 = asMuon(allLooseMuons->at(iMuon2));
+      auto muon2 = asNanoMuon(allLooseMuons->at(iMuon2));
       TLorentzVector muon2vector = muon2->GetFourVector();
       float deltaR = muon1vector.DeltaR(muon2vector);
       min_deltaR = std::min(min_deltaR,deltaR);
@@ -339,13 +339,13 @@ void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> ev
   auto genParticles = event->GetCollection("GenPart");
   for(auto genpart : *genParticles)
   {
-    auto genParticle = asGenParticle(genpart);
+    auto genParticle = asNanoGenParticle(genpart);
     int pdgid = genParticle->GetPdgId();
     if(abs(pdgid) != 13) continue;
 
     int motherIndex = genParticle->GetMotherIndex();
     if (motherIndex < 0) continue;
-    auto mother = asGenParticle(genParticles->at(motherIndex));
+    auto mother = asNanoGenParticle(genParticles->at(motherIndex));
     int mother_pdgid = mother->GetPdgId();
     if(mother_pdgid != 54) continue;
     

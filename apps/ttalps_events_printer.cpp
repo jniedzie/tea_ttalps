@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     } else {
       categories[category]++;
     }
-    nJets[event->GetCollectionSize("Jet")]++;
+    nJets[event->GetCollection("Jet")->size()]++;
   }
 
   // create a new map with categories, but merge entries with keys: "ee", "emu", "mumu", "etau", "mutau", "tautau" into one entry with key "ll"

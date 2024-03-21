@@ -20,7 +20,7 @@ string TTAlpsEvent::GetTTbarEventCategory() {
   int iGenParticle = -1;
   for (auto physicsObject : *genParticles) {
     iGenParticle++;
-    auto genParticle = asGenParticle(physicsObject);
+    auto genParticle = asNanoGenParticle(physicsObject);
     if (!IsGoodParticle(iGenParticle, topIndices, bottomIndices)) continue;
     finalState.AddParticle(genParticle->GetPdgId());
   }
@@ -38,7 +38,7 @@ vector<int> TTAlpsEvent::GetTopIndices() {
 
   for (auto physicsObject : *genParticles) {
     iGenParticle++;
-    auto genParticle = asGenParticle(physicsObject);
+    auto genParticle = asNanoGenParticle(physicsObject);
 
     if (!genParticle->IsLastCopy()) continue;
     if (genParticle->GetPdgId() == 6) topIndices[0] = iGenParticle;
@@ -57,12 +57,12 @@ vector<int> TTAlpsEvent::GetBottomIndices() {
 
   for (auto physicsObject : *genParticles) {
     iGenParticle++;
-    auto genParticle = asGenParticle(physicsObject);
+    auto genParticle = asNanoGenParticle(physicsObject);
 
     if (abs(genParticle->GetPdgId()) == 5) {
       int motherIndex = genParticle->GetMotherIndex();
       if (motherIndex < 0) continue;
-      auto mother = asGenParticle(genParticles->at(motherIndex));
+      auto mother = asNanoGenParticle(genParticles->at(motherIndex));
       if (!genParticle->IsGoodBottomQuark(mother)) continue;
       bottomIndices.push_back(iGenParticle);
     }
@@ -72,11 +72,11 @@ vector<int> TTAlpsEvent::GetBottomIndices() {
 
 bool TTAlpsEvent::IsGoodParticle(int particleIndex, vector<int> topIndices, vector<int> bottomIndices) {
   auto genParticles = event->GetCollection("GenPart");
-  auto particle = asGenParticle(genParticles->at(particleIndex));
+  auto particle = asNanoGenParticle(genParticles->at(particleIndex));
 
   int motherIndex = particle->GetMotherIndex();
   if (motherIndex < 0) return false;
-  auto mother = asGenParticle(genParticles->at(motherIndex));
+  auto mother = asNanoGenParticle(genParticles->at(motherIndex));
 
   int pid = particle->GetPdgId();
 
@@ -103,7 +103,7 @@ bool TTAlpsEvent::IsGoodParticle(int particleIndex, vector<int> topIndices, vect
 
 bool TTAlpsEvent::ParticlesMotherInIndices(int particleIndex, vector<int> indices) {
   auto genParticles = event->GetCollection("GenPart");
-  auto genParticle = asGenParticle(genParticles->at(particleIndex));
+  auto genParticle = asNanoGenParticle(genParticles->at(particleIndex));
   int motherIndex = genParticle->GetMotherIndex();
 
   if (find(indices.begin(), indices.end(), motherIndex) != indices.end()) return true;
@@ -114,10 +114,10 @@ bool TTAlpsEvent::ParticlesMotherInIndices(int particleIndex, vector<int> indice
 
 bool TTAlpsEvent::ParticleHasISRmotherAfterTopMother(int particleIndex) {
   auto genParticles = event->GetCollection("GenPart");
-  auto genParticle = asGenParticle(genParticles->at(particleIndex));
+  auto genParticle = asNanoGenParticle(genParticles->at(particleIndex));
   int motherIndex = genParticle->GetMotherIndex();
 
-  auto mother = asGenParticle(genParticles->at(motherIndex));
+  auto mother = asNanoGenParticle(genParticles->at(motherIndex));
 
   if (mother->IsTop()) return false;
   if (mother->IsJet()) return true;
