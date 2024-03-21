@@ -37,13 +37,13 @@ hist_path = "histograms_pileupSFs"
 # skim = "skimmed_SR_Met50GeV"
 skim = "skimmed_SemimuonicSR_Met50GeV"
 
-output_path = f"../plots_{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}/"
 
 # luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 
 canvas_size = (800, 600)
-show_ratio_plots = True
+show_ratio_plots = False
 ratio_limits = (0.5, 1.5)
 
 legend_width = 0.17 if show_ratio_plots else 0.20
