@@ -105,3 +105,4 @@ eventSelections = {
 
 branchesToKeep = ["*"]
 branchesToRemove = []
+specialBranchSizes = {}

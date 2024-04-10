@@ -6,6 +6,7 @@
 #include "HistogramsHandler.hpp"
 #include "Profiler.hpp"
 #include "TTAlpsSelections.hpp"
+#include "TTAlpsObjectsManager.hpp"
 #include "UserExtensionsHelpers.hpp"
 
 using namespace std;
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto eventProcessor = make_unique<EventProcessor>();
   auto ttAlpsSelections = make_unique<TTAlpsSelections>();
+  auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
   info() << "Retrieving values from config file... " << endl;
 
@@ -83,6 +85,7 @@ int main(int argc, char **argv) {
     }
 
     if(applySignalLikeSkimming){
+      ttalpsObjectsManager->InsertLooseMuonsMatchedCollections(event);
       if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager, muonMatchingType)) continue;
     }
 

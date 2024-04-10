@@ -8,6 +8,8 @@ runDefaultHistograms = True
 runTriggerHistograms = False
 runPileupHistograms = False
 runLLPNanoAODHistograms = False
+runMuonMatchingHistograms = False
+runGenMuonHistograms = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)

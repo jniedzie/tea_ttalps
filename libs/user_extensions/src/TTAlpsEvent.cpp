@@ -190,7 +190,7 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsFromALP(shared_ptr<PhysicsObject
   vector<int> savedMuonIndices;
 
   for (auto genMuon : *genMuons) {
-    auto genMuonp4 = asNanoGenParticle(genMuon)->GetFourVector();
+    auto genMuonp4 = asNanoGenParticle(genMuon)->GetFourVector(0.105);
 
     float minDeltaR = 9999;
     float minDeltaR_muonIdx = -1;
@@ -204,7 +204,7 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsFromALP(shared_ptr<PhysicsObject
         minDeltaR_muonIdx = i;
       }
     }
-    if(minDeltaR_muonIdx > 0 && find(savedMuonIndices.begin(), savedMuonIndices.end(), minDeltaR_muonIdx) == savedMuonIndices.end()) {
+    if(minDeltaR_muonIdx >= 0 && find(savedMuonIndices.begin(), savedMuonIndices.end(), minDeltaR_muonIdx) == savedMuonIndices.end()) {
       muonsFromALP->push_back(muonCollection->at(minDeltaR_muonIdx));
       savedMuonIndices.push_back(minDeltaR_muonIdx);
     }

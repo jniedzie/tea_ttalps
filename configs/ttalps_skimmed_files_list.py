@@ -7,9 +7,9 @@ max_files = -1
 # input_skim = "skimmed_looseSemileptonic"
 # input_skim = "skimmed_looseSemimuonic_tightMuon"
 # input_skim = "skimmed_looseSemimuonic_tightMuon_newBtag"
-# input_skim = "skimmed_looseSemimuonic"
+input_skim = "skimmed_looseSemimuonic"
 # input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet"
-input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
+# input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
 
 # Loose skims
 # output_skim = "skimmed_looseSemimuonic"
@@ -23,7 +23,7 @@ input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
-output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
+# output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
 
 # output_skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # output_skim = "skimmed_ttZSemimuonicCR_Met50GeV"
@@ -31,7 +31,7 @@ output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJ
 # output_skim = "skimmed_SR_Met50GeV_1mediumBjets_muonIdIso"
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_DR"
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_OuterDR"
-# output_skim = "skimmed_looseSemimuonic_SRmuonic_Segment"
+output_skim = "skimmed_looseSemimuonic_SRmuonic_Segment"
 
 # file_name = "6476B810-7ED2-704C-B80D-6F956C63EEBD.root"
 
@@ -101,6 +101,20 @@ samples = (
   "backgrounds2018/QCD_Pt_800to1000_MuEnriched",
   "backgrounds2018/QCD_Pt_1000_MuEnriched",
 
+  # QCD LLPnanoAOD mu enhanced naming
+  # "backgrounds2018/QCD_Pt-15To20",
+  # "backgrounds2018/QCD_Pt-20To30",
+  # "backgrounds2018/QCD_Pt-30To50",
+  # "backgrounds2018/QCD_Pt-50To80",
+  # "backgrounds2018/QCD_Pt-80To120",
+  # "backgrounds2018/QCD_Pt-120To170",
+  # "backgrounds2018/QCD_Pt-170To300",
+  # "backgrounds2018/QCD_Pt-300To470",
+  # "backgrounds2018/QCD_Pt-470To600",
+  # "backgrounds2018/QCD_Pt-600To800",
+  # "backgrounds2018/QCD_Pt-800To1000",
+  # "backgrounds2018/QCD_Pt-1000",
+
   # # Data
   "collision_data2018/SingleMuon2018A",
   "collision_data2018/SingleMuon2018B",
@@ -113,6 +127,7 @@ samples = (
   # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e-5mm",
 )
 
 # this has to be here, otherwise the script will not work:
