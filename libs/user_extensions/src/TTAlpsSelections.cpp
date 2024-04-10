@@ -34,12 +34,10 @@ void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager>
 }
 
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto looseMuons = event->GetCollection("LooseMuons");
-  int nLooseMuons = looseMuons->size();
+  int nLooseMuons = event->GetCollection("LooseMuons")->size();
   if (nLooseMuons > 1) return false;
 
-  auto tightMuons = event->GetCollection("TightMuons");
-  int nTightMuons = tightMuons->size();
+  int nTightMuons = event->GetCollection("TightMuons")->size();
   if (nTightMuons != 1) return false;
 
   if (nLooseMuons == 1) {
