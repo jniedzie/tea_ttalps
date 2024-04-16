@@ -11,7 +11,6 @@ applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
-muonMatchingType = ""
 
 triggerSelection = (
     "HLT_IsoMu24",

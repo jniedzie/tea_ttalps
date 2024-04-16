@@ -44,7 +44,6 @@ treeOutputFilePath = f"{basePath}/{sampleName}/skimmed_signalLike/{fileName}"
 
 weightsBranchName = "weight"
 eventsTreeNames = ("Events",)
-muonMatchingType = ""
 
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",

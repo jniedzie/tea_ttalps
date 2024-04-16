@@ -13,10 +13,19 @@ applySignalLikeSkimming = True
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
-# muonMatchingType = ""
-# muonMatchingType = "DR"
-# muonMatchingType = "OuterDR"
-muonMatchingType = "Segment"
+# For the signal like skimming the muonMatchingParams are applied in cumulative order from top to bottom
+# If only one matching method should be used ONLY include that one method
+# Matching methods implemented are:
+# "Segment" : max matching ratio (eg. 2.0f/3.0f)
+# "DR" : max Delta R (eg. 0.1)
+# "OuterDR" : max Delta R (eg. 0.1)
+# "ProxDR" : max Delta R (eg. 0.1)
+muonMatchingParams = {
+    "Segment" : 2.0/3.0,
+    # "DR" : 0.1
+    # "OuterDR" : 0.1
+    # "ProxDR" : 0.1
+}
 
 eventSelections = {
     "MET_pt": (50, 9999999),

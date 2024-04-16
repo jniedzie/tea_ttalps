@@ -40,12 +40,10 @@ int main(int argc, char **argv) {
   info() << "Retrieving values from config file... " << endl;
 
   bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming, applyTTZLikeSkimming;
-  std::string muonMatchingType;
   config.GetValue("applyLooseSkimming", applyLooseSkimming);
   config.GetValue("applyTTbarLikeSkimming", applyTTbarLikeSkimming);
   config.GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
   config.GetValue("applyTTZLikeSkimming", applyTTZLikeSkimming);
-  config.GetValue("muonMatchingType", muonMatchingType);
 
   info() << "Registering cuts" << endl;
 
@@ -69,6 +67,7 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
+
     if(applyLooseSkimming){
       if (!eventProcessor->PassesGoldenJson(event)) continue;
       cutFlowManager->UpdateCutFlow("goldenJson");
@@ -80,15 +79,16 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("metFilters");
     }
 
+
     if(applyTTbarLikeSkimming){
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
     }
 
-    if(applySignalLikeSkimming){
-      ttalpsObjectsManager->InsertLooseMuonsMatchedCollections(event);
-      if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager, muonMatchingType)) continue;
-    }
 
+    if(applySignalLikeSkimming){
+      ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
+      if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;
+    }
     if(applyTTZLikeSkimming){
       if(!ttAlpsSelections->PassesTTZLikeSelections(event, cutFlowManager)) continue;
     }

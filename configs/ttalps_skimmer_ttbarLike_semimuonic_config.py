@@ -10,7 +10,6 @@ applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
-muonMatchingType = ""
 
 eventSelections = {
     "MET_pt": (50, 9999999),

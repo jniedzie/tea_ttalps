@@ -8,7 +8,6 @@ applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
-muonMatchingType = ""
 
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
