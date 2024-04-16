@@ -544,12 +544,17 @@ for matchingMethod, param in muonMatchingParams.items():
     (muonCollectionName       , "nSegments"         , 50     , 0    , 50   , ""  ),
     (muonCollectionName       , "invMass"          , 10000 , 0     , 100   , ""  ),
     (muonCollectionName       , "deltaR"           , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "minDeltaR"        , 1000  , 0     , 10    , ""  ),
     (muonCollectionName       , "outerDeltaR"      , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "minOuterDeltaR"   , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "minProxDeltaR"    , 1000  , 0     , 10    , ""  ),
     (muonCollectionName       , "deltaEta"         , 1000  , 0     , 10    , ""  ),
     (muonCollectionName       , "deltaPhi"         , 1000  , 0     , 10    , ""  ),
   )
 
-  GenMuon_histParams += (("GenMuonFromALP"         , muonCollectionName+"MinDR"      , 1000  , 0     , 10    , ""  ))
+  GenMuon_histParams += (
+    ("GenMuonFromALP"         , "LooseMuons"+matchingMethod+"MatchMinDR"      , 1000  , 0     , 10    , ""  ),
+  )
 
   muonVertexCollectionName = "LooseMuonsFromALP"+matchingMethod+"MatchVertex"
   GenMuon_histParams += (
