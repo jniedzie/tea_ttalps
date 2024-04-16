@@ -30,12 +30,15 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
     return false;
   }
   auto allMuons = make_shared<PhysicsObjects>();
-
+  bool firstMatching = true;
 
   for(auto &[matchingMethod, param] : muonMatchingParams) {
     string collectionName = "LooseMuons" + matchingMethod + "Match";
     shared_ptr<PhysicsObjects> matchedMuons = event->GetCollection(collectionName);
-    if(allMuons == nullptr) allMuons = matchedMuons;
+    if(firstMatching) {
+      allMuons = matchedMuons;
+      firstMatching = false;
+    }
     else {
       auto allMuons_new = make_shared<PhysicsObjects>();
       for(auto muon : *matchedMuons) {
