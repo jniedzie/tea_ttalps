@@ -11,17 +11,41 @@ using namespace std;
 
 TTAlpsSelections::TTAlpsSelections(){
   eventProcessor = make_unique<EventProcessor>();
+
+  auto &config = ConfigManager::GetInstance();
+  try {
+    config.GetMuonMatchingParams(muonMatchingParams);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
+  }
 }
 
 void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> cutFlowManager) {
   cutFlowManager->RegisterCut("nLooseMuonsOrDSAMuons");
 }
 
-bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string muonMatching) {
-  shared_ptr<PhysicsObjects> allMuons;
-  if(muonMatching == "DR") allMuons = asNanoEvent(event)->GetDRMatchedMuons(0.01);
-  if(muonMatching == "OuterDR") allMuons = asNanoEvent(event)->GetOuterDRMatchedMuons(0.01);
-  if(muonMatching == "Segment") allMuons = asNanoEvent(event)->GetSegmentMatchedMuons();
+bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if(muonMatchingParams.size() == 0){
+    warn() << "No muon matching methods defined in config file - skipping muon matching" << endl;
+    return false;
+  }
+  auto allMuons = make_shared<PhysicsObjects>();
+
+
+  for(auto &[matchingMethod, param] : muonMatchingParams) {
+    string collectionName = "LooseMuons" + matchingMethod + "Match";
+    shared_ptr<PhysicsObjects> matchedMuons = event->GetCollection(collectionName);
+    if(allMuons == nullptr) allMuons = matchedMuons;
+    else {
+      auto allMuons_new = make_shared<PhysicsObjects>();
+      for(auto muon : *matchedMuons) {
+        if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSAMuon())) {
+          allMuons_new->push_back(muon);
+        }
+      }
+      allMuons = allMuons_new;
+    }
+  }
 
   if(allMuons->size() < 3) return false;
   cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");
