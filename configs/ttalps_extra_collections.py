@@ -19,7 +19,7 @@ extraEventCollections = {
   },
   "LooseDSAMuons": {
     "inputCollections": ("DSAMuon",),
-    "displacedID": (1, 9999990),
+    "displacedID": (1, 9999999.),
     "pt": (15., 9999999.),
     "eta": (-2.5, 2.5),
   },
