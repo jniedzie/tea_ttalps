@@ -53,10 +53,8 @@ int main(int argc, char **argv) {
     auto event = eventReader->GetEvent(iEvent);
 
     if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms) {
-      ttalpsObjectsManager->InsertLooseMuonsMatchedCollections(event);
-      ttalpsObjectsManager->InsertLooseMuonVerticesMatchedCollections(event);
+      ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
-      ttalpsObjectsManager->InsertLooseMuonMatchingEfficiencyCollections(event);
     }
 
     if (runDefaultHistograms) {
@@ -70,6 +68,7 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesFromLLPNanoAOD(event);
     }
     if(runMuonMatchingHistograms){
+      ttalpsObjectsManager->InsertMatchedLooseMuonEfficiencyCollections(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsMuonMatchingVariables(event);
     }
     if(runGenMuonHistograms){
