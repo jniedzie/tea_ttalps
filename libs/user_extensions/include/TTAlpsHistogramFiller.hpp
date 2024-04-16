@@ -37,6 +37,8 @@ class TTAlpsHistogramFiller {
   std::map<std::string, HistogramParams> defaultHistVariables;
   std::map<std::string, HistogramParams> ttalpsHistVariables;
 
+  std::map<std::string, float> muonMatchingParams;
+  
   std::vector<std::string> triggerNames;
   bool EndsWithTriggerName(std::string name);
 
@@ -53,7 +55,7 @@ class TTAlpsHistogramFiller {
   void FillMuonMinDeltaRHistograms(const std::shared_ptr<Event> event, std::string collectionName);
 
   // Gen-Level histograms
-  void FillGenMuonMinDR(const std::shared_ptr<PhysicsObject> genMuon, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollection, float weight);
+  void FillGenMuonMinDR(const std::shared_ptr<PhysicsObject> genMuon, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollection, std::string muonCollectionName, float weight);
   void FillGenALPsHistograms(const std::shared_ptr<Event> event);
   void FillGenMuonsFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsFromALPsHistograms(const std::shared_ptr<Event> event);

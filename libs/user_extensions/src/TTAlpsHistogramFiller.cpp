@@ -30,6 +30,11 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
   } catch (const Exception &e) {
     warn() << "Couldn't read histParams from config file - no custom ttalps histograms will be included" << endl;
   }
+  try {
+    config.GetMuonMatchingParams(muonMatchingParams);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
+  }
 }
 
 TTAlpsHistogramFiller::~TTAlpsHistogramFiller() {}
@@ -287,8 +292,6 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<Collection
     if(asNanoMuon(object)->isDSAMuon()) nDSA++;
     if(!asNanoMuon(object)->isDSAMuon()) nPat++;
   }
-  histogramsHandler->Fill("Event_n"+collectionName+"_DSA", nDSA, weight);
-  histogramsHandler->Fill("Event_n"+collectionName+"_PAT", nPat, weight);
 }
 
 void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<Event> event, string collectionName) {
@@ -311,13 +314,18 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     float muonWeight2 = GetObjectWeight(muons.second, "LooseMuons");
     
     histogramsHandler->Fill(vertexName+"_chi2", vertex->Get("chi2"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_ndof", vertex->Get("ndof"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_normChi2", vertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vxy", vertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vxySigma", vertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
-    float vxyz = sqrt(float(vertex->Get("vx"))*float(vertex->Get("vx")) + float(vertex->Get("vy"))*float(vertex->Get("vy")) + float(vertex->Get("vz"))*float(vertex->Get("vz")));
-    histogramsHandler->Fill(vertexName+"_vxyz", vxyz, weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_vxyz", vertex->Get("vxyz"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_vxyzSigma", vertex->Get("vxyzSigma"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vx", vertex->Get("vx"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vy", vertex->Get("vy"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vz", vertex->Get("vz"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_vxErr", vertex->Get("vxErr"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_vyErr", vertex->Get("vyErr"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_vzErr", vertex->Get("vzErr"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_dR", vertex->Get("dR"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_idx1", vertex->Get("idx1"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_idx2", vertex->Get("idx2"), weight * muonWeight1 * muonWeight2);
@@ -331,16 +339,19 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(vertexName+"_displacedTrackIso04Muon1", vertex->Get("displacedTrackIso04Muon1"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_displacedTrackIso03Muon2", vertex->Get("displacedTrackIso03Muon2"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_displacedTrackIso04Muon2", vertex->Get("displacedTrackIso04Muon2"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_chargeProduct", asNanoDimuonVertex(vertex)->GetDimuonChargeProduct(event), weight * muonWeight1 * muonWeight2);
 
     string category = asNanoDimuonVertex(vertex)->GetVertexCategory();
     histogramsHandler->Fill(vertexName+"_"+category+"_chi2", vertex->Get("chi2"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_"+category+"_ndof", vertex->Get("ndof"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_"+category+"_normChi2", vertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_vxy", vertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_vxySigma", vertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_vx", vertex->Get("vx"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_vy", vertex->Get("vy"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_vz", vertex->Get("vz"), weight * muonWeight1 * muonWeight2);
-    vxyz = sqrt(float(vertex->Get("vx"))*float(vertex->Get("vx")) + float(vertex->Get("vy"))*float(vertex->Get("vy")) + float(vertex->Get("vz"))*float(vertex->Get("vz")));
-    histogramsHandler->Fill(vertexName+"_"+category+"_vxyz", vxyz, weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_"+category+"_vxyz", vertex->Get("vxyz"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName+"_"+category+"_vxyzSigma", vertex->Get("vxyzSigma"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_dR", vertex->Get("dR"), weight * muonWeight1 * muonWeight2);
     if(category=="PatDSA") nPatDSA++;
     if(category=="Pat") nPat++;
@@ -423,26 +434,21 @@ void TTAlpsHistogramFiller::FillMuonMinDeltaRHistograms(const shared_ptr<Event> 
 void TTAlpsHistogramFiller::FillAllLooseMuonsHistograms(const shared_ptr<Event> event){
   float weight = GetEventWeight(event);
 
-  FillLooseMuonsHistograms(event, "LooseMuonsDRMatch");
-  FillLooseMuonsHistograms(event, "LooseMuonsOuterDRMatch");
-  FillLooseMuonsHistograms(event, "LooseMuonsSegmentMatch");
-  FillMuonMinDeltaRHistograms(event, "LooseMuonsDRMatch");
-  FillMuonMinDeltaRHistograms(event, "LooseMuonsOuterDRMatch");
-  FillMuonMinDeltaRHistograms(event, "LooseMuonsSegmentMatch");
+  for(auto &[matchingMethod, param] : muonMatchingParams) {
+    string muonCollectionName = "LooseMuons" + matchingMethod + "Match";
+    FillLooseMuonsHistograms(event, muonCollectionName);
+    FillMuonMinDeltaRHistograms(event, muonCollectionName);
+    auto DSAmuonCollection = asNanoEvent(event)->GetDSAMuonsFromCollection(muonCollectionName);
+    auto PATmuonCollection = asNanoEvent(event)->GetPATMuonsFromCollection(muonCollectionName);
+    string DSAmuonCollectionName = "LooseDSAMuons" + matchingMethod + "Match";
+    string PATmuonCollectionName = "LoosePATMuons" + matchingMethod + "Match";
+    FillLooseMuonsHistograms(DSAmuonCollection, DSAmuonCollectionName, weight);
+    FillLooseMuonsHistograms(PATmuonCollection, PATmuonCollectionName, weight);
+    string muonVertexCollectionName = "LooseMuonsVertex" + matchingMethod + "Match";
+    FillMuonVertexHistograms(event,muonVertexCollectionName);
+  }
 
-  auto LooseDSAMuonsSegmentMatch = asNanoEvent(event)->GetDSAMuonsInCollection("LooseMuonsSegmentMatch");
-  auto LoosePATMuonsSegmentMatch = asNanoEvent(event)->GetPatMuonsInCollection("LooseMuonsSegmentMatch");
-  FillLooseMuonsHistograms(LooseDSAMuonsSegmentMatch, "LooseDSAMuonsSegmentMatch", weight);
-  FillLooseMuonsHistograms(LoosePATMuonsSegmentMatch, "LoosePATMuonsSegmentMatch", weight);
-  auto looseDSAMuonsOuterDRMatch = asNanoEvent(event)->GetDSAMuonsInCollection("LooseMuonsOuterDRMatch");
-  auto loosePATMuonsOuterDRMatch = asNanoEvent(event)->GetPatMuonsInCollection("LooseMuonsOuterDRMatch");
-  FillLooseMuonsHistograms(looseDSAMuonsOuterDRMatch, "LooseDSAMuonsOuterDRMatch", weight);
-  FillLooseMuonsHistograms(loosePATMuonsOuterDRMatch, "LoosePATMuonsOuterDRMatch", weight);
-  
-  // FillMuonVertexHistograms(event,"LooseMuonsVertexDRMatch");
-  FillMuonVertexHistograms(event,"LooseMuonsVertexOuterDRMatch");
-  FillMuonVertexHistograms(event,"LooseMuonsVertexSegmentMatch");
-
+  FillMuonVertexHistograms(event,"GoodLooseMuonsVertexWithLargeDR");
 }
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const shared_ptr<Event> event) {
@@ -541,8 +547,9 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<PhysicsObject>
   }
 }
 
-void TTAlpsHistogramFiller::FillGenMuonMinDR(const shared_ptr<PhysicsObject> genMuon, const shared_ptr<Collection<shared_ptr<PhysicsObject> >> muonCollection, float weight) {
-  TLorentzVector genMuonFourVector = asNanoGenParticle(genMuon)->GetFourVector(0.105);
+void TTAlpsHistogramFiller::FillGenMuonMinDR(const shared_ptr<PhysicsObject> genMuon, const shared_ptr<Collection<shared_ptr<PhysicsObject> >> muonCollection, string muonCollectionName, float weight) {
+  float muonMass = 0.105;
+  TLorentzVector genMuonFourVector = asNanoGenParticle(genMuon)->GetFourVector(muonMass);
   float deltaRmin = 9999.;
   float muonWeight = 1;
   for ( auto muon : *muonCollection ) {
@@ -552,7 +559,7 @@ void TTAlpsHistogramFiller::FillGenMuonMinDR(const shared_ptr<PhysicsObject> gen
       muonWeight = GetObjectWeight(muon, "LooseMuons");
     }
   }
-  if(deltaRmin < 9999.) histogramsHandler->Fill("GenMuonFromALP_looseMuonsDRMatchMinDR", deltaRmin, weight*muonWeight);
+  if(deltaRmin < 9999.) histogramsHandler->Fill("GenMuonFromALP_"+muonCollectionName+"MinDR", deltaRmin, weight*muonWeight);
 }
 
 void TTAlpsHistogramFiller::FillGenMuonsFromALPsHistograms(const shared_ptr<Event> event) {
@@ -623,43 +630,35 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromALPsHistograms(const shared_ptr<Ev
 
   auto genMuonsFromALP = asTTAlpsEvent(event)->GetGenMuonsFromALP();
 
-  auto looseMuonsDRMatch = event->GetCollection("LooseMuonsDRMatch");
-  auto looseMuonsOuterDRMatch = event->GetCollection("LooseMuonsOuterDRMatch");
-  auto looseMuonsSegmentMatch = event->GetCollection("LooseMuonsSegmentMatch");
   auto loosePATMuons = event->GetCollection("LooseMuons");
   auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
 
+  for(auto &[matchingMethod, param] : muonMatchingParams) {
+    string muonCollectionName = "LooseMuons" + matchingMethod + "Match";
+    auto looseMatchedMuons = event->GetCollection(muonCollectionName);
+    for ( auto genMuon : *genMuonsFromALP ) {
+      FillGenMuonMinDR(genMuon, looseMatchedMuons, muonCollectionName, weight);
+      auto looseMatchedMuonsFromALP = asTTAlpsEvent(event)->GetMuonsMatchedToGenMuonsFromALP(looseMatchedMuons);
+
+      string muonFromALPsCollectionName = "LooseMuonsFromALP"+matchingMethod+"Match";
+      FillLooseMuonsHistograms(looseMatchedMuonsFromALP,muonFromALPsCollectionName,weight);
+      FillMuonMinDeltaRHistograms(event, looseMatchedMuonsFromALP, muonFromALPsCollectionName);
+
+      if(looseMatchedMuonsFromALP->size() > 1) {
+        FillDimuonHistograms(looseMatchedMuonsFromALP->at(0), looseMatchedMuonsFromALP->at(1), muonFromALPsCollectionName, weight, false);
+        auto dimuonVertex = asNanoEvent(event)->GetVertexForDimuon(looseMatchedMuonsFromALP->at(0),looseMatchedMuonsFromALP->at(1));
+        string muonFromALPsVertexCollectionName = muonFromALPsCollectionName+"Vertex";
+        FillMuonVertexHistograms(event,dimuonVertex,muonFromALPsVertexCollectionName);
+      }
+    }
+
+  }
+
   for ( auto genMuon : *genMuonsFromALP ) {
-    FillGenMuonMinDR(genMuon, looseMuonsDRMatch, weight);
-    FillGenMuonMinDR(genMuon, looseMuonsOuterDRMatch, weight);
-    FillGenMuonMinDR(genMuon, looseMuonsSegmentMatch, weight);
-    FillGenMuonMinDR(genMuon, loosePATMuons, weight);
-    FillGenMuonMinDR(genMuon, looseDSAMuons, weight);
+    FillGenMuonMinDR(genMuon, loosePATMuons, "LoosePATMuons", weight);
+    FillGenMuonMinDR(genMuon, looseDSAMuons, "LooseDSAMuons", weight);
   }
 
-  auto muonsFromALPDRMatch = asTTAlpsEvent(event)->GetMuonsFromALP(looseMuonsDRMatch);
-  auto muonsFromALPOuterDRMatch = asTTAlpsEvent(event)->GetMuonsFromALP(looseMuonsOuterDRMatch, 0.3);
-  auto muonsFromALPSegmentMatch = asTTAlpsEvent(event)->GetMuonsFromALP(looseMuonsSegmentMatch, 0.3);
-  FillLooseMuonsHistograms(muonsFromALPOuterDRMatch,"LooseMuonsFromALPOuterDRMatch",weight);
-  FillLooseMuonsHistograms(muonsFromALPSegmentMatch,"LooseMuonsFromALPSegmentMatch",weight);
-  FillMuonMinDeltaRHistograms(event, muonsFromALPSegmentMatch, "LooseMuonsFromALPOuterDRMatch");
-  FillMuonMinDeltaRHistograms(event, muonsFromALPSegmentMatch, "LooseMuonsFromALPSegmentMatch");
-
-  if(muonsFromALPDRMatch->size() > 1) {
-    FillDimuonHistograms(muonsFromALPDRMatch->at(0), muonsFromALPDRMatch->at(1), "LooseMuonsFromALPDRMatch", weight, false);
-    auto dimuonVertex = asNanoEvent(event)->GetVertexForDimuon(muonsFromALPDRMatch->at(0),muonsFromALPDRMatch->at(1));
-    FillMuonVertexHistograms(event,dimuonVertex,"LooseMuonsFromALPDRMatchVertex");
-  }
-  if(muonsFromALPOuterDRMatch->size() > 1) {
-    FillDimuonHistograms(muonsFromALPOuterDRMatch->at(0), muonsFromALPOuterDRMatch->at(1), "LooseMuonsFromALPOuterDRMatch", weight, false);
-    auto dimuonVertex = asNanoEvent(event)->GetVertexForDimuon(muonsFromALPOuterDRMatch->at(0),muonsFromALPOuterDRMatch->at(1));
-    FillMuonVertexHistograms(event,dimuonVertex,"LooseMuonsFromALPOuterDRMatchVertex");
-  }
-  if(muonsFromALPSegmentMatch->size() > 1) {
-    FillDimuonHistograms(muonsFromALPSegmentMatch->at(0), muonsFromALPSegmentMatch->at(1), "LooseMuonsFromALPSegmentMatch", weight, false);
-    auto dimuonVertex = asNanoEvent(event)->GetVertexForDimuon(muonsFromALPSegmentMatch->at(0),muonsFromALPSegmentMatch->at(1));
-    FillMuonVertexHistograms(event,dimuonVertex,"LooseMuonsFromALPSegmentMatchVertex");
-  }
 }
 
 void TTAlpsHistogramFiller::FillMatchedMuonHistograms(const shared_ptr<PhysicsObject> muon, string muonCollectionName, float weight) {
@@ -693,13 +692,13 @@ void TTAlpsHistogramFiller::FillMatchingHistograms(const shared_ptr<Event> event
   for(auto dsaMuon : *looseDsaMuons){
     
     float muonWeight = GetObjectWeight(dsaMuon, "LooseMuons");
-    float nSegments = dsaMuon->Get("nSegmentHits");
+    float nSegments = dsaMuon->Get("nSegments");
     float minRatio = float(2)/float(3);
 
     histogramsHandler->Fill(dsaMuonCollection+"_nDTHits", dsaMuon->Get("trkNumDTHits"), weight * muonWeight);
     histogramsHandler->Fill(dsaMuonCollection+"_nCSCHits", dsaMuon->Get("trkNumCSCHits"), weight * muonWeight);
     histogramsHandler->Fill(dsaMuonCollection+"_nDTplusCSCHits", float(dsaMuon->Get("trkNumDTHits"))+float(dsaMuon->Get("trkNumCSCHits")), weight * muonWeight);
-    histogramsHandler->Fill(dsaMuonCollection+"_nSegments", dsaMuon->Get("nSegmentHits"), weight * muonWeight);
+    histogramsHandler->Fill(dsaMuonCollection+"_nSegments", nSegments, weight * muonWeight);
     histogramsHandler->Fill(dsaMuonCollection+"_muonMatch1", dsaMuon->Get("muonMatch1"), weight * muonWeight);
     float ratio1 = float(dsaMuon->Get("muonMatch1")) / nSegments;
     histogramsHandler->Fill(dsaMuonCollection+"_matchRatio1", ratio1, weight * muonWeight);
@@ -709,9 +708,9 @@ void TTAlpsHistogramFiller::FillMatchingHistograms(const shared_ptr<Event> event
     histogramsHandler->Fill(dsaMuonCollection+"_muonMatch3", dsaMuon->Get("muonMatch3"), weight * muonWeight);
     float ratio3 = float(dsaMuon->Get("muonMatch3")) / nSegments;
     histogramsHandler->Fill(dsaMuonCollection+"_matchRatio3", ratio3, weight * muonWeight);
-    histogramsHandler->Fill(dsaMuonCollection+"_muonMatch1_nSegments", dsaMuon->Get("muonMatch1"), dsaMuon->Get("nSegmentHits"), weight*muonWeight*muonWeight);
-    histogramsHandler->Fill(dsaMuonCollection+"_muonMatch2_nSegments", dsaMuon->Get("muonMatch2"), dsaMuon->Get("nSegmentHits"), weight*muonWeight*muonWeight);
-    histogramsHandler->Fill(dsaMuonCollection+"_muonMatch3_nSegments", dsaMuon->Get("muonMatch3"), dsaMuon->Get("nSegmentHits"), weight*muonWeight*muonWeight);
+    histogramsHandler->Fill(dsaMuonCollection+"_muonMatch1_nSegments", dsaMuon->Get("muonMatch1"), nSegments, weight*muonWeight*muonWeight);
+    histogramsHandler->Fill(dsaMuonCollection+"_muonMatch2_nSegments", dsaMuon->Get("muonMatch2"), nSegments, weight*muonWeight*muonWeight);
+    histogramsHandler->Fill(dsaMuonCollection+"_muonMatch3_nSegments", dsaMuon->Get("muonMatch3"), nSegments, weight*muonWeight*muonWeight);
 
     float matchFound = false;
     float muon_idx = -1;
@@ -720,7 +719,7 @@ void TTAlpsHistogramFiller::FillMatchingHistograms(const shared_ptr<Event> event
     for(int i=1; i<=5; i++) {
       float ratio_tmp = asNanoMuon(dsaMuon)->GetMatchesForNthBestMatch(i) / nSegments;
       if(!matchFound && ratio_tmp >= minRatio) {
-        if(asNanoEvent(event)->MuonIndexExist(looseMuons, asNanoMuon(dsaMuon)->GetMatchIdxForNthBestMatch(i),false)) {
+        if(asNanoEvent(event)->PATMuonIndexExist(looseMuons, asNanoMuon(dsaMuon)->GetMatchIdxForNthBestMatch(i))) {
           matchFound = true;
           muon_idx = asNanoMuon(dsaMuon)->GetMatchIdxForNthBestMatch(i);
           maxMatches = asNanoMuon(dsaMuon)->GetMatchesForNthBestMatch(i);
@@ -730,11 +729,11 @@ void TTAlpsHistogramFiller::FillMatchingHistograms(const shared_ptr<Event> event
     }
     if(matchFound) {
       nSegmentMatched++;
-      pair<float,int> dsaGenMinDR = asNanoEvent(event)->GetMinDeltaRToGenMuons(dsaMuon);
+      pair<float,int> dsaGenMinDR = asNanoEvent(event)->GetDeltaRandIndexOfClosestGenMuon(dsaMuon);
       float dsaMinDR = dsaGenMinDR.first;
       float dsaMinDR_genidx = dsaGenMinDR.second;
-      auto muon = asNanoEvent(event)->GetMuonWithIndex(muon_idx, patMuonCollection, false);
-      pair<float,int> patGenMinDR = asNanoEvent(event)->GetMinDeltaRToGenMuons(muon); 
+      auto muon = asNanoEvent(event)->GetPATMuonWithIndex(muon_idx, patMuonCollection);
+      pair<float,int> patGenMinDR = asNanoEvent(event)->GetDeltaRandIndexOfClosestGenMuon(muon); 
       float patMinDR = patGenMinDR.first;
       float patMinDR_genidx = patGenMinDR.second;
       float muonWeight = GetObjectWeight(muon, "LooseMuons");
