@@ -13,7 +13,7 @@ class TTAlpsEvent {
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
   std::shared_ptr<PhysicsObjects> GetGenALPs();
   std::shared_ptr<PhysicsObjects> GetGenMuonsFromALP();
-  std::shared_ptr<PhysicsObjects> GetMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.5);
+  std::shared_ptr<PhysicsObjects> GetMuonsMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.5);
   std::shared_ptr<PhysicsObjects> GetVertexForDimuon(std::shared_ptr<PhysicsObject> muon1, std::shared_ptr<PhysicsObject> muon2);
   
   std::string GetTTbarEventCategory();

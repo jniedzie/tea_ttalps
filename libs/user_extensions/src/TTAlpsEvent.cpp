@@ -125,10 +125,10 @@ bool TTAlpsEvent::ParticleHasISRmotherAfterTopMother(int particleIndex) {
   return ParticleHasISRmotherAfterTopMother(motherIndex);
 }
 
-bool TTAlpsEvent::IsGoodMuonFromALP(int muonIndex) {
+bool TTAlpsEvent::IsGoodMuonFromALP(int genMuonIndex) {
 
   auto genParticles = event->GetCollection("GenPart");
-  auto muon = asNanoGenParticle(genParticles->at(muonIndex));
+  auto muon = asNanoGenParticle(genParticles->at(genMuonIndex));
   
   if (!muon->IsLastCopy()) return false;
   if(!muon->IsMuon()) return false;
@@ -138,8 +138,8 @@ bool TTAlpsEvent::IsGoodMuonFromALP(int muonIndex) {
   auto mother = asNanoGenParticle(genParticles->at(motherIndex));
 
   // loop over pythia copies of the muon
-  if (mother->IsMuon() == 13) {
-    while(mother->IsMuon() == 13) {
+  if (mother->IsMuon()) {
+    while(mother->IsMuon()) {
       motherIndex = muon->GetMotherIndex();
       if (motherIndex < 0) return false;
       mother = asNanoGenParticle(genParticles->at(motherIndex));
@@ -147,7 +147,8 @@ bool TTAlpsEvent::IsGoodMuonFromALP(int muonIndex) {
   }
   // mother must be an ALP
   if (!mother->IsLastCopy()) return false;
-  if (abs(mother->GetPdgId()) != 54) return false;
+  int ALPpdgId = 54;
+  if (abs(mother->GetPdgId()) != ALPpdgId) return false;
 
   return true;
 }
@@ -183,14 +184,16 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenMuonsFromALP() {
   return genMuons;
 }
 
-shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsFromALP(shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR) {
+shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsMatchedToGenMuonsFromALP(shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR) {
   auto genMuons = GetGenMuonsFromALP();
 
   auto muonsFromALP = make_shared<PhysicsObjects>();
   vector<int> savedMuonIndices;
 
+  float muonMass = 0.105;
+
   for (auto genMuon : *genMuons) {
-    auto genMuonp4 = asNanoGenParticle(genMuon)->GetFourVector(0.105);
+    auto genMuonp4 = asNanoGenParticle(genMuon)->GetFourVector(muonMass);
 
     float minDeltaR = 9999;
     float minDeltaR_muonIdx = -1;
