@@ -1,12 +1,18 @@
 max_files = -1
 
+# LLPNanoAOD input
+# input_skim = "LLPNanoAOD"
+
 # Loose skims
 # input_skim = "skimmed_looseSemileptonic"
 # input_skim = "skimmed_looseSemimuonic_tightMuon"
 # input_skim = "skimmed_looseSemimuonic_tightMuon_newBtag"
-# input_skim = "skimmed_looseSemimuonic"
+input_skim = "skimmed_looseSemimuonic"
 # input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet"
-input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
+# input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
+
+# Loose skims
+# output_skim = "skimmed_looseSemimuonic"
 
 # CRs & SRs
 # output_skim = "skimmed_ttbarLike"
@@ -17,12 +23,15 @@ input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
-output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
+# output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
 
 # output_skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # output_skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
 # output_skim = "skimmed_SR_Met50GeV_1mediumBjets_muonIdIso"
+# output_skim = "skimmed_looseSemimuonic_SRmuonic_DR"
+# output_skim = "skimmed_looseSemimuonic_SRmuonic_OuterDR"
+output_skim = "skimmed_looseSemimuonic_SRmuonic_Segment"
 
 # file_name = "6476B810-7ED2-704C-B80D-6F956C63EEBD.root"
 
@@ -92,6 +101,20 @@ samples = (
   "backgrounds2018/QCD_Pt_800to1000_MuEnriched",
   "backgrounds2018/QCD_Pt_1000_MuEnriched",
 
+  # QCD LLPnanoAOD mu enhanced naming
+  # "backgrounds2018/QCD_Pt-15To20",
+  # "backgrounds2018/QCD_Pt-20To30",
+  # "backgrounds2018/QCD_Pt-30To50",
+  # "backgrounds2018/QCD_Pt-50To80",
+  # "backgrounds2018/QCD_Pt-80To120",
+  # "backgrounds2018/QCD_Pt-120To170",
+  # "backgrounds2018/QCD_Pt-170To300",
+  # "backgrounds2018/QCD_Pt-300To470",
+  # "backgrounds2018/QCD_Pt-470To600",
+  # "backgrounds2018/QCD_Pt-600To800",
+  # "backgrounds2018/QCD_Pt-800To1000",
+  # "backgrounds2018/QCD_Pt-1000",
+
   # # Data
   "collision_data2018/SingleMuon2018A",
   "collision_data2018/SingleMuon2018B",
@@ -99,41 +122,12 @@ samples = (
   "collision_data2018/SingleMuon2018D",
   
   # Signal
+  # "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
-  
-  
-  # LLPnanoAOD
-  # tt̄
-  # "/backgrounds2018/TTToSemiLeptonic_LLPnanoAOD",
-  
-  # # QCD mu enriched
-  #  "/backgrounds2018/QCDPt15To20_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt20To30_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt30To50_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt50To80_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt80To120_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt120To170_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt170To300_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt300To470_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt470To600_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt600To800_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt800To1000_LLPnanoAOD",
-  #  "/backgrounds2018/QCDPt1000_LLPnanoAOD",
-  
-  # Signals
-   "/signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
-   "/signals/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100",
-   "/signals/tta_mAlp-0p35GeV_ctau-1e2mm_nEvents-100",
-   "/signals/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100",
-   "/signals/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000",
-   "/signals/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-1000",
-  #  "/signals/tta_mAlp-0p35GeV_ctau-1e0mm",
-  #  "/signals/tta_mAlp-0p35GeV_ctau-1e1mm",
-  #  "/signals/tta_mAlp-0p35GeV_ctau-1e2mm",
-  #  "/signals/tta_mAlp-0p35GeV_ctau-1e3mm",
-  #  "/signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e-5mm",
 )
 
 # this has to be here, otherwise the script will not work:

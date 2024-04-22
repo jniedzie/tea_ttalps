@@ -11,6 +11,13 @@ using namespace std;
 
 TTAlpsSelections::TTAlpsSelections(){
   eventProcessor = make_unique<EventProcessor>();
+
+  auto &config = ConfigManager::GetInstance();
+  try {
+    config.GetMuonMatchingParams(muonMatchingParams);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
+  }
 }
 
 void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> cutFlowManager) {
@@ -18,7 +25,30 @@ void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> c
 }
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto allMuons = asNanoEvent(event)->GetAllMuons(0.01);
+  if(muonMatchingParams.size() == 0){
+    warn() << "No muon matching methods defined in config file - skipping muon matching" << endl;
+    return false;
+  }
+  auto allMuons = make_shared<PhysicsObjects>();
+  bool firstMatching = true;
+
+  for(auto &[matchingMethod, param] : muonMatchingParams) {
+    string collectionName = "LooseMuons" + matchingMethod + "Match";
+    shared_ptr<PhysicsObjects> matchedMuons = event->GetCollection(collectionName);
+    if(firstMatching) {
+      allMuons = matchedMuons;
+      firstMatching = false;
+    }
+    else {
+      auto allMuons_new = make_shared<PhysicsObjects>();
+      for(auto muon : *matchedMuons) {
+        if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSAMuon())) {
+          allMuons_new->push_back(muon);
+        }
+      }
+      allMuons = allMuons_new;
+    }
+  }
 
   if(allMuons->size() < 3) return false;
   cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");

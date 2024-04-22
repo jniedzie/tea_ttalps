@@ -9,6 +9,7 @@ applyTTZLikeSkimming = True
 applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
+eventsTreeName = "Events"
 
 eventSelections = {
     "MET_pt": (50, 9999999),
@@ -20,3 +21,4 @@ eventSelections = {
 
 branchesToKeep = ["*"]
 branchesToRemove = []
+specialBranchSizes = {}

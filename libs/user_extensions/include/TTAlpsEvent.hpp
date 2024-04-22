@@ -11,6 +11,11 @@ class TTAlpsEvent {
   auto Get(std::string branchName) { return event->Get(branchName); }
   float GetAsFloat(std::string branchName) { return event->GetAsFloat(branchName); }
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
+  std::shared_ptr<PhysicsObjects> GetGenALPs();
+  std::shared_ptr<PhysicsObjects> GetGenMuonsFromALP();
+  std::shared_ptr<PhysicsObjects> GetMuonsMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.5);
+  std::shared_ptr<PhysicsObjects> GetVertexForDimuon(std::shared_ptr<PhysicsObject> muon1, std::shared_ptr<PhysicsObject> muon2);
+  
   std::string GetTTbarEventCategory();
 
  private:
@@ -21,6 +26,7 @@ class TTAlpsEvent {
   bool IsGoodParticle(int particleIndex, std::vector<int> topIndices, std::vector<int> bottomIndices);
   bool ParticlesMotherInIndices(int particleIndex, std::vector<int> indices);
   bool ParticleHasISRmotherAfterTopMother(int particleIndex);
+  bool IsGoodMuonFromALP(int muonIndex);
 };
 
 struct FinalState {

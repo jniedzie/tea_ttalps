@@ -10,6 +10,7 @@ applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
+eventsTreeNames = ("Events",)
 
 triggerSelection = (
     "HLT_IsoMu24",
@@ -37,3 +38,4 @@ requiredFlags = (
 
 branchesToKeep = ["*"]
 branchesToRemove = []
+specialBranchSizes = {}

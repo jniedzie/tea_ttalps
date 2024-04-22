@@ -48,6 +48,7 @@ class TTAlpsSelections {
 
  private:
   std::unique_ptr<EventProcessor> eventProcessor;
+  std::map<std::string, float> muonMatchingParams;
 
 };
 

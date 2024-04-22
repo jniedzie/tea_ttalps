@@ -6,6 +6,7 @@
 #include "HistogramsHandler.hpp"
 #include "Profiler.hpp"
 #include "TTAlpsSelections.hpp"
+#include "TTAlpsObjectsManager.hpp"
 #include "UserExtensionsHelpers.hpp"
 
 using namespace std;
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto eventProcessor = make_unique<EventProcessor>();
   auto ttAlpsSelections = make_unique<TTAlpsSelections>();
+  auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
   info() << "Retrieving values from config file... " << endl;
 
@@ -65,6 +67,7 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
+
     if(applyLooseSkimming){
       if (!eventProcessor->PassesGoldenJson(event)) continue;
       cutFlowManager->UpdateCutFlow("goldenJson");
@@ -76,14 +79,16 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("metFilters");
     }
 
+
     if(applyTTbarLikeSkimming){
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
     }
 
+
     if(applySignalLikeSkimming){
+      ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;
     }
-
     if(applyTTZLikeSkimming){
       if(!ttAlpsSelections->PassesTTZLikeSelections(event, cutFlowManager)) continue;
     }

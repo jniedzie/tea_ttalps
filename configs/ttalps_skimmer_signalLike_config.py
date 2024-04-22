@@ -43,6 +43,7 @@ inputFilePath = f"{basePath}/{sampleName}/skimmed_looseSemileptonic/{fileName}"
 treeOutputFilePath = f"{basePath}/{sampleName}/skimmed_signalLike/{fileName}"
 
 weightsBranchName = "weight"
+eventsTreeNames = ("Events",)
 
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
@@ -86,3 +87,4 @@ eventSelections = {
 
 branchesToKeep = ["*"]
 branchesToRemove = []
+specialBranchSizes = {}

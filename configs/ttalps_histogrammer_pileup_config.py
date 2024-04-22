@@ -6,6 +6,8 @@ printEveryNevents = 10000
 runDefaultHistograms = False
 runTriggerHistograms = False
 runPileupHistograms = True
+runMuonMatchingHistograms = False
+runGenMuonHistograms = False
 
 weightsBranchName = "genWeight"
 

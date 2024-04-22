@@ -1,5 +1,6 @@
 from scale_factors_config import *
 from ttalps_extra_collections import extraEventCollections
+from ttalps_signal_selections import *
 
 nEvents = -1
 printEveryNevents = 10000
@@ -8,16 +9,35 @@ runDefaultHistograms = True
 runTriggerHistograms = False
 runPileupHistograms = False
 runLLPNanoAODHistograms = True
+runMuonMatchingHistograms = True
+runGenMuonHistograms = True
 
 weightsBranchName = "genWeight"
+eventsTreeNames = ("Events",)
+specialBranchSizes = {}
 
 pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
 pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {
-  "muon": False,
-  "muonTrigger": False,
+  "muon": True,
+  "muonTrigger": True,
   "pileup": True,
+  "bTagging": True,
+}
+
+# For the signal histogramming all given mathcing methods are applied separately to histograms
+# More than one given method will not affect the other histograms
+# Matching methods implemented are:
+# "Segment" : max matching ratio (eg. 2.0f/3.0f)
+# "DR" : max Delta R (eg. 0.1)
+# "OuterDR" : max Delta R (eg. 0.1)
+# "ProxDR" : max Delta R (eg. 0.1)
+muonMatchingParams = {
+    "Segment" : 2.0/3.0,
+    # "DR" : 0.1
+    # "OuterDR" : 0.1
+    # "ProxDR" : 0.1
 }
 
 defaultHistParams = (
@@ -28,13 +48,13 @@ defaultHistParams = (
   
   ("Event"              , "nMuon"               , 50    , 0     , 50    , ""  ),
   ("Muon"               , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("Muon"               , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("Muon"               , "eta"                 , 300   , -3    , 3     , ""  ),
   ("Muon"               , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
   ("Muon"               , "dz"                  , 8000  , -1000  , 1000   , ""  ),
   
   ("Event"              , "nTightMuons"         , 50    , 0     , 50    , ""  ),
   ("TightMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("TightMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("TightMuons"         , "eta"                 , 300   , -3    , 3     , ""  ),
   ("TightMuons"         , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
   ("TightMuons"         , "dz"                  , 8000  , -1000  , 1000   , ""  ),
   ("TightMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
@@ -48,7 +68,8 @@ defaultHistParams = (
   
   ("Event"              , "nLooseMuons"         , 50    , 0     , 50    , ""  ),
   ("LooseMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("LooseMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("LooseMuons"         , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("LooseMuons"         , "phi"                 , 300   , -3    , 3     , ""  ),
   ("LooseMuons"         , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
   ("LooseMuons"         , "dz"                  , 8000  , -1000  , 1000   , ""  ),
   ("LooseMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
@@ -59,48 +80,42 @@ defaultHistParams = (
   ("LooseMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
   ("LooseMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
   
-  # ("Event"              , "nLooseDSAMuons"      , 50    , 0     , 50    , ""  ),
-  # ("LooseDSAMuons"      , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  # ("LooseDSAMuons"      , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  # ("LooseDSAMuons"      , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
-  # ("LooseDSAMuons"      , "dz"                  , 8000  , -1000  , 1000   , ""  ),
-  
   ("Event"              , "nElectron"           , 50    , 0     , 50    , ""  ),
   ("Electron"           , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("Electron"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("Electron"           , "eta"                 , 300   , -3    , 3     , ""  ),
   ("Electron"           , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
   ("Electron"           , "dz"                  , 8000  , -1000  , 1000   , ""  ),
   
   ("Event"              , "nLooseElectrons"     , 50    , 0     , 50    , ""  ),
   ("LooseElectrons"     , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("LooseElectrons"     , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("LooseElectrons"     , "eta"                 , 300   , -3    , 3     , ""  ),
   ("LooseElectrons"     , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
   ("LooseElectrons"     , "dz"                  , 8000  , -1000  , 1000   , ""  ),
   
   ("Event"              , "nJet"                , 50    , 0     , 50    , ""  ),
   ("Jet"                , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("Jet"                , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("Jet"                , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("Jet"                , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("Jet"                , "phi"                 , 300   , -3    , 3     , ""  ),
   ("Jet"                , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   
   ("Event"              , "nGoodJets"           , 50    , 0     , 50    , ""  ),
   ("GoodJets"           , "pt"                  , 2000  , 0     , 2000  , ""  ),
-  ("GoodJets"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodJets"           , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodJets"           , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("GoodJets"           , "phi"                 , 300   , -3    , 3     , ""  ),
   ("GoodJets"           , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   ("GoodJets"           , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
   ("Event"                    , "nGoodMediumBtaggedJets"    , 50    , 0     , 50    , ""  ),
   ("GoodMediumBtaggedJets"    , "pt"                  , 2000  , 0     , 2000  , ""  ),
-  ("GoodMediumBtaggedJets"    , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodMediumBtaggedJets"    , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodMediumBtaggedJets"    , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("GoodMediumBtaggedJets"    , "phi"                 , 300   , -3    , 3     , ""  ),
   ("GoodMediumBtaggedJets"    , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   ("GoodMediumBtaggedJets"    , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
   ("Event"                    , "nGoodNonTightBtaggedJets" , 50    , 0     , 50    , ""  ),
   ("GoodNonTightBtaggedJets"  , "pt"                  , 2000  , 0     , 2000  , ""  ),
-  ("GoodNonTightBtaggedJets"  , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodNonTightBtaggedJets"  , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodNonTightBtaggedJets"  , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("GoodNonTightBtaggedJets"  , "phi"                 , 300   , -3    , 3     , ""  ),
   ("GoodNonTightBtaggedJets"  , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   ("GoodNonTightBtaggedJets"  , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
 
@@ -108,32 +123,145 @@ defaultHistParams = (
 
 LLPNanoAOD_defaultHistParams = (
 
-  ("Event"              , "nDSAMuon"            , 50    , 0     , 50    , ""  ),
-  ("DSAMuon"            , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("DSAMuon"            , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("DSAMuon"            , "dxy"                 , 1600  , -400  , 400   , ""  ),
-  ("DSAMuon"            , "dz"                  , 1600  , -400  , 400   , ""  ),
+  ("Muon"               , "idx"                 , 50    , 0     , 50    , ""  ),
+  ("Muon"               , "dsaMatch1"           , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch1idx"        , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch2"           , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch2idx"        , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch3"           , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch3idx"        , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch4"           , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch4idx"        , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch5"           , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "dsaMatch5idx"        , 100   , 0     , 100   , ""  ),
+  ("Muon"               , "outerEta"            , 300   , -3    , 3     , ""  ),
+  ("Muon"               , "outerPhi"            , 300   , -3    , 3     , ""  ),
 
-  ("Event"              , "nMuonVertex"         , 50    , 0     , 50    , ""  ),
-  ("MuonVertex"         , "chi2"                , 500   , 0     , 500   , ""  ),
-  ("MuonVertex"         , "vxy"                 , 500   , 0     , 500   , ""  ),
-  ("MuonVertex"         , "vxySigma"            , 500   , 0     , 500   , ""  ),
-  ("MuonVertex"         , "vz"                  , 1000  , -500  , 500   , ""  ),
-  ("MuonVertex"         , "dR"                  , 500   , 0     , 10    , ""  ),
+  ("LooseMuons"               , "idx"                 , 50    , 0     , 50    , ""  ),
+  ("LooseMuons"               , "dzPV"                , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "dxyPVTraj"           , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "dxyPVSigned"         , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "ip3DPVSigned"        , 8000  , -1000 , 1000  , ""  ),
+  # ("LooseMuons"               , "dxyBS"               , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "dzBS"                , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "dxyBSTraj"           , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "dxyBSSigned"         , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "ip3DBSSigned"        , 8000  , -1000 , 1000  , ""  ),
+  ("LooseMuons"               , "dsaMatch1"           , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch1idx"        , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch2"           , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch2idx"        , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch3"           , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch3idx"        , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch4"           , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch4idx"        , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch5"           , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "dsaMatch5idx"        , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "outerEta"            , 300   , -3    , 3     , ""  ),
+  ("LooseMuons"               , "outerPhi"            , 300   , -3    , 3     , ""  ),
+  ("LooseMuons"               , "trkNumPlanes"        , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "trkNumHits"          , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "trkNumDTHits"        , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "trkNumCSCHits"       , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "trkNumPixelHits"     , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "trkNumTrkLayers"     , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "normChi2"            , 100   , 0     , 100   , ""  ),
+  ("LooseMuons"               , "trkPt"               , 2000  , 0     , 1000  , ""  ),
+  ("LooseMuons"               , "trkPtErr"            , 2000  , 0     , 1000  , ""  ),
+
+  ("Event"              , "nDSAMuon"            , 50    , 0     , 50    , ""  ),
+  ("DSAMuon"            , "idx"                 , 50    , 0     , 50    , ""  ),
+  ("DSAMuon"            , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("DSAMuon"            , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("DSAMuon"            , "dxy"                 , 8000  , -1000 , 1000  , ""  ),
+  ("DSAMuon"            , "dz"                  , 8000  , -1000 , 1000  , ""  ),
+  ("DSAMuon"            , "muonMatch1"          , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch1idx"       , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch2"          , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch2idx"       , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch3"          , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch3idx"       , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch4"          , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch4idx"       , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch5"          , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "muonMatch5idx"       , 100   , 0     , 100   , ""  ),
+  ("DSAMuon"            , "outerEta"            , 300   , -3    , 3     , ""  ),
+  ("DSAMuon"            , "outerPhi"            , 300   , -3    , 3     , ""  ),
+  ("DSAMuon"            , "displacedID"         , 50    , 0     , 50    , ""  ),
+
+  ("Event"              , "nLooseDSAMuons"            , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"            , "idx"                 , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"            , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("LooseDSAMuons"            , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("LooseDSAMuons"            , "phi"                 , 300   , -3    , 3     , ""  ),
+  ("LooseDSAMuons"            , "dxy"                 , 20000  , -2000    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "dz"                  , 20000  , -2000    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "idx"                 , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "dzPV"                , 20000  , -2000    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "dxyPVTraj"           , 20000  , -2000    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "dxyPVSigned"         , 10000  , 0    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "ip3DPVSigned"        , 20000  , -2000    , 2000  , ""  ),
+  # ("LooseDSAMuons"            , "dxyBS"               , 10000  , 0    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "dxyBSTraj"           , 20000  , -2000    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "dxyBSSigned"         , 10000  , 0    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "ip3DBSSigned"        , 10000  , 0    , 2000  , ""  ),
+  ("LooseDSAMuons"            , "muonMatch1"          , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch1idx"       , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch2"          , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch2idx"       , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch3"          , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch3idx"       , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch4"          , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch4idx"       , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch5"          , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "muonMatch5idx"       , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "outerEta"            , 300   , -3    , 3     , ""  ),
+  ("LooseDSAMuons"            , "outerPhi"            , 300   , -3    , 3     , ""  ),
+  ("LooseDSAMuons"            , "trkNumPlanes"        , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "trkNumHits"          , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "trkNumDTHits"        , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "trkNumCSCHits"       , 100   , 0     , 100   , ""  ),
+  ("LooseDSAMuons"            , "displacedID"         , 50    , 0     , 50    , ""  ),
+
+  ("Event"              , "nPatMuonVertex"      , 50    , 0     , 50    , ""  ),
+  ("PatMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("PatMuonVertex"      , "vxy"                 , 10000  , -1000  , 1000   , ""  ),
+  ("PatMuonVertex"      , "vxySigma"            , 10000  , 0      , 100    , ""  ),
+  ("PatMuonVertex"      , "vz"                  , 10000  , -1000  , 1000   , ""  ),
+  ("PatMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
+  ("PatMuonVertex"      , "idx1"                , 100   , 0     , 100   , ""  ),
+  ("PatMuonVertex"      , "idx2"                , 100   , 0     , 100   , ""  ),
+  ("PatMuonVertex"      , "isDSAMuon1"          , 10    , 0     , 10    , ""  ),
+  ("PatMuonVertex"      , "isDSAMuon2"          , 10    , 0     , 10    , ""  ),
+
+  ("Event"              , "nPatDSAMuonVertex"   , 50    , 0     , 50    , ""  ),
+  ("PatDSAMuonVertex"   , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("PatDSAMuonVertex"   , "vxy"                 , 10000  , -1000  , 1000   , ""  ),
+  ("PatDSAMuonVertex"   , "vxySigma"            , 10000  , 0      , 100    , ""  ),
+  ("PatDSAMuonVertex"   , "vz"                  , 10000  , -1000  , 1000   , ""  ),
+  ("PatDSAMuonVertex"   , "dR"                  , 500   , 0     , 10    , ""  ),
+  ("PatDSAMuonVertex"   , "idx1"                , 100   , 0     , 100   , ""  ),
+  ("PatDSAMuonVertex"   , "idx2"                , 100   , 0     , 100   , ""  ),
+  ("PatDSAMuonVertex"   , "isDSAMuon1"          , 10    , 0     , 10    , ""  ),
+  ("PatDSAMuonVertex"   , "isDSAMuon2"          , 10    , 0     , 10    , ""  ),
 
   ("Event"              , "nDSAMuonVertex"      , 50    , 0     , 50    , ""  ),
   ("DSAMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
-  ("DSAMuonVertex"      , "vxy"                 , 500   , 0     , 500   , ""  ),
-  ("DSAMuonVertex"      , "vxySigma"            , 500   , 0     , 500   , ""  ),
-  ("DSAMuonVertex"      , "vz"                  , 1000  , -500  , 500   , ""  ),
+  ("DSAMuonVertex"      , "vxy"                 , 10000  , -1000  , 1000   , ""  ),
+  ("DSAMuonVertex"      , "vxySigma"            , 10000  , 0      , 100    , ""  ),
+  ("DSAMuonVertex"      , "vz"                  , 10000  , -1000  , 1000   , ""  ),
   ("DSAMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
+  ("DSAMuonVertex"      , "idx1"                , 100   , 0     , 100   , ""  ),
+  ("DSAMuonVertex"      , "idx2"                , 100   , 0     , 100   , ""  ),
+  ("DSAMuonVertex"      , "isDSAMuon1"          , 10    , 0     , 10    , ""  ),
+  ("DSAMuonVertex"      , "isDSAMuon2"          , 10    , 0     , 10    , ""  ),
 
-  ("Event"              , "nMuonCombVertex"     , 50    , 0     , 50    , ""  ),
-  ("MuonCombVertex"     , "chi2"                , 500   , 0     , 500   , ""  ),
-  ("MuonCombVertex"     , "vxy"                 , 500   , 0     , 500   , ""  ),
-  ("MuonCombVertex"     , "vxySigma"            , 500   , 0     , 500   , ""  ),
-  ("MuonCombVertex"     , "vz"                  , 1000  , -500  , 500   , ""  ),
-  ("MuonCombVertex"     , "dR"                  , 500   , 0     , 10    , ""  ),
+  # ("Event"              , "nBS"                 , 50    , 0     , 50    , ""  ),
+  # ("BS"                 , "chi2"                , 500   , 0     , 500   , ""  ),
+  # ("BS"                 , "ndof"                , 100   , 0     , 100   , ""  ),
+  # ("BS"                 , "x"                   , 500   , 0     , 500   , ""  ),
+  # ("BS"                 , "y"                   , 500   , 0     , 500   , ""  ),
+  # ("BS"                 , "z"                   , 500   , 0     , 500   , ""  ),
 )
 
 if runLLPNanoAODHistograms:
@@ -169,21 +297,344 @@ histParams = (
   ("Event"          , "normCheck"                 , 1     , 0   , 1     , ""  ),
 )
 
-LLPNanoAOD_histParams = (
-  ("Event"          , "nAllLooseMuons"            , 50    , 0     , 50    , ""  ),
-  ("AllLooseMuons"  , "pt"                        , 2000  , 0     , 1000  , ""  ),
-  ("AllLooseMuons"  , "eta"                       , 100   , -2.5  , 2.5   , ""  ),
-  ("AllLooseMuons"  , "dxy"                       , 1600  , -400  , 400   , ""  ),
-  ("AllLooseMuons"  , "dz"                        , 1600  , -400  , 400   , ""  ),
-  ("AllLooseMuons"  , "deltaR"                    , 500   , 0     , 50    , ""  ),
-  ("AllLooseMuons"  , "minDeltaR"                 , 500   , 0     , 50    , ""  ),
+muonVertexCollectionCategories = ["", "_PatDSA", "_DSA", "_Pat"]
 
-  ("Event"          , "nLooseDSAMuons"            , 50    , 0     , 50    , ""  ),
-  ("LooseDSAMuons"  , "pt"                        , 2000  , 0     , 1000  , ""  ),
-  ("LooseDSAMuons"  , "eta"                       , 100   , -2.5  , 2.5   , ""  ),
-  ("LooseDSAMuons"  , "dxy"                       , 1600  , -400  , 400   , ""  ),
-  ("LooseDSAMuons"  , "dz"                        , 1600  , -400  , 400   , ""  ),
+LLPNanoAOD_histParams = (
+  ("GoodLooseMuonsVertexWithLargeDR" , "vxErr"                    , 10000  , -1000  , 1000   , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "vyErr"                    , 10000  , -1000  , 1000   , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "vzErr"                    , 10000  , -1000  , 1000   , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "idx1"                  , 100    , 0      , 100    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "idx2"                  , 100    , 0      , 100    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "isDSAMuon1"            , 10     , 0      , 10     , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "isDSAMuon2"            , 10     , 0      , 10     , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Dimuon2"   , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Muon1"     , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
+  ("GoodLooseMuonsVertexWithLargeDR" , "chargeProduct"         , 10     , -5    , 5     , ""  ),
+)
+for category in muonVertexCollectionCategories:
+  muonVertexCollectionName = "GoodLooseMuonsVertexWithLargeDR" + category
+  LLPNanoAOD_histParams += (
+  ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
+  (muonVertexCollectionName , "chi2"                  , 1000   , 0      , 500    , ""  ),
+  (muonVertexCollectionName , "ndof"                  , 500    , 0      , 500    , ""  ),
+  (muonVertexCollectionName , "normChi2"              , 500    , 0      , 500    , ""  ),
+  (muonVertexCollectionName , "vxy"                   , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vxySigma"              , 10000  , 0      , 100    , ""  ),
+  (muonVertexCollectionName , "vx"                    , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vy"                    , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vz"                    , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vxErr"                    , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vyErr"                    , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vzErr"                    , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vxyz"                  , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "vxyzSigma"                  , 10000  , -1000  , 1000   , ""  ),
+  (muonVertexCollectionName , "dR"                    , 500    , 0      , 10     , ""  ),
+  (muonVertexCollectionName , "proxDR"                , 500    , 0      , 10     , ""  ),
+)
+
+muonCollectionCategories = ["", "DSA", "PAT"]
+for matchingMethod, param in muonMatchingParams.items():
+  for category in muonCollectionCategories:
+    muonCollectionName = "Loose"+category+"Muons"+matchingMethod+"Match"
+    LLPNanoAOD_histParams += (
+      ("Event"      , "n"+muonCollectionName    , 50    , 0     , 50    , ""  ),
+      (muonCollectionName  , "pt"               , 2000  , 0     , 1000  , ""  ),
+      (muonCollectionName  , "eta"              , 300   , -3    , 3     , ""  ),
+      (muonCollectionName  , "phi"              , 300   , -3    , 3     , ""  ),
+      (muonCollectionName  , "dxy"              , 20000  , -2000    , 2000   , ""  ),
+      (muonCollectionName  , "dxyPVTraj"        , 20000  , -2000    , 2000   , ""  ),
+      (muonCollectionName  , "dxyPVTrajErr"     , 10000  , 0    , 2000   , ""  ),
+      (muonCollectionName  , "dxyPVTrajSig"     , 10000  , 0    , 2000   , ""  ),
+      (muonCollectionName  , "dz"               , 20000  , -2000    , 2000   , ""  ),
+      (muonCollectionName  , "dzPV"             , 20000  , -2000    , 2000   , ""  ),
+      (muonCollectionName  , "dzPVErr"          , 10000  , 0    , 2000   , ""  ),
+      (muonCollectionName  , "dzPVSig"          , 10000  , 0    , 2000   , ""  ),
+      (muonCollectionName  , "ip3DPVSigned"     , 20000  , -2000    , 2000   , ""  ),
+      (muonCollectionName  , "ip3DPVSignedErr"  , 10000  , 0    , 2000   , ""  ),
+      (muonCollectionName  , "ip3DPVSignedSig"  , 10000  , 0    , 2000   , ""  ),
+      (muonCollectionName  , "minDeltaR"        , 1000   , 0    , 10     , ""  ),
+      (muonCollectionName  , "minOuterDeltaR"   , 1000   , 0    , 10     , ""  ),
+      (muonCollectionName  , "minProxDeltaR"    , 1000   , 0    , 10     , ""  ),
+    )
+  
+  for category in muonVertexCollectionCategories:
+    muonVertexCollectionName = "LooseMuonsVertex"+matchingMethod+"Match"+category
+    LLPNanoAOD_histParams += (
+      ("Event"      , "n"+muonVertexCollectionName        , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "chi2"                  , 10000  , 0      , 500    , ""  ),
+      (muonVertexCollectionName , "ndof"                  , 500    , 0      , 500    , ""  ),
+      (muonVertexCollectionName , "normChi2"              , 500    , 0      , 500    , ""  ),
+      (muonVertexCollectionName , "vxy"                   , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vxySigma"              , 10000  , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "vx"                    , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vy"                    , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vz"                    , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vxErr"                 , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vyErr"                 , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vzErr"                 , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyz"                  , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyzSigma"             , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "dR"                    , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "proxDR"                , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "idx1"                  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "idx2"                  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "isDSAMuon1"            , 10     , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "isDSAMuon2"            , 10     , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso04Dimuon2"   , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso03Muon1"     , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
+      (muonVertexCollectionName , "chargeProduct"         , 10     , -5    , 5     , ""  ),
+    )
+
+MuonMatching_histParams = (
+  ("Event"             , "nSegmentMatchLooseMuons"          , 50    , 0     , 50    , ""  ),
+  ("SegmentMatchLooseMuons"  , "genMinDR"                   , 1000  , 0     , 10    , ""  ),
+  ("SegmentMatchLooseMuons"  , "genMinDRidx"                , 100   , 0     , 100   , ""  ),
+  ("SegmentMatchLooseMuons"  , "nSegments"                  , 50    , 0     , 50    , ""  ),
+  ("SegmentMatchLooseMuons"  , "matchingRatio"              , 600   , 0     , 2     , ""  ),
+  ("SegmentMatchLooseMuons"  , "maxMatches"                 , 50    , 0     , 50    , ""  ),
+  ("SegmentMatchLooseMuons"  , "muonMatchIdx"               , 50    , 0     , 50    , ""  ),
+  ("SegmentMatchLooseMuons"  , "pt"                         , 2000  , 0     , 1000  , ""  ),
+  ("SegmentMatchLooseMuons"  , "eta"                        , 300   , -3    , 3     , ""  ),
+  ("SegmentMatchLooseMuons"  , "phi"                        , 300   , -3    , 3     , ""  ),
+  ("SegmentMatchLooseMuons"  , "dxy"                        , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseMuons"  , "dxyPVTraj"                  , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseMuons"  , "dxyPVTrajSig"               , 10000  , 0    , 2000   , ""  ),
+  ("SegmentMatchLooseMuons"  , "dzPV"                       , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseMuons"  , "dzPVSig"                    , 10000  , 0    , 2000   , ""  ),
+  ("SegmentMatchLooseMuons"  , "ip3DPVSigned"               , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseMuons"  , "ip3DPVSignedSig"            , 10000  , 0    , 2000   , ""  ),
+
+  ("Event"             , "nSegmentMatchLooseDSAMuons"       , 50    , 0     , 50    , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "genMinDR"                , 1000  , 0     , 10    , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "genMinDRidx"             , 100   , 0     , 100   , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "pt"                      , 2000  , 0     , 1000  , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "eta"                     , 300   , -3    , 3     , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "phi"                     , 300   , -3    , 3     , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "dxy"                     , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "dxyPVTraj"               , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "dxyPVTrajSig"            , 10000  , 0    , 2000   , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "dzPV"                    , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "dzPVSig"                 , 10000  , 0    , 2000   , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "ip3DPVSigned"            , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentMatchLooseDSAMuons"  , "ip3DPVSignedSig"         , 10000  , 0    , 2000   , ""  ),
+  
+  ("Event"             , "nSegmentDRMatchLooseMuons"        , 50    , 0     , 50    , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "nSegments"                 , 50    , 0     , 50    , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "matchingRatio"            , 600   , 0     , 2     , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "maxMatches"               , 50    , 0     , 50    , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "muonMatchIdx"               , 50    , 0     , 50    , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "pt"                       , 2000  , 0     , 1000  , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "eta"                      , 300   , -3    , 3     , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "phi"                      , 300   , -3    , 3     , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "dxy"                      , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "dxyPVTraj"                , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "dxyPVTrajSig"             , 10000  , 0    , 2000   , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "dzPV"                     , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "dzPVSig"                  , 10000  , 0    , 2000   , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "ip3DPVSigned"             , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentDRMatchLooseMuons"  , "ip3DPVSignedSig"          , 10000  , 0    , 2000   , ""  ),
+  ("Event"             , "nSegmentOuterDRMatchLooseMuons"   , 50    , 0     , 50    , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "nSegments"           , 50    , 0     , 50    , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "matchingRatio"       , 600   , 0     , 2     , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "maxMatches"          , 50    , 0     , 50    , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "muonMatchIdx"               , 50    , 0     , 50    , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "eta"                 , 300   , -3    , 3     , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "phi"                 , 300   , -3    , 3     , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "dxy"                 , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "dxyPVTraj"           , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "dxyPVTrajSig"        , 10000  , 0    , 2000   , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "dzPV"                , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "dzPVSig"             , 10000  , 0    , 2000   , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "ip3DPVSigned"        , 20000  , -2000    , 2000   , ""  ),
+  ("SegmentOuterDRMatchLooseMuons"  , "ip3DPVSignedSig"     , 10000  , 0    , 2000   , ""  ),
+
+  ("LooseDSAMuons"  , "nSegments"              , 50  , 0    , 50   , ""  ),
+  ("LooseDSAMuons"  , "nDTHits"                , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"  , "nCSCHits"               , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"  , "nDTplusCSCHits"         , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"  , "muonMatch1"             , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"  , "muonMatch2"             , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"  , "muonMatch3"             , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"  , "matchRatio1"            , 600   , 0     , 2     , ""  ),
+  ("LooseDSAMuons"  , "matchRatio2"            , 600   , 0     , 2     , ""  ),
+  ("LooseDSAMuons"  , "matchRatio3"            , 600   , 0     , 2     , ""  ),
+
+  ("LooseDSAMuons"  , "PATOuterDR"             , 1000  , 0     , 10    , ""  ),
+  ("LooseDSAMuons"  , "PATProxDR"              , 1000  , 0     , 10    , ""  ),
+  ("LooseDSAMuons"  , "PATDR"                  , 1000  , 0     , 10    , ""  ),
+  ("LooseDSAMuons"  , "PATDEta"                , 600   , -6    , 6     , ""  ),
+  ("LooseDSAMuons"  , "PATDPhi"                , 600   , -6    , 6     , ""  ),
+  ("LooseDSAMuons"  , "PATDOuterEta"           , 600   , -6    , 6     , ""  ),
+  ("LooseDSAMuons"  , "PATDOuterPhi"           , 600   , -6    , 6     , ""  ),
+)
+
+GenMuon_histParams = (
+  ("Event"                     , "nGenMuonFromALP" , 50    , 0     , 50    , ""  ),
+  ("GenMuonFromALP"            , "pdgId"           , 200   , -100  , 100   , ""  ),
+  ("GenMuonFromALP"            , "pt"              , 4000  , 0     , 1000  , ""  ),
+  ("GenMuonFromALP"            , "mass"            , 10000 , 0     , 100   , ""  ),
+  ("GenMuonFromALP"            , "eta"             , 300   , -3    , 3     , ""  ),
+  ("GenMuonFromALP"            , "phi"             , 300   , -3    , 3     , ""  ),
+  ("GenMuonFromALP"            , "vx"              , 50000 , -5000 , 5000  , ""  ),
+  ("GenMuonFromALP"            , "vy"              , 50000 , -5000 , 5000  , ""  ),
+  ("GenMuonFromALP"            , "vz"              , 50000 , -5000 , 5000  , ""  ),
+  ("GenMuonFromALP"            , "vxy"             , 50000 , 0     , 5000  , ""  ),
+  ("GenMuonFromALP"            , "vxyz"            , 50000 , 0     , 5000  , ""  ),
+  ("GenMuonFromALP"            , "boost"           , 2000 , 0      , 1000  , ""  ),
+  ("GenMuonFromALP"            , "vxyALPboostpT"   , 50000 , 0     , 5000  , ""  ),
+  ("GenMuonFromALP"            , "vxyALPboostT"    , 50000 , 0     , 5000  , ""  ),
+  ("GenMuonFromALP"            , "vxyzALPboostp"   , 50000 , 0     , 5000  , ""  ),
+  ("GenMuonFromALP"            , "dxy"             , 50000 , -5000 , 5000  , ""  ),
+  ("GenMuonFromALP"            , "LoosePATMuonsMinDR"          , 1000  , 0     , 10    , ""  ),
+  ("GenMuonFromALP"            , "LooseDSAMuonsMinDR"          , 1000  , 0     , 10    , ""  ),
+  ("Event"                     , "nGenDimuonFromALP" , 50  , 0     , 50    , ""  ),
+  ("GenDimuonFromALP"          , "invMass"         , 10000 , 0     , 100   , ""  ),
+  ("GenDimuonFromALP"          , "deltaR"          , 1000  , 0     , 10    , ""  ),
+  ("GenDimuonFromALP"          , "deltaEta"        , 300   , -3    , 3     , ""  ),
+  ("GenDimuonFromALP"          , "deltaPhi"        , 300   , -3    , 3     , ""  ),
+  ("Event"                     , "nGenALP"         , 50    , 0     , 50    , ""  ),
+  ("GenALP"                    , "pdgId"           , 200   , -100  , 100   , ""  ),
+  ("GenALP"                    , "pt"              , 4000  , 0     , 1000  , ""  ),
+  ("GenALP"                    , "mass"            , 10000 , 0     , 100   , ""  ),
+  ("GenALP"                    , "massT"           , 10000 , 0     , 100   , ""  ),
+  ("GenALP"                    , "eta"             , 300   , -3    , 3     , ""  ),
+  ("GenALP"                    , "phi"             , 300   , -3    , 3     , ""  ),
+  ("GenALP"                    , "vx"              , 10000 , -1000 , 1000  , ""  ),
+  ("GenALP"                    , "vy"              , 10000 , -1000 , 1000  , ""  ),
+  ("GenALP"                    , "vz"              , 10000 , -1000 , 1000  , ""  ),
+  ("GenALP"                    , "vxy"             , 10000 , -1000 , 1000  , ""  ),
+  ("GenALP"                    , "vxyz"            , 10000 , -1000 , 1000  , ""  ),
+  ("GenALP"                    , "boost_pT"        , 2000 , 0      , 1000  , ""  ),
+  ("GenALP"                    , "boost_p"         , 2000 , 0      , 1000  , ""  ),
+  ("GenALP"                    , "boost_T"         , 2000 , 0      , 1000  , ""  ),
+  ("GenALP"                    , "dxy"             , 10000 , -1000 , 1000  , ""  ),
+)
+
+for matchingMethod, param in muonMatchingParams.items():
+  muonCollectionName = "LooseMuonsFromALP"+matchingMethod+"Match"
+  GenMuon_histParams += (
+    ("Event"       , "n"+muonCollectionName        , 50    , 0     , 50    , ""  ),
+    (muonCollectionName       , "pt"               , 2000  , 0     , 1000  , ""  ),
+    (muonCollectionName       , "eta"              , 300   , -3    , 3     , ""  ),
+    (muonCollectionName       , "phi"              , 300   , -3    , 3     , ""  ),
+    (muonCollectionName       , "dxy"              , 20000  , -2000    , 2000   , ""  ),
+    (muonCollectionName       , "dxyPVTraj"        , 20000  , -2000    , 2000   , ""  ),
+    (muonCollectionName       , "dxyPVTrajErr"     , 10000  , 0    , 2000   , ""  ),
+    (muonCollectionName       , "dxyPVTrajSig"     , 10000  , 0    , 2000   , ""  ),
+    (muonCollectionName       , "dz"               , 20000  , -2000    , 2000   , ""  ),
+    (muonCollectionName       , "dzPV"             , 20000  , -2000    , 2000   , ""  ),
+    (muonCollectionName       , "dzPVErr"          , 10000  , 0    , 2000   , ""  ),
+    (muonCollectionName       , "dzPVSig"          , 10000  , 0    , 2000   , ""  ),
+    (muonCollectionName       , "ip3DPVSigned"     , 20000  , -2000    , 2000   , ""  ),
+    (muonCollectionName       , "ip3DPVSignedErr"  , 10000  , 0    , 2000   , ""  ),
+    (muonCollectionName       , "ip3DPVSignedSig"  , 10000  , 0    , 2000   , ""  ),
+    (muonCollectionName       , "nSegments"         , 50     , 0    , 50   , ""  ),
+    (muonCollectionName       , "invMass"          , 10000 , 0     , 100   , ""  ),
+    (muonCollectionName       , "deltaR"           , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "minDeltaR"        , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "outerDeltaR"      , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "minOuterDeltaR"   , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "minProxDeltaR"    , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "deltaEta"         , 1000  , 0     , 10    , ""  ),
+    (muonCollectionName       , "deltaPhi"         , 1000  , 0     , 10    , ""  ),
+  )
+
+  GenMuon_histParams += (
+    ("GenMuonFromALP"         , "LooseMuons"+matchingMethod+"MatchMinDR"      , 1000  , 0     , 10    , ""  ),
+  )
+
+  muonVertexCollectionName = "LooseMuonsFromALP"+matchingMethod+"MatchVertex"
+  GenMuon_histParams += (
+    ("Event"       , "n"+muonVertexCollectionName           , 50    , 0     , 50    , ""  ),
+    (muonVertexCollectionName , "vxErr"                        , 10000  , -1000  , 1000   , ""  ),
+    (muonVertexCollectionName , "vyErr"                        , 10000  , -1000  , 1000   , ""  ),
+    (muonVertexCollectionName , "vzErr"                        , 10000  , -1000  , 1000   , ""  ),
+    (muonVertexCollectionName , "idx1"                      , 100    , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "idx2"                      , 100    , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "isDSAMuon1"                , 10     , 0      , 10     , ""  ),
+    (muonVertexCollectionName , "isDSAMuon2"                , 10     , 0      , 10     , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Dimuon2"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Muon1"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "chargeProduct"           , 10     , -5    , 5     , ""  ),
+  )
+
+  for category in muonVertexCollectionCategories:
+    muonVertexCollectionName = "LooseMuonsFromALP"+matchingMethod+"MatchVertex"+category
+    GenMuon_histParams += (
+      ("Event"      , "n"+muonVertexCollectionName           , 50    , 0     , 50    , ""  ),
+      (muonVertexCollectionName     , "chi2"         , 500    , 0      , 500    , ""  ),
+      (muonVertexCollectionName     , "ndof"         , 500    , 0      , 500    , ""  ),
+      (muonVertexCollectionName     , "normChi2"         , 500    , 0      , 500    , ""  ),
+      (muonVertexCollectionName     , "vxy"          , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName     , "vxySigma"     , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName     , "vx"           , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName     , "vy"           , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName     , "vz"           , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName     , "vxyz"         , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName     , "vxyzSigma"         , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName     , "dR"           , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName     , "proxDR"       , 500    , 0      , 10     , ""  ),
+    )
+  
+if runLLPNanoAODHistograms:
+  histParams = histParams + LLPNanoAOD_histParams
+if runMuonMatchingHistograms:
+  histParams = histParams + MuonMatching_histParams
+if runGenMuonHistograms:
+  histParams = histParams + GenMuon_histParams
+
+histParams2D = (
+
+)
+
+LLPNanoAOD_histParams2D = (
+
+)
+
+MuonMatching_histParams2D = ( 
+  ("LooseDSAMuons_muonMatch1_nSegments",               50  , 0    , 50, 50  , 0    , 50   , ""  ),
+  ("LooseDSAMuons_muonMatch2_nSegments",               50  , 0    , 50, 50  , 0    , 50   , ""  ),
+  ("LooseDSAMuons_muonMatch3_nSegments",               50  , 0    , 50, 50  , 0    , 50   , ""  ),
+
+  ("SegmentMatchLooseMuons_LooseDSAMuons_genMinDR",    1000 , 0    , 10  , 1000 , 0    , 10   , ""  ),
+  ("SegmentMatchLooseMuons_LooseDSAMuons_genMinDRidx", 100  , 0    , 100 , 100  , 0    , 100  , ""  ),
+  ("SegmentMatchLooseMuons_LooseDSAMuons_eta",         60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+  ("SegmentMatchLooseMuons_LooseDSAMuons_phi",         60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+  ("SegmentMatchLooseMuons_LooseDSAMuons_outerEta",    60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+  ("SegmentMatchLooseMuons_LooseDSAMuons_outerPhi",    60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+
+  ("SegmentMatchLooseMuons_eta_outerEta",              60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+  ("SegmentMatchLooseMuons_phi_outerPhi",              60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+  ("SegmentMatchLooseDSAMuons_eta_outerEta",           60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+  ("SegmentMatchLooseDSAMuons_phi_outerPhi",           60   , -3   , 3   , 60   , -3   , 3    , ""  ),
+)
+
+GenMuon_histParams2D = (
+
 )
 
 if runLLPNanoAODHistograms:
-  histParams = histParams + LLPNanoAOD_histParams
+  histParams2D = histParams2D + LLPNanoAOD_histParams2D
+if runMuonMatchingHistograms:
+  histParams2D = histParams2D + MuonMatching_histParams2D
+if runGenMuonHistograms:
+  histParams2D = histParams2D + GenMuon_histParams2D

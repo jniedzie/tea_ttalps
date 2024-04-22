@@ -7,6 +7,7 @@ applyTTZLikeSkimming = True
 applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
+eventsTreeNames = ("Events",)
 
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
@@ -55,3 +56,4 @@ eventSelections = {
 
 branchesToKeep = ["*"]
 branchesToRemove = []
+specialBranchSizes = {}
