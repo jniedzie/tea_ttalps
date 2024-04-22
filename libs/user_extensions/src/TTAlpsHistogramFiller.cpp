@@ -31,7 +31,7 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
     warn() << "Couldn't read histParams from config file - no custom ttalps histograms will be included" << endl;
   }
   try {
-    config.GetMuonMatchingParams(muonMatchingParams);
+    config.GetMap("muonMatchingParams", muonMatchingParams);
   } catch (const Exception &e) {
     warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
