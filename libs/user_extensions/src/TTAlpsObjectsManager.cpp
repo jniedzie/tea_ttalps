@@ -74,7 +74,9 @@ void TTAlpsObjectsManager::InsertSegmentMatchedLooseMuonsCollections(shared_ptr<
 
 void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event> event) {
   // Only segment matched muons for now
-  auto vertices = event->GetCollection("LooseMuonsVertexSegmentMatch");
+  string matchingMethod = muonMatchingParams.begin()->first;
+  auto vertices = event->GetCollection("LooseMuonsVertex"+matchingMethod+"Match");
+
   auto goodVertices = make_shared<PhysicsObjects>();
   auto goodVerticesWithLargeDR = make_shared<PhysicsObjects>();
   auto goodMuons = make_shared<PhysicsObjects>();
