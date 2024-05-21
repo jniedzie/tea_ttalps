@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 
   if(argc == 4 || argc == 6){
     config.SetInputPath(argv[2]);
-    config.SetOutputPath(argv[3]);
+    config.SetHistogramsOutputPath(argv[3]);
   }
 
   info() << "Creating objects..." << endl;

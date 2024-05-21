@@ -12,10 +12,12 @@
 using namespace std;
 
 void CheckArgs(int argc, char **argv) {
-  if (argc != 2 && argc != 4) {
+  if (argc != 2 && argc != 4 && argc != 5) {
     fatal() << "Usage: " << argv[0] << " config_path"<<endl;
     fatal() << "or"<<endl;
     fatal() << argv[0] << " config_path input_path output_path"<<endl;
+    fatal() << "or"<<endl;
+    fatal() << argv[0] << " config_path input_path output_path redirector"<<endl;
     exit(1);
   }
 }
@@ -25,9 +27,10 @@ int main(int argc, char **argv) {
   ConfigManager::Initialize(argv[1]);
   auto &config = ConfigManager::GetInstance();
   
-  if(argc == 4){
+  if(argc >= 4){
     config.SetInputPath(argv[2]);
-    config.SetOutputPath(argv[3]);
+    config.SetTreesOutputPath(argv[3]);
+    if (argc == 5) config.SetRedirector(argv[4]);
   }
 
   auto eventReader = make_shared<EventReader>();
