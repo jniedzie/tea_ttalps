@@ -37,7 +37,7 @@ extraText = "Preliminary"
 # extraText = "Private Work"
 
 ## SETTINGS ##
-plots_from_LLPNanoAOD = True
+plots_from_LLPNanoAOD = False
 plot_genALP_info = True
 plot_muonMatching_info = False
 plot_background = True
