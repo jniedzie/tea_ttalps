@@ -9,7 +9,7 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
   auto& config = ConfigManager::GetInstance();
 
   try {
-    config.GetMuonMatchingParams(muonMatchingParams);
+    config.GetMap("muonMatchingParams", muonMatchingParams);
   } catch (const Exception &e) {
     warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
@@ -74,8 +74,10 @@ void TTAlpsObjectsManager::InsertSegmentMatchedLooseMuonsCollections(shared_ptr<
 
 void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event> event) {
   // Only segment matched muons for now
-  auto vertices = event->GetCollection("LooseMuonsVertexSegmentMatch");
+  string matchingMethod = muonMatchingParams.begin()->first;
+  auto vertices = event->GetCollection("LooseMuonsVertex"+matchingMethod+"Match");
   auto goodVertices = make_shared<PhysicsObjects>();
+  auto goodDisplacedVertices = make_shared<PhysicsObjects>();
   auto goodVerticesWithLargeDR = make_shared<PhysicsObjects>();
   auto goodMuons = make_shared<PhysicsObjects>();
 
@@ -84,11 +86,17 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
     goodVertices->push_back(vertex);
   }
   for(auto vertex : *vertices) {
+    if(!IsGoodDisplacedMuonVertex(vertex, event)) continue;
+    goodDisplacedVertices->push_back(vertex);
+  }
+  for(auto vertex : *vertices) {
     if(!IsGoodMuonVertexWithLargeDR(vertex, event)) continue;
     goodVerticesWithLargeDR->push_back(vertex);
   }
   event->AddCollection("GoodLooseMuonsVertex", goodVertices);
+  event->AddCollection("GoodDisplacedLooseMuonsVertex", goodDisplacedVertices);
   event->AddCollection("GoodLooseMuonsVertexWithLargeDR", goodVerticesWithLargeDR);
+
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_ptr<Event> event) {
@@ -124,14 +132,27 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_pt
 }
 
 bool TTAlpsObjectsManager::IsGoodMuonVertex(const std::shared_ptr<PhysicsObject> vertex, shared_ptr<Event> event) {
-  if (!asNanoDimuonVertex(vertex)->PassesDimuonChargeCut(event)) return false;
-  if (!asNanoDimuonVertex(vertex)->PassesChi2Cut()) return false;
-  if (!asNanoDimuonVertex(vertex)->PassesMaxDeltaRCut()) return false;
+  if (!asNanoDimuonVertex(vertex,event)->isValid()) return false;
+  if (!asNanoDimuonVertex(vertex,event)->PassesDCACut()) return false;
+  // if (!asNanoDimuonVertex(vertex,event)->PassesDimuonChargeCut(event)) return false;
+  // if (!asNanoDimuonVertex(vertex,event)->PassesVxySigmaCut()) return false;
+  if (!asNanoDimuonVertex(vertex,event)->PassesChi2Cut()) return false;
+  // if (!asNanoDimuonVertex(vertex,event)->PassesMaxDeltaRCut()) return false;
+  if (!asNanoDimuonVertex(vertex,event)->PassesHitsBeforeVertexCut()) return false;
+  return true;
+}
+
+bool TTAlpsObjectsManager::IsGoodDisplacedMuonVertex(const std::shared_ptr<PhysicsObject> vertex, shared_ptr<Event> event) {
+  if (!IsGoodMuonVertex(vertex,event)) return false;
+  if (!asNanoDimuonVertex(vertex,event)->PassesLxyCut()) return false;
   return true;
 }
 
 bool TTAlpsObjectsManager::IsGoodMuonVertexWithLargeDR(const std::shared_ptr<PhysicsObject> vertex, shared_ptr<Event> event) {
-  if (!asNanoDimuonVertex(vertex)->PassesDimuonChargeCut(event)) return false;
-  if (!asNanoDimuonVertex(vertex)->PassesMinDeltaRCut(event)) return false;
+  if (!asNanoDimuonVertex(vertex,event)->isValid()) return false;
+  if (!asNanoDimuonVertex(vertex,event)->PassesDCACut()) return false;
+  // if (!asNanoDimuonVertex(vertex,event)->PassesDimuonChargeCut(event)) return false;
+  if (!asNanoDimuonVertex(vertex,event)->PassesMinDeltaRCut()) return false;
+  // if (!asNanoDimuonVertex(vertex,event)->PassesVxySigmaCut()) return false;
   return true;
 }

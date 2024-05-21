@@ -24,6 +24,7 @@ class TTAlpsObjectsManager {
   std::map<std::string, float> muonMatchingParams;
 
   bool IsGoodMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
+  bool IsGoodDisplacedMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
   bool IsGoodMuonVertexWithLargeDR(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
 
 };
