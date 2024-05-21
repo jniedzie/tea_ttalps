@@ -5,15 +5,18 @@ base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
 # skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_looseSemimuonic_tightMuon"
-# skim = "skimmed_looseSemimuonic"
+skim = "skimmed_looseSemimuonic"
 # skim = "skimmed_looseSemimuonic_looseMuon_looseBjet"
-skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
+# skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
 
 # skim = "histograms_pileup"
 
 # file_name = "02D6A1FE-C8EB-1A48-8B31-149FDFB64893.root"
 
-input_output_dirs = (
+# dbs_instance = "prod/global"
+dbs_instance = "prod/phys03"
+
+# input_output_dirs = (
   # tt̄
   # (f"{lovisa_base_path}/backgrounds2018/TTToSemiLeptonic/LLPNanoAOD/",
   #  f"{base_path}/backgrounds2018/TTToSemiLeptonic_LLPnanoAOD/{skim}/"),
@@ -31,8 +34,8 @@ input_output_dirs = (
   #  f"{base_path}/backgrounds2018/QCDPt80To120_LLPnanoAOD/{skim}/"),
   # (f"{lovisa_base_path}/backgrounds2018/QCDPt120To170/LLPNanoAOD/",
   #  f"{base_path}/backgrounds2018/QCDPt120To170_LLPnanoAOD/{skim}/"),
-  (f"{lovisa_base_path}/backgrounds2018/QCDPt170To300/LLPNanoAOD/",
-   f"{base_path}/backgrounds2018/QCDPt170To300_LLPnanoAOD/{skim}/"),
+  # (f"{lovisa_base_path}/backgrounds2018/QCDPt170To300/LLPNanoAOD/",
+  #  f"{base_path}/backgrounds2018/QCDPt170To300_LLPnanoAOD/{skim}/"),
   # (f"{lovisa_base_path}/backgrounds2018/QCDPt300To470/LLPNanoAOD/",
   #  f"{base_path}/backgrounds2018/QCDPt300To470_LLPnanoAOD/{skim}/"),
   # (f"{lovisa_base_path}/backgrounds2018/QCDPt470To600/LLPNanoAOD/",
@@ -57,9 +60,9 @@ input_output_dirs = (
   #  f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/"),
   # (f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-1000/LLPNanoAOD/",
   #  f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/"),
-)
+# )
 
-# datasets_and_output_dirs = (
+datasets_and_output_dirs = (
 # # # tt̄
 #   ("/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
 #    f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/"),
@@ -187,7 +190,34 @@ input_output_dirs = (
 #    f"{base_path}/collision_data2018/SingleMuon2018C/{skim}/"),
 #   ("/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
 #    f"{base_path}/collision_data2018/SingleMuon2018D/{skim}/"),
-# )
+
+## Signals LLPnanoAODs
+  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e0mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e1mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e2mm/{skim}/"),
+  ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e3mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/"),
+  ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e-5mm/{skim}/"),
+
+  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e0mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e1mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e2mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e3mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e5mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e-5mm/{skim}/"),  
+)
 
 # # this has to be here, otherwise the script will not work:
 dataset = ""

@@ -68,6 +68,13 @@ cross_sections = {
   "tta_mAlp-0p35GeV_ctau-1e3mm": 0.35,
   "tta_mAlp-0p35GeV_ctau-1e5mm": 0.35,
   "tta_mAlp-0p35GeV_ctau-1e7mm": 0.35,
+
+  "tta_mAlp-1GeV_ctau-1e-5mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e0mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e1mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e2mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e3mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e5mm": 1.0,
 }
 
 # Cross sections in (pb) from AN2018_025_v12
