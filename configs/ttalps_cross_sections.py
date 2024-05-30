@@ -24,8 +24,8 @@ cross_sections = {
   "ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8": 0.4611,
   
   "ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8": 0.5269,
-  "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8": 0.5418,
-  "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8": 0.5638,
+  "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8": 0.2953,
+  "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8": 0.2118,
   
   "TTZZ_TuneCP5_13TeV-madgraph-pythia8": 0.001386,
   "TTZH_TuneCP5_13TeV-madgraph-pythia8": 0.00113,
