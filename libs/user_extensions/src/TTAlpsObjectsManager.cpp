@@ -11,10 +11,15 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
   try {
     config.GetMap("muonMatchingParams", muonMatchingParams);
   } catch (const Exception &e) {
-    warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
+    info() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
 
-  config.GetMap("dimuonVertexCuts", dimuonVertexCuts);
+  try {
+    config.GetMap("dimuonVertexCuts", dimuonVertexCuts);
+  } catch (const Exception &e) {
+    info() << "Couldn't read dimuonVertexCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+  }
+
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> event) {
