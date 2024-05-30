@@ -62,7 +62,7 @@ dbs_instance = "prod/phys03"
   #  f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/"),
 # )
 
-datasets_and_output_dirs = (
+datasets_and_output_trees_dirs = (
 # # # tt̄
 #   ("/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
 #    f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/"),
@@ -198,28 +198,29 @@ datasets_and_output_dirs = (
   # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e1mm/{skim}/"),
   # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e2mm/{skim}/"),
-  ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e3mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e3mm/{skim}/"),
   # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/"),
-  ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e-5mm/{skim}/"),
+  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e-5mm/{skim}/"),
 
-  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e0mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e1mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e2mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e3mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e5mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e-5mm/{skim}/"),  
+  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e0mm/{skim}/"),
+  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e1mm/{skim}/"),
+  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e2mm/{skim}/"),
+  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e3mm/{skim}/"),
+  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e5mm/{skim}/"),
+  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
+  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e-5mm/{skim}/"),  
 )
 
 # # this has to be here, otherwise the script will not work:
 dataset = ""
-output_dir = ""
+output_trees_dir = ""
+output_hists_dir = ""
 input_directory = ""
