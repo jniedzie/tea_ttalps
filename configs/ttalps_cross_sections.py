@@ -23,7 +23,9 @@ cross_sections = {
   "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8": 0.2163,
   "ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8": 0.4611,
   
+  # ttHToMuMu cross section is wrong and shouldn't be used by us
   "ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8": 0.5269,
+  # ttH cross sections from HIG-19-011 (ttH H to bb Run 2)
   "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8": 0.2953,
   "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8": 0.2118,
   
