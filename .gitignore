@@ -3,5 +3,7 @@ build/*
 plots/*
 .vscode/*
 
+datacards/*
+
 data/*
 *.root
