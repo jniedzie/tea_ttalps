@@ -9,12 +9,13 @@ runDefaultHistograms = True
 runTriggerHistograms = False
 runPileupHistograms = False
 runLLPNanoAODHistograms = True
-runMuonMatchingHistograms = True
-runGenMuonHistograms = True
+runMuonMatchingHistograms = False
+runGenMuonHistograms = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 specialBranchSizes = {}
+# redirector = "xrootd-cms.infn.it"
 
 pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
 pileupScaleFactorsHistName = "pileup_scale_factors"
@@ -45,6 +46,10 @@ defaultHistParams = (
   ("Event"              , "PV_npvs"             , 300   , 0     , 300   , ""  ),
   ("Event"              , "PV_npvsGood"         , 300   , 0     , 300   , ""  ),
   ("Event"              , "MET_pt"              , 1000  , 0     , 1000  , ""  ),
+
+  ("Event"              , "PV_x"                , 200   , -100   , 100   , ""  ),
+  ("Event"              , "PV_y"                , 200   , -100   , 100   , ""  ),
+  ("Event"              , "PV_z"                , 200   , -100   , 100   , ""  ),
   
   ("Event"              , "nMuon"               , 50    , 0     , 50    , ""  ),
   ("Muon"               , "pt"                  , 2000  , 0     , 1000  , ""  ),
@@ -224,35 +229,44 @@ LLPNanoAOD_defaultHistParams = (
   ("LooseDSAMuons"            , "displacedID"         , 50    , 0     , 50    , ""  ),
 
   ("Event"              , "nPatMuonVertex"      , 50    , 0     , 50    , ""  ),
+  ("PatMuonVertex"      , "isValid"             , 10    , 0     , 10    , ""  ),
+  ("PatMuonVertex"      , "dca"                 , 1000  , 0     , 20    , ""  ),
+  ("PatMuonVertex"      , "dcaStatus"           , 10    , 0     , 10    , ""  ),
   ("PatMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
   ("PatMuonVertex"      , "vxy"                 , 10000  , -1000  , 1000   , ""  ),
   ("PatMuonVertex"      , "vxySigma"            , 10000  , 0      , 100    , ""  ),
   ("PatMuonVertex"      , "vz"                  , 10000  , -1000  , 1000   , ""  ),
   ("PatMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
-  ("PatMuonVertex"      , "idx1"                , 100   , 0     , 100   , ""  ),
-  ("PatMuonVertex"      , "idx2"                , 100   , 0     , 100   , ""  ),
+  ("PatMuonVertex"      , "originalMuonIdx1"    , 100   , 0     , 100   , ""  ),
+  ("PatMuonVertex"      , "originalMuonIdx2"    , 100   , 0     , 100   , ""  ),
   ("PatMuonVertex"      , "isDSAMuon1"          , 10    , 0     , 10    , ""  ),
   ("PatMuonVertex"      , "isDSAMuon2"          , 10    , 0     , 10    , ""  ),
 
   ("Event"              , "nPatDSAMuonVertex"   , 50    , 0     , 50    , ""  ),
+  ("PatDSAMuonVertex"   , "isValid"             , 10    , 0     , 10    , ""  ),
+  ("PatDSAMuonVertex"   , "dca"                 , 1000  , 0     , 20    , ""  ),
+  ("PatDSAMuonVertex"   , "dcaStatus"           , 10    , 0     , 10    , ""  ),
   ("PatDSAMuonVertex"   , "chi2"                , 500   , 0     , 500   , ""  ),
   ("PatDSAMuonVertex"   , "vxy"                 , 10000  , -1000  , 1000   , ""  ),
   ("PatDSAMuonVertex"   , "vxySigma"            , 10000  , 0      , 100    , ""  ),
   ("PatDSAMuonVertex"   , "vz"                  , 10000  , -1000  , 1000   , ""  ),
   ("PatDSAMuonVertex"   , "dR"                  , 500   , 0     , 10    , ""  ),
-  ("PatDSAMuonVertex"   , "idx1"                , 100   , 0     , 100   , ""  ),
-  ("PatDSAMuonVertex"   , "idx2"                , 100   , 0     , 100   , ""  ),
+  ("PatDSAMuonVertex"   , "originalMuonIdx1"    , 100   , 0     , 100   , ""  ),
+  ("PatDSAMuonVertex"   , "originalMuonIdx2"    , 100   , 0     , 100   , ""  ),
   ("PatDSAMuonVertex"   , "isDSAMuon1"          , 10    , 0     , 10    , ""  ),
   ("PatDSAMuonVertex"   , "isDSAMuon2"          , 10    , 0     , 10    , ""  ),
 
   ("Event"              , "nDSAMuonVertex"      , 50    , 0     , 50    , ""  ),
+  ("DSAMuonVertex"      , "isValid"             , 10    , 0     , 10    , ""  ),
+  ("DSAMuonVertex"      , "dca"                 , 1000  , 0     , 20    , ""  ),
+  ("DSAMuonVertex"      , "dcaStatus"           , 10    , 0     , 10    , ""  ),
   ("DSAMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
   ("DSAMuonVertex"      , "vxy"                 , 10000  , -1000  , 1000   , ""  ),
   ("DSAMuonVertex"      , "vxySigma"            , 10000  , 0      , 100    , ""  ),
   ("DSAMuonVertex"      , "vz"                  , 10000  , -1000  , 1000   , ""  ),
   ("DSAMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
-  ("DSAMuonVertex"      , "idx1"                , 100   , 0     , 100   , ""  ),
-  ("DSAMuonVertex"      , "idx2"                , 100   , 0     , 100   , ""  ),
+  ("DSAMuonVertex"      , "originalMuonIdx1"    , 100   , 0     , 100   , ""  ),
+  ("DSAMuonVertex"      , "originalMuonIdx2"    , 100   , 0     , 100   , ""  ),
   ("DSAMuonVertex"      , "isDSAMuon1"          , 10    , 0     , 10    , ""  ),
   ("DSAMuonVertex"      , "isDSAMuon2"          , 10    , 0     , 10    , ""  ),
 
@@ -297,47 +311,26 @@ histParams = (
   ("Event"          , "normCheck"                 , 1     , 0   , 1     , ""  ),
 )
 
+LLPNanoAOD_histParams = ()
+
+LLPNanoAOD_histParams2D = (
+  #  collection + variables                           binsx   xmin  xmax binsy ymin   ymax   name
+  ("GoodLooseMuonsVertex_normChi2_ndof",               1000, 0    , 10,   10  , 0    , 10   , ""  ),
+  ("GoodLooseMuonsVertex_vxySigma_vxy",                1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vxyzSigma_vxyz",              1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vxySigma_vxySignificance",    1000, 0    , 50,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vxyzSigma_vxyzSignificance",  1000, 0    , 50,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vxySignificance_vxy",         1000, 0    , 1000, 1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vxyzSignificance_vxyz",       1000, 0    , 1000, 1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vxErr_vx",                    1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vyErr_vy",                    1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_vzErr_vz",                    1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_normChi2_vxy",                1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_normChi2_vxyz",               1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+  ("GoodLooseMuonsVertex_normChi2_vxyz",               1000, 0    , 10,   1000, 0    , 1000 , ""  ),
+)
+
 muonVertexCollectionCategories = ["", "_PatDSA", "_DSA", "_Pat"]
-
-LLPNanoAOD_histParams = (
-  ("GoodLooseMuonsVertexWithLargeDR" , "vxErr"                    , 10000  , -1000  , 1000   , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "vyErr"                    , 10000  , -1000  , 1000   , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "vzErr"                    , 10000  , -1000  , 1000   , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "idx1"                  , 100    , 0      , 100    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "idx2"                  , 100    , 0      , 100    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "isDSAMuon1"            , 10     , 0      , 10     , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "isDSAMuon2"            , 10     , 0      , 10     , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Dimuon2"   , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Muon1"     , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
-  ("GoodLooseMuonsVertexWithLargeDR" , "chargeProduct"         , 10     , -5    , 5     , ""  ),
-)
-for category in muonVertexCollectionCategories:
-  muonVertexCollectionName = "GoodLooseMuonsVertexWithLargeDR" + category
-  LLPNanoAOD_histParams += (
-  ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
-  (muonVertexCollectionName , "chi2"                  , 1000   , 0      , 500    , ""  ),
-  (muonVertexCollectionName , "ndof"                  , 500    , 0      , 500    , ""  ),
-  (muonVertexCollectionName , "normChi2"              , 500    , 0      , 500    , ""  ),
-  (muonVertexCollectionName , "vxy"                   , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vxySigma"              , 10000  , 0      , 100    , ""  ),
-  (muonVertexCollectionName , "vx"                    , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vy"                    , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vz"                    , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vxErr"                    , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vyErr"                    , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vzErr"                    , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vxyz"                  , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "vxyzSigma"                  , 10000  , -1000  , 1000   , ""  ),
-  (muonVertexCollectionName , "dR"                    , 500    , 0      , 10     , ""  ),
-  (muonVertexCollectionName , "proxDR"                , 500    , 0      , 10     , ""  ),
-)
-
 muonCollectionCategories = ["", "DSA", "PAT"]
 for matchingMethod, param in muonMatchingParams.items():
   for category in muonCollectionCategories:
@@ -362,39 +355,149 @@ for matchingMethod, param in muonMatchingParams.items():
       (muonCollectionName  , "minOuterDeltaR"   , 1000   , 0    , 10     , ""  ),
       (muonCollectionName  , "minProxDeltaR"    , 1000   , 0    , 10     , ""  ),
     )
-  
+  muonVertexCollectionName = "LooseMuonsVertex"+matchingMethod+"Match"
+  LLPNanoAOD_histParams += (
+    (muonVertexCollectionName , "vxErr"                    , 1000   , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "vyErr"                    , 1000   , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "vzErr"                    , 1000   , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "originalMuonIdx1"         , 100    , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "originalMuonIdx2"         , 100    , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "isDSAMuon1"            , 10     , 0      , 10     , ""  ),
+    (muonVertexCollectionName , "isDSAMuon2"            , 10     , 0      , 10     , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Dimuon2"   , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Muon1"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
+    (muonVertexCollectionName , "chargeProduct"         , 10     , -5    , 5     , ""  ),
+    (muonVertexCollectionName , "lxyFromPVvxyDiff"      , 10000  , -1000  , 1000   , ""  ),
+  )
   for category in muonVertexCollectionCategories:
     muonVertexCollectionName = "LooseMuonsVertex"+matchingMethod+"Match"+category
     LLPNanoAOD_histParams += (
-      ("Event"      , "n"+muonVertexCollectionName        , 50     , 0      , 50     , ""  ),
+      ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
       (muonVertexCollectionName , "chi2"                  , 10000  , 0      , 500    , ""  ),
-      (muonVertexCollectionName , "ndof"                  , 500    , 0      , 500    , ""  ),
-      (muonVertexCollectionName , "normChi2"              , 500    , 0      , 500    , ""  ),
-      (muonVertexCollectionName , "vxy"                   , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "ndof"                  , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "vxy"                   , 1000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "vxySigma"              , 10000  , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "vxySignificance"       , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxySignificanceV2"     , 1000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "vx"                    , 10000  , -1000  , 1000   , ""  ),
       (muonVertexCollectionName , "vy"                    , 10000  , -1000  , 1000   , ""  ),
       (muonVertexCollectionName , "vz"                    , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName , "vxErr"                 , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName , "vyErr"                 , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName , "vzErr"                 , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName , "vxyz"                  , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName , "vxyzSigma"             , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vxSignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vySignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vzSignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyz"                  , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyzSigma"             , 10000  , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "vxyzSignificance"      , 1000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "dR"                    , 500    , 0      , 10     , ""  ),
       (muonVertexCollectionName , "proxDR"                , 500    , 0      , 10     , ""  ),
-      (muonVertexCollectionName , "idx1"                  , 100    , 0      , 100    , ""  ),
-      (muonVertexCollectionName , "idx2"                  , 100    , 0      , 100    , ""  ),
-      (muonVertexCollectionName , "isDSAMuon1"            , 10     , 0      , 10     , ""  ),
-      (muonVertexCollectionName , "isDSAMuon2"            , 10     , 0      , 10     , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso04Dimuon2"   , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso03Muon1"     , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
-      (muonVertexCollectionName , "chargeProduct"         , 10     , -5    , 5     , ""  ),
+      (muonVertexCollectionName , "outerDR"               , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert1"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert2"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVertSum"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "maxHitsInFrontOfVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVert1"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVert2"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVertSum"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "maxMissHitsAfterVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
+      (muonVertexCollectionName , "dcaStatus"             , 10     , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "collinearityAngle"     , 1000   , -10    , 10     , ""  ),
+      (muonVertexCollectionName , "absCollinearityAngle"  , 1000   , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "absPATPtLxyDPhi"       , 1000   , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "nPixelHits1"           , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "nPixelHits2"           , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "deltaPixelHits"        , 100    , -50    , 50     , ""  ),
+      (muonVertexCollectionName , "nTrackerLayers1"      , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "nTrackerLayers2"      , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "lxyFromPV"             , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+      (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
+    )
+    LLPNanoAOD_histParams2D += (
+      (muonVertexCollectionName+"_invMass_absCollinearityAngle",  2000, 0  , 200 ,  700 , 0  , 7  , ""  ),
+      (muonVertexCollectionName+"_Lxy_nTrackerLayers1"         ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
+      (muonVertexCollectionName+"_Lxy_nTrackerLayers2"         ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
+      (muonVertexCollectionName+"_Lxy_maxTrackerLayers"        ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
+    )
+
+extraMuonVertexCollections = ["GoodLooseMuonsVertexWithLargeDR", "MaskedLooseMuonsVertex", "GoodLooseMuonsVertex", "GoodLooseMuonsVertexTight", "GoodMaskedLooseMuonsVertex", "BestLooseMuonsVertex", "SecondBestLooseMuonsVertex", "GoodBestLooseMuonsVertex", "GoodSecondBestLooseMuonsVertex", "GoodBestLooseMuonsVertexTight", "GoodSecondBestLooseMuonsVertexTight"]
+for extraMuonVertexCollectionName in extraMuonVertexCollections:
+  LLPNanoAOD_histParams += (
+    (extraMuonVertexCollectionName , "vxErr"                    , 1000  , 0      , 100    , ""  ),
+    (extraMuonVertexCollectionName , "vyErr"                    , 1000  , 0      , 100    , ""  ),
+    (extraMuonVertexCollectionName , "vzErr"                    , 1000  , 0      , 100    , ""  ),
+    (extraMuonVertexCollectionName , "originalMuonIdx1"         , 100    , 0      , 100    , ""  ),
+    (extraMuonVertexCollectionName , "originalMuonIdx2"         , 100    , 0      , 100    , ""  ),
+    (extraMuonVertexCollectionName , "isDSAMuon1"            , 10     , 0      , 10     , ""  ),
+    (extraMuonVertexCollectionName , "isDSAMuon2"            , 10     , 0      , 10     , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso04Dimuon2"   , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso03Muon1"     , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
+    (extraMuonVertexCollectionName , "chargeProduct"         , 10     , -5    , 5     , ""  ),
+    (extraMuonVertexCollectionName , "lxyFromPVvxyDiff"      , 10000  , -1000  , 1000   , ""  ),
+  )
+  for category in muonVertexCollectionCategories:
+    muonVertexCollectionName = extraMuonVertexCollectionName + category
+    LLPNanoAOD_histParams += (
+      ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "chi2"                  , 10000  , 0      , 500    , ""  ),
+      (muonVertexCollectionName , "ndof"                  , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "vxy"                   , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxySigma"              , 10000  , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "vxySignificance"       , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxySignificanceV2"     , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vx"                    , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vy"                    , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vz"                    , 10000  , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vxSignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vySignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vzSignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyz"                  , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyzSigma"             , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyzSignificance"      , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "dR"                    , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "proxDR"                , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "outerDR"               , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert1"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert2"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVertSum"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "maxHitsInFrontOfVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVert1"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVert2"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVertSum"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "maxMissHitsAfterVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
+      (muonVertexCollectionName , "dcaStatus"             , 10     , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "collinearityAngle"     , 1000   , -10    , 10     , ""  ),
+      (muonVertexCollectionName , "absCollinearityAngle"  , 1000   , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "absPATPtLxyDPhi"       , 1000   , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "nPixelHits1"           , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "nPixelHits2"           , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "deltaPixelHits"        , 100    , -50    , 50     , ""  ),
+      (muonVertexCollectionName , "nTrackerLayers1"       , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "nTrackerLayers2"       , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "lxyFromPV"             , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+      (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
+    )
+    LLPNanoAOD_histParams2D += (
+      (muonVertexCollectionName+"_invMass_absCollinearityAngle",  2000, 0  , 200,  700 , 0  , 7 , ""  ),
+      (muonVertexCollectionName+"_Lxy_nTrackerLayers1"         ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
+      (muonVertexCollectionName+"_Lxy_nTrackerLayers2"         ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
+      (muonVertexCollectionName+"_Lxy_maxTrackerLayers"        ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
     )
 
 MuonMatching_histParams = (
@@ -558,14 +661,13 @@ for matchingMethod, param in muonMatchingParams.items():
 
   muonVertexCollectionName = "LooseMuonsFromALP"+matchingMethod+"MatchVertex"
   GenMuon_histParams += (
-    ("Event"       , "n"+muonVertexCollectionName           , 50    , 0     , 50    , ""  ),
-    (muonVertexCollectionName , "vxErr"                        , 10000  , -1000  , 1000   , ""  ),
-    (muonVertexCollectionName , "vyErr"                        , 10000  , -1000  , 1000   , ""  ),
-    (muonVertexCollectionName , "vzErr"                        , 10000  , -1000  , 1000   , ""  ),
-    (muonVertexCollectionName , "idx1"                      , 100    , 0      , 100    , ""  ),
-    (muonVertexCollectionName , "idx2"                      , 100    , 0      , 100    , ""  ),
-    (muonVertexCollectionName , "isDSAMuon1"                , 10     , 0      , 10     , ""  ),
-    (muonVertexCollectionName , "isDSAMuon2"                , 10     , 0      , 10     , ""  ),
+    (muonVertexCollectionName , "vxErr"                 , 1000   , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "vyErr"                 , 1000   , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "vzErr"                 , 1000   , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "originalMuonIdx1"      , 100    , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "originalMuonIdx2"      , 100    , 0      , 100    , ""  ),
+    (muonVertexCollectionName , "isDSAMuon1"            , 10     , 0      , 10     , ""  ),
+    (muonVertexCollectionName , "isDSAMuon2"            , 10     , 0      , 10     , ""  ),
     (muonVertexCollectionName , "displacedTrackIso03Dimuon1"   , 5000  , 0     , 500    , ""  ),
     (muonVertexCollectionName , "displacedTrackIso04Dimuon1"   , 5000  , 0     , 500    , ""  ),
     (muonVertexCollectionName , "displacedTrackIso03Dimuon2"   , 5000  , 0     , 500    , ""  ),
@@ -574,25 +676,55 @@ for matchingMethod, param in muonMatchingParams.items():
     (muonVertexCollectionName , "displacedTrackIso04Muon1"     , 5000  , 0     , 500    , ""  ),
     (muonVertexCollectionName , "displacedTrackIso03Muon2"     , 5000  , 0     , 500    , ""  ),
     (muonVertexCollectionName , "displacedTrackIso04Muon2"     , 5000  , 0     , 500    , ""  ),
-    (muonVertexCollectionName , "chargeProduct"           , 10     , -5    , 5     , ""  ),
+    (muonVertexCollectionName , "chargeProduct"         , 10     , -5    , 5     , ""  ),
+    (muonVertexCollectionName , "lxyFromPVvxyDiff"      , 1000   , 0      , 1000   , ""  ),
+
   )
 
   for category in muonVertexCollectionCategories:
     muonVertexCollectionName = "LooseMuonsFromALP"+matchingMethod+"MatchVertex"+category
     GenMuon_histParams += (
-      ("Event"      , "n"+muonVertexCollectionName           , 50    , 0     , 50    , ""  ),
-      (muonVertexCollectionName     , "chi2"         , 500    , 0      , 500    , ""  ),
-      (muonVertexCollectionName     , "ndof"         , 500    , 0      , 500    , ""  ),
-      (muonVertexCollectionName     , "normChi2"         , 500    , 0      , 500    , ""  ),
-      (muonVertexCollectionName     , "vxy"          , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName     , "vxySigma"     , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName     , "vx"           , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName     , "vy"           , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName     , "vz"           , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName     , "vxyz"         , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName     , "vxyzSigma"         , 10000  , -1000  , 1000   , ""  ),
-      (muonVertexCollectionName     , "dR"           , 500    , 0      , 10     , ""  ),
-      (muonVertexCollectionName     , "proxDR"       , 500    , 0      , 10     , ""  ),
+      ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "chi2"                  , 10000  , 0      , 500    , ""  ),
+      (muonVertexCollectionName , "ndof"                  , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "vxy"                   , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxySigma"              , 1000   , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "vxySignificance"       , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxySignificanceV2"     , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vx"                    , 5000   , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vy"                    , 5000   , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vz"                    , 5000   , -1000  , 1000   , ""  ),
+      (muonVertexCollectionName , "vxSignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vySignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vzSignificance"        , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyz"                  , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "vxyzSigma"             , 10000  , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "vxyzSignificance"      , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "dR"                    , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "proxDR"                , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "outerDR"               , 500    , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert1"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert2"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVertSum"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "maxHitsInFrontOfVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVert1"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVert2"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "missHitsAfterVertSum"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "maxMissHitsAfterVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
+      (muonVertexCollectionName , "dcaStatus"             , 10     , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "collinearityAngle"     , 1000   , -10    , 10     , ""  ),
+      (muonVertexCollectionName , "absCollinearityAngle"  , 1000   , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "absPATPtLxyDPhi"       , 1000   , 0      , 10     , ""  ),
+      (muonVertexCollectionName , "nPixelHits1"           , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "nPixelHits2"           , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "deltaPixelHits"        , 100    , -50    , 50     , ""  ),
+      (muonVertexCollectionName , "nTrackerLayers1"       , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "nTrackerLayers2"       , 50     , 0      , 50     , ""  ),
+      (muonVertexCollectionName , "lxyFromPV"             , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+      (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
     )
   
 if runLLPNanoAODHistograms:
@@ -603,11 +735,6 @@ if runGenMuonHistograms:
   histParams = histParams + GenMuon_histParams
 
 histParams2D = (
-
-)
-
-LLPNanoAOD_histParams2D = (
-
 )
 
 MuonMatching_histParams2D = ( 

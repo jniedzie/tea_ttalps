@@ -1,7 +1,22 @@
 # good object definitions
-muonVertexCuts = {
-  "maxChi2": 30.0,
-  "maxDeltaR": 0.3,
-  "muonChargeProduct": -1.0,
-  "minDeltaR": 0.6,
+dimuonVertexCuts = {
+  "maxBaseDCA": 15.0,
+  "maxDCA": 5.0,
+  "maxChi2": 2.0,
+  "maxHitsInFrontOfVertexDSA": 9999.0,
+  "maxHitsInFrontOfVertexPatDSA": 6.0,
+  "maxHitsInFrontOfVertexPat": 3.0,
+  "maxDeltaPixelHitsDSA": 9999.0,
+  "maxDeltaPixelHitsPatDSA": 9999.0,
+  "maxDeltaPixelHitsPat": 3.0,
+  "maxOuterDRDSA": 0.2,
+  "maxProxDRPatDSA": 0.3,
+  "maxDRPat": 0.2,
+  "maxCollinearityAngle": 0.785,
+  "maxPATpTLxyDPhiPatDSA": 2.9,
+  "maxInvariantMass": 70.0,
+  "minJpsiMass": 3.05,
+  "maxJpsiMass": 3.13,
+  "minpsiMass": 3.5,
+  "maxpsiMass": 3.86,
 }

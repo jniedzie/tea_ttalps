@@ -67,6 +67,7 @@ class TTAlpsHistogramFiller {
   void FillLooseMuonsHistograms(const std::shared_ptr<Event> event, std::string collectionName);
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> vertexCollection, std::string vertexName);
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName);
+  void FillMuonVertexCorrelationHistograms(const std::shared_ptr<Event> event, std::string vertexName);
 
   // Muon Matching histograms
   void FillMatchedMuonHistograms(const std::shared_ptr<PhysicsObject> muon, std::string muonCollectionName, float weight);  

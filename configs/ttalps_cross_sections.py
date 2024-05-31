@@ -23,9 +23,11 @@ cross_sections = {
   "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8": 0.2163,
   "ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8": 0.4611,
   
+  # ttHToMuMu cross section is wrong and shouldn't be used by us
   "ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8": 0.5269,
-  "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8": 0.5418,
-  "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8": 0.5638,
+  # ttH cross sections from HIG-19-011 (ttH H to bb Run 2)
+  "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8": 0.2953,
+  "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8": 0.2118,
   
   "TTZZ_TuneCP5_13TeV-madgraph-pythia8": 0.001386,
   "TTZH_TuneCP5_13TeV-madgraph-pythia8": 0.00113,
@@ -68,14 +70,13 @@ cross_sections = {
   "tta_mAlp-0p35GeV_ctau-1e3mm": 0.35,
   "tta_mAlp-0p35GeV_ctau-1e5mm": 0.35,
   "tta_mAlp-0p35GeV_ctau-1e7mm": 0.35,
-  
-  "signal_tta_mAlp-0p35GeV_ctau-1e-5mm": 0.35,
-  "signal_tta_mAlp-0p35GeV_ctau-1e0mm": 0.35,
-  "signal_tta_mAlp-0p35GeV_ctau-1e1mm": 0.35,
-  "signal_tta_mAlp-0p35GeV_ctau-1e2mm": 0.35,
-  "signal_tta_mAlp-0p35GeV_ctau-1e3mm": 0.35,
-  "signal_tta_mAlp-0p35GeV_ctau-1e5mm": 0.35,
-  "signal_tta_mAlp-0p35GeV_ctau-1e7mm": 0.35,
+
+  "tta_mAlp-1GeV_ctau-1e-5mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e0mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e1mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e2mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e3mm": 1.0,
+  "tta_mAlp-1GeV_ctau-1e5mm": 1.0,
 }
 
 # Cross sections in (pb) from AN2018_025_v12

@@ -39,3 +39,5 @@ requiredFlags = (
 branchesToKeep = ["*"]
 branchesToRemove = []
 specialBranchSizes = {}
+
+redirector = "xrootd-cms.infn.it"

@@ -22,9 +22,13 @@ class TTAlpsObjectsManager {
  private:
 
   std::map<std::string, float> muonMatchingParams;
+  std::map<std::string, float> dimuonVertexCuts;
 
   bool IsGoodMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
-  bool IsGoodMuonVertexWithLargeDR(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
+  bool IsGoodMuonVertexTight(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
+  bool IsGoodMaskedMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
+  std::shared_ptr<PhysicsObject> GetBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::shared_ptr<Event> event);
+  std::shared_ptr<PhysicsObject> GetSecondBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::shared_ptr<Event> event);
 
 };
 
