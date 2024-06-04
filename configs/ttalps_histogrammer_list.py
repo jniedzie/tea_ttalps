@@ -1,3 +1,5 @@
+import os
+
 max_files = -1
 
 # skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
@@ -24,8 +26,11 @@ skim = "LLPnanoAODv2"
 
 # skim = "skimmed_SR_Met50GeV"
 
-# base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
-base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
+
+base_path = "/nfs/dust/cms/user/{}/ttalps_cms"
+input_username = "lrygaard"
+output_username = os.environ["USER"]
+
 
 applyScaleFactors = {
   "muon": True,
@@ -115,9 +120,8 @@ samples = (
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
-input_directory = f"{base_path}/{sample_path}/{skim}/"
-
-output_dir = f"{input_directory}/histograms".replace("lrygaard", "jniedzie")
+input_directory = f"{base_path.format(input_username)}/{sample_path}/{skim}/"
+output_dir = f"{base_path.format(output_username)}/histograms"
 
 for name, apply in applyScaleFactors.items():
   if not apply:
