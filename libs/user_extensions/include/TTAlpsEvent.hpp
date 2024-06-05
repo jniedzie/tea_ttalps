@@ -8,14 +8,17 @@ class TTAlpsEvent {
  public:
   TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {}
 
-  auto Get(std::string branchName) { return event->Get(branchName); }
+  auto Get(std::string branchName, const char* file = __builtin_FILE(), const char* function = __builtin_FUNCTION(),
+           int line = __builtin_LINE()) {
+    return event->Get(branchName, file, function, line);
+  }
   float GetAsFloat(std::string branchName) { return event->GetAsFloat(branchName); }
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
   std::shared_ptr<PhysicsObjects> GetGenALPs();
   std::shared_ptr<PhysicsObjects> GetGenMuonsFromALP();
   std::shared_ptr<PhysicsObjects> GetMuonsMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.5);
   std::shared_ptr<PhysicsObjects> GetVertexForDimuon(std::shared_ptr<PhysicsObject> muon1, std::shared_ptr<PhysicsObject> muon2);
-  
+
   std::string GetTTbarEventCategory();
 
  private:

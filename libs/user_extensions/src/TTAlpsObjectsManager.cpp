@@ -197,7 +197,7 @@ bool TTAlpsObjectsManager::IsGoodMuonVertexTight(const shared_ptr<PhysicsObject>
   if(!abs(dimuonVertex->GetCollinearityAngle()) < dimuonVertexCuts["maxCollinearityAngle"]) return false;
 
   if(category == "PatDSA" && !(float)dimuonVertex->Get("dRprox") < dimuonVertexCuts["maxProxDRPatDSA"]) return false;
-  if(category == "Pat" && !(float)dimuonVertex->Get("dR ") < dimuonVertexCuts["maxDRPat"]) return false;
+  if(category == "Pat" && !(float)dimuonVertex->Get("dR") < dimuonVertexCuts["maxDRPat"]) return false;
   if(category == "DSA" && !dimuonVertex->GetOuterDeltaR() < dimuonVertexCuts["maxOuterDRDSA"]) return false;
   
   return true;
