@@ -445,6 +445,31 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   histogramsHandler->Fill("Event_n"+vertexName+"_DSA", nDSA, weight);
 }
 
+void TTAlpsHistogramFiller::FillBasicMuonVertexHistograms(const shared_ptr<Event> event) {
+  float weight = GetEventWeight(event);
+
+  auto vertexCollection = event->GetCollection("GoodBestLooseMuonsVertex");
+  
+  for(auto vertex : *vertexCollection){
+    auto dimuonVertex = asNanoDimuonVertex(vertex,event);
+    shared_ptr<PhysicsObject> muon1  = dimuonVertex->Muon1();
+    shared_ptr<PhysicsObject> muon2  = dimuonVertex->Muon2();
+    float muonWeight1 = GetObjectWeight(muon1, "LooseMuons");
+    float muonWeight2 = GetObjectWeight(muon2, "LooseMuons");
+    
+    string category = dimuonVertex->GetVertexCategory();
+    
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_vxy", dimuonVertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_vxySigma", dimuonVertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_vxySignificance", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_dca", dimuonVertex->Get("dca"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_collinearityAngle", dimuonVertex->GetCollinearityAngle(), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_invMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2); 
+  }
+}
+
+
 void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> event, string vertexName) {
   auto vertexCollection = event->GetCollection(vertexName);
   FillMuonVertexHistograms(event, vertexCollection, vertexName);

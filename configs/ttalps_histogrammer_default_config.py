@@ -10,10 +10,14 @@ runPileupHistograms = False
 runLLPNanoAODHistograms = False
 runMuonMatchingHistograms = False
 runGenMuonHistograms = False
+runLLPNanoAODVertexHistograms = True
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ["Events",]
-specialBranchSizes = {}
+specialBranchSizes = {
+  "Proton_multiRP": "nProton_multiRP",
+  "Proton_singleRP": "nProton_singleRP",
+}
 
 pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
 pileupScaleFactorsHistName = "pileup_scale_factors"
@@ -23,6 +27,13 @@ applyScaleFactors = {
   "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
+}
+
+muonMatchingParams = {
+    "Segment" : 2.0/3.0,
+    # "DR" : 0.1
+    # "OuterDR" : 0.1
+    # "ProxDR" : 0.1
 }
 
 defaultHistParams = (
@@ -191,3 +202,19 @@ LLPNanoAOD_histParams = (
 
 if runLLPNanoAODHistograms:
   histParams = histParams + LLPNanoAOD_histParams
+
+
+if runLLPNanoAODVertexHistograms:
+
+  categories = ["", "_PatDSA", "_DSA", "_Pat"]
+  for category in categories:
+    histParams += (
+      ("GoodBestLooseMuonsVertex_"+category , "normChi2"              , 50000  , 0      , 50     , ""  ),
+      ("GoodBestLooseMuonsVertex_"+category , "vxy"                   , 1000   , 0      , 1000   , ""  ),
+      ("GoodBestLooseMuonsVertex_"+category , "vxySigma"              , 1000   , 0      , 100    , ""  ),
+      ("GoodBestLooseMuonsVertex_"+category , "vxySignificance"       , 1000   , 0      , 1000   , ""  ),
+      ("GoodBestLooseMuonsVertex_"+category , "vxySignificanceV2"     , 1000   , 0      , 1000   , ""  ),
+      ("GoodBestLooseMuonsVertex_"+category , "dca"                   , 1000   , 0      , 20     , ""  ),
+      ("GoodBestLooseMuonsVertex_"+category , "collinearityAngle"     , 1000   , -10    , 10     , ""  ),
+      ("GoodBestLooseMuonsVertex_"+category , "invMass"               , 20000  , 0      , 200    , ""  ),
+    )

@@ -45,20 +45,25 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
+  bool runLLPNanoAODVertexHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
   config.GetValue("runMuonMatchingHistograms", runMuonMatchingHistograms);
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
+  config.GetValue("runLLPNanoAODVertexHistograms", runLLPNanoAODVertexHistograms);
 
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
+
+  // check if cutflowmanager has cut "initial"
+  if (!cutFlowManager->HasCut("initial")) cutFlowManager->RegisterCut("initial");
   
   info() << "Starting event loop..." << endl;
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms) {
+    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
     }
@@ -94,7 +99,10 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("initial");
       histogramFiller->FillDefaultVariables(event);
     }
-
+    
+    if (runLLPNanoAODVertexHistograms) {
+      ttalpsHistogramsFiller->FillBasicMuonVertexHistograms(event);
+    }
   }
 
   if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();

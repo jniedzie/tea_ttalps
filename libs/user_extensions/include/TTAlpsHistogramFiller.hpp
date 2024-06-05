@@ -28,6 +28,8 @@ class TTAlpsHistogramFiller {
 
   void FillNormCheck(const std::shared_ptr<Event> event);
 
+  void FillBasicMuonVertexHistograms(const std::shared_ptr<Event> event);
+
  private:
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;

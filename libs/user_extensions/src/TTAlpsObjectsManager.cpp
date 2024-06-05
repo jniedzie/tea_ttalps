@@ -80,6 +80,12 @@ void TTAlpsObjectsManager::InsertSegmentMatchedLooseMuonsCollections(shared_ptr<
 }
 
 void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event> event) {
+  
+  if(muonMatchingParams.size() == 0) {
+    error() << "Requested to insert GoodLooseMuonVertex collection, but no muonMatchingParams are set in the config file." << endl;
+    return;
+  }
+  
   // Only segment matched muons for now
   string matchingMethod = muonMatchingParams.begin()->first;
   auto vertices = event->GetCollection("LooseMuonsVertex"+matchingMethod+"Match");
@@ -204,9 +210,9 @@ bool TTAlpsObjectsManager::IsGoodMuonVertexTight(const shared_ptr<PhysicsObject>
   std::string category = dimuonVertex->GetVertexCategory();
   if(!abs(dimuonVertex->GetCollinearityAngle()) < dimuonVertexCuts["maxCollinearityAngle"]) return false;
 
-  if(category == "PatDSA" && (float)dimuonVertex->Get("dRprox") > dimuonVertexCuts["maxProxDRPatDSA"]) return false;
-  if(category == "Pat" && (float)dimuonVertex->Get("dR ") > dimuonVertexCuts["maxDRPat"]) return false;
-  if(category == "DSA" && dimuonVertex->GetOuterDeltaR() > dimuonVertexCuts["maxOuterDRDSA"]) return false;
+  if(category == "PatDSA" && !(float)dimuonVertex->Get("dRprox") < dimuonVertexCuts["maxProxDRPatDSA"]) return false;
+  if(category == "Pat" && !(float)dimuonVertex->Get("dR") < dimuonVertexCuts["maxDRPat"]) return false;
+  if(category == "DSA" && !dimuonVertex->GetOuterDeltaR() < dimuonVertexCuts["maxOuterDRDSA"]) return false;
   
   return true;
 }
