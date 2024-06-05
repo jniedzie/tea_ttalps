@@ -319,7 +319,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(vertexName+"_vxy", dimuonVertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vxySigma", dimuonVertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vxySignificance", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
-    if (float(dimuonVertex->Get("vxySigma")) == 0) histogramsHandler->Fill(vertexName+"_vxySignificanceV2", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
+    if (float(dimuonVertex->Get("vxySigma")) != 0) histogramsHandler->Fill(vertexName+"_vxySignificanceV2", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
     else histogramsHandler->Fill(vertexName+"_vxySignificanceV2", -1, weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vxyz", dimuonVertex->Get("vxyz"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_vxyzSigma", dimuonVertex->Get("vxyzSigma"), weight * muonWeight1 * muonWeight2);
@@ -433,14 +433,12 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
 
     histogramsHandler->Fill(vertexName+"_"+category+"_invMass_absCollinearityAngle", dimuonVertex->GetInvariantMass(), abs(dimuonVertex->GetCollinearityAngle()), weight * muonWeight1 * muonWeight2);
 
+    histogramsHandler->Fill(vertexName+"_"+category+"_dca_normChi2", dimuonVertex->Get("dca"), dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
+
     if(category=="PatDSA") nPatDSA++;
     if(category=="Pat") nPat++;
     if(category=="DSA") nDSA++;
 
-    if(vertexName == "GoodBestLooseMuonsVertexTight") {
-      std::cout << "GoodBestLooseMuonsVertexTight" << std::endl;
-      std::cout << "proxDR: " << (float)dimuonVertex->Get("dRprox") << std::endl;
-    }
   }
   histogramsHandler->Fill("Event_n"+vertexName+"_PatDSA", nPatDSA, weight);
   histogramsHandler->Fill("Event_n"+vertexName+"_Pat", nPat, weight);
@@ -555,14 +553,18 @@ void TTAlpsHistogramFiller::FillAllLooseMuonsHistograms(const shared_ptr<Event> 
 
   FillMuonVertexHistograms(event,"MaskedLooseMuonsVertex");
   FillMuonVertexHistograms(event,"GoodLooseMuonsVertex");
-  FillMuonVertexHistograms(event,"GoodLooseMuonsVertexTight");
+  // FillMuonVertexHistograms(event,"GoodLooseMuonsVertexTight");
   FillMuonVertexHistograms(event,"GoodMaskedLooseMuonsVertex");
   FillMuonVertexHistograms(event,"BestLooseMuonsVertex");
   FillMuonVertexHistograms(event,"SecondBestLooseMuonsVertex");
   FillMuonVertexHistograms(event,"GoodBestLooseMuonsVertex");
   FillMuonVertexHistograms(event,"GoodSecondBestLooseMuonsVertex");
-  FillMuonVertexHistograms(event,"GoodBestLooseMuonsVertexTight");
-  FillMuonVertexHistograms(event,"GoodSecondBestLooseMuonsVertexTight");
+  // FillMuonVertexHistograms(event,"GoodBestLooseMuonsVertexTight");
+  // FillMuonVertexHistograms(event,"GoodSecondBestLooseMuonsVertexTight");
+  FillMuonVertexHistograms(event,"BestLooseMuonsVertexDCA");
+  FillMuonVertexHistograms(event,"BestLooseMuonsVertexDCAHitsInFrontOfVertex");
+  FillMuonVertexHistograms(event,"BestLooseMuonsVertexDCAHitsInFrontOfVertexPATDPhi");
+  FillMuonVertexHistograms(event,"BestLooseMuonsVertexDCAHitsInFrontOfVertexPATDPhiChi2");
 
   FillMuonVertexCorrelationHistograms(event, "GoodLooseMuonsVertex");
 }

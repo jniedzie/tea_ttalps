@@ -1,4 +1,4 @@
-max_files = -1
+max_files = 1
 
 lovisa_base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
@@ -13,8 +13,6 @@ skim = "skimmed_looseSemimuonic"
 
 # file_name = "02D6A1FE-C8EB-1A48-8B31-149FDFB64893.root"
 
-# dbs_instance = "prod/global"
-dbs_instance = "prod/phys03"
 
 # input_output_dirs = (
   # tt̄
@@ -191,32 +189,6 @@ datasets_and_output_trees_dirs = (
 #   ("/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
 #    f"{base_path}/collision_data2018/SingleMuon2018D/{skim}/"),
 
-## Signals LLPnanoAODs
-  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e0mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e1mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e2mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e3mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/"),
-  # ("/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  # f"{lovisa_base_path}/signals/tta_mAlp-0p35GeV_ctau-1e-5mm/{skim}/"),
-
-  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e0mm/{skim}/"),
-  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e1mm/{skim}/"),
-  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e2mm/{skim}/"),
-  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e3mm/{skim}/"),
-  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e5mm/{skim}/"),
-  ("/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  f"{lovisa_base_path}/signals/tta_mAlp-1GeV_ctau-1e-5mm/{skim}/"),  
 )
 
 # # this has to be here, otherwise the script will not work:
