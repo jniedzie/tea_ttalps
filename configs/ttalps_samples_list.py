@@ -46,18 +46,18 @@ backgrounds2018 = (
 
 data2018 = (
   # "collision_data2018/SingleMuon2018A",
-  # "collision_data2018/SingleMuon2018B",
+  "collision_data2018/SingleMuon2018B",
   # "collision_data2018/SingleMuon2018C",
   # "collision_data2018/SingleMuon2018D",
 )
 
 signals2018 = (
-  "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e-5mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e-5mm",
 
   "signals/tta_mAlp-1GeV_ctau-1e0mm",
   "signals/tta_mAlp-1GeV_ctau-1e1mm",
@@ -69,7 +69,7 @@ signals2018 = (
 
 # DAS samples
 
-dasBackgrounds2018 = (
+dasBackgrounds2018 = {
 #   "backgrounds2018/TTToSemiLeptonic" : "",
   "backgrounds2018/TTToHadronic" : "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_lrygaard-crab_TTToHadronic_LLPminiAOD-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
 #   "backgrounds2018/TTTo2L2Nu" : "",
@@ -109,16 +109,16 @@ dasBackgrounds2018 = (
 #   "backgrounds2018/QCD_Pt-600To800" : "",
   "backgrounds2018/QCD_Pt-800To1000" : "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-LLPminiAODv1_RunIISummer20UL18RECO-106X_v11-v2-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
 #   "backgrounds2018/QCD_Pt-1000" : "",
-)
+}
 
-dasData2018 = (
+dasData2018 = {
 #   "collision_data2018/SingleMuon2018A" : "",
   "collision_data2018/SingleMuon2018B" : "/SingleMuon/lrygaard-LLPnanoAODv1_lrygaard-crab_SingleMuonB_LLPminiAOD-9cdbfc999b77f606d32dabc67655eebd-00000000000000000000000000000000/USER",
 #   "collision_data2018/SingleMuon2018C" : "",
 #   "collision_data2018/SingleMuon2018D" : "",
-)
+}
 
-dasSignals2018 = (
+dasSignals2018 = {
   "signals/tta_mAlp-0p35GeV_ctau-1e0mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-0p35GeV_ctau-1e1mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-0p35GeV_ctau-1e2mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
@@ -132,4 +132,4 @@ dasSignals2018 = (
   "signals/tta_mAlp-1GeV_ctau-1e3mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-1GeV_ctau-1e5mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-1GeV_ctau-1e-5mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-)
+}

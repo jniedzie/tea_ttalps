@@ -42,4 +42,7 @@ eventSelections = {
 branchesToKeep = ["*"]
 branchesToRemove = []
 
-specialBranchSizes = {}
+specialBranchSizes = {
+  "Proton_multiRP": "nProton_multiRP",
+  "Proton_singleRP": "nProton_singleRP",
+}

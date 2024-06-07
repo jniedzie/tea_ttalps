@@ -133,16 +133,12 @@ bool TTAlpsEvent::IsGoodMuonFromALP(int genMuonIndex) {
   if (!muon->IsLastCopy()) return false;
   if(!muon->IsMuon()) return false;
 
-  int motherIndex = muon->GetMotherIndex();
+  auto firstMuon = muon->GetFirstCopy(genParticles);
+  if (firstMuon == nullptr) return false;
+
+  int motherIndex = firstMuon->GetMotherIndex();
   if (motherIndex < 0) return false;
   auto mother = asNanoGenParticle(genParticles->at(motherIndex));
-
-  // loop over pythia copies of the muon
-  while(mother->IsMuon()) {
-    motherIndex = mother->GetMotherIndex();
-    if (motherIndex < 0) return false;
-    mother = asNanoGenParticle(genParticles->at(motherIndex));
-  }
   // mother must be an ALP
   if (!mother->IsLastCopy()) return false;
   int ALPpdgId = 54;
