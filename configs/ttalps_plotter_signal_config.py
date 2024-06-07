@@ -9,8 +9,7 @@ from ttalps_cross_sections import *
 
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/"
 
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
-hist_path = ""
+hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 
 # skim = "skimmed_looseSemimuonic"
 skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
