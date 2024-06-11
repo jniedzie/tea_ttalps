@@ -68,7 +68,6 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
-
     if(applyLooseSkimming){
       if (!eventProcessor->PassesGoldenJson(event)) continue;
       cutFlowManager->UpdateCutFlow("goldenJson");

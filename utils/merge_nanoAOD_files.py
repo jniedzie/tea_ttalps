@@ -4,14 +4,17 @@ import os
 # input_path = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune"
 # input_pattern = "ntuples_loose_selections_*.root"
 
-input_base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/backgrounds2018/"
-# input_base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/signals/"
-# input_dataset = "tta_mAlp-0p35GeV_ctau-1e2mm"
-input_dataset = "QCD_Pt-800To1000"
-input_path = input_base_path+input_dataset+"/LLPnanoAODv2/"
-input_pattern = input_dataset+"*.root"
+# input_base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/backgrounds2018/"
+input_base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/signals/"
+input_dataset = "tta_mAlp-1GeV_ctau-1e-5mm"
+# input_dataset = "QCD_Pt-800To1000"
+# input_path = input_base_path+input_dataset+"/LLPnanoAODv2/"
+input_path = input_base_path+input_dataset+"/skimmed_looseSemimuonic_SRmuonic_Segmentv1_unmerged/"
+# input_pattern = input_dataset+"*.root"
+input_pattern = "output_*.root"
 
-output_path = input_base_path+input_dataset+"/LLPnanoAODv2merged/"
+# output_path = input_base_path+input_dataset+"/LLPnanoAODv2merged/"
+output_path = input_base_path+input_dataset+"/skimmed_looseSemimuonic_SRmuonic_Segmentv1/"
 output_pattern = input_dataset+"_{}.root"
 
 n_files_to_merge = 30

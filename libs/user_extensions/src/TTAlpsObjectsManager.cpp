@@ -89,52 +89,61 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
   // Only segment matched muons for now
   string matchingMethod = muonMatchingParams.begin()->first;
   auto vertices = event->GetCollection("LooseMuonsVertex"+matchingMethod+"Match");
-  auto goodVertices = make_shared<PhysicsObjects>();
-  auto goodVerticesTight = make_shared<PhysicsObjects>();
   auto maskedVertices = make_shared<PhysicsObjects>();
-  auto goodMaskedVertices = make_shared<PhysicsObjects>();
   auto bestVertex = make_shared<PhysicsObjects>();
   auto secondBestVertex = make_shared<PhysicsObjects>();
   auto goodBestVertex = make_shared<PhysicsObjects>();
   auto goodSecondBestVertex = make_shared<PhysicsObjects>();
-  auto goodBestVertexTight = make_shared<PhysicsObjects>();
-  auto goodSecondBestVertexTight = make_shared<PhysicsObjects>();
+  auto goodBestVertexHitsInFrontOfVertex = make_shared<PhysicsObjects>();
+  auto goodBestVertexHitsInFrontOfVertexPATDPhi = make_shared<PhysicsObjects>();
+  auto goodBestVertexHitsInFrontOfVertexPATDPhiDCA = make_shared<PhysicsObjects>();
+  auto goodBestVertexHitsInFrontOfVertexPATDPhiDCAChi2 = make_shared<PhysicsObjects>();
 
   for(auto vertex : *vertices) {
-    if(IsGoodMuonVertex(vertex, event)) {
-      goodVertices->push_back(vertex);
-      if(IsGoodMuonVertexTight(vertex, event)) goodVerticesTight->push_back(vertex);
-    }
-    if(IsGoodMaskedMuonVertex(vertex, event)) {
-      maskedVertices->push_back(vertex);
-      if(IsGoodMuonVertex(vertex, event)) goodMaskedVertices->push_back(vertex);
-    }
+    if(IsGoodMaskedMuonVertex(vertex, event)) maskedVertices->push_back(vertex);
   }
 
   if(GetBestMuonVertex(maskedVertices, event)) bestVertex->push_back(GetBestMuonVertex(maskedVertices, event));
   if(GetSecondBestMuonVertex(maskedVertices, event)) secondBestVertex->push_back(GetSecondBestMuonVertex(maskedVertices, event));
   if(bestVertex->size()>0) {
     if(IsGoodMuonVertex(bestVertex->at(0), event)) goodBestVertex->push_back(bestVertex->at(0));
-    if(IsGoodMuonVertexTight(bestVertex->at(0), event)) {
-      goodBestVertexTight->push_back(bestVertex->at(0));
-      std::cout << "goodBestVertexTight" << std::endl;
+    // Each step in the vertex selection 
+    auto dimuonVertex = asNanoDimuonVertex(bestVertex->at(0),event);
+
+    std::string category = dimuonVertex->GetVertexCategory();
+    int hitsInFrontOfVertex = max((float)dimuonVertex->Get("hitsInFrontOfVert1"),(float)dimuonVertex->Get("hitsInFrontOfVert2"));
+    if((category == "PatDSA" && hitsInFrontOfVertex < dimuonVertexCuts["maxHitsInFrontOfVertexPatDSA"]) ||
+      (category == "Pat" && hitsInFrontOfVertex < dimuonVertexCuts["maxHitsInFrontOfVertexPat"]) ||
+      (category == "DSA" && hitsInFrontOfVertex < dimuonVertexCuts["maxHitsInFrontOfVertexDSA"])) {
+      goodBestVertexHitsInFrontOfVertex->push_back(bestVertex->at(0));
+
+      if((abs(dimuonVertex->GetMuonpTLxyDPhi(1)) < dimuonVertexCuts["maxpTLxyDPhi"]) && (abs(dimuonVertex->GetMuonpTLxyDPhi(2)) < dimuonVertexCuts["maxpTLxyDPhi"])) {
+        goodBestVertexHitsInFrontOfVertexPATDPhi->push_back(bestVertex->at(0));
+
+        if((category == "PatDSA" && (float)dimuonVertex->Get("dca") < dimuonVertexCuts["maxDCAPatDSA"]) ||
+          (category == "Pat" && (float)dimuonVertex->Get("dca") < dimuonVertexCuts["maxDCAPat"]) ||
+          (category == "DSA" && (float)dimuonVertex->Get("dca") < dimuonVertexCuts["maxDCADSA"])) {
+          goodBestVertexHitsInFrontOfVertexPATDPhiDCA->push_back(bestVertex->at(0));
+        
+          if((float)dimuonVertex->Get("normChi2") < dimuonVertexCuts["maxChi2"]) goodBestVertexHitsInFrontOfVertexPATDPhiDCAChi2->push_back(bestVertex->at(0));
+        }
+      }
     }
   }
   if(secondBestVertex->size()>0) {
     if(IsGoodMuonVertex(secondBestVertex->at(0), event)) goodSecondBestVertex->push_back(secondBestVertex->at(0));
-    if(IsGoodMuonVertexTight(secondBestVertex->at(0), event)) goodSecondBestVertexTight->push_back(secondBestVertex->at(0));
   }
   
   event->AddCollection("MaskedLooseMuonsVertex", maskedVertices);
-  event->AddCollection("GoodLooseMuonsVertex", goodVertices);
-  event->AddCollection("GoodLooseMuonsVertexTight", goodVertices);
-  event->AddCollection("GoodMaskedLooseMuonsVertex", goodMaskedVertices);
   event->AddCollection("BestLooseMuonsVertex", bestVertex);
   event->AddCollection("SecondBestLooseMuonsVertex", secondBestVertex);
   event->AddCollection("GoodBestLooseMuonsVertex", goodBestVertex);
   event->AddCollection("GoodSecondBestLooseMuonsVertex", goodSecondBestVertex);
-  event->AddCollection("GoodBestLooseMuonsVertexTight", goodBestVertexTight);
-  event->AddCollection("GoodSecondBestLooseMuonsVertexTight", goodSecondBestVertexTight);
+  event->AddCollection("BestLooseMuonsVertexHitsInFrontOfVertex", goodBestVertexHitsInFrontOfVertex);
+  event->AddCollection("BestLooseMuonsVertexHitsInFrontOfVertexPATDPhi", goodBestVertexHitsInFrontOfVertexPATDPhi);
+  event->AddCollection("BestLooseMuonsVertexHitsInFrontOfVertexPATDPhiDCA", goodBestVertexHitsInFrontOfVertexPATDPhiDCA);
+  event->AddCollection("BestLooseMuonsVertexHitsInFrontOfVertexPATDPhiDCAChi2", goodBestVertexHitsInFrontOfVertexPATDPhiDCAChi2);
+
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_ptr<Event> event) {
@@ -171,21 +180,23 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_pt
 
 bool TTAlpsObjectsManager::IsGoodMuonVertex(const shared_ptr<PhysicsObject> vertex, shared_ptr<Event> event) {
   auto dimuonVertex = asNanoDimuonVertex(vertex,event);
-    std::string category = dimuonVertex->GetVertexCategory();
+  std::string category = dimuonVertex->GetVertexCategory();
   if (!dimuonVertex->isValid()) return false;
-  if (!(float)dimuonVertex->Get("dca") < dimuonVertexCuts["maxBaseDCA"]) return false;
+  if ((float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxBaseDCA"]) return false;
   
-  int hitsInFrontOfVertex = 0;
-  if((float)dimuonVertex->Get("hitsInFrontOfVert1") > 0) hitsInFrontOfVertex += (float)dimuonVertex->Get("hitsInFrontOfVert1");
-  if((float)dimuonVertex->Get("hitsInFrontOfVert2") > 0) hitsInFrontOfVertex += (float)dimuonVertex->Get("hitsInFrontOfVert2");
+  int hitsInFrontOfVertex = max((float)dimuonVertex->Get("hitsInFrontOfVert1"),(float)dimuonVertex->Get("hitsInFrontOfVert2"));
+  if(category == "PatDSA" && hitsInFrontOfVertex > dimuonVertexCuts["maxHitsInFrontOfVertexPatDSA"]) return false;
+  if(category == "Pat" && hitsInFrontOfVertex > dimuonVertexCuts["maxHitsInFrontOfVertexPat"]) return false;
+  if(category == "DSA" && hitsInFrontOfVertex > dimuonVertexCuts["maxHitsInFrontOfVertexDSA"]) return false;
 
-  if(category == "PatDSA" && !hitsInFrontOfVertex < dimuonVertexCuts["maxHitsInFrontOfVertexPatDSA"]) return false;
-  if(category == "Pat" && !hitsInFrontOfVertex < dimuonVertexCuts["maxHitsInFrontOfVertexPat"]) return false;
-  if(category == "DSA" && !hitsInFrontOfVertex < dimuonVertexCuts["maxHitsInFrontOfVertexDSA"]) return false;
+  if(abs(dimuonVertex->GetMuonpTLxyDPhi(1)) > dimuonVertexCuts["maxpTLxyDPhi"]) return false;
+  if(abs(dimuonVertex->GetMuonpTLxyDPhi(2)) > dimuonVertexCuts["maxpTLxyDPhi"]) return false;
 
-  if(category == "PatDSA" && !abs(dimuonVertex->GetPATpTLxyDPhi()) < dimuonVertexCuts["maxPATpTLxyDPhiPatDSA"]) return false;
+  if (category == "PatDSA" && (float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxDCAPatDSA"]) return false;
+  if (category == "Pat" && (float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxDCAPat"]) return false;
+  if (category == "DSA" && (float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxDCADSA"]) return false;
   
-  if(!(float)dimuonVertex->Get("normChi2") < dimuonVertexCuts["maxChi2"]) return false;
+  if((float)dimuonVertex->Get("normChi2") > dimuonVertexCuts["maxChi2"]) return false;
 
   return true;
 }
@@ -206,7 +217,7 @@ bool TTAlpsObjectsManager::IsGoodMuonVertexTight(const shared_ptr<PhysicsObject>
 bool TTAlpsObjectsManager::IsGoodMaskedMuonVertex(const shared_ptr<PhysicsObject> vertex, shared_ptr<Event> event) {
   auto dimuonVertex = asNanoDimuonVertex(vertex,event);
   if (!dimuonVertex->isValid()) return false;
-  if (!(float)dimuonVertex->Get("dca") < dimuonVertexCuts["maxBaseDCA"]) return false;
+  if ((float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxBaseDCA"]) return false;
   float invMass = dimuonVertex->GetInvariantMass();
   if(invMass > dimuonVertexCuts["maxInvariantMass"]) return false;
   if(invMass > dimuonVertexCuts["minJpsiMass"] && invMass < dimuonVertexCuts["maxJpsiMass"]) return false;

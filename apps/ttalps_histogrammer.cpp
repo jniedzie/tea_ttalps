@@ -14,7 +14,6 @@ using namespace std;
 int main(int argc, char **argv) {
   
   auto args = make_unique<ArgsManager>(argc, argv);
-  // check if optional value "config" is present
   if (!args->GetString("config").has_value()) {
     fatal() << "No config file provided" << endl;
     exit(1);
@@ -44,10 +43,11 @@ int main(int argc, char **argv) {
   auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(histogramsHandler);
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
-  bool runDefaultHistograms, runTriggerHistograms, runPileupHistograms;
-  bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
+  bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runPileupHistograms;
+  bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
   bool runLLPNanoAODVertexHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
+  config.GetValue("runCustomTTAlpsHistograms", runCustomTTAlpsHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -73,11 +73,16 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("initial");
       ttalpsHistogramsFiller->FillNormCheck(event);
       ttalpsHistogramsFiller->FillDefaultVariables(event);
+    }
+    if (runCustomTTAlpsHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariables(event);
     }
 
     if (runLLPNanoAODHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesFromLLPNanoAOD(event);
+    }
+    if (runLLPNanoAOD2DHistograms) {
+      ttalpsHistogramsFiller->FillCustomTTAlps2DVariablesFromLLPNanoAOD(event);      
     }
     if(runMuonMatchingHistograms){
       ttalpsObjectsManager->InsertMatchedLooseMuonEfficiencyCollections(event);
