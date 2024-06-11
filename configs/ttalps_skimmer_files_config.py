@@ -18,21 +18,10 @@ input_skim = "skimmed_looseSemimuonicv1"
 ### Output skims ###
 
 # CRs
-# output_skim = "skimmed_ttbarLike"
-# output_skim = "skimmed_ttbarSemimuonicCR_tightMuon"
-# output_skim = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag"
-# output_skim = "skimmed_ttbarSemimuonicCR"
-# output_skim = "skimmed_ttbarSemimuonicCR_Met30GeV"
-# output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
-# output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
-# output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
-
-# output_skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # output_skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
 # SRs
-# output_skim = "skimmed_looseSemimuonic_SRmuonic_DR"
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_OuterDR"
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
 
