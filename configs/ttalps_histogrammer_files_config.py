@@ -1,4 +1,4 @@
-from ttalps_samples_list import backgrounds2018, signals2018, data2018
+from ttalps_samples_list import backgrounds2018, signals2018, data2018, signals2018_1GeV, test_backgrounds2018
 import os
 
 max_files = -1
@@ -25,7 +25,8 @@ applyScaleFactors = {
   "bTagging": True,
 }
 
-samples = backgrounds2018 + signals2018 + data2018
+samples = backgrounds2018 + signals2018_1GeV + data2018
+# samples = test_backgrounds2018
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
