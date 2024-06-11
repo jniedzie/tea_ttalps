@@ -1,4 +1,4 @@
-from ttalps_samples_list import *
+from ttalps_samples_list import dasBackgrounds2018, dasSignals2018, dasData2018
 
 max_files = -1
 

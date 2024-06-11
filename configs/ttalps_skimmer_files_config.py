@@ -1,4 +1,4 @@
-from ttalps_samples_list import *
+from ttalps_samples_list import backgrounds2018, signals2018, data2018
 
 max_files = -1
 

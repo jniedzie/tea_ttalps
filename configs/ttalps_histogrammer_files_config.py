@@ -1,7 +1,7 @@
-from ttalps_samples_list import *
+from ttalps_samples_list import backgrounds2018, signals2018, data2018
 import os
 
-max_files = 1
+max_files = -1
 
 # skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
 # skim = "skimmed_looseSemimuonic"
@@ -40,9 +40,7 @@ applyScaleFactors = {
   "bTagging": True,
 }
 
-# samples = backgrounds2018 + signals2018 + data2018
-# samples = backgrounds2018 + signals2018
-samples = signals2018
+samples = backgrounds2018 + signals2018 + data2018
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
