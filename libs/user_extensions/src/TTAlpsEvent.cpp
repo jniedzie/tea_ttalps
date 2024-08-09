@@ -147,6 +147,28 @@ bool TTAlpsEvent::IsGoodMuonFromALP(int genMuonIndex) {
   return true;
 }
 
+bool TTAlpsEvent::IsGoodMuonNotFromALP(int genMuonIndex) {
+
+  auto genParticles = event->GetCollection("GenPart");
+  auto muon = asNanoGenParticle(genParticles->at(genMuonIndex));
+  
+  if (!muon->IsLastCopy()) return false;
+  if(!muon->IsMuon()) return false;
+
+  auto firstMuon = muon->GetFirstCopy(genParticles);
+  if (firstMuon == nullptr) return false;
+
+  int motherIndex = firstMuon->GetMotherIndex();
+  if (motherIndex < 0) return false;
+  auto mother = asNanoGenParticle(genParticles->at(motherIndex));
+  // mother must be an ALP
+  if (!mother->IsLastCopy()) return false;
+  int ALPpdgId = 54;
+  if (abs(mother->GetPdgId()) == ALPpdgId) return false;
+
+  return true;
+}
+
 shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenALPs() {
   auto genParticles = event->GetCollection("GenPart");
 
@@ -173,6 +195,62 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenMuonsFromALP() {
     if (motherIndex < 0) continue;
     auto mother = asNanoGenParticle(genParticles->at(motherIndex));
     if(!IsGoodMuonFromALP(muon_idx)) continue;
+    genMuons->push_back(genParticles->at(muon_idx));
+  }
+  return genMuons;
+}
+
+shared_ptr<vector<pair<shared_ptr<PhysicsObject>, shared_ptr<PhysicsObject>>>> TTAlpsEvent::GetGenDimuonsNotFromALP() {
+  auto genParticles = event->GetCollection("GenPart");
+
+  auto genMuons = GetGenMuonsNotFromALP();
+  auto genDimuons = make_shared<vector<pair<shared_ptr<PhysicsObject>,shared_ptr<PhysicsObject>>>>();
+
+  for (int muon1_idx = 0; muon1_idx < genMuons->size(); muon1_idx++)
+  {
+    auto genMuon1 = asNanoGenParticle(genMuons->at(muon1_idx));
+    auto firstMuon1 = genMuon1->GetFirstCopy(genParticles);
+    if (firstMuon1 == nullptr) continue;
+
+    int motherIndex1 = firstMuon1->GetMotherIndex();
+    if (motherIndex1 < 0) continue;
+    auto mother1 = asNanoGenParticle(genParticles->at(motherIndex1));
+    if (!mother1->IsLastCopy()) continue;
+
+    for (int muon2_idx = muon1_idx+1; muon2_idx < genMuons->size(); muon2_idx++) {
+      if (muon2_idx == muon1_idx) continue;
+      auto genMuon2 = asNanoGenParticle(genMuons->at(muon2_idx));
+      auto firstMuon2 = genMuon2->GetFirstCopy(genParticles); 
+      if (firstMuon2 == nullptr) continue;
+
+      int motherIndex2 = firstMuon2->GetMotherIndex();
+      if (motherIndex2 < 0) continue;
+      auto mother2 = asNanoGenParticle(genParticles->at(motherIndex2));
+
+      if (!mother2->IsLastCopy()) continue;
+      
+      if (motherIndex1 == motherIndex2) {
+        auto dimuon = make_pair(genMuons->at(muon1_idx), genMuons->at(muon2_idx));
+        genDimuons->push_back(dimuon);
+      }
+    }
+  }
+  return genDimuons;
+}
+
+shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenMuonsNotFromALP() {
+  auto genParticles = event->GetCollection("GenPart");
+
+  auto genMuons = make_shared<PhysicsObjects>();
+
+  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++)
+  {
+    auto genParticle = asNanoGenParticle(genParticles->at(muon_idx));
+    int motherIndex = genParticle->GetMotherIndex();
+    if (motherIndex < 0) continue;
+    auto mother = asNanoGenParticle(genParticles->at(motherIndex));
+
+    if(!IsGoodMuonNotFromALP(muon_idx)) continue;
     genMuons->push_back(genParticles->at(muon_idx));
   }
   return genMuons;

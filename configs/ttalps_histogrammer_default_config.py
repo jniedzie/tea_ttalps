@@ -5,12 +5,18 @@ nEvents = -1
 printEveryNevents = 10000
 
 runDefaultHistograms = True
+runCustomTTAlpsHistograms = False
 runTriggerHistograms = False
 runPileupHistograms = False
 runLLPNanoAODHistograms = False
+runLLPNanoAOD2DHistograms = False
+runBestDimuonHistograms = False
+runDimuonNminus1Histograms = False
 runMuonMatchingHistograms = False
 runGenMuonHistograms = False
 runLLPNanoAODVertexHistograms = True
+
+nonIsolatedLooseMuons = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ["Events",]

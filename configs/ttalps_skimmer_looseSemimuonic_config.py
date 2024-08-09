@@ -9,6 +9,8 @@ applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
+nonIsolatedMuons = False
+
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 

@@ -24,6 +24,7 @@ class TTAlpsHistogramFiller {
   void FillCustomTTAlpsVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesFromLLPNanoAOD(const std::shared_ptr<Event> event);
   void FillCustomTTAlps2DVariablesFromLLPNanoAOD(const std::shared_ptr<Event> event);
+  void FillCustomTTAlpsDimuonNminus1Variables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
 
@@ -32,6 +33,9 @@ class TTAlpsHistogramFiller {
   void FillBasicMuonVertexHistograms(const std::shared_ptr<Event> event);
 
  private:
+
+  bool nonIsolatedLooseMuons = false;
+
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;
   std::unique_ptr<NanoEventProcessor> nanoEventProcessor;

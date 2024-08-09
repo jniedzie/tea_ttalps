@@ -10,6 +10,9 @@ applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
 
+# non isolated loose muons means that there is no isolation requirement for the loose muons
+nonIsolatedLooseMuons = False
+
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 

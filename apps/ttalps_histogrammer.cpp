@@ -45,12 +45,15 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
-  bool runLLPNanoAODVertexHistograms;
+  bool runLLPNanoAODVertexHistograms, runBestDimuonHistograms, runDimuonNminus1Histograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runCustomTTAlpsHistograms", runCustomTTAlpsHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
+  config.GetValue("runLLPNanoAOD2DHistograms", runLLPNanoAOD2DHistograms);
+  config.GetValue("runBestDimuonHistograms", runBestDimuonHistograms);
+  config.GetValue("runDimuonNminus1Histograms", runDimuonNminus1Histograms);
   config.GetValue("runMuonMatchingHistograms", runMuonMatchingHistograms);
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runLLPNanoAODVertexHistograms", runLLPNanoAODVertexHistograms);
@@ -68,7 +71,6 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
     }
-
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
       ttalpsHistogramsFiller->FillNormCheck(event);
@@ -84,7 +86,11 @@ int main(int argc, char **argv) {
     if (runLLPNanoAOD2DHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlps2DVariablesFromLLPNanoAOD(event);      
     }
-    if(runMuonMatchingHistograms){
+    if (runDimuonNminus1Histograms) {
+      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+      ttalpsHistogramsFiller->FillCustomTTAlpsDimuonNminus1Variables(event);
+    }
+    if(runMuonMatchingHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonEfficiencyCollections(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsMuonMatchingVariables(event);
     }
