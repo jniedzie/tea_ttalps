@@ -20,7 +20,7 @@ runMuonMatchingHistograms = False
 runGenMuonHistograms = False
 runLLPNanoAODVertexHistograms = False
 
-nonIsolatedLooseMuons = True
+useNonIsolatedLooseMuons = True
 dimuonSelection = "JPsiDimuonVertex"
 
 # weightsBranchName = ""

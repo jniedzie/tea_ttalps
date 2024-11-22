@@ -14,7 +14,7 @@ runMuonMatchingHistograms = False
 runGenMuonHistograms = False
 runLLPNanoAODVertexHistograms = True
 
-nonIsolatedLooseMuons = False
+useNonIsolatedLooseMuons = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ["Events",]

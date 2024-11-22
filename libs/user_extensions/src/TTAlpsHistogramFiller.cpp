@@ -37,11 +37,11 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
   }
   bool nonIso = false;
   try {
-    config.GetValue("nonIsolatedLooseMuons", nonIso);
+    config.GetValue("useNonIsolatedLooseMuons", nonIso);
   } catch (const Exception &e) {
-    info() << "Couldn't read nonIsolatedLooseMuons from config file - will use isolated LooseMuons collection with isolation cuts" << endl;
+    info() << "Couldn't read useNonIsolatedLooseMuons from config file - will use isolated LooseMuons collection with isolation cuts" << endl;
   }
-  nonIsolatedLooseMuons = nonIso;
+  useNonIsolatedLooseMuons = nonIso;
   try {
     config.GetVector("muonVertexCollectionNames", muonVertexCollectionNames);
   } catch (const Exception &e) {

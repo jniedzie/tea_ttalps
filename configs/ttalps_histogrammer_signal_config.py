@@ -21,7 +21,7 @@ runMuonMatchingHistograms = False
 runGenMuonHistograms = True
 runLLPNanoAODVertexHistograms = False
 
-nonIsolatedLooseMuons = True
+useNonIsolatedLooseMuons = True
 # dimuonSelection is the name of the selection in ttalps_object_selections
 # dimuonSelection = "GoodDimuonVertex"
 dimuonSelection = "SRDimuonVertex"
