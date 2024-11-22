@@ -343,8 +343,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(vertexName+"_"+category+"_vxy", dimuonVertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_vxySigma", dimuonVertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_vxySignificance", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
-    if(float(dimuonVertex->Get("vxySigma"))!=0) histogramsHandler->Fill(vertexName+"_"+category+"_vxySignificanceV2", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
-    else histogramsHandler->Fill(vertexName+"_"+category+"_vxySignificanceV2", float(dimuonVertex->Get("vxy")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_dR", dimuonVertex->Get("dR"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_proxDR", dimuonVertex->Get("dRprox"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_outerDR", dimuonVertex->GetOuterDeltaR(), weight * muonWeight1 * muonWeight2);
@@ -357,9 +355,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(vertexName+"_"+category+"_absCollinearityAngle", abs(dimuonVertex->GetCollinearityAngle()), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_absPtLxyDPhi1", abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_absPtLxyDPhi2", abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(2)), weight * muonWeight1 * muonWeight2);
-    // histogramsHandler->Fill(vertexName+"_"+category+"_absPtPtMissDPhi", abs(dimuonVertex->GetDPhiBetweenDimuonpTAndPtMiss(asNanoEvent(event)->GetMetFourVector())), weight * muonWeight1 * muonWeight2);
-    // if(dimuonVertex->GetDeltaPixelHits() > -5) histogramsHandler->Fill(vertexName+"_"+category+"_deltaPixelHits", dimuonVertex->GetDeltaPixelHits(), weight * muonWeight1 * muonWeight2);
-    // else histogramsHandler->Fill(vertexName+"_"+category+"_deltaPixelHits", -1, weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_invMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_pt", dimuonVertex->GetDimuonPt(), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_dEta", abs((float)muon1->Get("eta")-(float)muon2->Get("eta")), weight * muonWeight1 * muonWeight2);
@@ -367,30 +362,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(vertexName+"_"+category+"_dPhi", abs((float)muon1->Get("phi")-(float)muon2->Get("phi")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_outerDPhi", abs((float)muon1->Get("outerPhi")-(float)muon2->Get("outerPhi")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_chargeProduct", dimuonVertex->GetDimuonChargeProduct(), weight * muonWeight1 * muonWeight2);
-    // if(dimuonVertex->GetDimuonChargeProduct() < 0) histogramsHandler->Fill(vertexName+"_"+category+"_OSinvMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-    // else histogramsHandler->Fill(vertexName+"_"+category+"_SSinvMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-    // float nTrackerLayers1 = 0; 
-    // float nTrackerLayers2 = 0;
-    // float nSegments1 = 0;
-    // float nSegments2 = 0;
-    // if(category=="Pat") {
-    //   nTrackerLayers1 = muon1->Get("trkNumTrkLayers");
-    //   nTrackerLayers2 = muon2->Get("trkNumTrkLayers");
-    // }
-    // if(category=="PatDSA") {
-    //   nTrackerLayers1 = muon1->Get("trkNumTrkLayers");
-    //   nSegments2 = muon2->Get("nSegments");
-    // }
-    // if(category=="DSA") {
-    //   nSegments1 = muon1->Get("nSegments");
-    //   nSegments2 = muon2->Get("nSegments");
-    // }
-    // histogramsHandler->Fill(vertexName+"_"+category+"_nTrackerLayers1", nTrackerLayers1, weight * muonWeight1 * muonWeight2);
-    // histogramsHandler->Fill(vertexName+"_"+category+"_nTrackerLayers2", nTrackerLayers2, weight * muonWeight1 * muonWeight2);
-    // histogramsHandler->Fill(vertexName+"_"+category+"_nSegments1", nSegments1, weight * muonWeight1 * muonWeight2);
-    // histogramsHandler->Fill(vertexName+"_"+category+"_nSegments2", nSegments2, weight * muonWeight1 * muonWeight2);
-    // histogramsHandler->Fill(vertexName+"_"+category+"_nSegmentsSum", nSegments1+nSegments2, weight * muonWeight1 * muonWeight2);
-
+    
     // Isolations:
     histogramsHandler->Fill(vertexName+"_"+category+"_displacedTrackIso03Dimuon1", dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_displacedTrackIso04Dimuon1", dimuonVertex->Get("displacedTrackIso04Dimuon1"), weight * muonWeight1 * muonWeight2);
@@ -421,15 +393,10 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
 
     // Muons in vertex variables:
     histogramsHandler->Fill(vertexName+"_"+category+"_leadingPt", max((float)muon1->Get("pt"),(float)muon2->Get("pt")), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName+"_"+category+"_subleadingPt", min((float)muon1->Get("pt"),(float)muon2->Get("pt")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_dxyPVTraj1", muon1->Get("dxyPVTraj"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_dxyPVTraj2", muon2->Get("dxyPVTraj"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName+"_"+category+"_minDxyPVTraj", min((float)muon1->Get("dxyPVTraj"),(float)muon2->Get("dxyPVTraj")), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName+"_"+category+"_maxDxyPVTraj", max((float)muon1->Get("dxyPVTraj"),(float)muon2->Get("dxyPVTraj")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_dxyPVTrajSig1", (float)muon1->Get("dxyPVTraj")/(float)muon1->Get("dxyPVTrajErr"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_dxyPVTrajSig2", (float)muon2->Get("dxyPVTraj")/(float)muon2->Get("dxyPVTrajErr"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName+"_"+category+"_minDxyPVTrajSig", min((float)muon1->Get("dxyPVTraj")/(float)muon1->Get("dxyPVTrajErr"),(float)muon2->Get("dxyPVTraj")/(float)muon2->Get("dxyPVTrajErr")), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName+"_"+category+"_maxDxyPVTrajSig", max((float)muon1->Get("dxyPVTraj")/(float)muon1->Get("dxyPVTrajErr"),(float)muon2->Get("dxyPVTraj")/(float)muon2->Get("dxyPVTrajErr")), weight * muonWeight1 * muonWeight2);
 
     histogramsHandler->Fill(vertexName+"_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_Lxy", dimuonVertex->GetLxyFromPV(), weight * muonWeight1 * muonWeight2);
@@ -684,20 +651,9 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesFromLLPNanoAOD(const shared
 void TTAlpsHistogramFiller::FillLLPnanoAODLooseMuonsHistograms(const shared_ptr<Event> event){
   float weight = GetEventWeight(event);
 
-  // FillLooseMuonsHistograms(event, "LooseMuons");
-  // FillLooseMuonsHistograms(event, "LooseNonIsoMuons");
-  // FillLooseMuonsHistograms(event, "LooseDSAMuons");
-
   for(auto &[matchingMethod, param] : muonMatchingParams) {
     string muonCollectionName = "LooseMuons" + matchingMethod + "Match";
     FillLooseMuonsHistograms(event, muonCollectionName);
-    // FillMuonMinDeltaRHistograms(event, muonCollectionName);
-    // auto DSAmuonCollection = asNanoEvent(event)->GetDSAMuonsFromCollection(muonCollectionName);
-    // auto PATmuonCollection = asNanoEvent(event)->GetPATMuonsFromCollection(muonCollectionName);
-    // string DSAmuonCollectionName = "LooseDSAMuons" + matchingMethod + "Match";
-    // string PATmuonCollectionName = "LoosePATMuons" + matchingMethod + "Match";
-    // FillLooseMuonsHistograms(DSAmuonCollection, DSAmuonCollectionName, weight);
-    // FillLooseMuonsHistograms(PATmuonCollection, PATmuonCollectionName, weight);
   }
 }
 
@@ -712,17 +668,6 @@ void TTAlpsHistogramFiller::FillLLPnanoAODLooseMuonsVertexHistograms(const share
   for(auto collectionName : muonVertexCollectionNames) {
     FillMuonVertexHistograms(event, collectionName);
   }
-
-  // FillMuonVertexHistograms(event, "MaskedDimuonVertices");
-  // FillMuonVertexHistograms(event, "GoodDimuonVertices");
-  // FillMuonVertexHistograms(event, "GoodIsoDimuonVertices");
-  // FillMuonVertexHistograms(event, "GoodIsoMaskedDimuonVertices");
-  // FillMuonVertexHistograms(event, "GoodIsoMaskedDRDimuonVertices");
-  // FillMuonVertexHistograms(event, "GoodMaskedDimuonVertices");
-  // FillMuonVertexHistograms(event, "BestIsoDimuonVertex");
-  // FillMuonVertexHistograms(event, "BestIsoMaskedDimuonVertex");
-  // FillMuonVertexHistograms(event, "BestIsoMaskedDRDimuonVertex");
-  // FillMuonVertexHistograms(event, "BestMaskedDimuonVertex");
 }
 
 void TTAlpsHistogramFiller::FillLLPnanoAODLooseMuonsNminus1VertexHistograms(const shared_ptr<Event> event){
@@ -1153,7 +1098,7 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromWsHistograms(const shared_ptr<Even
 /// Muon Matching Histograms
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsMuonMatchingVariables(const shared_ptr<Event> event) {
-  FillMatchingHistograms(event, "LooseMuons", "LooseDSAMuons");
+  FillMatchingHistograms(event, "LoosePATMuons", "LooseDSAMuons");
 }
 
 void TTAlpsHistogramFiller::FillMatchingHistograms(const shared_ptr<Event> event, string patMuonCollection, string dsaMuonCollection) {
@@ -1327,4 +1272,4 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
     histogramsHandler->SetHistogram1D(cutFlowName.c_str(), cutFlowHist);
     histogramsHandler->SetHistogram1D(rawEventsCutFlowName.c_str(), rawEventsCutFlowHist);
   }
-}                                                                                                                                                                                                                                                                                        
+}
