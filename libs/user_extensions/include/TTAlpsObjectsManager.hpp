@@ -27,7 +27,7 @@ class TTAlpsObjectsManager {
 
  private:
 
-  bool useNonIsolatedLooseMuons = false;
+  bool useLooseIsoPATMuons = true;
 
   std::unique_ptr<TTAlpsDimuonSelections> ttAlpsSelections;
 

@@ -123,7 +123,7 @@ void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager>
 }
 
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  int nLooseMuons = event->GetCollection("LooseMuons")->size();
+  int nLooseMuons = event->GetCollection("LooseIsoPATMuons")->size();
   if (nLooseMuons > 1) return false;
 
   int nTightMuons = event->GetCollection("TightMuons")->size();
@@ -131,7 +131,7 @@ bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> even
 
   if (nLooseMuons == 1) {
     auto tightMuon = event->GetCollection("TightMuons")->at(0);
-    auto looseMuon = event->GetCollection("LooseMuons")->at(0);
+    auto looseMuon = event->GetCollection("LooseIsoPATMuons")->at(0);
     if (looseMuon != tightMuon) return false;
   }
   if(cutFlowManager) cutFlowManager->UpdateCutFlow("nAdditionalLooseMuons");
@@ -144,7 +144,7 @@ void TTAlpsSelections::RegisterTTZLikeSelections(shared_ptr<CutFlowManager> cutF
 }
 
 bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto looseMuons = event->GetCollection("LooseMuons");
+  auto looseMuons = event->GetCollection("LooseIsoPATMuons");
   
   double zMass = 91.1876; // GeV
   double smallestDifferenceToZmass = 999999;

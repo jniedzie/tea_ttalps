@@ -14,7 +14,7 @@ runMuonMatchingHistograms = False
 runGenMuonHistograms = False
 runLLPNanoAODVertexHistograms = True
 
-useNonIsolatedLooseMuons = False
+useLooseIsoPATMuons = True
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ["Events",]
@@ -66,18 +66,18 @@ defaultHistParams = (
   ("TightMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
 
   
-  ("Event"              , "nLooseMuons"         , 50    , 0     , 50    , ""  ),
-  ("LooseMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  ("LooseMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("LooseMuons"         , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
-  ("LooseMuons"         , "dz"                  , 8000  , -1000  , 1000   , ""  ),
-  ("LooseMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
-  ("LooseMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
-  ("LooseMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
-  ("LooseMuons"         , "tkRelIso"            , 2000  , -10   , 10    , ""  ),
-  ("LooseMuons"         , "miniPFRelIso_chg"    , 2000  , -10   , 10    , ""  ),
-  ("LooseMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
-  ("LooseMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
+  ("Event"              , "nLoosePATMuons"         , 50    , 0     , 50    , ""  ),
+  ("LoosePATMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("LoosePATMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("LoosePATMuons"         , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
+  ("LoosePATMuons"         , "dz"                  , 8000  , -1000  , 1000   , ""  ),
+  ("LoosePATMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
+  ("LoosePATMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
+  ("LoosePATMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
+  ("LoosePATMuons"         , "tkRelIso"            , 2000  , -10   , 10    , ""  ),
+  ("LoosePATMuons"         , "miniPFRelIso_chg"    , 2000  , -10   , 10    , ""  ),
+  ("LoosePATMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
+  ("LoosePATMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
   
   # ("Event"              , "nLooseDSAMuons"      , 50    , 0     , 50    , ""  ),
   # ("LooseDSAMuons"      , "pt"                  , 2000  , 0     , 1000  , ""  ),
@@ -162,7 +162,7 @@ histParams = (
 #  collection         variable                      bins   xmin   xmax    dir
   ("Muon"           , "leadingPt"                 , 2000  , 0   , 1000  , ""  ),
   ("TightMuons"     , "leadingPt"                 , 2000  , 0   , 1000  , ""  ),
-  ("LooseMuons"     , "leadingPt"                 , 2000  , 0   , 1000  , ""  ),
+  ("LoosePATMuons"     , "leadingPt"                 , 2000  , 0   , 1000  , ""  ),
   ("Electron"       , "leadingPt"                 , 2000  , 0   , 1000  , ""  ),
   ("LooseElectrons" , "leadingPt"                 , 2000  , 0   , 1000  , ""  ),
   ("Jet"            , "leadingPt"                 , 2000  , 0   , 1000  , ""  ),
@@ -170,17 +170,17 @@ histParams = (
   
   ("Muon"           , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
   ("TightMuons"     , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
-  ("LooseMuons"     , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
+  ("LoosePATMuons"     , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
   ("Electron"       , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
   ("LooseElectrons" , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
   ("Jet"            , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
   ("GoodJets"       , "subleadingPt"              , 2000  , 0   , 1000  , ""  ),
   
-  ("LooseMuons"     , "dimuonMinv"                , 200   , 0   , 200   , ""  ),
-  ("LooseMuons"     , "dimuonMinvClosestToZ"      , 200   , 0   , 200   , ""  ),
-  ("LooseMuons"     , "dimuonDeltaRclosestToZ"    , 200   , -10 , 10    , ""  ),
-  ("LooseMuons"     , "dimuonDeltaEtaclosestToZ"  , 200   , -10 , 10    , ""  ),
-  ("LooseMuons"     , "dimuonDeltaPhiclosestToZ"  , 200   , -10 , 10    , ""  ),
+  ("LoosePATMuons"     , "dimuonMinv"                , 200   , 0   , 200   , ""  ),
+  ("LoosePATMuons"     , "dimuonMinvClosestToZ"      , 200   , 0   , 200   , ""  ),
+  ("LoosePATMuons"     , "dimuonDeltaRclosestToZ"    , 200   , -10 , 10    , ""  ),
+  ("LoosePATMuons"     , "dimuonDeltaEtaclosestToZ"  , 200   , -10 , 10    , ""  ),
+  ("LoosePATMuons"     , "dimuonDeltaPhiclosestToZ"  , 200   , -10 , 10    , ""  ),
   ("GoodJets"       , "minvBjet2jets"             , 2000  , 0   , 2000  , ""  ),
   ("TightMuons"     , "deltaPhiMuonMET"           , 200   , -4  , 4     , ""  ),
   ("TightMuons"     , "minvMuonMET"               , 1000  , 0   , 1000  , ""  ),

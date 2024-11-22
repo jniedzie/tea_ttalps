@@ -37,12 +37,6 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
   }
   bool nonIso = false;
   try {
-    config.GetValue("useNonIsolatedLooseMuons", nonIso);
-  } catch (const Exception &e) {
-    info() << "Couldn't read useNonIsolatedLooseMuons from config file - will use isolated LooseMuons collection with isolation cuts" << endl;
-  }
-  useNonIsolatedLooseMuons = nonIso;
-  try {
     config.GetVector("muonVertexCollectionNames", muonVertexCollectionNames);
   } catch (const Exception &e) {
     info() << "Couldn't read muonVertexCollectionNames from config file - no muon vertex collection histograms will be filled" << endl;
@@ -83,6 +77,10 @@ float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> obj
   if (collectionName == "TightMuons") {
     weight *= asNanoMuon(object)->GetScaleFactor("muonIDTight", "muonIsoTight", "muonReco");
   } else if (collectionName == "LooseMuons") {
+    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
+  } else if (collectionName == "LoosePATMuons") {
+    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
+  } else if (collectionName == "LooseIsoPATMuons") {
     weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
   } else if (collectionName == "GoodTightBtaggedJets") {
     weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingTight");
@@ -199,7 +197,7 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, s
 
 void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
-  string collectionName = "LooseMuons";
+  string collectionName = "LooseIsoPATMuons";
 
   auto looseMuons = event->GetCollection(collectionName);
   for (int iMuon1 = 0; iMuon1 < looseMuons->size(); iMuon1++) {
@@ -213,18 +211,18 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<Event> event) 
       auto muon2 = asNanoMuon(obj2);
       float muon2SF = GetObjectWeight(obj2, collectionName);
       TLorentzVector muon2vector = muon2->GetFourVector();
-      histogramsHandler->Fill("LooseMuons_dimuonMinv", (muon1vector + muon2vector).M(), weight * muon1SF * muon2SF);
+      histogramsHandler->Fill("LooseIsoPATMuons_dimuonMinv", (muon1vector + muon2vector).M(), weight * muon1SF * muon2SF);
     }
   }
 }
 
 void TTAlpsHistogramFiller::FillDiumonClosestToZhistgrams(const shared_ptr<Event> event) {
-  if (event->GetCollection("LooseMuons")->size() < 2) {
+  if (event->GetCollection("LooseIsoPATMuons")->size() < 2) {
     warn() << "Not enough muons in event to fill dimuon histograms" << endl;
     return;
   }
 
-  string collectionName = "LooseMuons";
+  string collectionName = "LooseIsoPATMuons";
 
   float weight = GetEventWeight(event);
   auto [muon1, muon2] = nanoEventProcessor->GetMuonPairClosestToZ(asNanoEvent(event), collectionName);
@@ -454,7 +452,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
 void TTAlpsHistogramFiller::FillBasicMuonVertexHistograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
 
-  auto vertexCollection = event->GetCollection("GoodBestLooseMuonsVertex");
+  auto vertexCollection = event->GetCollection("BestLooseMuonsVertex");
   
   for(auto vertex : *vertexCollection){
     auto dimuonVertex = asNanoDimuonVertex(vertex,event);
@@ -1329,4 +1327,4 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
     histogramsHandler->SetHistogram1D(cutFlowName.c_str(), cutFlowHist);
     histogramsHandler->SetHistogram1D(rawEventsCutFlowName.c_str(), rawEventsCutFlowHist);
   }
-}
+}                                                                                                                                                                                                                                                                                        

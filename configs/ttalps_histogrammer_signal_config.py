@@ -21,7 +21,7 @@ runMuonMatchingHistograms = False
 runGenMuonHistograms = True
 runLLPNanoAODVertexHistograms = False
 
-useNonIsolatedLooseMuons = True
+useLooseIsoPATMuons = False
 # dimuonSelection is the name of the selection in ttalps_object_selections
 # dimuonSelection = "GoodDimuonVertex"
 dimuonSelection = "SRDimuonVertex"
@@ -80,8 +80,8 @@ LLPNanoAOD_histParams2D = ()
 muonVertexCollectionCategories = ["_PatDSA", "_DSA", "_Pat"]
 muonCollectionCategories = ["", "DSA", "PAT"]
 muonCollectionCategories = [""]
-# muonCollectionNames = ["LooseDSAMuons", "LooseMuons", "LooseNonIsoMuons"]
-muonCollectionNames = ["LooseMuons"]
+# muonCollectionNames = ["LooseDSAMuons", "LoosePATMuons", "LooseIsoPATMuons"]
+muonCollectionNames = [""]
 
 muonVertexCollections = {
   # "MaskedDimuonVertices" : ["InvMassCut"],

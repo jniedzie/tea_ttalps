@@ -31,20 +31,20 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
     info() << "Couldn't read muonVertexNminus1Collections from config file - is needed for GoodLooseMuonVertex N-1 collections" << endl;
   } 
 
-  bool nonIso = false;
+  bool useIso = true;
   try {
-    config.GetValue("useNonIsolatedLooseMuons", nonIso);
+    config.GetValue("useLooseIsoPATMuons", useIso);
   } catch (const Exception &e) {
-    info() << "Couldn't read useNonIsolatedLooseMuons from config file - will use isolated LooseMuons collection with isolation cuts" << endl;
+    info() << "Couldn't read useLooseIsoPATMuons from config file - will use isolated PAT LooseMuons collection with isolation cuts" << endl;
   }
-  useNonIsolatedLooseMuons = nonIso;
+  useLooseIsoPATMuons = useIso;
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> event) {
 
-  auto loosePATMuons = event->GetCollection("LooseMuons");
+  auto loosePATMuons = event->GetCollection("LoosePATMuons");
   auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
-  if(useNonIsolatedLooseMuons) loosePATMuons = event->GetCollection("LooseNonIsoMuons");
+  if(useLooseIsoPATMuons) loosePATMuons = event->GetCollection("LooseIsoPATMuons");
   auto looseMuons = make_shared<PhysicsObjects>();
   for (auto muon : *loosePATMuons) {
     looseMuons->push_back(muon);

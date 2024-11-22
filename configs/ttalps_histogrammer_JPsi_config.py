@@ -20,7 +20,7 @@ runMuonMatchingHistograms = False
 runGenMuonHistograms = False
 runLLPNanoAODVertexHistograms = False
 
-useNonIsolatedLooseMuons = True
+useLooseIsoPATMuons = False
 dimuonSelection = "JPsiDimuonVertex"
 
 # weightsBranchName = ""
@@ -81,7 +81,8 @@ LLPNanoAOD_histParams2D = ()
 muonVertexCollectionCategories = ["_PatDSA", "_DSA", "_Pat"]
 muonCollectionCategories = ["", "DSA", "PAT"]
 # muonCollectionNames = []
-muonCollectionNames = ["LooseDSAMuons", "LooseMuons", "LooseNonIsoMuons"]
+# muonCollectionNames = ["LooseDSAMuons", "LoosePATMuons", "LooseIsoPATMuons"]
+muonCollectionNames = [""]
 
 muonVertexCollections = {
   # "MaskedDimuonVertices" : ["InvMassCut"],

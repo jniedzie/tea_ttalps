@@ -12,7 +12,7 @@ applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
 
 # non isolated loose muons means that there is no isolation requirement for the loose muons
-useNonIsolatedLooseMuons = True
+useLooseIsoPATMuons = False
 
 # weightsBranchName = ""
 weightsBranchName = "genWeight"
@@ -36,9 +36,8 @@ muonMatchingParams = {
 eventSelections = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 9999999),
-    # "nLooseMuons": (3, 9999999),
+    # "nLooseIsoPATMuons": (3, 9999999),
     # "nLooseDSAMuons": (3, 9999999),
-    # "nLooseMuonsAndDSAMuons": (3, 9999999),
     "nLooseElectrons": (0, 0),
     # "nGoodBtaggedJets": (2, 9999999),
     # "nGoodMediumBtaggedJets": (1, 9999999),

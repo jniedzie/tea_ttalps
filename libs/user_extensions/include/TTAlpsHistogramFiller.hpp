@@ -35,8 +35,6 @@ class TTAlpsHistogramFiller {
 
  private:
 
-  bool useNonIsolatedLooseMuons = false;
-
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;
   std::unique_ptr<NanoEventProcessor> nanoEventProcessor;
