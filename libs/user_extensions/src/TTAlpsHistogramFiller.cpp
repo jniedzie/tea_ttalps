@@ -86,7 +86,10 @@ float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> obj
     weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingTight");
   } else if (collectionName == "GoodMediumBtaggedJets") {
     weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingMedium");
+  } else if (collectionName == "GoodJets") {
+    weight *= asNanoJet(object)->GetJetIDScaleFactor("jetIDtight");
   }
+  
   return weight;
 }
 
