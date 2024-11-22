@@ -46,14 +46,13 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
-  bool runLLPNanoAODVertexHistograms, runBestDimuonHistograms;
+  bool runLLPNanoAODVertexHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runCustomTTAlpsHistograms", runCustomTTAlpsHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
   config.GetValue("runLLPNanoAOD2DHistograms", runLLPNanoAOD2DHistograms);
-  config.GetValue("runBestDimuonHistograms", runBestDimuonHistograms);
   config.GetValue("runMuonMatchingHistograms", runMuonMatchingHistograms);
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runLLPNanoAODVertexHistograms", runLLPNanoAODVertexHistograms);

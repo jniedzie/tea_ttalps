@@ -17,8 +17,6 @@ runPileupHistograms = False
 runLLPNanoAODHistograms = True
 runLLPNanoAOD2DHistograms = False
 
-runBestDimuonHistograms = True
-
 runMuonMatchingHistograms = False
 runGenMuonHistograms = True
 runLLPNanoAODVertexHistograms = False

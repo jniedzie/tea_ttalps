@@ -16,18 +16,20 @@ runPileupHistograms = False
 #  - extra muon vertex collections
 runLLPNanoAODHistograms = True
 runLLPNanoAOD2DHistograms = False
-runDimuonNminus1Histograms = False
 runMuonMatchingHistograms = False
 runGenMuonHistograms = False
 runLLPNanoAODVertexHistograms = False
 
-runBestDimuonHistograms = True
 nonIsolatedLooseMuons = True
-objectSelection = "JPsi"
+dimuonSelection = "JPsiDimuonVertex"
 
+# weightsBranchName = ""
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
-specialBranchSizes = {}
+specialBranchSizes = {
+  "Proton_multiRP": "nProton_multiRP",
+  "Proton_singleRP": "nProton_singleRP",
+}
 # redirector = "xrootd-cms.infn.it"
 
 pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
@@ -78,9 +80,28 @@ LLPNanoAOD_histParams2D = ()
 
 muonVertexCollectionCategories = ["_PatDSA", "_DSA", "_Pat"]
 muonCollectionCategories = ["", "DSA", "PAT"]
-muonCollectionNames = []
+# muonCollectionNames = []
+muonCollectionNames = ["LooseDSAMuons", "LooseMuons", "LooseNonIsoMuons"]
 
-muonVertexCollectionNames = ["BaseLooseMuonsVertex", "BaseLooseDimuonsVertex", "BestLooseMuonsVertex", "BestLooseDimuonsVertex", "GoodBestLooseDimuonsVertex"]
+muonVertexCollections = {
+  # "MaskedDimuonVertices" : ["InvMassCut"],
+  # "GoodDimuonVertices" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut"],
+  "BestDimuonVertex" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut", "BestDimuonVertex"],
+  # "GoodIsoDimuonVertices" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut", "DisplacedIsoCut"],
+  "BestIsoDimuonVertex" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut", "DisplacedIsoCut", "BestDimuonVertex"],
+}
+muonVertexCollectionNames = [collectionName for collectionName in muonVertexCollections.keys()]
+muonVertexNminus1Collections = [
+  "BestDimuonVertex",
+  "BestIsoDimuonVertex",
+]
+for collectionName in muonVertexNminus1Collections:
+  for cut in muonVertexCollections[collectionName]:
+    if cut == "BestDimuonVertex":
+      continue
+    muonVertexCollectionName = collectionName + "Nminus1" + cut
+    muonVertexCollectionNames.append(muonVertexCollectionName)
+
 for matchingMethod, param in muonMatchingParams.items():
   for category in muonCollectionCategories:
     muonCollectionName = "Loose"+category+"Muons"+matchingMethod+"Match"
@@ -88,17 +109,13 @@ for matchingMethod, param in muonMatchingParams.items():
   muonVertexCollectionName = "LooseMuonsVertex"+matchingMethod+"Match"
   muonVertexCollectionNames.append(muonVertexCollectionName)
 
-muonVertexNminus1CollectionNames = ["GoodBestVertexNminus1All", "GoodBestVertexNminus1AllVxy", "GoodBestVertexNminus1DR", "GoodBestVertexNminus1Iso", "GoodBestVertexNminus1Collinearity", "GoodBestVertexNminus1Chi2", "GoodBestVertexNminus1DCA", "GoodBestVertexNminus1DPhiMuonpTLxy", "GoodBestVertexNminus1HitsInFrontOfVertex", "GoodBestVertexNminus1InvMass", "GoodBestVertexNminus1Charge"]
-if runDimuonNminus1Histograms:
-  muonVertexCollectionNames += muonVertexNminus1CollectionNames
-
 for muonCollectionName in muonCollectionNames:
   LLPNanoAOD_histParams += (
     ("Event"      , "n"+muonCollectionName    , 50    , 0     , 50    , ""  ),
     (muonCollectionName  , "pt"               , 2000  , 0     , 1000  , ""  ),
     (muonCollectionName  , "eta"              , 300   , -3    , 3     , ""  ),
     (muonCollectionName  , "phi"              , 300   , -3    , 3     , ""  ),
-    (muonCollectionName  , "dxy"              , 20000  , -2000    , 2000   , ""  ),
+    (muonCollectionName  , "absDxyPVTraj"     , 10000  , 0        , 2000   , ""  ),
     (muonCollectionName  , "dxyPVTraj"        , 20000  , -2000    , 2000   , ""  ),
     (muonCollectionName  , "dxyPVTrajErr"     , 10000  , 0    , 2000   , ""  ),
     (muonCollectionName  , "dxyPVTrajSig"     , 10000  , 0    , 2000   , ""  ),
@@ -110,11 +127,20 @@ for muonCollectionName in muonCollectionNames:
     (muonCollectionName  , "minProxDeltaR"    , 1000   , 0    , 10     , ""  ),
     (muonCollectionName  , "pfRelIso04all"    , 800    , 0    , 20     , ""  ),
     (muonCollectionName  , "tkRelIso"         , 800    , 0    , 20     , ""  ),
+    (muonCollectionName  , "isPAT"            , 10     , 0    , 10     , ""  ),
+    (muonCollectionName  , "isTight"          , 10     , 0    , 10     , ""  ),
   )
 
 for collectionName in muonVertexCollectionNames:
   LLPNanoAOD_histParams += (
     ("Event"       , "n"+collectionName       , 50     , 0      , 50     , ""  ),
+    (collectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
+    (collectionName , "Lxy"                   , 1000   , 0      , 1000   , ""  ),
+    (collectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
+    (collectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
+    (collectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+    (collectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
+    (collectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
   )
   for category in muonVertexCollectionCategories:
     muonVertexCollectionName = collectionName + category
@@ -122,6 +148,7 @@ for collectionName in muonVertexCollectionNames:
       ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
       (muonVertexCollectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
       (muonVertexCollectionName , "vxy"                   , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "Lxy"                   , 1000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "vxySigma"              , 10000  , 0      , 100    , ""  ),
       (muonVertexCollectionName , "vxySignificance"       , 1000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "vxySignificanceV2"     , 1000   , 0      , 1000   , ""  ),
@@ -133,22 +160,25 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "outerDEta"             , 500    , 0      , 10     , ""  ),
       (muonVertexCollectionName , "outerDPhi"             , 500    , 0      , 10     , ""  ),
       (muonVertexCollectionName , "maxHitsInFrontOfVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "sumHitsInFrontOfVert"  , 100    , 0      , 100    , ""  ),
       (muonVertexCollectionName , "maxMissHitsAfterVert"  , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert1"    , 100    , 0      , 100    , ""  ),
+      (muonVertexCollectionName , "hitsInFrontOfVert2"    , 100    , 0      , 100    , ""  ),
       (muonVertexCollectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
       (muonVertexCollectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi1"         , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi2"         , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtPtMissDPhi"       , 500    , 0      , 5      , ""  ),
-      (muonVertexCollectionName , "deltaPixelHits"        , 100    , -50    , 50     , ""  ),
-      (muonVertexCollectionName , "nTrackerLayers1"       , 50     , 0      , 50     , ""  ),
-      (muonVertexCollectionName , "nTrackerLayers2"       , 50     , 0      , 50     , ""  ),
+      # (muonVertexCollectionName , "deltaPixelHits"        , 100    , -50    , 50     , ""  ),
+      # (muonVertexCollectionName , "nTrackerLayers1"       , 50     , 0      , 50     , ""  ),
+      # (muonVertexCollectionName , "nTrackerLayers2"       , 50     , 0      , 50     , ""  ),
       (muonVertexCollectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
-      (muonVertexCollectionName , "OSinvMass"             , 20000  , 0      , 200    , ""  ),
-      (muonVertexCollectionName , "SSinvMass"             , 20000  , 0      , 200    , ""  ),
+      # (muonVertexCollectionName , "OSinvMass"             , 20000  , 0      , 200    , ""  ),
+      # (muonVertexCollectionName , "SSinvMass"             , 20000  , 0      , 200    , ""  ),
       (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
-      (muonVertexCollectionName , "nSegments1"            , 50     , 0      , 50     , ""  ),
-      (muonVertexCollectionName , "nSegments2"            , 50     , 0      , 50     , ""  ),
-      (muonVertexCollectionName , "nSegmentsSum"          , 50     , 0      , 50     , ""  ),
+      # (muonVertexCollectionName , "nSegments1"            , 50     , 0      , 50     , ""  ),
+      # (muonVertexCollectionName , "nSegments2"            , 50     , 0      , 50     , ""  ),
+      # (muonVertexCollectionName , "nSegmentsSum"          , 50     , 0      , 50     , ""  ),
       (muonVertexCollectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
       (muonVertexCollectionName , "leadingPt"             , 2000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "subleadingPt"          , 2000   , 0      , 1000   , ""  ),
