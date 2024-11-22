@@ -206,13 +206,14 @@ if runLLPNanoAODVertexHistograms:
 
   categories = ["", "_PatDSA", "_DSA", "_Pat"]
   for category in categories:
+    hist_name = "GoodBestLooseMuonsVertex" + category
     histParams += (
-      ("GoodBestLooseMuonsVertex_"+category , "normChi2"              , 50000  , 0      , 50     , ""  ),
-      ("GoodBestLooseMuonsVertex_"+category , "vxy"                   , 1000   , 0      , 1000   , ""  ),
-      ("GoodBestLooseMuonsVertex_"+category , "vxySigma"              , 1000   , 0      , 100    , ""  ),
-      ("GoodBestLooseMuonsVertex_"+category , "vxySignificance"       , 1000   , 0      , 1000   , ""  ),
-      ("GoodBestLooseMuonsVertex_"+category , "vxySignificanceV2"     , 1000   , 0      , 1000   , ""  ),
-      ("GoodBestLooseMuonsVertex_"+category , "dca"                   , 1000   , 0      , 20     , ""  ),
-      ("GoodBestLooseMuonsVertex_"+category , "collinearityAngle"     , 1000   , -10    , 10     , ""  ),
-      ("GoodBestLooseMuonsVertex_"+category , "invMass"               , 20000  , 0      , 200    , ""  ),
+      (hist_name, "normChi2"              , 50000  , 0      , 50     , ""  ),
+      (hist_name, "vxy"                   , 1000   , 0      , 1000   , ""  ),
+      (hist_name, "vxySigma"              , 1000   , 0      , 100    , ""  ),
+      (hist_name, "vxySignificance"       , 1000   , 0      , 1000   , ""  ),
+      (hist_name, "vxySignificanceV2"     , 1000   , 0      , 1000   , ""  ),
+      (hist_name, "dca"                   , 1000   , 0      , 20     , ""  ),
+      (hist_name, "collinearityAngle"     , 1000   , -10    , 10     , ""  ),
+      (hist_name, "invMass"               , 20000  , 0      , 200    , ""  ),
     )

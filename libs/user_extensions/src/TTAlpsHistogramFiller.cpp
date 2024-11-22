@@ -458,13 +458,13 @@ void TTAlpsHistogramFiller::FillBasicMuonVertexHistograms(const shared_ptr<Event
     
     string category = dimuonVertex->GetVertexCategory();
     
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_vxy", dimuonVertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_vxySigma", dimuonVertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_vxySignificance", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_dca", dimuonVertex->Get("dca"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_collinearityAngle", dimuonVertex->GetCollinearityAngle(), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex_"+category+"_invMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2); 
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxy", dimuonVertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxySigma", dimuonVertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxySignificance", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_dca", dimuonVertex->Get("dca"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_collinearityAngle", dimuonVertex->GetCollinearityAngle(), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_invMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2); 
   }
 }
 
