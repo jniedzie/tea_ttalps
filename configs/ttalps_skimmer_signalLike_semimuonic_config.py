@@ -1,4 +1,5 @@
 import ttalps_extra_collections as collections
+from ttalps_object_selections import *
 
 extraEventCollections = collections.extraEventCollections
 
@@ -11,8 +12,9 @@ applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
 
 # non isolated loose muons means that there is no isolation requirement for the loose muons
-nonIsolatedLooseMuons = False
+nonIsolatedLooseMuons = True
 
+# weightsBranchName = ""
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 

@@ -18,10 +18,33 @@ TTAlpsSelections::TTAlpsSelections(){
   } catch (const Exception &e) {
     warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
+  try {
+    config.GetMap("muonVertexCollections", muonVertexCollections);
+  } catch (const Exception &e) {
+    info() << "Couldn't read muonVertexCollections from config file - no muon vertex collection selections can be made" << endl;
+  }
 }
 
 void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> cutFlowManager) {
   cutFlowManager->RegisterCut("nLooseMuonsOrDSAMuons");
+}
+
+void TTAlpsSelections::RegisterInitialDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager) {
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    if (!cutFlowManager->HasCut("initial", collectionName)) {
+      cutFlowManager->RegisterCollection(collectionName);
+      cutFlowManager->RegisterCut("initial", collectionName);
+    }
+  }
+}
+
+void TTAlpsSelections::RegisterDimuonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    for (auto cutName : vertexCuts) {
+      if(cutName == "BestDimuonVertex") continue;
+      cutFlowManager->RegisterCut(cutName, collectionName);
+    }
+  }
 }
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
@@ -42,7 +65,7 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
     else {
       auto allMuons_new = make_shared<PhysicsObjects>();
       for(auto muon : *matchedMuons) {
-        if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSAMuon())) {
+        if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSA())) {
           allMuons_new->push_back(muon);
         }
       }
@@ -53,6 +76,45 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
   if(allMuons->size() < 3) return false;
   cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");
 
+  return true;
+}
+
+bool TTAlpsSelections::PassesDimuonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  bool passesSelections = true;
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    if(!PassesDimuonSelections(event, cutFlowManager, collectionName, vertexCuts)) passesSelections = false;
+  }
+  return passesSelections;
+}
+
+bool TTAlpsSelections::PassesDimuonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string collectionName, vector<string> vertexCuts) {
+  std::unique_ptr<TTAlpsDimuonSelections> ttAlpsDimuonSelections = make_unique<TTAlpsDimuonSelections>();
+
+  shared_ptr<PhysicsObjects> dimuons = event->GetCollection("BaseDimuonVertices");
+    
+  cutFlowManager->UpdateCutFlow("initial", collectionName);
+
+  auto baseDimuons = make_shared<PhysicsObjects>();
+  for (const auto& dimuon : *dimuons) {
+      baseDimuons->push_back(std::make_shared<PhysicsObject>(*dimuon));
+  }
+  // auto goodDimuons = make_shared<PhysicsObjects>();
+
+  for(auto cutName : vertexCuts) {
+    if(cutName == "BestDimuonVertex") continue;
+    auto goodDimuons = make_shared<PhysicsObjects>();
+    for (auto dimuon : *baseDimuons) {
+      if(ttAlpsDimuonSelections->PassesCut(asNanoDimuonVertex(dimuon, event), cutName)) {
+        goodDimuons->push_back(dimuon);
+      }
+    }
+    if(goodDimuons->size() < 1) return false;
+    cutFlowManager->UpdateCutFlow(cutName, collectionName);
+    baseDimuons = make_shared<PhysicsObjects>();
+    for (const auto& dimuon : *goodDimuons) {
+      baseDimuons->push_back(dimuon);
+    }
+  }
   return true;
 }
 
@@ -162,3 +224,11 @@ bool TTAlpsSelections::PassesHadronSelections(const shared_ptr<Event> event) {
   if (jetsPt30 < 6) return false;
   return true;
 }
+
+void TTAlpsSelections::PrintDimuonCutFlow(shared_ptr<CutFlowManager> cutFlowManager) {
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    info() << "CutFlow for dimuon collection " << collectionName << endl;
+    cutFlowManager->Print(collectionName);
+  }
+}
+    

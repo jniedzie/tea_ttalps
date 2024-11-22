@@ -6,6 +6,7 @@
 #include "Helpers.hpp"
 #include "UserExtensionsHelpers.hpp"
 #include "TTAlpsDimuonSelections.hpp"
+#include "TTAlpsSelections.hpp"
 
 class TTAlpsObjectsManager {
  public:
@@ -17,10 +18,11 @@ class TTAlpsObjectsManager {
   void InsertOuterDRMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float maxDR, std::shared_ptr<Collection<std::shared_ptr<PhysicsObject>>> muonCollection = nullptr);
   void InsertProximityDRMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float maxDR, std::shared_ptr<Collection<std::shared_ptr<PhysicsObject>>> muonCollection = nullptr);
   void InsertSegmentMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float minSegmentRatio, std::shared_ptr<Collection<std::shared_ptr<PhysicsObject>>> muonCollection = nullptr);
+  void InsertBaseLooseMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertGoodLooseMuonVertexCollection(std::shared_ptr<Event> event);
+  void InsertGoodLooseMuonVertexCollection(std::shared_ptr<Event> event, std::string muonVertexCollectionName, std::vector<std::string> muonVertexCollectionCuts);
   void InsertNminus1VertexCollections(std::shared_ptr<Event> event);
-  void InsertIsolatedNminus1VertexCollections(std::shared_ptr<Event> event);
-  void InsertNonIsolatedNminus1VertexCollections(std::shared_ptr<Event> event);
+  void InsertNminus1VertexCollections(std::shared_ptr<Event> event, std::string muonVertexCollectionName, std::vector<std::string> muonVertexCollectionCuts);
   void InsertMatchedLooseMuonEfficiencyCollections(std::shared_ptr<Event> event);
 
  private:
@@ -31,6 +33,8 @@ class TTAlpsObjectsManager {
 
   std::map<std::string, float> muonMatchingParams;
   std::map<std::string, float> dimuonVertexCuts;
+  std::map<std::string, std::vector<std::string>> muonVertexCollections;
+  std::vector<std::string> muonVertexNminus1Collections;
 
   bool IsGoodBaseMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
   bool IsGoodDimuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
