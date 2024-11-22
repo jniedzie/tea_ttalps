@@ -73,7 +73,7 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> 
 }
 
 void TTAlpsObjectsManager::InsertDRMatchedLooseMuonsCollections(shared_ptr<Event> event, float maxDR, shared_ptr<Collection<shared_ptr<PhysicsObject>>> muonCollection) {
-  shared_ptr<PhysicsObjects> looseMuonsDRMatch = asNanoEvent(event)->GetDRMatchedMuons(maxDR, muonCollection);
+  shared_ptr<PhysicsObjects> looseMuonsDRMatch = asNanoEvent(event)->GetDRMatchedMuons(muonCollection, maxDR);
   shared_ptr<PhysicsObjects> looseMuonVerticesDRMatch = asNanoEvent(event)->GetVerticesForMuons(looseMuonsDRMatch);
   
   event->AddCollection("LooseMuonsDRMatch", looseMuonsDRMatch);
@@ -82,7 +82,7 @@ void TTAlpsObjectsManager::InsertDRMatchedLooseMuonsCollections(shared_ptr<Event
   
 void TTAlpsObjectsManager::InsertOuterDRMatchedLooseMuonsCollections(shared_ptr<Event> event, float maxDR, shared_ptr<Collection<shared_ptr<PhysicsObject>>> muonCollection) {
   
-  shared_ptr<PhysicsObjects> looseMuonsOuterDRMatch = asNanoEvent(event)->GetOuterDRMatchedMuons(maxDR, muonCollection);
+  shared_ptr<PhysicsObjects> looseMuonsOuterDRMatch = asNanoEvent(event)->GetOuterDRMatchedMuons(muonCollection, maxDR);
   shared_ptr<PhysicsObjects> looseMuonVerticesOuterDRMatch = asNanoEvent(event)->GetVerticesForMuons(looseMuonsOuterDRMatch);
 
   event->AddCollection("LooseMuonsOuterDRMatch", looseMuonsOuterDRMatch);
@@ -91,7 +91,7 @@ void TTAlpsObjectsManager::InsertOuterDRMatchedLooseMuonsCollections(shared_ptr<
 
 void TTAlpsObjectsManager::InsertProximityDRMatchedLooseMuonsCollections(shared_ptr<Event> event, float maxDR, shared_ptr<Collection<shared_ptr<PhysicsObject>>> muonCollection) {
   
-  shared_ptr<PhysicsObjects> looseMuonsProxDRMatch = asNanoEvent(event)->GetProximityDRMatchedMuons(maxDR, muonCollection);
+  shared_ptr<PhysicsObjects> looseMuonsProxDRMatch = asNanoEvent(event)->GetProximityDRMatchedMuons(muonCollection, maxDR);
   shared_ptr<PhysicsObjects> looseMuonVerticesProxDRMatch = asNanoEvent(event)->GetVerticesForMuons(looseMuonsProxDRMatch);
 
   event->AddCollection("LooseMuonsProxDRMatch", looseMuonsProxDRMatch);
@@ -100,7 +100,7 @@ void TTAlpsObjectsManager::InsertProximityDRMatchedLooseMuonsCollections(shared_
 
 void TTAlpsObjectsManager::InsertSegmentMatchedLooseMuonsCollections(shared_ptr<Event> event, float minSegmentRatio, shared_ptr<Collection<shared_ptr<PhysicsObject>>> muonCollection) {
 
-  shared_ptr<PhysicsObjects> looseMuonsSegmentMatch = asNanoEvent(event)->GetSegmentMatchedMuons(minSegmentRatio, muonCollection);
+  shared_ptr<PhysicsObjects> looseMuonsSegmentMatch = asNanoEvent(event)->GetSegmentMatchedMuons(muonCollection, minSegmentRatio);
   shared_ptr<PhysicsObjects> looseMuonVerticesSegmentMatch = asNanoEvent(event)->GetVerticesForMuons(looseMuonsSegmentMatch);
   
   event->AddCollection("LooseMuonsSegmentMatch", looseMuonsSegmentMatch);
@@ -227,10 +227,20 @@ shared_ptr<PhysicsObject> TTAlpsObjectsManager::GetBestMuonVertex(const shared_p
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_ptr<Event> event) {
+  auto loosePATMuons = event->GetCollection("LoosePATMuons");
+  auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
+  if(useLooseIsoPATMuons) loosePATMuons = event->GetCollection("LooseIsoPATMuons");
+  auto looseMuons = make_shared<PhysicsObjects>();
+  for (auto muon : *loosePATMuons) {
+    looseMuons->push_back(muon);
+  }
+  for (auto muon : *looseDSAMuons) {
+    looseMuons->push_back(muon);
+  }
   auto looseMuonsSegmentDRMatch = make_shared<PhysicsObjects>();
-  shared_ptr<PhysicsObjects> looseMuonsDRMatch = asNanoEvent(event)->GetDRMatchedMuons();
-  shared_ptr<PhysicsObjects> looseMuonsOuterDRMatch = asNanoEvent(event)->GetOuterDRMatchedMuons();
-  shared_ptr<PhysicsObjects> looseMuonsSegmentMatch = asNanoEvent(event)->GetSegmentMatchedMuons();
+  shared_ptr<PhysicsObjects> looseMuonsDRMatch = asNanoEvent(event)->GetDRMatchedMuons(looseMuons);
+  shared_ptr<PhysicsObjects> looseMuonsOuterDRMatch = asNanoEvent(event)->GetOuterDRMatchedMuons(looseMuons);
+  shared_ptr<PhysicsObjects> looseMuonsSegmentMatch = asNanoEvent(event)->GetSegmentMatchedMuons(looseMuons);
 
   for(auto muon : *looseMuonsSegmentMatch){
     float muon_idx = muon->Get("idx");
