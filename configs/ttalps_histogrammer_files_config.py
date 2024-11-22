@@ -1,7 +1,7 @@
 from ttalps_samples_list import backgrounds2018, signals2018, data2018, signals2018_1GeV, test_backgrounds2018, test_signals2018
 import os
 
-max_files = 1
+max_files = -1
 
 skim = "skimmed_looseSemimuonicv1"
 # skim = "skimmed_looseSemimuonicv1_LLPtrigger"
