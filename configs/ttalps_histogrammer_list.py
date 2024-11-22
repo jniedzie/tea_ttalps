@@ -39,6 +39,7 @@ applyScaleFactors = {
   "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
+  "jetID": True,
 }
 
 samples = (
