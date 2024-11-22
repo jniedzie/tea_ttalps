@@ -10,7 +10,7 @@ extraEventCollections = {
   },
   "LooseMuons": {
     "inputCollections": ("Muon",),
-    "pt": (5., 9999999.),
+    "pt": (3., 9999999.),
     "eta": (-2.5, 2.5),
     "pfRelIso04_all": (0., 0.25),
     "looseId": True,
@@ -19,7 +19,7 @@ extraEventCollections = {
   },
   "LooseNonIsoMuons": {
     "inputCollections": ("Muon",),
-    "pt": (5., 9999999.),
+    "pt": (3., 9999999.),
     "eta": (-2.5, 2.5),
     # "pfRelIso04_all": (0., 0.25),
     "looseId": True,
@@ -29,7 +29,7 @@ extraEventCollections = {
   "LooseDSAMuons": {
     "inputCollections": ("DSAMuon",),
     "displacedID": (1, 9999999.),
-    "pt": (5., 9999999.),
+    "pt": (3., 9999999.),
     "eta": (-2.5, 2.5),
   },
   # "LooseMuonsAndDSAMuons": {
