@@ -3,8 +3,8 @@ import os
 
 def main():
   
-  # base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
-  base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
+  base_path = "/nfs/dust/cms/user/{}/ttalps_cms"
+  output_username = os.environ["USER"]
   
   # skim=""
   # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
@@ -28,8 +28,8 @@ def main():
     
     print(f"{output_path=}")
     
-    os.system(f"rm {base_path}/{output_path}")
-    os.system(f"hadd -f -j -k {base_path}/{output_path} {base_path}/{input_path}")
+    os.system(f"rm {base_path.format(output_username)}/{output_path}")
+    os.system(f"hadd -f -j -k {base_path.format(output_username)}/{output_path} {base_path.format(output_username)}/{input_path}")
 
 if __name__ == "__main__":
   main()
