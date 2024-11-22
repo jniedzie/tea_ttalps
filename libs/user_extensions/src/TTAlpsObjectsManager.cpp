@@ -214,19 +214,6 @@ bool TTAlpsObjectsManager::IsGoodBaseMuonVertex(const shared_ptr<PhysicsObject> 
   return true;
 }
 
-bool TTAlpsObjectsManager::IsGoodDimuonVertex(const shared_ptr<PhysicsObject> vertex, shared_ptr<Event> event) {
-  auto dimuonVertex = asNanoDimuonVertex(vertex,event);
-
-  if(!ttAlpsSelections->PassesHitsInFrontOfVertexCut(dimuonVertex)) return false;
-  if(!ttAlpsSelections->PassesDPhiBetweenMuonpTAndLxyCut(dimuonVertex)) return false;
-  if(!ttAlpsSelections->PassesDCACut(dimuonVertex)) return false;
-  if(!ttAlpsSelections->PassesCollinearityAngleCut(dimuonVertex)) return false;
-  if(!ttAlpsSelections->PassesChi2Cut(dimuonVertex)) return false;
-  if(!ttAlpsSelections->PassesDeltaRCut(dimuonVertex)) return false; 
-  return true;
-}
-
-
 shared_ptr<PhysicsObject> TTAlpsObjectsManager::GetBestMuonVertex(const shared_ptr<PhysicsObjects> vertices, shared_ptr<Event> event) {
   if(vertices->size() == 0) return nullptr;
   if(vertices->size() == 1) return vertices->at(0);

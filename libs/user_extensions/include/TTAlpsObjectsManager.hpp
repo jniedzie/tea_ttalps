@@ -37,8 +37,6 @@ class TTAlpsObjectsManager {
   std::vector<std::string> muonVertexNminus1Collections;
 
   bool IsGoodBaseMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
-  bool IsGoodDimuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
-  bool IsGoodBestDimuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
   std::shared_ptr<PhysicsObject> GetBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::shared_ptr<Event> event);
   std::shared_ptr<PhysicsObject> GetSecondBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::shared_ptr<Event> event);
 
