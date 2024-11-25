@@ -771,7 +771,7 @@ void TTAlpsHistogramFiller::FillGenMuonsFromALPsHistograms(const shared_ptr<Even
   auto looseMatchedMuonsFromALP = asTTAlpsEvent(event)->GetMuonsMatchedToGenMuonsFromALP(looseMatchedMuons);
   auto genParticles = event->GetCollection("GenPart");
 
-  if(asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
+  if(!asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
 
   histogramsHandler->Fill("Event_nGenMuonFromALP", genMuonsFromALP->size(), weight);
   if(genMuonsFromALP->size() > 1) {
@@ -844,7 +844,7 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromALPsHistograms(const shared_ptr<Ev
   auto genMuonsFromALP = asTTAlpsEvent(event)->GetGenMuonsFromALP();
   auto genParticles = event->GetCollection("GenPart");
 
-  if(asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
+  if(!asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
 
   string category = asTTAlpsEvent(event)->GetTTbarEventCategory();
   bool hmuCategory = category == "hmu";
@@ -967,7 +967,7 @@ void TTAlpsHistogramFiller::FillGenMuonsNotFromALPsHistograms(const shared_ptr<E
   auto genMuonsNotFromALP = asTTAlpsEvent(event)->GetGenMuonsNotFromALP();
   auto genDimuonsNotFromALP = asTTAlpsEvent(event)->GetGenDimuonsNotFromALP();
 
-  if(asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
+  if(!asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
   
   histogramsHandler->Fill("Event_nGenMuonNotFromALP", genMuonsNotFromALP->size(), weight);
   histogramsHandler->Fill("Event_nGenDimuonNotFromALP", genDimuonsNotFromALP->size(), weight);
@@ -1000,7 +1000,7 @@ void TTAlpsHistogramFiller::FillGenMuonsNotFromALPsHistograms(const shared_ptr<E
 void TTAlpsHistogramFiller::FillLooseMuonsNotFromALPsHistograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
 
-  if(asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
+  if(!asTTAlpsEvent(event)->IsALPDecayWithinCMS()) return;
 
   for(auto &[matchingMethod, param] : muonMatchingParams) {
     string muonCollectionName = "LooseMuons" + matchingMethod + "Match";
