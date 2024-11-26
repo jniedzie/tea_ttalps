@@ -634,8 +634,8 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const shared_ptr<Event> ev
       FillLeadingPt(event, histName, params);
     }
   }
-  // FillDimuonHistograms(event);
-  // FillDiumonClosestToZhistgrams(event);
+  FillDimuonHistograms(event);
+  FillDiumonClosestToZhistgrams(event);
   FillMuonMetHistograms(event);
   FillJetHistograms(event);
 }
@@ -736,7 +736,7 @@ void TTAlpsHistogramFiller::FillGenALPsHistograms(const shared_ptr<Event> event)
   }
 }
 
-void TTAlpsHistogramFiller::FillGenMuonMinDR(const shared_ptr<PhysicsObject> genMuon, const shared_ptr<Collection<shared_ptr<PhysicsObject> >> muonCollection, string genMuonCollectionName, string looseMuonCollectionName, float weight) {
+void TTAlpsHistogramFiller::FillGenMuonMinDRHistograms(const shared_ptr<PhysicsObject> genMuon, const shared_ptr<Collection<shared_ptr<PhysicsObject> >> muonCollection, string genMuonCollectionName, string looseMuonCollectionName, float weight) {
   float muonMass = 0.105;
   TLorentzVector genMuonFourVector = asNanoGenParticle(genMuon)->GetFourVector(muonMass);
   float deltaRmin = 9999.;
@@ -766,7 +766,7 @@ void TTAlpsHistogramFiller::FillGenMuonMinDR(const shared_ptr<PhysicsObject> gen
   if(deltaEtamin < 9999.) histogramsHandler->Fill(genMuonCollectionName+"_"+looseMuonCollectionName+"MinDEta", deltaEtamin, weight *muonWeightDEta);
 }
 
-void TTAlpsHistogramFiller::FillGenMuonMinDR(const shared_ptr<PhysicsObject> genMuon, const shared_ptr<PhysicsObject> looseMuon, string genMuonCollectionName, string looseMuonCollectionName, float weight) {
+void TTAlpsHistogramFiller::FillGenMuonMinDRHistograms(const shared_ptr<PhysicsObject> genMuon, const shared_ptr<PhysicsObject> looseMuon, string genMuonCollectionName, string looseMuonCollectionName, float weight) {
   float muonMass = 0.105;
   TLorentzVector genMuonFourVector = asNanoGenParticle(genMuon)->GetFourVector(muonMass);
   TLorentzVector muonFourVector = asNanoMuon(looseMuon)->GetFourVector();
@@ -881,8 +881,8 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromALPsHistograms(const shared_ptr<Ev
     string tightMuonFromALPsCollectionName = "TightMuonsFromALP"+matchingMethod+"Match";
 
     if(genMuonsFromALP) {
-      FillGenMuonMinDR(genMuonsFromALP->first, looseMatchedMuons, "GenMuonFromALP1", muonCollectionName, weight);
-      FillGenMuonMinDR(genMuonsFromALP->second, looseMatchedMuons, "GenMuonFromALP2", muonCollectionName, weight);
+      FillGenMuonMinDRHistograms(genMuonsFromALP->first, looseMatchedMuons, "GenMuonFromALP1", muonCollectionName, weight);
+      FillGenMuonMinDRHistograms(genMuonsFromALP->second, looseMatchedMuons, "GenMuonFromALP2", muonCollectionName, weight);
     }
     if(!looseMatchedMuonsFromALP) continue;
 
@@ -896,8 +896,8 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromALPsHistograms(const shared_ptr<Ev
     if(hmuCategory) histogramsHandler->Fill("Event_n"+tightMuonFromALPsCollectionName+"_hmu", tightMatchedMuonsFromALP->size(), weight);
     FillLooseMuonsHistograms(looseMatchedMuonsFromALPCollection,muonFromALPsCollectionName,weight);
     FillMuonMinDeltaRHistograms(event, looseMatchedMuonsFromALPCollection, muonFromALPsCollectionName);
-    FillGenMuonMinDR(genMuonsFromALP->first, looseMatchedMuonsFromALP->first, "GenMuonFromALP", "RecoMatch1", weight);
-    FillGenMuonMinDR(genMuonsFromALP->second, looseMatchedMuonsFromALP->second, "GenMuonFromALP", "RecoMatch2", weight);
+    FillGenMuonMinDRHistograms(genMuonsFromALP->first, looseMatchedMuonsFromALP->first, "GenMuonFromALP", "RecoMatch1", weight);
+    FillGenMuonMinDRHistograms(genMuonsFromALP->second, looseMatchedMuonsFromALP->second, "GenMuonFromALP", "RecoMatch2", weight);
     FillDimuonHistograms(looseMatchedMuonsFromALP->first, looseMatchedMuonsFromALP->second, muonFromALPsCollectionName, event, false);
     
     for(int j=0; j<tightMatchedMuonsFromALP->size(); j++) {
@@ -1092,8 +1092,8 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromWsHistograms(const shared_ptr<Even
     if(looseMatchedMuonsFromW->size() > 0) {
       FillLooseMuonsHistograms(looseMatchedMuonsFromW,muonFromWsCollectionName,weight);
       FillMuonMinDeltaRHistograms(event, looseMatchedMuonsFromW, muonFromWsCollectionName);
-      FillGenMuonMinDR(genMuonsFromW->at(0), looseMatchedMuonsFromW->at(0), "GenMuonFromW", "RecoMatch1", weight);
-      if(looseMatchedMuonsFromW->size() > 1) FillGenMuonMinDR(genMuonsFromW->at(1), looseMatchedMuonsFromW->at(1), "GenMuonFromW", "RecoMatch2", weight);
+      FillGenMuonMinDRHistograms(genMuonsFromW->at(0), looseMatchedMuonsFromW->at(0), "GenMuonFromW", "RecoMatch1", weight);
+      if(looseMatchedMuonsFromW->size() > 1) FillGenMuonMinDRHistograms(genMuonsFromW->at(1), looseMatchedMuonsFromW->at(1), "GenMuonFromW", "RecoMatch2", weight);
     
       if(asTTAlpsEvent(event)->IsLeadingMuonInCollection(looseMatchedMuonsFromW, looseMatchedMuons)) leadingLooseMuonFromW = 1;
       if(tightMatchedMuons->size() > 0 && tightMatchedMuonsFromW->size() > 0) {

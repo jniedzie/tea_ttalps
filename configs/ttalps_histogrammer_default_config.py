@@ -78,13 +78,7 @@ defaultHistParams = (
   ("LoosePATMuons"         , "miniPFRelIso_chg"    , 2000  , -10   , 10    , ""  ),
   ("LoosePATMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
   ("LoosePATMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
-  
-  # ("Event"              , "nLooseDSAMuons"      , 50    , 0     , 50    , ""  ),
-  # ("LooseDSAMuons"      , "pt"                  , 2000  , 0     , 1000  , ""  ),
-  # ("LooseDSAMuons"      , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  # ("LooseDSAMuons"      , "dxy"                 , 8000  , -1000  , 1000   , ""  ),
-  # ("LooseDSAMuons"      , "dz"                  , 8000  , -1000  , 1000   , ""  ),
-  
+    
   ("Event"              , "nElectron"           , 50    , 0     , 50    , ""  ),
   ("Electron"           , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("Electron"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),

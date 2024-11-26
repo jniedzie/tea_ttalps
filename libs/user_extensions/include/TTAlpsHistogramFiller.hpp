@@ -79,8 +79,8 @@ class TTAlpsHistogramFiller {
   void FillMuonVertexCorrelationHistograms(const std::shared_ptr<Event> event, std::string vertexName);
 
   // Gen-Level histograms
-  void FillGenMuonMinDR(const std::shared_ptr<PhysicsObject> genMuon, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollection, std::string genMuonCollectionName, std::string looseMuonCollectionName, float weight);
-  void FillGenMuonMinDR(const std::shared_ptr<PhysicsObject> genMuon, const std::shared_ptr<PhysicsObject> looseMuon, std::string genMuonCollectionName, std::string looseMuonCollectionName, float weight);
+  void FillGenMuonMinDRHistograms(const std::shared_ptr<PhysicsObject> genMuon, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollection, std::string genMuonCollectionName, std::string looseMuonCollectionName, float weight);
+  void FillGenMuonMinDRHistograms(const std::shared_ptr<PhysicsObject> genMuon, const std::shared_ptr<PhysicsObject> looseMuon, std::string genMuonCollectionName, std::string looseMuonCollectionName, float weight);
   void FillGenALPsHistograms(const std::shared_ptr<Event> event);
   void FillGenMuonsFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillGenMuonsNotFromALPsHistograms(const std::shared_ptr<Event> event);

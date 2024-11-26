@@ -10,19 +10,27 @@ def main():
   # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
   # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
-  # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_Iso"
-  # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+  # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
+  skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 
-  skim = "skimmed_looseSemimuonicv1"
+  # For signal like skim with Dimuon triggers for LLP trigger study
+  # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
+
+  # Loose semimuonic skim
+  # skim = "skimmed_looseSemimuonicv1"
+
+  # Loose semimuonic skim with Dimuon triggers for LLP trigger study
+  # skim = "skimmed_looseSemimuonicv1_LLPtrigger"
   
-  # hist_path = "histograms"
+  # Default settings
   # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+  # SR dimuon cuts applied
   hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
-  # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons_Unweighted"
+  # JPsi dimuon cuts applied
   # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
   
   # sample_paths = backgrounds2018 + signals2018_1GeV + data2018
-  sample_paths = signals2018_70GeV
+  sample_paths = signals2018_1GeV
   
   for sample_path in sample_paths:
     print(f"{sample_path=}")
