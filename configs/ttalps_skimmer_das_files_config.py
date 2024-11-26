@@ -5,8 +5,10 @@ max_files = -1
 # base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
 
-# Loose skims
+# Loose semimuonic skims - unmerged directoreis to later merge files
 output_skim = "skimmed_looseSemimuonicv1_unmerged"
+# Loose semimuonic skim with Dimuon triggers for LLP trigger study
+# output_skim = "skimmed_looseSemimuonicv1_LLPtrigger_unmerged"
 
 output_trees_dir = ""
 output_hists_dir = ""

@@ -3,17 +3,20 @@ import os
 
 max_files = -1
 
+# Loose semimuonic skim
 skim = "skimmed_looseSemimuonicv1"
+# Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # skim = "skimmed_looseSemimuonicv1_LLPtrigger"
 
+# CRs
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
 # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
-# skim = "skimmed_looseSemimuonic_SRmuonic_OuterDR"
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_Iso"
+# For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 
+# For signal like skim with Dimuon triggers for LLP trigger study
+# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
 
 base_path = "/nfs/dust/cms/user/{}/ttalps_cms"
 input_username = "lrygaard"
@@ -45,6 +48,7 @@ for name, apply in applyScaleFactors.items():
   output_hists_dir += f"_{name}SFs"
   
 # output_hists_dir += "_JPsiDimuons"
-output_hists_dir += "_SRDimuons"
+# output_hists_dir += "_SRDimuons"
 # output_hists_dir += "_SRDimuons_Unweighted"
+output_hists_dir += "_SRDimuons_TriggerStudy"
 output_hists_dir += "/"
