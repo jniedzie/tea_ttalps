@@ -81,8 +81,6 @@ LLPNanoAOD_histParams2D = ()
 
 muonVertexCollectionCategories = ["_PatDSA", "_DSA", "_Pat"]
 muonCollectionCategories = ["", "DSA", "PAT"]
-muonCollectionCategories = [""]
-# muonCollectionNames = ["LooseDSAMuons", "LoosePATMuons", "LooseIsoPATMuons"]
 muonCollectionNames = [""]
 
 muonVertexCollections = {
