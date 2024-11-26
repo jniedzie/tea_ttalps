@@ -18,9 +18,8 @@ GoodDimuonVertexPATCuts = {
   "maxDR": 9999.0,
   # "maxDR": 0.2,
   "maxCollinearityAngle": 2.0,
-  "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
+  "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
@@ -30,13 +29,12 @@ GoodDimuonVertexPATDSACuts = {
   "maxDCA": 2.0,
   "maxChi2": 2.0,
   "maxHitsInFrontOfVertex": 3.0,
-  "maxDR": 9999.0,
-  # "maxDR": 0.4,
+  "maxDR": 9999.0, # no DR cut
+  # "maxDR": 0.4, # tesing cut
   "maxCollinearityAngle": 2.0,
   "maxpTLxyDPhi": 2.9,
-  "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
+  "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "minVxy": 0.0,
@@ -47,10 +45,8 @@ GoodDimuonVertexDSACuts = {
   "maxDR": 9999.0,
   # "maxDR": 0.5,
   "maxCollinearityAngle": 2.0,
-  # "maxCollinearityAngle": 2,
-  "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
+  "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
   "maxOuterDEta": 9999.0,
   "maxOuterDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
@@ -83,10 +79,9 @@ SRDimuonVertexPATCuts = {
   "maxDR": 9999.0,
   # "maxDR": 0.2,
   "maxCollinearityAngle": 2.0,
-  # "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
-  "maxdisplacedTrackIso03Dimuon": 0.025,
+  # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
+  "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
@@ -100,10 +95,9 @@ SRDimuonVertexPATDSACuts = {
   # "maxDR": 0.4,
   "maxCollinearityAngle": 2.0,
   "maxpTLxyDPhi": 2.9,
-  # "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
-  "maxdisplacedTrackIso03Dimuon": 0.025,
+  # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
+  "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "minVxy": 0.0,
@@ -115,10 +109,9 @@ SRDimuonVertexDSACuts = {
   # "maxDR": 0.5,
   "maxCollinearityAngle": 2.0,
   # "maxCollinearityAngle": 2,
-  # "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
-  "maxdisplacedTrackIso03Dimuon": 0.025,
+  # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
+  "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxOuterDEta": 9999.0,
   "maxOuterDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
@@ -142,13 +135,12 @@ JPsiDimuonVertexPATCuts = {
   "maxChi2": 2.0,
   "maxHitsInFrontOfVertex": 3.0,
   "maxDeltaPixelHits": 3.0,
-  "maxDR": 9999.0,
-  # "maxDR": 0.2,
+  "maxDR": 9999.0, # no cut
+  # "maxDR": 0.2, # tesing cut
   "maxCollinearityAngle": 2.0,
-  "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
-  # "maxdisplacedTrackIso03Dimuon": 0.025,
+  "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
+  # "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
@@ -158,14 +150,13 @@ JPsiDimuonVertexPATDSACuts = {
   "maxDCA": 2.0,
   "maxChi2": 2.0,
   "maxHitsInFrontOfVertex": 3.0,
-  "maxDR": 9999.0,
-  # "maxDR": 0.4,
+  "maxDR": 9999.0, # no cut
+  # "maxDR": 0.4, # tesing cut
   "maxCollinearityAngle": 2.0,
   "maxpTLxyDPhi": 2.9,
-  "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
-  # "maxdisplacedTrackIso03Dimuon": 0.025,
+  "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
+  # "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "minVxy": 0.0,
@@ -173,14 +164,12 @@ JPsiDimuonVertexPATDSACuts = {
 JPsiDimuonVertexDSACuts = {
   "maxDCA": 2.0,
   "maxChi2": 2.0,
-  "maxDR": 9999.0,
-  # "maxDR": 0.5,
+  "maxDR": 9999.0, # no cut
+  # "maxDR": 0.5, # tesing cut
   "maxCollinearityAngle": 2.0,
-  # "maxCollinearityAngle": 2,
-  "maxdisplacedTrackIso03Dimuon": 9999.0,
-  # "maxdisplacedTrackIso03Dimuon": 0.2,
-  # "maxdisplacedTrackIso03Dimuon": 0.075,
-  # "maxdisplacedTrackIso03Dimuon": 0.025,
+  "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
+  # "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxOuterDEta": 9999.0,
   "maxOuterDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
