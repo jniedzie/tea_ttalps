@@ -42,19 +42,19 @@ TTAlpsDimuonSelections::TTAlpsDimuonSelections(){
   using namespace std::placeholders;
   PassesCutsMap = {
     {"LLPnanoAODVertexCuts", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLLPnanoAODVertexCuts(v); }},
-    {"InvMassCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesInvariantMassCuts(v); }},
+    {"InvariantMassCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesInvariantMassCut(v); }},
     {"ChargeCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChargeCut(v); }},
-    {"DisplacedIsoCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDisplacedIsolationCut(v); }},
+    {"DisplacedIsolationCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDisplacedIsolationCut(v); }},
     {"HitsInFrontOfVertexCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesHitsInFrontOfVertexCut(v); }},
-    {"DPhiMuonpTLxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDPhiBetweenMuonpTAndLxyCut(v); }},
+    {"DPhiBetweenMuonpTAndLxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDPhiBetweenMuonpTAndLxyCut(v); }},
     {"DCACut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDCACut(v); }},
     {"Chi2Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChi2Cut(v); }},
     {"VxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesVxyCut(v); }},
-    {"CollinearityCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesCollinearityAngleCut(v); }},
+    {"CollinearityAngleCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesCollinearityAngleCut(v); }},
     {"DeltaEtaCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaEtaCut(v); }},
     {"DeltaPhiCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPhiCut(v); }},
     {"DeltaRCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaRCut(v); }},
-    {"DeltaPixelHitsCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPixelHits(v); }}
+    {"DeltaPixelHitsCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPixelHitsCut(v); }}
   };
 }
 
@@ -75,7 +75,7 @@ bool TTAlpsDimuonSelections::PassesLLPnanoAODVertexCuts(shared_ptr<NanoDimuonVer
   return true;
 }
 
-bool TTAlpsDimuonSelections::PassesInvariantMassCuts(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+bool TTAlpsDimuonSelections::PassesInvariantMassCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   float invMass = dimuonVertex->GetInvariantMass();
   if(dimuonVertexBaseCuts.find("maxInvariantMass") == dimuonVertexBaseCuts.end()) return true;
 
@@ -175,7 +175,7 @@ bool TTAlpsDimuonSelections::PassesDeltaRCut(shared_ptr<NanoDimuonVertex> dimuon
   return true;
 }
 
-bool TTAlpsDimuonSelections::PassesDeltaPixelHits(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+bool TTAlpsDimuonSelections::PassesDeltaPixelHitsCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto category = dimuonVertex->GetVertexCategory();
   if(category == "DSA" || category == "PatDSA") return true;
   auto dimuonVertexCuts = GetDimuonCategoryMap(category);

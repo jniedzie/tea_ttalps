@@ -84,11 +84,11 @@ muonCollectionCategories = ["", "DSA", "PAT"]
 muonCollectionNames = []
 
 muonVertexCollections = {
-  # "MaskedDimuonVertices" : ["InvMassCut"],
-  # "GoodDimuonVertices" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut"],
-  "BestDimuonVertex" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut", "BestDimuonVertex"],
-  # "GoodIsoDimuonVertices" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut", "DisplacedIsoCut"],
-  "BestIsoDimuonVertex" : ["InvMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiMuonpTLxyCut", "DCACut", "CollinearityCut", "Chi2Cut", "DisplacedIsoCut", "BestDimuonVertex"],
+  # "MaskedDimuonVertices" : ["InvariantMassCut"],
+  # "GoodDimuonVertices" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut"],
+  "BestDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "BestDimuonVertex"],
+  # "GoodIsoDimuonVertices" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut"],
+  "BestIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut", "BestDimuonVertex"],
 }
 muonVertexCollectionNames = [collectionName for collectionName in muonVertexCollections.keys()]
 muonVertexNminus1Collections = [

@@ -15,7 +15,7 @@ class TTAlpsDimuonSelections {
   TTAlpsDimuonSelections();
   
   bool PassesLLPnanoAODVertexCuts(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
-  bool PassesInvariantMassCuts(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
+  bool PassesInvariantMassCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesChargeCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDisplacedIsolationCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex, std::string isolationVariable="displacedTrackIso03Dimuon");
   bool PassesHitsInFrontOfVertexCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
@@ -27,7 +27,7 @@ class TTAlpsDimuonSelections {
   bool PassesDeltaEtaCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaPhiCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaRCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
-  bool PassesDeltaPixelHits(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
+  bool PassesDeltaPixelHitsCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
 
   bool PassesCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex, std::string cutName);
   
