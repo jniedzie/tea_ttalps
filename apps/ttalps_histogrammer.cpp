@@ -44,12 +44,13 @@ int main(int argc, char **argv) {
   auto ttAlpsSelections = make_unique<TTAlpsSelections>();
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
-  bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runPileupHistograms;
+  bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runLLPTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
   bool runLLPNanoAODVertexHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runCustomTTAlpsHistograms", runCustomTTAlpsHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
+  config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
   config.GetValue("runLLPNanoAOD2DHistograms", runLLPNanoAOD2DHistograms);
@@ -107,6 +108,18 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillTriggerVariablesPerTriggerSet(event, "inclusive");
       ttalpsHistogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
     }
+
+    if (runLLPTriggerHistograms) {
+      if(ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager)) {
+        if(ttAlpsSelections->PassesSingleMuonTrigger(event)) {
+          ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "SingleMuonTrigger");
+        } 
+        if(ttAlpsSelections->PassesDoubleMuonTrigger(event)) {
+          ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "DoubleMuonTrigger");
+        } 
+      }
+    }
+
 
     if (runPileupHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
