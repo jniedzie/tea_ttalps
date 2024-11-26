@@ -33,6 +33,9 @@ class TTAlpsSelections {
   void PrintDimuonCutFlow(std::shared_ptr<CutFlowManager> cutFlowManager);
   void SaveDimuonCutFlows(std::shared_ptr<CutFlowManager> cutFlowManager);
 
+  bool PassesSingleMuonTrigger(const std::shared_ptr<Event> event);
+  bool PassesDoubleMuonTrigger(const std::shared_ptr<Event> event);
+
   // Selections targetting semi-leptonic ttbar, and additional leptons. Requires:
   // - 1 good e/μ (the top-lepton)
   // - 0 other quasi-good leptons
@@ -60,6 +63,8 @@ class TTAlpsSelections {
   std::map<std::string, std::vector<std::string>> muonVertexCollections;
 
   bool PassesDimuonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string collectionName, std::vector<std::string> vertexCuts);
+
+  std::vector<std::string> triggerWarningsPrinted;
 
 };
 

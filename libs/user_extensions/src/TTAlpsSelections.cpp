@@ -118,6 +118,39 @@ bool TTAlpsSelections::PassesDimuonSelections(const shared_ptr<Event> event, sha
   return true;
 }
 
+bool TTAlpsSelections::PassesSingleMuonTrigger(const shared_ptr<Event> event) {
+  string triggerName = "HLT_IsoMu24";
+  bool passes = false;
+  try {
+    passes = event->Get(triggerName);
+  } catch (Exception &) {
+    if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
+      warn() << "Trigger not present: " << triggerName << endl;
+      triggerWarningsPrinted.push_back(triggerName);
+    }
+  }
+  if(passes) return true;
+  return passes;
+}
+
+bool TTAlpsSelections::PassesDoubleMuonTrigger(const shared_ptr<Event> event) {
+  vector<string> triggerNames = {"HLT_DoubleL2Mu23NoVtx_2Cha","HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed"};
+  bool passes = false;
+  for (auto &triggerName : triggerNames) {
+    passes = false;
+    try {
+      passes = event->Get(triggerName);
+    } catch (Exception &) {
+      if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
+        warn() << "Trigger not present: " << triggerName << endl;
+        triggerWarningsPrinted.push_back(triggerName);
+      }
+    }
+    if (passes) return true;
+  }
+  return passes;
+}
+
 void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
   cutFlowManager->RegisterCut("nAdditionalLooseMuons");
 }
@@ -226,6 +259,7 @@ bool TTAlpsSelections::PassesHadronSelections(const shared_ptr<Event> event) {
 }
 
 void TTAlpsSelections::PrintDimuonCutFlow(shared_ptr<CutFlowManager> cutFlowManager) {
+  info() << "Dimuon cut flow for all muonVertexCollections" << endl;
   for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
     info() << "CutFlow for dimuon collection " << collectionName << endl;
     cutFlowManager->Print(collectionName);

@@ -33,6 +33,8 @@ class TTAlpsHistogramFiller {
 
   void FillDimuonCutFlows(const std::shared_ptr<CutFlowManager> cutFlowManager);
 
+  void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
+
  private:
 
   std::shared_ptr<HistogramsHandler> histogramsHandler;
@@ -85,7 +87,6 @@ class TTAlpsHistogramFiller {
   void FillLooseMuonsFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsNotFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsFromWsHistograms(const std::shared_ptr<Event> event);
-
 
   // Muon Matching histograms
   void FillMatchedMuonHistograms(const std::shared_ptr<PhysicsObject> muon, std::string muonCollectionName, float weight);  

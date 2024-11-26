@@ -696,6 +696,26 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsGenMuonVariables(const shared_ptr<Ev
   FillLooseMuonsFromWsHistograms(event);
 }
 
+void TTAlpsHistogramFiller::FillTriggerStudyHistograms(const shared_ptr<Event> event, string triggerName) {
+  float weight = GetEventWeight(event);
+
+  auto genMuonsFromALP = asTTAlpsEvent(event)->GetGenMuonsFromALP();
+  string muonCollectionName = triggerName+"GenMuonFromALP";
+  
+  histogramsHandler->Fill("Event_n"+muonCollectionName, genMuonsFromALP->size(), weight);
+
+  if(genMuonsFromALP->size() > 1) {
+    auto genMuon1 = genMuonsFromALP->at(0);
+    auto genMuon2 = genMuonsFromALP->at(1);
+    histogramsHandler->Fill(muonCollectionName+"_pt1", genMuon1->Get("pt"), weight);
+    histogramsHandler->Fill(muonCollectionName+"_pt2", genMuon2->Get("pt"), weight);
+    float leadingPt = max((float)genMuon1->Get("pt"),(float)genMuon2->Get("pt"));
+    float subleadingPt = min((float)genMuon1->Get("pt"),(float)genMuon2->Get("pt"));
+    histogramsHandler->Fill(muonCollectionName+"_leadingPt", leadingPt, weight);
+    histogramsHandler->Fill(muonCollectionName+"_subleadingPt", subleadingPt, weight);
+  }
+}
+
 void TTAlpsHistogramFiller::FillGenALPsHistograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
 
