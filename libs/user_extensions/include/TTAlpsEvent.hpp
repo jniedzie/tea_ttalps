@@ -16,19 +16,19 @@ class TTAlpsEvent {
   float GetAsFloat(std::string branchName) { return event->GetAsFloat(branchName); }
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
   std::shared_ptr<PhysicsObjects> GetGenALPs();
-  std::shared_ptr<PhysicsObjects> GetGenMuonsFromALP();
+  std::shared_ptr<MuonPair> GetGenMuonsFromALP();
   std::vector<int> GetGenMuonIndicesFromALP();
   std::shared_ptr<PhysicsObjects> GetGenMuonsNotFromALP();
   std::shared_ptr<PhysicsObjects> GetGenMuonsFromW();
   std::vector<int> GetGenMuonIndicesFromW();
-  std::shared_ptr<Collection<MuonPair>> GetGenDimuonsNotFromALP();
+  std::shared_ptr<MuonPairs> GetGenDimuonsNotFromALP();
 
-  std::shared_ptr<PhysicsObjects> GetMuonsMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
+  std::shared_ptr<MuonPair> GetMuonsMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
   std::shared_ptr<PhysicsObjects> GetMuonsMatchedToGenMuonsNotFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
-  std::shared_ptr<Collection<MuonPair>> GetMuonsMatchedToGenDimuonsNotFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
-  std::shared_ptr<PhysicsObjects> GetLooseMuonsMatchedToGenDimuon(std::shared_ptr<PhysicsObjects> genMuonCollection, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR = 0.3);
+  std::shared_ptr<MuonPairs> GetMuonsMatchedToGenDimuonsNotFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
+  std::shared_ptr<MuonPair> GetLooseMuonsMatchedToGenDimuon(std::shared_ptr<MuonPair> genMuonPair, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR = 0.3);
   std::shared_ptr<PhysicsObjects> GetLooseMuonsMatchedToGenMuons(std::shared_ptr<PhysicsObjects> genMuonCollection, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR);
-  std::shared_ptr<PhysicsObjects> GetRemainingNonResonantMuons(std::shared_ptr<PhysicsObjects> muonCollection, std::shared_ptr<std::vector<std::pair<std::shared_ptr<PhysicsObject>, std::shared_ptr<PhysicsObject>>>> resonantCollection);
+  std::shared_ptr<PhysicsObjects> GetRemainingNonResonantMuons(std::shared_ptr<PhysicsObjects> muonCollection, std::shared_ptr<MuonPairs> resonantCollection);
   
   std::vector<int> GetFiveFirstMotherIDsOfParticle(std::shared_ptr<PhysicsObject> particle);
 

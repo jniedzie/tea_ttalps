@@ -81,7 +81,7 @@ LLPNanoAOD_histParams2D = ()
 
 muonVertexCollectionCategories = ["_PatDSA", "_DSA", "_Pat"]
 muonCollectionCategories = ["", "DSA", "PAT"]
-muonCollectionNames = [""]
+muonCollectionNames = []
 
 muonVertexCollections = {
   # "MaskedDimuonVertices" : ["InvMassCut"],
@@ -309,17 +309,19 @@ GenMuon_histParams = (
   ("Event"                     , "nGenMuonFromALP" , 50    , 0     , 50    , ""  ),
   ("GenMuonFromALP"            , "index1"          , 100   , 0     , 100   , ""  ),
   ("GenMuonFromALP"            , "index2"          , 100   , 0     , 100   , ""  ),
-  ("GenMuonFromALP"            , "pdgId"           , 200   , -100  , 100   , ""  ),
-  ("GenMuonFromALP"            , "pt"              , 4000  , 0     , 1000  , ""  ),
-  ("GenMuonFromALP"            , "mass"            , 10000 , 0     , 100   , ""  ),
-  ("GenMuonFromALP"            , "eta"             , 300   , -3    , 3     , ""  ),
-  ("GenMuonFromALP"            , "phi"             , 300   , -3    , 3     , ""  ),
+  ("GenMuonFromALP"            , "pt1"             , 4000  , 0     , 1000  , ""  ),
+  ("GenMuonFromALP"            , "pt2"             , 4000  , 0     , 1000  , ""  ),
+  ("GenMuonFromALP"            , "eta1"            , 300   , -3    , 3     , ""  ),
+  ("GenMuonFromALP"            , "eta2"            , 300   , -3    , 3     , ""  ),
+  ("GenMuonFromALP"            , "phi1"            , 300   , -3    , 3     , ""  ),
+  ("GenMuonFromALP"            , "phi2"            , 300   , -3    , 3     , ""  ),
   ("GenMuonFromALP"            , "Lxy"             , 50000 , 0     , 5000  , ""  ),
   ("GenMuonFromALP"            , "Lxyz"            , 50000 , 0     , 5000  , ""  ),
   ("GenMuonFromALP"            , "properLxy"       , 50000 , 0     , 5000  , ""  ),
   ("GenMuonFromALP"            , "properLxyT"      , 50000 , 0     , 5000  , ""  ),
   ("GenMuonFromALP"            , "properLxyz"      , 50000 , 0     , 5000  , ""  ),
-  ("GenMuonFromALP"            , "dxy"             , 50000 , -5000 , 5000  , ""  ),
+  ("GenMuonFromALP"            , "dxy1"            , 50000 , -5000 , 5000  , ""  ),
+  ("GenMuonFromALP"            , "dxy2"            , 50000 , -5000 , 5000  , ""  ),
   ("GenMuonFromALP"            , "RecoMatch1MinDR"   , 1000  , 0     , 10    , ""  ),
   ("GenMuonFromALP"            , "RecoMatch2MinDR"   , 1000  , 0     , 10    , ""  ),
   ("GenMuonFromALP"            , "RecoMatch1MinDPhi" , 1000  , 0     , 10    , ""  ),
@@ -420,16 +422,20 @@ for matchingMethod, param in muonMatchingParams.items():
       (muonCollectionName  , "invMass"          , 20000  , 0    , 200    , ""  ),
       (muonCollectionName  , "deltaR"           , 1000   , 0    , 10     , ""  ),
       (muonCollectionName  , "outerDeltaR"      , 1000   , 0    , 10     , ""  ),
-      (muonCollectionName  , "genMuonMinDR"     , 1000   , 0    , 10     , ""  ),
+      (muonCollectionName  , "genMuonMinDR1"    , 1000   , 0    , 10     , ""  ),
+      (muonCollectionName  , "genMuonMinDR2"    , 1000   , 0    , 10     , ""  ),
       (muonCollectionName  , "pfRelIso04all"    , 800    , 0    , 20     , ""  ),
       (muonCollectionName  , "tkRelIso"         , 800    , 0    , 20     , ""  ),
       (muonCollectionName  , "isPAT"            , 10     , 0    , 10     , ""  ),
       (muonCollectionName  , "isTight"          , 10     , 0    , 10     , ""  ),
     )
   GenMuon_histParams += (
-    ("GenMuonFromALP"    , "LooseMuons"+matchingMethod+"MatchMinDR"    , 1000 , 0  , 10    , ""  ),
-    ("GenMuonFromALP"    , "LooseMuons"+matchingMethod+"MatchMinDPhi"  , 1000 , 0  , 10    , ""  ),
-    ("GenMuonFromALP"    , "LooseMuons"+matchingMethod+"MatchMinDEta"  , 1000 , 0  , 10    , ""  ),
+    ("GenMuonFromALP1"   , "LooseMuons"+matchingMethod+"MatchMinDR"    , 1000 , 0  , 10    , ""  ),
+    ("GenMuonFromALP1"   , "LooseMuons"+matchingMethod+"MatchMinDPhi"  , 1000 , 0  , 10    , ""  ),
+    ("GenMuonFromALP1"   , "LooseMuons"+matchingMethod+"MatchMinDEta"  , 1000 , 0  , 10    , ""  ),
+    ("GenMuonFromALP2"   , "LooseMuons"+matchingMethod+"MatchMinDR"    , 1000 , 0  , 10    , ""  ),
+    ("GenMuonFromALP2"   , "LooseMuons"+matchingMethod+"MatchMinDPhi"  , 1000 , 0  , 10    , ""  ),
+    ("GenMuonFromALP2"   , "LooseMuons"+matchingMethod+"MatchMinDEta"  , 1000 , 0  , 10    , ""  ),
     ("GenMuonFromW"      , "LooseMuons"+matchingMethod+"MatchMinDR"    , 1000 , 0  , 10    , ""  ),
     ("GenMuonFromW"      , "LooseMuons"+matchingMethod+"MatchMinDPhi"  , 1000 , 0  , 10    , ""  ),
     ("GenMuonFromW"      , "LooseMuons"+matchingMethod+"MatchMinDEta"  , 1000 , 0  , 10    , ""  ),
@@ -498,19 +504,18 @@ for matchingMethod, param in muonMatchingParams.items():
         (muonVertexCollectionName+"_dca_normChi2"                ,  1000, 0  , 20  ,  5000, 0  , 50 , ""  ),
       )
 
-if runLLPTriggerHistograms:
-  GenMuon_histParams += (
-    ("Event" , "nSingleMuonTriggerGenMuonFromALP"           , 50     , 0      , 50     , ""  ),
-    ("SingleMuonTriggerGenMuonFromALP" , "pt1"              , 2000   , 0      , 1000   , ""  ),
-    ("SingleMuonTriggerGenMuonFromALP" , "pt2"              , 2000   , 0      , 1000   , ""  ),
-    ("SingleMuonTriggerGenMuonFromALP" , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
-    ("SingleMuonTriggerGenMuonFromALP" , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
-    ("Event" , "nDoubleMuonTriggerGenMuonFromALP"           , 50     , 0      , 50     , ""  ),
-    ("DoubleMuonTriggerGenMuonFromALP" , "pt1"              , 2000   , 0      , 1000   , ""  ),
-    ("DoubleMuonTriggerGenMuonFromALP" , "pt2"              , 2000   , 0      , 1000   , ""  ),
-    ("DoubleMuonTriggerGenMuonFromALP" , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
-    ("DoubleMuonTriggerGenMuonFromALP" , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
-  )
+LLPTrigger_histParams = (
+  ("Event" , "nSingleMuonTriggerGenMuonFromALP"           , 50     , 0      , 50     , ""  ),
+  ("SingleMuonTriggerGenMuonFromALP" , "pt1"              , 2000   , 0      , 1000   , ""  ),
+  ("SingleMuonTriggerGenMuonFromALP" , "pt2"              , 2000   , 0      , 1000   , ""  ),
+  ("SingleMuonTriggerGenMuonFromALP" , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
+  ("SingleMuonTriggerGenMuonFromALP" , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
+  ("Event" , "nDoubleMuonTriggerGenMuonFromALP"           , 50     , 0      , 50     , ""  ),
+  ("DoubleMuonTriggerGenMuonFromALP" , "pt1"              , 2000   , 0      , 1000   , ""  ),
+  ("DoubleMuonTriggerGenMuonFromALP" , "pt2"              , 2000   , 0      , 1000   , ""  ),
+  ("DoubleMuonTriggerGenMuonFromALP" , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
+  ("DoubleMuonTriggerGenMuonFromALP" , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
+)
   
 if runLLPNanoAODHistograms:
   histParams = histParams + LLPNanoAOD_defaultHistParams
@@ -523,4 +528,5 @@ if runMuonMatchingHistograms:
 if runGenMuonHistograms:
   histParams = histParams + GenMuon_histParams
   histParams2D = histParams2D + GenMuon_histParams2D
-  
+if runLLPTriggerHistograms:
+  histParams = histParams + LLPTrigger_histParams
