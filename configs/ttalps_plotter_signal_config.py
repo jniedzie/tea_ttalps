@@ -9,14 +9,16 @@ from ttalps_cross_sections import *
 
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/"
 
+# Default settings
 # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_GenLevel"
+# SR dimuon cuts applied
 hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
+# JPsi dimuon cuts applied
 # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
 
+# Loose semimuonic skim
 # skim = "skimmed_looseSemimuonicv1"
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_Iso"
+# For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
 skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 
 output_formats = ["pdf"]
@@ -35,7 +37,8 @@ legend_max_x = 0.82
 legend_height = 0.045 if show_ratio_plots else 0.03
 legend_max_y = 0.89
 
-# requierement is num. events >= bkgRawEventsThreshold
+# Minimuon requirements on number of background events to be uncluded in plots
+# requierement is # events >= bkgRawEventsThreshold
 bkgRawEventsThreshold = 10
 
 n_default_backgrounds = 10
@@ -47,12 +50,14 @@ extraText = "Preliminary"
 ## SETTINGS ##
 plots_from_LLPNanoAOD = True
 plot_genALP_info = True
+plot_genCollinearityStudy = False
+plot_gengenMuonFromTopStudy = False
 plot_muonMatching_info = False
-plot_ratio_hists = True
-plot_background = True
+plot_background = False
 plot_data = False
 
-# for LLPNanoAOD plots
+
+# To include plots with collection names "LooseMuons"+muonMatchingMethods+"Match"
 muonMatchingMethods = [
 #   # # "DR", 
 #   # # "OuterDR", 
@@ -66,11 +71,15 @@ genMuonMatchingMethods = [
 ]
 
 extraMuonVertexCollections = [
-  # # "MaskedDimuonVertices",
-  # # "GoodDimuonVertices",
+  # invariant mass cut only:
+  # # "MaskedDimuonVertices", 
+  # Good Dimuon selection without isolation cut:
+  # # "GoodDimuonVertices", 
   # "BestDimuonVertex", 
+  # Good Dimuon selection with isolation cut:
   # # "GoodIsoDimuonVertices", 
-  # "BestIsoDimuonVertex",
+  # "BestIsoDimuonVertex", 
+  # N-1 plots:
   # # "BestDimuonVertexNminus1InvMassCut",
   # # "BestDimuonVertexNminus1DRCut",
   # # "BestDimuonVertexNminus1CollinearityCut",
@@ -87,13 +96,11 @@ sampletype = "sig"
 
 if plot_background:
   plot_genALP_info = False
-  plot_ratio_hists = False
   signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-3*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
   sampletype = "bkg"
 
 if plot_data:
   plot_genALP_info = False
-  plot_ratio_hists = False 
   signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-3*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
   sampletype = "data"
 
@@ -103,8 +110,8 @@ legends = {
   SampleType.data: Legend(legend_max_x-3*(legend_width), legend_max_y-legend_height, legend_max_x-2*(legend_width), legend_max_y, "pl"),
 }
 
-output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}/"
-# output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}_test/"
+# output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}_test/"
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
@@ -117,8 +124,6 @@ plotting_options = {
 }
 
 default_norm = NormalizationType.to_lumi
-# default_norm = NormalizationType.to_background
-# default_norm = NormalizationType.to_data
 
 y_scale = 0.01
 
@@ -149,9 +154,7 @@ LLPnanoAOD_histograms = ()
 histograms2D_LLPnanoAOD = ()
 
 muonVertexCategories = ["_PatDSA", "_DSA", "_Pat", ""]
-# muonVertexCategories = [""]
 muonCollectionCategories = ["", "DSA", "PAT"]
-# muonCollectionCategories = [""]
 muonCollectionNames = []
 muonVertexCollectionNames = extraMuonVertexCollections
 for matchingMethod in muonMatchingMethods:
@@ -188,37 +191,19 @@ for muonVertexCollectionName in muonVertexCollectionNames:
       Histogram(muonVertexCollectionName+category+"_dR"                   , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex #Delta R"                    , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_proxDR"               , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex proximity #Delta R"          , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_outerDR"              , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex outer #Delta R"              , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_dEta"                 , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex #Delta #eta"                 , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_outerDEta"            , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex outer #Delta #eta"           , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_dPhi"                 , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex #Delta #phi"                 , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_outerDPhi"            , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex outer #Delta #phi"           , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_normChi2"             , "", False, True  , default_norm        , 100, 0     , 5     , 1e-5  , 1e4   , "#mu vertex #chi^{2}/ndof"               , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_chargeProduct"        , "", False, True  , default_norm        , 1  , -1    , 2     , 1e-3  , 1e8   , "Dimuon charge"                          , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_maxHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-4  , 1e6   , "Max N(hits before vertex)"              , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_sumHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-6  , 1e6   , "Sum N(hits before vertex)"              , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert1"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-6  , 1e6   , "N(hits before vertex)"                  , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert2"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-7  , 1e5   , "N(hits before vertex)"                  , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_maxMissHitsAfterVert" , "", False, True  , default_norm        , 1  , 0     , 10    , 1e-6  , 1e6   , "Max N(hits after vertex)"               , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_dca"                  , "", False, True  , default_norm        , 20 , 0     , 15    , 1e-6  , 1e6   , "DCA [cm]"                               , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-5  , 1e6   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, False , default_norm        , 10 , 0     , 3.15  , 0     , 500   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_absPtLxyDPhi1"        , "", False, False , default_norm        , 10 , 0     , 3.15  , 0     , 0.6   , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_absPtLxyDPhi1"        , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-4  , 1e2   , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_absPtLxyDPhi2"        , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-4  , 1e5   , "#mu vertex |#Delta #phi_{#mu2}|"        , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_absPtPtMissDPhi"      , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-3  , 1e6   , "#mu vertex |#Delta #phi(p_{T}^{2}, p_{T}^{miss})|"        , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_deltaPixelHits"       , "", False, True  , default_norm        , 1  , 0     , 15    , 1e-3  , 1e10  , "#Delta N(pixel hits)"                   , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_nTrackerLayers1"      , "", False, True  , default_norm        , 1  , 0     , 50    , 1e-3  , 1e10  , "#mu_{1} N(tracker layers)"              , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_nTrackerLayers2"      , "", False, True  , default_norm        , 1  , 0     , 50    , 1e-3  , 1e6   , "#mu_{2} N(tracker layers)"              , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_nSegments1"           , "", False, True  , NormalizationType.to_one        , 1  , 0     , 10    , 1e-6  , 1e4  , "#mu_{1} N(muon segments)"               , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_nSegments2"           , "", False, True  , NormalizationType.to_one        , 1  , 0     , 10    , 1e-6  , 1e4  , "#mu_{2} N(muon segments)"               , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_nSegmentsSum"         , "", False, True  , default_norm        , 1  , 0     , 20    , 1e-3  , 1e10  , "#mu_{1} + #mu_{2} N(muon segments)"     , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_OSinvMass"            , "", False, True  , default_norm        , 1  , 2.5     , 3.5     , 1e-4  , 1e9   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_SSinvMass"            , "", False, True  , default_norm        , 1  , 2.5     , 3.5     , 1e-4  , 1e9   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 20, 0     , 10   , 1e-7  , 1e6   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 2  , 2.7     , 3.5     , 1e-4*y_scale  , 1e10*y_scale   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_subleadingPt"         , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex subleading p_{T} [GeV]"      , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_minDxyPVTraj"         , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex min d_{xy} [cm]"             , "# events (2018)"   ),
@@ -241,129 +226,7 @@ for muonVertexCollectionName in muonVertexCollectionNames:
       # Histogram(muonVertexCollectionName+category+"_tkRelIsoMuon2"                   , "", False, True  , default_norm        , 4  , 0     , 10    , 1e-3  , 1e6   , "#mu_{2} I_{tk}^{rel} ( #Delta R < 0.3 )"    , "# events (2018)"   ),
     )
 
-histograms2D_LLPnanoAOD = (
-
-# #   Histogram2D("BestLooseMuonsVertex_Pat_dca_normChi2"             , "", False, False, True  , NormalizationType.to_lumi , 1   , 20  , 0 , 1   , 0 , 15   , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("BestLooseMuonsVertex_PatDSA_dca_normChi2"          , "", False, False, True  , NormalizationType.to_lumi , 10  , 20  , 0 , 15  , 0 , 15   , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("BestLooseMuonsVertex_DSA_dca_normChi2"             , "", False, False, True  , NormalizationType.to_lumi , 10  , 5   , 0 , 15  , 0 , 5    , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("BestLooseMuonsVertexHitsInFrontOfVertex_Pat_dca_normChi2"             , "", False, False, True  , NormalizationType.to_lumi , 1   , 20  , 0 , 1   , 0 , 15   , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("BestLooseMuonsVertexHitsInFrontOfVertex_PatDSA_dca_normChi2"          , "", False, False, True  , NormalizationType.to_lumi , 10  , 5   , 0 , 15  , 0 , 5    , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("BestLooseMuonsVertexHitsInFrontOfVertex_DSA_dca_normChi2"             , "", False, False, True  , NormalizationType.to_lumi , 10  , 5   , 0 , 15  , 0 , 5    , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("GoodBestLooseMuonsVertex_Pat_dca_normChi2"             , "", False, False, True  , NormalizationType.to_lumi , 1   , 5   , 0 , 1   , 0 , 5   , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dca_normChi2"          , "", False, False, True  , NormalizationType.to_lumi , 2   , 5   , 0 , 2  , 0 , 5    , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-# #   Histogram2D("GoodBestLooseMuonsVertex_DSA_dca_normChi2"             , "", False, False, True  , NormalizationType.to_lumi , 2   , 5   , 0 , 2  , 0 , 5    , 1e-2  , 1e3   , "#mu vertex DCA [cm]"  , "#mu vertex #chi^{2}/ndof"  , "# events (2018)"   ),
-
-  # Histogram2D("GoodBestLooseMuonsVertex_Pat_absCollinearityAngle_invMass"     , "", False, False, True  , NormalizationType.to_lumi , 5  , 2  , 0 , 3.15, 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|"  , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-  # Histogram2D("GoodBestLooseMuonsVertex_PatDSA_absCollinearityAngle_invMass"  , "", False, False, True  , NormalizationType.to_lumi , 5  , 2  , 0 , 3.15, 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|"  , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-  # Histogram2D("GoodBestLooseMuonsVertex_DSA_absCollinearityAngle_invMass"     , "", False, False, True  , NormalizationType.to_lumi , 5  , 2  , 0 , 3.15, 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|"  , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-
-  # Histogram2D("LooseMuonsVertexSegmentMatch_Pat_absCollinearityAngle_invMass"     , "", False, False, True  , NormalizationType.to_lumi , 5  , 2  , 0 , 3.15, 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|"  , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-  # Histogram2D("LooseMuonsVertexSegmentMatch_PatDSA_absCollinearityAngle_invMass"  , "", False, False, True  , NormalizationType.to_lumi , 5  , 2  , 0 , 3.15, 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|"  , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-  # Histogram2D("LooseMuonsVertexSegmentMatch_DSA_absCollinearityAngle_invMass"     , "", False, False, True  , NormalizationType.to_lumi , 5  , 2  , 0 , 3.15, 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|"  , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-
-#   # Histogram2D("GoodBestLooseMuonsVertex_PatDSA_nSegmentsSum_invMass"          , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 15  , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #segments"      , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_DSA_nSegmentsSum_invMass"             , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 15  , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #segments"      , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_Pat_chargeProduct_invMass"            , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , -1, 2   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex charge product" , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_PatDSA_chargeProduct_invMass"         , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , -1, 2   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex charge product" , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_DSA_chargeProduct_invMass"            , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , -1, 2   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex charge product" , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_Pat_dEta_invMass"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dEta_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_DSA_dEta_invMass"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDEta_invMass"                , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer #eta" , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_Pat_dR_invMass"                       , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dR_invMass"                    , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_DSA_dR_invMass"                       , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-#   # Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDR_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 1   , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer R" , "#mu vertex M_{#mu #mu} [GeV]"  , "# events (2018)"   ),
-
-#   Histogram2D("BestLooseMuonsVertex_Pat_dEta_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_dEta_displacedTrackIso03Dimuon1"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_dEta_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_outerDEta_displacedTrackIso03Dimuon1"                , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer #eta" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_Pat_dPhi_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_dPhi_displacedTrackIso03Dimuon1"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_dPhi_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_outerDPhi_displacedTrackIso03Dimuon1"                , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer #phi" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_Pat_dR_displacedTrackIso03Dimuon1"                       , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_dR_displacedTrackIso03Dimuon1"                    , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_dR_displacedTrackIso03Dimuon1"                       , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_outerDR_displacedTrackIso03Dimuon1"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer R" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-
-#   Histogram2D("BestLooseMuonsVertex_Pat_dEta_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_dEta_absCollinearityAngle"                        , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_dEta_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_outerDEta_absCollinearityAngle"                      , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta outer #eta" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_Pat_dPhi_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_dPhi_absCollinearityAngle"                        , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_dPhi_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_outerDPhi_absCollinearityAngle"                      , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta outer #phi" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_Pat_dR_absCollinearityAngle"                             , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_PatDSA_dR_absCollinearityAngle"                          , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_DSA_dR_absCollinearityAngle"                             , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_Pat_outerDR_absCollinearityAngle"                        , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex outer #Delta R" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_PatDSA_outerDR_absCollinearityAngle"                     , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex outer #Delta R" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_DSA_outerDR_absCollinearityAngle"                        , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex outer #Delta R" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_Pat_proxDR_absCollinearityAngle"                         , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex proximity #Delta R" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_PatDSA_proxDR_absCollinearityAngle"                      , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex proximity #Delta R" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-  # Histogram2D("BestLooseMuonsVertex_DSA_proxDR_absCollinearityAngle"                         , "", False, False, True  , NormalizationType.to_lumi , 10  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex proximity #Delta R" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-
-#   Histogram2D("BestLooseMuonsVertex_Pat_displacedTrackIso03Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_Pat_displacedTrackIso04Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_displacedTrackIso03Dimuon1_invMass"               , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_displacedTrackIso04Dimuon1_invMass"               , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_displacedTrackIso03Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_displacedTrackIso04Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-
-#   Histogram2D("BestLooseMuonsVertex_Pat_absCollinearityAngle_displacedTrackIso03Dimuon1"     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.2 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_absCollinearityAngle_displacedTrackIso03Dimuon1"  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.2 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_absCollinearityAngle_displacedTrackIso03Dimuon1"     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.2 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_Pat_absCollinearityAngle_Lxy"                            , "", False, False, True  , NormalizationType.to_lumi , 5  , 5  , 0 , 3.15, 0 , 300   , 1e-2  , 1e2   , "|#Delta #Phi|" , "Lxy [cm]" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_PatDSA_absCollinearityAngle_Lxy"                         , "", False, False, True  , NormalizationType.to_lumi , 5  , 5  , 0 , 3.15, 0 , 300   , 1e-2  , 1e2   , "|#Delta #Phi|" , "Lxy [cm]" , "# events (2018)"   ),
-#   Histogram2D("BestLooseMuonsVertex_DSA_absCollinearityAngle_Lxy"                            , "", False, False, True  , NormalizationType.to_lumi , 5  , 5  , 0 , 3.15, 0 , 300   , 1e-2  , 1e2   , "|#Delta #Phi|" , "Lxy [cm]" , "# events (2018)"   ),
-
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_dEta_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dEta_displacedTrackIso03Dimuon1"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_dEta_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDEta_displacedTrackIso03Dimuon1"                , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer #eta" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_dPhi_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dPhi_displacedTrackIso03Dimuon1"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_dPhi_displacedTrackIso03Dimuon1"                     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDPhi_displacedTrackIso03Dimuon1"                , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer #phi" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_dR_displacedTrackIso03Dimuon1"                       , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dR_displacedTrackIso03Dimuon1"                    , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_dR_displacedTrackIso03Dimuon1"                       , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDR_displacedTrackIso03Dimuon1"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex #Delta outer R" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)"   ),
-
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_dEta_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dEta_absCollinearityAngle"                        , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_dEta_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #eta"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDEta_absCollinearityAngle"                      , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta outer #eta" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_dPhi_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dPhi_absCollinearityAngle"                        , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_dPhi_absCollinearityAngle"                           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta #phi"    , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDPhi_absCollinearityAngle"                      , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta outer #phi" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_dR_absCollinearityAngle"                             , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_dR_absCollinearityAngle"                          , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_dR_absCollinearityAngle"                             , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta R"       , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_outerDR_absCollinearityAngle"                        , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 3.5   , 1e-2  , 1e2   , "#mu vertex #Delta outer R" , "#mu vertex |#Delta #Phi|"  , "# events (2018)"   ),
-
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_displacedTrackIso03Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_displacedTrackIso04Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_displacedTrackIso03Dimuon1_invMass"               , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_displacedTrackIso04Dimuon1_invMass"               , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_displacedTrackIso03Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_displacedTrackIso04Dimuon1_invMass"                  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 10  , 0 , 10    , 1e-2  , 1e2   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "#mu vertex M_{#mu #mu} [GeV]" , "# events (2018)"   ),
-
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_absCollinearityAngle_displacedTrackIso03Dimuon1"     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_absCollinearityAngle_displacedTrackIso03Dimuon1"  , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_absCollinearityAngle_displacedTrackIso03Dimuon1"     , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 3.5 , 0 , 10    , 1e-2  , 1e2   , "#mu vertex |#Delta #Phi|" , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_Pat_absCollinearityAngle_Lxy"                            , "", False, False, True  , NormalizationType.to_lumi , 5  , 5  , 0 , 3.15, 0 , 300   , 1e-2  , 1e2   , "|#Delta #Phi|" , "Lxy [cm]" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_PatDSA_absCollinearityAngle_Lxy"                         , "", False, False, True  , NormalizationType.to_lumi , 5  , 5  , 0 , 3.15, 0 , 300   , 1e-2  , 1e2   , "|#Delta #Phi|" , "Lxy [cm]" , "# events (2018)"   ),
-#   Histogram2D("GoodBestLooseMuonsVertex_DSA_absCollinearityAngle_Lxy"                            , "", False, False, True  , NormalizationType.to_lumi , 5  , 5  , 0 , 3.15, 0 , 300   , 1e-2  , 1e2   , "|#Delta #Phi|" , "Lxy [cm]" , "# events (2018)"   ),
-
-# #   Histogram2D("BestLooseMuonsVertex_PatDSA_Lxy_nTrackerLayers1"           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 800 , 0 , 20    , 1e-1  , 1e8   , "#mu vertex L_{xy} [cm]"         , "#mu_{1} N(tracker layers)" , "# events (2018)"   ),
-# #   Histogram2D("BestLooseMuonsVertex_PatDSA_Lxy_nTrackerLayers2"           , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 800 , 0 , 20    , 1e-1  , 1e8   , "#mu vertex L_{xy} [cm]"         , "#mu_{2} N(tracker layers)" , "# events (2018)"   ),
-# #   Histogram2D("BestLooseMuonsVertex_PatDSA_Lxy_maxTrackerLayers"          , "", False, False, True  , NormalizationType.to_lumi , 1  , 1  , 0 , 800 , 0 , 20    , 1e-1  , 1e8   , "#mu vertex L_{xy} [cm]"         , "max N(tracker layers)"     , "# events (2018)"   ),
-)
+histograms2D_LLPnanoAOD = ()
 
 histograms_muonMatching = (
   Histogram("Event_nSegmentMatchLooseMuons"             , "", False, True  , default_norm       , 1  , 0     , 15    , 1e-2*y_scale   , 1e9*y_scale  , "Number of segment matched loose PAT #mu" , "# events (2018)"   ),
@@ -433,16 +296,9 @@ histograms2D_muonMatching = (
 )
 
 histograms_genALPs = (
-  # Histogram("Event_nGenALP"                       , "", False, True  , default_norm      , 1  , 0     , 15    , 1e-2*y_scale   , 1e9*y_scale   , "Number of gen ALP"                     , "# events (2018)"   ),
-  # Histogram("GenALP_pt"                           , "", False, True  , default_norm      , 1  , 0     , 500   , 1e-1  , 1e8   , "Gen ALP p_{T} [GeV]"                            , "# events (2018)"   ),
-  # Histogram("GenALP_mass"                         , "", False, True  , default_norm      , 1  , 0     , 10    , 1e-1  , 1e8   , "Gen ALP mass [GeV]"                             , "# events (2018)"   ),
-  Histogram("GenALP_eta"                          , "", False, True  , default_norm     , 1  , 0     , 3    , 1e-6  , 1e4   , "Gen ALP #eta"                            , "# events (2018)"   ),
   Histogram("Event_nGenMuonFromALP"               , "", False, True  , default_norm     , 1  , 0     , 4     , 1e-6   , 1e4   , "# Gen #mu from ALP"     , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_index1"               , "", False, True  , default_norm     , 1  , 0     , 40    , 1e-4   , 1e3   , "Leading #mu from ALP index"             , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_index2"               , "", False, True  , default_norm     , 1  , 0     , 40    , 1e-4   , 1e3   , "Subleading #mu from ALP index"          , "# events (2018)"   ),
   Histogram("GenMuonFromALP_pdgId"                , "", False, True  , default_norm     , 1  , -100  , 100   , 1e-2   , 1e4   , "Gen #mu particle ID"                    , "# events (2018)"   ),
   Histogram("GenMuonFromALP_Lxy"                  , "", False, True  , default_norm     , 200, 0     , 1000  , 1e-8   , 1e1   , "Gen #mu L_{xy} [cm]"                    , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_Lxyz"                 , "", False, True  , default_norm     , 100, 0     , 600   , 1e-8   , 1e1   , "Gen #mu L_{xyz} [cm]"                   , "# events (2018)"   ),
   Histogram("GenMuonFromALP_properLxy"            , "", False, True  , default_norm     , 2  , 0     , 10    , 1e-2   , 1e4   , "Gen proper #mu L_{xy} [cm]"             , "# events (2018)"   ),
   Histogram("GenMuonFromALP_properLxyT"           , "", False, True  , default_norm     , 200, 0     , 1000  , 1e-8   , 1e1   , "Gen proper #mu L_{xy} [cm]"             , "# events (2018)"   ),
   Histogram("GenMuonFromALP_properLxyz"           , "", False, True  , default_norm     , 100, 0     , 600   , 1e-8   , 1e1   , "Gen proper #mu L_{xyz} [cm]"            , "# events (2018)"   ),
@@ -455,6 +311,27 @@ histograms_genALPs = (
   Histogram("GenMuonFromALP_RecoMatch2MinDPhi"    , "", False, True  , default_norm     , 1  , 0     , 0.5   , 1e-5   , 1e2   , "#Delta #Phi(Gen #mu, loose #mu)"        , "# events (2018)"   ),
   Histogram("GenMuonFromALP_RecoMatch1MinDEta"    , "", False, True  , default_norm     , 1  , 0     , 0.5   , 1e-5   , 1e2   , "#Delta #eta(Gen #mu, loose #mu)"        , "# events (2018)"   ),
   Histogram("GenMuonFromALP_RecoMatch2MinDEta"    , "", False, True  , default_norm     , 1  , 0     , 0.5   , 1e-5   , 1e2   , "#Delta #eta(Gen #mu, loose #mu)"        , "# events (2018)"   ),
+)
+
+histograms_genCollinearityStudy = (
+  Histogram("GenMuonFromALP_index1"               , "", False, True  , default_norm     , 1  , 0     , 40    , 1e-4   , 1e3   , "Leading #mu from ALP index"             , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_index2"               , "", False, True  , default_norm     , 1  , 0     , 40    , 1e-4   , 1e3   , "Subleading #mu from ALP index"          , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPSegmentMatchVertex_genPlaneAngle"            , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPSegmentMatchVertex_recoPlaneAngle"           , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPSegmentMatchVertex_etaSum"                   , "", False, True  , default_norm     , 10 , 0     , 7     , 1e-6   , 1e1   , "Dimuon |#eta^{#mu1}| + |#eta^{#mu2}|" , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmaxdPhi2SegmentMatchVertex_genPlaneAngle"    , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmaxdPhi2SegmentMatchVertex_recoPlaneAngle"   , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmaxdPhi2SegmentMatchVertex_etaSum"           , "", False, True  , default_norm     , 10 , 0     , 7     , 1e-6   , 1e1   , "Dimuon |#eta^{#mu1}| + |#eta^{#mu2}|" , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_genPlaneAngle"    , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_recoPlaneAngle"   , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_etaSum"           , "", False, True  , default_norm     , 10 , 0     , 7     , 1e-6   , 1e1   , "Dimuon |#eta^{#mu1}| + |#eta^{#mu2}|" , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_Lxy"                  , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_absCollinearityAngle" , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-5  , 1e2   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_absPtLxyDPhi1"        , "", False, False , default_norm        , 10 , 0     , 3.15  , 0     , 0.25  , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_absPtLxyDPhi2"        , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-6  , 1e3   , "#mu vertex |#Delta #phi_{#mu2}|"        , "# events (2018)"   ),
+)
+
+histograms_genMuonFromTopStudy = (
   Histogram("Event_nGenMuonFromW"                 , "", False, True  , default_norm     , 1  , 0     , 6     , 1e-6   , 1e4   , "# Gen #mu from W"                       , "# events (2018)"   ),
   Histogram("GenMuonFromW_index1"                 , "", False, True  , default_norm     , 1  , 0     , 40    , 1e-4   , 1e3   , "Leading #mu from W index"               , "# events (2018)"   ),
   Histogram("GenMuonFromW_index2"                 , "", False, True  , default_norm     , 1  , 0     , 40    , 1e-4   , 1e3   , "Subleading #mu from W index"            , "# events (2018)"   ),
@@ -465,19 +342,12 @@ histograms_genALPs = (
   Histogram("GenMuonFromW_RecoMatch2MinDPhi"      , "", False, True  , default_norm     , 1  , 0     , 0.5   , 1e-5   , 1e2   , "#Delta #Phi(Gen #mu, loose #mu)"        , "# events (2018)"   ),
   Histogram("GenMuonFromW_RecoMatch1MinDEta"      , "", False, True  , default_norm     , 1  , 0     , 0.5   , 1e-5   , 1e2   , "#Delta #eta(Gen #mu, loose #mu)"        , "# events (2018)"   ),
   Histogram("GenMuonFromW_RecoMatch2MinDEta"      , "", False, True  , default_norm     , 1  , 0     , 0.5   , 1e-5   , 1e2   , "#Delta #eta(Gen #mu, loose #mu)"        , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPSegmentMatchVertex_genPlaneAngle"            , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPSegmentMatchVertex_recoPlaneAngle"           , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPSegmentMatchVertex_etaSum"                   , "", False, True  , default_norm     , 10 , 0     , 7     , 1e-6   , 1e1   , "Dimuon |#eta^{#mu1}| + |#eta^{#mu2}|" , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPmaxdPhi2SegmentMatchVertex_genPlaneAngle"    , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPmaxdPhi2SegmentMatchVertex_recoPlaneAngle"   , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPmaxdPhi2SegmentMatchVertex_etaSum"           , "", False, True  , default_norm     , 10 , 0     , 7     , 1e-6   , 1e1   , "Dimuon |#eta^{#mu1}| + |#eta^{#mu2}|" , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_genPlaneAngle"    , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_recoPlaneAngle"   , "", False, True  , default_norm     , 10 , 0     , 3     , 1e-6   , 1e1   , "#phi between dimuon and ALP plane"    , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALPmindPhi2SegmentMatchVertex_etaSum"           , "", False, True  , default_norm     , 10 , 0     , 7     , 1e-6   , 1e1   , "Dimuon |#eta^{#mu1}| + |#eta^{#mu2}|" , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALegmentMatch_hasLeadingMuon"                   , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from ALP"                , "# events (2018)"   ),
-  Histogram("LooseMuonsFromALegmentMatch_hmu_hasLeadingMuon"               , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from ALP"                , "# events (2018)"   ),
-  Histogram("LooseMuonsFromWSegmentMatch_hasLeadingMuon"                   , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from W boson"            , "# events (2018)"   ),
-  Histogram("LooseMuonsFromWSegmentMatch_hmu_hasLeadingMuon"               , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from W boson"            , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPSegmentMatch_hasLeadingMuon"     , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from ALP"                , "# events (2018)"   ),
+  Histogram("LooseMuonsFromALPSegmentMatch_hmu_hasLeadingMuon" , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from ALP"                , "# events (2018)"   ),
+  Histogram("LooseMuonsFromWSegmentMatch_hasLeadingMuon"       , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from W boson"            , "# events (2018)"   ),
+  Histogram("LooseMuonsFromWSegmentMatch_hmu_hasLeadingMuon"   , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from W boson"            , "# events (2018)"   ),
+  Histogram("LooseMuonsFromWSegmentMatch_hmu_hasLeadingMuon"   , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from W boson"            , "# events (2018)"   ),
+  Histogram("LooseMuonsFromWSegmentMatch_pt"                   , "", False, True  , default_norm     , 20 , 0     , 500   , 1e-6  , 1e2    , "loose #mu p_{T} [GeV]"                 , "# events (2018)"   ),
   Histogram("Event_nTightMuonsFromALPSegmentMatch"             , "", False, True  , default_norm     , 1  , 0     , 5     , 1e-2   , 1e4   , "# tight #mu from ALP"                 , "# events (2018)"   ),
   Histogram("TightMuonsFromALPSegmentMatch_hasLeadingMuon"     , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from ALP"                , "# events (2018)"   ),
   Histogram("TightMuonsFromALPSegmentMatch_hmu_hasLeadingMuon" , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from ALP"                , "# events (2018)"   ),
@@ -488,6 +358,9 @@ histograms_genALPs = (
   Histogram("TightMuonsFromWSegmentMatch_hmu_hasLeadingMuon"   , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from W boson"            , "# events (2018)"   ),
   Histogram("TightMuonsFromWSegmentMatch_index"                , "", False, True  , default_norm     , 1  , 0     , 10    , 1e-4   , 1e2   , "Tight #mu from W index"               , "# events (2018)"   ),
   Histogram("TightMuonsFromWSegmentMatch_hmu_index"            , "", False, True  , default_norm     , 1  , 0     , 10    , 1e-4   , 1e2   , "Tight #mu from W index"               , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDR"   , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta R (gen #mu, loose #mu)"         , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDPhi" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #Phi (gen #mu, loose #mu)"      , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDEta" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #eta (gen #mu, loose #mu)"      , "# events (2018)"   ),
 )
 
 histograms2D_genALPs = ()
@@ -499,13 +372,10 @@ genDimuonCollectionNames = [
 ]
 genmuonCollectionNames = [
   "LooseMuonsFromALP",
-  "LooseMuonsFromALPmindPhi2",
   "LooseMuonsNotFromALP",
-  "LooseMuonsFromW",
 ]
 genmuonVertexCollectionNames = [
   "LooseMuonsFromALP",
-  "LooseMuonsFromALPmindPhi2",
   "LooseMuonsNotFromALP",
   "LooseDimuonsNotFromALP",
 ]
@@ -548,8 +418,6 @@ for method in genMuonMatchingMethods:
       Histogram(collectionName+"_deltaR"       , "", False, True  , default_norm     , 10 , 0     , 10    , 1e-6  , 1e2   , "loose #Delta R (#mu #mu)"              , "# events (2018)"   ),
       Histogram(collectionName+"_outerDeltaR"  , "", False, True  , default_norm     , 10 , 0     , 10    , 1e-6  , 1e2   , "loose outer #Delta R (#mu #mu)"        , "# events (2018)"   ),
       Histogram(collectionName+"_genMuonMinDR" , "", False, True  , default_norm     , 1  , 0     , 0.4   , 1e-6  , 1e2   , "min #Delta R (loose #mu, gen #mu)"              , "# events (2018)"   ),
-      # Histogram(collectionName+"_pfRelIso04all"   , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-2  , 1e8   , "loose #mu I_{PF}^{rel} ( #Delta R < 0.4 )"      , "# events (2018)"   ),
-      # Histogram(collectionName+"_tkRelIso"        , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-2  , 1e8   , "loose #mu I_{tk}^{rel} ( #Delta R < 0.3 )"      , "# events (2018)"   ),
       Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDR"   , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta R (gen #mu, loose #mu)"         , "# events (2018)"   ),
       Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDPhi" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #Phi (gen #mu, loose #mu)"      , "# events (2018)"   ),
       Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDEta" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #eta (gen #mu, loose #mu)"      , "# events (2018)"   ),
@@ -580,7 +448,6 @@ for method in genMuonMatchingMethods:
         Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 20 , 0     , 10    , 1e-6  , 1e3   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_subleadingPt"         , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex subleading p_{T} [GeV]"      , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_minDxyPVTraj"         , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex min d_{xy} [cm]"             , "# events (2018)"   ),
@@ -597,58 +464,19 @@ for method in genMuonMatchingMethods:
         Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Muon1"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e6   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Muon2"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e6   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Muon2"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e6   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_pfRelIso04all1"                  , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-8  , 1e6   , "#mu_{1} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_pfRelIso04all2"                  , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-8  , 1e6   , "#mu_{2} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_tkRelIsoMuon1"                   , "", False, True  , default_norm        , 4  , 0     , 10    , 1e-3  , 1e6   , "#mu_{1} I_{tk}^{rel} ( #Delta R < 0.3 )"    , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_tkRelIsoMuon2"                   , "", False, True  , default_norm        , 4  , 0     , 10    , 1e-3  , 1e6   , "#mu_{2} I_{tk}^{rel} ( #Delta R < 0.3 )"    , "# events (2018)"   ),
       )
-
-histogramsRatio_plots = [
-
-  # ( Histogram("SegmentDRMatchMuon_pt"                   , "", False, False  , default_norm   , 40 , 0     , 500   , 0    , 1.5 , "p_{T}^{#mu} [GeV]"         , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_pt"                     , "", False, False  , default_norm   , 40 , 0     , 500   , 0    , 1.5 , "p_{T}^{#mu} [GeV]"         , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentDRMatchMuon_eta"                  , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#eta^{#mu}"                , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_eta"                    , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#eta^{#mu}"                , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentDRMatchMuon_phi"                  , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#phi^{#mu}"                , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_phi"                    , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#phi^{#mu}"                , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentDRMatchMuon_dxyPVTraj"            , "", False, False  , default_norm   , 1  , 0     , 5     , 0    , 1.5 , "d_{xy}^{#mu} [cm]"         , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_dxyPVTraj"              , "", False, False  , default_norm   , 1  , 0     , 5     , 0    , 1.5 , "d_{xy}^{#mu} [cm]"         , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentDRMatchMuon_dxyPVTrajSig"         , "", False, False  , default_norm   , 50 , 0     , 250   , 0    , 1.5 , "d_{xy}^{#mu} / #sigma_{dxy}^{#mu}" , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_dxyPVTrajSig"           , "", False, False  , default_norm   , 50 , 0     , 250   , 0    , 1.5 , "d_{xy}^{#mu} / #sigma_{dxy}^{#mu}" , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentDRMatchMuon_ip3DPVSigned"         , "", False, False  , default_norm   , 50 , 0     , 500   , 0    , 1.5 , "#mu 3D IP [cm]"            , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_ip3DPVSigned"           , "", False, False  , default_norm   , 50 , 0     , 500   , 0    , 1.5 , "#mu 3D IP [cm]"            , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentDRMatchMuon_ip3DPVSignedSig"      , "", False, False  , default_norm   , 50 , 0     , 200   , 0    , 1.5 , "#mu 3D IP / #sigma_{3DIP}" , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_ip3DPVSignedSig"        , "", False, False  , default_norm   , 50 , 0     , 200   , 0    , 1.5 , "#mu 3D IP / #sigma_{3DIP}" , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentDRMatchMuon_matchingRatio"        , "", False, False  , default_norm   , 10 , 0     , 1.033 , 0    , 1.5 , "Muon segment matches / DSA segments"    , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_matchingRatio"          , "", False, False  , default_norm   , 10 , 0     , 1.033 , 0    , 1.5 , "Muon segment matches / DSA segments"    , "Outer #Delta R-matched efficiency"   ) ),
-  
-  # ( Histogram("SegmentOuterDRMatchMuon_pt"              , "", False, False  , default_norm   , 40 , 0     , 500   , 0    , 1.5 , "p_{T}^{#mu} [GeV]"         , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_pt"                     , "", False, False  , default_norm   , 40 , 0     , 500   , 0    , 1.5 , "p_{T}^{#mu} [GeV]"         , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentOuterDRMatchMuon_eta"             , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#eta^{#mu}"                , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_eta"                    , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#eta^{#mu}"                , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentOuterDRMatchMuon_phi"             , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#phi^{#mu}"                , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_phi"                    , "", False, False  , default_norm   , 10  , -3   , 3     , 0    , 1.5 , "#phi^{#mu}"                , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentOuterDRMatchMuon_dxyPVTraj"       , "", False, False  , default_norm   , 1  , 0     , 5     , 0    , 1.5 , "d_{xy}^{#mu} [cm]"         , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_dxyPVTraj"              , "", False, False  , default_norm   , 1  , 0     , 5     , 0    , 1.5 , "d_{xy}^{#mu} [cm]"         , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentOuterDRMatchMuon_dxyPVTrajSig"    , "", False, False  , default_norm   , 50 , 0     , 250   , 0    , 1.5 , "d_{xy}^{#mu} / #sigma_{dxy}^{#mu}" , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_dxyPVTrajSig"           , "", False, False  , default_norm   , 50 , 0     , 250   , 0    , 1.5 , "d_{xy}^{#mu} / #sigma_{dxy}^{#mu}" , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentOuterDRMatchMuon_ip3DPVSigned"    , "", False, False  , default_norm   , 50 , 0     , 500   , 0    , 1.5 , "#mu 3D IP [cm]"            , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_ip3DPVSigned"           , "", False, False  , default_norm   , 50 , 0     , 500   , 0    , 1.5 , "#mu 3D IP [cm]"            , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentOuterDRMatchMuon_ip3DPVSignedSig" , "", False, False  , default_norm   , 50 , 0     , 200   , 0    , 1.5 , "#mu 3D IP / #sigma_{3DIP}" , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_ip3DPVSignedSig"        , "", False, False  , default_norm   , 50 , 0     , 200   , 0    , 1.5 , "#mu 3D IP / #sigma_{3DIP}" , "Outer #Delta R-matched efficiency"   ) ),
-  # ( Histogram("SegmentOuterDRMatchMuon_matchingRatio"   , "", False, False  , default_norm   , 10 , 0     , 1.033 , 0    , 1.5 , "Muon segment matches / DSA segments"    , "Outer #Delta R-matched efficiency"   ),
-  #   Histogram("SegmentMatchMuon_matchingRatio"          , "", False, False  , default_norm   , 10 , 0     , 1.033 , 0    , 1.5 , "Muon segment matches / DSA segments"    , "Outer #Delta R-matched efficiency"   ) ),
-]
-
-histogramsRatio = []
-if plot_ratio_hists:
-  histogramsRatio = histogramsRatio_plots
 
 if plots_from_LLPNanoAOD:
   histograms += LLPnanoAOD_histograms
 
 if plot_genALP_info:
   histograms = histograms + histograms_genALPs
+
+if plot_genCollinearityStudy:
+  histograms = histograms + histograms_genCollinearityStudy
+
+if plot_gengenMuonFromTopStudy:
+  histograms = histograms + histograms_genMuonFromTopStudy
 
 if plot_muonMatching_info:
   histograms = histograms + histograms_muonMatching
@@ -694,144 +522,28 @@ data_samples = (
   ),
 )
 
-signal_samples = (
-  
-  # Signal
-  # # Sample(
-  # #   name="tta_mAlp-0p35GeV_ctau-1e-5mm",
-  # #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e-5mm/{skim}/{hist_path}/histograms.root",
-  # #   type=SampleType.signal,
-  # #   cross_sections=cross_sections,
-  # #   line_alpha=1,
-  # #   line_style=1,
-  # #   fill_alpha=0,
-  # #   marker_size=0,
-  # #   line_color=ROOT.kMagenta,
-  # #   legend_description="m_{a} = 0.35 GeV, c#tau_{a} = 10 nm",
-  # # ),
-  
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e0mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e0mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=1,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kCyan,
-  #   legend_description="m_{a} = 0.35 GeV, c#tau_{a} = 1 mm",
-  # ),
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e1mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e1mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=1,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kCyan,
-  #   legend_description="m_{a} = 0.35 GeV, c#tau_{a} = 1 cm",
-  # ),
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e2mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e2mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=1,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kOrange,
-  #   legend_description="m_{a} = 0.35 GeV, c#tau_{a} = 10 cm",
-  # ),
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e3mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e3mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=1,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kOrange,
-  #   legend_description="m_{a} = 0.35 GeV, c#tau_{a} = 1 m",
-  # ),
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e5mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=1, 
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kOrange,
-  #   legend_description="m_{a} = 0.35 GeV, c#tau_{a} = 100 m",
-  # ),
-
-  Sample(
-    name="tta_mAlp-1GeV_ctau-1e0mm",
-    file_path=f"{base_path}/signals/tta_mAlp-1GeV_ctau-1e0mm/{skim}/{hist_path}/histograms.root",
-    type=SampleType.signal,
-    cross_sections=cross_sections,
-    line_alpha=1,
-    line_style=1,
-    fill_alpha=0,
-    marker_size=0,
-    line_color=ROOT.kBlue,
-    legend_description="m_{a} = 1 GeV, c#tau_{a} = 1 mm",
-  ),
-  Sample(
-    name="tta_mAlp-1GeV_ctau-1e1mm",
-    file_path=f"{base_path}/signals/tta_mAlp-1GeV_ctau-1e1mm/{skim}/{hist_path}/histograms.root",
-    type=SampleType.signal,
-    cross_sections=cross_sections,
-    line_alpha=1,
-    line_style=1,
-    fill_alpha=0,
-    marker_size=0,
-    line_color=ROOT.kGreen+1,
-    legend_description="m_{a} = 1 GeV, c#tau_{a} = 1 cm",
-  ),
-  Sample(
-    name="tta_mAlp-1GeV_ctau-1e2mm",
-    file_path=f"{base_path}/signals/tta_mAlp-1GeV_ctau-1e2mm/{skim}/{hist_path}/histograms.root",
-    type=SampleType.signal,
-    cross_sections=cross_sections,
-    line_alpha=1,
-    line_style=1,
-    fill_alpha=0,
-    marker_size=0,
-    line_color=ROOT.kOrange+1,
-    legend_description="m_{a} = 1 GeV, c#tau_{a} = 10 cm",
-  ),
-  # Sample(
-  #   name="tta_mAlp-1GeV_ctau-1e3mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-1GeV_ctau-1e3mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=1,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kRed+1,
-  #   legend_description="m_{a} = 1 GeV, c#tau_{a} = 1 m",
-  # ),
-  # Sample(
-  #   name="tta_mAlp-1GeV_ctau-1e5mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-1GeV_ctau-1e5mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=1, 
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kRed+2,
-  #   legend_description="m_{a} = 1 GeV, c#tau_{a} = 100 m",
-  # ),
-)
+signals = {
+  "tta_mAlp-1GeV_ctau-1e0mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
+  "tta_mAlp-1GeV_ctau-1e1mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
+  "tta_mAlp-1GeV_ctau-1e2mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-1GeV_ctau-1e3mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
+}
+signal_samples = []
+for signal_name, signal_info in signals.items():
+  signal_samples.append(
+    Sample(
+      name=signal_name,
+      file_path=f"{base_path}/signals/{signal_name}/{skim}/{hist_path}/histograms.root",
+      type=SampleType.signal,
+      cross_sections=cross_sections,
+      line_alpha=1,
+      line_style=1,
+      fill_alpha=0,
+      marker_size=0,
+      line_color=signal_info["color"],
+      legend_description=signal_info["label"],
+    )
+  )
 
 background_samples = (
   
@@ -842,7 +554,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kRed+1,
     fill_color=TColor.GetColor(color_palette_petroff_10[0]),
     fill_alpha=1.0,
     marker_size=0,
@@ -855,7 +566,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kRed+3,
     fill_color=TColor.GetColor(color_palette_petroff_10[1]),
     fill_alpha=1.0,
     marker_size=0,
@@ -868,7 +578,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kRed+4,
     fill_color=TColor.GetColor(color_palette_petroff_10[2]),
     fill_alpha=1.0,
     marker_size=0,
@@ -935,7 +644,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kMagenta+1,
     fill_color=TColor.GetColor(color_palette_petroff_10[5]),
     fill_alpha=0.7,
     marker_size=0,
@@ -950,7 +658,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kMagenta+1,
     fill_color=TColor.GetColor(color_palette_petroff_10[5]),
     fill_alpha=0.7,
     marker_size=0,
@@ -966,7 +673,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kViolet+1,
     fill_color=TColor.GetColor(color_palette_petroff_10[6]),
     fill_alpha=0.7,
     marker_size=0,
@@ -979,7 +685,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kYellow+3,
     fill_color=TColor.GetColor(color_palette_petroff_10[7]),
     fill_alpha=0.7,
     marker_size=0,
@@ -991,7 +696,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kGray,
     fill_color=TColor.GetColor(color_palette_petroff_10[8]),
     fill_alpha=0.7,
     marker_size=0,
@@ -1004,7 +708,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kYellow+1,
     fill_color=TColor.GetColor(color_palette_petroff_10[9]),
     fill_alpha=0.7,
     marker_size=0,
@@ -1029,7 +732,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kBlue+1,
     fill_color=TColor.GetColor(color_palette_petroff_8[1]),
     fill_alpha=1.0,
     marker_size=0,
@@ -1042,7 +744,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kGray+1,
     fill_color=TColor.GetColor(color_palette_petroff_8[2]),
     fill_alpha=0.7,
     marker_size=0,
@@ -1054,7 +755,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kGray+2,
     fill_color=TColor.GetColor(color_palette_petroff_8[3]),
     fill_alpha=0.7,
     marker_size=0,
@@ -1066,7 +766,6 @@ background_samples = (
     type=SampleType.background,
     cross_sections=cross_sections,
     line_alpha=0,
-    # fill_color=ROOT.kGray+3,
     fill_color=TColor.GetColor(color_palette_petroff_8[4]),
     fill_alpha=0.7,
     marker_size=0,
