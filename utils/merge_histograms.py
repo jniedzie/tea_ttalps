@@ -6,10 +6,6 @@ def main():
   # base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
   base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
   
-  # skim=""
-  # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
-  # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
-
   # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
   skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 

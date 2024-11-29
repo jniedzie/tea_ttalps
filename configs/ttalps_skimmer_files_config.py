@@ -8,21 +8,12 @@ base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
 
 ### Input skims ###
 
-# input_skim = "skimmed_looseSemimuonic_tightMuon"
-# input_skim = "skimmed_looseSemimuonic_tightMuon_newBtag"
-# input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet"
-# input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
-
 # Loose semimuonic skim
 input_skim = "skimmed_looseSemimuonicv1"
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # input_skim = "skimmed_looseSemimuonicv1_LLPtrigger"
 
 ### Output skims ###
-
-# CRs
-# output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
-# output_skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
 # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
 output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
