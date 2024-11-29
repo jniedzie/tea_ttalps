@@ -138,7 +138,6 @@ int main(int argc, char **argv) {
   cutFlowManager->Print();
   histogramsHandler->SaveHistograms();
 
-  std:cout << "Dimuon cut flow for all muonVertexCollections" << std::endl;
   ttAlpsSelections->PrintDimuonCutFlow(cutFlowManager);
 
   auto &logger = Logger::GetInstance();
