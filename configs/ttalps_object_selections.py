@@ -23,7 +23,7 @@ GoodDimuonVertexPATCuts = {
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 GoodDimuonVertexPATDSACuts = {
   "maxDCA": 2.0,
@@ -37,7 +37,7 @@ GoodDimuonVertexPATDSACuts = {
   # "maxdisplacedTrackIso03Dimuon": 0.075, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 GoodDimuonVertexDSACuts = {
   "maxDCA": 2.0,
@@ -50,7 +50,7 @@ GoodDimuonVertexDSACuts = {
   "maxOuterDEta": 9999.0,
   "maxOuterDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 
 # good object definitions
@@ -85,7 +85,7 @@ SRDimuonVertexPATCuts = {
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 SRDimuonVertexPATDSACuts = {
   "maxDCA": 2.0,
@@ -100,7 +100,7 @@ SRDimuonVertexPATDSACuts = {
   "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 SRDimuonVertexDSACuts = {
   "maxDCA": 2.0,
@@ -115,7 +115,7 @@ SRDimuonVertexDSACuts = {
   "maxOuterDEta": 9999.0,
   "maxOuterDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 
 # good object definitions
@@ -144,7 +144,7 @@ JPsiDimuonVertexPATCuts = {
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 JPsiDimuonVertexPATDSACuts = {
   "maxDCA": 2.0,
@@ -159,7 +159,7 @@ JPsiDimuonVertexPATDSACuts = {
   # "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
 JPsiDimuonVertexDSACuts = {
   "maxDCA": 2.0,
@@ -173,5 +173,5 @@ JPsiDimuonVertexDSACuts = {
   "maxOuterDEta": 9999.0,
   "maxOuterDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
-  "minVxy": 0.0,
+  "minLxy": 0.0,
 }
