@@ -49,7 +49,7 @@ TTAlpsDimuonSelections::TTAlpsDimuonSelections(){
     {"DPhiBetweenMuonpTAndLxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDPhiBetweenMuonpTAndLxyCut(v); }},
     {"DCACut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDCACut(v); }},
     {"Chi2Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChi2Cut(v); }},
-    {"VxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesVxyCut(v); }},
+    {"LxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLxyCut(v); }},
     {"CollinearityAngleCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesCollinearityAngleCut(v); }},
     {"DeltaEtaCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaEtaCut(v); }},
     {"DeltaPhiCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPhiCut(v); }},
@@ -127,9 +127,9 @@ bool TTAlpsDimuonSelections::PassesChi2Cut(shared_ptr<NanoDimuonVertex> dimuonVe
   return true;
 }
 
-bool TTAlpsDimuonSelections::PassesVxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+bool TTAlpsDimuonSelections::PassesLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
-  if((float)dimuonVertex->Get("vxy") < dimuonVertexCuts["minVxy"]) return false;
+  if((float)dimuonVertex->GetLxyFromPV() < dimuonVertexCuts["minLxy"]) return false;
   return true;
 }
 
@@ -158,7 +158,7 @@ bool TTAlpsDimuonSelections::PassesDeltaPhiCut(shared_ptr<NanoDimuonVertex> dimu
   string cutName = "maxDPhi";
   if(category == "DSA") {
     deltaPhi = dimuonVertex->GetOuterDeltaPhi();
-    cutName = "maxOuterDR";
+    cutName = "maxOuterDPhi";
   }
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if(deltaPhi > dimuonVertexCuts[cutName]) return false;

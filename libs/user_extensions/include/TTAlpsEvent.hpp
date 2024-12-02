@@ -32,7 +32,7 @@ class TTAlpsEvent {
   
   std::vector<int> GetFiveFirstMotherIDsOfParticle(std::shared_ptr<PhysicsObject> particle);
 
-  float GetPhiAngleBetweenMuonsAndALP(std::shared_ptr<PhysicsObject> muon1, std::shared_ptr<PhysicsObject> muon2, std::shared_ptr<PhysicsObject> alp, bool recoMuon);
+  float GetPhiAngleBetweenDimuonAndALP(std::shared_ptr<PhysicsObject> muon1, std::shared_ptr<PhysicsObject> muon2, std::shared_ptr<PhysicsObject> alp, bool recoMuon);
 
   std::shared_ptr<PhysicsObject> GetLeadingMuon(std::shared_ptr<PhysicsObjects> muonCollection);
   bool IsLeadingMuonInCollection(std::shared_ptr<PhysicsObjects> collection, std::shared_ptr<PhysicsObjects> allMuons);

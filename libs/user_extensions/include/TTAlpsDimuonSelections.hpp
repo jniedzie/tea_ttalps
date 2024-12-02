@@ -22,7 +22,7 @@ class TTAlpsDimuonSelections {
   bool PassesDPhiBetweenMuonpTAndLxyCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDCACut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesChi2Cut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
-  bool PassesVxyCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
+  bool PassesLxyCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesCollinearityAngleCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaEtaCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaPhiCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);

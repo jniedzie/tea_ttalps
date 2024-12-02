@@ -938,8 +938,8 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromALPsHistograms(const shared_ptr<Ev
       if(abs(Lxyz.X()) < 0.1) {
         int motherIndex = asNanoGenParticle(genMuonsFromALP->first)->GetMotherIndex();
         auto ALP = genParticles->at(motherIndex);
-        float recoAngle = asTTAlpsEvent(event)->GetPhiAngleBetweenMuonsAndALP(looseMatchedMuonsFromALP->first, looseMatchedMuonsFromALP->second, ALP, true);
-        float genAngle = asTTAlpsEvent(event)->GetPhiAngleBetweenMuonsAndALP(genMuonsFromALP->first, genMuonsFromALP->second, ALP, false);
+        float recoAngle = asTTAlpsEvent(event)->GetPhiAngleBetweenDimuonAndALP(looseMatchedMuonsFromALP->first, looseMatchedMuonsFromALP->second, ALP, true);
+        float genAngle = asTTAlpsEvent(event)->GetPhiAngleBetweenDimuonAndALP(genMuonsFromALP->first, genMuonsFromALP->second, ALP, false);
         muonFromALPsVertexCollectionName = "LooseMuonsFromALP"+matchingMethod+"MatchVertex";
         histogramsHandler->Fill(muonFromALPsVertexCollectionName+"_genPlaneAngle", abs(genAngle), weight);
         histogramsHandler->Fill(muonFromALPsVertexCollectionName+"_recoPlaneAngle", abs(recoAngle), weight * muon1Weight * muon2Weight);
