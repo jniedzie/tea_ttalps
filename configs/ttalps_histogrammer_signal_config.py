@@ -8,7 +8,7 @@ printEveryNevents = 10000
 runDefaultHistograms = True
 runCustomTTAlpsHistograms = False
 runTriggerHistograms = False
-runLLPTriggerHistograms = True
+runLLPTriggerHistograms = False
 runPileupHistograms = False
 
 # LLPNanoAODHistograms: 
@@ -27,7 +27,6 @@ useLooseIsoPATMuons = False
 # dimuonSelection = "GoodDimuonVertex"
 dimuonSelection = "SRDimuonVertex"
 
-# weightsBranchName = ""
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 specialBranchSizes = {}

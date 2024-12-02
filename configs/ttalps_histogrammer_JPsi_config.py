@@ -8,6 +8,7 @@ printEveryNevents = 10000
 runDefaultHistograms = True
 runCustomTTAlpsHistograms = False
 runTriggerHistograms = False
+runLLPTriggerHistograms = False
 runPileupHistograms = False
 
 # LLPNanoAODHistograms: 
@@ -23,7 +24,6 @@ runLLPNanoAODVertexHistograms = False
 useLooseIsoPATMuons = False
 dimuonSelection = "JPsiDimuonVertex"
 
-# weightsBranchName = ""
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 specialBranchSizes = {
@@ -114,8 +114,8 @@ for muonCollectionName in muonCollectionNames:
     (muonCollectionName  , "pt"               , 2000  , 0     , 1000  , ""  ),
     (muonCollectionName  , "eta"              , 300   , -3    , 3     , ""  ),
     (muonCollectionName  , "phi"              , 300   , -3    , 3     , ""  ),
+    (muonCollectionName  , "dxy"              , 20000  , -2000    , 2000   , ""  ),
     (muonCollectionName  , "absDxyPVTraj"     , 10000  , 0        , 2000   , ""  ),
-    (muonCollectionName  , "dxyPVTraj"        , 20000  , -2000    , 2000   , ""  ),
     (muonCollectionName  , "dxyPVTrajErr"     , 10000  , 0    , 2000   , ""  ),
     (muonCollectionName  , "dxyPVTrajSig"     , 10000  , 0    , 2000   , ""  ),
     (muonCollectionName  , "ip3DPVSigned"     , 20000  , -2000    , 2000   , ""  ),
