@@ -31,10 +31,8 @@ void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> c
 
 void TTAlpsSelections::RegisterInitialDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager) {
   for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
-    if (!cutFlowManager->HasCut("initial", collectionName)) {
-      cutFlowManager->RegisterCollection(collectionName);
-      cutFlowManager->RegisterCut("initial", collectionName);
-    }
+    cutFlowManager->RegisterCollection(collectionName);
+    cutFlowManager->RegisterCut("initial", collectionName);
   }
 }
 

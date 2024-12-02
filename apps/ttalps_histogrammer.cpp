@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
 
   // check if cutflowmanager has cut "initial"
-  if (!cutFlowManager->HasCut("initial")) cutFlowManager->RegisterCut("initial");
+  cutFlowManager->RegisterCut("initial");
   ttAlpsSelections->RegisterInitialDimuonCuts(cutFlowManager);
   ttAlpsSelections->RegisterDimuonSelections(cutFlowManager);
   
@@ -73,9 +73,12 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+          }
+    bool passesDimuonSelections = false;
+    if (runLLPNanoAODHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
-      bool passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager);
+      passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager);
     }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
@@ -110,7 +113,7 @@ int main(int argc, char **argv) {
     }
 
     if (runLLPTriggerHistograms) {
-      if(ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager)) {
+      if(passesDimuonSelections) {
         if(ttAlpsSelections->PassesSingleMuonTrigger(event)) {
           ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "SingleMuonTrigger");
         } 
