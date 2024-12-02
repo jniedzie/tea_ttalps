@@ -11,19 +11,30 @@
 #include "EventProcessor.hpp"
 #include "Helpers.hpp"
 #include "PhysicsObject.hpp"
+#include "TTAlpsDimuonSelections.hpp"
 
 class TTAlpsSelections {
  public:
   TTAlpsSelections();
   
-  // Selections targetting semi-leptonic ttbar + two muons. Requires:
+  // Selections targetting SR semi-leptonic ttbar + two muons. Requires:
   // - 1 good e/μ (the top-lepton)
   // - at least 2 additional good muons (different than the top-lepton)
   // - at least 4 good jets
   // - at least 1 good b-tagged jet
   // - some amount of MET
+  // - at least one good dimuon pair with mass excluding the JPsi window
   bool PassesSignalLikeSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   void RegisterSignalLikeSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
+  
+  void RegisterInitialDimuonCuts(std::shared_ptr<CutFlowManager> cutFlowManager);
+  void RegisterDimuonSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
+  bool PassesDimuonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+  void PrintDimuonCutFlow(std::shared_ptr<CutFlowManager> cutFlowManager);
+  void SaveDimuonCutFlows(std::shared_ptr<CutFlowManager> cutFlowManager);
+
+  bool PassesSingleMuonTrigger(const std::shared_ptr<Event> event);
+  bool PassesDoubleMuonTrigger(const std::shared_ptr<Event> event);
 
   // Selections targetting semi-leptonic ttbar, and additional leptons. Requires:
   // - 1 good e/μ (the top-lepton)
@@ -49,6 +60,11 @@ class TTAlpsSelections {
  private:
   std::unique_ptr<EventProcessor> eventProcessor;
   std::map<std::string, float> muonMatchingParams;
+  std::map<std::string, std::vector<std::string>> muonVertexCollections;
+
+  bool PassesDimuonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string collectionName, std::vector<std::string> vertexCuts);
+
+  std::vector<std::string> triggerWarningsPrinted;
 
 };
 

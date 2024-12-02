@@ -41,16 +41,19 @@ int main(int argc, char **argv) {
   auto histogramsHandler = make_shared<HistogramsHandler>();
   auto histogramFiller = make_unique<HistogramsFiller>(histogramsHandler);
   auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(histogramsHandler);
+  auto ttAlpsSelections = make_unique<TTAlpsSelections>();
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
-  bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runPileupHistograms;
+  bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runLLPTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
   bool runLLPNanoAODVertexHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runCustomTTAlpsHistograms", runCustomTTAlpsHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
+  config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
+  config.GetValue("runLLPNanoAOD2DHistograms", runLLPNanoAOD2DHistograms);
   config.GetValue("runMuonMatchingHistograms", runMuonMatchingHistograms);
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runLLPNanoAODVertexHistograms", runLLPNanoAODVertexHistograms);
@@ -58,17 +61,25 @@ int main(int argc, char **argv) {
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
 
   // check if cutflowmanager has cut "initial"
-  if (!cutFlowManager->HasCut("initial")) cutFlowManager->RegisterCut("initial");
+  cutFlowManager->RegisterCut("initial");
+  ttAlpsSelections->RegisterInitialDimuonCuts(cutFlowManager);
+  ttAlpsSelections->RegisterDimuonSelections(cutFlowManager);
   
   info() << "Starting event loop..." << endl;
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
-
+    
     if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
+      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+          }
+    bool passesDimuonSelections = false;
+    if (runLLPNanoAODHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms) {
+      // To register the dimuon cutflow
+      ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
+      passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager);
     }
-
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
       ttalpsHistogramsFiller->FillNormCheck(event);
@@ -84,7 +95,7 @@ int main(int argc, char **argv) {
     if (runLLPNanoAOD2DHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlps2DVariablesFromLLPNanoAOD(event);      
     }
-    if(runMuonMatchingHistograms){
+    if(runMuonMatchingHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonEfficiencyCollections(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsMuonMatchingVariables(event);
     }
@@ -101,6 +112,18 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
     }
 
+    if (runLLPTriggerHistograms) {
+      if(passesDimuonSelections) {
+        if(ttAlpsSelections->PassesSingleMuonTrigger(event)) {
+          ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "SingleMuonTrigger");
+        } 
+        if(ttAlpsSelections->PassesDoubleMuonTrigger(event)) {
+          ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "DoubleMuonTrigger");
+        } 
+      }
+    }
+
+
     if (runPileupHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
       histogramFiller->FillDefaultVariables(event);
@@ -113,9 +136,12 @@ int main(int argc, char **argv) {
 
   if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();
   if(runDefaultHistograms || runPileupHistograms) histogramFiller->FillCutFlow(cutFlowManager);
+  if(runDefaultHistograms) ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager);
   
   cutFlowManager->Print();
   histogramsHandler->SaveHistograms();
+
+  ttAlpsSelections->PrintDimuonCutFlow(cutFlowManager);
 
   auto &logger = Logger::GetInstance();
   logger.Print();

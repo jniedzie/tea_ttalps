@@ -1,4 +1,4 @@
-from ttalps_samples_list import backgrounds2018, signals2018, data2018
+from ttalps_samples_list import backgrounds2018, signals2018, data2018, signals2018_1GeV
 import os
 
 def main():
@@ -6,15 +6,27 @@ def main():
   # base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
   base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
   
-  # skim=""
-  # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
-  # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
-  skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
+  # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
+  skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+
+  # For signal like skim with Dimuon triggers for LLP trigger study
+  # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
+
+  # Loose semimuonic skim
+  # skim = "skimmed_looseSemimuonicv1"
+
+  # Loose semimuonic skim with Dimuon triggers for LLP trigger study
+  # skim = "skimmed_looseSemimuonicv1_LLPtrigger"
   
-  # hist_path = "histograms"
-  hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+  # Default settings
+  # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+  # SR dimuon cuts applied
+  hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
+  # JPsi dimuon cuts applied
+  # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
   
-  sample_paths = backgrounds2018 + signals2018 + data2018
+  # sample_paths = backgrounds2018 + signals2018_1GeV + data2018
+  sample_paths = signals2018_1GeV
   
   for sample_path in sample_paths:
     print(f"{sample_path=}")

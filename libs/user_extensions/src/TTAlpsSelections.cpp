@@ -18,10 +18,31 @@ TTAlpsSelections::TTAlpsSelections(){
   } catch (const Exception &e) {
     warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
+  try {
+    config.GetMap("muonVertexCollections", muonVertexCollections);
+  } catch (const Exception &e) {
+    info() << "Couldn't read muonVertexCollections from config file - no muon vertex collection selections can be made" << endl;
+  }
 }
 
 void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> cutFlowManager) {
   cutFlowManager->RegisterCut("nLooseMuonsOrDSAMuons");
+}
+
+void TTAlpsSelections::RegisterInitialDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager) {
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    cutFlowManager->RegisterCollection(collectionName);
+    cutFlowManager->RegisterCut("initial", collectionName);
+  }
+}
+
+void TTAlpsSelections::RegisterDimuonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    for (auto cutName : vertexCuts) {
+      if(cutName == "BestDimuonVertex") continue;
+      cutFlowManager->RegisterCut(cutName, collectionName);
+    }
+  }
 }
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
@@ -42,7 +63,7 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
     else {
       auto allMuons_new = make_shared<PhysicsObjects>();
       for(auto muon : *matchedMuons) {
-        if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSAMuon())) {
+        if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSA())) {
           allMuons_new->push_back(muon);
         }
       }
@@ -56,12 +77,84 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
   return true;
 }
 
+bool TTAlpsSelections::PassesDimuonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  bool passesSelections = true;
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    if(!PassesDimuonSelections(event, cutFlowManager, collectionName, vertexCuts)) passesSelections = false;
+  }
+  return passesSelections;
+}
+
+bool TTAlpsSelections::PassesDimuonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string collectionName, vector<string> vertexCuts) {
+  std::unique_ptr<TTAlpsDimuonSelections> ttAlpsDimuonSelections = make_unique<TTAlpsDimuonSelections>();
+
+  shared_ptr<PhysicsObjects> dimuons = event->GetCollection("BaseDimuonVertices");
+    
+  cutFlowManager->UpdateCutFlow("initial", collectionName);
+
+  auto baseDimuons = make_shared<PhysicsObjects>();
+  for (const auto& dimuon : *dimuons) {
+      baseDimuons->push_back(std::make_shared<PhysicsObject>(*dimuon));
+  }
+  // auto goodDimuons = make_shared<PhysicsObjects>();
+
+  for(auto cutName : vertexCuts) {
+    if(cutName == "BestDimuonVertex") continue;
+    auto goodDimuons = make_shared<PhysicsObjects>();
+    for (auto dimuon : *baseDimuons) {
+      if(ttAlpsDimuonSelections->PassesCut(asNanoDimuonVertex(dimuon, event), cutName)) {
+        goodDimuons->push_back(dimuon);
+      }
+    }
+    if(goodDimuons->size() < 1) return false;
+    cutFlowManager->UpdateCutFlow(cutName, collectionName);
+    baseDimuons = make_shared<PhysicsObjects>();
+    for (const auto& dimuon : *goodDimuons) {
+      baseDimuons->push_back(dimuon);
+    }
+  }
+  return true;
+}
+
+bool TTAlpsSelections::PassesSingleMuonTrigger(const shared_ptr<Event> event) {
+  string triggerName = "HLT_IsoMu24";
+  bool passes = false;
+  try {
+    passes = event->Get(triggerName);
+  } catch (Exception &) {
+    if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
+      warn() << "Trigger not present: " << triggerName << endl;
+      triggerWarningsPrinted.push_back(triggerName);
+    }
+  }
+  if(passes) return true;
+  return passes;
+}
+
+bool TTAlpsSelections::PassesDoubleMuonTrigger(const shared_ptr<Event> event) {
+  vector<string> triggerNames = {"HLT_DoubleL2Mu23NoVtx_2Cha","HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed"};
+  bool passes = false;
+  for (auto &triggerName : triggerNames) {
+    passes = false;
+    try {
+      passes = event->Get(triggerName);
+    } catch (Exception &) {
+      if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
+        warn() << "Trigger not present: " << triggerName << endl;
+        triggerWarningsPrinted.push_back(triggerName);
+      }
+    }
+    if (passes) return true;
+  }
+  return passes;
+}
+
 void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
   cutFlowManager->RegisterCut("nAdditionalLooseMuons");
 }
 
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  int nLooseMuons = event->GetCollection("LooseMuons")->size();
+  int nLooseMuons = event->GetCollection("LooseIsoPATMuons")->size();
   if (nLooseMuons > 1) return false;
 
   int nTightMuons = event->GetCollection("TightMuons")->size();
@@ -69,7 +162,7 @@ bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> even
 
   if (nLooseMuons == 1) {
     auto tightMuon = event->GetCollection("TightMuons")->at(0);
-    auto looseMuon = event->GetCollection("LooseMuons")->at(0);
+    auto looseMuon = event->GetCollection("LooseIsoPATMuons")->at(0);
     if (looseMuon != tightMuon) return false;
   }
   if(cutFlowManager) cutFlowManager->UpdateCutFlow("nAdditionalLooseMuons");
@@ -82,7 +175,7 @@ void TTAlpsSelections::RegisterTTZLikeSelections(shared_ptr<CutFlowManager> cutF
 }
 
 bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto looseMuons = event->GetCollection("LooseMuons");
+  auto looseMuons = event->GetCollection("LooseIsoPATMuons");
   
   double zMass = 91.1876; // GeV
   double smallestDifferenceToZmass = 999999;
@@ -162,3 +255,12 @@ bool TTAlpsSelections::PassesHadronSelections(const shared_ptr<Event> event) {
   if (jetsPt30 < 6) return false;
   return true;
 }
+
+void TTAlpsSelections::PrintDimuonCutFlow(shared_ptr<CutFlowManager> cutFlowManager) {
+  info() << "Dimuon cut flow for all muonVertexCollections" << endl;
+  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
+    info() << "CutFlow for dimuon collection " << collectionName << endl;
+    cutFlowManager->Print(collectionName);
+  }
+}
+    

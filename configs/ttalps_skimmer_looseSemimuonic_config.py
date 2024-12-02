@@ -9,6 +9,9 @@ applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
+nonIsolatedMuons = False
+
+# weightsBranchName = ""
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
@@ -18,7 +21,7 @@ triggerSelection = (
 
 eventSelections = {
     "MET_pt": (30, 9999999),
-    "nLooseMuons": (1, 9999999),
+    "nLooseIsoPATMuons": (1, 9999999),
     "nGoodJets": (4, 9999999),
     "nGoodMediumBtaggedJets": (1, 9999999),
 }
