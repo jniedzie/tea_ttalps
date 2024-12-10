@@ -27,9 +27,9 @@ class TTAlpsSelections {
   bool PassesSignalLikeSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   void RegisterSignalLikeSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
   
-  void RegisterInitialDimuonCuts(std::shared_ptr<CutFlowManager> cutFlowManager);
-  void RegisterDimuonSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
-  bool PassesDimuonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+  void RegisterInitialDimuonCuts(std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
+  void RegisterDimuonSelections(std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
+  bool PassesDimuonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
   void PrintDimuonCutFlow(std::shared_ptr<CutFlowManager> cutFlowManager);
   void SaveDimuonCutFlows(std::shared_ptr<CutFlowManager> cutFlowManager);
 
@@ -62,7 +62,7 @@ class TTAlpsSelections {
   std::map<std::string, float> muonMatchingParams;
   std::map<std::string, std::vector<std::string>> muonVertexCollections;
 
-  bool PassesDimuonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string collectionName, std::vector<std::string> vertexCuts);
+  bool PassesDimuonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string collectionName, std::vector<std::string> vertexCuts, std::string dimuonCategory = "");
 
   std::vector<std::string> triggerWarningsPrinted;
 

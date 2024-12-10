@@ -18,6 +18,7 @@ class TTAlpsDimuonSelections {
   bool PassesInvariantMassCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesChargeCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDisplacedIsolationCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex, std::string isolationVariable="displacedTrackIso03Dimuon");
+  bool PassesPFRelIsolationCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesHitsInFrontOfVertexCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDPhiBetweenMuonpTAndLxyCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDCACut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);

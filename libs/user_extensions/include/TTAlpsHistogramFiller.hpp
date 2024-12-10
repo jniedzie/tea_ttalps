@@ -31,7 +31,7 @@ class TTAlpsHistogramFiller {
 
   void FillBasicMuonVertexHistograms(const std::shared_ptr<Event> event);
 
-  void FillDimuonCutFlows(const std::shared_ptr<CutFlowManager> cutFlowManager);
+  void FillDimuonCutFlows(const std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
 
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
@@ -74,6 +74,9 @@ class TTAlpsHistogramFiller {
   void FillLooseMuonsHistograms(const std::shared_ptr<Event> event, std::string collectionName);
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> vertexCollection, std::string vertexName);
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName);
+
+  // Nminus1 LLPnanoAOD histograms
+  void FillDimuonVertexNminus1HistogramForCut(std::string collectionName, std::string cut, std::shared_ptr<NanoDimuonVertex> dimuonVertex, float weight);
   
   // LLPnanoAOD 3D histograms
   void FillMuonVertexCorrelationHistograms(const std::shared_ptr<Event> event, std::string vertexName);
@@ -85,6 +88,7 @@ class TTAlpsHistogramFiller {
   void FillGenMuonsFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillGenMuonsNotFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsFromALPsHistograms(const std::shared_ptr<Event> event);
+  void FillLooseMuonsFromALPsNminus1Histograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsNotFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsFromWsHistograms(const std::shared_ptr<Event> event);
 

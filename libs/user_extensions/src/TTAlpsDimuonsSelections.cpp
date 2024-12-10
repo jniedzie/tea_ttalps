@@ -45,6 +45,7 @@ TTAlpsDimuonSelections::TTAlpsDimuonSelections(){
     {"InvariantMassCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesInvariantMassCut(v); }},
     {"ChargeCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChargeCut(v); }},
     {"DisplacedIsolationCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDisplacedIsolationCut(v); }},
+    {"PFRelIsolationCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesPFRelIsolationCut(v); }},
     {"HitsInFrontOfVertexCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesHitsInFrontOfVertexCut(v); }},
     {"DPhiBetweenMuonpTAndLxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDPhiBetweenMuonpTAndLxyCut(v); }},
     {"DCACut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDCACut(v); }},
@@ -92,9 +93,22 @@ bool TTAlpsDimuonSelections::PassesChargeCut(shared_ptr<NanoDimuonVertex> dimuon
 }
 
 bool TTAlpsDimuonSelections::PassesDisplacedIsolationCut(shared_ptr<NanoDimuonVertex> dimuonVertex, string isolationVariable) {
+  string category = dimuonVertex->GetVertexCategory();
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  if(category == "DSA") return true;
   if((float)dimuonVertex->Get(isolationVariable+"1") > dimuonVertexCuts["max"+isolationVariable]) return false;
+  if(category == "PatDSA") return true;
   if((float)dimuonVertex->Get(isolationVariable+"2") > dimuonVertexCuts["max"+isolationVariable]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonSelections::PassesPFRelIsolationCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  string category = dimuonVertex->GetVertexCategory();
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  if(category == "DSA") return true;
+  if((float)dimuonVertex->Muon1()->Get("pfRelIso04_all") > dimuonVertexCuts["maxPFRelIso"]) return false;
+  if(category == "PatDSA") return true;
+  if((float)dimuonVertex->Muon2()->Get("pfRelIso04_all") > dimuonVertexCuts["maxPFRelIso"]) return false;
   return true;
 }
 

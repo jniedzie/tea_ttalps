@@ -131,6 +131,10 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
 
 void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> event) {
   for(auto muonVertexCollectionName : muonVertexNminus1Collections) {
+    if(muonVertexCollections.find(muonVertexCollectionName) == muonVertexCollections.end()) {
+      warn() << "Requested to insert N-1 vertex collection: " << muonVertexCollectionName << ", but the collection name cannot be found in muonVertexCollections. Skipped." << endl;
+      continue;
+    }
     auto muonVertexCollectionCuts = muonVertexCollections[muonVertexCollectionName];
     InsertNminus1VertexCollections(event, muonVertexCollectionName, muonVertexCollectionCuts);
   }
@@ -153,10 +157,14 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
   auto passedVertices = make_shared<PhysicsObjects>();
   for(auto vertex : *vertices) {
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
+    bool passed = true;
     for(auto cutName : muonVertexCollectionCuts) {
-      if(!ttAlpsSelections->PassesCut(dimuonVertex, cutName)) continue;
+      if(!ttAlpsSelections->PassesCut(dimuonVertex, cutName)) {
+        passed = false;
+        break;
+      }
     }
-    passedVertices->push_back(vertex);
+    if(passed) passedVertices->push_back(vertex);
   }
 
   auto finalCollection = make_shared<PhysicsObjects>();
@@ -165,7 +173,7 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
   }
   else finalCollection = passedVertices;
 
-  event->AddCollection(muonVertexCollectionName, passedVertices);
+  event->AddCollection(muonVertexCollectionName, finalCollection);
 }
 
 void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> event, string muonVertexCollectionName, vector<string> muonVertexCollectionCuts) {  
@@ -187,21 +195,24 @@ void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> even
   for(int i = 0; i < nCuts; i++) {
     auto passedVertices = make_shared<PhysicsObjects>();
     for(auto vertex : *vertices) {
+      bool passed = true;
       auto dimuonVertex = asNanoDimuonVertex(vertex, event);
       for(int j = 0; j < nCuts; j++) {
         if(j == i) continue;
-        if(!ttAlpsSelections->PassesCut(dimuonVertex, muonVertexCollectionCuts[j])) continue;
+        if(!ttAlpsSelections->PassesCut(dimuonVertex, muonVertexCollectionCuts[j])) {
+          passed = false;
+          break;
+        }
       }
-      passedVertices->push_back(vertex);
+      if(passed) passedVertices->push_back(vertex);
     }
-
+    string nminus1CollectionName = muonVertexCollectionName+"Nminus1"+muonVertexCollectionCuts[i];
     auto finalCollection = make_shared<PhysicsObjects>();
     if(bestVertex) {
       if(GetBestMuonVertex(passedVertices, event)) finalCollection->push_back(GetBestMuonVertex(passedVertices, event));
     }
     else finalCollection = passedVertices;
-    string nminus1CollectionName = muonVertexCollectionName+"Nminus1"+muonVertexCollectionCuts[i];
-    event->AddCollection(nminus1CollectionName, passedVertices);
+    event->AddCollection(nminus1CollectionName, finalCollection);
   }
 }
 

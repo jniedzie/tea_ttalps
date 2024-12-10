@@ -42,6 +42,8 @@ class TTAlpsEvent {
 
   std::string GetTTbarEventCategory();
 
+  std::shared_ptr<PhysicsObjects> GetMuonsInVertexCollection(std::shared_ptr<PhysicsObjects> vertexCollection);
+
  private:
   std::shared_ptr<Event> event;
 
