@@ -63,7 +63,13 @@ int main(int argc, char **argv) {
   // check if cutflowmanager has cut "initial"
   cutFlowManager->RegisterCut("initial");
   ttAlpsSelections->RegisterInitialDimuonCuts(cutFlowManager);
+  ttAlpsSelections->RegisterInitialDimuonCuts(cutFlowManager, "Pat");
+  ttAlpsSelections->RegisterInitialDimuonCuts(cutFlowManager, "PatDSA");
+  ttAlpsSelections->RegisterInitialDimuonCuts(cutFlowManager, "DSA");
   ttAlpsSelections->RegisterDimuonSelections(cutFlowManager);
+  ttAlpsSelections->RegisterDimuonSelections(cutFlowManager, "Pat");
+  ttAlpsSelections->RegisterDimuonSelections(cutFlowManager, "PatDSA");
+  ttAlpsSelections->RegisterDimuonSelections(cutFlowManager, "DSA");
   
   info() << "Starting event loop..." << endl;
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
@@ -73,12 +79,15 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
-          }
+    }
     bool passesDimuonSelections = false;
     if (runLLPNanoAODHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
       passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager);
+      passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager, "Pat");
+      passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager, "PatDSA");
+      passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager, "DSA");
     }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
@@ -136,7 +145,12 @@ int main(int argc, char **argv) {
 
   if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();
   if(runDefaultHistograms || runPileupHistograms) histogramFiller->FillCutFlow(cutFlowManager);
-  if(runDefaultHistograms) ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager);
+  if(runDefaultHistograms) {
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager);
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "Pat");
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "PatDSA");
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "DSA");
+  }
   
   cutFlowManager->Print();
   histogramsHandler->SaveHistograms();
