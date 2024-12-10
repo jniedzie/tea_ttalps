@@ -1,6 +1,6 @@
 from scale_factors_config import *
 from ttalps_extra_collections import extraEventCollections
-from ttalps_object_selections import *
+from ttalps_object_cuts import *
 
 nEvents = -1
 printEveryNevents = 10000
@@ -23,7 +23,7 @@ runGenMuonHistograms = False
 runLLPNanoAODVertexHistograms = False
 
 useLooseIsoPATMuons = False
-# dimuonSelection is the name of the selection in ttalps_object_selections
+# dimuonSelection is the name of the selection in ttalps_object_cuts
 # dimuonSelection = "GoodDimuonVertex"
 dimuonSelection = "SRDimuonVertex"
 

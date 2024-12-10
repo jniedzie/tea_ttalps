@@ -3,7 +3,7 @@
 #include "ConfigManager.hpp"
 #include "ExtensionsHelpers.hpp"
 #include "UserExtensionsHelpers.hpp"
-#include "TTAlpsSelections.hpp"
+#include "TTAlpsCuts.hpp"
 
 using namespace std;
 
@@ -146,11 +146,11 @@ void TTAlpsHistogramFiller::FillTriggerVariables(const shared_ptr<Event> event, 
 }
 
 void TTAlpsHistogramFiller::FillTriggerVariablesPerTriggerSet(const shared_ptr<Event> event, string ttbarCategory) {
-  auto ttAlpsSelections = make_unique<TTAlpsSelections>();
+  auto ttAlpsCuts = make_unique<TTAlpsCuts>();
 
-  bool passesSingleLepton = ttAlpsSelections->PassesSingleLeptonSelections(event);
-  bool passesDilepton = ttAlpsSelections->PassesDileptonSelections(event);
-  bool passesHadron = ttAlpsSelections->PassesHadronSelections(event);
+  bool passesSingleLepton = ttAlpsCuts->PassesSingleLeptonCuts(event);
+  bool passesDilepton = ttAlpsCuts->PassesDileptonCuts(event);
+  bool passesHadron = ttAlpsCuts->PassesHadronCuts(event);
 
   for (auto &[triggerSetName, triggerSet] : triggerSets) {
     bool passesTrigger = false;
@@ -362,7 +362,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(vertexName+"_"+category+"_dPhi", abs((float)muon1->Get("phi")-(float)muon2->Get("phi")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_outerDPhi", abs((float)muon1->Get("outerPhi")-(float)muon2->Get("outerPhi")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_chargeProduct", dimuonVertex->GetDimuonChargeProduct(), weight * muonWeight1 * muonWeight2);
-    
     // Isolations:
     histogramsHandler->Fill(vertexName+"_"+category+"_displacedTrackIso03Dimuon1", dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName+"_"+category+"_displacedTrackIso04Dimuon1", dimuonVertex->Get("displacedTrackIso04Dimuon1"), weight * muonWeight1 * muonWeight2);

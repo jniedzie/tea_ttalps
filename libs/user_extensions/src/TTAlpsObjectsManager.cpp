@@ -8,7 +8,7 @@ using namespace std;
 TTAlpsObjectsManager::TTAlpsObjectsManager() {
   auto& config = ConfigManager::GetInstance();
 
-  ttAlpsSelections = make_unique<TTAlpsDimuonSelections>();
+  ttAlpsCuts = make_unique<TTAlpsDimuonCuts>();
 
   try {
     config.GetMap("muonMatchingParams", muonMatchingParams);
@@ -159,7 +159,7 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
     bool passed = true;
     for(auto cutName : muonVertexCollectionCuts) {
-      if(!ttAlpsSelections->PassesCut(dimuonVertex, cutName)) {
+      if(!ttAlpsCuts->PassesCut(dimuonVertex, cutName)) {
         passed = false;
         break;
       }
@@ -199,7 +199,7 @@ void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> even
       auto dimuonVertex = asNanoDimuonVertex(vertex, event);
       for(int j = 0; j < nCuts; j++) {
         if(j == i) continue;
-        if(!ttAlpsSelections->PassesCut(dimuonVertex, muonVertexCollectionCuts[j])) {
+        if(!ttAlpsCuts->PassesCut(dimuonVertex, muonVertexCollectionCuts[j])) {
           passed = false;
           break;
         }
@@ -218,10 +218,10 @@ void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> even
 
 bool TTAlpsObjectsManager::IsGoodBaseMuonVertex(const shared_ptr<PhysicsObject> vertex, shared_ptr<Event> event) {
   auto dimuonVertex = asNanoDimuonVertex(vertex,event);
-  if(!ttAlpsSelections->PassesLLPnanoAODVertexCuts(dimuonVertex)) return false;
+  if(!ttAlpsCuts->PassesLLPnanoAODVertexCuts(dimuonVertex)) return false;
   
 
-  if(!ttAlpsSelections->PassesChargeCut(dimuonVertex)) return false;
+  if(!ttAlpsCuts->PassesChargeCut(dimuonVertex)) return false;
   return true;
 }
 

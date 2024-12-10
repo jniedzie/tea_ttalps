@@ -1,6 +1,6 @@
 
-#ifndef TTAlpsDimuonSelections_hpp
-#define TTAlpsDimuonSelections_hpp
+#ifndef TTAlpsDimuonCuts_hpp
+#define TTAlpsDimuonCuts_hpp
 
 #include "ConfigManager.hpp"
 #include "CutFlowManager.hpp"
@@ -10,9 +10,9 @@
 #include "PhysicsObject.hpp"
 #include "NanoDimuonVertex.hpp"
 
-class TTAlpsDimuonSelections {
+class TTAlpsDimuonCuts {
  public:
-  TTAlpsDimuonSelections();
+  TTAlpsDimuonCuts();
   
   bool PassesLLPnanoAODVertexCuts(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesInvariantMassCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
@@ -43,4 +43,4 @@ class TTAlpsDimuonSelections {
   std::map<std::string, std::function<bool(std::shared_ptr<NanoDimuonVertex>)>> PassesCutsMap;
 };
 
-#endif /* TTAlpsDimuonSelections_hpp */
+#endif /* TTAlpsDimuonCuts_hpp */

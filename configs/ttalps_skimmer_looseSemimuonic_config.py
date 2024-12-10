@@ -19,7 +19,7 @@ triggerSelection = (
     "HLT_IsoMu24",
 )
 
-eventSelections = {
+eventCuts = {
     "MET_pt": (30, 9999999),
     "nLooseIsoPATMuons": (1, 9999999),
     "nGoodJets": (4, 9999999),
