@@ -11,9 +11,9 @@ applySignalLikeSkimming = False
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
-eventSelections = {
+eventCuts = {
     "MET_pt": (50, 9999999),
-    # "nTightMuons": (1, 1), # This is already handled in PassesSingleLeptonSelections
+    # "nTightMuons": (1, 1), # This is already handled in PassesSingleLeptonCuts
     "nLooseElectrons": (0, 0),
     # "nGoodTightBtaggedJets": (2, 9999999),
     "nGoodMediumBtaggedJets": (1, 9999999),

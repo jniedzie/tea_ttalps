@@ -5,7 +5,7 @@
 #include "EventWriter.hpp"
 #include "HistogramsHandler.hpp"
 #include "Profiler.hpp"
-#include "TTAlpsSelections.hpp"
+#include "TTAlpsCuts.hpp"
 #include "TTAlpsObjectsManager.hpp"
 #include "UserExtensionsHelpers.hpp"
 #include "ArgsManager.hpp"
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
   auto eventWriter = make_shared<EventWriter>(eventReader);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto eventProcessor = make_unique<EventProcessor>();
-  auto ttAlpsSelections = make_unique<TTAlpsSelections>();
+  auto ttAlpsCuts = make_unique<TTAlpsCuts>();
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
   info() << "Retrieving values from config file... " << endl;
@@ -55,9 +55,9 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("metFilters");
   }
 
-  if(applyTTbarLikeSkimming) ttAlpsSelections->RegisterSingleLeptonSelections(cutFlowManager);
-  if(applyTTZLikeSkimming) ttAlpsSelections->RegisterTTZLikeSelections(cutFlowManager);
-  if(applySignalLikeSkimming) ttAlpsSelections->RegisterSignalLikeSelections(cutFlowManager);
+  if(applyTTbarLikeSkimming) ttAlpsCuts->RegisterSingleLeptonCuts(cutFlowManager);
+  if(applyTTZLikeSkimming) ttAlpsCuts->RegisterTTZLikeCuts(cutFlowManager);
+  if(applySignalLikeSkimming) ttAlpsCuts->RegisterSignalLikeCuts(cutFlowManager);
 
   eventProcessor->RegisterCuts(cutFlowManager);
     
@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
       if (!eventProcessor->PassesGoldenJson(event)) continue;
       cutFlowManager->UpdateCutFlow("goldenJson");
 
-      if (!eventProcessor->PassesTriggerSelections(event)) continue;
+      if (!eventProcessor->PassesTriggerCuts(event)) continue;
       cutFlowManager->UpdateCutFlow("trigger");
 
       if (!eventProcessor->PassesMetFilters(event)) continue;
@@ -81,19 +81,19 @@ int main(int argc, char **argv) {
 
 
     if(applyTTbarLikeSkimming){
-      if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
+      if(!ttAlpsCuts->PassesSingleLeptonCuts(event, cutFlowManager)) continue;
     }
 
 
     if(applySignalLikeSkimming){
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
-      if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;
+      if(!ttAlpsCuts->PassesSignalLikeCuts(event, cutFlowManager)) continue;
     }
     if(applyTTZLikeSkimming){
-      if(!ttAlpsSelections->PassesTTZLikeSelections(event, cutFlowManager)) continue;
+      if(!ttAlpsCuts->PassesTTZLikeCuts(event, cutFlowManager)) continue;
     }
 
-    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
+    if(!eventProcessor->PassesEventCuts(event, cutFlowManager)) continue;
     
     eventWriter->AddCurrentEvent("Events");
   }

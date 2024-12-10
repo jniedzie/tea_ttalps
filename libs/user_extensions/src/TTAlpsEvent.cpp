@@ -665,3 +665,33 @@ bool TTAlpsEvent::IsLeadingMuonInCollection(shared_ptr<PhysicsObjects> collectio
   }
   return false;
 }
+
+shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsInVertexCollection(shared_ptr<PhysicsObjects> vertexCollection) {
+  auto muons = make_shared<PhysicsObjects>();
+  vector<int> DSAmuonIndices;
+  vector<int> PATmuonIndices;
+  for(auto vertex : *vertexCollection) {
+    auto dimuonVertex = asNanoDimuonVertex(vertex, event);
+    if(dimuonVertex->isDSAMuon1()) {
+      if(std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex1()) != DSAmuonIndices.end()) continue;
+      DSAmuonIndices.push_back(dimuonVertex->muonIndex1());
+      muons->push_back(dimuonVertex->Muon1());
+    }
+    else {
+      if(std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex1()) != PATmuonIndices.end()) continue;
+      PATmuonIndices.push_back(dimuonVertex->muonIndex1());
+      muons->push_back(dimuonVertex->Muon1());
+    }
+    if(dimuonVertex->isDSAMuon2()) {
+      if(std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex2()) != DSAmuonIndices.end()) continue;
+      DSAmuonIndices.push_back(dimuonVertex->muonIndex2());
+      muons->push_back(dimuonVertex->Muon2());
+    }
+    else {
+      if(std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex2()) != PATmuonIndices.end()) continue;
+      PATmuonIndices.push_back(dimuonVertex->muonIndex2());
+      muons->push_back(dimuonVertex->Muon2());
+    }
+  }
+  return muons;
+}

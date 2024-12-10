@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   auto histogramsHandler = make_shared<HistogramsHandler>();
   auto histogramFiller = make_unique<HistogramsFiller>(histogramsHandler);
   auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(histogramsHandler);
-  auto ttAlpsSelections = make_unique<TTAlpsSelections>();
+  auto ttAlpsCuts = make_unique<TTAlpsCuts>();
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
   bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runLLPTriggerHistograms, runPileupHistograms;
@@ -62,8 +62,14 @@ int main(int argc, char **argv) {
 
   // check if cutflowmanager has cut "initial"
   cutFlowManager->RegisterCut("initial");
-  ttAlpsSelections->RegisterInitialDimuonCuts(cutFlowManager);
-  ttAlpsSelections->RegisterDimuonSelections(cutFlowManager);
+  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager);
+  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager, "Pat");
+  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager, "PatDSA");
+  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager, "DSA");
+  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager);
+  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager, "Pat");
+  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager, "PatDSA");
+  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager, "DSA");
   
   info() << "Starting event loop..." << endl;
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
@@ -73,12 +79,15 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
-          }
-    bool passesDimuonSelections = false;
+    }
+    bool passesDimuonCuts = false;
     if (runLLPNanoAODHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
-      passesDimuonSelections = ttAlpsSelections->PassesDimuonSelections(event, cutFlowManager);
+      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager);
+      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "Pat");
+      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "PatDSA");
+      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "DSA");
     }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
@@ -113,11 +122,11 @@ int main(int argc, char **argv) {
     }
 
     if (runLLPTriggerHistograms) {
-      if(passesDimuonSelections) {
-        if(ttAlpsSelections->PassesSingleMuonTrigger(event)) {
+      if(passesDimuonCuts) {
+        if(ttAlpsCuts->PassesSingleMuonTrigger(event)) {
           ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "SingleMuonTrigger");
         } 
-        if(ttAlpsSelections->PassesDoubleMuonTrigger(event)) {
+        if(ttAlpsCuts->PassesDoubleMuonTrigger(event)) {
           ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "DoubleMuonTrigger");
         } 
       }
@@ -136,12 +145,17 @@ int main(int argc, char **argv) {
 
   if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();
   if(runDefaultHistograms || runPileupHistograms) histogramFiller->FillCutFlow(cutFlowManager);
-  if(runDefaultHistograms) ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager);
+  if(runDefaultHistograms) {
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager);
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "Pat");
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "PatDSA");
+    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "DSA");
+  }
   
   cutFlowManager->Print();
   histogramsHandler->SaveHistograms();
 
-  ttAlpsSelections->PrintDimuonCutFlow(cutFlowManager);
+  ttAlpsCuts->PrintDimuonCutFlow(cutFlowManager);
 
   auto &logger = Logger::GetInstance();
   logger.Print();

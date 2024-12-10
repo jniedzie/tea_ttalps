@@ -5,8 +5,8 @@
 #include "Event.hpp"
 #include "Helpers.hpp"
 #include "UserExtensionsHelpers.hpp"
-#include "TTAlpsDimuonSelections.hpp"
-#include "TTAlpsSelections.hpp"
+#include "TTAlpsDimuonCuts.hpp"
+#include "TTAlpsCuts.hpp"
 
 class TTAlpsObjectsManager {
  public:
@@ -29,7 +29,7 @@ class TTAlpsObjectsManager {
 
   bool useLooseIsoPATMuons = true;
 
-  std::unique_ptr<TTAlpsDimuonSelections> ttAlpsSelections;
+  std::unique_ptr<TTAlpsDimuonCuts> ttAlpsCuts;
 
   std::map<std::string, float> muonMatchingParams;
   std::map<std::string, float> dimuonVertexCuts;

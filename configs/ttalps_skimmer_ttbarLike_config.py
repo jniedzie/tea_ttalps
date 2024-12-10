@@ -80,7 +80,7 @@ extraEventCollections = {
     },
 }
 
-eventSelections = {
+eventCuts = {
     "MET_pt": (30, 9999999),
     "nGoodLeptons": (1, 1),
     "nGoodJets": (4, 9999999),

@@ -85,6 +85,19 @@ cross_sections = {
   "tta_mAlp-2GeV_ctau-1e3mm": 0.004233, # +- 3.199e-05 pb,
 
   "tta_mAlp-12GeV_ctau-1e0mm": 0.004019, # +- 3.065e-05 pb
+  "tta_mAlp-12GeV_ctau-1e1mm": 0.004019, # +- 3.065e-05 pb
+  "tta_mAlp-12GeV_ctau-1e2mm": 0.004019, # +- 3.065e-05 pb
+  "tta_mAlp-12GeV_ctau-1e3mm": 0.004019, # +- 3.065e-05 pb
+
+  "tta_mAlp-30GeV_ctau-1e0mm": 0.003504, # +- 2.162e-05 pb
+  "tta_mAlp-30GeV_ctau-1e1mm": 0.003504, # +- 2.162e-05 pb
+  "tta_mAlp-30GeV_ctau-1e2mm": 0.003504, # +- 2.162e-05 pb
+  "tta_mAlp-30GeV_ctau-1e3mm": 0.003504, # +- 2.162e-05 pb
+
+  "tta_mAlp-60GeV_ctau-1e0mm": 0.002679, # +- 1.323e-05 pb
+  "tta_mAlp-60GeV_ctau-1e1mm": 0.002679, # +- 1.323e-05 pb
+  "tta_mAlp-60GeV_ctau-1e2mm": 0.002679, # +- 1.323e-05 pb
+  "tta_mAlp-60GeV_ctau-1e3mm": 0.002679, # +- 1.323e-05 pb
 
   "tta_mAlp-70GeV_ctau-1e0mm": 0.002438, # +- 1.888e-05 pb
 }

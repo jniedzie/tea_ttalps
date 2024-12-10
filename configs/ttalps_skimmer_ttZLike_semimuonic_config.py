@@ -11,7 +11,7 @@ applySignalLikeSkimming = False
 weightsBranchName = "genWeight"
 eventsTreeName = "Events"
 
-eventSelections = {
+eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 9999999),
     "nLooseIsoPATMuons": (3, 9999999),
