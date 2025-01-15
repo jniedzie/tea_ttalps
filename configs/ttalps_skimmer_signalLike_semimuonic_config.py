@@ -1,5 +1,5 @@
 import ttalps_extra_collections as collections
-from ttalps_object_selections import *
+from ttalps_object_cuts import *
 
 extraEventCollections = collections.extraEventCollections
 
@@ -14,7 +14,6 @@ applySignalLikeSkimming = True
 # non isolated loose muons means that there is no isolation requirement for the loose muons
 useLooseIsoPATMuons = False
 
-# weightsBranchName = ""
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
@@ -33,7 +32,7 @@ muonMatchingParams = {
     # "ProxDR" : 0.1,
 }
 
-eventSelections = {
+eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 9999999),
     # "nLooseIsoPATMuons": (3, 9999999),

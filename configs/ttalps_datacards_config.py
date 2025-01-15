@@ -4,21 +4,33 @@ from HistogramNormalizer import NormalizationType
 from ttalps_cross_sections import *
 
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/"
-skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
-hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 
+# For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
+# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_corrected"
+
+# SR dimuon cuts applied
+hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
 
 output_path = f"../datacards/"
 
 # If True, poisson error on empty bins (1.84) will be added to data histograms
 add_uncertainties_on_zero = False
 
-signal_name = "tta_mAlp-1GeV_ctau-1e-5mm"
-# signal_name = "tta_mAlp-1GeV_ctau-1e0mm"
+# signal_name = "tta_mAlp-1GeV_ctau-1e-5mm"
+signal_name = "tta_mAlp-1GeV_ctau-1e0mm"
 # signal_name = "tta_mAlp-1GeV_ctau-1e1mm"
 # signal_name = "tta_mAlp-1GeV_ctau-1e2mm"
 # signal_name = "tta_mAlp-1GeV_ctau-1e3mm"
 # signal_name = "tta_mAlp-1GeV_ctau-1e5mm"
+
+# signal_name = "tta_mAlp-2GeV_ctau-1e0mm"
+# signal_name = "tta_mAlp-2GeV_ctau-1e1mm"
+# signal_name = "tta_mAlp-2GeV_ctau-1e2mm"
+# signal_name = "tta_mAlp-2GeV_ctau-1e3mm"
+
+# signal_name = "tta_mAlp-12GeV_ctau-1e0mm"
+# signal_name = "tta_mAlp-70GeV_ctau-1e0mm"
 
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 include_shapes = True
@@ -64,12 +76,12 @@ samples = (
         cross_sections=cross_sections,
     ),
 
-    # Sample(
-    #   name="ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
-    #   file_path=f"{base_path}/backgrounds2018/ST_t-channel_top/{skim}/{hist_path}/histograms.root",
-    #   type=SampleType.background,
-    #   cross_sections=cross_sections,
-    # ),
+    Sample(
+      name="ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
+      file_path=f"{base_path}/backgrounds2018/ST_t-channel_top/{skim}/{hist_path}/histograms.root",
+      type=SampleType.background,
+      cross_sections=cross_sections,
+    ),
     Sample(
         name="ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
         file_path=f"{base_path}/backgrounds2018/ST_t-channel_antitop/{skim}/{hist_path}/histograms.root",
@@ -160,12 +172,12 @@ samples = (
         type=SampleType.background,
         cross_sections=cross_sections,
     ),
-    # Sample(
-    #   name="TTTT_TuneCP5_13TeV-amcatnlo-pythia8",
-    #   file_path=f"{base_path}/backgrounds2018/TTTT/{skim}/{hist_path}/histograms.root",
-    #   type=SampleType.background,
-    #   cross_sections=cross_sections,
-    # ),
+    Sample(
+      name="TTTT_TuneCP5_13TeV-amcatnlo-pythia8",
+      file_path=f"{base_path}/backgrounds2018/TTTT/{skim}/{hist_path}/histograms.root",
+      type=SampleType.background,
+      cross_sections=cross_sections,
+    ),
 
     Sample(
         name="QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
@@ -179,24 +191,24 @@ samples = (
         type=SampleType.background,
         cross_sections=cross_sections,
     ),
-    # Sample(
-    #   name="QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    #   file_path=f"{base_path}/backgrounds2018/QCD_Pt-30To50/{skim}/{hist_path}/histograms.root",
-    #   type=SampleType.background,
-    #   cross_sections=cross_sections,
-    # ),
-    # Sample(
-    #   name="QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    #   file_path=f"{base_path}/backgrounds2018/QCD_Pt-50To80/{skim}/{hist_path}/histograms.root",
-    #   type=SampleType.background,
-    #   cross_sections=cross_sections,
-    # ),
-    # Sample(
-    #   name="QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    #   file_path=f"{base_path}/backgrounds2018/QCD_Pt-80To120/{skim}/{hist_path}/histograms.root",
-    #   type=SampleType.background,
-    #   cross_sections=cross_sections,
-    # ),
+    Sample(
+      name="QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+      file_path=f"{base_path}/backgrounds2018/QCD_Pt-30To50/{skim}/{hist_path}/histograms.root",
+      type=SampleType.background,
+      cross_sections=cross_sections,
+    ),
+    Sample(
+      name="QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+      file_path=f"{base_path}/backgrounds2018/QCD_Pt-50To80/{skim}/{hist_path}/histograms.root",
+      type=SampleType.background,
+      cross_sections=cross_sections,
+    ),
+    Sample(
+      name="QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+      file_path=f"{base_path}/backgrounds2018/QCD_Pt-80To120/{skim}/{hist_path}/histograms.root",
+      type=SampleType.background,
+      cross_sections=cross_sections,
+    ),
     Sample(
         name="QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
         file_path=f"{base_path}/backgrounds2018/QCD_Pt-120To170/{skim}/{hist_path}/histograms.root",
@@ -233,12 +245,12 @@ samples = (
         type=SampleType.background,
         cross_sections=cross_sections,
     ),
-    # Sample(
-    #   name="QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    #   file_path=f"{base_path}/backgrounds2018/QCD_Pt-1000/{skim}/{hist_path}/histograms.root",
-    #   type=SampleType.background,
-    #   cross_sections=cross_sections,
-    # ),
+    Sample(
+      name="QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+      file_path=f"{base_path}/backgrounds2018/QCD_Pt-1000/{skim}/{hist_path}/histograms.root",
+      type=SampleType.background,
+      cross_sections=cross_sections,
+    ),
 
 
     Sample(
@@ -259,21 +271,30 @@ samples = (
 histograms = [
     # Histogram(name="LooseMuonsDRMatch_dxyPVTrajSig", norm_type=NormalizationType.to_lumi, x_max=90.0, rebin=1),
     
-    # Histogram(name="GoodBestLooseMuonsVertex_DSA_vxy"               , norm_type=NormalizationType.to_lumi, x_max=800    , rebin=20  ),
-    # Histogram(name="GoodBestLooseMuonsVertex_DSA_vxySigma"          , norm_type=NormalizationType.to_lumi, x_max=200    , rebin=200 ),
-    Histogram(name="GoodBestLooseMuonsVertex_DSA_vxySignificance"   , norm_type=NormalizationType.to_lumi, x_max=200    , rebin=5   ),
+    # Histogram(name="BestIsoDimuonVertex_DSA_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=800    , rebin=20  ),
+    # Histogram(name="BestIsoDimuonVertex_DSA_vxySigma"          , norm_type=NormalizationType.to_lumi, x_max=200    , rebin=200 ),
+    # Histogram(name="BestIsoDimuonVertex_DSA_vxySignificance"   , norm_type=NormalizationType.to_lumi, x_max=200    , rebin=5   ),
     
-    # Histogram(name="GoodBestLooseMuonsVertex_Pat_vxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
-    # Histogram(name="GoodBestLooseMuonsVertex_Pat_vxySigma"          , norm_type=NormalizationType.to_lumi, x_max=10     , rebin=20  ),
-    # Histogram(name="GoodBestLooseMuonsVertex_Pat_vxySignificance"   , norm_type=NormalizationType.to_lumi, x_max=1000   , rebin=40  ),
+    # Histogram(name="BestIsoDimuonVertex_Pat_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+    # Histogram(name="BestIsoDimuonVertex_Pat_vxySigma"          , norm_type=NormalizationType.to_lumi, x_max=10     , rebin=20  ),
+    # Histogram(name="BestIsoDimuonVertex_Pat_vxySignificance"   , norm_type=NormalizationType.to_lumi, x_max=1000   , rebin=40  ),
     
-    # Histogram(name="GoodBestLooseMuonsVertex_PatDSA_vxy"            , norm_type=NormalizationType.to_lumi, x_max=800    , rebin=40  ),
-    # Histogram(name="GoodBestLooseMuonsVertex_PatDSA_vxySigma"       , norm_type=NormalizationType.to_lumi, x_max=100    , rebin=200 ),
-    # Histogram(name="GoodBestLooseMuonsVertex_PatDSA_vxySignificance", norm_type=NormalizationType.to_lumi, x_max=800    , rebin=20  ),
+    # Histogram(name="BestIsoDimuonVertex_PatDSA_Lxy"            , norm_type=NormalizationType.to_lumi, x_max=800    , rebin=40  ),
+    # Histogram(name="BestIsoDimuonVertex_PatDSA_vxySigma"       , norm_type=NormalizationType.to_lumi, x_max=100    , rebin=200 ),
+    # Histogram(name="BestIsoDimuonVertex_PatDSA_vxySignificance", norm_type=NormalizationType.to_lumi, x_max=800    , rebin=20  ),
+
+    Histogram(name="BestPFIsoDimuonVertex_Pat_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+    Histogram(name="BestPFIsoDimuonVertex_PatDSA_Lxy"            , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+    Histogram(name="BestPFIsoDimuonVertex_DSA_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+
+    # Histogram(name="BestPFIsoDimuonVertex_Pat_LxySignificance"     , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+    # Histogram(name="BestPFIsoDimuonVertex_PatDSA_LxySignificance"  , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),    
+    # Histogram(name="BestPFIsoDimuonVertex_DSA_LxySignificance"     , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
 ]
 
 
-output_path = f"../datacards/datacard_{histograms[0].getName()}_{signal_name}"
+# output_path = f"../datacards/datacard_{histograms[0].getName()}_{signal_name}_displacedIso"
+output_path = f"../datacards/datacard_{histograms[0].getName()}_{signal_name}_pfIso"
 
 background_name = [sample.name for sample in samples if sample.type == SampleType.background]
 
@@ -286,9 +307,9 @@ nuisances = {
 }
 
 
-# combineCards.py datacard_GoodBestLooseMuonsVertex_Pat_vxy_tta_mAlp-1GeV_ctau-1e-5mm.txt datacard_GoodBestLooseMuonsVertex_PatDSA_vxy_tta_mAlp-1GeV_ctau-1e-5mm.txt datacard_GoodBestLooseMuonsVertex_DSA_vxy_tta_mAlp-1GeV_ctau-1e-5mm.txt > datacard_GoodBestLooseMuonsVertex_combined_vxy_tta_mAlp-1GeV_ctau-1e-5mm.txt
-# combineCards.py datacard_GoodBestLooseMuonsVertex_Pat_vxy_tta_mAlp-1GeV_ctau-1e0mm.txt datacard_GoodBestLooseMuonsVertex_PatDSA_vxy_tta_mAlp-1GeV_ctau-1e0mm.txt datacard_GoodBestLooseMuonsVertex_DSA_vxy_tta_mAlp-1GeV_ctau-1e0mm.txt > datacard_GoodBestLooseMuonsVertex_combined_vxy_tta_mAlp-1GeV_ctau-1e0mm.txt
-# combineCards.py datacard_GoodBestLooseMuonsVertex_Pat_vxy_tta_mAlp-1GeV_ctau-1e1mm.txt datacard_GoodBestLooseMuonsVertex_PatDSA_vxy_tta_mAlp-1GeV_ctau-1e1mm.txt datacard_GoodBestLooseMuonsVertex_DSA_vxy_tta_mAlp-1GeV_ctau-1e1mm.txt > datacard_GoodBestLooseMuonsVertex_combined_vxy_tta_mAlp-1GeV_ctau-1e1mm.txt
-# combineCards.py datacard_GoodBestLooseMuonsVertex_Pat_vxy_tta_mAlp-1GeV_ctau-1e2mm.txt datacard_GoodBestLooseMuonsVertex_PatDSA_vxy_tta_mAlp-1GeV_ctau-1e2mm.txt datacard_GoodBestLooseMuonsVertex_DSA_vxy_tta_mAlp-1GeV_ctau-1e2mm.txt > datacard_GoodBestLooseMuonsVertex_combined_vxy_tta_mAlp-1GeV_ctau-1e2mm.txt
-# combineCards.py datacard_GoodBestLooseMuonsVertex_Pat_vxy_tta_mAlp-1GeV_ctau-1e3mm.txt datacard_GoodBestLooseMuonsVertex_PatDSA_vxy_tta_mAlp-1GeV_ctau-1e3mm.txt datacard_GoodBestLooseMuonsVertex_DSA_vxy_tta_mAlp-1GeV_ctau-1e3mm.txt > datacard_GoodBestLooseMuonsVertex_combined_vxy_tta_mAlp-1GeV_ctau-1e3mm.txt
-# combineCards.py datacard_GoodBestLooseMuonsVertex_Pat_vxy_tta_mAlp-1GeV_ctau-1e5mm.txt datacard_GoodBestLooseMuonsVertex_PatDSA_vxy_tta_mAlp-1GeV_ctau-1e5mm.txt datacard_GoodBestLooseMuonsVertex_DSA_vxy_tta_mAlp-1GeV_ctau-1e5mm.txt > datacard_GoodBestLooseMuonsVertex_combined_vxy_tta_mAlp-1GeV_ctau-1e5mm.txt
+# # combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt
+# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt
+# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt
+# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt
+# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt
+# # combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt

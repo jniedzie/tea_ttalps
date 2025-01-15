@@ -39,7 +39,7 @@ legend_max_y = 0.89
 
 # Minimuon requirements on number of background events to be uncluded in plots
 # requierement is # events >= bkgRawEventsThreshold
-bkgRawEventsThreshold = 10
+bkgRawEventsThreshold = 1
 
 n_default_backgrounds = 10
 
@@ -53,7 +53,7 @@ plot_genALP_info = True
 plot_genCollinearityStudy = False
 plot_gengenMuonFromTopStudy = False
 plot_muonMatching_info = False
-plot_background = False
+plot_background = True
 plot_data = False
 
 
@@ -79,16 +79,12 @@ extraMuonVertexCollections = [
   # Good Dimuon selection with isolation cut:
   # # "GoodIsoDimuonVertices", 
   # "BestIsoDimuonVertex", 
-  # N-1 plots:
-  # # "BestDimuonVertexNminus1InvMassCut",
-  # # "BestDimuonVertexNminus1DRCut",
-  # # "BestDimuonVertexNminus1CollinearityCut",
-  # # "BestDimuonVertexNminus1IsoCut",
-  # # "BestDimuonVertexNminus1Chi2Cut",
-  # # "BestDimuonVertexNminus1DCACut",
-  # # "BestDimuonVertexNminus1DPhiMuonpTLxyCutCut",
-  # # "BestDimuonVertexNminus1HitsInFrontOfVertexCut",
-  # # "BestDimuonVertexNminus1ChargeCut",
+  "BestPFIsoDimuonVertex",
+]
+
+dimuonNminus1CollectionNames = [
+  # "BestIsoDimuonVertexNminus1",
+  "BestPFIsoDimuonVertexNminus1",
 ]
 
 signal_legend = Legend(legend_max_x-legend_width, legend_max_y-5*legend_height, legend_max_x-2*legend_width, legend_max_y, "l")
@@ -110,8 +106,7 @@ legends = {
   SampleType.data: Legend(legend_max_x-3*(legend_width), legend_max_y-legend_height, legend_max_x-2*(legend_width), legend_max_y, "pl"),
 }
 
-# output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}/"
-output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}_test/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}/"
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
@@ -146,8 +141,13 @@ histograms = (
   Histogram("Event_PV_y"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV y [cm]"                           , "# events (2018)"   ),
   Histogram("Event_PV_z"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV z [cm]"                           , "# events (2018)"   ),
   
-  Histogram("cutFlow"                             , "", False, True  , default_norm , 1  , 0     , 13     , 1e1*y_scale   , 1e23*y_scale  , "Selection"                      , "Number of events"  ),
-  Histogram("Event_normCheck"                     , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1*y_scale  , 1e20*y_scale   , "norm check"                     , "# events (2018)"   ),
+  Histogram("cutFlow"                                 , "", False, True  , default_norm , 1  , 0     , 13     , 1e1*y_scale   , 1e23*y_scale   , "Selection"                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestPFIsoDimuonVertex"       , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestIsoDimuonVertex"       , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestIsoDimuonVertex_Pat"   , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestIsoDimuonVertex_PatDSA", "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestIsoDimuonVertex_DSA"   , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
+  Histogram("Event_normCheck"                         , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1*y_scale  , 1e20*y_scale   , "norm check"                     , "# events (2018)"   ),
 )
 
 LLPnanoAOD_histograms = ()
@@ -169,7 +169,7 @@ for muonCollectionName in muonCollectionNames:
     Histogram("Event_n"+muonCollectionName          , "", False, True  , default_norm        , 1  , 0     , 15    , 1e-5  , 1e3   , "Number of loose #mu"                            , "# events (2018)"   ),
     Histogram(muonCollectionName+"_pt"              , "", False, True  , default_norm        , 10 , 0     , 300   , 1e-1  , 1e5   , "loose #mu p_{T} [GeV]"                          , "# events (2018)"   ),
     Histogram(muonCollectionName+"_eta"             , "", False, True  , default_norm        , 10 , -3    , 3     , 1e-1  , 1e7   , "loose #mu #eta"                                 , "# events (2018)"   ),
-    Histogram(muonCollectionName+"_absDxyPVTraj"       , "", False, True  , default_norm        , 100, -300  , 300   , 1e-3  , 1e6   , "loose #mu |d_{xy}| [cm]"                          , "# events (2018)"   ),
+    Histogram(muonCollectionName+"_absDxyPVTraj"    , "", False, True  , default_norm        , 100, -300  , 300   , 1e-3  , 1e6   , "loose #mu |d_{xy}| [cm]"                        , "# events (2018)"   ),
     Histogram(muonCollectionName+"_dxyPVTrajErr"    , "", False, True  , default_norm        , 20 , 0     , 200   , 1e-1  , 1e8   , "loose #mu #sigma_{dxy} uncertainty [cm]"        , "# events (2018)"   ),
     Histogram(muonCollectionName+"_dxyPVTrajSig"    , "", False, True  , default_norm        , 20 , 0     , 200   , 1e-1  , 1e8   , "loose #mu d_{xy} / #sigma_{dxy}"                , "# events (2018)"   ),
     Histogram(muonCollectionName+"_ip3DPVSigned"    , "", False, True  , default_norm        , 250, -600  , 600   , 1e-3  , 1e6   , "loose #mu 3D IP [cm]"                           , "# events (2018)"   ),
@@ -184,49 +184,46 @@ for muonVertexCollectionName in muonVertexCollectionNames:
   for category in muonVertexCategories:
     LLPnanoAOD_histograms += (
       Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 45    , 1e-4  , 1e3   , "Number of loose #mu vertices"           , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_vxy"                  , "", False, True  , default_norm        , 10 , 0     , 200   , 1e-6*y_scale  , 1e11*y_scale   , "#mu vertex v_{xy} [cm]"                 , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 10 , 0     , 200   , 1e-6*y_scale  , 1e11*y_scale   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_vxySigma"             , "", False, True  , default_norm        , 50 , 0     , 100   , 1e-3  , 1e6   , "#mu vertex #sigma_{Lxy} [cm]"           , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_vxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"       , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_dR"                   , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex #Delta R"                    , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_proxDR"               , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex proximity #Delta R"          , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_outerDR"              , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex outer #Delta R"              , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_normChi2"             , "", False, True  , default_norm        , 100, 0     , 5     , 1e-5  , 1e4   , "#mu vertex #chi^{2}/ndof"               , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_chargeProduct"        , "", False, True  , default_norm        , 1  , -1    , 2     , 1e-3  , 1e8   , "Dimuon charge"                          , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_maxHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-4  , 1e6   , "Max N(hits before vertex)"              , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_sumHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-6  , 1e6   , "Sum N(hits before vertex)"              , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert1"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-6  , 1e6   , "N(hits before vertex)"                  , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert2"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-7  , 1e5   , "N(hits before vertex)"                  , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_dca"                  , "", False, True  , default_norm        , 20 , 0     , 15    , 1e-6  , 1e6   , "DCA [cm]"                               , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, False , default_norm        , 10 , 0     , 3.15  , 0     , 500   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_absPtLxyDPhi1"        , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-4  , 1e2   , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_absPtLxyDPhi2"        , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-4  , 1e5   , "#mu vertex |#Delta #phi_{#mu2}|"        , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 20, 0     , 10   , 1e-7  , 1e6   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_LxySigma"             , "", False, True  , default_norm        , 100, 0     , 100   , 1e-5  , 1e4   , "#mu vertex #sigma_{Lxy} [cm]"           , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_LxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 150   , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"       , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_vxySigma"             , "", False, True  , default_norm        , 50 , 0     , 100   , 1e-3  , 1e6   , "#mu vertex #sigma_{Vxy} [cm]"           , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_vxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex V_{xy} / #sigma_{Vxy}"       , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert1"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-6  , 1e6   , "N(hits before vertex)"                  , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert2"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-7  , 1e5   , "N(hits before vertex)"                  , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 10, 0      , 10    , 1e-5  , 1e6   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_minDxyPVTraj"         , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex min d_{xy} [cm]"             , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_maxDxyPVTraj"         , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex max d_{xy} [cm]"             , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig1"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} / #sigma_{dxy}^{1}"  , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig2"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} / #sigma_{dxy}^{2}"  , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_minDxyPVTrajSig"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex min d_{xy} / #sigma_{dxy}"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_maxDxyPVTrajSig"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex max d_{xy} / #sigma_{dxy}"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Dimuon1"      , "", False, True  , default_norm        , 1  , 0     , 1   , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Dimuon1"      , "", False, True  , default_norm        , 1  , 0     , 1   , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Dimuon2"      , "", False, True  , default_norm        , 1  , 0     , 1   , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Dimuon2"      , "", False, True  , default_norm        , 1  , 0     , 1   , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Muon1"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Muon1"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Muon2"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Muon2"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_pfRelIso04all1"                  , "", False, True  , default_norm        , 4  , 0     , 1    , 1e-3  , 1e6   , "#mu_{1} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_pfRelIso04all2"                  , "", False, True  , default_norm        , 4  , 0     , 1    , 1e-3  , 1e6   , "#mu_{2} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_tkRelIsoMuon1"                   , "", False, True  , default_norm        , 4  , 0     , 10    , 1e-3  , 1e6   , "#mu_{1} I_{tk}^{rel} ( #Delta R < 0.3 )"    , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_tkRelIsoMuon2"                   , "", False, True  , default_norm        , 4  , 0     , 10    , 1e-3  , 1e6   , "#mu_{2} I_{tk}^{rel} ( #Delta R < 0.3 )"    , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig1"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} / #sigma_{dxy}^{1}"  , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig2"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} / #sigma_{dxy}^{2}"  , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_alpha"                , "", False, True  , default_norm        , 10 , 0      , 3.5  , 1e-4  , 1e6   , "#mu vertex #alpha"                      , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_cosAlpha"             , "", False, True  , default_norm        , 5  , -1     , 1    , 1e-4  , 1e7   , "#mu vertex cos #alpha"                  , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_deltaPixelHits"       , "", False, True  , default_norm        , 1  , 0      , 15   , 1e-3  , 1e6   , "#mu vertex #Delta(Pixel Hits)"          , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_nSegments"            , "", False, True  , default_norm        , 1  , 0      , 20   , 1e-4  , 1e7   , "#mu vertex N(Segments)"                 , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_nSegments1"           , "", False, True  , default_norm        , 1  , 0      , 20   , 1e-4  , 1e7   , "#mu_{1} vertex N(Segments)"             , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_nSegments2"           , "", False, True  , default_norm        , 1  , 0      , 20   , 1e-4  , 1e7   , "#mu_{2} vertex N(Segments)"             , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_nDTHits"              , "", False, True  , default_norm        , 1  , 0      , 50   , 1e-4  , 1e8   , "#mu vertex N(DT Hits)"                  , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_nDTHits1"             , "", False, True  , default_norm        , 1  , 0      , 50   , 1e-4  , 1e8   , "#mu_{1} vertex N(DT Hits)"              , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_nDTHits2"             , "", False, True  , default_norm        , 1  , 0      , 50   , 1e-4  , 1e8   , "#mu_{2} vertex N(DT Hits)"              , "# events (2018)"   ),
     )
 
-histograms2D_LLPnanoAOD = ()
+for dimuonCollectionName in dimuonNminus1CollectionNames:
+  for category in muonVertexCategories:
+    LLPnanoAOD_histograms += (
+      Histogram(dimuonCollectionName+category+"_invMass"                     , "", False, True  , default_norm        , 10 , 0     , 10   , 1e-4  , 1e7   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_chargeProduct"               , "", False, True  , default_norm        , 1  , -1    , 2    , 1e-2  , 1e10  , "Dimuon charge"                          , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_maxHitsInFrontOfVert"        , "", False, True  , default_norm        , 1  , 0     , 35   , 1e-3  , 1e9   , "Max N(hits before vertex)"              , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_absPtLxyDPhi1"               , "", False, True  , default_norm        , 10 , 0     , 3.15 , 1e-3  , 1e9   , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_dca"                         , "", False, True  , default_norm        , 20 , 0     , 15   , 1e-4  , 1e9   , "DCA [cm]"                               , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_absCollinearityAngle"        , "", False, True  , default_norm        , 10 , 0     , 3.15 , 1e-3  , 1e9   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_normChi2"                    , "", False, True  , default_norm        , 1000,0     , 100  , 1e-5  , 1e6   , "#mu vertex #chi^{2}/ndof"               , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_displacedTrackIso03Dimuon1"  , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_displacedTrackIso03Dimuon2"  , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_pfRelIso1"                   , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{1} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_pfRelIso2"                   , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{2} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
+    )
 
 histograms_muonMatching = (
   Histogram("Event_nSegmentMatchLooseMuons"             , "", False, True  , default_norm       , 1  , 0     , 15    , 1e-2*y_scale   , 1e9*y_scale  , "Number of segment matched loose PAT #mu" , "# events (2018)"   ),
@@ -299,8 +296,8 @@ histograms_genALPs = (
   Histogram("Event_nGenMuonFromALP"               , "", False, True  , default_norm     , 1  , 0     , 4     , 1e-6   , 1e4   , "# Gen #mu from ALP"     , "# events (2018)"   ),
   Histogram("GenMuonFromALP_pdgId"                , "", False, True  , default_norm     , 1  , -100  , 100   , 1e-2   , 1e4   , "Gen #mu particle ID"                    , "# events (2018)"   ),
   Histogram("GenMuonFromALP_Lxy"                  , "", False, True  , default_norm     , 200, 0     , 1000  , 1e-8   , 1e1   , "Gen #mu L_{xy} [cm]"                    , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_properLxy"            , "", False, True  , default_norm     , 2  , 0     , 10    , 1e-2   , 1e4   , "Gen proper #mu L_{xy} [cm]"             , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_properLxyT"           , "", False, True  , default_norm     , 200, 0     , 1000  , 1e-8   , 1e1   , "Gen proper #mu L_{xy} [cm]"             , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_properLxy"            , "", False, True  , default_norm     , 1  , 0     , 1     , 1e-6   , 1e2   , "Gen proper #mu L_{xy} [cm]"             , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_properLxyT"           , "", False, True  , default_norm     , 1  , 0     , 1     , 1e-6   , 1e2   , "Gen proper #mu L_{xy} [cm]"             , "# events (2018)"   ),
   Histogram("GenMuonFromALP_properLxyz"           , "", False, True  , default_norm     , 100, 0     , 600   , 1e-8   , 1e1   , "Gen proper #mu L_{xyz} [cm]"            , "# events (2018)"   ),
   Histogram("GenMuonFromALP_pt"                   , "", False, True  , default_norm     , 40 , 0     , 500   , 1e-3   , 1e3   , "Gen #mu p_{T} [GeV]"                    , "# events (2018)"   ),
   Histogram("GenMuonFromALP_eta"                  , "", False, True  , default_norm     , 10 , -3    , 3     , 1e-1   , 1e5   , "Gen #mu #eta"                           , "# events (2018)"   ),
@@ -358,9 +355,14 @@ histograms_genMuonFromTopStudy = (
   Histogram("TightMuonsFromWSegmentMatch_hmu_hasLeadingMuon"   , "", False, True  , default_norm     , 1  , 0     , 2     , 1e-2   , 1e4   , "Leading muon from W boson"            , "# events (2018)"   ),
   Histogram("TightMuonsFromWSegmentMatch_index"                , "", False, True  , default_norm     , 1  , 0     , 10    , 1e-4   , 1e2   , "Tight #mu from W index"               , "# events (2018)"   ),
   Histogram("TightMuonsFromWSegmentMatch_hmu_index"            , "", False, True  , default_norm     , 1  , 0     , 10    , 1e-4   , 1e2   , "Tight #mu from W index"               , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDR"   , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta R (gen #mu, loose #mu)"         , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDPhi" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #Phi (gen #mu, loose #mu)"      , "# events (2018)"   ),
-  Histogram("GenMuonFromALP_LooseMuons"+method+"MatchMinDEta" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #eta (gen #mu, loose #mu)"      , "# events (2018)"   ),
+  Histogram("GenMuonFromALP1_LooseMuonsSegmentMatchMinDR"   , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta R (gen #mu_{1}, loose #mu)"         , "# events (2018)"   ),
+  Histogram("GenMuonFromALP1_LooseMuonsSegmentMatchMinDPhi" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #Phi (gen #mu_{1}, loose #mu)"      , "# events (2018)"   ),
+  Histogram("GenMuonFromALP1_LooseMuonsSegmentMatchMinDEta" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #eta (gen #mu_{1}, loose #mu)"      , "# events (2018)"   ),
+  Histogram("GenMuonFromALP2_LooseMuonsSegmentMatchMinDR"   , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta R (gen #mu_{2}, loose #mu)"         , "# events (2018)"   ),
+  Histogram("GenMuonFromALP2_LooseMuonsSegmentMatchMinDPhi" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #Phi (gen #mu_{2}, loose #mu)"      , "# events (2018)"   ),
+  Histogram("GenMuonFromALP2_LooseMuonsSegmentMatchMinDEta" , "", False, True  , default_norm     , 1 , 0     , 0.5    , 1e-5  , 1e3   , "min #Delta #eta (gen #mu_{2}, loose #mu)"      , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_pt1"                  , "", False, True  , default_norm     , 20 , 0     , 500   , 1e-6  , 1e2   , "Gen #mu_{1} p_{T} [GeV]"      , "# events (2018)"   ),
+  Histogram("GenMuonFromALP_pt2"                  , "", False, True  , default_norm     , 20 , 0     , 500   , 1e-6  , 1e2   , "Gen #mu_{2} p_{T} [GeV]"      , "# events (2018)"   ),
 )
 
 histograms2D_genALPs = ()
@@ -379,18 +381,54 @@ genmuonVertexCollectionNames = [
   "LooseMuonsNotFromALP",
   "LooseDimuonsNotFromALP",
 ]
+genDimuonNminus1CollectionNames = [
+  "GoodPFIsoDimuonVerticesFromALPNminus1",
+]
+genVertexCollectionNames = [
+  "GoodPFIsoDimuonVertexFromALP",
+  "GoodPFIsoDimuonVertexResonancesNotFromALP",
+  "GoodPFIsoDimuonVertexNonresonancesNotFromALP",
+]
 muonVertexCategories = ["", "_Pat", "_DSA", "_PatDSA"]
 
 for genDimuonCollectionName in genDimuonCollectionNames:
   histograms_genALPs += (
     Histogram("Event_n"+genDimuonCollectionName                     , "", False, True  , default_norm    , 1   , 0    , 5     , 1e-7   , 1e4   , "# Gen Dimuons not from ALP"     , "# events (2018)"   ),
-    Histogram(genDimuonCollectionName+"_invMass"                    , "", False, True  , default_norm    , 200 , 0    , 200   , 1e-6   , 1e4   , "Gen m_{#mu #mu} [GeV]"          , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_invMass"                    , "", False, True  , default_norm    , 100 , 0    , 100   , 1e-6   , 1e4   , "Gen m_{#mu #mu} [GeV]"          , "# events (2018)"   ),
     Histogram(genDimuonCollectionName+"_deltaR"                     , "", False, True  , default_norm    , 10  , 0    , 3     , 1e-4   , 1e2   , "Gen #Delta R(#mu #mu)"          , "# events (2018)"   ),
     Histogram(genDimuonCollectionName+"_absCollinearityAngle"       , "", False, True  , default_norm    , 10  , 0    , 3.15  , 1e-6   , 1e2   , "Gen Dimuon |#Delta #Phi|"       , "# events (2018)"   ),
     Histogram(genDimuonCollectionName+"_absPtLxyDPhi1"              , "", False, True  , default_norm    , 10  , 0    , 3.15  , 1e-5   , 1e3   , "Gen |#Delta #phi_{#mu1}|"       , "# events (2018)"   ),  
     Histogram(genDimuonCollectionName+"_absPtLxyDPhi2"              , "", False, True  , default_norm    , 10  , 0    , 3.15  , 1e-5   , 1e3   , "Gen |#Delta #phi_{#mu2}|"       , "# events (2018)"   ),
-    Histogram(genDimuonCollectionName+"_Lxy"                        , "", False, True  , default_norm    , 2   , 0    , 10    , 1e-6   , 1e4   , "Gen #mu L_{xy} [cm]"            , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_Lxy"                        , "", False, True  , default_norm    , 100 , 0    , 800   , 1e-6   , 1e2   , "Gen #mu L_{xy} [cm]"            , "# events (2018)"   ),
   )
+
+for genDimuonCollectionName in genDimuonNminus1CollectionNames:
+  histograms_genALPs += (
+    Histogram(genDimuonCollectionName+"_invMass"                     , "", False, True  , default_norm        , 10 , 0     , 10   , 1e-4  , 1e7   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_chargeProduct"               , "", False, True  , default_norm        , 1  , -1    , 2    , 1e-2  , 1e10  , "Dimuon charge"                          , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_maxHitsInFrontOfVert"        , "", False, True  , default_norm        , 1  , 0     , 35   , 1e-3  , 1e9   , "Max N(hits before vertex)"              , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_absPtLxyDPhi1"               , "", False, True  , default_norm        , 10 , 0     , 3.15 , 1e-3  , 1e9   , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_dca"                         , "", False, True  , default_norm        , 20 , 0     , 15   , 1e-4  , 1e9   , "DCA [cm]"                               , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_absCollinearityAngle"        , "", False, True  , default_norm        , 10 , 0     , 3.15 , 1e-3  , 1e9   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_normChi2"                    , "", False, True  , default_norm        , 1000,0     , 100  , 1e-5  , 1e6   , "#mu vertex #chi^{2}/ndof"               , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_displacedTrackIso03Dimuon1"  , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_displacedTrackIso03Dimuon2"  , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_pfRelIso1"                   , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{1} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_pfRelIso2"                   , "", False, True  , default_norm        , 1  , 0     , 1    , 1e-3  , 1e9   , "#mu_{2} I_{PF}^{rel} ( #Delta R < 0.4 )"    , "# events (2018)"   ),
+  )
+
+for muonVertexCollectionName in genVertexCollectionNames:
+  for category in {"_Pat", "_PatDSA", "_DSA"}:
+    histograms_genALPs += (
+      Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_LxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 150   , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"       , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_alpha"                , "", False, True  , default_norm        , 10 , 0      , 3.5  , 1e-4  , 1e6   , "#mu vertex #alpha"                      , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_cosAlpha"             , "", False, True  , default_norm        , 5  , -1     , 1    , 1e-4  , 1e7   , "#mu vertex cos #alpha"                  , "# events (2018)"   ),
+    )
+    histograms2D_genALPs += (
+      Histogram2D(muonVertexCollectionName+category+"_Lxy_alpha",            "",  False,  False,  True,  NormalizationType.to_lumi,  2,  2,   0, 250,  0,3.15,  1e-5,  1e1,  "L_{xy} [cm]",  "#mu vertex #alpha",    "# events (2018)",  ""  ),
+      Histogram2D(muonVertexCollectionName+category+"_Lxy_cosAlpha",         "",  False,  False,  True,  NormalizationType.to_lumi,  2,  2,   0, 250, -1,   1,  1e-5,  1e1,  "L_{xy} [cm]",  "#mu vertex cos #alpha",    "# events (2018)",  ""  ),
+    )
 
 for i in range(1,6):
   histograms_genALPs += (
@@ -414,7 +452,7 @@ for method in genMuonMatchingMethods:
       Histogram(collectionName+"_ip3DPVSigned"    , "", False, True  , default_norm  , 100, -500  , 500   , 1e-6  , 1e2   , "loose #mu 3D IP [cm]"                  , "# events (2018)"   ),
       Histogram(collectionName+"_ip3DPVSignedErr" , "", False, True  , default_norm  , 20 , 0     , 200   , 1e-6  , 1e2   , "loose #mu #sigma_{3DIP} [cm]"          , "# events (2018)"   ),
       Histogram(collectionName+"_ip3DPVSignedSig" , "", False, True  , default_norm  , 20 , 0     , 200   , 1e-6  , 1e2   , "loose #mu 3D IP / #sigma_{3DIP}"       , "# events (2018)"   ),
-      Histogram(collectionName+"_invMass"      , "", False, True  , default_norm     , 10 , 0     , 10    , 1e-6  , 1e2   , "loose m_{#mu #mu} [GeV]"               , "# events (2018)"   ),
+      Histogram(collectionName+"_invMass"      , "", False, True  , default_norm     , 20 , 0     , 20    , 1e-6  , 1e2   , "loose m_{#mu #mu} [GeV]"               , "# events (2018)"   ),
       Histogram(collectionName+"_deltaR"       , "", False, True  , default_norm     , 10 , 0     , 10    , 1e-6  , 1e2   , "loose #Delta R (#mu #mu)"              , "# events (2018)"   ),
       Histogram(collectionName+"_outerDeltaR"  , "", False, True  , default_norm     , 10 , 0     , 10    , 1e-6  , 1e2   , "loose outer #Delta R (#mu #mu)"        , "# events (2018)"   ),
       Histogram(collectionName+"_genMuonMinDR" , "", False, True  , default_norm     , 1  , 0     , 0.4   , 1e-6  , 1e2   , "min #Delta R (loose #mu, gen #mu)"              , "# events (2018)"   ),
@@ -427,43 +465,20 @@ for method in genMuonMatchingMethods:
     for category in muonVertexCategories:
       histograms_genALPs += (
         Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 4     , 1e-3  , 1e6   , "Number of loose #mu vertices"           , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
+        Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-6  , 1e2   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_vxySigma"             , "", False, True  , default_norm        , 50 , 0     , 100   , 1e-3  , 1e6   , "#mu vertex #sigma_{vxy} [cm]"           , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_vxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex v_{xy} / #sigma_{vxy}"       , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dR"                   , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex #Delta R"                    , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_proxDR"               , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex proximity #Delta R"          , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_outerDR"              , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex outer #Delta R"              , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dEta"                 , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex #Delta #eta"                 , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_outerDEta"            , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex outer #Delta #eta"           , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dPhi"                 , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex #Delta #phi"                 , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_outerDPhi"            , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-3  , 1e6   , "#mu vertex outer #Delta #phi"           , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_normChi2"             , "", False, True  , default_norm        , 100, 0     , 5     , 1e-6  , 1e1   , "#mu vertex #chi^{2}/ndof"               , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_chargeProduct"        , "", False, True  , default_norm        , 1  , -1    , 2     , 1e-5  , 1e6   , "Dimuon charge"                          , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_maxHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 30    , 1e-6  , 1e3   , "Max N(hits in front of vertex)"    , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_maxMissHitsAfterVert" , "", False, True  , default_norm        , 1  , 0     , 10    , 1e-3  , 1e6   , "max hits after #mu vertex fit"          , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dca"                  , "", False, True  , default_norm        , 20 , 0     , 15    , 1e-6  , 1e4   , "DCA(#mu#mu) [cm]"                               , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-5  , 1e2   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_absPtLxyDPhi1"        , "", False, False , default_norm        , 10 , 0     , 3.15  , 0     , 0.25  , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_absPtLxyDPhi2"        , "", False, True  , default_norm        , 10 , 0     , 3.15  , 1e-6  , 1e3   , "#mu vertex |#Delta #phi_{#mu2}|"        , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 20 , 0     , 10    , 1e-6  , 1e3   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
+        Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 100, 0     , 100   , 1e-6  , 1e3   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_minDxyPVTraj"         , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex min d_{xy} [cm]"             , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_maxDxyPVTraj"         , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex max d_{xy} [cm]"             , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig1"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} / #sigma_{dxy}^{1}"  , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig2"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} / #sigma_{dxy}^{2}"  , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_minDxyPVTrajSig"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex min d_{xy} / #sigma_{dxy}"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_maxDxyPVTrajSig"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex max d_{xy} / #sigma_{dxy}"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Dimuon1"      , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-6  , 1e6   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Dimuon1"      , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-6  , 1e6   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Dimuon2"      , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-6  , 1e6   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Dimuon2"      , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-6  , 1e6   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Muon1"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e6   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Muon1"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e6   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso03Muon2"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e6   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )"   , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_displacedTrackIso04Muon2"        , "", False, True  , default_norm        , 1  , 0     , 1     , 1e-3  , 1e6   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )"   , "# events (2018)"   ),
       )
 
 if plots_from_LLPNanoAOD:
@@ -523,14 +538,17 @@ data_samples = (
 )
 
 signals = {
+  # "tta_mAlp-70GeV_ctau-1e0mm" : {"label": "m_{a} = 70 GeV, c#tau_{a} = 1 mm", "color": ROOT.kMagenta},
+  # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
   "tta_mAlp-1GeV_ctau-1e0mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
   "tta_mAlp-1GeV_ctau-1e1mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
   "tta_mAlp-1GeV_ctau-1e2mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
   # "tta_mAlp-1GeV_ctau-1e3mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
 }
-signal_samples = []
+signal_samples = ()
 for signal_name, signal_info in signals.items():
-  signal_samples.append(
+  signal_samples += (
     Sample(
       name=signal_name,
       file_path=f"{base_path}/signals/{signal_name}/{skim}/{hist_path}/histograms.root",
@@ -542,7 +560,7 @@ for signal_name, signal_info in signals.items():
       marker_size=0,
       line_color=signal_info["color"],
       legend_description=signal_info["label"],
-    )
+    ),
   )
 
 background_samples = (
