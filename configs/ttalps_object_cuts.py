@@ -1,7 +1,7 @@
 # good object definitions
 SRDimuonVertexBaseCuts = {
   "maxDCA": 15.0,
-  "maxChargeProduct": -1.0,
+  "maxChargeProduct": -0.1,
   ## SR mass cut
   "maxInvariantMass": 70.0,
   "minInvariantMass": 0.0,
@@ -67,7 +67,7 @@ SRDimuonVertexDSACuts = {
 # good object definitions
 JPsiDimuonVertexBaseCuts = {
   "maxDCA": 15.0,
-  "maxChargeProduct": -1.0,
+  "maxChargeProduct": -0.1,
   ## JPsi CR cut
   "maxInvariantMass": 3.3,
   "minInvariantMass": 2.9,
