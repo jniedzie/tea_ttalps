@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
   bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runLLPTriggerHistograms, runPileupHistograms;
-  bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms;
+  bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
   bool runLLPNanoAODVertexHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runCustomTTAlpsHistograms", runCustomTTAlpsHistograms);
@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
   config.GetValue("runLLPNanoAOD2DHistograms", runLLPNanoAOD2DHistograms);
   config.GetValue("runMuonMatchingHistograms", runMuonMatchingHistograms);
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
+  config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runLLPNanoAODVertexHistograms", runLLPNanoAODVertexHistograms);
 
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
@@ -81,7 +82,7 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     }
     bool passesDimuonCuts = false;
-    if (runLLPNanoAODHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms) {
+    if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
       passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager);
@@ -110,6 +111,9 @@ int main(int argc, char **argv) {
     }
     if(runGenMuonHistograms){
       ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVariables(event);
+    }
+    if(runGenMuonVertexCollectionHistograms) {
+      ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVertexCollectionsVariables(event);
     }
 
     if (runTriggerHistograms) {

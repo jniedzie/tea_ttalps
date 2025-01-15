@@ -55,7 +55,8 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
     {"DeltaEtaCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaEtaCut(v); }},
     {"DeltaPhiCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPhiCut(v); }},
     {"DeltaRCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaRCut(v); }},
-    {"DeltaPixelHitsCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPixelHitsCut(v); }}
+    {"DeltaPixelHitsCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPixelHitsCut(v); }},
+    {"BarrelDeltaEtaCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesBarrelDeltaEtaCut(v); }},
   };
 }
 
@@ -194,5 +195,12 @@ bool TTAlpsDimuonCuts::PassesDeltaPixelHitsCut(shared_ptr<NanoDimuonVertex> dimu
   if(category == "DSA" || category == "PatDSA") return true;
   auto dimuonVertexCuts = GetDimuonCategoryMap(category);
   if(dimuonVertex->GetDeltaPixelHits() > dimuonVertexCuts["maxDeltaPixelHits"]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesBarrelDeltaEtaCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto muon1eta = dimuonVertex->Muon1()->GetAsFloat("eta");
+  auto muon2eta = dimuonVertex->Muon2()->GetAsFloat("eta");
+  if(abs(muon1eta-muon2eta) > dimuonVertexBaseCuts["maxDeltaEta"]) return false;
   return true;
 }

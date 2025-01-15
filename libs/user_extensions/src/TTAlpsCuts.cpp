@@ -35,7 +35,7 @@ void TTAlpsCuts::RegisterInitialDimuonCuts(shared_ptr<CutFlowManager> cutFlowMan
     if(dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
     cutFlowManager->RegisterCollection(collectionName);
     cutFlowManager->RegisterCut("initial", collectionName);
-    cutFlowManager->RegisterCut("InitalDimuon", collectionName);
+    cutFlowManager->RegisterCut("initialDimuon", collectionName);
   }
 }
 
@@ -108,7 +108,7 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
   else dimuons = allDimuons;
     
   if (dimuons->size() < 1) return false;
-  cutFlowManager->UpdateCutFlow("InitalDimuon", collectionName);
+  cutFlowManager->UpdateCutFlow("initialDimuon", collectionName);
 
   auto baseDimuons = make_shared<PhysicsObjects>();
   for (const auto& dimuon : *dimuons) {

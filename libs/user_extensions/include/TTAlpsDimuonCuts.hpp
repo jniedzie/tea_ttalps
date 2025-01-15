@@ -29,6 +29,7 @@ class TTAlpsDimuonCuts {
   bool PassesDeltaPhiCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaRCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaPixelHitsCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
+  bool PassesBarrelDeltaEtaCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
 
   bool PassesCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex, std::string cutName);
   

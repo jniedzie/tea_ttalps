@@ -24,8 +24,10 @@ class TTAlpsHistogramFiller {
   void FillCustomTTAlpsVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesFromLLPNanoAOD(const std::shared_ptr<Event> event);
   void FillCustomTTAlps2DVariablesFromLLPNanoAOD(const std::shared_ptr<Event> event);
+  void FillCustomTTAlpsGenMuonVertexCollectionsVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
+  void FillGenLevelMuonCollectionHistograms(const std::shared_ptr<Event> event);
 
   void FillNormCheck(const std::shared_ptr<Event> event);
 
