@@ -1,7 +1,7 @@
 # good object definitions
 SRDimuonVertexBaseCuts = {
   "maxDCA": 15.0,
-  "maxChargeProduct": 0.0,
+  "maxChargeProduct": -1.0,
   ## SR mass cut
   "maxInvariantMass": 70.0,
   "minInvariantMass": 0.0,
@@ -15,12 +15,12 @@ SRDimuonVertexBaseCuts = {
   # "maxJpsiMass": 0.0,
   # "minpsiMass": 99999.0,
   # "maxpsiMass": 0.0,
+  "maxDeltaEta": 0.1,
 }
 SRDimuonVertexPATCuts = {
   "maxDCA": 9999.0,
   "maxChi2": 3.0,
   "maxHitsInFrontOfVertex": 3.0,
-  "maxDeltaPixelHits": 3.0,
   "maxCollinearityAngle": 2.0,
   # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
   "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
@@ -31,11 +31,12 @@ SRDimuonVertexPATCuts = {
   "maxDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
   "minLxy": 0.0,
+  "maxDeltaPixelHits": 9999.0,
 }
 SRDimuonVertexPATDSACuts = {
   "maxDCA": 2.0,
   "maxChi2": 3.0,
-  "maxHitsInFrontOfVertex": 3.0,
+  "maxHitsInFrontOfVertex": 6.0,
   "maxCollinearityAngle": 2.0,
   "maxpTLxyDPhi": 2.9,
   # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
@@ -46,6 +47,7 @@ SRDimuonVertexPATDSACuts = {
   "maxDEta": 9999.0,
   "maxDPhi": 9999.0,
   "minLxy": 0.0,
+  "maxDeltaPixelHits": 9999.0,
 }
 SRDimuonVertexDSACuts = {
   "maxDCA": 2.0,
@@ -59,13 +61,13 @@ SRDimuonVertexDSACuts = {
   "maxOuterDPhi": 9999.0,
   "maxpTLxyDPhi": 9999.0,
   "minLxy": 0.0,
+  "maxDeltaPixelHits": 9999.0,
 }
 
 # good object definitions
 JPsiDimuonVertexBaseCuts = {
   "maxDCA": 15.0,
-  # "maxChargeProduct": 0.0,
-  "maxChargeProduct": 9999.0,
+  "maxChargeProduct": -1.0,
   ## JPsi CR cut
   "maxInvariantMass": 3.3,
   "minInvariantMass": 2.9,
