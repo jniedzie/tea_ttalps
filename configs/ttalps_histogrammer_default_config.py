@@ -23,7 +23,6 @@ specialBranchSizes = {
   "Proton_singleRP": "nProton_singleRP",
 }
 
-# inputFilePath = "/nfs/dust/cms/user/lrygaard/ttalps_cms/backgrounds2018/TTToSemiLeptonic/LLPnanoAODv1merged/TTToSemiLeptonic_0.root"
 # histogramsOutputFilePath = "../test_hists.root"
 
 pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"

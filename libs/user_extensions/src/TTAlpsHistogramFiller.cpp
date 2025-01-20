@@ -462,9 +462,9 @@ void TTAlpsHistogramFiller::FillBasicMuonVertexHistograms(const shared_ptr<Event
     string category = dimuonVertex->GetVertexCategory();
     
     histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxy", dimuonVertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxy", dimuonVertex->GetLxyFromPV(), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxySigma", dimuonVertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxySignificance", float(dimuonVertex->Get("vxy"))/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_vxySignificance", float(dimuonVertex->GetLxyFromPV())/float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_dca", dimuonVertex->Get("dca"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_collinearityAngle", dimuonVertex->GetCollinearityAngle(), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill("GoodBestLooseMuonsVertex"+category+"_invMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2); 
