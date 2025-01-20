@@ -30,13 +30,27 @@ extraEventCollections = {
     "inputCollections": ("Electron",),
     "pt": (15., 9999999.),
     "eta": (-2.5, 2.5),
-    "mvaFall17V2Iso_WPL": True,
+    "mvaFall17V2Iso_WPL": True,  # TODO: Doesn't work for Run 3!! Will have to handle different cases.
   },
   
   "GoodJets": {
     "inputCollections": ("Jet", ),
     "pt": (30., 9999999.),
     "eta": (-2.4, 2.4),
+    # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
+    "jetId": 6,
+  },
+  "GoodForwardJetsPlus": {
+    "inputCollections": ("Jet", ),
+    "pt": (30., 9999999.),
+    "eta": (2.4, 4.7),
+    # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
+    "jetId": 6,
+  },
+  "GoodForwardJetsMinus": {
+    "inputCollections": ("Jet", ),
+    "pt": (30., 9999999.),
+    "eta": (-4.7, -2.4),
     # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
     "jetId": 6,
   },
@@ -63,6 +77,14 @@ extraEventCollections = {
     "eta": (-2.4, 2.4),
     "btagDeepFlavB": (0.0, 0.7100),
     # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
+    "jetId": 6,
+  },
+  
+  "GoodCentralNonBtaggedJets": {
+    "inputCollections": ("Jet", ),
+    "pt": (30., 9999999.),
+    "eta": (-2.4, 2.4),
+    "btagDeepFlavB": (0.0, 0.2783),
     "jetId": 6,
   },
 }

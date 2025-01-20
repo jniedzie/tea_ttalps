@@ -3,8 +3,8 @@ import os
 
 def main():
   
-  # base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
-  base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
+  base_path = "/nfs/dust/cms/user/{}/ttalps_cms"
+  output_username = os.environ["USER"]
   
   # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
   skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
@@ -40,8 +40,8 @@ def main():
     
     print(f"{output_path=}")
     
-    os.system(f"rm {base_path}/{output_path}")
-    os.system(f"hadd -f -j -k {base_path}/{output_path} {base_path}/{input_path}")
+    os.system(f"rm {base_path.format(output_username)}/{output_path}")
+    os.system(f"hadd -f -j -k {base_path.format(output_username)}/{output_path} {base_path.format(output_username)}/{input_path}")
 
 if __name__ == "__main__":
   main()
