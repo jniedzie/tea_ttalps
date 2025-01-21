@@ -62,12 +62,12 @@ muonMatchingMethods = [
 #   # # "DR", 
 #   # # "OuterDR", 
 #   # # "ProxDR", 
-  # "Segment"
+  "Segment"
 ]
 
 # for genALP plots
 genMuonMatchingMethods = [
-  # "Segment"
+  "Segment"
 ]
 
 extraMuonVertexCollections = [
@@ -84,7 +84,7 @@ extraMuonVertexCollections = [
 
 dimuonNminus1CollectionNames = [
   # "BestIsoDimuonVertexNminus1",
-  # "BestPFIsoDimuonVertexNminus1",
+  "BestPFIsoDimuonVertexNminus1",
 ]
 
 signal_legend = Legend(legend_max_x-legend_width, legend_max_y-5*legend_height, legend_max_x-2*legend_width, legend_max_y, "l")
@@ -184,8 +184,7 @@ for muonVertexCollectionName in muonVertexCollectionNames:
   for category in muonVertexCategories:
     LLPnanoAOD_histograms += (
       Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 45    , 1e-4  , 1e3   , "Number of loose #mu vertices"           , "# events (2018)"   ),
-      # Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", True,  True  , default_norm        , 1  , 1e-3  , 1e3   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_LxySigma"             , "", False, True  , default_norm        , 100, 0     , 100   , 1e-5  , 1e4   , "#mu vertex #sigma_{Lxy} [cm]"           , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_LxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 150   , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"       , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_vxySigma"             , "", False, True  , default_norm        , 50 , 0     , 100   , 1e-3  , 1e6   , "#mu vertex #sigma_{Vxy} [cm]"           , "# events (2018)"   ),
