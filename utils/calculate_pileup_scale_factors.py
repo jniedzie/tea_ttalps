@@ -5,7 +5,7 @@ import os
 def main():
   gStyle.SetOptStat(0)
   
-  base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
+  base_path = "/data/dust/user/jniedzie/ttalps_cms"
   data_file_path = f"{base_path}/collision_data2018/SingleMuon2018__histograms_pileup.root"
   background_file_paths = {
     "tt (semi-leptonic)": f"{base_path}/backgrounds2018/TTToSemiLeptonic/histograms_pileup/histograms.root",

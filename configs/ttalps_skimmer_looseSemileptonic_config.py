@@ -6,9 +6,9 @@ applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
-# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds/"
-# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
-# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
+# basePath = "/data/dust/user/jniedzie/ttalps_cms/backgrounds/"
+# basePath = "/data/dust/user/jniedzie/ttalps_cms/signals/"
+# basePath = "/data/dust/user/jniedzie/ttalps_cms/collision_data/"
 
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"

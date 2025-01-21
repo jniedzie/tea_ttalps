@@ -7,7 +7,7 @@ from HistogramNormalizer import NormalizationType
 
 from ttalps_cross_sections import *
 
-base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/"
+base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
 hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 
