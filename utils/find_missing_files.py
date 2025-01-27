@@ -16,7 +16,7 @@ skim = "skimmed_looseSemimuonic_looseMuon_looseBjet/"
 # Histograms
 # skim = "skimmed_ttbarLike/histograms/"
 
-base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
+base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
 samples = (
 # tt̄
@@ -165,8 +165,8 @@ if __name__ == '__main__':
   main()
   
   
-# ./ttalps_skimmer ttalps_skimmer_ttbarLike_config.py /nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_looseSemileptonic/2D47004A-E7E8-4A49-9EA2-374FAB2437BA.root /nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_ttbarLike/2D47004A-E7E8-4A49-9EA2-374FAB2437BA.root
+# ./ttalps_skimmer ttalps_skimmer_ttbarLike_config.py /data/dust/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_looseSemileptonic/2D47004A-E7E8-4A49-9EA2-374FAB2437BA.root /data/dust/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_ttbarLike/2D47004A-E7E8-4A49-9EA2-374FAB2437BA.root
 
-# ./ttalps_skimmer ttalps_skimmer_ttbarLike_config.py /nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/skimmed_looseSemileptonic/EEA943A9-2FA6-634D-AAAA-66055F00E547.root /nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/skimmed_ttbarLike/EEA943A9-2FA6-634D-AAAA-66055F00E547.root
+# ./ttalps_skimmer ttalps_skimmer_ttbarLike_config.py /data/dust/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/skimmed_looseSemileptonic/EEA943A9-2FA6-634D-AAAA-66055F00E547.root /data/dust/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/skimmed_ttbarLike/EEA943A9-2FA6-634D-AAAA-66055F00E547.root
 
-# ./ttalps_histogrammer ttalps_histogrammer_default_config.py /nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_ttZLike/10AE0CA0-AD1E-5A47-8437-B0D867A62B80.root /nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_ttZLike/histograms/10AE0CA0-AD1E-5A47-8437-B0D867A62B80.root
+# ./ttalps_histogrammer ttalps_histogrammer_default_config.py /data/dust/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_ttZLike/10AE0CA0-AD1E-5A47-8437-B0D867A62B80.root /data/dust/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_ttZLike/histograms/10AE0CA0-AD1E-5A47-8437-B0D867A62B80.root

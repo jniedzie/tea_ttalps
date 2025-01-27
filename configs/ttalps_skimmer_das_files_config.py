@@ -2,8 +2,8 @@ from ttalps_samples_list import dasBackgrounds2018, dasSignals2018, dasData2018
 
 max_files = -1
 
-# base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
-base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
+# base_path = "/data/dust/user/jniedzie/ttalps_cms"
+base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 # Loose semimuonic skims - unmerged directoreis to later merge files
 output_skim = "skimmed_looseSemimuonicv1_unmerged"

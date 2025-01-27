@@ -1,7 +1,7 @@
 import ROOT
 import os
 
-base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
+base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
 # Loose skims
 # sub_path = "skimmed_looseSemimuonic_tightMuon/"

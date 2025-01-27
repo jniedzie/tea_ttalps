@@ -7,7 +7,7 @@ from HistogramNormalizer import NormalizationType
 
 from ttalps_cross_sections import *
 
-base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/"
+base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 
 # Default settings
 # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
@@ -51,7 +51,7 @@ extraText = "Preliminary"
 plots_from_LLPNanoAOD = True
 plot_genALP_info = True
 plot_genCollinearityStudy = False
-plot_gengenMuonFromTopStudy = False
+plot_genMuonFromTopStudy = False
 plot_muonMatching_info = False
 plot_background = True
 plot_data = False
@@ -62,7 +62,7 @@ muonMatchingMethods = [
 #   # # "DR", 
 #   # # "OuterDR", 
 #   # # "ProxDR", 
-  # "Segment"
+  "Segment"
 ]
 
 # for genALP plots
@@ -490,7 +490,7 @@ if plot_genALP_info:
 if plot_genCollinearityStudy:
   histograms = histograms + histograms_genCollinearityStudy
 
-if plot_gengenMuonFromTopStudy:
+if plot_genMuonFromTopStudy:
   histograms = histograms + histograms_genMuonFromTopStudy
 
 if plot_muonMatching_info:

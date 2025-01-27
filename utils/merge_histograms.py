@@ -3,7 +3,7 @@ import os
 
 def main():
   
-  base_path = "/nfs/dust/cms/user/{}/ttalps_cms"
+  base_path = "/data/dust/user/{}/ttalps_cms"
   output_username = os.environ["USER"]
   
   # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons

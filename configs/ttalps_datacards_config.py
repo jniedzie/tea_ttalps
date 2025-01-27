@@ -3,7 +3,7 @@ from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
 from ttalps_cross_sections import *
 
-base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms/"
+base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 
 # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"

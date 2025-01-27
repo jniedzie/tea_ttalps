@@ -2,8 +2,8 @@ from ttalps_samples_list import backgrounds2018, signals2018, data2018
 
 max_files = -1
 
-# base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
-base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
+# base_path = "/data/dust/user/jniedzie/ttalps_cms"
+base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 
 ### Input skims ###
