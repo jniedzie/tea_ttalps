@@ -49,7 +49,7 @@ extraText = "Preliminary"
 
 ## SETTINGS ##
 plots_from_LLPNanoAOD = True
-plot_genALP_info = True
+plot_genALP_info = False
 plot_genCollinearityStudy = False
 plot_genMuonFromTopStudy = False
 plot_muonMatching_info = False
@@ -77,13 +77,10 @@ extraMuonVertexCollections = [
   # # "GoodDimuonVertices", 
   # "BestDimuonVertex", 
   # Good Dimuon selection with isolation cut:
-  # # "GoodIsoDimuonVertices", 
-  # "BestIsoDimuonVertex", 
   "BestPFIsoDimuonVertex",
 ]
 
 dimuonNminus1CollectionNames = [
-  # "BestIsoDimuonVertexNminus1",
   "BestPFIsoDimuonVertexNminus1",
 ]
 
@@ -92,7 +89,7 @@ sampletype = "sig"
 
 if plot_background:
   plot_genALP_info = False
-  signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-3*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
+  signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-5*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
   sampletype = "bkg"
 
 if plot_data:
@@ -141,19 +138,15 @@ histograms = (
   Histogram("Event_PV_y"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV y [cm]"                           , "# events (2018)"   ),
   Histogram("Event_PV_z"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV z [cm]"                           , "# events (2018)"   ),
   
-  Histogram("cutFlow"                                 , "", False, True  , default_norm , 1  , 0     , 13     , 1e1*y_scale   , 1e23*y_scale   , "Selection"                      , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestPFIsoDimuonVertex"       , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestIsoDimuonVertex"       , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestIsoDimuonVertex_Pat"   , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestIsoDimuonVertex_PatDSA", "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestIsoDimuonVertex_DSA"   , "", False, True  , default_norm , 1  , 0     , 11     , 1e4           , 1e6            , "Selection"                      , "Number of events"  ),
+  Histogram("cutFlow"                                 , "", False, True  , default_norm , 1  , 0     , 13     , 1e1   , 1e23   , "Selection"                      , "Number of events"  ),  
+  Histogram("dimuonCutFlow_BestPFIsoDimuonVertex"       , "", False, True  , default_norm , 1  , 0     , 11     , 1e3           , 1e9            , "Selection"                      , "Number of events"  ),
   Histogram("Event_normCheck"                         , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1*y_scale  , 1e20*y_scale   , "norm check"                     , "# events (2018)"   ),
 )
 
 LLPnanoAOD_histograms = ()
 histograms2D_LLPnanoAOD = ()
 
-muonVertexCategories = ["_PatDSA", "_DSA", "_Pat", ""]
+muonVertexCategories = ["_PatDSA", "_DSA", "_Pat"]
 muonCollectionCategories = ["", "DSA", "PAT"]
 muonCollectionNames = []
 muonVertexCollectionNames = extraMuonVertexCollections
@@ -181,6 +174,10 @@ for muonCollectionName in muonCollectionNames:
   )
 
 for muonVertexCollectionName in muonVertexCollectionNames:
+  LLPnanoAOD_histograms += (
+    Histogram(muonVertexCollectionName+"_Lxy"                  , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
+    Histogram(muonVertexCollectionName+"_logLxy"               , "", False, True  , default_norm        , 10 , -5    , 3     , 1e-4  , 1e9   , "#mu vertex log_{10}(L_{xy}) [cm]"                 , "# events (2018)"   ),
+  )
   for category in muonVertexCategories:
     LLPnanoAOD_histograms += (
       Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 45    , 1e-4  , 1e3   , "Number of loose #mu vertices"           , "# events (2018)"   ),
@@ -539,12 +536,28 @@ data_samples = (
 
 signals = {
   # "tta_mAlp-70GeV_ctau-1e0mm" : {"label": "m_{a} = 70 GeV, c#tau_{a} = 1 mm", "color": ROOT.kMagenta},
-  # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm", "color": ROOT.kOrange+1},
-  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
-  "tta_mAlp-1GeV_ctau-1e0mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
-  "tta_mAlp-1GeV_ctau-1e1mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
-  "tta_mAlp-1GeV_ctau-1e2mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-60GeV_ctau-1e0mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
+  "tta_mAlp-60GeV_ctau-1e2mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
+  # "tta_mAlp-12GeV_ctau-1e1mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
+  # "tta_mAlp-12GeV_ctau-1e2mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-1GeV_ctau-1e0mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
+  # "tta_mAlp-1GeV_ctau-1e1mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
+  # "tta_mAlp-1GeV_ctau-1e2mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
   # "tta_mAlp-1GeV_ctau-1e3mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
+  # "tta_mAlp-1GeV_ctau-1e-5mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
+  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
+  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
+  # "tta_mAlp-2GeV_ctau-1e1mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
+  # "tta_mAlp-2GeV_ctau-1e2mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-2GeV_ctau-1e3mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
+  # "tta_mAlp-2GeV_ctau-1e-5mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
+  # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
+  # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
+  # "tta_mAlp-0p35GeV_ctau-1e1mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
+  # "tta_mAlp-0p35GeV_ctau-1e2mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-0p35GeV_ctau-1e3mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
+  # "tta_mAlp-0p35GeV_ctau-1e-5mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
 }
 signal_samples = ()
 for signal_name, signal_info in signals.items():
