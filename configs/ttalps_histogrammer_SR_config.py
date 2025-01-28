@@ -25,12 +25,9 @@ runGenMuonVertexCollectionHistograms = False  # can only be run on signal sample
 runLLPNanoAODVertexHistograms = False
 
 runABCDHistograms = True
-# abcdCollection = "BestPFIsoDimuonVertex"
-abcdCollection = "BestIsoDimuonVertex"
+abcdCollection = "BestPFIsoDimuonVertex"
 
-useLooseIsoPATMuons = False
 # dimuonSelection is the name of the selection in ttalps_object_cuts
-# dimuonSelection = "GoodDimuonVertex"
 dimuonSelection = "SRDimuonVertex"
 
 weightsBranchName = "genWeight"

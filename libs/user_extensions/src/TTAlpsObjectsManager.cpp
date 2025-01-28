@@ -30,21 +30,12 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
   } catch (const Exception &e) {
     info() << "Couldn't read muonVertexNminus1Collections from config file - is needed for GoodLooseMuonVertex N-1 collections" << endl;
   } 
-
-  bool useIso = true;
-  try {
-    config.GetValue("useLooseIsoPATMuons", useIso);
-  } catch (const Exception &e) {
-    info() << "Couldn't read useLooseIsoPATMuons from config file - will use isolated PAT LooseMuons collection with isolation cuts" << endl;
-  }
-  useLooseIsoPATMuons = useIso;
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> event) {
 
   auto loosePATMuons = event->GetCollection("LoosePATMuons");
   auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
-  if(useLooseIsoPATMuons) loosePATMuons = event->GetCollection("LooseIsoPATMuons");
   auto looseMuons = make_shared<PhysicsObjects>();
   for (auto muon : *loosePATMuons) {
     looseMuons->push_back(muon);
@@ -244,7 +235,6 @@ shared_ptr<PhysicsObject> TTAlpsObjectsManager::GetBestMuonVertex(const shared_p
 void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_ptr<Event> event) {
   auto loosePATMuons = event->GetCollection("LoosePATMuons");
   auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
-  if(useLooseIsoPATMuons) loosePATMuons = event->GetCollection("LooseIsoPATMuons");
   auto looseMuons = make_shared<PhysicsObjects>();
   for (auto muon : *loosePATMuons) {
     looseMuons->push_back(muon);

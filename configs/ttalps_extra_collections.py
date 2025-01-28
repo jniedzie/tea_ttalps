@@ -6,13 +6,6 @@ extraEventCollections = {
     "pfRelIso04_all": (0., 0.15),
     "tightId": True,
   },
-  "LooseIsoPATMuons": {
-    "inputCollections": ("Muon",),
-    "pt": (3., 9999999.),
-    "eta": (-2.5, 2.5),
-    "pfRelIso04_all": (0., 0.25),
-    "looseId": True,
-  },
   "LoosePATMuons": {
     "inputCollections": ("Muon",),
     "pt": (3., 9999999.),
