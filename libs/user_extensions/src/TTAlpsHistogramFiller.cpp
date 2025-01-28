@@ -80,8 +80,6 @@ float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> obj
     weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
   } else if (collectionName == "LoosePATMuons") {
     weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
-  } else if (collectionName == "LooseIsoPATMuons") {
-    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
   } else if (collectionName == "GoodTightBtaggedJets") {
     weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingTight");
   } else if (collectionName == "GoodMediumBtaggedJets") {
@@ -200,7 +198,7 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, s
 
 void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
-  string collectionName = "LooseIsoPATMuons";
+  string collectionName = "LoosePATMuons";
 
   auto looseMuons = event->GetCollection(collectionName);
   for (int iMuon1 = 0; iMuon1 < looseMuons->size(); iMuon1++) {
@@ -214,18 +212,18 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<Event> event) 
       auto muon2 = asNanoMuon(obj2);
       float muon2SF = GetObjectWeight(obj2, collectionName);
       TLorentzVector muon2vector = muon2->GetFourVector();
-      histogramsHandler->Fill("LooseIsoPATMuons_dimuonMinv", (muon1vector + muon2vector).M(), weight * muon1SF * muon2SF);
+      histogramsHandler->Fill("LoosePATMuons_dimuonMinv", (muon1vector + muon2vector).M(), weight * muon1SF * muon2SF);
     }
   }
 }
 
 void TTAlpsHistogramFiller::FillDiumonClosestToZhistgrams(const shared_ptr<Event> event) {
-  if (event->GetCollection("LooseIsoPATMuons")->size() < 2) {
+  if (event->GetCollection("LoosePATMuons")->size() < 2) {
     warn() << "Not enough muons in event to fill dimuon histograms" << endl;
     return;
   }
 
-  string collectionName = "LooseIsoPATMuons";
+  string collectionName = "LoosePATMuons";
 
   float weight = GetEventWeight(event);
   auto [muon1, muon2] = nanoEventProcessor->GetMuonPairClosestToZ(asNanoEvent(event), collectionName);

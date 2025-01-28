@@ -23,9 +23,7 @@ runGenMuonHistograms = False
 runGenMuonVertexCollectionHistograms = False
 runLLPNanoAODVertexHistograms = False
 
-useLooseIsoPATMuons = False
 # dimuonSelection is the name of the selection in ttalps_object_cuts
-# dimuonSelection = "GoodDimuonVertex"
 dimuonSelection = "SRDimuonVertex"
 
 weightsBranchName = "genWeight"
