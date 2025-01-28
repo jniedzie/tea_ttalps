@@ -84,9 +84,9 @@ bool TTAlpsCuts::PassesSignalLikeCuts(const shared_ptr<Event> event, shared_ptr<
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
   bool passesCuts = true;
-  for(auto &[origianlCollectionName, vertexCuts] : muonVertexCollections) {
-    string collectionName = origianlCollectionName;
-    if(dimuonCategory != "") collectionName = origianlCollectionName + "_" + dimuonCategory;
+  for(auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
+    string collectionName = originalCollectionName;
+    if(dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
     if(!PassesDimuonCuts(event, cutFlowManager, collectionName, vertexCuts, dimuonCategory)) passesCuts = false;
   }
   return passesCuts;
