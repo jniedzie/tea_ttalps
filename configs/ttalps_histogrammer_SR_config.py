@@ -15,12 +15,12 @@ runPileupHistograms = False
 #  - muonMatchingParams loose muons 
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
-runLLPNanoAODHistograms = True
+runLLPNanoAODHistograms = False
 runLLPNanoAOD2DHistograms = False
 
 runMuonMatchingHistograms = False
-runGenMuonHistograms = False
-runGenMuonVertexCollectionHistograms = True
+runGenMuonHistograms = False  # can only be run on signal samples
+runGenMuonVertexCollectionHistograms = False  # can only be run on signal samples
 runLLPNanoAODVertexHistograms = False
 
 useLooseIsoPATMuons = False
