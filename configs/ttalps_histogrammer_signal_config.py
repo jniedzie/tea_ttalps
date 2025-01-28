@@ -20,7 +20,7 @@ runLLPNanoAOD2DHistograms = False
 
 runMuonMatchingHistograms = False
 runGenMuonHistograms = False
-runGenMuonVertexCollectionHistograms = True
+runGenMuonVertexCollectionHistograms = False
 runLLPNanoAODVertexHistograms = False
 
 useLooseIsoPATMuons = False
@@ -88,16 +88,16 @@ muonCollectionCategories = ["", "DSA", "PAT"]
 muonCollectionNames = []
 
 muonVertexCollections = {
-  "GoodIsoDimuonVertices" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut"],
-  "BestIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut", "BestDimuonVertex"],
+  # "GoodIsoDimuonVertices" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut"],
+  # "BestIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut", "BestDimuonVertex"],
   "GoodPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut"],
   "BestPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut", "BestDimuonVertex"],
 }
 muonVertexCollectionNames = [collectionName for collectionName in muonVertexCollections.keys()]
 # N-1 collections need to be defined above
 muonVertexNminus1Collections = [
-  "GoodIsoDimuonVertices",
-  "BestIsoDimuonVertex",
+  # "GoodIsoDimuonVertices",
+  # "BestIsoDimuonVertex",
   "GoodPFIsoDimuonVertex",
   "BestPFIsoDimuonVertex",
 ]
@@ -137,7 +137,8 @@ for collectionName in muonVertexCollectionNames:
   LLPNanoAOD_histParams += (
     ("Event"       , "n"+collectionName       , 50     , 0      , 50     , ""  ),
     (collectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
-    (collectionName , "Lxy"                   , 1000   , 0      , 1000   , ""  ),
+    (collectionName , "Lxy"                   , 10000  , 0      , 1000   , ""  ),
+    (collectionName , "logLxy"                , 2000   , -10    , 10     , ""  ),
     (collectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
     (collectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
     (collectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
@@ -149,7 +150,8 @@ for collectionName in muonVertexCollectionNames:
     LLPNanoAOD_histParams += (
       ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
       (muonVertexCollectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
-      (muonVertexCollectionName , "Lxy"                   , 1000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "Lxy"                   , 10000  , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "logLxy"                , 2000   , -10    , 10     , ""  ),
       (muonVertexCollectionName , "LxySigma"              , 10000  , 0      , 100    , ""  ),
       (muonVertexCollectionName , "LxySignificance"       , 1000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "vxy"                   , 1000   , 0      , 1000   , ""  ),
