@@ -233,6 +233,21 @@ dasSignals2018_2GeV = {
 }
 dasSignals2018_12GeV = {
   "signals/tta_mAlp-12GeV_ctau-1e0mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
+  "signals/tta_mAlp-12GeV_ctau-1e1mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e1mm-00000000000000000000000000000000/USER",
+  "signals/tta_mAlp-12GeV_ctau-1e2mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e2mm-00000000000000000000000000000000/USER",
+  # "signals/tta_mAlp-12GeV_ctau-1e3mm" : "",
+}
+dasSignals2018_30GeV = {
+  # "signals/tta_mAlp-30GeV_ctau-1e0mm" : "",
+  # "signals/tta_mAlp-30GeV_ctau-1e1mm" : "",
+  # "signals/tta_mAlp-30GeV_ctau-1e2mm" : "",
+  # "signals/tta_mAlp-30GeV_ctau-1e3mm" : "",
+}
+dasSignals2018_60GeV = {
+  "signals/tta_mAlp-60GeV_ctau-1e0mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-60GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
+  # "signals/tta_mAlp-60GeV_ctau-1e1mm" : "",
+  "signals/tta_mAlp-60GeV_ctau-1e2mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-60GeV_ctau-1e2mm-00000000000000000000000000000000/USER",
+  # "signals/tta_mAlp-60GeV_ctau-1e3mm" : "",
 }
 dasSignals2018_70GeV = {
   "signals/tta_mAlp-70GeV_ctau-1e0mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-70GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
