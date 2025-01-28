@@ -344,6 +344,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
 
     histogramsHandler->Fill(vertexName + "_" + category + "_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_Lxy", dimuonVertex->GetLxyFromPV(), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName + "_" + category + "_logLxy", log10(dimuonVertex->GetLxyFromPV()), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_vxy", dimuonVertex->Get("vxy"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_vxySigma", dimuonVertex->Get("vxySigma"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_vxySignificance",
@@ -463,6 +464,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
 
     histogramsHandler->Fill(vertexName + "_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_Lxy", dimuonVertex->GetLxyFromPV(), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName + "_logLxy", log10(dimuonVertex->GetLxyFromPV()), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_dca", dimuonVertex->Get("dca"), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_absCollinearityAngle", abs(dimuonVertex->GetCollinearityAngle()),
                             weight * muonWeight1 * muonWeight2);
@@ -712,6 +714,7 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<PhysicsObject>
     float Lxy1 = sqrt(Lx1 * Lx1 + Ly1 * Ly1);
     TVector3 Lxyz1(Lx1, Ly1, Lz1);
     histogramsHandler->Fill(collectionName + "_Lxy", Lxy1, weight);
+    histogramsHandler->Fill(collectionName + "_logLxy", log10(Lxy1), weight);
 
     auto genParticles = event->GetCollection("GenPart");
     int motherIndex = asNanoGenParticle(muon1)->GetMotherIndex();
@@ -1201,7 +1204,11 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
     histogramsHandler->Fill(collectionName + "_ProxDeltaR", dimuonVertex->Get("dRprox"), weight);
   }
   if (cut == "DeltaPixelHitsCut") histogramsHandler->Fill(collectionName + "_DeltaPixelHits", dimuonVertex->GetDeltaPixelHits(), weight);
-  if (cut == "BarrelDeltaEtaCut") histogramsHandler->Fill(collectionName + "_dimuonEta", dimuonVertex->GetDimuonEta(), weight);
+  if (cut == "BarrelDeltaEtaCut") {
+    histogramsHandler->Fill(collectionName + "_dimuonEta", dimuonVertex->GetDimuonEta(), weight);
+    histogramsHandler->Fill(collectionName + "_DeltaEta", abs(dimuonVertex->GetDeltaEta()), weight);
+  }
+  if(cut.find("LogLxy") != string::npos) histogramsHandler->Fill(collectionName+"_LogLxy", log(dimuonVertex->GetLxyFromPV()), weight);
 }
 
 void TTAlpsHistogramFiller::FillLooseMuonsFromALPsNminus1Histograms(const shared_ptr<Event> event) {

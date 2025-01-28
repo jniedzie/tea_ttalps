@@ -57,6 +57,10 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
     {"DeltaRCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaRCut(v); }},
     {"DeltaPixelHitsCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDeltaPixelHitsCut(v); }},
     {"BarrelDeltaEtaCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesBarrelDeltaEtaCut(v); }},
+    {"LogLxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v); }},
+    {"LogLxyMinus1Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus1); }},
+    {"LogLxyMinus2Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus2); }},
+    {"LogLxyMinus3Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus3); }},
   };
 }
 
@@ -145,6 +149,16 @@ bool TTAlpsDimuonCuts::PassesChi2Cut(shared_ptr<NanoDimuonVertex> dimuonVertex) 
 bool TTAlpsDimuonCuts::PassesLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if((float)dimuonVertex->GetLxyFromPV() < dimuonVertexCuts["minLxy"]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesLogLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex, float* logLxyMin) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  float minLogLxy = 0.;
+  if (logLxyMin != nullptr) minLogLxy = *logLxyMin;
+  else minLogLxy = dimuonVertexCuts["minLogLxy"];
+  float logLxy = log10(dimuonVertex->GetLxyFromPV());
+  if(logLxy < minLogLxy) return false;
   return true;
 }
 

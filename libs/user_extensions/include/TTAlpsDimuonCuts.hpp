@@ -24,6 +24,7 @@ class TTAlpsDimuonCuts {
   bool PassesDCACut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesChi2Cut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesLxyCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
+  bool PassesLogLxyCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex, float* logLxyMin = nullptr);
   bool PassesCollinearityAngleCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaEtaCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
   bool PassesDeltaPhiCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex);
@@ -42,6 +43,10 @@ class TTAlpsDimuonCuts {
 
   std::map<std::string, float> GetDimuonCategoryMap(std::string category);
   std::map<std::string, std::function<bool(std::shared_ptr<NanoDimuonVertex>)>> PassesCutsMap;
+
+  float LogLxyMinus1 = -1.0f;
+  float LogLxyMinus2 = -2.0f;
+  float LogLxyMinus3 = -3.0f;
 };
 
 #endif /* TTAlpsDimuonCuts_hpp */
