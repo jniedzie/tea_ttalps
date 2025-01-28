@@ -14,7 +14,7 @@ skim = "skimmed_looseSemimuonicv1"
 # For signal like skim with Dimuon triggers for LLP trigger study
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
 
-base_path = "/nfs/dust/cms/user/{}/ttalps_cms"
+base_path = "/data/dust/user/{}/ttalps_cms"
 input_username = "lrygaard"
 output_username = os.environ["USER"]
 
