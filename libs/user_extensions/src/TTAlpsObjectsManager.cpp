@@ -150,10 +150,14 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
   auto vertices = event->GetCollection("LooseMuonsVertex"+matchingMethod+"Match");
 
   bool bestVertex = false;
-  if(muonVertexCollectionCuts.back() == "BestDimuonVertex") {
-    bestVertex = true;
-    muonVertexCollectionCuts.pop_back();
+  for(auto cutName : muonVertexCollectionCuts) {
+    if(cutName == "BestDimuonVertex") {
+      bestVertex = true;
+      break;
+    }
   }
+  if (bestVertex) muonVertexCollectionCuts.erase(std::remove(muonVertexCollectionCuts.begin(), muonVertexCollectionCuts.end(), "BestDimuonVertex"), muonVertexCollectionCuts.end());
+
   auto passedVertices = make_shared<PhysicsObjects>();
   for(auto vertex : *vertices) {
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
