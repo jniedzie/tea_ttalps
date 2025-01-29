@@ -1,4 +1,4 @@
-from ttalps_samples_list import backgrounds2018, signals2018, data2018, signals2018_1GeV, test_backgrounds2018, test_signals2018, signals2018_12GeV
+from ttalps_samples_list import backgrounds2018, signals2018, data2018, signals2018_1GeV, test_backgrounds2018, test_signals2018
 import os
 
 max_files = -1
@@ -29,6 +29,7 @@ applyScaleFactors = {
   "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
+  "jetID": False,
 }
 
 # samples = data2018
@@ -36,7 +37,9 @@ applyScaleFactors = {
 # samples = backgrounds2018
 # samples = signals2018_1GeV
 # samples = test_signals2018
-samples = signals2018_12GeV
+
+samples = ("backgrounds2018/TTToSemiLeptonic",)
+# samples = ("signals/tta_mAlp-2GeV_ctau-1e2mm",)
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
