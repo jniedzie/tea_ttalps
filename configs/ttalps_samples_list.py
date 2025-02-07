@@ -60,35 +60,47 @@ data2018 = (
 )
 
 signals2018_0p35GeV = (
+  "signals/tta_mAlp-0p35GeV_ctau-1e-5mm",
   "signals/tta_mAlp-0p35GeV_ctau-1e0mm",
   "signals/tta_mAlp-0p35GeV_ctau-1e1mm",
   "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
   "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
   "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
-  "signals/tta_mAlp-0p35GeV_ctau-1e-5mm",
 )
 signals2018_1GeV = (
+  "signals/tta_mAlp-1GeV_ctau-1e-5mm",
   "signals/tta_mAlp-1GeV_ctau-1e0mm",
   "signals/tta_mAlp-1GeV_ctau-1e1mm",
   "signals/tta_mAlp-1GeV_ctau-1e2mm",
   "signals/tta_mAlp-1GeV_ctau-1e3mm",
   "signals/tta_mAlp-1GeV_ctau-1e5mm",
-  "signals/tta_mAlp-1GeV_ctau-1e-5mm",
 )
 signals2018_2GeV = (
+  "signals/tta_mAlp-2GeV_ctau-1e-5mm",
   "signals/tta_mAlp-2GeV_ctau-1e0mm",
   "signals/tta_mAlp-2GeV_ctau-1e1mm",
   "signals/tta_mAlp-2GeV_ctau-1e2mm",
   "signals/tta_mAlp-2GeV_ctau-1e3mm",
-  "signals/tta_mAlp-2GeV_ctau-1e-5mm",
+  "signals/tta_mAlp-2GeV_ctau-1e5mm",
 )
 signals2018_12GeV = (
+  "signals/tta_mAlp-12GeV_ctau-1e-5mm",
   "signals/tta_mAlp-12GeV_ctau-1e0mm",
+  "signals/tta_mAlp-12GeV_ctau-1e1mm",
+  "signals/tta_mAlp-12GeV_ctau-1e2mm",
+  "signals/tta_mAlp-12GeV_ctau-1e3mm",
+  "signals/tta_mAlp-12GeV_ctau-1e5mm",
 )
-signals2018_70GeV = (
-  "signals/tta_mAlp-70GeV_ctau-1e0mm",
+
+signals2018_60GeV = (
+  "signals/tta_mAlp-60GeV_ctau-1e-5mm",
+  "signals/tta_mAlp-60GeV_ctau-1e0mm",
+  "signals/tta_mAlp-60GeV_ctau-1e1mm",
+  "signals/tta_mAlp-60GeV_ctau-1e2mm",
+  "signals/tta_mAlp-60GeV_ctau-1e3mm",
+  "signals/tta_mAlp-60GeV_ctau-1e5mm",
 )
-signals2018 = signals2018_0p35GeV + signals2018_1GeV + signals2018_2GeV + signals2018_12GeV + signals2018_70GeV
+signals2018 = signals2018_0p35GeV + signals2018_1GeV + signals2018_2GeV + signals2018_12GeV + signals2018_60GeV
 
 test_signals2018 = (
   "signals/tta_mAlp-1GeV_ctau-1e0mm",
@@ -226,3 +238,32 @@ dasSignals2018_70GeV = {
   "signals/tta_mAlp-70GeV_ctau-1e0mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-70GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
 }
 dasSignals2018 = {key: value for d in (dasSignals2018_0p35GeV, dasSignals2018_1GeV, dasSignals2018_2GeV, dasSignals2018_12GeV, dasSignals2018_70GeV) for key, value in d.items()}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 from scale_factors_config import *
 from ttalps_extra_collections import extraEventCollections
 from ttalps_object_cuts import *
+from math import pi
 
 nEvents = -1
 printEveryNevents = 10000
@@ -15,13 +16,15 @@ runPileupHistograms = False
 #  - muonMatchingParams loose muons 
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
-runLLPNanoAODHistograms = True
+runLLPNanoAODHistograms = False
 runLLPNanoAOD2DHistograms = False
 
 runMuonMatchingHistograms = False
-runGenMuonHistograms = False
-runGenMuonVertexCollectionHistograms = True
+runGenMuonHistograms = False  # can only be run on signal samples
+runGenMuonVertexCollectionHistograms = False  # can only be run on signal samples
 runLLPNanoAODVertexHistograms = False
+
+runABCDHistograms = True
 
 useLooseIsoPATMuons = False
 # dimuonSelection is the name of the selection in ttalps_object_cuts
@@ -44,6 +47,7 @@ applyScaleFactors = {
   "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
+  "jetID": False,
 }
 
 # For the signal histogramming all given mathcing methods are applied separately to histograms
@@ -626,7 +630,29 @@ LLPTrigger_histParams = (
   ("DoubleMuonTriggerGenMuonFromALP" , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
   ("DoubleMuonTriggerGenMuonFromALP" , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
 )
+
+
+ABCD_variables = {
+  "Lxy": (100, 0, 1000),
+  "LxySignificance": (100, 0, 100),
+  "absCollinearityAngle": (100, 0, 2), 
+  "3Dangle": (100, 0, pi),
   
+  "logLxy": (100, -2, 3),
+  "logLxySignificance": (100, -2, 2),
+  "logAbsCollinearityAngle": (100, -5, 1), 
+  "log3Dangle": (100, -3, 1),
+}
+
+ABCD_histParams2D = []
+
+for variable_1, (nBins_1, xMin_1, xMax_1) in ABCD_variables.items():
+  for variable_2, (nBins_2, xMin_2, xMax_2) in ABCD_variables.items():
+    if variable_1 == variable_2:
+      continue
+    ABCD_histParams2D.append((f"{variable_2}_vs_{variable_1}", nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+
+
 if runLLPNanoAODHistograms:
   histParams = histParams + LLPNanoAOD_defaultHistParams
   histParams = histParams + LLPNanoAOD_histParams
@@ -643,3 +669,5 @@ if runGenMuonVertexCollectionHistograms:
   histParams2D = histParams2D + GenMuonVertexCollection_histParams2D
 if runLLPTriggerHistograms:
   histParams = histParams + LLPTrigger_histParams
+if runABCDHistograms:
+  histParams2D = histParams2D + tuple(ABCD_histParams2D)

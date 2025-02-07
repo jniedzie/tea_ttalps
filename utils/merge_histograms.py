@@ -6,7 +6,7 @@ def main():
   base_path = "/data/dust/user/{}/ttalps_cms"
   output_username = os.environ["USER"]
   
-  # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
+  # SR, J/Psi CR, and tt̄ CR with no isolation requirement on the loose muons
   skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 
   # For signal like skim with Dimuon triggers for LLP trigger study
@@ -25,8 +25,13 @@ def main():
   # JPsi dimuon cuts applied
   # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
   
+  # sample_paths = backgrounds2018
+  # sample_paths = backgrounds2018 + signals2018
+  sample_paths = signals2018
   # sample_paths = backgrounds2018 + signals2018_1GeV + data2018
-  sample_paths = signals2018_1GeV
+  # sample_paths = signals2018_1GeV
+  
+  # sample_paths = ("signals/tta_mAlp-2GeV_ctau-1e2mm",)
   
   for sample_path in sample_paths:
     print(f"{sample_path=}")
