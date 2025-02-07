@@ -874,10 +874,10 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
       {"absCollinearityAngle", bestDimuon->GetCollinearityAngle()},
       {"3Dangle", bestDimuon->Get3DOpeningAngle()},
 
-      {"LogLxy", TMath::Log10(bestDimuon->GetLxyFromPV())},
-      {"LogLxySignificance", TMath::Log10(bestDimuon->GetLxyFromPV() / bestDimuon->GetLxySigmaFromPV())},
-      {"LogAbsCollinearityAngle", TMath::Log10(bestDimuon->GetCollinearityAngle())},
-      {"Log3Dangle", TMath::Log10(bestDimuon->Get3DOpeningAngle())},
+      {"logLxy", TMath::Log10(bestDimuon->GetLxyFromPV())},
+      {"logLxySignificance", TMath::Log10(bestDimuon->GetLxyFromPV() / bestDimuon->GetLxySigmaFromPV())},
+      {"logAbsCollinearityAngle", TMath::Log10(bestDimuon->GetCollinearityAngle())},
+      {"log3Dangle", TMath::Log10(bestDimuon->Get3DOpeningAngle())},
   };
 
   for (auto &[varName_1, varValue_1] : variables) {

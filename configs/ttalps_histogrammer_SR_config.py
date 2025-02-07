@@ -638,10 +638,10 @@ ABCD_variables = {
   "absCollinearityAngle": (100, 0, 2), 
   "3Dangle": (100, 0, pi),
   
-  "LogLxy": (100, -2, 3),
-  "LogLxySignificance": (100, -2, 2),
-  "LogAbsCollinearityAngle": (100, -5, 1), 
-  "Log3Dangle": (100, -3, 1),
+  "logLxy": (100, -2, 3),
+  "logLxySignificance": (100, -2, 2),
+  "logAbsCollinearityAngle": (100, -5, 1), 
+  "log3Dangle": (100, -3, 1),
 }
 
 ABCD_histParams2D = []
