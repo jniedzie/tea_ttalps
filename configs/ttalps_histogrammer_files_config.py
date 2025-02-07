@@ -8,12 +8,11 @@ max_files = -1
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # skim = "skimmed_looseSemimuonicv1_LLPtrigger"
 
-# SR, J/Psi CR, and tt̄ CR with no isolation requirement on the loose muons
+# SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
 skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
-# skim = "skimmed_looseSemimuonic_JPsimuonicCR_Segmentv1_NonIso" (TODO)
 # skim = "skimmed_looseSemimuonic_ttbarCR_Segmentv1_NonIso" (TODO)
 
-# SR, J/Psi CR, and tt̄ CR with isolation requirement on the loose muons (obsolete)
+# SR (+J/Psi CR) and tt̄ CR with isolation requirement on the loose muons (obsolete)
 # skim = "skimmed_looseSemimuonic_JPsimuonic_Segmentv1"
 
 # For signal like skim with Dimuon triggers for LLP trigger study
@@ -35,11 +34,10 @@ applyScaleFactors = {
 # samples = data2018
 # samples = backgrounds2018 + signals2018_1GeV
 # samples = backgrounds2018
+# samples = backgrounds2018 + signals2018
+samples = signals2018
 # samples = signals2018_1GeV
 # samples = test_signals2018
-
-samples = ("backgrounds2018/TTToSemiLeptonic",)
-# samples = ("signals/tta_mAlp-2GeV_ctau-1e2mm",)
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
