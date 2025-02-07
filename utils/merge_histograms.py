@@ -25,10 +25,12 @@ def main():
   # JPsi dimuon cuts applied
   # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
   
+  # sample_paths = backgrounds2018
+  # sample_paths = backgrounds2018 + signals2018
+  sample_paths = signals2018
   # sample_paths = backgrounds2018 + signals2018_1GeV + data2018
   # sample_paths = signals2018_1GeV
   
-  sample_paths = ("backgrounds2018/TTToSemiLeptonic",)
   # sample_paths = ("signals/tta_mAlp-2GeV_ctau-1e2mm",)
   
   for sample_path in sample_paths:
