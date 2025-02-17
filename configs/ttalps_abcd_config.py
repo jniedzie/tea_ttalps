@@ -1,5 +1,5 @@
 import ROOT
-
+from ttalps_cross_sections import cross_sections
 
 base_path = "/data/dust/user/jniedzie/ttalps_cms"
 output_path = "../abcd_results"
@@ -41,7 +41,8 @@ smart_rebin_max_error = 0.30  # max allowed ralative error for smaert rebinning
 standard_rebin = 1
 
 rebin_grid = 10  # rebinning factor for the 2D histograms of signals and backgrounds
-rebin_optimization = 2  # rebinning factor for the 2D optimization histograms (closure, error, min_n_events, significance)
+# rebinning factor for the 2D optimization histograms (closure, error, min_n_events, significance)
+rebin_optimization = 2
 
 
 # ------------------------------------------
@@ -83,7 +84,17 @@ predicted_background_description = "ABCD prediction"
 projection_y_title = "Events (2018, 137 fb^{-1})"
 ratio_y_title = "True / Pred  "
 
-
+# you can specify custom names for the variables to be displayed in the plots
+nice_names = {
+    "Lxy": "L_{xy} (cm)",
+    "LxySignificance": "L_{xy} significance",
+    "absCollinearityAngle": "|#theta_{coll}|",
+    "3Dangle": "#alpha_{3D}",
+    "LogLxy": "log_{10}[L_{xy} (cm)]",
+    "LogLxySignificance": "log_{10}[L_{xy} significance]",
+    "LogAbsCollinearityAngle": "log_{10}[|#theta_{coll}|]",
+    "Log3Dangle": "log_{10}[#alpha_{3D}]",
+}
 
 # ------------------------------------------
 # Samples settings
@@ -106,49 +117,55 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
 # region = "_JPsiCR"
 region = "_SR"
 
-# cross sections for the background processes
-background_params = (
-    ("TTToSemiLeptonic", 365.34),
-    ("TTToHadronic", 377.9),
-    ("TTTo2L2Nu", 88.29),
+backgrounds = (
+    "TTToSemiLeptonic",
+    "TTToHadronic",
+    "TTTo2L2Nu",
 
-    ("TTZToLLNuNu_M-10", 0.2439),
-    ("TTZToLL_M-1to10", 0.05324),
-    ("TTZZ", 0.001386),
-    ("TTZH", 0.00113),
-    ("TTTT", 0.008213),
+    "TTZToLLNuNu_M-10",
+    "TTZToLL_M-1to10",
+    "TTZZ",
+    "TTZH",
+    "TTTT",
 
-    ("TTWJetsToLNu", 0.2163),
+    "TTWJetsToLNu",
 
-    ("ttHTobb", 0.2953),
-    ("ttHToNonbb", 0.2118),
+    "ttHTobb",
+    "ttHToNonbb",
 
-    ("ST_tW_antitop", 32.51),
-    ("ST_t-channel_antitop", 69.09,),
-    ("ST_tW_top", 32.45),
-    ("ST_t-channel_top", 115.3),
+    "ST_tW_antitop",
+    "ST_t-channel_antitop",
+    "ST_tW_top",
+    "ST_t-channel_top",
 
-    ("DYJetsToMuMu_M-50", 1976.0),
-    ("DYJetsToMuMu_M-10to50", 7013.0),
-    # ("WJetsToLNu", 52850.0),  # we only have 1 event passing in 2018 SR, with a large weight, so skipping it for now
+    "DYJetsToMuMu_M-50",
+    "DYJetsToMuMu_M-10to50",
+    # "WJetsToLNu",
 
-    ("QCD_Pt-15To20", 2800000.0),
-    ("QCD_Pt-20To30", 2527000.0),
-    ("QCD_Pt-30To50", 1367000.0),
-    ("QCD_Pt-50To80", 381700.0),
-    ("QCD_Pt-80To120", 87740.0),
-    ("QCD_Pt-120To170", 21280.0),
-    ("QCD_Pt-170To300", 7000.0),
-    ("QCD_Pt-300To470", 622.6),
-    ("QCD_Pt-470To600", 58.9),
-    ("QCD_Pt-600To800", 18.12),
-    ("QCD_Pt-800To1000", 3.318),
-    ("QCD_Pt-1000", 1.085),
-
+    "QCD_Pt-15To20",
+    "QCD_Pt-20To30",
+    "QCD_Pt-30To50",
+    "QCD_Pt-50To80",
+    "QCD_Pt-80To120",
+    "QCD_Pt-120To170",
+    "QCD_Pt-170To300",
+    "QCD_Pt-300To470",
+    "QCD_Pt-470To600",
+    "QCD_Pt-600To800",
+    "QCD_Pt-800To1000",
+    "QCD_Pt-1000",
 )
+
+background_params = []
+for b in backgrounds:
+    for k, v in cross_sections.items():
+        if b in k:
+            background_params.append((b, v))
+            break
 
 z_params = {
     "closure": ("|True - Pred|/True x 100 %", 0, 100, False),
     "error": ("|True - Pred|/#sqrt{#Delta Pred^{2} + #Delta True^{2}}", 0, 5, False),
     "min_n_events": ("min(A, B, C, D)", 0, 100, True)
 }
+
