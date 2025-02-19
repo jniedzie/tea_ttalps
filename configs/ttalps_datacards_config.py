@@ -3,6 +3,9 @@ from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
 from ttalps_cross_sections import *
 
+year = "2018"
+cross_sections = get_cross_sections(year)
+
 base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 
 # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons

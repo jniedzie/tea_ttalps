@@ -1,7 +1,8 @@
-import ttalps_extra_collections as collections
+from ttalps_extra_collections import *
 from ttalps_object_cuts import *
 
-extraEventCollections = collections.extraEventCollections
+year = "2018"
+extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
 printEveryNevents = 1000
@@ -11,7 +12,8 @@ applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
 
-weightsBranchName = "genWeight"
+weightsBranchName = ""
+# weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
 # For the signal like skimming all given muonMatchingParams are applied together

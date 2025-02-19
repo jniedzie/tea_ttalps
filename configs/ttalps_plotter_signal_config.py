@@ -7,6 +7,9 @@ from HistogramNormalizer import NormalizationType
 
 from ttalps_cross_sections import *
 
+year = "2018"
+cross_sections = get_cross_sections(year)
+
 base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 
 # Default settings
@@ -25,6 +28,7 @@ output_formats = ["pdf"]
 
 # luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
+lumi_label_value = 59830.
 
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
@@ -396,8 +400,9 @@ for genDimuonCollectionName in genDimuonCollectionNames:
     Histogram(genDimuonCollectionName+"_absCollinearityAngle"       , "", False, True  , default_norm    , 10  , 0    , 3.15  , 1e-6   , 1e2   , "Gen Dimuon |#Delta #Phi|"       , "# events (2018)"   ),
     Histogram(genDimuonCollectionName+"_absPtLxyDPhi1"              , "", False, True  , default_norm    , 10  , 0    , 3.15  , 1e-5   , 1e3   , "Gen |#Delta #phi_{#mu1}|"       , "# events (2018)"   ),  
     Histogram(genDimuonCollectionName+"_absPtLxyDPhi2"              , "", False, True  , default_norm    , 10  , 0    , 3.15  , 1e-5   , 1e3   , "Gen |#Delta #phi_{#mu2}|"       , "# events (2018)"   ),
-    Histogram(genDimuonCollectionName+"_Lxy"                        , "", False, True  , default_norm    , 100 , 0    , 800   , 1e-6   , 1e2   , "Gen #mu L_{xy} [cm]"            , "# events (2018)"   ),
-  )
+    Histogram(genDimuonCollectionName+"_Lxy"                        , "", False, True  , default_norm    , 100 , 0    , 700   , 1e-2   , 1e6   , "Gen #mu L_{xy} [cm]"            , "# events (2018)"   ),
+    Histogram(genDimuonCollectionName+"_properLxy"                  , "", False, True  , default_norm    , 100  , 0    , 700   , 1e-2   , 1e6   , "Gen #mu L_{xy} / ALP boost [cm]"             , "# events (2018)"   ),
+)
 
 for genDimuonCollectionName in genDimuonNminus1CollectionNames:
   histograms_genALPs += (
@@ -432,14 +437,14 @@ for i in range(1,6):
     Histogram("GenDimuonNotFromALP_motherID1"+str(i)  , "", False, True  , default_norm  , 1  , -10   , 30   , 1e-8   , 1e1   , "Gen #mu_{1} mother PDG ID"  , "# events (2018)"   ),
     Histogram("GenDimuonNotFromALP_motherID1"+str(i)  , "", False, True  , default_norm  , 1  , -10   , 30   , 1e-8   , 1e1   , "Gen #mu_{2} mother PDG ID"  , "# events (2018)"   ),
     Histogram("GenMuonNotFromALP_motherID"+str(i)     , "", False, True  , default_norm  , 1  , -10   , 600  , 1e-8   , 1e1   , "Gen #mu 1st mother PDG ID"  , "# events (2018)"   ),
-    Histogram("GenMuonFromALP_motherID"+str(i)        , "", False, True  , default_norm  , 1  , -10   , 60   , 1e-8   , 1e1   , "Gen #mu 1st mother PDG ID"  , "# events (2018)"   ),
+    Histogram("GenMuonFromALP_motherID"+str(i)        , "", False, True  , default_norm  , 1  , -10   , 60   , 1e-2   , 1e2   , "Gen #mu 1st mother PDG ID"  , "# events (2018)"   ),
   )
 
 for method in genMuonMatchingMethods:
   for genmuonCollectionName in genmuonCollectionNames:
     collectionName = genmuonCollectionName+method+"Match"
     histograms_genALPs += (
-      Histogram("Event_n"+collectionName       , "", False, True  , default_norm     , 1  , 0     , 6     , 1e-6  , 1e4   , "Number of loose #mu"                   , "# events (2018)"   ),
+      Histogram("Event_n"+collectionName       , "", False, True  , default_norm     , 1  , 0     , 6     , 1e-8  , 1e6   , "Number of loose #mu"                   , "# events (2018)"   ),
       Histogram(collectionName+"_pt"           , "", False, True  , default_norm     , 20 , 0     , 500   , 1e-6  , 1e2   , "loose #mu p_{T} [GeV]"                 , "# events (2018)"   ),
       Histogram(collectionName+"_eta"          , "", False, True  , default_norm     , 10 , -3    , 3     , 1e-6  , 1e2   , "loose #mu #eta"                        , "# events (2018)"   ),
       Histogram(collectionName+"_phi"          , "", False, True  , default_norm     , 10 , -3    , 3     , 1e-6  , 1e2   , "loose #mu #phi"                        , "# events (2018)"   ),
@@ -461,21 +466,24 @@ for method in genMuonMatchingMethods:
     muonVertexCollectionName = genmuonVertexCollectionName+method+"MatchVertex"
     for category in muonVertexCategories:
       histograms_genALPs += (
-        Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 4     , 1e-3  , 1e6   , "Number of loose #mu vertices"           , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-6  , 1e2   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_vxySigma"             , "", False, True  , default_norm        , 50 , 0     , 100   , 1e-3  , 1e6   , "#mu vertex #sigma_{vxy} [cm]"           , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_vxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex v_{xy} / #sigma_{vxy}"       , "# events (2018)"   ),
+        Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 4     , 1e-8  , 1e6   , "Number of loose #mu vertices"           , "# events (2018)"   ),
+        Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 10 , 0     , 700   , 1e-2  , 1e6   , "Reco #mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, True  , default_norm        , 10 , 0     , 3.15 , 1e-5  , 1e2   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
+        Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, False  , default_norm        , 10 , 0     , 3.15 , 0    , 6   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_vxySigma"             , "", False, True  , default_norm        , 50 , 0     , 100   , 1e-3  , 1e6   , "#mu vertex #sigma_{vxy} [cm]"           , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_vxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex v_{xy} / #sigma_{vxy}"       , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_dR"                   , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex #Delta R"                    , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_proxDR"               , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex proximity #Delta R"          , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_outerDR"              , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex outer #Delta R"              , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_maxHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 30    , 1e-6  , 1e3   , "Max N(hits in front of vertex)"    , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 100, 0     , 100   , 1e-6  , 1e3   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_proxDR"               , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex proximity #Delta R"          , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_outerDR"              , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex outer #Delta R"              , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_maxHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 30    , 1e-6  , 1e3   , "Max N(hits in front of vertex)"    , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 100, 0     , 100   , 1e-6  , 1e3   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
+        Histogram(muonVertexCollectionName+category+"_invMass"              , "", True,  True  , default_norm        , 100, 1e-1  , 1e2   , 1e-4  , 1e6   , "Reco #mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig1"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} / #sigma_{dxy}^{1}"  , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig2"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} / #sigma_{dxy}^{2}"  , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig1"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} / #sigma_{dxy}^{1}"  , "# events (2018)"   ),
+        # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig2"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} / #sigma_{dxy}^{2}"  , "# events (2018)"   ),
       )
 
 if plots_from_LLPNanoAOD:
@@ -537,7 +545,7 @@ data_samples = (
 signals = {
   # "tta_mAlp-70GeV_ctau-1e0mm" : {"label": "m_{a} = 70 GeV, c#tau_{a} = 1 mm", "color": ROOT.kMagenta},
   # "tta_mAlp-60GeV_ctau-1e0mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
-  "tta_mAlp-60GeV_ctau-1e2mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-60GeV_ctau-1e2mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
   # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
   # "tta_mAlp-12GeV_ctau-1e1mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
   # "tta_mAlp-12GeV_ctau-1e2mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
@@ -546,18 +554,27 @@ signals = {
   # "tta_mAlp-1GeV_ctau-1e2mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
   # "tta_mAlp-1GeV_ctau-1e3mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
   # "tta_mAlp-1GeV_ctau-1e-5mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
-  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
-  # "tta_mAlp-2GeV_ctau-1e1mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-2GeV_ctau-1e2mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
-  # "tta_mAlp-2GeV_ctau-1e3mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
+  "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
+  "tta_mAlp-2GeV_ctau-1e1mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
+  "tta_mAlp-2GeV_ctau-1e2mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
+  "tta_mAlp-2GeV_ctau-1e3mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
   # "tta_mAlp-2GeV_ctau-1e-5mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
+  # "tta_mAlp-2GeV_ctau-1e-5mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kMagenta},
   # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
   # "tta_mAlp-0p35GeV_ctau-1e1mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
   # "tta_mAlp-0p35GeV_ctau-1e2mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
   # "tta_mAlp-0p35GeV_ctau-1e3mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
   # "tta_mAlp-0p35GeV_ctau-1e-5mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
+
+  # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
+  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kOrange+1},
+  # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm", "color": ROOT.kMagenta},
+  # "tta_mAlp-60GeV_ctau-1e0mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
+
+#   "ttalps_m-2GeV_ctau-1e2mm_ctau_1e2mm" : {"label": "gridpack c#tau_{a} = 10 cm, pythia8 c#tau_{a} = 10 cm", "color": ROOT.kGreen+1},
+#   "ttalps_m-2GeV_ctau-1e-5mm_ctau_1e-5mm" : {"label": "gridpack c#tau_{a} = 10 #mu m, pythia8 c#tau_{a} = 10 #mu m", "color": ROOT.kBlue},
+#   "ttalps_m-2GeV_ctau-1e-5mm_ctau_" : {"label": "gridpack c#tau_{a} = 10 #mu m, no pythia8 c#tau_{a}", "color": ROOT.kMagenta},
+#   "ttalps_m-2GeV_ctau-1e2mm_ctau_" : {"label": "gridpack c#tau_{a} = 10 #mu m, no pythia8 c#tau_{a}", "color": ROOT.kOrange+1},
 }
 signal_samples = ()
 for signal_name, signal_info in signals.items():
@@ -565,6 +582,7 @@ for signal_name, signal_info in signals.items():
     Sample(
       name=signal_name,
       file_path=f"{base_path}/signals/{signal_name}/{skim}/{hist_path}/histograms.root",
+      # file_path=f"{base_path}/signals_gridpack_hadronizer_test/{signal_name}/{skim}/{hist_path}/histograms.root",
       type=SampleType.signal,
       cross_sections=cross_sections,
       line_alpha=1,
@@ -976,10 +994,8 @@ else:
 if plot_background:
   samples = samples + background_samples
 
-
 # custom_stacks_order = (
   # "SingleMuon",
-  
   
   # "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8",
   # "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8",
@@ -1028,12 +1044,16 @@ if plot_background:
   # "tta_mAlp-0p35GeV_ctau-1e1mm",
   # "tta_mAlp-0p35GeV_ctau-1e2mm",
   # "tta_mAlp-0p35GeV_ctau-1e3mm",
-  # "tta_mAlp-0p35GeV_ctau-1e5mm",
+  # # "tta_mAlp-0p35GeV_ctau-1e5mm",
 
-  # "tta_mAlp-1GeV_ctau-1e-5mm",
-  # "tta_mAlp-1GeV_ctau-1e0mm",
-  # "tta_mAlp-1GeV_ctau-1e1mm",
-  # "tta_mAlp-1GeV_ctau-1e2mm",
-  # "tta_mAlp-1GeV_ctau-1e3mm",
-  # "tta_mAlp-1GeV_ctau-1e5mm",
+  # "tta_mAlp-2GeV_ctau-1e-5mm",
+  # "tta_mAlp-2GeV_ctau-1e0mm",
+  # "tta_mAlp-2GeV_ctau-1e1mm",
+  # "tta_mAlp-2GeV_ctau-1e2mm",
+  # "tta_mAlp-2GeV_ctau-1e3mm",
+
+#   "tta_mAlp-0p35GeV_ctau-1e0mm",
+#   "tta_mAlp-2GeV_ctau-1e0mm",
+#   "tta_mAlp-12GeV_ctau-1e0mm",
+#   "tta_mAlp-60GeV_ctau-1e0mm",
 # )

@@ -7,6 +7,9 @@ from HistogramNormalizer import NormalizationType
 
 from ttalps_cross_sections import *
 
+year = "2018"
+cross_sections = get_cross_sections(year)
+
 base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1"
 hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
