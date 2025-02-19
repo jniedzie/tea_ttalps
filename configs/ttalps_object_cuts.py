@@ -23,7 +23,7 @@ SRDimuonVertexPATCuts = {
   "maxHitsInFrontOfVertex": 3.0,
   "maxCollinearityAngle": 2.0,
   # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
-  "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
+  # "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxPFRelIso": 0.25,
   "maxDR": 9999.0, # no cut
   # "maxDR": 0.2,
@@ -40,7 +40,7 @@ SRDimuonVertexPATDSACuts = {
   "maxCollinearityAngle": 2.0,
   "maxpTLxyDPhi": 2.9,
   # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
-  "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
+  # "maxdisplacedTrackIso03Dimuon": 0.025, # testing cut
   "maxPFRelIso": 0.25,
   "maxDR": 9999.0, # no cut
   # "maxDR": 0.4,
@@ -53,7 +53,7 @@ SRDimuonVertexDSACuts = {
   "maxDCA": 2.0,
   "maxChi2": 3.0,
   "maxCollinearityAngle": 2.0,
-  "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
+  # "maxdisplacedTrackIso03Dimuon": 9999.0, # no cut
   "maxDR": 9999.0, # no cut
   # "maxDR": 0.5,
   "maxPFRelIso": 9999.0, # no cut
