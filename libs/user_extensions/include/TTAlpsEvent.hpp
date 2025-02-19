@@ -13,20 +13,27 @@ class TTAlpsEvent {
            int line = __builtin_LINE()) {
     return event->Get(branchName, file, function, line);
   }
-  float GetAsFloat(std::string branchName) { return event->GetAsFloat(branchName); }
+
+  template <typename T>
+  T GetAs(std::string branchName) { return event->GetAs<T>(branchName); }
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
+  
   std::shared_ptr<PhysicsObjects> GetGenALPs();
-  std::shared_ptr<MuonPair> GetGenMuonsFromALP();
+  std::shared_ptr<MuonPair> GetGenDimuonFromALP();
   std::vector<int> GetGenMuonIndicesFromALP();
+
   std::shared_ptr<PhysicsObjects> GetGenMuonsNotFromALP();
-  std::shared_ptr<PhysicsObjects> GetGenMuonsFromW();
-  std::vector<int> GetGenMuonIndicesFromW();
   std::shared_ptr<MuonPairs> GetGenDimuonsNotFromALP();
 
-  std::shared_ptr<MuonPair> GetMuonsMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
+  std::shared_ptr<PhysicsObjects> GetGenMuonsFromW();
+  std::vector<int> GetGenMuonIndicesFromW();
+  
+  std::shared_ptr<MuonPair> GetDimuonMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
+  
   std::shared_ptr<PhysicsObjects> GetMuonsMatchedToGenMuonsNotFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
   std::shared_ptr<MuonPairs> GetMuonsMatchedToGenDimuonsNotFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
-  std::shared_ptr<MuonPair> GetLooseMuonsMatchedToGenDimuon(std::shared_ptr<MuonPair> genMuonPair, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR = 0.3);
+  
+  std::shared_ptr<MuonPair> GetLooseDimuonMatchedToGenDimuon(std::shared_ptr<MuonPair> genMuonPair, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR = 0.3);
   std::shared_ptr<PhysicsObjects> GetLooseMuonsMatchedToGenMuons(std::shared_ptr<PhysicsObjects> genMuonCollection, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR);
   std::shared_ptr<PhysicsObjects> GetRemainingNonResonantMuons(std::shared_ptr<PhysicsObjects> muonCollection, std::shared_ptr<MuonPairs> resonantCollection);
   

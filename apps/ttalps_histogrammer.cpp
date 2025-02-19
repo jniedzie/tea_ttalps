@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runCustomTTAlpsHistograms, runTriggerHistograms, runLLPTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runLLPNanoAOD2DHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
-  bool runLLPNanoAODVertexHistograms;
+  bool runLLPNanoAODVertexHistograms, runABCDHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runCustomTTAlpsHistograms", runCustomTTAlpsHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
@@ -58,6 +58,10 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runLLPNanoAODVertexHistograms", runLLPNanoAODVertexHistograms);
+  config.GetValue("runABCDHistograms", runABCDHistograms);
+
+  string abcdCollection;
+  config.GetValue("abcdCollection", abcdCollection);
 
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
 
@@ -76,13 +80,13 @@ int main(int argc, char **argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
     
-    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms) {
+    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runLLPNanoAODVertexHistograms || runABCDHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     }
     bool passesDimuonCuts = false;
-    if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms) {
+    if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPNanoAODVertexHistograms || runLLPTriggerHistograms || runABCDHistograms) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
       passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager);
@@ -144,6 +148,10 @@ int main(int argc, char **argv) {
     
     if (runLLPNanoAODVertexHistograms) {
       ttalpsHistogramsFiller->FillBasicMuonVertexHistograms(event);
+    }
+
+    if (runABCDHistograms && passesDimuonCuts) {
+      ttalpsHistogramsFiller->FillABCDHistograms(event, abcdCollection);
     }
   }
 

@@ -4,6 +4,7 @@ plots/*
 .vscode/*
 
 datacards/*
+abcd_results*/*
 
 data/*
 *.root

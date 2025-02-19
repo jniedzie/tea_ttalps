@@ -205,7 +205,7 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenALPs() {
   return genALPs;
 }
 
-shared_ptr<MuonPair> TTAlpsEvent::GetGenMuonsFromALP() {
+shared_ptr<MuonPair> TTAlpsEvent::GetGenDimuonFromALP() {
   auto genParticles = event->GetCollection("GenPart");
 
   auto genMuons = make_shared<PhysicsObjects>();
@@ -332,13 +332,13 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenMuonsNotFromALP() {
   return genMuons;
 }
 
-shared_ptr<MuonPair> TTAlpsEvent::GetMuonsMatchedToGenMuonsFromALP(shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR) {
-  auto genMuonPair = GetGenMuonsFromALP();
+shared_ptr<MuonPair> TTAlpsEvent::GetDimuonMatchedToGenMuonsFromALP(shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR) {
+  auto genMuonPair = GetGenDimuonFromALP();
 
-  return GetLooseMuonsMatchedToGenDimuon(genMuonPair, muonCollection, maxDeltaR);
+  return GetLooseDimuonMatchedToGenDimuon(genMuonPair, muonCollection, maxDeltaR);
 }
 
-shared_ptr<MuonPair> TTAlpsEvent::GetLooseMuonsMatchedToGenDimuon(shared_ptr<MuonPair> genMuonPair, shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR) {
+shared_ptr<MuonPair> TTAlpsEvent::GetLooseDimuonMatchedToGenDimuon(shared_ptr<MuonPair> genMuonPair, shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR) {
   vector<int> savedMuonIndices;
   float muonMass = 0.105;
 
@@ -595,9 +595,9 @@ std::vector<int> TTAlpsEvent::GetFiveFirstMotherIDsOfParticle(shared_ptr<Physics
 
 // Particle can be either a genParticle or a reco muon, Mother has to be a genParticle
 float TTAlpsEvent::GetPhiAngleBetweenDimuonAndALP(shared_ptr<PhysicsObject> muon1, shared_ptr<PhysicsObject> muon2, shared_ptr<PhysicsObject> alp, bool recoMuon) {
-  auto pv_x = GetAsFloat("PV_x");
-  auto pv_y = GetAsFloat("PV_y");
-  auto pv_z = GetAsFloat("PV_z");
+  auto pv_x = GetAs<float>("PV_x");
+  auto pv_y = GetAs<float>("PV_y");
+  auto pv_z = GetAs<float>("PV_z");
 
   TLorentzVector muon1fourVector,muon2fourVector;
   float muonMass = 0.105;
@@ -650,7 +650,7 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetTightMuonsInCollection(shared_ptr<Phy
 }
 
 bool TTAlpsEvent::IsALPDecayWithinCMS(float CMS_Lxy_max) {
-  auto genMuonsFromALP = GetGenMuonsFromALP();
+  auto genMuonsFromALP = GetGenDimuonFromALP();
   float ALPvx = genMuonsFromALP->first->Get("vx");
   float ALPvy = genMuonsFromALP->first->Get("vy");
   float ALPvxy = sqrt(ALPvx*ALPvx + ALPvy*ALPvy);

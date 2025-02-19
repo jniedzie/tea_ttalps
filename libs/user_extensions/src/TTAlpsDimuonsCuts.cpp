@@ -213,8 +213,8 @@ bool TTAlpsDimuonCuts::PassesDeltaPixelHitsCut(shared_ptr<NanoDimuonVertex> dimu
 }
 
 bool TTAlpsDimuonCuts::PassesBarrelDeltaEtaCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
-  auto muon1eta = dimuonVertex->Muon1()->GetAsFloat("eta");
-  auto muon2eta = dimuonVertex->Muon2()->GetAsFloat("eta");
+  auto muon1eta = dimuonVertex->Muon1()->GetAs<float>("eta");
+  auto muon2eta = dimuonVertex->Muon2()->GetAs<float>("eta");
   if(abs(muon1eta-muon2eta) > dimuonVertexBaseCuts["maxDeltaEta"]) return false;
   return true;
 }
