@@ -7,6 +7,9 @@ from HistogramNormalizer import NormalizationType
 
 from ttalps_cross_sections import *
 
+year = "2018"
+cross_sections = get_cross_sections(year)
+
 base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 
 hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
@@ -17,9 +20,12 @@ skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 output_formats = ["pdf"]
 
 # luminosity = 63670. # pb^-1
-luminosity = 27973. # 2018 eras A+B+C 27972.887358
+# luminosity = 59820. # 2018 eras A+B+C+D 27972.887358
+luminosity = 27972. # 2018 eras A+B+C+D 27972.887358
 # luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 lumi_label_offset = 0.02
+# lumi_label_value = 59820.
+lumi_label_value = 27972.
 
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
@@ -33,7 +39,7 @@ legend_height = 0.045 if show_ratio_plots else 0.03
 legend_max_y = 0.89
 
 # requierement is num. events >= bkgRawEventsThreshold
-bkgRawEventsThreshold = 20
+bkgRawEventsThreshold = 10
 
 n_default_backgrounds = 8
 
@@ -57,9 +63,9 @@ extraMuonVertexCollections = [
   # invariant mass cut only:
   # # "MaskedDimuonVerex", 
   # Best Dimuon selection without isolation cut:
-  # "BestDimuonVertex", 
+  "BestDimuonVertex", 
   # Best Dimuon selection with isolation cut:
-  "BestPFIsoDimuonVertex",
+  # "BestPFIsoDimuonVertex",
 ]
 
 signal_legend = Legend(legend_max_x-legend_width, legend_max_y-5*legend_height, legend_max_x-2*legend_width, legend_max_y, "l")
@@ -126,9 +132,7 @@ LLPnanoAOD_histograms = ()
 histograms2D_LLPnanoAOD = ()
 
 muonVertexCategories = ["_PatDSA", "_DSA", "_Pat"]
-# muonVertexCategories = ["_DSA"]
 muonCollectionCategories = ["", "DSA", "PAT"]
-# muonCollectionCategories = [""]
 muonCollectionNames = []
 muonVertexCollectionNames = extraMuonVertexCollections
 for matchingMethod in muonMatchingMethods:
@@ -235,7 +239,7 @@ data_samples = (
   # Data
   Sample(
     name="SingleMuon",
-    file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_{hist_path}.root",
+    file_path=f"{base_path}/collision_data2018/SingleMuon_{skim}_{hist_path}.root",
     type=SampleType.data,
     cross_sections=cross_sections,
     line_alpha=1,

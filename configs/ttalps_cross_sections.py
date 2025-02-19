@@ -1,7 +1,7 @@
 
 
 # Cross sections in (pb) from XSDB
-cross_sections = {
+cross_sectionsRun2 = {
   "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8": 365.34,
   "TTToHadronic_TuneCP5_13TeV-powheg-pythia8": 377.96,
   "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8": 88.29,
@@ -63,6 +63,7 @@ cross_sections = {
   "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8": 1.085,
   
   "SingleMuon": 1.0,
+  "MuonC": 1.0,
   "tta_mAlp-0p35GeV_ctau-1e-5mm": 0.003912, # +- 2.935e-05 pb
   "tta_mAlp-0p35GeV_ctau-1e0mm": 0.003912, # +- 2.935e-05 pb
   "tta_mAlp-0p35GeV_ctau-1e1mm": 0.003912, # +- 2.935e-05 pb
@@ -100,7 +101,45 @@ cross_sections = {
   "tta_mAlp-60GeV_ctau-1e3mm": 0.002679, # +- 1.323e-05 pb
 
   "tta_mAlp-70GeV_ctau-1e0mm": 0.002438, # +- 1.888e-05 pb
+
+  "ttalps_m-2GeV_ctau-1e2mm_ctau_1e2mm": 1.0,
+  "ttalps_m-2GeV_ctau-1e2mm_ctau_1e-5mm": 1.0,
+  "ttalps_m-2GeV_ctau-1e-5mm_ctau_1e-5mm": 1.0,
+  "ttalps_m-2GeV_ctau-1e-5mm_ctau_": 1.0,
+  "ttalps_m-2GeV_ctau-1e2mm_ctau_": 1.0,
 }
+
+cross_sectionsRun3 = {
+  "MuonC": 1.0,
+  "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 405.8099,
+  # "TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8": ,
+  "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8": 98.0963,
+  "TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 19.36,
+  "TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 19.36,
+  # "DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8": ,
+  "WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8": 64481.58,
+  # "WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8": ,
+  "TTLL_MLL-4to50_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.03949,
+  "TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.08646,
+  "TTHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8": 0.331968,
+  # "TTHtoNon2B_M-125_TuneCP5_13p6TeV_powheg-pythia8": ,
+  # "TTZZ_TuneCP5_13p6TeV_madgraph-madspin-pythia8": ,
+  # "TTZH_TuneCP5_13p6TeV_madgraph-pythia8": ,
+  # "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8": ,
+  # "QCD_PT-15To20_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-20To30_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-30To50_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-50To80_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-80To120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-120To170_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-170To300_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-300To470_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-470To600_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-600To800_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-800To1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+  # "QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": ,
+}
+
 
 # Cross sections in (pb) from AN2018_025_v12
 # cross_sections = {
@@ -160,3 +199,11 @@ cross_sections = {
   
 #   "SingleMuon": 1.0,
 # }
+
+def get_cross_sections(year):
+  if year == "2016" or year == "2017" or year == "2018":
+    return cross_sectionsRun2
+  elif year == "2022" or year == "2023":
+    return cross_sectionsRun3
+  else:
+    raise ValueError(f"Year {year} not supported.")

@@ -1,4 +1,7 @@
-from ttalps_extra_collections import extraEventCollections
+from ttalps_extra_collections import *
+
+year = "2018"
+extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
 printEveryNevents = 10000

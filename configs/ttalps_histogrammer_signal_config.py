@@ -1,6 +1,9 @@
 from scale_factors_config import *
-from ttalps_extra_collections import extraEventCollections
+from ttalps_extra_collections import *
 from ttalps_object_cuts import *
+
+year = "2018"
+extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
 printEveryNevents = 10000
@@ -433,8 +436,9 @@ for genDimuonCollectionName in genDimuonCollectionNames:
     (genDimuonCollectionName   , "absCollinearityAngle"        , 500   , 0     , 5     , ""  ),
     (genDimuonCollectionName   , "absPtLxyDPhi1"               , 500   , 0     , 5     , ""  ),
     (genDimuonCollectionName   , "absPtLxyDPhi2"               , 500   , 0     , 5     , ""  ),
-    (genDimuonCollectionName   , "Lxy"                         , 50000 , 0     , 5000  , ""  ),
-    (genDimuonCollectionName   , "properLxy"                   , 50000 , 0     , 5000  , ""  ),
+    (genDimuonCollectionName   , "Lxy"                         , 10000 , 0     , 1000  , ""  ),
+    (genDimuonCollectionName   , "logLxy"                      , 2000  , -10   , 10    , ""  ),
+    (genDimuonCollectionName   , "properLxy"                   , 10000 , 0     , 1000  , ""  ),
   )
 
 ####  Loose Muons Matched to Gen Muons Histograms  ####
@@ -484,6 +488,7 @@ for matchingMethod, param in muonMatchingParams.items():
       ("Event"       , "n"+collectionName       , 50     , 0      , 50     , ""  ),
       (collectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
       (collectionName , "Lxy"                   , 1000   , 0      , 1000   , ""  ),
+      (collectionName , "logLxy"                , 2000   , -10    , 10     , ""  ),
       (collectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
       (collectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
       (collectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
@@ -496,6 +501,7 @@ for matchingMethod, param in muonMatchingParams.items():
         ("Event"       , "n"+muonVertexCollectionName       , 50     , 0      , 50     , ""  ),
         (muonVertexCollectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
         (muonVertexCollectionName , "Lxy"                   , 1000   , 0      , 1000   , ""  ),
+        (muonVertexCollectionName , "logLxy"                , 2000   , -10    , 10     , ""  ),
         (muonVertexCollectionName , "LxySigma"              , 10000  , 0      , 100    , ""  ),
         (muonVertexCollectionName , "LxySignificance"       , 1000   , 0      , 1000   , ""  ),
         (muonVertexCollectionName , "vxy"                   , 1000   , 0      , 1000   , ""  ),
