@@ -1,5 +1,8 @@
 from ttalps_extra_collections import extraEventCollections
-from golden_json_config import goldenJson
+from golden_json_config import goldenJsons
+
+year = "2018"
+goldenJson = goldenJsons[year]
 
 nEvents = -1
 printEveryNevents = 10000
