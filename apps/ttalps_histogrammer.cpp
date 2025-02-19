@@ -60,6 +60,9 @@ int main(int argc, char **argv) {
   config.GetValue("runLLPNanoAODVertexHistograms", runLLPNanoAODVertexHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
 
+  string abcdCollection;
+  config.GetValue("abcdCollection", abcdCollection);
+
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
 
   // check if cutflowmanager has cut "initial"
@@ -148,7 +151,7 @@ int main(int argc, char **argv) {
     }
 
     if (runABCDHistograms && passesDimuonCuts) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event);
+      ttalpsHistogramsFiller->FillABCDHistograms(event, abcdCollection);
     }
   }
 

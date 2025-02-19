@@ -37,7 +37,7 @@ class TTAlpsHistogramFiller {
 
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
-  void FillABCDHistograms(const std::shared_ptr<Event> event);
+  void FillABCDHistograms(const std::shared_ptr<Event> event, std::string abcdCollection);
 
  private:
 
