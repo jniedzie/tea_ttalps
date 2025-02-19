@@ -106,13 +106,13 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
       if (branchName[0] == 'n') {
         value = event->GetCollection(branchName.substr(1))->size();
       } else {
-        value = event->GetAsFloat(branchName);
+        value = event->GetAs<float>(branchName);
       }
       histogramsHandler->Fill(title, value, eventWeight);
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        value = object->GetAsFloat(branchName);
+        value = object->GetAs<float>(branchName);
         float objectWeight = GetObjectWeight(object, collectionName);
         histogramsHandler->Fill(title, value, eventWeight * objectWeight);
       }
@@ -429,15 +429,15 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
       tkRelIsoMuon1 = muon1->Get("tkRelIso");
       nSegments2 = muon2->Get("nSegments");
       nDTHits2 = muon2->Get("trkNumDTHits");
-      if (muon2->GetAsFloat("trkNumCSCHits") == 0) nDTHits2BarrelOnly = nDTHits2;
+      if (muon2->GetAs<float>("trkNumCSCHits") == 0) nDTHits2BarrelOnly = nDTHits2;
     }
     if (category == "DSA") {
       nSegments1 = muon1->Get("nSegments");
       nSegments2 = muon2->Get("nSegments");
       nDTHits1 = muon1->Get("trkNumDTHits");
       nDTHits2 = muon2->Get("trkNumDTHits");
-      if (muon1->GetAsFloat("trkNumCSCHits") == 0) nDTHits1BarrelOnly = nDTHits1;
-      if (muon2->GetAsFloat("trkNumCSCHits") == 0) nDTHits2BarrelOnly = nDTHits2;
+      if (muon1->GetAs<float>("trkNumCSCHits") == 0) nDTHits1BarrelOnly = nDTHits1;
+      if (muon2->GetAs<float>("trkNumCSCHits") == 0) nDTHits2BarrelOnly = nDTHits2;
     }
     histogramsHandler->Fill(vertexName + "_" + category + "_nSegments1", nSegments1, weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_nSegments2", nSegments2, weight * muonWeight1 * muonWeight2);
@@ -682,9 +682,9 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<PhysicsObject>
                                                  string collectionName, const shared_ptr<Event> event, bool genLevel) {
   float weight = GetEventWeight(event);
 
-  auto pv_x = event->GetAsFloat("PV_x");
-  auto pv_y = event->GetAsFloat("PV_y");
-  auto pv_z = event->GetAsFloat("PV_z");
+  auto pv_x = event->GetAs<float>("PV_x");
+  auto pv_y = event->GetAs<float>("PV_y");
+  auto pv_z = event->GetAs<float>("PV_z");
 
   TLorentzVector muon1fourVector;
   TLorentzVector muon2fourVector;
@@ -863,10 +863,10 @@ void TTAlpsHistogramFiller::FillTriggerStudyHistograms(const shared_ptr<Event> e
   }
 }
 
-void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, string abcdCollection) {
   double weight = GetEventWeight(event);
 
-  auto bestDimuon = asNanoDimuonVertex(event->GetCollection("BestPFIsoDimuonVertex")->at(0), event);
+  auto bestDimuon = asNanoDimuonVertex(event->GetCollection(abcdCollection)->at(0), event);
 
   map<string, double> variables = {
       {"Lxy", bestDimuon->GetLxyFromPV()},
@@ -958,9 +958,9 @@ void TTAlpsHistogramFiller::FillGenMuonMinDRHistograms(const shared_ptr<PhysicsO
 void TTAlpsHistogramFiller::FillGenMuonsFromALPsHistograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
   float muonMass = 0.105;
-  auto pv_x = event->GetAsFloat("PV_x");
-  auto pv_y = event->GetAsFloat("PV_y");
-  auto pv_z = event->GetAsFloat("PV_z");
+  auto pv_x = event->GetAs<float>("PV_x");
+  auto pv_y = event->GetAs<float>("PV_y");
+  auto pv_z = event->GetAs<float>("PV_z");
 
   auto genMuonsFromALP = asTTAlpsEvent(event)->GetGenDimuonFromALP();
   auto genMuonsFromALPindices = asTTAlpsEvent(event)->GetGenMuonIndicesFromALP();
@@ -1035,9 +1035,9 @@ void TTAlpsHistogramFiller::FillLooseMuonsFromALPsHistograms(const shared_ptr<Ev
   float weight = GetEventWeight(event);
   float muonMass = 0.105;
 
-  auto pv_x = event->GetAsFloat("PV_x");
-  auto pv_y = event->GetAsFloat("PV_y");
-  auto pv_z = event->GetAsFloat("PV_z");
+  auto pv_x = event->GetAs<float>("PV_x");
+  auto pv_y = event->GetAs<float>("PV_y");
+  auto pv_z = event->GetAs<float>("PV_z");
 
   auto genMuonsFromALP = asTTAlpsEvent(event)->GetGenDimuonFromALP();
   auto genParticles = event->GetCollection("GenPart");

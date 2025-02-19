@@ -24,7 +24,7 @@ runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False  # can only be run on signal samples
 runLLPNanoAODVertexHistograms = False
 
-runABCDHistograms = True
+runABCDHistograms = False
 # abcdCollection = "BestPFIsoDimuonVertex"
 abcdCollection = "BestIsoDimuonVertex"
 
@@ -75,6 +75,19 @@ defaultHistParams = (
   ("Event"              , "PV_x"                , 200   , -100   , 100   , ""  ),
   ("Event"              , "PV_y"                , 200   , -100   , 100   , ""  ),
   ("Event"              , "PV_z"                , 200   , -100   , 100   , ""  ),
+  
+  ("Event"              , "nJet"                , 50    , 0     , 50    , ""  ),
+  ("Jet"                , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("Jet"                , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("Jet"                , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("Jet"                , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  
+  ("Event"              , "nGoodJets"           , 50    , 0     , 50    , ""  ),
+  ("GoodJets"           , "pt"                  , 2000  , 0     , 2000  , ""  ),
+  ("GoodJets"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodJets"           , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodJets"           , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodJets"           , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
 )
 
 histParams = (

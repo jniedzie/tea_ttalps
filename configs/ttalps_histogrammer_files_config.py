@@ -9,8 +9,8 @@ max_files = -1
 # skim = "skimmed_looseSemimuonicv1_LLPtrigger"
 
 # SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
-skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
-# skim = "skimmed_looseSemimuonic_ttbarCR_Segmentv1_NonIso" (TODO)
+# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+skim = "skimmed_looseSemimuonic_ttbarCR"
 
 # SR (+J/Psi CR) and tt̄ CR with isolation requirement on the loose muons (obsolete)
 # skim = "skimmed_looseSemimuonic_JPsimuonic_Segmentv1"
@@ -35,9 +35,13 @@ applyScaleFactors = {
 # samples = backgrounds2018 + signals2018_1GeV
 # samples = backgrounds2018
 # samples = backgrounds2018 + signals2018
-samples = signals2018
+# samples = backgrounds2018 + signals2018 + data2018
+samples = backgrounds2018 + data2018
+# samples = signals2018
 # samples = signals2018_1GeV
 # samples = test_signals2018
+
+# samples = ["backgrounds2018/TTToSemiLeptonic",]
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
@@ -53,4 +57,5 @@ for name, apply in applyScaleFactors.items():
 # output_hists_dir += "_JPsiDimuons"
 output_hists_dir += "_SRDimuons"
 # output_hists_dir += "_SRDimuons_TriggerStudy"
+
 output_hists_dir += "/"

@@ -595,9 +595,9 @@ std::vector<int> TTAlpsEvent::GetFiveFirstMotherIDsOfParticle(shared_ptr<Physics
 
 // Particle can be either a genParticle or a reco muon, Mother has to be a genParticle
 float TTAlpsEvent::GetPhiAngleBetweenDimuonAndALP(shared_ptr<PhysicsObject> muon1, shared_ptr<PhysicsObject> muon2, shared_ptr<PhysicsObject> alp, bool recoMuon) {
-  auto pv_x = GetAsFloat("PV_x");
-  auto pv_y = GetAsFloat("PV_y");
-  auto pv_z = GetAsFloat("PV_z");
+  auto pv_x = GetAs<float>("PV_x");
+  auto pv_y = GetAs<float>("PV_y");
+  auto pv_z = GetAs<float>("PV_z");
 
   TLorentzVector muon1fourVector,muon2fourVector;
   float muonMass = 0.105;
