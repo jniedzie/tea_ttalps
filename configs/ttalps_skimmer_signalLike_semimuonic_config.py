@@ -12,8 +12,7 @@ applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
 
-weightsBranchName = ""
-# weightsBranchName = "genWeight"
+weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
 # For the signal like skimming all given muonMatchingParams are applied together
