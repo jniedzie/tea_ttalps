@@ -28,7 +28,7 @@ output_formats = ["pdf"]
 
 # luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
-lumi_label_value = 59830.
+lumi_label_value = luminosity
 
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
