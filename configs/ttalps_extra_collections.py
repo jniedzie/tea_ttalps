@@ -97,6 +97,6 @@ def get_extra_event_collections(year):
   if year == "2016" or year == "2017" or year == "2018":
     return {**commonExtraEventCollections, **run2extraEventCollections}
   elif year == "2022" or year == "2023":
-    return {**commonExtraEventCollections, **run2extraEventCollections}
+    return {**commonExtraEventCollections, **run3extraEventCollections}
   else:
     raise ValueError(f"Year {year} not supported.")
