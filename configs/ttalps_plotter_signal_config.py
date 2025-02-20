@@ -199,8 +199,8 @@ for muonVertexCollectionName in muonVertexCollectionNames:
       # Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig1"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} / #sigma_{dxy}^{1}"  , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig2"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} / #sigma_{dxy}^{2}"  , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_alpha"                , "", False, True  , default_norm        , 10 , 0      , 3.5  , 1e-4  , 1e6   , "#mu vertex #alpha"                      , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_cosAlpha"             , "", False, True  , default_norm        , 5  , -1     , 1    , 1e-4  , 1e7   , "#mu vertex cos #alpha"                  , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_3Dangle"                , "", False, True  , default_norm        , 10 , 0      , 3.5  , 1e-4  , 1e6   , "#mu vertex #alpha"                      , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_cos3Dangle"             , "", False, True  , default_norm        , 5  , -1     , 1    , 1e-4  , 1e7   , "#mu vertex cos #alpha"                  , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_deltaPixelHits"       , "", False, True  , default_norm        , 1  , 0      , 15   , 1e-3  , 1e6   , "#mu vertex #Delta(Pixel Hits)"          , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_nSegments"            , "", False, True  , default_norm        , 1  , 0      , 20   , 1e-4  , 1e7   , "#mu vertex N(Segments)"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_nSegments1"           , "", False, True  , default_norm        , 1  , 0      , 20   , 1e-4  , 1e7   , "#mu_{1} vertex N(Segments)"             , "# events (2018)"   ),
@@ -424,12 +424,12 @@ for muonVertexCollectionName in genVertexCollectionNames:
     histograms_genALPs += (
       Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_LxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 150   , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"       , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_alpha"                , "", False, True  , default_norm        , 10 , 0      , 3.5  , 1e-4  , 1e6   , "#mu vertex #alpha"                      , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_cosAlpha"             , "", False, True  , default_norm        , 5  , -1     , 1    , 1e-4  , 1e7   , "#mu vertex cos #alpha"                  , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_3Dangle"                , "", False, True  , default_norm        , 10 , 0      , 3.5  , 1e-4  , 1e6   , "#mu vertex #alpha"                      , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_cos3Dangle"             , "", False, True  , default_norm        , 5  , -1     , 1    , 1e-4  , 1e7   , "#mu vertex cos #alpha"                  , "# events (2018)"   ),
     )
     histograms2D_genALPs += (
-      Histogram2D(muonVertexCollectionName+category+"_Lxy_alpha",            "",  False,  False,  True,  NormalizationType.to_lumi,  2,  2,   0, 250,  0,3.15,  1e-5,  1e1,  "L_{xy} [cm]",  "#mu vertex #alpha",    "# events (2018)",  ""  ),
-      Histogram2D(muonVertexCollectionName+category+"_Lxy_cosAlpha",         "",  False,  False,  True,  NormalizationType.to_lumi,  2,  2,   0, 250, -1,   1,  1e-5,  1e1,  "L_{xy} [cm]",  "#mu vertex cos #alpha",    "# events (2018)",  ""  ),
+      Histogram2D(muonVertexCollectionName+category+"_Lxy_3Dangle",            "",  False,  False,  True,  NormalizationType.to_lumi,  2,  2,   0, 250,  0,3.15,  1e-5,  1e1,  "L_{xy} [cm]",  "#mu vertex #alpha",    "# events (2018)",  ""  ),
+      Histogram2D(muonVertexCollectionName+category+"_Lxy_cos3Dangle",         "",  False,  False,  True,  NormalizationType.to_lumi,  2,  2,   0, 250, -1,   1,  1e-5,  1e1,  "L_{xy} [cm]",  "#mu vertex cos #alpha",    "# events (2018)",  ""  ),
     )
 
 for i in range(1,6):
