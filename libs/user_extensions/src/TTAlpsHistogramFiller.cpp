@@ -261,26 +261,6 @@ void TTAlpsHistogramFiller::FillMuonMetHistograms(const shared_ptr<Event> event)
   histogramsHandler->Fill(collectionName + "_minvMuonMET", (leadingMuonVector + metVector).M(), weight * leadingMuonSF);
 }
 
-void TTAlpsHistogramFiller::FillJetHistograms(const shared_ptr<Event> event) {
-  float weight = GetEventWeight(event);
-  auto bJets = event->GetCollection("GoodTightBtaggedJets");
-  auto jets = event->GetCollection("GoodNonTightBtaggedJets");
-
-  for (auto bJet : *bJets) {
-    TLorentzVector bJetVector = asNanoJet(bJet)->GetFourVector();
-    float bjetWeight = GetObjectWeight(bJet, "GoodTightBtaggedJets");
-
-    for (int iJet = 0; iJet < jets->size(); iJet++) {
-      TLorentzVector jet1vector = asNanoJet(jets->at(iJet))->GetFourVector();
-
-      for (int jJet = iJet + 1; jJet < jets->size(); jJet++) {
-        TLorentzVector jet2vector = asNanoJet(jets->at(jJet))->GetFourVector();
-        histogramsHandler->Fill("GoodJets_minvBjet2jets", (bJetVector + jet1vector + jet2vector).M(), weight * bjetWeight);
-      }
-    }
-  }
-}
-
 void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<Collection<shared_ptr<PhysicsObject>>> objectCollection,
                                                      string collectionName, float weight) {
   float size = objectCollection->size();
@@ -750,7 +730,6 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const shared_ptr<Event> ev
   FillDimuonHistograms(event);
   FillDiumonClosestToZhistgrams(event);
   FillMuonMetHistograms(event);
-  FillJetHistograms(event);
 }
 
 /// LLPnanoAOD Loose Muons and Loose Muon Vertex Histograms

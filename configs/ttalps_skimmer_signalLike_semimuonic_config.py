@@ -8,9 +8,7 @@ nEvents = -1
 printEveryNevents = 1000
 
 applyLooseSkimming = False
-applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
-applySignalLikeSkimming = True
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
@@ -33,9 +31,9 @@ muonMatchingParams = {
 eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 9999999),
+    "nLooseMuonsSegmentMatch": (3, 9999999),
     "nLooseElectrons": (0, 0),
-    # "nGoodBtaggedJets": (2, 9999999),
-    # "nGoodMediumBtaggedJets": (1, 9999999),
+    # "nGoodTightBtaggedJets": (2, 9999999),  # TODO: consider tight WP and/or 2 b-tags
 }
 
 branchesToKeep = ["*"]

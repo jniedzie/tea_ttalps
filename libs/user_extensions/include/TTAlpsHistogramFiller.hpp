@@ -64,7 +64,6 @@ class TTAlpsHistogramFiller {
   void FillDimuonHistograms(const std::shared_ptr<Event> event);
   void FillDiumonClosestToZhistgrams(const std::shared_ptr<Event> event);
   void FillMuonMetHistograms(const std::shared_ptr<Event> event);
-  void FillJetHistograms(const std::shared_ptr<Event> event);
 
   void FillDimuonHistograms(const std::shared_ptr<PhysicsObject> muon1, const std::shared_ptr<PhysicsObject> muon2, std::string collectionName, const std::shared_ptr<Event> event, bool genLevel);
   void FillMuonMinDeltaRHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollection, std::string collectionName);
