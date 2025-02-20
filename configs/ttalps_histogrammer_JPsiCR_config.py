@@ -28,8 +28,6 @@ runGenMuonVertexCollectionHistograms = False  # can only be run on signal sample
 runLLPNanoAODVertexHistograms = False
 
 runABCDHistograms = True
-# abcdCollection = "BestPFIsoDimuonVertex"
-# abcdCollection = "BestIsoDimuonVertex"
 abcdCollection = "BestDimuonVertex"
 
 dimuonSelection = "JPsiDimuonVertex"

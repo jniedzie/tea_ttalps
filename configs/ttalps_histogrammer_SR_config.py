@@ -28,8 +28,7 @@ runGenMuonVertexCollectionHistograms = False  # can only be run on signal sample
 runLLPNanoAODVertexHistograms = False
 
 runABCDHistograms = True
-# abcdCollection = "BestPFIsoDimuonVertex"
-abcdCollection = "BestIsoDimuonVertex"
+abcdCollection = "BestPFIsoDimuonVertex"
 
 # dimuonSelection is the name of the selection in ttalps_object_cuts
 dimuonSelection = "SRDimuonVertex"
@@ -95,16 +94,12 @@ muonCollectionCategories = ["", "DSA", "PAT"]
 muonCollectionNames = []
 
 muonVertexCollections = {
-  # "GoodIsoDimuonVertices" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut"],
-  # "BestIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut", "BestDimuonVertex"],
   "GoodPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut"],
   "BestPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut", "BestDimuonVertex"],
 }
 muonVertexCollectionNames = [collectionName for collectionName in muonVertexCollections.keys()]
 # N-1 collections need to be defined above
 muonVertexNminus1Collections = [
-  # "GoodIsoDimuonVertices",
-  # "BestIsoDimuonVertex",
   "GoodPFIsoDimuonVertex",
   "BestPFIsoDimuonVertex",
 ]

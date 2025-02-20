@@ -158,7 +158,7 @@ signals2018_60GeV = (
   "signals/tta_mAlp-60GeV_ctau-1e3mm",
   "signals/tta_mAlp-60GeV_ctau-1e5mm",
 )
-signals2018 = signals2018_0p35GeV + signals2018_1GeV + signals2018_2GeV + signals2018_12GeV + signals2018_60GeV + signals2018_70GeV
+signals2018 = signals2018_0p35GeV + signals2018_1GeV + signals2018_2GeV + signals2018_12GeV + signals2018_60GeV
 
 test_signals2018 = (
   "signals/tta_mAlp-1GeV_ctau-1e0mm",
