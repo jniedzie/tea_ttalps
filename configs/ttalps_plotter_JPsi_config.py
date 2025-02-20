@@ -119,7 +119,7 @@ histograms = (
   Histogram("Event_PV_z"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV z [cm]"                           , "# events (2018)"   ),
   
   Histogram("cutFlow"                             , "", False, True  , default_norm , 1  , 0     , 13     , 1e-3*y_scale   , 1e23*y_scale  , "Selection"                      , "Number of events"  ),
-  Histogram("dimuonCutFlow"                       , "", False, True  , default_norm , 1  , 0     , 8      , 1e4*y_scale   , 1e7*y_scale  , "Selection"                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex"      , "", False, True  , default_norm , 1  , 0     , 8      , 1e4*y_scale   , 1e7*y_scale  , "Selection"                      , "Number of events"  ),
   Histogram("Event_normCheck"                     , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1*y_scale  , 1e20*y_scale   , "norm check"                     , "# events (2018)"   ),
 )
 
