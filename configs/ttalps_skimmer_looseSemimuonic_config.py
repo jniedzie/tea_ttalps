@@ -13,7 +13,6 @@ applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
-# weightsBranchName = ""
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
