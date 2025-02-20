@@ -20,12 +20,10 @@ skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 output_formats = ["pdf"]
 
 # luminosity = 63670. # pb^-1
-# luminosity = 59820. # 2018 eras A+B+C+D 27972.887358
-luminosity = 27972. # 2018 eras A+B+C+D 27972.887358
+luminosity = 59820. # 2018 eras A+B+C+D (A+B+C was 27972.887358 before)
 # luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 lumi_label_offset = 0.02
-# lumi_label_value = 59820.
-lumi_label_value = 27972.
+lumi_label_value = 59820.
 
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
@@ -98,15 +96,12 @@ plotting_options = {
 }
 
 default_norm = NormalizationType.to_lumi
-# default_norm = NormalizationType.to_background
-# default_norm = NormalizationType.to_data
 
 y_scale = 0.01
 
 if plot_background:
   default_norm = NormalizationType.to_background
 else:
-  # default_norm = NormalizationType.to_one
   default_norm = NormalizationType.to_lumi
   y_scale = 0.1
 if plot_data:
@@ -116,7 +111,7 @@ if plot_data:
 
 histograms = (
 # #           name                                  title logx  logy    norm_type                 rebin xmin   xmax    ymin    ymax,   xlabel                                             ylabel
-  
+
   Histogram("Event_PV_npvs"                       , "", False, True  , default_norm              , 1  , 0     , 90   , 1e-2   , 1e8   , "# Primary vertices"                  , "# events (2018)"   ),
   Histogram("Event_PV_npvsGood"                   , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "# Good primary vertices"             , "# events (2018)"   ),
   Histogram("Event_PV_x"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV x [cm]"                           , "# events (2018)"   ),
@@ -184,7 +179,7 @@ for muonVertexCollectionName in muonVertexCollectionNames:
       # Histogram(muonVertexCollectionName+category+"_nSegments1"           , "", False, True  , NormalizationType.to_one        , 1  , 0     , 10    , 1e-6  , 1e4  , "#mu_{1} N(muon segments)"               , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_nSegments2"           , "", False, True  , NormalizationType.to_one        , 1  , 0     , 10    , 1e-6  , 1e4  , "#mu_{2} N(muon segments)"               , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_nSegmentsSum"         , "", False, True  , default_norm        , 1  , 0     , 20    , 1e-3  , 1e10  , "#mu_{1} + #mu_{2} N(muon segments)"     , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, False , default_norm        , 2  , 2.7     , 3.5     , 0  , 35   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, False , default_norm        , 2  , 2.7     , 3.5     , 0  , 320   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
