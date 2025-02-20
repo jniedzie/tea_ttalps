@@ -30,21 +30,12 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
   } catch (const Exception &e) {
     info() << "Couldn't read muonVertexNminus1Collections from config file - is needed for GoodLooseMuonVertex N-1 collections" << endl;
   } 
-
-  bool useIso = true;
-  try {
-    config.GetValue("useLooseIsoPATMuons", useIso);
-  } catch (const Exception &e) {
-    info() << "Couldn't read useLooseIsoPATMuons from config file - will use isolated PAT LooseMuons collection with isolation cuts" << endl;
-  }
-  useLooseIsoPATMuons = useIso;
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> event) {
 
   auto loosePATMuons = event->GetCollection("LoosePATMuons");
   auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
-  if(useLooseIsoPATMuons) loosePATMuons = event->GetCollection("LooseIsoPATMuons");
   auto looseMuons = make_shared<PhysicsObjects>();
   for (auto muon : *loosePATMuons) {
     looseMuons->push_back(muon);
@@ -150,10 +141,14 @@ void TTAlpsObjectsManager::InsertGoodLooseMuonVertexCollection(shared_ptr<Event>
   auto vertices = event->GetCollection("LooseMuonsVertex"+matchingMethod+"Match");
 
   bool bestVertex = false;
-  if(muonVertexCollectionCuts.back() == "BestDimuonVertex") {
-    bestVertex = true;
-    muonVertexCollectionCuts.pop_back();
+  for(auto cutName : muonVertexCollectionCuts) {
+    if(cutName == "BestDimuonVertex") {
+      bestVertex = true;
+      break;
+    }
   }
+  if (bestVertex) muonVertexCollectionCuts.erase(std::remove(muonVertexCollectionCuts.begin(), muonVertexCollectionCuts.end(), "BestDimuonVertex"), muonVertexCollectionCuts.end());
+
   auto passedVertices = make_shared<PhysicsObjects>();
   for(auto vertex : *vertices) {
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
@@ -240,7 +235,6 @@ shared_ptr<PhysicsObject> TTAlpsObjectsManager::GetBestMuonVertex(const shared_p
 void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_ptr<Event> event) {
   auto loosePATMuons = event->GetCollection("LoosePATMuons");
   auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
-  if(useLooseIsoPATMuons) loosePATMuons = event->GetCollection("LooseIsoPATMuons");
   auto looseMuons = make_shared<PhysicsObjects>();
   for (auto muon : *loosePATMuons) {
     looseMuons->push_back(muon);

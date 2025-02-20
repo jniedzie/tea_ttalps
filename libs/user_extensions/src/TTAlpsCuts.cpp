@@ -84,9 +84,9 @@ bool TTAlpsCuts::PassesSignalLikeCuts(const shared_ptr<Event> event, shared_ptr<
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
   bool passesCuts = true;
-  for(auto &[origianlCollectionName, vertexCuts] : muonVertexCollections) {
-    string collectionName = origianlCollectionName;
-    if(dimuonCategory != "") collectionName = origianlCollectionName + "_" + dimuonCategory;
+  for(auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
+    string collectionName = originalCollectionName;
+    if(dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
     if(!PassesDimuonCuts(event, cutFlowManager, collectionName, vertexCuts, dimuonCategory)) passesCuts = false;
   }
   return passesCuts;
@@ -172,7 +172,7 @@ void TTAlpsCuts::RegisterSingleLeptonCuts(shared_ptr<CutFlowManager> cutFlowMana
 }
 
 bool TTAlpsCuts::PassesSingleLeptonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  int nLooseMuons = event->GetCollection("LooseIsoPATMuons")->size();
+  int nLooseMuons = event->GetCollection("LoosePATMuons")->size();
   if (nLooseMuons > 1) return false;
 
   int nTightMuons = event->GetCollection("TightMuons")->size();
@@ -180,7 +180,7 @@ bool TTAlpsCuts::PassesSingleLeptonCuts(const shared_ptr<Event> event, shared_pt
 
   if (nLooseMuons == 1) {
     auto tightMuon = event->GetCollection("TightMuons")->at(0);
-    auto looseMuon = event->GetCollection("LooseIsoPATMuons")->at(0);
+    auto looseMuon = event->GetCollection("LoosePATMuons")->at(0);
     if (looseMuon != tightMuon) return false;
   }
   if(cutFlowManager) cutFlowManager->UpdateCutFlow("nAdditionalLooseMuons");
@@ -193,7 +193,7 @@ void TTAlpsCuts::RegisterTTZLikeCuts(shared_ptr<CutFlowManager> cutFlowManager) 
 }
 
 bool TTAlpsCuts::PassesTTZLikeCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto looseMuons = event->GetCollection("LooseIsoPATMuons");
+  auto looseMuons = event->GetCollection("LoosePATMuons");
   
   double zMass = 91.1876; // GeV
   double smallestDifferenceToZmass = 999999;

@@ -17,7 +17,8 @@ weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
 triggerSelection = (
-    "HLT_IsoMu24",
+    "HLT_DoubleL2Mu23NoVtx_2Cha",
+    "HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed",
 )
 
 eventCuts = {

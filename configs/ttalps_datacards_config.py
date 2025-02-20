@@ -3,11 +3,13 @@ from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
 from ttalps_cross_sections import *
 
+year = "2018"
+cross_sections = get_cross_sections(year)
+
 base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 
 # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
-skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_corrected"
+skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 
 # SR dimuon cuts applied
 hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
@@ -17,19 +19,31 @@ output_path = f"../datacards/"
 # If True, poisson error on empty bins (1.84) will be added to data histograms
 add_uncertainties_on_zero = False
 
+# signal_name = "tta_mAlp-0p35GeV_ctau-1e-5mm"
+# signal_name = "tta_mAlp-0p35GeV_ctau-1e0mm"
+# signal_name = "tta_mAlp-0p35GeV_ctau-1e1mm"
+# signal_name = "tta_mAlp-0p35GeV_ctau-1e2mm"
+signal_name = "tta_mAlp-0p35GeV_ctau-1e3mm"
+
 # signal_name = "tta_mAlp-1GeV_ctau-1e-5mm"
-signal_name = "tta_mAlp-1GeV_ctau-1e0mm"
+# signal_name = "tta_mAlp-1GeV_ctau-1e0mm"
 # signal_name = "tta_mAlp-1GeV_ctau-1e1mm"
 # signal_name = "tta_mAlp-1GeV_ctau-1e2mm"
 # signal_name = "tta_mAlp-1GeV_ctau-1e3mm"
-# signal_name = "tta_mAlp-1GeV_ctau-1e5mm"
 
+# signal_name = "tta_mAlp-2GeV_ctau-1e-5mm"
 # signal_name = "tta_mAlp-2GeV_ctau-1e0mm"
 # signal_name = "tta_mAlp-2GeV_ctau-1e1mm"
 # signal_name = "tta_mAlp-2GeV_ctau-1e2mm"
 # signal_name = "tta_mAlp-2GeV_ctau-1e3mm"
 
 # signal_name = "tta_mAlp-12GeV_ctau-1e0mm"
+# signal_name = "tta_mAlp-12GeV_ctau-1e1mm"
+# signal_name = "tta_mAlp-12GeV_ctau-1e2mm"
+
+# signal_name = "tta_mAlp-60GeV_ctau-1e0mm"
+# signal_name = "tta_mAlp-60GeV_ctau-1e2mm"
+
 # signal_name = "tta_mAlp-70GeV_ctau-1e0mm"
 
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
@@ -268,33 +282,19 @@ samples = (
 )
 
 # List histograms for which to create datacards
-histograms = [
-    # Histogram(name="LooseMuonsDRMatch_dxyPVTrajSig", norm_type=NormalizationType.to_lumi, x_max=90.0, rebin=1),
-    
-    # Histogram(name="BestIsoDimuonVertex_DSA_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=800    , rebin=20  ),
-    # Histogram(name="BestIsoDimuonVertex_DSA_vxySigma"          , norm_type=NormalizationType.to_lumi, x_max=200    , rebin=200 ),
-    # Histogram(name="BestIsoDimuonVertex_DSA_vxySignificance"   , norm_type=NormalizationType.to_lumi, x_max=200    , rebin=5   ),
-    
-    # Histogram(name="BestIsoDimuonVertex_Pat_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
-    # Histogram(name="BestIsoDimuonVertex_Pat_vxySigma"          , norm_type=NormalizationType.to_lumi, x_max=10     , rebin=20  ),
-    # Histogram(name="BestIsoDimuonVertex_Pat_vxySignificance"   , norm_type=NormalizationType.to_lumi, x_max=1000   , rebin=40  ),
-    
-    # Histogram(name="BestIsoDimuonVertex_PatDSA_Lxy"            , norm_type=NormalizationType.to_lumi, x_max=800    , rebin=40  ),
-    # Histogram(name="BestIsoDimuonVertex_PatDSA_vxySigma"       , norm_type=NormalizationType.to_lumi, x_max=100    , rebin=200 ),
-    # Histogram(name="BestIsoDimuonVertex_PatDSA_vxySignificance", norm_type=NormalizationType.to_lumi, x_max=800    , rebin=20  ),
-
-    Histogram(name="BestPFIsoDimuonVertex_Pat_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
-    Histogram(name="BestPFIsoDimuonVertex_PatDSA_Lxy"            , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
-    Histogram(name="BestPFIsoDimuonVertex_DSA_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+histograms = [    
+    # Histogram(name="BestPFIsoDimuonVertex_Pat_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+    # Histogram(name="BestPFIsoDimuonVertex_PatDSA_Lxy"            , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+    # Histogram(name="BestPFIsoDimuonVertex_DSA_Lxy"               , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
 
     # Histogram(name="BestPFIsoDimuonVertex_Pat_LxySignificance"     , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
     # Histogram(name="BestPFIsoDimuonVertex_PatDSA_LxySignificance"  , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),    
-    # Histogram(name="BestPFIsoDimuonVertex_DSA_LxySignificance"     , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
+    Histogram(name="BestPFIsoDimuonVertex_DSA_LxySignificance"     , norm_type=NormalizationType.to_lumi, x_max=140    , rebin=5   ),
 ]
 
 
 # output_path = f"../datacards/datacard_{histograms[0].getName()}_{signal_name}_displacedIso"
-output_path = f"../datacards/datacard_{histograms[0].getName()}_{signal_name}_pfIso"
+output_path = f"../datacards/datacard_{histograms[0].getName()}_{signal_name}_PFIso"
 
 background_name = [sample.name for sample in samples if sample.type == SampleType.background]
 
@@ -306,10 +306,4 @@ nuisances = {
     }
 }
 
-
-# # combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e-5mm.txt
-# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e0mm.txt
-# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e1mm.txt
-# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e2mm.txt
-# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e3mm.txt
-# # combineCards.py datacard_BestPFIsoDimuonVertex_Pat_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt datacard_BestPFIsoDimuonVertex_PatDSA_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt datacard_BestPFIsoDimuonVertex_DSA_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt > datacard_BestPFIsoDimuonVertex_combined_Lxy_tta_mAlp-1GeV_ctau-1e5mm.txt
+# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_PatDSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_DSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt > datacard_BestPFIsoDimuonVertex_combined_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt

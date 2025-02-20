@@ -27,8 +27,6 @@ class TTAlpsObjectsManager {
 
  private:
 
-  bool useLooseIsoPATMuons = true;
-
   std::unique_ptr<TTAlpsDimuonCuts> ttAlpsCuts;
 
   std::map<std::string, float> muonMatchingParams;

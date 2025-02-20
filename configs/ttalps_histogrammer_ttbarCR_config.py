@@ -25,8 +25,7 @@ runGenMuonVertexCollectionHistograms = False  # can only be run on signal sample
 runLLPNanoAODVertexHistograms = False
 
 runABCDHistograms = False
-# abcdCollection = "BestPFIsoDimuonVertex"
-abcdCollection = "BestIsoDimuonVertex"
+abcdCollection = "BestPFIsoDimuonVertex"
 
 useLooseIsoPATMuons = False
 # dimuonSelection is the name of the selection in ttalps_object_cuts
@@ -107,16 +106,12 @@ muonCollectionCategories = ["", "DSA", "PAT"]
 muonCollectionNames = []
 
 muonVertexCollections = {
-  "GoodIsoDimuonVertices" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut"],
-  "BestIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "DisplacedIsolationCut", "BestDimuonVertex"],
   "GoodPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut"],
   "BestPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut", "BestDimuonVertex"],
 }
 muonVertexCollectionNames = [collectionName for collectionName in muonVertexCollections.keys()]
 # N-1 collections need to be defined above
 muonVertexNminus1Collections = [
-  "GoodIsoDimuonVertices",
-  "BestIsoDimuonVertex",
   "GoodPFIsoDimuonVertex",
   "BestPFIsoDimuonVertex",
 ]
@@ -210,8 +205,8 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "pfRelIso04all2"                , 800   , 0      , 20   , ""  ),
       (muonVertexCollectionName , "tkRelIsoMuon1"                 , 800   , 0      , 20   , ""  ),
       (muonVertexCollectionName , "tkRelIsoMuon2"                 , 800   , 0      , 20   , ""  ),
-      (muonVertexCollectionName , "alpha"                         , 2000  , -10    , 10   , ""  ),
-      (muonVertexCollectionName , "cosAlpha"                      , 400   , -2     , 2    , ""  ),
+      (muonVertexCollectionName , "3Dangle"                         , 2000  , -10    , 10   , ""  ),
+      (muonVertexCollectionName , "cos3Dangle"                      , 400   , -2     , 2    , ""  ),
       (muonVertexCollectionName , "deltaPixelHits"                , 50    , 0      , 50   , ""  ),
       (muonVertexCollectionName , "nSegments"                     , 50    , 0      , 50   , ""  ),
       (muonVertexCollectionName , "nSegments1"                    , 50    , 0      , 50   , ""  ),
@@ -279,21 +274,6 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
       (muonVertexCollectionName , "pfRelIso1"                   , 800    , 0      , 20    , ""  ),
       (muonVertexCollectionName , "pfRelIso2"                   , 800    , 0      , 20    , ""  ),
     )
-
-####  LLP Trigger Histograms  ####
-LLPTrigger_histParams = (
-  ("Event" , "nSingleMuonTriggerGenMuonFromALP"           , 50     , 0      , 50     , ""  ),
-  ("SingleMuonTriggerGenMuonFromALP" , "pt1"              , 2000   , 0      , 1000   , ""  ),
-  ("SingleMuonTriggerGenMuonFromALP" , "pt2"              , 2000   , 0      , 1000   , ""  ),
-  ("SingleMuonTriggerGenMuonFromALP" , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
-  ("SingleMuonTriggerGenMuonFromALP" , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
-  ("Event" , "nDoubleMuonTriggerGenMuonFromALP"           , 50     , 0      , 50     , ""  ),
-  ("DoubleMuonTriggerGenMuonFromALP" , "pt1"              , 2000   , 0      , 1000   , ""  ),
-  ("DoubleMuonTriggerGenMuonFromALP" , "pt2"              , 2000   , 0      , 1000   , ""  ),
-  ("DoubleMuonTriggerGenMuonFromALP" , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
-  ("DoubleMuonTriggerGenMuonFromALP" , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
-)
-
 
 ABCD_variables = {
   "Lxy": (100, 0, 1000),

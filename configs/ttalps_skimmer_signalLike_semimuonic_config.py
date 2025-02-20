@@ -1,7 +1,8 @@
-import ttalps_extra_collections as collections
+from ttalps_extra_collections import *
 from ttalps_object_cuts import *
 
-extraEventCollections = collections.extraEventCollections
+year = "2018"
+extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
 printEveryNevents = 1000
@@ -10,9 +11,6 @@ applyLooseSkimming = False
 applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = True
-
-# non isolated loose muons means that there is no isolation requirement for the loose muons
-useLooseIsoPATMuons = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
@@ -35,8 +33,6 @@ muonMatchingParams = {
 eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 9999999),
-    # "nLooseIsoPATMuons": (3, 9999999),
-    # "nLooseDSAMuons": (3, 9999999),
     "nLooseElectrons": (0, 0),
     # "nGoodBtaggedJets": (2, 9999999),
     # "nGoodMediumBtaggedJets": (1, 9999999),

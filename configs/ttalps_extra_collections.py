@@ -1,17 +1,10 @@
-extraEventCollections = {
+commonExtraEventCollections = {
   "TightMuons": {
     "inputCollections": ("Muon",),
     "pt": (30., 9999999.),
     "eta": (-2.4, 2.4),
     "pfRelIso04_all": (0., 0.15),
     "tightId": True,
-  },
-  "LooseIsoPATMuons": {
-    "inputCollections": ("Muon",),
-    "pt": (3., 9999999.),
-    "eta": (-2.5, 2.5),
-    "pfRelIso04_all": (0., 0.25),
-    "looseId": True,
   },
   "LoosePATMuons": {
     "inputCollections": ("Muon",),
@@ -24,13 +17,6 @@ extraEventCollections = {
     "displacedID": (1, 9999999.),
     "pt": (3., 9999999.),
     "eta": (-2.5, 2.5),
-  },
-  
-  "LooseElectrons": {
-    "inputCollections": ("Electron",),
-    "pt": (15., 9999999.),
-    "eta": (-2.5, 2.5),
-    "mvaFall17V2Iso_WPL": True,  # TODO: Doesn't work for Run 3!! Will have to handle different cases.
   },
   
   "GoodJets": {
@@ -88,3 +74,29 @@ extraEventCollections = {
     "jetId": 6,
   },
 }
+
+run2extraEventCollections = {
+  "LooseElectrons": {
+    "inputCollections": ("Electron",),
+    "pt": (15., 9999999.),
+    "eta": (-2.5, 2.5),
+    "mvaFall17V2Iso_WPL": True,
+  },
+}
+
+run3extraEventCollections = {
+  "LooseElectrons": {
+    "inputCollections": ("Electron",),
+    "pt": (15., 9999999.),
+    "eta": (-2.5, 2.5),
+    "mvaIso_WP80": True, 
+  },
+}
+
+def get_extra_event_collections(year):
+  if year == "2016" or year == "2017" or year == "2018":
+    return {**commonExtraEventCollections, **run2extraEventCollections}
+  elif year == "2022" or year == "2023":
+    return {**commonExtraEventCollections, **run3extraEventCollections}
+  else:
+    raise ValueError(f"Year {year} not supported.")
