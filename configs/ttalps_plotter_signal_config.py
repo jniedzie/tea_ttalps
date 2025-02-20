@@ -468,22 +468,9 @@ for method in genMuonMatchingMethods:
       histograms_genALPs += (
         Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 4     , 1e-8  , 1e6   , "Number of loose #mu vertices"           , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_Lxy"                  , "", False, True  , default_norm        , 10 , 0     , 700   , 1e-2  , 1e6   , "Reco #mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, True  , default_norm        , 10 , 0     , 3.15 , 1e-5  , 1e2   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_absCollinearityAngle" , "", False, False  , default_norm        , 10 , 0     , 3.15 , 0    , 6   , "#mu vertex |#Delta #Phi|"               , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_vxySigma"             , "", False, True  , default_norm        , 50 , 0     , 100   , 1e-3  , 1e6   , "#mu vertex #sigma_{vxy} [cm]"           , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_vxySignificance"      , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex v_{xy} / #sigma_{vxy}"       , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_dR"                   , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex #Delta R"                    , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_proxDR"               , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex proximity #Delta R"          , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_outerDR"              , "", False, True  , default_norm        , 5  , 0     , 6     , 1e-4  , 1e6   , "#mu vertex outer #Delta R"              , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_maxHitsInFrontOfVert" , "", False, True  , default_norm        , 1  , 0     , 30    , 1e-6  , 1e3   , "Max N(hits in front of vertex)"    , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 100, 0     , 100   , 1e-6  , 1e3   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
-        Histogram(muonVertexCollectionName+category+"_invMass"              , "", True,  True  , default_norm        , 100, 1e-1  , 1e2   , 1e-4  , 1e6   , "Reco #mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
+        Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 100, 0     , 100   , 1e-6  , 1e3   , "#mu vertex M_{#mu #mu} [GeV]"                 , "# events (2018)"   ),
         Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig1"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} / #sigma_{dxy}^{1}"  , "# events (2018)"   ),
-        # Histogram(muonVertexCollectionName+category+"_dxyPVTrajSig2"        , "", False, True  , default_norm        , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} / #sigma_{dxy}^{2}"  , "# events (2018)"   ),
       )
 
 if plots_from_LLPNanoAOD:
@@ -542,42 +529,33 @@ data_samples = (
   ),
 )
 
+signal_colors = [ROOT.kBlue,ROOT.kGreen+1,ROOT.kOrange+1,ROOT.kMagenta,ROOT.kBlue+2]
+
 signals = {
-  # "tta_mAlp-70GeV_ctau-1e0mm" : {"label": "m_{a} = 70 GeV, c#tau_{a} = 1 mm", "color": ROOT.kMagenta},
-  # "tta_mAlp-60GeV_ctau-1e0mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-60GeV_ctau-1e2mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
-  # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
-  # "tta_mAlp-12GeV_ctau-1e1mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-12GeV_ctau-1e2mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
-  # "tta_mAlp-1GeV_ctau-1e0mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
-  # "tta_mAlp-1GeV_ctau-1e1mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-1GeV_ctau-1e2mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
-  # "tta_mAlp-1GeV_ctau-1e3mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
-  # "tta_mAlp-1GeV_ctau-1e-5mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
-  "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
-  "tta_mAlp-2GeV_ctau-1e1mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
-  "tta_mAlp-2GeV_ctau-1e2mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
-  "tta_mAlp-2GeV_ctau-1e3mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
-  # "tta_mAlp-2GeV_ctau-1e-5mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
-  # "tta_mAlp-2GeV_ctau-1e-5mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kMagenta},
-  # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-0p35GeV_ctau-1e1mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 cm", "color": ROOT.kGreen+1},
-  # "tta_mAlp-0p35GeV_ctau-1e2mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 cm", "color": ROOT.kOrange+1},
-  # "tta_mAlp-0p35GeV_ctau-1e3mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 m", "color": ROOT.kMagenta},
-  # "tta_mAlp-0p35GeV_ctau-1e-5mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 #mu m", "color": ROOT.kBlue+2},
-
-  # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm", "color": ROOT.kBlue},
-  # "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm", "color": ROOT.kOrange+1},
-  # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm", "color": ROOT.kMagenta},
-  # "tta_mAlp-60GeV_ctau-1e0mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 1 mm", "color": ROOT.kGreen+1},
-
-#   "ttalps_m-2GeV_ctau-1e2mm_ctau_1e2mm" : {"label": "gridpack c#tau_{a} = 10 cm, pythia8 c#tau_{a} = 10 cm", "color": ROOT.kGreen+1},
-#   "ttalps_m-2GeV_ctau-1e-5mm_ctau_1e-5mm" : {"label": "gridpack c#tau_{a} = 10 #mu m, pythia8 c#tau_{a} = 10 #mu m", "color": ROOT.kBlue},
-#   "ttalps_m-2GeV_ctau-1e-5mm_ctau_" : {"label": "gridpack c#tau_{a} = 10 #mu m, no pythia8 c#tau_{a}", "color": ROOT.kMagenta},
-#   "ttalps_m-2GeV_ctau-1e2mm_ctau_" : {"label": "gridpack c#tau_{a} = 10 #mu m, no pythia8 c#tau_{a}", "color": ROOT.kOrange+1},
+  # "tta_mAlp-0p35GeV_ctau-1e-5mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 #mu m"},
+  # "tta_mAlp-0p35GeV_ctau-1e0mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 mm"},
+  # "tta_mAlp-0p35GeV_ctau-1e1mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 cm"},
+  # "tta_mAlp-0p35GeV_ctau-1e2mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 10 cm"},
+  # "tta_mAlp-0p35GeV_ctau-1e3mm" : {"label": "m_{a} = 0.35 GeV, c#tau_{a} = 1 m"},
+  # "tta_mAlp-1GeV_ctau-1e-5mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 #mu m"},
+  # "tta_mAlp-1GeV_ctau-1e0mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 mm"},
+  # "tta_mAlp-1GeV_ctau-1e1mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 cm"},
+  # "tta_mAlp-1GeV_ctau-1e2mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 10 cm"},
+  # "tta_mAlp-1GeV_ctau-1e3mm" : {"label": "m_{a} = 1 GeV, c#tau_{a} = 1 m"},
+  "tta_mAlp-2GeV_ctau-1e-5mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 #mu m"},
+  "tta_mAlp-2GeV_ctau-1e0mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 mm"},
+  "tta_mAlp-2GeV_ctau-1e1mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 cm"},
+  "tta_mAlp-2GeV_ctau-1e2mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 10 cm"},
+  "tta_mAlp-2GeV_ctau-1e3mm" : {"label": "m_{a} = 2 GeV, c#tau_{a} = 1 m"},
+  # "tta_mAlp-12GeV_ctau-1e0mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 mm"},
+  # "tta_mAlp-12GeV_ctau-1e1mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 1 cm"},
+  # "tta_mAlp-12GeV_ctau-1e2mm" : {"label": "m_{a} = 12 GeV, c#tau_{a} = 10 cm"},
+  # "tta_mAlp-60GeV_ctau-1e0mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 1 mm"},
+  # "tta_mAlp-60GeV_ctau-1e2mm" : {"label": "m_{a} = 60 GeV, c#tau_{a} = 10 cm"},
+  # "tta_mAlp-70GeV_ctau-1e0mm" : {"label": "m_{a} = 70 GeV, c#tau_{a} = 1 mm"},
 }
 signal_samples = ()
-for signal_name, signal_info in signals.items():
+for i, (signal_name, signal_info) in enumerate(signals.items()):
   signal_samples += (
     Sample(
       name=signal_name,
@@ -589,7 +567,7 @@ for signal_name, signal_info in signals.items():
       line_style=1,
       fill_alpha=0,
       marker_size=0,
-      line_color=signal_info["color"],
+      line_color=signal_colors[i],
       legend_description=signal_info["label"],
     ),
   )
@@ -995,65 +973,58 @@ if plot_background:
   samples = samples + background_samples
 
 # custom_stacks_order = (
-  # "SingleMuon",
+#   # "SingleMuon",
   
-  # "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8",
-  # "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8",
-  # "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8",
+#   "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8",
+#   "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8",
+#   "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8",
   
-  # "TTZZ_TuneCP5_13TeV-madgraph-pythia8",
-  # "TTZH_TuneCP5_13TeV-madgraph-pythia8",
-  # "TTTT_TuneCP5_13TeV-amcatnlo-pythia8",
+#   "TTZZ_TuneCP5_13TeV-madgraph-pythia8",
+#   "TTZH_TuneCP5_13TeV-madgraph-pythia8",
+#   "TTTT_TuneCP5_13TeV-amcatnlo-pythia8",
   
-  # "ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8",
-  # "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8",
-  # "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8",
+#   "ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8",
+#   "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8",
+#   "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8",
   
-  # "DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
-  # "DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
+#   "DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
+#   "DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
   
-  # "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
-  # "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
+#   "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
+#   "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
   
   
-  # "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8",
-  # "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8",
+#   "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8",
+#   "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8",
   
-  # "ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
-  # "ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
+#   "ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
+#   "ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
   
-  # "QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  # "QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  # "QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  # "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+#   "QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+#   "QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
+#   "QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+#   "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
   
-  # "TTToHadronic_TuneCP5_13TeV-powheg-pythia8",
-  # "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8",
-  # "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
-  
-  # "tta_mAlp-0p35GeV_ctau-1e-5mm",
-  # "tta_mAlp-0p35GeV_ctau-1e0mm",
-  # "tta_mAlp-0p35GeV_ctau-1e1mm",
-  # "tta_mAlp-0p35GeV_ctau-1e2mm",
-  # "tta_mAlp-0p35GeV_ctau-1e3mm",
-  # # "tta_mAlp-0p35GeV_ctau-1e5mm",
-
-  # "tta_mAlp-2GeV_ctau-1e-5mm",
-  # "tta_mAlp-2GeV_ctau-1e0mm",
-  # "tta_mAlp-2GeV_ctau-1e1mm",
-  # "tta_mAlp-2GeV_ctau-1e2mm",
-  # "tta_mAlp-2GeV_ctau-1e3mm",
-
-#   "tta_mAlp-0p35GeV_ctau-1e0mm",
-#   "tta_mAlp-2GeV_ctau-1e0mm",
-#   "tta_mAlp-12GeV_ctau-1e0mm",
-#   "tta_mAlp-60GeV_ctau-1e0mm",
+#   "TTToHadronic_TuneCP5_13TeV-powheg-pythia8",
+#   "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8",
+#   "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
 # )
+
+# if it's just signal we can define a new custom_stacks_order
+if not plot_background:
+  custom_stacks_order = ()
+  for signal_name, signal_info in signals.items():
+    custom_stacks_order += (signal_name,)
+else:
+  # sometimes I don't use the custom stacks orders with background:
+  if "custom_stacks_order" in globals():
+    for signal_name, signal_info in signals.items():
+      custom_stacks_order += (signal_name,)
