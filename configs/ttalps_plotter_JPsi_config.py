@@ -20,10 +20,10 @@ skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 output_formats = ["pdf"]
 
 # luminosity = 63670. # pb^-1
-luminosity = 59820. # 2018 eras A+B+C+D (A+B+C was 27972.887358 before)
+luminosity = 59820. # 2018 eras A+B+C+D (A+B+C) was 27972.887358 before)
 # luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 lumi_label_offset = 0.02
-lumi_label_value = 59820.
+lumi_label_value = luminosity
 
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
