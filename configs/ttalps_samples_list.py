@@ -170,7 +170,7 @@ test_signals2018 = (
 #####     DAS SAMPLES     #####
 
 TT_dasBackgrounds2018 = {
-  "backgrounds2018/TTToSemiLeptonic" : "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+  "backgrounds2018/TTToSemiLeptonic" : "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
   "backgrounds2018/TTToHadronic" : "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
   "backgrounds2018/TTTo2L2Nu" : "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
@@ -371,8 +371,7 @@ dasSignals2018_70GeV = {
 dasSignals2018 = {key: value for d in (dasSignals2018_0p35GeV, dasSignals2018_1GeV, dasSignals2018_2GeV, dasSignals2018_12GeV, dasSignals2018_70GeV) for key, value in d.items()}
 
 
-
-
+dasSamples2018 = {key: value for d in (dasBackgrounds2018, dasSignals2018, dasData2018) for key, value in d.items()}
 
 
 
