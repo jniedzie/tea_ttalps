@@ -155,11 +155,6 @@ histograms = (
   Histogram("GoodMediumBtaggedJets_btagDeepB"           , "", False,  True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good b-jet deepCSV score"                           , "# events (2018)"   ),
   Histogram("GoodMediumBtaggedJets_btagDeepFlavB"       , "", False,  True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good b-jet deepJet score"                           , "# events (2018)"   ),
   
-  # Histogram("Event_nGoodNonTightBtaggedJets"           , "", False,  True  , default_norm              , 1  , 0     , 20    , 1e0   , 1e9   , "Number of good non-b jets"                      , "# events (2018)"   ),
-  # Histogram("GoodNonTightBtaggedJets_pt"               , "", False,  True  , default_norm              , 50 , 0     , 2000  , 1e-5  , 1e4   , "good non-b jet p_{T} [GeV]"                     , "# events (2018)"   ),
-  # Histogram("GoodNonTightBtaggedJets_eta"              , "", False,  True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e10  , "good non-b jet #eta"                            , "# events (2018)"   ),
-  # Histogram("GoodNonTightBtaggedJets_btagDeepB"        , "", False,  True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good non-b jet btagDeepB"                       , "# events (2018)"   ),
-  
   Histogram("Event_MET_pt"                         , "", False,  True  , default_norm              , 10 , 0     , 800   , 1e-8  , 1e9   , "MET p_{T} [GeV]"                                , "# events (2018)"   ),
   Histogram("Event_PV_npvs"                       , "", False,  True  , default_norm              , 1  , 0     , 150   , 1e-3  , 1e12   , "# Primary vertices"                             , "# events (2018)"   ),
   Histogram("Event_PV_npvsGood"                   , "", False,  True  , default_norm              , 1  , 0     , 150   , 1e-3  , 1e6   , "# Good primary vertices"                        , "# events (2018)"   ),

@@ -17,14 +17,6 @@ class TTAlpsCuts {
  public:
   TTAlpsCuts();
   
-  // Cuts targetting SR semi-leptonic ttbar + two muons. Requires:
-  // - 1 good e/μ (the top-lepton)
-  // - at least 2 additional good muons (different than the top-lepton)
-  // - at least 4 good jets
-  // - at least 1 good b-tagged jet
-  // - some amount of MET
-  // - at least one good dimuon pair with mass excluding the JPsi window
-  bool PassesSignalLikeCuts(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   void RegisterSignalLikeCuts(std::shared_ptr<CutFlowManager> cutFlowManager);
   
   void RegisterInitialDimuonCuts(std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");

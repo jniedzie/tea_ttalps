@@ -40,10 +40,8 @@ int main(int argc, char **argv) {
 
   info() << "Retrieving values from config file... " << endl;
 
-  bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming, applyTTZLikeSkimming;
+  bool applyLooseSkimming, applyTTZLikeSkimming;
   config.GetValue("applyLooseSkimming", applyLooseSkimming);
-  config.GetValue("applyTTbarLikeSkimming", applyTTbarLikeSkimming);
-  config.GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
   config.GetValue("applyTTZLikeSkimming", applyTTZLikeSkimming);
 
   info() << "Registering cuts" << endl;
@@ -55,9 +53,7 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("metFilters");
   }
 
-  if(applyTTbarLikeSkimming) ttAlpsCuts->RegisterSingleLeptonCuts(cutFlowManager);
   if(applyTTZLikeSkimming) ttAlpsCuts->RegisterTTZLikeCuts(cutFlowManager);
-  if(applySignalLikeSkimming) ttAlpsCuts->RegisterSignalLikeCuts(cutFlowManager);
 
   eventProcessor->RegisterCuts(cutFlowManager);
     
@@ -65,8 +61,11 @@ int main(int argc, char **argv) {
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
+    ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
 
     cutFlowManager->UpdateCutFlow("initial");
+
+    
 
     if(applyLooseSkimming){
       if (!eventProcessor->PassesGoldenJson(event)) continue;
@@ -79,16 +78,6 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("metFilters");
     }
 
-
-    if(applyTTbarLikeSkimming){
-      if(!ttAlpsCuts->PassesSingleLeptonCuts(event, cutFlowManager)) continue;
-    }
-
-
-    if(applySignalLikeSkimming){
-      ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
-      if(!ttAlpsCuts->PassesSignalLikeCuts(event, cutFlowManager)) continue;
-    }
     if(applyTTZLikeSkimming){
       if(!ttAlpsCuts->PassesTTZLikeCuts(event, cutFlowManager)) continue;
     }
