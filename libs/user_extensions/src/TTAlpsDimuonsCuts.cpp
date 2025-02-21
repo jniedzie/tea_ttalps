@@ -21,22 +21,22 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
   try {
     config.GetMap(dimuonSelection+"BaseCuts", dimuonVertexBaseCuts);
   } catch (const Exception &e) {
-    info() << "Couldn't read " << dimuonSelection << "BaseCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+    warn() << "Couldn't read " << dimuonSelection << "BaseCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
   }
   try {
     config.GetMap(dimuonSelection+"PATCuts", dimuonVertexPATCuts);
   } catch (const Exception &e) {
-    info() << "Couldn't read " << dimuonSelection << "PATCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+    warn() << "Couldn't read " << dimuonSelection << "PATCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
   }
   try {
     config.GetMap(dimuonSelection+"PATDSACuts", dimuonVertexPATDSACuts);
   } catch (const Exception &e) {
-    info() << "Couldn't read " << dimuonSelection << "PATDSACuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+    warn() << "Couldn't read " << dimuonSelection << "PATDSACuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
   }
   try {
     config.GetMap(dimuonSelection+"DSACuts", dimuonVertexDSACuts);
   } catch (const Exception &e) {
-    info() << "Couldn't read " << dimuonSelection << "DSACuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+    warn() << "Couldn't read " << dimuonSelection << "DSACuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
   }
 
   using namespace std::placeholders;
