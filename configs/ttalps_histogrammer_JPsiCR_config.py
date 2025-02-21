@@ -19,7 +19,7 @@ runPileupHistograms = False
 #  - muonMatchingParams loose muons 
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
-runLLPNanoAODHistograms = False
+runLLPNanoAODHistograms = True
 runLLPNanoAOD2DHistograms = False
 
 runMuonMatchingHistograms = False
