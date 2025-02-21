@@ -9,9 +9,7 @@ nEvents = -1
 printEveryNevents = 10000
 
 applyLooseSkimming = True
-applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
-applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
