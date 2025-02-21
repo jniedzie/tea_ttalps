@@ -50,37 +50,38 @@ void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, s
   }
 }
 
-bool TTAlpsCuts::PassesSignalLikeCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if(muonMatchingParams.size() == 0){
-    warn() << "No muon matching methods defined in config file - skipping muon matching" << endl;
-    return false;
-  }
-  auto allMuons = make_shared<PhysicsObjects>();
-  bool firstMatching = true;
+// TODO: Lovisa, remove that when you're done with creating cumulatively matched collections in TTAlpsObjectsManager
+// bool TTAlpsCuts::PassesSignalLikeCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+//   if(muonMatchingParams.size() == 0){
+//     warn() << "No muon matching methods defined in config file - skipping muon matching" << endl;
+//     return false;
+//   }
+//   auto allMuons = make_shared<PhysicsObjects>();
+//   bool firstMatching = true;
 
-  for(auto &[matchingMethod, param] : muonMatchingParams) {
-    string collectionName = "LooseMuons" + matchingMethod + "Match";
-    shared_ptr<PhysicsObjects> matchedMuons = event->GetCollection(collectionName);
-    if(firstMatching) {
-      allMuons = matchedMuons;
-      firstMatching = false;
-    }
-    else {
-      auto allMuons_new = make_shared<PhysicsObjects>();
-      for(auto muon : *matchedMuons) {
-        if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSA())) {
-          allMuons_new->push_back(muon);
-        }
-      }
-      allMuons = allMuons_new;
-    }
-  }
+//   for(auto &[matchingMethod, param] : muonMatchingParams) {
+//     string collectionName = "LooseMuons" + matchingMethod + "Match";
+//     shared_ptr<PhysicsObjects> matchedMuons = event->GetCollection(collectionName);
+//     if(firstMatching) {
+//       allMuons = matchedMuons;
+//       firstMatching = false;
+//     }
+//     else {
+//       auto allMuons_new = make_shared<PhysicsObjects>();
+//       for(auto muon : *matchedMuons) {
+//         if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSA())) {
+//           allMuons_new->push_back(muon);
+//         }
+//       }
+//       allMuons = allMuons_new;
+//     }
+//   }
 
-  if(allMuons->size() < 3) return false;
-  cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");
+//   if(allMuons->size() < 3) return false;
+//   cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");
 
-  return true;
-}
+//   return true;
+// }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
   bool passesCuts = true;

@@ -30,6 +30,7 @@ runLLPNanoAODVertexHistograms = False
 runABCDHistograms = True
 abcdCollection = "BestDimuonVertex"
 
+# dimuonSelection is the name of the selection in ttalps_object_cuts
 dimuonSelection = "JPsiDimuonVertex"
 
 weightsBranchName = "genWeight"
@@ -261,7 +262,7 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
       (muonVertexCollectionName , "pfRelIso1"                   , 800    , 0      , 20    , ""  ),
       (muonVertexCollectionName , "pfRelIso2"                   , 800    , 0      , 20    , ""  ),
     )
-    
+
 ABCD_variables = {
   "Lxy": (100, 0, 1000),
   "LxySignificance": (100, 0, 100),
