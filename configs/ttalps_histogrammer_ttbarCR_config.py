@@ -1,7 +1,10 @@
 from scale_factors_config import *
-from ttalps_extra_collections import extraEventCollections
+from ttalps_extra_collections import *
 from ttalps_object_cuts import *
 from math import pi
+
+year = "2018"
+extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
 printEveryNevents = 10000
@@ -301,7 +304,5 @@ if runLLPNanoAODHistograms:
   histParams = histParams + LLPNanoAOD_histParams
 if runLLPNanoAOD2DHistograms:
   histParams2D = histParams2D + LLPNanoAOD_histParams2D
-if runLLPTriggerHistograms:
-  histParams = histParams + LLPTrigger_histParams
 if runABCDHistograms:
   histParams2D = histParams2D + tuple(ABCD_histParams2D)
