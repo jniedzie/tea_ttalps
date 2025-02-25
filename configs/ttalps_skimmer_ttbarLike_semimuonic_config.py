@@ -28,9 +28,9 @@ muonMatchingParams = {
 }
 
 eventCuts = {
-    "MET_pt": (50, 9999999),
     "nTightMuons": (1, 1),  #  This is against TOP recommendation, but we do it to keep it the same as SR
     "nLooseMuonsSegmentMatch": (1, 1),
+    "MET_pt": (50, 9999999),
     "nLooseElectrons": (0, 0),
     # "nGoodTightBtaggedJets": (2, 9999999),  # TODO: consider tight WP and/or 2 b-tags
 }
