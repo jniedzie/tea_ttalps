@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasBackgrounds2018, dasSignals2018, dasData2018
+from ttalps_samples_list import dasSamples2018
 
 max_files = -1
 
@@ -19,7 +19,7 @@ input_directory = ""
 # # For DAS inputs:
 dataset = ""
 dbs_instance = "prod/phys03"
-dasSamples = dasBackgrounds2018 + dasSignals2018 + dasData2018
+dasSamples = dasSamples2018
 
 # create list datasets_and_output_trees_dirs with tuples (dasSamples value, f"{base_path}/{k}/{output_skim}/") for k is dasSamples key
 datasets_and_output_trees_dirs = [(v, f"{base_path}/{k}/{output_skim}/") for k, v in dasSamples.items()]

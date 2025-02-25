@@ -13,22 +13,22 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
   try {
     config.GetMap("muonMatchingParams", muonMatchingParams);
   } catch (const Exception &e) {
-    info() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
+    warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
   try {
     config.GetMap("dimuonVertexCuts", dimuonVertexCuts);
   } catch (const Exception &e) {
-    info() << "Couldn't read dimuonVertexCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+    warn() << "Couldn't read dimuonVertexCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
   }
   try {
     config.GetMap("muonVertexCollections", muonVertexCollections);
   } catch (const Exception &e) {
-    info() << "Couldn't read muonVertexCollections from config file - is needed for GoodLooseMuonVertex collections" << endl;
+    warn() << "Couldn't read muonVertexCollections from config file - is needed for GoodLooseMuonVertex collections" << endl;
   } 
   try {
     config.GetVector("muonVertexNminus1Collections", muonVertexNminus1Collections);
   } catch (const Exception &e) {
-    info() << "Couldn't read muonVertexNminus1Collections from config file - is needed for GoodLooseMuonVertex N-1 collections" << endl;
+    warn() << "Couldn't read muonVertexNminus1Collections from config file - is needed for GoodLooseMuonVertex N-1 collections" << endl;
   } 
 }
 
