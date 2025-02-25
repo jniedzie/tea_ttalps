@@ -1,117 +1,93 @@
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
 import os
+import re
+
+base_path = "/data/dust/user/{}/ttalps_cms"
+output_username = os.environ["USER"]
+
+# ------------------------------------------------------------------------------
+# Skims
+# ------------------------------------------------------------------------------
+
+# SR, J/Psi CR, and tt̄ CR with no isolation requirement on the loose muons
+# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+# skim = "skimmed_looseSemimuonic_v2_ttbarCR"
+skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
+
+# For signal like skim with Dimuon triggers for LLP trigger study
+# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
+
+# Loose semimuonic skim
+# skim = "skimmed_looseSemimuonicv1"
+
+# Loose semimuonic skim with Dimuon triggers for LLP trigger study
+# skim = "skimmed_looseSemimuonicv1_LLPtrigger"
+
+# ------------------------------------------------------------------------------
+# Histograms
+# ------------------------------------------------------------------------------
+
+# Default settings (e.g. for tt̄ CR)
+hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_jetIDSFs"
+
+# SR dimuon cuts applied
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
+
+# JPsi dimuon cuts applied
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
+
+# ------------------------------------------------------------------------------
+# Samples
+# ------------------------------------------------------------------------------
+
+# sample_paths = dasSamples2018.keys()
+sample_paths = dasData2018.keys()
+# sample_paths = QCD_dasBackgrounds2018.keys()
+
+
+def extract_year(s):
+    match = re.search(r'(20\d{2})(?!\d)', s)
+    return int(match.group(1)) if match else None
+
+
+def clean_path_after_year(s, year):
+    parts = s.split(str(year))
+    clean_path = str(year).join(parts[:-1]) + str(year)
+    return clean_path
+
 
 def main():
-  
-  base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
-  
-  # skim=""
-  
-  # skim="skimmed_ttbarSemimuonicCR_tightMuon"
-  # skim="skimmed_ttbarSemimuonicCR_tightMuon_newBtag"
-  # skim="skimmed_ttbarSemimuonicCR"
-  # skim="skimmed_ttbarSemimuonicCR_Met30GeV"
-  # skim="skimmed_ttbarSemimuonicCR_Met50GeV"
-  # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
-  # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
-  # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets"
-  # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
-  skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
-  
-  # skim="skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
-  # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
-  
-  # skim = "skimmed_SR_Met50GeV"
-  
-  # hist_path = "histograms"
-  # hist_path = "histograms_pileup"
-  # hist_path = "histograms_pileupSFs"
-  # hist_path = "histograms_pileupSFs_bTaggingSFs"
-  # hist_path = "histograms_muonSFs_pileupSFs_bTaggingSFs"
-  hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
-  
-  sample_paths = (
-    # Backgrounds
-    "backgrounds2018/TTToSemiLeptonic",
-    "backgrounds2018/TTToHadronic",
-    "backgrounds2018/TTTo2L2Nu",
-    
-    "backgrounds2018/ST_tW_antitop",
-    "backgrounds2018/ST_tW_top",
-    "backgrounds2018/ST_t-channel_antitop",
-    "backgrounds2018/ST_t-channel_top",
-    
-    "backgrounds2018/DYJetsToMuMu_M-50",
-    "backgrounds2018/DYJetsToMuMu_M-10to50",
-    
-    "backgrounds2018/WJetsToLNu",
-    
-    "backgrounds2018/TTZToLLNuNu",
-    "backgrounds2018/TTZToLLNuNu_M-1to10",
-    
-    "backgrounds2018/TTWJetsToLNu",
-    
-    "backgrounds2018/ttHTobb",
-    "backgrounds2018/ttHToNonbb",
-    "backgrounds2018/ttHToMuMu",
-    
-    "backgrounds2018/TTZZ",
-    "backgrounds2018/TTZH",
-    "backgrounds2018/TTTT"
-    
-    # # # QCD
-    # # "backgrounds2018/QCD_Pt_15to30",
-    # # "backgrounds2018/QCD_Pt_30to50",
-    # # "backgrounds2018/QCD_Pt_50to80",
-    # # "backgrounds2018/QCD_Pt_80to120",
-    # # "backgrounds2018/QCD_Pt_120to170",
-    # # "backgrounds2018/QCD_Pt_170to300",
-    # # "backgrounds2018/QCD_Pt_300to470",
-    # # "backgrounds2018/QCD_Pt_470to600",
-    # # "backgrounds2018/QCD_Pt_600to800",
-    # # "backgrounds2018/QCD_Pt_800to1000",
-    # # "backgrounds2018/QCD_Pt_1000to1400",
-    # # "backgrounds2018/QCD_Pt_1400to1800",
-    # # "backgrounds2018/QCD_Pt_1800to2400",
-    # # "backgrounds2018/QCD_Pt_2400to3200",
-    # # "backgrounds2018/QCD_Pt_3200toInf",
+    input_data_paths = {}
+    output_data_path = {}
 
-    # QCD mu enhanced
-    "backgrounds2018/QCD_Pt_15to20_MuEnriched",
-    "backgrounds2018/QCD_Pt_20to30_MuEnriched",
-    "backgrounds2018/QCD_Pt_30to50_MuEnriched",
-    "backgrounds2018/QCD_Pt_50to80_MuEnriched",
-    "backgrounds2018/QCD_Pt_80to120_MuEnriched",
-    "backgrounds2018/QCD_Pt_120to170_MuEnriched",
-    "backgrounds2018/QCD_Pt_170to300_MuEnriched",
-    "backgrounds2018/QCD_Pt_300to470_MuEnriched",
-    "backgrounds2018/QCD_Pt_470to600_MuEnriched",
-    "backgrounds2018/QCD_Pt_600to800_MuEnriched",
-    "backgrounds2018/QCD_Pt_800to1000_MuEnriched",
-    "backgrounds2018/QCD_Pt_1000_MuEnriched",
-    
-    # Data
-    "collision_data2018/SingleMuon2018*",
-    
-    # Signal
-    # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
-    # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
-    # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
-  )
-  
-  for sample_path in sample_paths:
-    print(f"{sample_path=}")
-    
-    input_path = f"{sample_path}/{skim}/{hist_path}/*.root"
-    
-    if "collision_data" in input_path:
-      output_path = f"collision_data2018/SingleMuon2018_{skim}_{hist_path}.root"
-    else:
-      output_path = input_path.replace("*.root", "histograms.root")
-    
-    print(f"{output_path=}")
-    
-    os.system(f"rm {base_path}/{output_path}")
-    os.system(f"hadd -f -j -k {base_path}/{output_path} {base_path}/{input_path}")
+    for sample_path in sample_paths:
+        print(f"{sample_path=}")
+        input_path = f"{sample_path}/{skim}/{hist_path}/*.root"
+
+        if "collision_data" in input_path:
+            year = extract_year(sample_path)
+
+            if year not in input_data_paths:
+                input_data_paths[year] = ""
+
+            clean_path = clean_path_after_year(sample_path, year)
+
+            output_data_path[year] = f"{clean_path}_{skim}_{hist_path}.root"
+            input_data_paths[year] += f"{base_path.format(output_username)}/{input_path} "
+        else:
+
+            output_path = input_path.replace("*.root", "histograms.root")
+            os.system(f"rm {base_path.format(output_username)}/{output_path}")
+            os.system(
+                f"hadd -f -j -k {base_path.format(output_username)}/{output_path} {base_path.format(output_username)}/{input_path}")
+            print(f"{output_path=}")
+
+    for year, input_data_path in input_data_paths.items():
+        output_data_path = output_data_path[year]
+        os.system(f"rm {base_path.format(output_username)}/{output_data_path}")
+        os.system(f"hadd -f -j -k {base_path.format(output_username)}/{output_data_path} {input_data_path}")
+
 
 if __name__ == "__main__":
-  main()
+    main()

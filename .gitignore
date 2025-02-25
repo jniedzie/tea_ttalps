@@ -5,3 +5,7 @@ plots/*
 
 data/*
 *.root
+
+abcd_results*
+datacards
+datacards/*
