@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasSamples2018
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
 
 import argparse
 import glob
@@ -8,6 +8,8 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 # base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skim = "skimmed_looseSemimuonic_v2"
+
+sample_paths = dasSamples2018.keys()
 
 input_pattern = "output_*.root"
 output_pattern = "output_{}.root"
@@ -119,7 +121,7 @@ def merge_n_files(input_path, output_path, args):
 def main():
     args = get_args()
 
-    for path in dasSamples2018:
+    for path in sample_paths:
         input_path = f"{base_path}/{path}/{skim}/"
         output_path = f"{base_path}/{path}/{skim}_merged/"
         merge_n_files(input_path, output_path, args)
