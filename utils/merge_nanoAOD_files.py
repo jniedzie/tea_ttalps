@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018, dasData2018_standard
 
 import argparse
 import glob
@@ -86,7 +86,7 @@ def run_on_condor(commands, dry_run=False):
 def merge_batch_of_files(files_to_merge, output_ntuple_counter, output_path, dry_run, condor):
     output_filename = get_file_name(output_ntuple_counter, output_path)
 
-    command = f"hadd -f -j -k {output_filename} {' '.join(files_to_merge)}"
+    command = f"python3 hadd_safe.py -f -j -k {output_filename} {' '.join(files_to_merge)}"
 
     if condor:
         condor_commands.append(command)

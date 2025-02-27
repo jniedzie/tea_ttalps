@@ -9,3 +9,9 @@ data/*
 abcd_results*
 datacards
 datacards/*
+
+plots/*
+plots_*/*
+
+*.txt
+*.pdf
