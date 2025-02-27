@@ -104,6 +104,10 @@ cross_sectionsRun2 = {
 
 cross_sectionsRun3 = {
   "MuonC": 1.0,
+  "Muon0Cv2": 1.0,
+  "Muon1Cv2": 1.0,
+  "Muon0Cv3": 1.0,
+  "Muon1Cv3": 1.0,
   "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 405.8099,
   "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8": 98.0963,
   "TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 19.36,
@@ -112,26 +116,27 @@ cross_sectionsRun3 = {
   "TTLL_MLL-4to50_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.03949,
   "TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.08646,
   "TTHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8": 0.331968,
-  # TODO: Add cross section for the following samples
-  "TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8": 0.0,
-  "DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8": 0.0,
-  "WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8": 0.0,
-  "TTHtoNon2B_M-125_TuneCP5_13p6TeV_powheg-pythia8": 0.0,
-  "TTZZ_TuneCP5_13p6TeV_madgraph-madspin-pythia8": 0.0,
-  "TTZH_TuneCP5_13p6TeV_madgraph-pythia8": 0.0,
-  "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.0,
-  "QCD_PT-15To20_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-20To30_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-30To50_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-50To80_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-80To120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-120To170_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-170To300_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-300To470_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-470To600_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-600To800_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-800To1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
-  "QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 0.0,
+  # Cross sections from XSDB
+  "TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8": 762.1,
+  "DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8": 5558.0, #6345.99
+  "WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8": 55390.0, 
+  "TTHtoNon2B_M-125_TuneCP5_13p6TeV_powheg-pythia8": 0.5742,
+  "TTZZ_TuneCP5_13p6TeV_madgraph-madspin-pythia8": 0.001579,
+  "TTZH_TuneCP5_13p6TeV_madgraph-pythia8": 0.001288,
+  "TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.009652,
+  # QCD from XSDB
+  "QCD_PT-15To20_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 2982000.0, # 2022 postEE: 2960000.0
+  "QCD_PT-20To30_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 2679000.0,
+  "QCD_PT-30To50_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 1465000.0, # miniaodsim v2: 1497000.0
+  "QCD_PT-50To80_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 402900.0, # 2022 postEE: 409500.0
+  "QCD_PT-80To120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 95130.0, # 2022 postEE: 96200.0,
+  "QCD_PT-120To170_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 22980.0,
+  "QCD_PT-170To300_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 7763.0,
+  "QCD_PT-300To470_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 699.1,
+  "QCD_PT-470To600_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 68.24,
+  "QCD_PT-600To800_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 21.37,
+  "QCD_PT-800To1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 3.913,
+  "QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 1.323,
 }
 
 

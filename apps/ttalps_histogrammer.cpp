@@ -131,6 +131,8 @@ int main(int argc, char **argv) {
 
     if (runLLPTriggerHistograms) {
       if(passesDimuonCuts) {
+        // first make histograms without having to pass a trigger
+        ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "NoExtraTrigger");
         if(ttAlpsCuts->PassesSingleMuonTrigger(event)) {
           ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "SingleMuonTrigger");
         } 
