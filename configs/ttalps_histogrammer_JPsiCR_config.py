@@ -142,7 +142,7 @@ for collectionName in muonVertexCollectionNames:
     (collectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
     (collectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
     (collectionName , "invMass"               , 2000   , 0      , 200    , ""  ),
-    (collectionName , "logInvMass"            , 1000   , 0.1    , 100    , ""  ),
+    (collectionName , "logInvMass"            , 1000   , -1     , 2      , ""  ),
     (collectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
     (collectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
   )
@@ -175,7 +175,7 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "absPtLxyDPhi1"         , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi2"         , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "invMass"               , 2000   , 0      , 200    , ""  ),
-      (muonVertexCollectionName , "logInvMass"            , 1000   , 0.1    , 100    , ""  ),
+      (muonVertexCollectionName , "logInvMass"            , 1000   , -1     , 2      , ""  ),
       (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
       (muonVertexCollectionName , "leadingPt"             , 2000   , 0      , 1000   , ""  ),
@@ -253,7 +253,7 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
     muonVertexCollectionName = muonVertexNminus1Collection+"Nminus1"+category
     LLPNanoAOD_histParams += (
       (muonVertexCollectionName , "invMass"                     , 2000   , 0      , 200   , ""  ),
-      (muonVertexCollectionName , "logInvMass"                  , 1000   , 0.1    , 100   , ""  ),
+      (muonVertexCollectionName , "logInvMass"                  , 1000   , -1     , 2     , ""  ),
       (muonVertexCollectionName , "chargeProduct"               , 4      , -2     , 2     , ""  ),
       (muonVertexCollectionName , "maxHitsInFrontOfVert"        , 100    , 0      , 100   , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi1"               , 500    , 0      , 5     , ""  ),
