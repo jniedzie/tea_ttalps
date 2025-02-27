@@ -6,7 +6,7 @@ from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
 
 from ttalps_cross_sections import *
-from ttalps_samples_list import backgrounds2018, signals2018, data2018
+from ttalps_samples_list import dasBackgrounds2018
 
 year = "2018"
 cross_sections = get_cross_sections(year)
@@ -15,13 +15,9 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms/"
 # base_path = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/"
 # base_path = "/data/dust/user/lrygaard/ttalps_cms/"
 
-# hist_path = "histograms"
-# hist_path = "histograms_pileup"
-# hist_path = "histograms_pileupSFs"
-# hist_path = "histograms_pileupSFs_bTaggingSFs"
-# hist_path = "histograms_muonSFs_pileupSFs_bTaggingSFs"
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
-hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
+hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_jetIDSFs"
 
 # skim = ""
 # skim = "skimmed_looseSemileptonic"
@@ -39,7 +35,7 @@ hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
 
-skim = "skimmed_looseSemimuonic_ttbarCR"
+skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
 # skim = "skimmed_ttZLike"
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
@@ -89,6 +85,7 @@ plotting_options = {
 default_norm = NormalizationType.to_lumi
 # default_norm = NormalizationType.to_background
 # default_norm = NormalizationType.to_data
+# default_norm = NormalizationType.none
 
 plots_from_LLPNanoAOD = False
 
@@ -97,13 +94,13 @@ if plots_from_LLPNanoAOD:
 
 histograms = (
 #           name                                  title logx logy    norm_type                 rebin xmin   xmax    ymin    ymax,   xlabel                                             ylabel
-  # Histogram("Event_nTightMuons"                   , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of tight #mu"                            , "# events (2018)"   ),
-  # Histogram("TightMuons_pt"                       , "", False,  True  , default_norm              , 50 , 0     , 1000  , 1e-6  , 1e8   , "tight #mu p_{T} [GeV]"                          , "# events (2018)"   ),
-  # # Histogram("TightMuons_leadingPt"                , "", False,  True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e5   , "leading tight #mu p_{T} [GeV]"                  , "# events (2018)"   ),
-  # # # Histogram("TightMuons_subleadingPt"             , "", False,  True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e4   , "all subleading tight #mu p_{T} [GeV]"           , "# events (2018)"   ),
-  # Histogram("TightMuons_eta"                      , "", False,  True  , default_norm              , 10 , -3.0  , 5.0   , 1e0   , 1e5   , "tight #mu #eta"                                 , "# events (2018)"   ),
-  # Histogram("TightMuons_dxy"                      , "", False,  True  , default_norm              , 2  , -0.5  , 0.5   , 1e-2  , 1e10   , "tight #mu d_{xy} [cm]"                          , "# events (2018)"   ),
-  # Histogram("TightMuons_dz"                       , "", False,  True  , default_norm              , 2  , -1    , 1     , 1e-2  , 1e8   , "tight #mu d_{z} [cm]"                           , "# events (2018)"   ),
+  Histogram("Event_nTightMuons"                   , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of tight #mu"                            , "# events (2018)"   ),
+  Histogram("TightMuons_pt"                       , "", False,  True  , default_norm              , 50 , 0     , 1000  , 1e-6  , 1e8   , "tight #mu p_{T} [GeV]"                          , "# events (2018)"   ),
+  # Histogram("TightMuons_leadingPt"                , "", False,  True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e5   , "leading tight #mu p_{T} [GeV]"                  , "# events (2018)"   ),
+  # # Histogram("TightMuons_subleadingPt"             , "", False,  True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e4   , "all subleading tight #mu p_{T} [GeV]"           , "# events (2018)"   ),
+  Histogram("TightMuons_eta"                      , "", False,  True  , default_norm              , 10 , -3.0  , 5.0   , 1e0   , 1e5   , "tight #mu #eta"                                 , "# events (2018)"   ),
+  Histogram("TightMuons_dxy"                      , "", False,  True  , default_norm              , 2  , -0.5  , 0.5   , 1e-2  , 1e10   , "tight #mu d_{xy} [cm]"                          , "# events (2018)"   ),
+  Histogram("TightMuons_dz"                       , "", False,  True  , default_norm              , 2  , -1    , 1     , 1e-2  , 1e8   , "tight #mu d_{z} [cm]"                           , "# events (2018)"   ),
   
   # Histogram("TightMuons_pfRelIso04_all"           , "", False,  True  , default_norm              , 1  , 0.0   , 0.2   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.4 (all)"                 , "# events (2018)"   ),
   # Histogram("TightMuons_pfRelIso03_chg"           , "", False,  True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.3 (chg)"                 , "# events (2018)"   ),
@@ -239,45 +236,44 @@ samples = [
     marker_color=ROOT.kBlack,
     legend_description="SingleMuon2018",
   ),
-  
-  # Signal
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e2mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e2mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=2,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kGreen+1,
-  #   legend_description="0.35 GeV, 1e2 mm",
-  # ),
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e3mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e3mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=2,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kBlue,
-  #   legend_description="0.35 GeV, 1e3 mm",
-  # ),
-  # Sample(
-  #   name="tta_mAlp-0p35GeV_ctau-1e5mm",
-  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/{hist_path}/histograms.root",
-  #   type=SampleType.signal,
-  #   cross_sections=cross_sections,
-  #   line_alpha=1,
-  #   line_style=2,
-  #   fill_alpha=0,
-  #   marker_size=0,
-  #   line_color=ROOT.kMagenta,
-  #   legend_description="0.35 GeV, 1e5 mm",
-  # ),
 ]
+
+def add_signals():
+  
+  colors = [
+    ROOT.kGreen+1,
+    ROOT.kRed+1,
+    ROOT.kRed+3,
+    ROOT.kRed+4,
+    ROOT.kViolet+1,
+    ROOT.kYellow+3,
+    ROOT.kGray+1,
+    ROOT.kGray+2,
+    ROOT.kGray+3,
+    ROOT.kMagenta+1,
+  ]
+  
+  signals = []
+  # signals = ["tta_mAlp-0p35GeV_ctau-1e2mm", "tta_mAlp-0p35GeV_ctau-1e3mm", "tta_mAlp-0p35GeV_ctau-1e5mm"]
+  
+  for i, name in enumerate(signals):
+    
+    nice_name = name.replace("tta_mAlp-", "")
+    nice_name = nice_name.replace("GeV_ctau-", " GeV, ")
+    nice_name = nice_name.replace("mm", " mm")
+    
+    Sample(
+      name=name,
+      file_path=f"{base_path}/signals/{name}/{skim}/{hist_path}/histograms.root",
+      type=SampleType.signal,
+      cross_sections=cross_sections,
+      line_alpha=1,
+      line_style=2,
+      fill_alpha=0,
+      marker_size=0,
+      line_color=colors[i],
+      legend_description=nice_name,
+    ),
 
 def get_legend(column, row):
   legend = Legend(
@@ -295,7 +291,7 @@ backgrounds_to_exclude = [
   "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
 ]
 
-for background_name in backgrounds2018:
+for background_name in dasBackgrounds2018:
   short_name = background_name.split("/")[-1]
   
   exclude_background = False
@@ -306,9 +302,6 @@ for background_name in backgrounds2018:
   
   if exclude_background:
     continue
-  
-  
-  
   
   long_name = None
   

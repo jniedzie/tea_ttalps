@@ -21,7 +21,7 @@ TTAlpsCuts::TTAlpsCuts(){
   try {
     config.GetMap("muonVertexCollections", muonVertexCollections);
   } catch (const Exception &e) {
-    info() << "Couldn't read muonVertexCollections from config file - no muon vertex collection cuts can be made" << endl;
+    warn() << "Couldn't read muonVertexCollections from config file - no muon vertex collection cuts can be made" << endl;
   }
 }
 

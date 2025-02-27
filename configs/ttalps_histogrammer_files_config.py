@@ -1,4 +1,4 @@
-from ttalps_samples_list import backgrounds2018, signals2018, data2018, signals2018_1GeV, test_backgrounds2018, test_signals2018
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
 import os
 
 max_files = -1
@@ -10,7 +10,8 @@ max_files = -1
 
 # SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
-skim = "skimmed_looseSemimuonic_ttbarCR"
+# skim = "skimmed_looseSemimuonic_v2_ttbarCR"
+skim = "skimmed_looseSemimuonic_v2_ttbarCR_loosePATmuons"
 
 # SR (+J/Psi CR) and tt̄ CR with isolation requirement on the loose muons (obsolete)
 # skim = "skimmed_looseSemimuonic_JPsimuonic_Segmentv1"
@@ -19,29 +20,21 @@ skim = "skimmed_looseSemimuonic_ttbarCR"
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
 
 base_path = "/data/dust/user/{}/ttalps_cms"
-input_username = "lrygaard"
+# input_username = "lrygaard"
+input_username = "jniedzie"
 output_username = os.environ["USER"]
-
 
 applyScaleFactors = {
   "muon": True,
   "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
-  "jetID": False,
+  "jetID": False,  # no need to apply jet ID SFs in UL
 }
 
-# samples = data2018
-# samples = backgrounds2018 + signals2018_1GeV
-# samples = backgrounds2018
-# samples = backgrounds2018 + signals2018
-# samples = backgrounds2018 + signals2018 + data2018
-samples = backgrounds2018 + data2018
-# samples = signals2018
-# samples = signals2018_1GeV
-# samples = test_signals2018
-
-# samples = ["backgrounds2018/TTToSemiLeptonic",]
+# samples = dasSamples2018.keys()
+samples = dasData2018.keys()
+# samples = QCD_dasBackgrounds2018.keys()
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
@@ -55,7 +48,7 @@ for name, apply in applyScaleFactors.items():
   output_hists_dir += f"_{name}SFs"
   
 # output_hists_dir += "_JPsiDimuons"
-output_hists_dir += "_SRDimuons"
+# output_hists_dir += "_SRDimuons"
 # output_hists_dir += "_SRDimuons_TriggerStudy"
 
 output_hists_dir += "/"

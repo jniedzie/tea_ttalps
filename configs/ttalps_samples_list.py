@@ -371,8 +371,7 @@ dasSignals2018_70GeV = {
 dasSignals2018 = {key: value for d in (dasSignals2018_0p35GeV, dasSignals2018_1GeV, dasSignals2018_2GeV, dasSignals2018_12GeV, dasSignals2018_70GeV) for key, value in d.items()}
 
 
-
-
+dasSamples2018 = {key: value for d in (dasBackgrounds2018, dasSignals2018, dasData2018) for key, value in d.items()}
 
 
 
