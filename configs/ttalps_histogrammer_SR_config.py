@@ -143,7 +143,8 @@ for collectionName in muonVertexCollectionNames:
     (collectionName , "logLxy"                , 2000   , -10    , 10     , ""  ),
     (collectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
     (collectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
-    (collectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+    (collectionName , "invMass"               , 2000   , 0      , 200    , ""  ),
+    (collectionName , "logInvMass"            , 1000   , 0.1    , 100    , ""  ),
     (collectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
     (collectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
   )
@@ -175,7 +176,8 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi1"         , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi2"         , 500    , 0      , 5      , ""  ),
-      (muonVertexCollectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+      (muonVertexCollectionName , "invMass"               , 2000   , 0      , 200    , ""  ),
+      (muonVertexCollectionName , "logInvMass"            , 1000   , 0.1    , 100    , ""  ),
       (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
       (muonVertexCollectionName , "leadingPt"             , 2000   , 0      , 1000   , ""  ),
@@ -252,7 +254,8 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
   for category in allMuonVertexCollectionCategories:
     muonVertexCollectionName = muonVertexNminus1Collection+"Nminus1"+category
     LLPNanoAOD_histParams += (
-      (muonVertexCollectionName , "invMass"                     , 20000  , 0      , 200   , ""  ),
+      (muonVertexCollectionName , "invMass"                     , 2000   , 0      , 200   , ""  ),
+      (muonVertexCollectionName , "logInvMass"                  , 1000   , 0.1    , 100   , ""  ),
       (muonVertexCollectionName , "chargeProduct"               , 4      , -2     , 2     , ""  ),
       (muonVertexCollectionName , "maxHitsInFrontOfVert"        , 100    , 0      , 100   , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi1"               , 500    , 0      , 5     , ""  ),
@@ -432,7 +435,8 @@ genmuonVertexCollectionNames = ["LooseMuonsFromALP","LooseMuonsFromALPmindPhi2",
 for genDimuonCollectionName in genDimuonCollectionNames:
   GenMuon_histParams += (
     ("Event"                   , "n"+genDimuonCollectionName   , 50    , 0     , 50    , ""  ),
-    (genDimuonCollectionName   , "invMass"                     , 10000 , 0     , 100   , ""  ),
+    (genDimuonCollectionName   , "invMass"                     , 2000  , 0     , 200   , ""  ),
+    (genDimuonCollectionName   , "logInvMass"                  , 1000  , 0.1   , 100   , ""  ),
     (genDimuonCollectionName   , "deltaR"                      , 1000  , 0     , 10    , ""  ),
     (genDimuonCollectionName   , "absCollinearityAngle"        , 500   , 0     , 5     , ""  ),
     (genDimuonCollectionName   , "absPtLxyDPhi1"               , 500   , 0     , 5     , ""  ),
@@ -461,7 +465,8 @@ for matchingMethod, param in muonMatchingParams.items():
       (muonCollectionName  , "minDeltaR"        , 1000   , 0    , 10     , ""  ),
       (muonCollectionName  , "minOuterDeltaR"   , 1000   , 0    , 10     , ""  ),
       (muonCollectionName  , "minProxDeltaR"    , 1000   , 0    , 10     , ""  ),
-      (muonCollectionName  , "invMass"          , 20000  , 0    , 200    , ""  ),
+      (muonCollectionName  , "invMass"          , 2000   , 0    , 200    , ""  ),
+      (muonCollectionName  , "logInvMass"       , 1000   , 0.1  , 100    , ""  ),
       (muonCollectionName  , "deltaR"           , 1000   , 0    , 10     , ""  ),
       (muonCollectionName  , "outerDeltaR"      , 1000   , 0    , 10     , ""  ),
       (muonCollectionName  , "genMuonMinDR1"    , 1000   , 0    , 10     , ""  ),
@@ -492,7 +497,8 @@ for matchingMethod, param in muonMatchingParams.items():
       (collectionName , "logLxy"                , 2000   , -10    , 10     , ""  ),
       (collectionName , "dca"                   , 1000   , 0      , 20     , ""  ),
       (collectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
-      (collectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+      (collectionName , "invMass"               , 2000   , 0      , 200    , ""  ),
+      (collectionName , "logInvMass"            , 1000   , 0.1    , 100    , ""  ),
       (collectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
       (collectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
     )
@@ -522,7 +528,8 @@ for matchingMethod, param in muonMatchingParams.items():
         (muonVertexCollectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
         (muonVertexCollectionName , "absPtLxyDPhi1"         , 500    , 0      , 5      , ""  ),
         (muonVertexCollectionName , "absPtLxyDPhi2"         , 500    , 0      , 5      , ""  ),
-        (muonVertexCollectionName , "invMass"               , 20000  , 0      , 200    , ""  ),
+        (muonVertexCollectionName , "invMass"               , 2000   , 0      , 200    , ""  ),
+        (muonVertexCollectionName , "logInvMass"            , 1000   , 0.1    , 100    , ""  ),
         (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
         (muonVertexCollectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
         (muonVertexCollectionName , "leadingPt"             , 2000   , 0      , 1000   , ""  ),
@@ -571,7 +578,8 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
   for category in allMuonVertexCollectionCategories:
     muonVertexCollectionName = muonVertexNminus1Collection+"FromALPNminus1"+category
     GenMuonVertexCollection_histParams += (
-    (muonVertexCollectionName , "invMass"                     , 20000  , 0      , 200   , ""  ),
+    (muonVertexCollectionName , "invMass"                     , 2000   , 0      , 200   , ""  ),
+    (muonVertexCollectionName , "logInvMass"                  , 1000   , 0.1    , 100   , ""  ),
     (muonVertexCollectionName , "chargeProduct"               , 4      , -2     , 2     , ""  ),
     (muonVertexCollectionName , "maxHitsInFrontOfVert"        , 100    , 0      , 100   , ""  ),
     (muonVertexCollectionName , "absPtLxyDPhi1"  , 500        , 0      , 5     , ""  ),
@@ -622,6 +630,11 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
 
 ####  LLP Trigger Histograms  ####
 LLPTrigger_histParams = (
+  ("Event" , "nNoExtraTriggerGenMuonFromALP"              , 50     , 0      , 50     , ""  ),
+  ("NoExtraTriggerGenMuonFromALP"    , "pt1"              , 2000   , 0      , 1000   , ""  ),
+  ("NoExtraTriggerGenMuonFromALP"    , "pt2"              , 2000   , 0      , 1000   , ""  ),
+  ("NoExtraTriggerGenMuonFromALP"    , "leadingPt"        , 2000   , 0      , 1000   , ""  ),
+  ("NoExtraTriggerGenMuonFromALP"    , "subleadingPt"     , 2000   , 0      , 1000   , ""  ),
   ("Event" , "nSingleMuonTriggerGenMuonFromALP"           , 50     , 0      , 50     , ""  ),
   ("SingleMuonTriggerGenMuonFromALP" , "pt1"              , 2000   , 0      , 1000   , ""  ),
   ("SingleMuonTriggerGenMuonFromALP" , "pt2"              , 2000   , 0      , 1000   , ""  ),
