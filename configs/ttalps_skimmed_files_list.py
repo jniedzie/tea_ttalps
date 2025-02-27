@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasData2018
+from ttalps_samples_list import dasData2018, TT_dasBackgrounds2018, dasData2018_standard
 
 max_files = -1
 
@@ -11,7 +11,9 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 # input_skim = "skimmed_looseSemimuonic"
 # input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet"
 # input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet_goldenJson"
+# input_skim = "skimmed_looseSemimuonic_v2_reproduce"
 input_skim = "skimmed_looseSemimuonic_v2_reproduce_merged"
+# input_skim = "skimmed_looseSemimuonic_v2_reproduce_standardNano"
 
 # CRs & SRs
 # output_skim = "skimmed_ttbarLike"
@@ -23,8 +25,9 @@ input_skim = "skimmed_looseSemimuonic_v2_reproduce_merged"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
-output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
-
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
+output_skim = "skimmed_looseSemimuonic_v2_merged_ttbarCR_reproduce"
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce_standardNano"
 
 # output_skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # output_skim = "skimmed_ttZSemimuonicCR_Met50GeV"
@@ -39,6 +42,8 @@ output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
 
 
 samples = dasData2018.keys()
+# samples = TT_dasBackgrounds2018.keys()
+# samples = dasData2018_standard.keys()
 
 # samples = (
 #   # Backgrounds

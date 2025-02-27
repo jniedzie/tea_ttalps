@@ -10,7 +10,7 @@ runPileupHistograms = False
 
 weightsBranchName = "genWeight"
 
-pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
+pileupScaleFactorsPath = "/data/dust/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
 pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {

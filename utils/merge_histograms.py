@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018, dasData2018_standard
 import os
 import re
 
@@ -12,7 +12,8 @@ output_username = os.environ["USER"]
 # SR, J/Psi CR, and tt̄ CR with no isolation requirement on the loose muons
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 # skim = "skimmed_looseSemimuonic_v2_ttbarCR"
-skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
+# skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
+skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce_standardNano"
 
 # For signal like skim with Dimuon triggers for LLP trigger study
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
@@ -42,8 +43,10 @@ hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 # ------------------------------------------------------------------------------
 
 # sample_paths = dasSamples2018.keys()
-sample_paths = dasData2018.keys()
+# sample_paths = dasData2018.keys()
 # sample_paths = QCD_dasBackgrounds2018.keys()
+# sample_paths = TT_dasBackgrounds2018.keys()
+sample_paths = dasData2018_standard.keys()
 
 
 def extract_year(s):

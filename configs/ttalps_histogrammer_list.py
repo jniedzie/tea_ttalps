@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasData2018
+from ttalps_samples_list import dasData2018, TT_dasBackgrounds2018, dasData2018_standard
 
 max_files = -1
 
@@ -16,7 +16,10 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets"
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
 # skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
-skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
+# skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce"
+skim = "skimmed_looseSemimuonic_v2_merged_ttbarCR_reproduce"
+# skim = "skimmed_looseSemimuonic_v2_ttbarCR_reproduce_standardNano"
+# skim = "skimmed_tmp"
 
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
@@ -33,6 +36,8 @@ applyScaleFactors = {
 }
 
 samples = dasData2018.keys()
+# samples = TT_dasBackgrounds2018.keys()
+# samples = dasData2018_standard.keys()
 
 # samples = (
 #   # Backgrounds
