@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018
 
 max_files = -1
 
@@ -19,7 +19,7 @@ input_skim = "skimmed_looseSemimuonic_v2_merged"
 ### Output skims ###
 
 # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
-# output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+# output_skim = "skimmed_looseSemimuonic_v2_SR"
 
 # For signal like skim with Dimuon triggers for LLP trigger study
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
@@ -40,3 +40,4 @@ output_trees_dir = f"{base_path}/{sample_path}/{output_skim}/"
 samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
 # samples = QCD_dasBackgrounds2018.keys()
+# samples = TT_dasBackgrounds2018.keys()
