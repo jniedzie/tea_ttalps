@@ -1,76 +1,74 @@
 import ROOT
-from ROOT import TColor
-from Sample import Sample, SampleType
-from Legend import Legend
+from Sample import SampleType
 from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
 
+from TTAlpsPlotterConfigHelper import TTAlpsPlotterConfigHelper
 from ttalps_cross_sections import *
-from ttalps_samples_list import dasBackgrounds2018
+from ttalps_plotting_styles import *
 
 year = "2018"
 cross_sections = get_cross_sections(year)
 
 base_path = "/data/dust/user/jniedzie/ttalps_cms/"
-# base_path = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/"
 # base_path = "/data/dust/user/lrygaard/ttalps_cms/"
+# base_path = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/"
 
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
 hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_jetIDSFs"
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
 
-# skim = ""
-# skim = "skimmed_looseSemileptonic"
-# skim = "skimmed_signalLike"
-# skim = "skimmed_ttbarLike"
-
-# skim = "skimmed_ttbarSemimuonicCR_tightMuon"
-# skim = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag"
-# skim = "skimmed_ttbarSemimuonicCR"
-# skim = "skimmed_ttbarSemimuonicCR_Met30GeV"
-# skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
-# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
-# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
-# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets"
-# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
-# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso_goldenJson"
 
 skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
-# skim = "skimmed_ttZLike"
-# skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
-# skim = "skimmed_ttZSemimuonicCR_Met50GeV"
-
-# skim = "skimmed_SR_Met50GeV"
-
 output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}/"
 
-# luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 
 canvas_size = (800, 600)
+
 show_ratio_plots = True
 ratio_limits = (0.5, 1.5)
 
-legend_width = 0.17 if show_ratio_plots else 0.20
-legend_min_x = 0.45
 legend_max_x = 0.83
-
-legend_height = 0.045 if show_ratio_plots else 0.03
 legend_max_y = 0.89
-
-n_default_backgrounds = 10
+legend_width = 0.17 if show_ratio_plots else 0.20
+legend_height = 0.045 if show_ratio_plots else 0.03
 
 show_cms_labels = True
 extraText = "Preliminary"
 
-legends = {
-  SampleType.signal: Legend(legend_max_x-3*legend_width, legend_max_y-2*legend_height, legend_max_x-2*legend_width, legend_max_y-legend_height, "l"),
-  SampleType.background: Legend(legend_max_x-legend_width, legend_max_y-n_default_backgrounds*legend_height, legend_max_x, legend_max_y, "f"),
-  SampleType.data: Legend(legend_max_x-3*(legend_width), legend_max_y-legend_height, legend_max_x-2*(legend_width), legend_max_y, "pl"),
-}
+data_to_include = [
+  "SingleMuon2018",
+]
 
+backgrounds_to_exclude = [
+  "QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+  "QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+  "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+]
 
+signals_to_include = [
+  "tta_mAlp-0p35GeV_ctau-1e2mm", 
+  "tta_mAlp-0p35GeV_ctau-1e3mm", 
+  "tta_mAlp-0p35GeV_ctau-1e5mm"
+]
+
+configHelper = TTAlpsPlotterConfigHelper(
+  year,
+  base_path,
+  skim,
+  hist_path,
+  data_to_include,
+  backgrounds_to_exclude,
+  signals_to_include,
+  (legend_max_x, legend_max_y, legend_width, legend_height)
+)
+
+samples = []
+configHelper.add_samples(SampleType.data, samples)
+configHelper.add_samples(SampleType.background, samples)
+configHelper.add_samples(SampleType.signal, samples)
+custom_stacks_order = configHelper.get_custom_stacks_order(samples)
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
@@ -87,10 +85,8 @@ default_norm = NormalizationType.to_lumi
 # default_norm = NormalizationType.to_data
 # default_norm = NormalizationType.none
 
-plots_from_LLPNanoAOD = False
-
-if plots_from_LLPNanoAOD:
-  default_norm = NormalizationType.to_background
+histogramsRatio = []
+weightsBranchName = "genWeight"
 
 histograms = (
 #           name                                  title logx logy    norm_type                 rebin xmin   xmax    ymin    ymax,   xlabel                                             ylabel
@@ -141,10 +137,10 @@ histograms = (
   # # Histogram("LooseElectrons_dz"                   , "", False,  True  , default_norm              , 10 , -10   , 10    , 1e-2  , 1e6   , "loose electron d_{z}"                           , "# events (2018)"   ),
   
   Histogram("Event_nGoodJets"                     , "", False,  True  , default_norm              , 1  , 2     , 16    , 1e-2  , 1e10   , "Number of good jets"                            , "# events (2018)"   ),
-  Histogram("GoodJets_pt"                         , "", False,  True  , default_norm              , 1 , 0     , 1300  , 1e-3  , 1e6   , "good jet p_{T} [GeV]"                           , "# events (2018)"   ),
-  Histogram("GoodJets_eta"                        , "", False,  True  , default_norm              , 10 , -3    , 5.0   , 1e1   , 1e6   , "good jet #eta"                                  , "# events (2018)"   ),
-  Histogram("GoodJets_btagDeepB"                  , "", False,  True  , default_norm              , 10 , 0     , 1.5   , 2e0   , 1e6   , "good jet deepCSV score"                         , "# events (2018)"   ),
-  Histogram("GoodJets_btagDeepFlavB"              , "", False,  True  , default_norm              , 10 , 0     , 1.8   , 1e-1   , 1e8   , "good jet deepJet score"                         , "# events (2018)"   ),
+  Histogram("GoodJets_pt"                         , "", False,  True  , default_norm              , 10 , 0     , 1300  , 1e-3  , 1e6   , "good jet p_{T} [GeV]"                           , "# events (2018)"   ),
+  Histogram("GoodJets_eta"                        , "", False,  True  , default_norm              , 10 , -3    , 5.0   , 1e1   , 1e8   , "good jet #eta"                                  , "# events (2018)"   ),
+  Histogram("GoodJets_btagDeepB"                  , "", False,  True  , default_norm              , 10 , 0     , 1.5   , 2e0   , 1e8   , "good jet deepCSV score"                         , "# events (2018)"   ),
+  Histogram("GoodJets_btagDeepFlavB"              , "", False,  True  , default_norm              , 10 , 0     , 1.8   , 1e-1  , 1e8   , "good jet deepJet score"                         , "# events (2018)"   ),
   
   Histogram("Event_nGoodMediumBtaggedJets"              , "", False,  True  , default_norm              , 1  , 0     , 20    , 1e0   , 1e9   , "Number of good b-jets"                          , "# events (2018)"   ),
   Histogram("GoodMediumBtaggedJets_pt"                  , "", False,  True  , default_norm              , 50 , 0     , 2000  , 1e-5  , 1e4   , "good b-jet p_{T} [GeV]"                         , "# events (2018)"   ),
@@ -168,10 +164,7 @@ histograms = (
 
   Histogram("cutFlow"                             , "", False,  True  , default_norm , 1  , 0     , 12    , 1e1   , 1e15  , "Selection"                                      , "Number of events"  ),
   Histogram("Event_normCheck"                     , "", False,  True  , default_norm , 1  , 0     , 1     , 1e-2  , 1e7   , "norm check"                                     , "# events (2018)"   ),
-)
 
-LLP_histograms = (
-#           name                                  title logy    norm_type                 rebin xmin   xmax    ymin    ymax,   xlabel                                             ylabel
   Histogram("Event_nLooseDSAMuons"                , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of loose dSA #mu"                        , "# events (2018)"   ),
   Histogram("LooseDSAMuons_pt"                    , "", False,  True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "loose dSA #mu p_{T} [GeV]"                      , "# events (2018)"   ),
   Histogram("LooseDSAMuons_eta"                   , "", False,  True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e6   , "loose dSA #mu #eta"                             , "# events (2018)"   ),
@@ -204,255 +197,4 @@ LLP_histograms = (
   Histogram("MuonCombVertex_dR"                   , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e-2  , 1e6   , "standard-DSA #mu vertex #Delta R"                , "# events (2018)"   ),
   Histogram("MuonCombVertex_chi2"                 , "", False,  True  , default_norm              , 10 , 0     , 500   , 1e-2  , 1e6   , "standard-DSA #mu vertex #chi^{2}"                , "# events (2018)"   ),
 
-)
-
-histogramsRatio = (
-)
-
-if plots_from_LLPNanoAOD:
-  histograms = histograms + LLP_histograms
-
-weightsBranchName = "genWeight"
-
-color_palette_wong = (
-    TColor.GetColor(230, 159, 0),
-    TColor.GetColor(86, 180, 233),
-    TColor.GetColor(0, 158, 115),
-    TColor.GetColor(0, 114, 178),
-    TColor.GetColor(213, 94, 0),
-)
-
-samples = [
-  # Data
-  Sample(
-    name="SingleMuon",
-    file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_{hist_path}.root",
-    type=SampleType.data,
-    cross_sections=cross_sections,
-    line_alpha=1,
-    fill_alpha=0,
-    marker_size=0.7,
-    marker_style=20,
-    marker_color=ROOT.kBlack,
-    legend_description="SingleMuon2018",
-  ),
-]
-
-def add_signals():
-  
-  colors = [
-    ROOT.kGreen+1,
-    ROOT.kRed+1,
-    ROOT.kRed+3,
-    ROOT.kRed+4,
-    ROOT.kViolet+1,
-    ROOT.kYellow+3,
-    ROOT.kGray+1,
-    ROOT.kGray+2,
-    ROOT.kGray+3,
-    ROOT.kMagenta+1,
-  ]
-  
-  signals = []
-  # signals = ["tta_mAlp-0p35GeV_ctau-1e2mm", "tta_mAlp-0p35GeV_ctau-1e3mm", "tta_mAlp-0p35GeV_ctau-1e5mm"]
-  
-  for i, name in enumerate(signals):
-    
-    nice_name = name.replace("tta_mAlp-", "")
-    nice_name = nice_name.replace("GeV_ctau-", " GeV, ")
-    nice_name = nice_name.replace("mm", " mm")
-    
-    Sample(
-      name=name,
-      file_path=f"{base_path}/signals/{name}/{skim}/{hist_path}/histograms.root",
-      type=SampleType.signal,
-      cross_sections=cross_sections,
-      line_alpha=1,
-      line_style=2,
-      fill_alpha=0,
-      marker_size=0,
-      line_color=colors[i],
-      legend_description=nice_name,
-    ),
-
-def get_legend(column, row):
-  legend = Legend(
-    legend_max_x-(column+1)*legend_width, 
-    legend_max_y-(row+1)*legend_height, 
-    legend_max_x-(column)*legend_width, 
-    legend_max_y-(row)*legend_height, "f")
-  
-  return legend
-
-
-backgrounds_to_exclude = [
-  "QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  "QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-]
-
-for background_name in dasBackgrounds2018:
-  short_name = background_name.split("/")[-1]
-  
-  exclude_background = False
-  for background_to_exclude in backgrounds_to_exclude:
-    if short_name in background_to_exclude:
-      exclude_background = True
-      break
-  
-  if exclude_background:
-    continue
-  
-  long_name = None
-  
-  for sample_name in cross_sections.keys():
-    if short_name in sample_name:
-      long_name = sample_name
-      break
-  
-  if not long_name:
-    print(f"Error: Could not find long name for {short_name}")
-    continue
-  
-  color = None
-  custom_legend = Legend(0, 0, 0, 0, "")
-  legend_description = " "
-  
-  
-  if "TTToSemiLeptonic" in long_name:
-    color = ROOT.kRed+1
-    custom_legend = get_legend(column=1, row=0)
-    legend_description = "tt (semi-leptonic)"
-  elif "TTToHadronic" in long_name:
-    color = ROOT.kRed+3
-    custom_legend = get_legend(column=1, row=1)
-    legend_description = "tt (hadronic)"
-  elif "TTTo2L2Nu" in long_name:
-    color = ROOT.kRed+4
-    custom_legend = get_legend(column=1, row=2)
-    legend_description = "tt (leptonic)"
-  
-  elif "QCD" in long_name:
-    color = color_palette_wong[0]  
-    if "120To170" in long_name:
-      custom_legend = get_legend(column=1, row=3)
-      legend_description = "QCD (#mu enriched)"
-  
-  elif "WJets" in long_name:
-    color = ROOT.kViolet+1
-    custom_legend = get_legend(column=1, row=4)
-    legend_description = "W+jets"
-  
-  elif "ST_t" in long_name:
-    color = color_palette_wong[1]
-    if "antitop" in long_name:
-      custom_legend = get_legend(column=1, row=5)
-      legend_description = "Single top (tW)"
-  
-  elif "ttH" in long_name:
-    color = color_palette_wong[4]
-    if "ttHTobb" in long_name:
-      custom_legend = get_legend(column=1, row=6)
-      legend_description = "ttH"
-  
-  elif "TTZToLL" in long_name:
-    color = ROOT.kYellow+3
-    if "NuNu" in long_name:
-      custom_legend = get_legend(column=0, row=0)
-      legend_description = "ttZ"
-  elif "TTZZ" in long_name:
-    color = ROOT.kGray+1
-    custom_legend = get_legend(column=0, row=1)
-    legend_description = "ttZZ"
-  elif "TTZH" in long_name:
-    color = ROOT.kGray+2
-    custom_legend = get_legend(column=0, row=2)
-    legend_description = "ttZH"
-  elif "TTTT" in long_name:
-    color = ROOT.kGray+3
-    custom_legend = get_legend(column=0, row=3)
-    legend_description = "TTTT"
-  elif "DYJets" in long_name:
-    color = ROOT.kMagenta+1
-    if "M-10to50" in long_name:
-      custom_legend = get_legend(column=0, row=4)
-      legend_description = "DY+jets"
-  else:
-    print(f"Error: Could not determine color for {long_name}")
-    continue
-    
-  samples.append(
-    Sample(
-      name=long_name,
-      file_path=f"{base_path}/{background_name}/{skim}/{hist_path}/histograms.root",
-      type=SampleType.background,
-      cross_sections=cross_sections,
-      line_alpha=0,
-      fill_color=color,
-      fill_alpha=0.7,
-      marker_size=0,
-      legend_description=legend_description,
-      custom_legend=custom_legend,
-    )
-  )
-
-
-custom_stacks_order = (
-  "SingleMuon",
-  
-  "DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
-  "DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
-  
-  "TTZZ_TuneCP5_13TeV-madgraph-pythia8",
-  "TTZH_TuneCP5_13TeV-madgraph-pythia8",
-  "TTTT_TuneCP5_13TeV-amcatnlo-pythia8",
-
-  "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8",
-  "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8",
-  "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8",
-  
-  "ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8",
-  "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8",
-  "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8",
-
-  "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
-  "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
-  "ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
-  "ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8",
-  
-  "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8",
-  "TTToHadronic_TuneCP5_13TeV-powheg-pythia8",
-  
-  "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8",
-  "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8",
-  
-  "QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  "QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  "QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  "QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  "QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  "QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  "QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  "QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  "QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8", 
-  "QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-  
-  "QCD_Pt_120to170_TuneCP5_13TeV_pythia8",
-  "QCD_Pt_170to300_TuneCP5_13TeV_pythia8",
-  "QCD_Pt_300to470_TuneCP5_13TeV_pythia8",
-  "QCD_Pt_470to600_TuneCP5_13TeV_pythia8",
-  "QCD_Pt_600to800_TuneCP5_13TeV_pythia8",
-  "QCD_Pt_800to1000_TuneCP5_13TeV_pythia8",
-  "QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8",
-  "QCD_Pt_1400to1800_TuneCP5_13TeV_pythia8",
-  
-  "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
-  
-  "tta_mAlp-0p35GeV_ctau-1e0mm",
-  "tta_mAlp-0p35GeV_ctau-1e1mm",
-  "tta_mAlp-0p35GeV_ctau-1e2mm",
-  "tta_mAlp-0p35GeV_ctau-1e3mm",
-  "tta_mAlp-0p35GeV_ctau-1e5mm",
 )
