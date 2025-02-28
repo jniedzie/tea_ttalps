@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018
 import os
 import re
 
@@ -43,6 +43,7 @@ hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 sample_paths = dasSamples2018.keys()
 # sample_paths = dasData2018.keys()
 # sample_paths = QCD_dasBackgrounds2018.keys()
+# sample_paths = TT_dasBackgrounds2018.keys()
 
 
 def extract_year(s):

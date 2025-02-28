@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018
+from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018
 import os
 
 max_files = -1
@@ -10,8 +10,7 @@ max_files = -1
 
 # SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
-# skim = "skimmed_looseSemimuonic_v2_ttbarCR"
-skim = "skimmed_looseSemimuonic_v2_ttbarCR_loosePATmuons"
+skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
 # SR (+J/Psi CR) and tt̄ CR with isolation requirement on the loose muons (obsolete)
 # skim = "skimmed_looseSemimuonic_JPsimuonic_Segmentv1"
@@ -32,9 +31,10 @@ applyScaleFactors = {
   "jetID": False,  # no need to apply jet ID SFs in UL
 }
 
-# samples = dasSamples2018.keys()
-samples = dasData2018.keys()
+samples = dasSamples2018.keys()
+# samples = dasData2018.keys()
 # samples = QCD_dasBackgrounds2018.keys()
+# samples = TT_dasBackgrounds2018.keys()
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""
