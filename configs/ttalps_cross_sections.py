@@ -62,7 +62,8 @@ cross_sectionsRun2 = {
   "QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8": 3.318,
   "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8": 1.085,
   
-  "SingleMuon": 1.0,
+  "SingleMuon2018": 1.0,
+  
   "tta_mAlp-0p35GeV_ctau-1e-5mm": 0.003912, # +- 2.935e-05 pb
   "tta_mAlp-0p35GeV_ctau-1e0mm": 0.003912, # +- 2.935e-05 pb
   "tta_mAlp-0p35GeV_ctau-1e1mm": 0.003912, # +- 2.935e-05 pb
