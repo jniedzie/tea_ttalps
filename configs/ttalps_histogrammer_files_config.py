@@ -9,11 +9,8 @@ max_files = -1
 # skim = "skimmed_looseSemimuonicv1_LLPtrigger"
 
 # SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+# skim = "skimmed_looseSemimuonic_v2_SR"
 skim = "skimmed_looseSemimuonic_v2_ttbarCR"
-
-# SR (+J/Psi CR) and tt̄ CR with isolation requirement on the loose muons (obsolete)
-# skim = "skimmed_looseSemimuonic_JPsimuonic_Segmentv1"
 
 # For signal like skim with Dimuon triggers for LLP trigger study
 # skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
@@ -47,7 +44,7 @@ for name, apply in applyScaleFactors.items():
   
   output_hists_dir += f"_{name}SFs"
   
-# output_hists_dir += "_JPsiDimuons"
+output_hists_dir += "_JPsiDimuons"
 # output_hists_dir += "_SRDimuons"
 # output_hists_dir += "_SRDimuons_TriggerStudy"
 

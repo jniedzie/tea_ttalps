@@ -10,7 +10,7 @@ output_username = os.environ["USER"]
 # ------------------------------------------------------------------------------
 
 # SR, J/Psi CR, and tt̄ CR with no isolation requirement on the loose muons
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+# skim = "skimmed_looseSemimuonic_v2_SR"
 skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
 # For signal like skim with Dimuon triggers for LLP trigger study
@@ -28,7 +28,6 @@ skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
 # Default settings (e.g. for tt̄ CR)
 hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_jetIDSFs"
 
 # SR dimuon cuts applied
 # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"

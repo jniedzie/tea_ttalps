@@ -19,7 +19,7 @@ input_skim = "skimmed_looseSemimuonic_v2_merged"
 ### Output skims ###
 
 # For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
-# output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
+# output_skim = "skimmed_looseSemimuonic_v2_SR"
 
 # For signal like skim with Dimuon triggers for LLP trigger study
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
