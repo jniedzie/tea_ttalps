@@ -35,7 +35,6 @@ class TTAlpsDimuonCuts {
   bool PassesCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex, std::string cutName);
   
  private:
-  std::map<std::string, float> dimuonVertexBaseCuts;
   std::map<std::string, float> dimuonVertexPATCuts;
   std::map<std::string, float> dimuonVertexPATDSACuts;
   std::map<std::string, float> dimuonVertexDSACuts;
