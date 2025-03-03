@@ -77,7 +77,7 @@ if plot_data:
   signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-3*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
   sampletype = "data"
 
-output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}_{year}/"
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
@@ -91,6 +91,7 @@ plotting_options = {
 
 data_to_include = [
   "SingleMuon2018",
+  # "MuonC",
 ]
 
 backgrounds_to_exclude = [
@@ -119,7 +120,8 @@ configHelper = TTAlpsPlotterConfigHelper(
 samples = []
 configHelper.add_samples(SampleType.data, samples)
 configHelper.add_samples(SampleType.background, samples)
-configHelper.add_samples(SampleType.signal, samples)
+if year == "2018": # can change this when central samples are done
+  configHelper.add_samples(SampleType.signal, samples)
 custom_stacks_order = configHelper.get_custom_stacks_order(samples)
 
 weightsBranchName = "genWeight"
