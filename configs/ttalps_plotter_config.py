@@ -22,7 +22,7 @@ hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 
 output_formats = ["pdf"]
 
-output_path = f"../plots/{skim[0].replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}/"
+output_path = f"../plots/{skim[0].replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{year}/"
 
 luminosity = 59820. # 2018 eras A+B+C+D (A+B+C) was 27972.887358 before)
 # luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
@@ -83,7 +83,9 @@ configHelper = TTAlpsPlotterConfigHelper(
 samples = []
 configHelper.add_samples(SampleType.data, samples)
 configHelper.add_samples(SampleType.background, samples)
-configHelper.add_samples(SampleType.signal, samples)
+if year == "2018":  # can change this when central samples are done
+  configHelper.add_samples(SampleType.signal, samples)
+
 custom_stacks_order = configHelper.get_custom_stacks_order(samples)
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
@@ -110,10 +112,14 @@ histograms = (
   # ----------------------------------------------------------------------------
   # Event variables
   # ----------------------------------------------------------------------------
-  Histogram("cutFlow"                             , "", False,  True  , default_norm              , 1  , 0     , 12    , 1e1   , 1e15  , "Selection"                                      , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestDimuonVertex"      , "", False,  True  , default_norm              , 1  , 0     , 8     , 1e-1  , 1e2   , "Selection"                                      , "Number of events"  ),
-  Histogram("Event_normCheck"                     , "", False,  True  , default_norm              , 1  , 0     , 1     , 1e-2  , 1e7   , "norm check"                                     , "# events (2018)"   ),
-  Histogram("Event_MET_pt"                        , "", False,  True  , default_norm              , 10 , 0     , 800   , 1e-8  , 1e9   , "MET p_{T} [GeV]"                                , "# events (2018)"   ),
+  Histogram("cutFlow"                              , "", False,  True  , default_norm              , 1  , 0     , 12    , 1e1   , 1e15  , "Selection"                                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex"       , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e3   , 4e3   , "Selection"                                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex_Pat"   , "", False,  True  , default_norm              , 1  , 0     , 10    , 2e2   , 1e4   , "Selection"                                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex_PatDSA", "", False,  True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e4   , "Selection"                                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex_DSA"   , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e-1  , 1e4   , "Selection"                                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex"       , "", False,  True  , default_norm              , 1  , 0     , 8     , 1e-1  , 1e2   , "Selection"                                      , "Number of events"  ),
+  Histogram("Event_normCheck"                      , "", False,  True  , default_norm              , 1  , 0     , 1     , 1e-2  , 1e7   , "norm check"                                     , "# events (2018)"   ),
+  Histogram("Event_MET_pt"                         , "", False,  True  , default_norm              , 10 , 0     , 800   , 1e-8  , 1e9   , "MET p_{T} [GeV]"                                , "# events (2018)"   ),
   # Histogram("Event_nTightMuons"                   , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of tight #mu"                            , "# events (2018)"   ),
   # Histogram("Event_nLoosePATMuons"                , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of loose #mu"                            , "# events (2018)"   ),
   # Histogram("Event_nLooseDSAMuons"                , "", False,  True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of loose dSA #mu"                        , "# events (2018)"   ),
