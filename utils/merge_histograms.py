@@ -1,39 +1,24 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018
+from ttalps_samples_list import *
 import os
 import re
 
 base_path = "/data/dust/user/{}/ttalps_cms"
 output_username = os.environ["USER"]
 
-# ------------------------------------------------------------------------------
-# Skims
-# ------------------------------------------------------------------------------
-
-# SR, J/Psi CR, and tt̄ CR with no isolation requirement on the loose muons
-# skim = "skimmed_looseSemimuonic_v2_SR"
-skim = "skimmed_looseSemimuonic_v2_ttbarCR"
-
-# For signal like skim with Dimuon triggers for LLP trigger study
-# skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
-
 # Loose semimuonic skim
-# skim = "skimmed_looseSemimuonicv1"
+# skim = ("skimmed_looseSemimuonic_v2", "")
+
+# SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
-# skim = "skimmed_looseSemimuonicv1_LLPtrigger"
+# skim = ("skimmed_looseSemimuonicv1_LLPtrigger", "_SRDimuons_TriggerStudy")
+# skim = ("skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger", "_SRDimuons_TriggerStudy")
 
-# ------------------------------------------------------------------------------
-# Histograms
-# ------------------------------------------------------------------------------
-
-# Default settings (e.g. for tt̄ CR)
-hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
-
-# SR dimuon cuts applied
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
-
-# JPsi dimuon cuts applied
-# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 
 # ------------------------------------------------------------------------------
 # Samples
@@ -62,7 +47,7 @@ def main():
 
     for sample_path in sample_paths:
         print(f"{sample_path=}")
-        input_path = f"{sample_path}/{skim}/{hist_path}/*.root"
+        input_path = f"{sample_path}/{skim[0]}/{hist_path}/*.root"
 
         if "collision_data" in input_path:
             year = extract_year(sample_path)
@@ -72,7 +57,7 @@ def main():
 
             clean_path = clean_path_after_year(sample_path, year)
 
-            output_data_path[year] = f"{clean_path}_{skim}_{hist_path}.root"
+            output_data_path[year] = f"{clean_path}_{skim[0]}_{hist_path}.root"
             input_data_paths[year] += f"{base_path.format(output_username)}/{input_path} "
         else:
 
