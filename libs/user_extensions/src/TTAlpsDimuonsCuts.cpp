@@ -18,27 +18,19 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
   }
   dimuonSelection = selection;
 
+  map<string, vector<float>> dimuonVertexCuts;
   try {
-    config.GetMap(dimuonSelection+"BaseCuts", dimuonVertexBaseCuts);
+    config.GetMap(dimuonSelection+"Cuts", dimuonVertexCuts);
   } catch (const Exception &e) {
-    warn() << "Couldn't read " << dimuonSelection << "BaseCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+    warn() << "Couldn't read " << dimuonSelection << "Cuts from config file - is needed for good dimuon vertex collections" << endl;
   }
-  try {
-    config.GetMap(dimuonSelection+"PATCuts", dimuonVertexPATCuts);
-  } catch (const Exception &e) {
-    warn() << "Couldn't read " << dimuonSelection << "PATCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
+  // input vector of dimuon categories cut values should be in order PAT-PAT,PAT-DSA,DSA-DSA
+  for (const auto& [cutName, cuts] : dimuonVertexCuts) {
+    dimuonVertexPATCuts[cutName] = cuts[0];
+    dimuonVertexPATDSACuts[cutName] = cuts[1];
+    dimuonVertexDSACuts[cutName] = cuts[2];
   }
-  try {
-    config.GetMap(dimuonSelection+"PATDSACuts", dimuonVertexPATDSACuts);
-  } catch (const Exception &e) {
-    warn() << "Couldn't read " << dimuonSelection << "PATDSACuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
-  }
-  try {
-    config.GetMap(dimuonSelection+"DSACuts", dimuonVertexDSACuts);
-  } catch (const Exception &e) {
-    warn() << "Couldn't read " << dimuonSelection << "DSACuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
-  }
-
+  
   using namespace std::placeholders;
   PassesCutsMap = {
     {"LLPnanoAODVertexCuts", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLLPnanoAODVertexCuts(v); }},
@@ -76,30 +68,33 @@ bool TTAlpsDimuonCuts::PassesCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex,
 }
 
 bool TTAlpsDimuonCuts::PassesLLPnanoAODVertexCuts(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if (!dimuonVertex->isValid()) return false;
-  if ((float)dimuonVertex->Get("dca") > dimuonVertexBaseCuts["maxDCA"]) return false;
+  if ((float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxDCA"]) return false;
   return true;
 }
 
 bool TTAlpsDimuonCuts::PassesInvariantMassCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   float invMass = dimuonVertex->GetInvariantMass();
-  if(dimuonVertexBaseCuts.find("maxInvariantMass") == dimuonVertexBaseCuts.end()) return true;
+  if(dimuonVertexCuts.find("maxInvariantMass") == dimuonVertexCuts.end()) return true;
 
-  if(invMass > dimuonVertexBaseCuts["maxInvariantMass"]) return false;
-  if(invMass < dimuonVertexBaseCuts["minInvariantMass"]) return false;
-  if(invMass > dimuonVertexBaseCuts["minJpsiMass"] && invMass < dimuonVertexBaseCuts["maxJpsiMass"]) return false;
-  if(invMass > dimuonVertexBaseCuts["minpsiMass"] && invMass < dimuonVertexBaseCuts["maxpsiMass"]) return false;
+  if(invMass > dimuonVertexCuts["maxInvariantMass"]) return false;
+  if(invMass < dimuonVertexCuts["minInvariantMass"]) return false;
+  if(invMass > dimuonVertexCuts["minJpsiMass"] && invMass < dimuonVertexCuts["maxJpsiMass"]) return false;
+  if(invMass > dimuonVertexCuts["minpsiMass"] && invMass < dimuonVertexCuts["maxpsiMass"]) return false;
   return true;
 }
 
 bool TTAlpsDimuonCuts::PassesChargeCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
-  if(dimuonVertex->GetDimuonChargeProduct() > dimuonVertexBaseCuts["maxChargeProduct"]) return false;
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  if(dimuonVertex->GetDimuonChargeProduct() > dimuonVertexCuts["maxChargeProduct"]) return false;
   return true;
 }
 
 bool TTAlpsDimuonCuts::PassesDisplacedIsolationCut(shared_ptr<NanoDimuonVertex> dimuonVertex, string isolationVariable) {
   string category = dimuonVertex->GetVertexCategory();
-  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  auto dimuonVertexCuts = GetDimuonCategoryMap(category);
   if(category == "DSA") return true;
   if((float)dimuonVertex->Get(isolationVariable+"1") > dimuonVertexCuts["max"+isolationVariable]) return false;
   if(category == "PatDSA") return true;
@@ -109,7 +104,7 @@ bool TTAlpsDimuonCuts::PassesDisplacedIsolationCut(shared_ptr<NanoDimuonVertex> 
 
 bool TTAlpsDimuonCuts::PassesPFRelIsolationCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   string category = dimuonVertex->GetVertexCategory();
-  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  auto dimuonVertexCuts = GetDimuonCategoryMap(category);
   if(category == "DSA") return true;
   if((float)dimuonVertex->Muon1()->Get("pfRelIso04_all") > dimuonVertexCuts["maxPFRelIso"]) return false;
   if(category == "PatDSA") return true;
@@ -213,8 +208,9 @@ bool TTAlpsDimuonCuts::PassesDeltaPixelHitsCut(shared_ptr<NanoDimuonVertex> dimu
 }
 
 bool TTAlpsDimuonCuts::PassesBarrelDeltaEtaCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   auto muon1eta = dimuonVertex->Muon1()->GetAs<float>("eta");
   auto muon2eta = dimuonVertex->Muon2()->GetAs<float>("eta");
-  if(abs(muon1eta-muon2eta) > dimuonVertexBaseCuts["maxDeltaEta"]) return false;
+  if(abs(muon1eta-muon2eta) > dimuonVertexCuts["maxDeltaEta"]) return false;
   return true;
 }

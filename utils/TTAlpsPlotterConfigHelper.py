@@ -28,9 +28,11 @@ class TTAlpsPlotterConfigHelper:
     def add_samples(self, sample_type, samples):
         if sample_type == SampleType.background and self.year == "2018":
             dataset = dasBackgrounds2018
+        elif sample_type == SampleType.background and self.year == "2023":
+            dataset = dasBackgrounds2023preBPix
         elif sample_type == SampleType.signal and self.year == "2018":
             dataset = dasSignals2018
-        elif sample_type == SampleType.data and self.year == "2018":
+        elif sample_type == SampleType.data and (self.year == "2018" or self.year == "2023"):
             dataset = self.data_to_include
         else:
             error(f"Unknown combination of sample: {sample_type} and year {self.year}")
@@ -119,6 +121,7 @@ class TTAlpsPlotterConfigHelper:
         for key, params in samples_params.items():
             if key in long_name:
                 return params
+        error(f"No sample parameters found for sample {long_name}")
 
     def __exclude_background(self, background_name):
         for background_to_exclude in self.backgrounds_to_exclude:

@@ -37,7 +37,7 @@ legend_height = 0.045 if show_ratio_plots else 0.03
 legend_max_y = 0.89
 
 # requierement is num. events >= bkgRawEventsThreshold
-bkgRawEventsThreshold = 10
+bkgRawEventsThreshold = 0
 
 n_default_backgrounds = 8
 
@@ -77,7 +77,7 @@ if plot_data:
   signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-3*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
   sampletype = "data"
 
-output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}_{year}/"
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
@@ -91,6 +91,7 @@ plotting_options = {
 
 data_to_include = [
   "SingleMuon2018",
+  # "MuonC",
 ]
 
 backgrounds_to_exclude = [
@@ -119,7 +120,8 @@ configHelper = TTAlpsPlotterConfigHelper(
 samples = []
 configHelper.add_samples(SampleType.data, samples)
 configHelper.add_samples(SampleType.background, samples)
-configHelper.add_samples(SampleType.signal, samples)
+if year == "2018": # can change this when central samples are done
+  configHelper.add_samples(SampleType.signal, samples)
 custom_stacks_order = configHelper.get_custom_stacks_order(samples)
 
 weightsBranchName = "genWeight"
@@ -148,9 +150,12 @@ histograms = (
   Histogram("Event_PV_z"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV z [cm]"                           , "# events (2018)"   ),
   Histogram("Event_MET_pt"                        , "", False,  True  , default_norm             , 10 , 0     , 800   , 1e-8  , 1e9   , "MET p_{T} [GeV]"                     , "# events (2018)"   ),
   
-  Histogram("cutFlow"                             , "", False, True  , default_norm , 1  , 0     , 13     , 1e-3*y_scale   , 1e23*y_scale  , "Selection"                      , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestDimuonVertex"      , "", False, True  , default_norm , 1  , 0     , 8      , 1e4*y_scale   , 1e7*y_scale  , "Selection"                      , "Number of events"  ),
-  Histogram("Event_normCheck"                     , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1*y_scale  , 1e20*y_scale   , "norm check"                     , "# events (2018)"   ),
+  Histogram("cutFlow"                               , "", False, True  , default_norm , 1  , 0     , 13     , 1e5   , 1e18   , "Selection"         , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex"        , "", False, True  , default_norm , 1  , 0     , 10     , 1e3   , 4e3    , "Selection"         , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex_Pat"    , "", False, True  , default_norm , 1  , 0     , 10     , 2e2   , 1e4    , "Selection"         , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex_PatDSA" , "", False, True  , default_norm , 1  , 0     , 10     , 1e1   , 1e4    , "Selection"         , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex_DSA"    , "", False, True  , default_norm , 1  , 0     , 10     , 1e-1  , 1e4    , "Selection"         , "Number of events"  ),
+  Histogram("Event_normCheck"                       , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1  , 1e20   , "norm check"        , "# events (2018)"   ),
 )
 
 LLPnanoAOD_histograms = ()
@@ -187,6 +192,9 @@ for muonCollectionName in muonCollectionNames:
   )
 
 for muonVertexCollectionName in muonVertexCollectionNames:
+  LLPnanoAOD_histograms += (
+    Histogram(muonVertexCollectionName+"_invMass"              , "", False, False , default_norm        , 2  , 2.7     , 3.5     , 0  , 160   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+  )
   for category in muonVertexCategories:
     LLPnanoAOD_histograms += (
       Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 5     , 1e-3  , 1e8   , "Number of loose #mu vertices"           , "# events (2018)"   ),
