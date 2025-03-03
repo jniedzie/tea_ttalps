@@ -31,7 +31,8 @@ runABCDHistograms = True
 abcdCollection = "BestDimuonVertex"
 
 # dimuonSelection is the name of the selection in ttalps_object_cuts
-dimuonSelection = "JPsiDimuonVertex"
+# dimuonSelection = "JPsiDimuonVertex"
+dimuonSelection = "ZDimuonVertex"
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
@@ -97,6 +98,7 @@ muonVertexCollections = {
   # "MaskedDimuonVertices" : ["InvariantMassCut"],
   "GoodDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut"],
   "BestDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "BestDimuonVertex"],
+  "BestPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut", "BestDimuonVertex"],
 }
 muonVertexCollectionNames = [collectionName for collectionName in muonVertexCollections.keys()]
 # N-1 collections need to be defined above
@@ -174,7 +176,7 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "absCollinearityAngle"  , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi1"         , 500    , 0      , 5      , ""  ),
       (muonVertexCollectionName , "absPtLxyDPhi2"         , 500    , 0      , 5      , ""  ),
-      (muonVertexCollectionName , "invMass"               , 10000  , 0      , 200    , ""  ),
+      (muonVertexCollectionName , "invMass"               , 10000   , 0      , 200    , ""  ),
       (muonVertexCollectionName , "logInvMass"            , 1000   , -1     , 2      , ""  ),
       (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
@@ -252,7 +254,7 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
   for category in allMuonVertexCollectionCategories:
     muonVertexCollectionName = muonVertexNminus1Collection+"Nminus1"+category
     LLPNanoAOD_histParams += (
-      (muonVertexCollectionName , "invMass"                     , 10000  , 0      , 200   , ""  ),
+      (muonVertexCollectionName , "invMass"                     , 10000   , 0      , 200   , ""  ),
       (muonVertexCollectionName , "logInvMass"                  , 1000   , -1     , 2     , ""  ),
       (muonVertexCollectionName , "chargeProduct"               , 4      , -2     , 2     , ""  ),
       (muonVertexCollectionName , "maxHitsInFrontOfVert"        , 100    , 0      , 100   , ""  ),
