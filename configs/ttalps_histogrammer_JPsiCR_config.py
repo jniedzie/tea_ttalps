@@ -146,6 +146,7 @@ for collectionName in muonVertexCollectionNames:
     (collectionName , "invMass"               , 10000  , 0      , 200    , ""  ),
     (collectionName , "logInvMass"            , 1000   , -1     , 2      , ""  ),
     (collectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
+    (collectionName , "eta"                   , 1000   , -10    , 10     , ""  ),
     (collectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
   )
   for category in muonVertexCollectionCategories:
@@ -179,6 +180,7 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "invMass"               , 10000   , 0      , 200    , ""  ),
       (muonVertexCollectionName , "logInvMass"            , 1000   , -1     , 2      , ""  ),
       (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "eta"                   , 1000   , -10    , 10     , ""  ),
       (muonVertexCollectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
       (muonVertexCollectionName , "leadingPt"             , 2000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "dxyPVTraj1"            , 1000   , 0      , 1000   , ""  ),

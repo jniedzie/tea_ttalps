@@ -152,7 +152,7 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillBasicMuonVertexHistograms(event);
     }
 
-    if (runABCDHistograms && passesDimuonCuts) {
+    if (runABCDHistograms) {
       ttalpsHistogramsFiller->FillABCDHistograms(event, abcdCollection);
     }
   }

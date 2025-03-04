@@ -348,6 +348,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(vertexName + "_" + category + "_invMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_logInvMass", log10(dimuonVertex->GetInvariantMass()), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_pt", dimuonVertex->GetDimuonPt(), weight * muonWeight1 * muonWeight2);
+    histogramsHandler->Fill(vertexName + "_" + category + "_eta", dimuonVertex->GetDimuonEta(), weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_dEta", abs((float)muon1->Get("eta") - (float)muon2->Get("eta")),
                             weight * muonWeight1 * muonWeight2);
     histogramsHandler->Fill(vertexName + "_" + category + "_outerDEta", abs((float)muon1->Get("outerEta") - (float)muon2->Get("outerEta")),
@@ -852,8 +853,16 @@ void TTAlpsHistogramFiller::FillTriggerStudyHistograms(const shared_ptr<Event> e
 
 void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, string abcdCollection) {
   double weight = GetEventWeight(event);
+  auto collection = event->GetCollection(abcdCollection);
+  
+  if (collection->size() < 1) return;
+  if (collection->size() > 1) {
+    error() << "More than one vertex in collection: " << abcdCollection << ". Expected only one but the size is "
+           << collection->size() << std::endl;
+    return;
+  }
 
-  auto bestDimuon = asNanoDimuonVertex(event->GetCollection(abcdCollection)->at(0), event);
+  auto bestDimuon = asNanoDimuonVertex(collection->at(0), event);
 
   map<string, double> variables = {
       {"Lxy", bestDimuon->GetLxyFromPV()},
