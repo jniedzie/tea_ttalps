@@ -1,11 +1,10 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018
+from ttalps_samples_list import *
 
 import argparse
 import glob
 import os
 
-base_path = "/data/dust/user/jniedzie/ttalps_cms"
-# base_path = "/data/dust/user/lrygaard/ttalps_cms"
+base_path = f"/data/dust/user/{os.environ["USER"]}/ttalps_cms"
 
 skim = "skimmed_looseSemimuonic_v2"
 

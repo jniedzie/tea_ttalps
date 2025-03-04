@@ -1,7 +1,7 @@
 import ROOT
-from ROOT import TColor
-from Sample import Sample, SampleType
-from Legend import Legend
+import os
+
+from Sample import SampleType
 from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
 
@@ -11,10 +11,10 @@ from ttalps_cross_sections import *
 year = "2018"
 cross_sections = get_cross_sections(year)
 
-# base_path = "/data/dust/user/lrygaard/ttalps_cms/"
-base_path = "/data/dust/user/jniedzie/ttalps_cms/"
+base_path = f"/data/dust/user/{os.environ["USER"]}/ttalps_cms/"
 
-hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
+hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_ZDimuons"
 
 skim = "skimmed_looseSemimuonic_v2_SR"
 
@@ -30,16 +30,14 @@ canvas_size_2Dhists = (800, 800)
 show_ratio_plots = True
 ratio_limits = (0.5, 1.5)
 
-legend_width = 0.17 if show_ratio_plots else 0.23
-legend_min_x = 0.45
 legend_max_x = 0.82
-legend_height = 0.045 if show_ratio_plots else 0.03
 legend_max_y = 0.89
+legend_width = 0.17 if show_ratio_plots else 0.23
+legend_height = 0.045 if show_ratio_plots else 0.03
 
-# requierement is num. events >= bkgRawEventsThreshold
-bkgRawEventsThreshold = 0
 
-n_default_backgrounds = 8
+# only plot backgrounds with N_events > bkgRawEventsThreshold
+bkgRawEventsThreshold = 10
 
 show_cms_labels = True
 extraText = "Preliminary"
@@ -60,24 +58,21 @@ muonMatchingMethods = [
 extraMuonVertexCollections = [
   # invariant mass cut only:
   # # "MaskedDimuonVerex", 
+  
   # Best Dimuon selection without isolation cut:
-  "BestDimuonVertex", 
+  "BestDimuonVertex",
+  
   # Best Dimuon selection with isolation cut:
-  # "BestPFIsoDimuonVertex",
+  "BestPFIsoDimuonVertex",
 ]
 
-signal_legend = Legend(legend_max_x-legend_width, legend_max_y-5*legend_height, legend_max_x-2*legend_width, legend_max_y, "l")
 sampletype = "sig"
-
 if plot_background:
-  signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-3*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
   sampletype = "bkg"
-
 if plot_data:
-  signal_legend = Legend(legend_max_x-2.5*legend_width, legend_max_y-0.13-3*legend_height, legend_max_x-2*legend_width, legend_max_y-0.13, "l")
   sampletype = "data"
 
-output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}_{year}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{sampletype}/"
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
@@ -91,7 +86,6 @@ plotting_options = {
 
 data_to_include = [
   "SingleMuon2018",
-  # "MuonC",
 ]
 
 backgrounds_to_exclude = [
@@ -120,8 +114,7 @@ configHelper = TTAlpsPlotterConfigHelper(
 samples = []
 configHelper.add_samples(SampleType.data, samples)
 configHelper.add_samples(SampleType.background, samples)
-if year == "2018": # can change this when central samples are done
-  configHelper.add_samples(SampleType.signal, samples)
+configHelper.add_samples(SampleType.signal, samples)
 custom_stacks_order = configHelper.get_custom_stacks_order(samples)
 
 weightsBranchName = "genWeight"
@@ -150,12 +143,9 @@ histograms = (
   Histogram("Event_PV_z"                          , "", False, True  , default_norm              , 1  , 0     , 20   , 1e-2   , 1e8   , "PV z [cm]"                           , "# events (2018)"   ),
   Histogram("Event_MET_pt"                        , "", False,  True  , default_norm             , 10 , 0     , 800   , 1e-8  , 1e9   , "MET p_{T} [GeV]"                     , "# events (2018)"   ),
   
-  Histogram("cutFlow"                               , "", False, True  , default_norm , 1  , 0     , 13     , 1e5   , 1e18   , "Selection"         , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestDimuonVertex"        , "", False, True  , default_norm , 1  , 0     , 10     , 1e3   , 4e3    , "Selection"         , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestDimuonVertex_Pat"    , "", False, True  , default_norm , 1  , 0     , 10     , 2e2   , 1e4    , "Selection"         , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestDimuonVertex_PatDSA" , "", False, True  , default_norm , 1  , 0     , 10     , 1e1   , 1e4    , "Selection"         , "Number of events"  ),
-  Histogram("dimuonCutFlow_BestDimuonVertex_DSA"    , "", False, True  , default_norm , 1  , 0     , 10     , 1e-1  , 1e4    , "Selection"         , "Number of events"  ),
-  Histogram("Event_normCheck"                       , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1  , 1e20   , "norm check"        , "# events (2018)"   ),
+  Histogram("cutFlow"                             , "", False, True  , default_norm , 1  , 0     , 13     , 1e-3*y_scale   , 1e23*y_scale  , "Selection"                      , "Number of events"  ),
+  Histogram("dimuonCutFlow_BestDimuonVertex"      , "", False, True  , default_norm , 1  , 0     , 8      , 1e4*y_scale   , 1e7*y_scale  , "Selection"                      , "Number of events"  ),
+  Histogram("Event_normCheck"                     , "", False, True  , default_norm , 1  , 0     , 1      , 1e-1*y_scale  , 1e20*y_scale   , "norm check"                     , "# events (2018)"   ),
 )
 
 LLPnanoAOD_histograms = ()
@@ -192,9 +182,6 @@ for muonCollectionName in muonCollectionNames:
   )
 
 for muonVertexCollectionName in muonVertexCollectionNames:
-  LLPnanoAOD_histograms += (
-    Histogram(muonVertexCollectionName+"_invMass"              , "", False, False , default_norm        , 2  , 2.7     , 3.5     , 0  , 160   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
-  )
   for category in muonVertexCategories:
     LLPnanoAOD_histograms += (
       Histogram("Event_n"+muonVertexCollectionName+category               , "", False, True  , default_norm        , 1  , 0     , 5     , 1e-3  , 1e8   , "Number of loose #mu vertices"           , "# events (2018)"   ),
@@ -217,8 +204,11 @@ for muonVertexCollectionName in muonVertexCollectionNames:
       # Histogram(muonVertexCollectionName+category+"_nSegments1"           , "", False, True  , NormalizationType.to_one        , 1  , 0     , 10    , 1e-6  , 1e4  , "#mu_{1} N(muon segments)"               , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_nSegments2"           , "", False, True  , NormalizationType.to_one        , 1  , 0     , 10    , 1e-6  , 1e4  , "#mu_{2} N(muon segments)"               , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_nSegmentsSum"         , "", False, True  , default_norm        , 1  , 0     , 20    , 1e-3  , 1e10  , "#mu_{1} + #mu_{2} N(muon segments)"     , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, False , default_norm        , 1  , 2.7   , 3.5     , 0  , 50   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
-      Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
+      # Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, False , default_norm        , 1  , 2.7   , 3.5     , 0  , 1500   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, False , default_norm        , 20  , 70   , 110     , 0  , 30   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+      
+      
+      Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 10  , 0     , 200     , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_dxyPVTraj2"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{2} [cm]"             , "# events (2018)"   ),

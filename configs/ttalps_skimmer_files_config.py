@@ -1,15 +1,13 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, QCD_dasBackgrounds2018, TT_dasBackgrounds2018
+from ttalps_samples_list import *
+import os
 
 max_files = -1
 
-base_path = "/data/dust/user/jniedzie/ttalps_cms"
-# base_path = "/data/dust/user/lrygaard/ttalps_cms"
-
+base_path = f"/data/dust/user/{os.environ["USER"]}/ttalps_cms"
 
 ### Input skims ###
 
 # Loose semimuonic skim (merged means each 10 files were merged into one)
-# input_skim = "skimmed_looseSemimuonicv1"
 # input_skim = "skimmed_looseSemimuonic_v2"
 input_skim = "skimmed_looseSemimuonic_v2_merged"
 
@@ -18,13 +16,13 @@ input_skim = "skimmed_looseSemimuonic_v2_merged"
 
 ### Output skims ###
 
-# For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
+# Signal like skim: SR, J/Psi CR and Z CR with no isolation requirement on the loose muons
 # output_skim = "skimmed_looseSemimuonic_v2_SR"
 
-# For signal like skim with Dimuon triggers for LLP trigger study
+# Signal like skim with Dimuon triggers for LLP trigger study
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
 
-# For ttbar CR skim
+# tt̄ CR skim
 output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
 output_trees_dir = ""
