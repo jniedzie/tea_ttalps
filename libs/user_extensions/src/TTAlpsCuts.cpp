@@ -50,47 +50,27 @@ void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, s
   }
 }
 
-// TODO: Lovisa, remove that when you're done with creating cumulatively matched collections in TTAlpsObjectsManager
-// bool TTAlpsCuts::PassesSignalLikeCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-//   if(muonMatchingParams.size() == 0){
-//     warn() << "No muon matching methods defined in config file - skipping muon matching" << endl;
-//     return false;
-//   }
-//   auto allMuons = make_shared<PhysicsObjects>();
-//   bool firstMatching = true;
-
-//   for(auto &[matchingMethod, param] : muonMatchingParams) {
-//     string collectionName = "LooseMuons" + matchingMethod + "Match";
-//     shared_ptr<PhysicsObjects> matchedMuons = event->GetCollection(collectionName);
-//     if(firstMatching) {
-//       allMuons = matchedMuons;
-//       firstMatching = false;
-//     }
-//     else {
-//       auto allMuons_new = make_shared<PhysicsObjects>();
-//       for(auto muon : *matchedMuons) {
-//         if(asNanoEvent(event)->MuonIndexExist(allMuons, muon->Get("idx"), asNanoMuon(muon)->isDSA())) {
-//           allMuons_new->push_back(muon);
-//         }
-//       }
-//       allMuons = allMuons_new;
-//     }
-//   }
-
-//   if(allMuons->size() < 3) return false;
-//   cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");
-
-//   return true;
-// }
-
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  bool passesCuts = true;
-  for(auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
+  bool finalPassesCuts = true;
+  bool firstIteration = true;
+  string firstCollectionName = "";
+  for (auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
     string collectionName = originalCollectionName;
-    if(dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
-    if(!PassesDimuonCuts(event, cutFlowManager, collectionName, vertexCuts, dimuonCategory)) passesCuts = false;
+    if (dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
+    bool passesDimuonCuts = PassesDimuonCuts(event, cutFlowManager, collectionName, vertexCuts, dimuonCategory);
+    
+    // final passes cut will only be registered for the first "Best" dimuon collection
+    bool bestCollection = originalCollectionName.find("Best") == 0;
+    if (firstIteration && bestCollection) {
+      if(!passesDimuonCuts) finalPassesCuts = false;
+      firstIteration = false;
+      firstCollectionName = collectionName;
+    }
+    if (!firstIteration && bestCollection) {
+      warn() << "Multiple Best dimuon collections registered. Only the first collection " << firstCollectionName << " will be used for final PassesDimuonCuts." << endl;
+    }
   }
-  return passesCuts;
+  return finalPassesCuts;
 }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string collectionName, vector<string> vertexCuts, string dimuonCategory) {
@@ -115,7 +95,6 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
   for (const auto& dimuon : *dimuons) {
       baseDimuons->push_back(std::make_shared<PhysicsObject>(*dimuon));
   }
-  // auto goodDimuons = make_shared<PhysicsObjects>();
 
   for(auto cutName : vertexCuts) {
     if(cutName == "BestDimuonVertex") continue;

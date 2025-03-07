@@ -80,15 +80,15 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     }
-    bool passesDimuonCuts = false;
+    bool passesDimuonCuts = true;
     if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPTriggerHistograms ||
         runABCDHistograms) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
       passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager);
-      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "Pat");
-      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "PatDSA");
-      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "DSA");
+      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "Pat");
+      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "PatDSA");
+      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "DSA");
     }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");

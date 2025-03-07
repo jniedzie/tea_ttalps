@@ -5,7 +5,8 @@ import glob
 import os
 import uuid
 
-tmp_path = "/data/dust/user/jniedzie/tmp/"
+username = os.environ["USER"]
+tmp_path = f"/data/dust/user/{username}/tmp/"
 
 def get_missing_branches(input_files):
     all_trees = {}
@@ -71,7 +72,7 @@ def create_filtered_files(input_files, missing_branches_per_tree):
             continue
 
         random_string = str(uuid.uuid4().hex[:30])        
-        temp_filename = f"{tmp_path}/filtered_{random_string}"
+        temp_filename = f"{tmp_path}/filtered_{random_string}.root"
         temp_files.append(temp_filename)
         temp_file = ROOT.TFile(temp_filename, "RECREATE")
 

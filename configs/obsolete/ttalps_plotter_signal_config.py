@@ -181,6 +181,8 @@ for muonVertexCollectionName in muonVertexCollectionNames:
   LLPnanoAOD_histograms += (
     Histogram(muonVertexCollectionName+"_Lxy"                  , "", False, True  , default_norm        , 20 , 0     , 800   , 1e-4  , 1e9   , "#mu vertex L_{xy} [cm]"                 , "# events (2018)"   ),
     Histogram(muonVertexCollectionName+"_logLxy"               , "", False, True  , default_norm        , 10 , -5    , 3     , 1e-4  , 1e9   , "#mu vertex log_{10}(L_{xy}) [cm]"                 , "# events (2018)"   ),
+    Histogram(muonVertexCollectionName+"_invMass"              , "", False, True  , default_norm        , 10, 0      , 10    , 1e-5  , 1e6   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+    Histogram(muonVertexCollectionName+"_logInvMass"           , "", False, True  , default_norm        , 10 , -1     , 2   , 1e-6  , 1e7   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
   )
   for category in muonVertexCategories:
     LLPnanoAOD_histograms += (
@@ -193,6 +195,7 @@ for muonVertexCollectionName in muonVertexCollectionNames:
       # Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert1"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-6  , 1e6   , "N(hits before vertex)"                  , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_hitsInFrontOfVert2"   , "", False, True  , default_norm        , 1  , 0     , 35    , 1e-7  , 1e5   , "N(hits before vertex)"                  , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_invMass"              , "", False, True  , default_norm        , 10, 0      , 10    , 1e-5  , 1e6   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+      Histogram(muonVertexCollectionName+category+"_logInvMass"           , "", False, True  , default_norm        , 10 , -1     , 2     , 1e-5  , 1e6   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_pt"                   , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                 , "# events (2018)"   ),
       Histogram(muonVertexCollectionName+category+"_leadingPt"            , "", False, True  , default_norm        , 5  , 0     , 50    , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"         , "# events (2018)"   ),
       # Histogram(muonVertexCollectionName+category+"_dxyPVTraj1"           , "", False, True  , default_norm        , 10 , 0     , 800   , 1e-3  , 1e6   , "#mu vertex d_{xy}^{1} [cm]"             , "# events (2018)"   ),
@@ -211,9 +214,11 @@ for muonVertexCollectionName in muonVertexCollectionNames:
     )
 
 for dimuonCollectionName in dimuonNminus1CollectionNames:
+  Histogram(dimuonCollectionName+"_logInvMass"                  , "", True,  True  , default_norm        , 1  , 0.1   , 100  , 1e-4  , 1e7   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
   for category in muonVertexCategories:
     LLPnanoAOD_histograms += (
       Histogram(dimuonCollectionName+category+"_invMass"                     , "", False, True  , default_norm        , 10 , 0     , 10   , 1e-4  , 1e7   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
+      Histogram(dimuonCollectionName+category+"_logInvMass"                  , "", True,  True  , default_norm        , 1  , 0.1   , 100  , 1e-4  , 1e7   , "#mu vertex M_{#mu #mu} [GeV]"           , "# events (2018)"   ),
       Histogram(dimuonCollectionName+category+"_chargeProduct"               , "", False, True  , default_norm        , 1  , -1    , 2    , 1e-2  , 1e10  , "Dimuon charge"                          , "# events (2018)"   ),
       Histogram(dimuonCollectionName+category+"_maxHitsInFrontOfVert"        , "", False, True  , default_norm        , 1  , 0     , 35   , 1e-3  , 1e9   , "Max N(hits before vertex)"              , "# events (2018)"   ),
       Histogram(dimuonCollectionName+category+"_absPtLxyDPhi1"               , "", False, True  , default_norm        , 10 , 0     , 3.15 , 1e-3  , 1e9   , "#mu vertex |#Delta #phi_{#mu1}|"        , "# events (2018)"   ),

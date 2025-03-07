@@ -4,7 +4,8 @@ import argparse
 import glob
 import os
 
-base_path = f"/data/dust/user/{os.environ["USER"]}/ttalps_cms"
+username = os.environ["USER"]
+base_path = f"/data/dust/user/{username}/ttalps_cms"
 
 skim = "skimmed_looseSemimuonic_v2"
 

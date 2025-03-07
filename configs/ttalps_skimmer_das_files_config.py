@@ -1,4 +1,5 @@
-from ttalps_samples_list import dasSamples2018
+from ttalps_samples_list import *
+import os
 
 max_files = -1
 
@@ -16,11 +17,16 @@ output_trees_dir = ""
 output_hists_dir = ""
 input_directory = ""
 
-# # For DAS inputs:
-dataset = ""
+# # For DAS datasets:
+# dataset = ""
+# # For local path to DAS files:
+input_dasfiles = ""
+
 dbs_instance = "prod/phys03"
-dasSamples = dasSamples2018
+dasSamples = TT_dasBackgrounds2022preEE
 
 # create list datasets_and_output_trees_dirs with tuples (dasSamples value, f"{base_path}/{k}/{output_skim}/") for k is dasSamples key
-datasets_and_output_trees_dirs = [(v, f"{base_path}/{k}/{output_skim}/") for k, v in dasSamples.items()]
+# datasets_and_output_trees_dirs = [(v, f"{base_path}/{k}/{output_skim}/") for k, v in dasSamples.items()]
 
+# create list input_dasfiles_and_output_trees_dirs with tuples (dasSamples value, f"{base_path}/{k}/{output_skim}/") for k is dasSamples key
+input_dasfiles_and_output_trees_dirs = [(v, f"{base_path}/{k}/{output_skim}/") for k, v in dasSamples.items()]
