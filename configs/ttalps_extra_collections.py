@@ -71,7 +71,7 @@ run3extraEventCollections = {
     "inputCollections": ("Electron",),
     "pt": (15., 9999999.),
     "eta": (-2.5, 2.5),
-    "mvaIso_WP80": True,  #  TODO: check if this is the correct WP
+    "mvaIso_WP90": True,  #  TODO: check if this is the correct WP
   },
 }
 

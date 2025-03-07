@@ -51,13 +51,26 @@ void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, s
 }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  bool passesCuts = true;
-  for(auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
+  bool finalPassesCuts = true;
+  bool firstIteration = true;
+  string firstCollectionName = "";
+  for (auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
     string collectionName = originalCollectionName;
-    if(dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
-    if(!PassesDimuonCuts(event, cutFlowManager, collectionName, vertexCuts, dimuonCategory)) passesCuts = false;
+    if (dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
+    bool passesDimuonCuts = PassesDimuonCuts(event, cutFlowManager, collectionName, vertexCuts, dimuonCategory);
+    
+    // final passes cut will only be registered for the first "Best" dimuon collection
+    bool bestCollection = originalCollectionName.find("Best") == 0;
+    if (firstIteration && bestCollection) {
+      if(!passesDimuonCuts) finalPassesCuts = false;
+      firstIteration = false;
+      firstCollectionName = collectionName;
+    }
+    if (!firstIteration && bestCollection) {
+      warn() << "Multiple Best dimuon collections registered. Only the first collection " << firstCollectionName << " will be used for final PassesDimuonCuts." << endl;
+    }
   }
-  return passesCuts;
+  return finalPassesCuts;
 }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string collectionName, vector<string> vertexCuts, string dimuonCategory) {
@@ -82,7 +95,6 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
   for (const auto& dimuon : *dimuons) {
       baseDimuons->push_back(std::make_shared<PhysicsObject>(*dimuon));
   }
-  // auto goodDimuons = make_shared<PhysicsObjects>();
 
   for(auto cutName : vertexCuts) {
     if(cutName == "BestDimuonVertex") continue;

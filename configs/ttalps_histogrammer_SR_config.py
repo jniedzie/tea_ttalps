@@ -89,6 +89,7 @@ allMuonVertexCollectionCategories = ["", "_PatDSA", "_DSA", "_Pat"]
 muonCollectionCategories = ["", "DSA", "PAT"]
 muonCollectionNames = []
 
+# Note: only the first "Best" dimuon collection will be used for passedDimuonCuts!
 muonVertexCollections = {
   "GoodPFIsoDimuonVertex" : ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "PFRelIsolationCut"],
   "BestDimuonVertex" :      ["InvariantMassCut", "ChargeCut", "HitsInFrontOfVertexCut", "DPhiBetweenMuonpTAndLxyCut", "DCACut", "CollinearityAngleCut", "Chi2Cut", "BestDimuonVertex"],
@@ -454,7 +455,7 @@ for matchingMethod, param in muonMatchingParams.items():
   )
   for genmuonVertexCollectionName in genmuonVertexCollectionNames:
     collectionName = genmuonVertexCollectionName+matchingMethod+"MatchVertex"
-    LLPNanoAOD_histParams += (
+    GenMuon_histParams += (
       ("Event"       , "n"+collectionName       , 50     , 0      , 50     , ""  ),
       (collectionName , "normChi2"              , 50000  , 0      , 50     , ""  ),
       (collectionName , "Lxy"                   , 1000   , 0      , 1000   , ""  ),
@@ -481,6 +482,7 @@ for matchingMethod, param in muonMatchingParams.items():
         (muonVertexCollectionName , "dR"                    , 500    , 0      , 10     , ""  ),
         (muonVertexCollectionName , "proxDR"                , 500    , 0      , 10     , ""  ),
         (muonVertexCollectionName , "outerDR"               , 500    , 0      , 10     , ""  ),
+        (muonVertexCollectionName , "eta"                   , 300    , -3     , 3      , ""  ),
         (muonVertexCollectionName , "dEta"                  , 500    , 0      , 10     , ""  ),
         (muonVertexCollectionName , "dPhi"                  , 500    , 0      , 10     , ""  ),
         (muonVertexCollectionName , "outerDEta"             , 500    , 0      , 10     , ""  ),

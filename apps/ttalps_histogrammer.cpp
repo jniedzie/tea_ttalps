@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     }
-    bool passesDimuonCuts = false;
+    bool passesDimuonCuts = true;
     if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPTriggerHistograms ||
         runABCDHistograms) {
       // To register the dimuon cutflow
