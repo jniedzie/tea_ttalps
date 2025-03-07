@@ -1,35 +1,37 @@
 import ROOT
-from ttalps_cross_sections import cross_sections
+from ttalps_cross_sections import get_cross_sections
 
 
 lumi = 137190  # pb^-1
+year = "2018"
+cross_sections = get_cross_sections(year)
 
 
 # ------------------------------------------
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-# do_region = "SR"
-do_region = "JPsiCR"
+do_region = "SR"
+# do_region = "JPsiCR"
+# do_region = "ttZCR"
 
-do_data = True
+do_data = False
 
 if do_region == "SR":
     do_data = False
 
-# variables to use for the two ABCD axes
-if do_region == "JPsiCR":
-    variable_1 = "logLxySignificance"
-    variable_2 = "log3Dangle"
-else:
-    variable_1 = "LogLxySignificance"
-    variable_2 = "Log3Dangle"
+
+variable_1 = "logLxySignificance"
+variable_2 = "log3Dangle"
 
 # your chosen ABCD crossing point that will be used to make 1D projections
 if do_region == "JPsiCR":
-    abcd_point = (-0.94, 0.86)
-    # abcd_point = (-0.9, 0.0)
+    # abcd_point = (-0.94, 0.94) # from MC optimization
+    abcd_point = (-0.74, 0.58) # from data optimization
+    # abcd_point = (-0.9, 0.0) # from SR MC optimization
 elif do_region == "SR":
+    abcd_point = (-0.9, 0.0)
+elif do_region == "ttZCR":
     abcd_point = (-0.9, 0.0)
 
 # optimization parameters
@@ -38,11 +40,14 @@ max_closure = 0.10  # max allowed closure
 
 
 if do_region == "JPsiCR":
-    min_n_events = 1  # min number of events in any of the CRs
+    min_n_events = 20  # min number of events in any of the CRs
     max_signal_contamination = 1.0  # max allowed signal contamination in any of the CRs
 elif do_region == "SR":
     min_n_events = 10
-    max_signal_contamination = 0.10
+    max_signal_contamination = 0.20
+elif do_region == "ttZCR":
+    min_n_events = 10
+    max_signal_contamination = 1.0
 
 
 # ------------------------------------------
@@ -56,12 +61,12 @@ custom_projections_binning = [0, 0.5, 0.9, 1.5, 2.0]
 
 # you can also use smart rebinning for the 1D projection, which will keep the relative error below a certain threshold
 smart_rebin = False
-smart_rebin_max_error = 0.30  # max allowed ralative error for smaert rebinning
+smart_rebin_max_error = 0.30  # max allowed ralative error for smart rebinning
 
 # or you can use standard rebinning for the 1D projection (the number is the rebin factor)
 standard_rebin = 1
 
-rebin_grid = 10  # rebinning factor for the 2D histograms of signals and backgrounds
+rebin_grid = 5  # rebinning factor for the 2D histograms of signals and backgrounds
 
 # rebinning factor for the 2D optimization histograms (closure, error, min_n_events, significance, contamination)
 rebin_optimization = 1
@@ -73,10 +78,13 @@ rebin_optimization = 1
 
 # axes limits for the 1D projection
 if do_region == "JPsiCR":
-    y_max = 3
+    y_max = 50
     y_max_ratio = 3
 elif do_region == "SR":
     y_max = 30
+    y_max_ratio = 10
+elif do_region == "ttZCR":
+    y_max = 10
     y_max_ratio = 10
 
 
@@ -109,7 +117,7 @@ predicted_background_color = ROOT.kBlack
 predicted_background_description = "ABCD prediction"
 
 projection_y_title = "Events (2018, 137 fb^{-1})"
-ratio_y_title = "True / Pred  "
+ratio_y_title = " Pred / True   "
 
 # you can specify custom names for the variables to be displayed in the plots
 nice_names = {
@@ -133,27 +141,27 @@ nice_names = {
 
 base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
-if do_region == "JPsiCR":
-    output_path = "../abcd_results_JPsiCR"
-elif do_region == "SR":
-    output_path = "../abcd_results_SR"
+output_path = f"../abcd/results_{do_region}"
     
 if do_data:
     output_path += "_data"
+else:
+    output_path += "_mc"
 
-
-skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso"
 
 if do_region == "JPsiCR":
-    hist_dir = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_JPsiDimuons"
+    skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
+elif do_region == "ttZCR":
+    skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 elif do_region == "SR":
-    hist_dir = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons"
+    skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+
+hist_dir = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 
 signal_path_pattern = "signals/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
-
 background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
 
-data_path = f"collision_data2018/SingleMuon2018_{skim}_{hist_dir}.root"
+data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_dir}.root"
 
 # signal points for which to run ABCD analysis
 masses = ["0p35", "1", "2", "12", "60"]
@@ -162,11 +170,8 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
 # masses = ["1", "12"]
 # ctaus = ["1e1", "1e2"]
 
-# select which region to use (obsolete, but needed if you already have histograms with region names)
-if do_region == "JPsiCR":
-    region = ""
-elif do_region == "SR":
-    region = "_SR"
+# masses = ["0p35"]
+# ctaus = ["1e3"]
 
 backgrounds = (
     "TTToSemiLeptonic",
