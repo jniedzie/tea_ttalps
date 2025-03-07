@@ -10,22 +10,18 @@ nEvents = -1
 printEveryNevents = 10000
 
 runDefaultHistograms = True
-runCustomTTAlpsHistograms = False
-runTriggerHistograms = False
 runLLPTriggerHistograms = False
 runPileupHistograms = False
 
-# LLPNanoAODHistograms: 
+# LLPNanoAODHistograms:
 #  - muonMatchingParams loose muons 
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
-runLLPNanoAODHistograms = True
-runLLPNanoAOD2DHistograms = False
+runLLPNanoAODHistograms = False
 
 runMuonMatchingHistograms = False
 runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False  # can only be run on signal samples
-runLLPNanoAODVertexHistograms = False
 
 runABCDHistograms = True
 abcdCollection = "BestDimuonVertex"
@@ -87,7 +83,6 @@ histParams2D = ()
 ####  LLPnanoAOD Histograms  #### 
 LLPNanoAOD_defaultHistParams = ()
 LLPNanoAOD_histParams = ()
-LLPNanoAOD_histParams2D = ()
 
 muonVertexCollectionCategories = ["_PatDSA", "_DSA", "_Pat"]
 allMuonVertexCollectionCategories = ["", "_PatDSA", "_DSA", "_Pat"]
@@ -146,6 +141,7 @@ for collectionName in muonVertexCollectionNames:
     (collectionName , "invMass"               , 10000  , 0      , 200    , ""  ),
     (collectionName , "logInvMass"            , 1000   , -1     , 2      , ""  ),
     (collectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
+    (collectionName , "eta"                   , 1000   , -10    , 10     , ""  ),
     (collectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
   )
   for category in muonVertexCollectionCategories:
@@ -179,6 +175,7 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "invMass"               , 10000   , 0      , 200    , ""  ),
       (muonVertexCollectionName , "logInvMass"            , 1000   , -1     , 2      , ""  ),
       (muonVertexCollectionName , "pt"                    , 2000   , 0      , 1000   , ""  ),
+      (muonVertexCollectionName , "eta"                   , 1000   , -10    , 10     , ""  ),
       (muonVertexCollectionName , "chargeProduct"         , 4      , -2     , 2      , ""  ),
       (muonVertexCollectionName , "leadingPt"             , 2000   , 0      , 1000   , ""  ),
       (muonVertexCollectionName , "dxyPVTraj1"            , 1000   , 0      , 1000   , ""  ),
@@ -209,41 +206,6 @@ for collectionName in muonVertexCollectionNames:
       (muonVertexCollectionName , "nDTHitsBarrelOnly"             , 100   , 0      , 100  , ""  ),
       (muonVertexCollectionName , "nDTHits1BarrelOnly"            , 100   , 0      , 100  , ""  ),
       (muonVertexCollectionName , "nDTHits2BarrelOnly"            , 100   , 0      , 100  , ""  ),
-    )
-    LLPNanoAOD_histParams2D += (
-    #  collection + variables                           binsx   xmin  xmax binsy ymin   ymax   name
-      (muonVertexCollectionName+"_vxySigma_vxy",                1000, 0    , 10,   1000, 0    , 1000 , ""  ),
-      (muonVertexCollectionName+"_vxySigma_vxySignificance",    1000, 0    , 50,   1000, 0    , 1000 , ""  ),
-      (muonVertexCollectionName+"_vxySignificance_vxy",         1000, 0    , 1000, 1000, 0    , 1000 , ""  ),
-      (muonVertexCollectionName+"_normChi2_vxy",                1000, 0    , 10,   1000, 0    , 1000 , ""  ),
-      (muonVertexCollectionName+"_absCollinearityAngle_invMass",  500 , 0  , 5   ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_nSegmentsSum_invMass"        ,  50  , 0  , 50  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_chargeProduct_invMass"       ,  4   , -2 , 2   ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_dEta_invMass"                ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_outerDEta_invMass"           ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_dR_invMass"                  ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_outerDR_invMass"             ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_dca_normChi2"                ,  1000, 0  , 20  ,  5000, 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_Lxy_nTrackerLayers1"         ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_Lxy_nTrackerLayers2"         ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_Lxy_maxTrackerLayers"        ,  1000, 0  , 1000,  50  , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_displacedTrackIso03Dimuon1_invMass"             ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_displacedTrackIso03Dimuon2_invMass"             ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_displacedTrackIso04Dimuon1_invMass"             ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_displacedTrackIso04Dimuon2_invMass"             ,  500 , 0  , 10  ,  700 , 0  , 70 , ""  ),
-      (muonVertexCollectionName+"_dEta_displacedTrackIso03Dimuon1"                ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_outerDEta_displacedTrackIso03Dimuon1"           ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_dR_displacedTrackIso03Dimuon1"                  ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_outerDR_displacedTrackIso03Dimuon1"             ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_dEta_absCollinearityAngle"                      ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_outerDEta_absCollinearityAngle"                 ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_dR_absCollinearityAngle"                        ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_outerDR_absCollinearityAngle"                   ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_proxDR_absCollinearityAngle"                   ,  500 , 0  , 10  ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_absCollinearityAngle_displacedTrackIso03Dimuon1",  500 , 0  , 5   ,  500 , 0  , 50 , ""  ),
-      (muonVertexCollectionName+"_absCollinearityAngle_Lxy"                       ,  500 , 0  , 5   , 1000 , 0  ,1000, ""  ),
-      (muonVertexCollectionName+"_absCollinearityAngle_normChi2"                  ,  500 , 0  , 5   , 1000 , 0  ,1000, ""  ),
-      (muonVertexCollectionName+"_absCollinearityAngle_chargeProduct"             ,  500 , 0  , 5   ,   10 , -5 ,  5 , ""  ),
     )
 
 ####  Muon Vertex N-1 Histograms  ####
@@ -291,8 +253,6 @@ for variable_1, (nBins_1, xMin_1, xMax_1) in ABCD_variables.items():
 if runLLPNanoAODHistograms:
   histParams = histParams + LLPNanoAOD_defaultHistParams
   histParams = histParams + LLPNanoAOD_histParams
-if runLLPNanoAOD2DHistograms:
-  histParams2D = histParams2D + LLPNanoAOD_histParams2D
 if runABCDHistograms:
   histParams2D = histParams2D + tuple(ABCD_histParams2D)
   
