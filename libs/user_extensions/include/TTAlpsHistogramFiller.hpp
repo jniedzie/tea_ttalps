@@ -13,25 +13,17 @@ class TTAlpsHistogramFiller {
   TTAlpsHistogramFiller(std::shared_ptr<HistogramsHandler> histogramsHandler_);
   ~TTAlpsHistogramFiller();
 
-  void FillTriggerEfficiencies();
-  void FillTriggerVariables(const std::shared_ptr<Event> event, std::string prefix = "", std::string suffix = "");
-  void FillTriggerVariablesPerTriggerSet(const std::shared_ptr<Event> event, std::string ttbarCategory = "");
-
   void FillLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params);
   void FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params);
 
   void FillDefaultVariables(const std::shared_ptr<Event> event);
-  void FillCustomTTAlpsVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesFromLLPNanoAOD(const std::shared_ptr<Event> event);
-  void FillCustomTTAlps2DVariablesFromLLPNanoAOD(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsGenMuonVertexCollectionsVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
   void FillGenLevelMuonCollectionHistograms(const std::shared_ptr<Event> event);
 
   void FillNormCheck(const std::shared_ptr<Event> event);
-
-  void FillBasicMuonVertexHistograms(const std::shared_ptr<Event> event);
 
   void FillDimuonCutFlows(const std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
 
@@ -60,10 +52,6 @@ class TTAlpsHistogramFiller {
 
   float GetEventWeight(const std::shared_ptr<Event> event);
   float GetObjectWeight(const std::shared_ptr<PhysicsObject> object, std::string collectionName);
-
-  void FillDimuonHistograms(const std::shared_ptr<Event> event);
-  void FillDiumonClosestToZhistgrams(const std::shared_ptr<Event> event);
-  void FillMuonMetHistograms(const std::shared_ptr<Event> event);
 
   void FillDimuonHistograms(const std::shared_ptr<PhysicsObject> muon1, const std::shared_ptr<PhysicsObject> muon2, std::string collectionName, const std::shared_ptr<Event> event, bool genLevel);
   void FillMuonMinDeltaRHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> muonCollection, std::string collectionName);

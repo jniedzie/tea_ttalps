@@ -118,56 +118,6 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
   }
 }
 
-void TTAlpsHistogramFiller::FillTriggerEfficiencies() {
-  TH1D *hist_tmp;
-
-  for (auto &[name, hist] : histogramsHandler->GetHistograms1D()) {
-    if (!EndsWithTriggerName(name)) continue;
-    string nameWithoutTrigger = name.substr(0, name.rfind("_"));
-    string newName = name + "_eff";
-    hist_tmp = (TH1D *)histogramsHandler->GetHistogram1D(name)->Clone(newName.c_str());
-    hist_tmp->Divide(hist_tmp, histogramsHandler->GetHistogram1D(nameWithoutTrigger), 1, 1, "B");
-    histogramsHandler->SetHistogram1D(newName, hist_tmp);
-  }
-}
-
-void TTAlpsHistogramFiller::FillTriggerVariables(const shared_ptr<Event> event, string prefix, string suffix) {
-  if (prefix != "") prefix = prefix + "_";
-  if (suffix != "") suffix = "_" + suffix;
-
-  auto nanoEvent = asNanoEvent(event);
-
-  float weight = nanoEventProcessor->GetGenWeight(nanoEvent);
-
-  histogramsHandler->Fill(prefix + "muonMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Muon"), weight);
-  histogramsHandler->Fill(prefix + "eleMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Electron"), weight);
-  histogramsHandler->Fill(prefix + "jetMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Jet"), weight);
-  histogramsHandler->Fill(prefix + "jetHt" + suffix, eventProcessor->GetHt(event, "Jet"), weight);
-}
-
-void TTAlpsHistogramFiller::FillTriggerVariablesPerTriggerSet(const shared_ptr<Event> event, string ttbarCategory) {
-  auto ttAlpsCuts = make_unique<TTAlpsCuts>();
-
-  bool passesSingleLepton = ttAlpsCuts->PassesSingleLeptonCuts(event);
-  bool passesDilepton = ttAlpsCuts->PassesDileptonCuts(event);
-  bool passesHadron = ttAlpsCuts->PassesHadronCuts(event);
-
-  for (auto &[triggerSetName, triggerSet] : triggerSets) {
-    bool passesTrigger = false;
-
-    for (auto &triggerName : triggerSet) {
-      passesTrigger = event->Get(triggerName);
-      if (passesTrigger) break;
-    }
-    if (!passesTrigger) continue;
-
-    FillTriggerVariables(event, ttbarCategory, triggerSetName);
-    if (passesSingleLepton) FillTriggerVariables(event, ttbarCategory, triggerSetName + "_singleLepton");
-    if (passesDilepton) FillTriggerVariables(event, ttbarCategory, triggerSetName + "_dilepton");
-    if (passesHadron) FillTriggerVariables(event, ttbarCategory, triggerSetName + "_hadron");
-  }
-}
-
 void TTAlpsHistogramFiller::FillNormCheck(const shared_ptr<Event> event) {
   float weight = nanoEventProcessor->GetGenWeight(asNanoEvent(event));
   histogramsHandler->Fill("Event_normCheck", 0.5, weight);
@@ -193,72 +143,6 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, s
     if (pt == maxPt) continue;
     histogramsHandler->Fill(histName, pt, weight * GetObjectWeight(object, params.collection));
   }
-}
-
-void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<Event> event) {
-  float weight = GetEventWeight(event);
-  string collectionName = "LoosePATMuons";
-
-  auto looseMuons = event->GetCollection(collectionName);
-  for (int iMuon1 = 0; iMuon1 < looseMuons->size(); iMuon1++) {
-    auto obj1 = looseMuons->at(iMuon1);
-    auto muon1 = asNanoMuon(obj1);
-    float muon1SF = GetObjectWeight(obj1, collectionName);
-    TLorentzVector muon1vector = muon1->GetFourVector();
-
-    for (int iMuon2 = iMuon1 + 1; iMuon2 < looseMuons->size(); iMuon2++) {
-      auto obj2 = looseMuons->at(iMuon2);
-      auto muon2 = asNanoMuon(obj2);
-      float muon2SF = GetObjectWeight(obj2, collectionName);
-      TLorentzVector muon2vector = muon2->GetFourVector();
-      histogramsHandler->Fill("LoosePATMuons_dimuonMinv", (muon1vector + muon2vector).M(), weight * muon1SF * muon2SF);
-    }
-  }
-}
-
-void TTAlpsHistogramFiller::FillDiumonClosestToZhistgrams(const shared_ptr<Event> event) {
-  if (event->GetCollection("LoosePATMuons")->size() < 2) {
-    warn() << "Not enough muons in event to fill dimuon histograms" << endl;
-    return;
-  }
-
-  string collectionName = "LoosePATMuons";
-
-  float weight = GetEventWeight(event);
-  auto [muon1, muon2] = nanoEventProcessor->GetMuonPairClosestToZ(asNanoEvent(event), collectionName);
-
-  TLorentzVector muon1fourVector = muon1->GetFourVector();
-  TLorentzVector muon2fourVector = muon2->GetFourVector();
-
-  float massClosestToZ = (muon1fourVector + muon2fourVector).M();
-  float deltaRclosestToZ = muon1fourVector.DeltaR(muon2fourVector);
-  float deltaEtaclosestToZ = fabs(muon1fourVector.Eta() - muon2fourVector.Eta());
-  float deltaPhiclosestToZ = muon1fourVector.DeltaPhi(muon2fourVector);
-  float muon1SF = GetObjectWeight(muon1->GetPhysicsObject(), collectionName);
-  float muon2SF = GetObjectWeight(muon2->GetPhysicsObject(), collectionName);
-
-  histogramsHandler->Fill(collectionName + "_dimuonMinvClosestToZ", massClosestToZ, weight * muon1SF * muon2SF);
-  histogramsHandler->Fill(collectionName + "_dimuonDeltaRclosestToZ", deltaRclosestToZ, weight * muon1SF * muon2SF);
-  histogramsHandler->Fill(collectionName + "_dimuonDeltaEtaclosestToZ", deltaEtaclosestToZ, weight * muon1SF * muon2SF);
-  histogramsHandler->Fill(collectionName + "_dimuonDeltaPhiclosestToZ", deltaPhiclosestToZ, weight * muon1SF * muon2SF);
-}
-
-void TTAlpsHistogramFiller::FillMuonMetHistograms(const shared_ptr<Event> event) {
-  float weight = GetEventWeight(event);
-
-  string collectionName = "TightMuons";
-
-  auto leadingMuonObj = eventProcessor->GetMaxPtObject(event, collectionName);
-  if (!leadingMuonObj) return;
-
-  auto leadingTightMuon = asNanoMuon(leadingMuonObj);
-  float leadingMuonSF = GetObjectWeight(leadingMuonObj, collectionName);
-
-  TLorentzVector leadingMuonVector = leadingTightMuon->GetFourVector();
-  TLorentzVector metVector = asNanoEvent(event)->GetMetFourVector();
-
-  histogramsHandler->Fill(collectionName + "_deltaPhiMuonMET", metVector.DeltaPhi(leadingMuonVector), weight * leadingMuonSF);
-  histogramsHandler->Fill(collectionName + "_minvMuonMET", (leadingMuonVector + metVector).M(), weight * leadingMuonSF);
 }
 
 void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<Collection<shared_ptr<PhysicsObject>>> objectCollection,
@@ -464,38 +348,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   histogramsHandler->Fill("Event_n" + vertexName + "_DSA", nDSA, weight);
 }
 
-void TTAlpsHistogramFiller::FillBasicMuonVertexHistograms(const shared_ptr<Event> event) {
-  float weight = GetEventWeight(event);
-
-  auto vertexCollection = event->GetCollection("BestLooseMuonsVertex");
-
-  for (auto vertex : *vertexCollection) {
-    auto dimuonVertex = asNanoDimuonVertex(vertex, event);
-    shared_ptr<PhysicsObject> muon1 = dimuonVertex->Muon1();
-    shared_ptr<PhysicsObject> muon2 = dimuonVertex->Muon2();
-    float muonWeight1 = GetObjectWeight(muon1, "LooseMuons");
-    float muonWeight2 = GetObjectWeight(muon2, "LooseMuons");
-
-    string category = dimuonVertex->GetVertexCategory();
-
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_normChi2", dimuonVertex->Get("normChi2"),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_vxy", dimuonVertex->GetLxyFromPV(),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_vxySigma", dimuonVertex->Get("vxySigma"),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_vxySignificance",
-                            float(dimuonVertex->GetLxyFromPV()) / float(dimuonVertex->Get("vxySigma")), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_dca", dimuonVertex->Get("dca"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_collinearityAngle", dimuonVertex->GetCollinearityAngle(),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_invMass", dimuonVertex->GetInvariantMass(),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill("GoodBestLooseMuonsVertex" + category + "_logInvMass", log10(dimuonVertex->GetInvariantMass()),
-                            weight * muonWeight1 * muonWeight2);
-  }
-}
-
 void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> event, string vertexName) {
   auto vertexCollection = event->GetCollection(vertexName);
   FillMuonVertexHistograms(event, vertexCollection, vertexName);
@@ -557,114 +409,6 @@ void TTAlpsHistogramFiller::FillMuonMinDeltaRHistograms(const shared_ptr<Event> 
   FillMuonMinDeltaRHistograms(event, muonCollection, collectionName);
 }
 
-void TTAlpsHistogramFiller::FillMuonVertexCorrelationHistograms(const shared_ptr<Event> event, string vertexName) {
-  auto vertexCollection = event->GetCollection(vertexName);
-  float weight = GetEventWeight(event);
-  // float weight = 1.;
-
-  for (auto vertex : *vertexCollection) {
-    auto dimuonVertex = asNanoDimuonVertex(vertex, event);
-    float muonWeight1 = GetObjectWeight(dimuonVertex->Muon1(), "LooseMuons");
-    float muonWeight2 = GetObjectWeight(dimuonVertex->Muon2(), "LooseMuons");
-    // float muonWeight1 = 1.;
-    // float muonWeight2 = 1.;
-
-    float vxySignificance = float(dimuonVertex->Get("vxy")) / float(dimuonVertex->Get("vxySigma"));
-    float vxyzSignificance = float(dimuonVertex->Get("vxyz")) / float(dimuonVertex->Get("vxyzSigma"));
-
-    string category = dimuonVertex->GetVertexCategory();
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_vxySigma_vxy", dimuonVertex->Get("vxySigma"), dimuonVertex->Get("vxy"),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_vxySigma_vxySignificance", dimuonVertex->Get("vxySigma"), vxySignificance,
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_vxySignificance_vxy", vxySignificance, dimuonVertex->Get("vxy"),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_normChi2_vxy", dimuonVertex->Get("normChi2"), dimuonVertex->Get("vxy"),
-                            weight * muonWeight1 * muonWeight2);
-
-    float nTrackerLayers1 = 0;
-    float nTrackerLayers2 = 0;
-    if (category == "Pat") {
-      nTrackerLayers1 = dimuonVertex->Muon1()->Get("trkNumTrkLayers");
-      nTrackerLayers2 = dimuonVertex->Muon2()->Get("trkNumTrkLayers");
-    }
-    if (category == "PatDSA") nTrackerLayers1 = dimuonVertex->Muon1()->Get("trkNumTrkLayers");
-    histogramsHandler->Fill(vertexName + "_" + category + "_Lxy_nTrackerLayers1", dimuonVertex->GetLxyFromPV(), nTrackerLayers1,
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_Lxy_nTrackerLayers2", dimuonVertex->GetLxyFromPV(), nTrackerLayers2,
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_Lxy_maxTrackerLayers", dimuonVertex->GetLxyFromPV(),
-                            max(nTrackerLayers1, nTrackerLayers2), weight * muonWeight1 * muonWeight2);
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_absCollinearityAngle_invMass", abs(dimuonVertex->GetCollinearityAngle()),
-                            dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_chargeProduct_invMass", dimuonVertex->GetDimuonChargeProduct(),
-                            dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_dEta_invMass",
-                            abs((float)dimuonVertex->Muon1()->Get("eta") - (float)dimuonVertex->Muon2()->Get("eta")),
-                            dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_outerDEta_invMass",
-                            abs((float)dimuonVertex->Muon1()->Get("outerEta") - (float)dimuonVertex->Muon2()->Get("outerEta")),
-                            dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_dR_invMass", dimuonVertex->Get("dR"), dimuonVertex->GetInvariantMass(),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_outerDR_invMass", dimuonVertex->GetOuterDeltaR(),
-                            dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_displacedTrackIso03Dimuon1_invMass",
-                            dimuonVertex->Get("displacedTrackIso03Dimuon1"), dimuonVertex->GetInvariantMass(),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_displacedTrackIso03Dimuon2_invMass",
-                            dimuonVertex->Get("displacedTrackIso03Dimuon2"), dimuonVertex->GetInvariantMass(),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_displacedTrackIso04Dimuon1_invMass",
-                            dimuonVertex->Get("displacedTrackIso04Dimuon1"), dimuonVertex->GetInvariantMass(),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_displacedTrackIso04Dimuon2_invMass",
-                            dimuonVertex->Get("displacedTrackIso04Dimuon2"), dimuonVertex->GetInvariantMass(),
-                            weight * muonWeight1 * muonWeight2);
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_dEta_displacedTrackIso03Dimuon1",
-                            abs((float)dimuonVertex->Muon1()->Get("eta") - (float)dimuonVertex->Muon2()->Get("eta")),
-                            dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_outerDEta_displacedTrackIso03Dimuon1",
-                            abs((float)dimuonVertex->Muon1()->Get("outerEta") - (float)dimuonVertex->Muon2()->Get("outerEta")),
-                            dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_dR_displacedTrackIso03Dimuon1", dimuonVertex->Get("dR"),
-                            dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_outerDR_displacedTrackIso03Dimuon1", dimuonVertex->GetOuterDeltaR(),
-                            dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight * muonWeight1 * muonWeight2);
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_dEta_absCollinearityAngle",
-                            abs((float)dimuonVertex->Muon1()->Get("eta") - (float)dimuonVertex->Muon2()->Get("eta")),
-                            abs(dimuonVertex->GetCollinearityAngle()), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_outerDEta_absCollinearityAngle",
-                            abs((float)dimuonVertex->Muon1()->Get("outerEta") - (float)dimuonVertex->Muon2()->Get("outerEta")),
-                            abs(dimuonVertex->GetCollinearityAngle()), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_dR_absCollinearityAngle", dimuonVertex->Get("dR"),
-                            abs(dimuonVertex->GetCollinearityAngle()), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_outerDR_absCollinearityAngle", dimuonVertex->GetOuterDeltaR(),
-                            abs(dimuonVertex->GetCollinearityAngle()), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_proxDR_absCollinearityAngle", dimuonVertex->Get("dRprox"),
-                            abs(dimuonVertex->GetCollinearityAngle()), weight * muonWeight1 * muonWeight2);
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_absCollinearityAngle_displacedTrackIso03Dimuon1",
-                            abs(dimuonVertex->GetCollinearityAngle()), dimuonVertex->Get("displacedTrackIso03Dimuon1"),
-                            weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_absCollinearityAngle_Lxy", abs(dimuonVertex->GetCollinearityAngle()),
-                            dimuonVertex->GetLxyFromPV(), weight * muonWeight1 * muonWeight2);
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_absCollinearityAngle_normChi2", abs(dimuonVertex->GetCollinearityAngle()),
-                            dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
-    histogramsHandler->Fill(vertexName + "_" + category + "_absCollinearityAngle_chargeProduct", abs(dimuonVertex->GetCollinearityAngle()),
-                            dimuonVertex->GetDimuonChargeProduct(), weight * muonWeight1 * muonWeight2);
-
-    histogramsHandler->Fill(vertexName + "_" + category + "_dca_normChi2", dimuonVertex->Get("dca"), dimuonVertex->Get("normChi2"),
-                            weight * muonWeight1 * muonWeight2);
-  }
-}
-
 void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<PhysicsObject> muon1, const shared_ptr<PhysicsObject> muon2,
                                                  string collectionName, const shared_ptr<Event> event, bool genLevel) {
   float weight = GetEventWeight(event);
@@ -723,21 +467,6 @@ void TTAlpsHistogramFiller::FillDimuonHistograms(const shared_ptr<PhysicsObject>
     histogramsHandler->Fill(collectionName + "_absPtLxyDPhi1", abs(ptLxyDPhi1), weight);
     histogramsHandler->Fill(collectionName + "_absPtLxyDPhi2", abs(ptLxyDPhi2), weight);
   }
-}
-
-/// Custom TTAlps Histograms - old reminent naming should probably be changed
-
-void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const shared_ptr<Event> event) {
-  for (auto &[histName, params] : ttalpsHistVariables) {
-    if (params.variable == "subleadingPt") {
-      FillAllSubLeadingPt(event, histName, params);
-    } else if (params.variable == "leadingPt") {
-      FillLeadingPt(event, histName, params);
-    }
-  }
-  FillDimuonHistograms(event);
-  FillDiumonClosestToZhistgrams(event);
-  FillMuonMetHistograms(event);
 }
 
 /// LLPnanoAOD Loose Muons and Loose Muon Vertex Histograms
@@ -802,14 +531,6 @@ void TTAlpsHistogramFiller::FillLLPnanoAODLooseMuonsNminus1VertexHistograms(cons
         nminus1HistogramsName = collectionName + "Nminus1_PatDSA";
       FillDimuonVertexNminus1HistogramForCut(nminus1HistogramsName, cut, dimuonVertex, weight * muon1Weight * muon2Weight);
     }
-  }
-}
-
-/// LLPnanoAOD Muon Vertex 2D Histograms
-
-void TTAlpsHistogramFiller::FillCustomTTAlps2DVariablesFromLLPNanoAOD(const shared_ptr<Event> event) {
-  for (auto collectionName : muonVertexCollectionNames) {
-    FillMuonVertexCorrelationHistograms(event, collectionName);
   }
 }
 
