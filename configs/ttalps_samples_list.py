@@ -147,9 +147,9 @@ dasSamples2018 = {key: value for d in (dasBackgrounds2018, dasSignals2018, dasDa
 
 ##################     2022    ##################
 TT_dasBackgrounds2022preEE = {
-  # "backgrounds2022preEE/TTtoLNu2Q" : "data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022PreEE.txt",
-  # "backgrounds2022preEE/TTto4Q" : "/TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/TTto2L2Nu" : "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/TTtoLNu2Q" : "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022PreEE.txt",
+  "backgrounds2022preEE/TTto4Q" : "/TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/TTto2L2Nu" : "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
 
   "backgrounds2022preEE/TTLL_MLL-4to50" : "/TTLL_MLL-4to50_TuneCP5_13p6TeV_amcatnlo-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v2-00000000000000000000000000000000/USER",
   "backgrounds2022preEE/TTLL_MLL-50" : "/TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v2-00000000000000000000000000000000/USER",
@@ -169,22 +169,22 @@ DY_dasBackgrounds2022preEE = {
   "backgrounds2022preEE/DYJetsToLL_M-50" : "/DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v2-00000000000000000000000000000000/USER",
 } 
 V_dasBackgrounds2022preEE = {
-  # "backgrounds2022preEE/WtoLNu-2Jets" : "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v3-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/WtoLNu-2Jets" : "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v3-00000000000000000000000000000000/USER",
   "backgrounds2022preEE/WtoLNu-4Jets" : "/WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v2-00000000000000000000000000000000/USER",
 } 
 QCD_dasBackgrounds2022preEE = {
   "backgrounds2022preEE/QCD_PT-15To20" : "/QCD_PT-15to20_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
   "backgrounds2022preEE/QCD_PT-20To30" : "/QCD_PT-20to30_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-30To50" : "/QCD_PT-30to50_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-50To80" : "/QCD_PT-50to80_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v2-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-80To120" : "/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-120To170" : "/QCD_PT-120to170_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-170To300" : "/QCD_PT-170to300_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-300To470" : "/QCD_PT-300to470_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-470To600" : "/QCD_PT-470to600_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-600To800" : "/QCD_PT-600to800_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-800To1000" : "/QCD_PT-800to1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
-  # "backgrounds2022preEE/QCD_PT-1000" : "/QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v3-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-30To50" : "/QCD_PT-30to50_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-50To80" : "/QCD_PT-50to80_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v2-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-80To120" : "/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-120To170" : "/QCD_PT-120to170_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-170To300" : "/QCD_PT-170to300_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-300To470" : "/QCD_PT-300to470_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-470To600" : "/QCD_PT-470to600_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-600To800" : "/QCD_PT-600to800_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-800To1000" : "/QCD_PT-800to1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
+  "backgrounds2022preEE/QCD_PT-1000" : "/QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v3-00000000000000000000000000000000/USER",
 }
 dasBackgrounds2022preEE = {key: value for d in (TT_dasBackgrounds2022preEE, ST_dasBackgrounds2022preEE, DY_dasBackgrounds2022preEE, V_dasBackgrounds2022preEE, QCD_dasBackgrounds2022preEE) for key, value in d.items()}
 
