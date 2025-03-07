@@ -11,11 +11,11 @@ cross_sections = get_cross_sections(year)
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-# do_region = "SR"
-do_region = "JPsiCR"
+do_region = "SR"
+# do_region = "JPsiCR"
 # do_region = "ttZCR"
 
-do_data = True
+do_data = False
 
 if do_region == "SR":
     do_data = False
@@ -26,8 +26,9 @@ variable_2 = "log3Dangle"
 
 # your chosen ABCD crossing point that will be used to make 1D projections
 if do_region == "JPsiCR":
-    # abcd_point = (-0.94, 0.86)
-    abcd_point = (-0.9, 0.0)
+    # abcd_point = (-0.94, 0.94) # from MC optimization
+    abcd_point = (-0.74, 0.58) # from data optimization
+    # abcd_point = (-0.9, 0.0) # from SR MC optimization
 elif do_region == "SR":
     abcd_point = (-0.9, 0.0)
 elif do_region == "ttZCR":
@@ -39,11 +40,11 @@ max_closure = 0.10  # max allowed closure
 
 
 if do_region == "JPsiCR":
-    min_n_events = 1  # min number of events in any of the CRs
+    min_n_events = 20  # min number of events in any of the CRs
     max_signal_contamination = 1.0  # max allowed signal contamination in any of the CRs
 elif do_region == "SR":
     min_n_events = 10
-    max_signal_contamination = 0.10
+    max_signal_contamination = 0.20
 elif do_region == "ttZCR":
     min_n_events = 10
     max_signal_contamination = 1.0
@@ -60,12 +61,12 @@ custom_projections_binning = [0, 0.5, 0.9, 1.5, 2.0]
 
 # you can also use smart rebinning for the 1D projection, which will keep the relative error below a certain threshold
 smart_rebin = False
-smart_rebin_max_error = 0.30  # max allowed ralative error for smaert rebinning
+smart_rebin_max_error = 0.30  # max allowed ralative error for smart rebinning
 
 # or you can use standard rebinning for the 1D projection (the number is the rebin factor)
 standard_rebin = 1
 
-rebin_grid = 1  # rebinning factor for the 2D histograms of signals and backgrounds
+rebin_grid = 5  # rebinning factor for the 2D histograms of signals and backgrounds
 
 # rebinning factor for the 2D optimization histograms (closure, error, min_n_events, significance, contamination)
 rebin_optimization = 1
@@ -77,7 +78,7 @@ rebin_optimization = 1
 
 # axes limits for the 1D projection
 if do_region == "JPsiCR":
-    y_max = 3
+    y_max = 50
     y_max_ratio = 3
 elif do_region == "SR":
     y_max = 30
@@ -116,7 +117,7 @@ predicted_background_color = ROOT.kBlack
 predicted_background_description = "ABCD prediction"
 
 projection_y_title = "Events (2018, 137 fb^{-1})"
-ratio_y_title = "True / Pred  "
+ratio_y_title = " Pred / True   "
 
 # you can specify custom names for the variables to be displayed in the plots
 nice_names = {
@@ -168,6 +169,9 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
 
 # masses = ["1", "12"]
 # ctaus = ["1e1", "1e2"]
+
+# masses = ["0p35"]
+# ctaus = ["1e3"]
 
 backgrounds = (
     "TTToSemiLeptonic",
