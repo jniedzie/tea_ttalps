@@ -90,9 +90,9 @@ int main(int argc, char **argv) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
       passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager);
-      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "Pat");
-      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "PatDSA");
-      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "DSA");
+      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "Pat");
+      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "PatDSA");
+      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "DSA");
     }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
