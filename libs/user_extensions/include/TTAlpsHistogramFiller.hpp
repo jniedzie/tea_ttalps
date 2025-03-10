@@ -39,7 +39,6 @@ class TTAlpsHistogramFiller {
 
   std::map<std::string, std::vector<std::string>> triggerSets;
   std::map<std::string, HistogramParams> defaultHistVariables;
-  std::map<std::string, HistogramParams> ttalpsHistVariables;
 
   std::map<std::string, float> muonMatchingParams;
 

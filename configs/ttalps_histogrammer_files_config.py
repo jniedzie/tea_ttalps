@@ -23,6 +23,7 @@ samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
 # samples = QCD_dasBackgrounds2018.keys()
 # samples = TT_dasBackgrounds2018.keys()
+# samples = dasSignals2018.keys()
 
 base_path = "/data/dust/user/{}/ttalps_cms"
 
