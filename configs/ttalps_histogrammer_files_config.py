@@ -11,8 +11,8 @@ input_username = "jniedzie"
 
 # SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
@@ -21,9 +21,11 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
 samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
+# samples = dasBackgrounds2018.keys()
 # samples = QCD_dasBackgrounds2018.keys()
 # samples = TT_dasBackgrounds2018.keys()
 # samples = dasSignals2018.keys()
+# samples = dasSignals2018_2GeV.keys()
 
 base_path = "/data/dust/user/{}/ttalps_cms"
 

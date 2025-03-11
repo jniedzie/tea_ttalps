@@ -10,8 +10,8 @@ nEvents = -1
 printEveryNevents = 10000
 
 runDefaultHistograms = True
-runLLPTriggerHistograms = True
-runPileupHistograms = True
+runLLPTriggerHistograms = False
+runPileupHistograms = False
 
 # LLPNanoAODHistograms: 
 #  - muonMatchingParams loose muons 
@@ -19,17 +19,17 @@ runPileupHistograms = True
 #  - extra muon vertex collections
 runLLPNanoAODHistograms = True
 
+runNminus1Histograms = False
+
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
-runGenMuonHistograms = True  # can only be run on signal samples
-runGenMuonVertexCollectionHistograms = True  # can only be run on signal samples
+runGenMuonHistograms = False  # can only be run on signal samples
+runGenMuonVertexCollectionHistograms = False  # can only be run on signal samples
 
 runABCDHistograms = True
-abcdCollection = "BestPFIsoDimuonVertex"
-# abcdCollection = "BestDimuonVertex"
 
 # dimuonSelection is the name of the selection in ttalps_object_cuts
-dimuonSelection = "SRDimuonVertex"
-# dimuonSelection = "JPsiDimuonVertex"
+# dimuonSelection = "SRDimuonVertex"
+dimuonSelection = "JPsiDimuonVertex"
 # dimuonSelection = "ZDimuonVertex"
 
 weightsBranchName = "genWeight"
@@ -82,7 +82,8 @@ muonVertexCollections = {
   "BestDimuonVertex"      : muonVertexBaselineSelection + ["BestDimuonVertex"],
 }
 
-muonVertexNminus1Collections = list(muonVertexCollections.keys())
+abcdCollections = tuple(muonVertexCollections.keys())
+muonVertexNminus1Collections = tuple(muonVertexCollections.keys())
 muonVertexCollectionNames = list(muonVertexCollections.keys())
 
 for matchingMethod in muonMatchingParams:

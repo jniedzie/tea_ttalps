@@ -33,6 +33,29 @@ class TTAlpsHistogrammerConfigHelper:
         ("Event", "PV_x", 200, -100, 100, ""),
         ("Event", "PV_y", 200, -100, 100, ""),
         ("Event", "PV_z", 200, -100, 100, ""),
+        
+        ("Event", "nGoodJets", 20, 0, 20, ""),
+        ("GoodJets", "pt", 1000, 0, 1000, ""),
+        ("GoodJets", "eta", 300, -3, 3, ""),
+        ("GoodJets", "phi", 300, -3, 3, ""),
+        ("GoodJets", "mass", 1000, 0, 1000, ""),
+        
+        ("Event", "nGoodMediumBtaggedJets", 20, 0, 20, ""),
+        ("GoodMediumBtaggedJets", "pt", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "eta", 300, -3, 3, ""),
+        ("GoodMediumBtaggedJets", "phi", 300, -3, 3, ""),
+        ("GoodMediumBtaggedJets", "mass", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "btagDeepFlavB", 1000, 0, 1, ""),
+        
+        ("Event", "nLooseMuonsSegmentMatch", 50, 0, 50, ""),
+        ("LooseMuonsSegmentMatch", "pt", 2000, 0, 1000, ""),
+        ("LooseMuonsSegmentMatch", "eta", 300, -3, 3, ""),
+        ("LooseMuonsSegmentMatch", "phi", 300, -3, 3, ""),
+        
+        ("Event", "nTightMuons", 50, 0, 50, ""),
+        ("TightMuons", "pt", 2000, 0, 1000, ""),
+        ("TightMuons", "eta", 300, -3, 3, ""),
+        ("TightMuons", "phi", 300, -3, 3, ""),
     )
 
   def get_basic_params(self):
@@ -452,11 +475,12 @@ class TTAlpsHistogrammerConfigHelper:
 
     params = []
 
-    for variable_1, (nBins_1, xMin_1, xMax_1) in ABCD_variables.items():
-      for variable_2, (nBins_2, xMin_2, xMax_2) in ABCD_variables.items():
-        if variable_1 == variable_2:
-          continue
-        params.append((f"{variable_2}_vs_{variable_1}", nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+    for collection in self.muonVertexCollections:
+      for variable_1, (nBins_1, xMin_1, xMax_1) in ABCD_variables.items():
+        for variable_2, (nBins_2, xMin_2, xMax_2) in ABCD_variables.items():
+          if variable_1 == variable_2:
+            continue
+          params.append((f"{collection}_{variable_2}_vs_{variable_1}", nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
     
     return tuple(params)
 

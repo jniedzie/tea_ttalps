@@ -21,16 +21,22 @@ if do_region == "SR":
     do_data = False
 
 
+# collection = "GoodPFIsoDimuonVertex"
+collection = "BestPFIsoDimuonVertex"
+# collection = "BestDimuonVertex"
+
 variable_1 = "logLxySignificance"
 variable_2 = "log3Dangle"
 
 # your chosen ABCD crossing point that will be used to make 1D projections
 if do_region == "JPsiCR":
-    # abcd_point = (-0.94, 0.94) # from MC optimization
-    abcd_point = (-0.74, 0.58) # from data optimization
-    # abcd_point = (-0.9, 0.0) # from SR MC optimization
+    # abcd_point = (-0.94, 0.94) # from J/Psi MC optimization
+    abcd_point = (-0.74, 0.58) # from J/Psi data optimization
+    # abcd_point = (-0.90, 0.38) # from SR MC optimization
 elif do_region == "SR":
-    abcd_point = (-0.9, 0.0)
+    # abcd_point = (-0.94, 0.94) # from J/Psi MC optimization
+    abcd_point = (-0.74, 0.58) # from J/Psi data optimization
+    # abcd_point = (-0.90, 0.38) # from SR MC optimization
 elif do_region == "ttZCR":
     abcd_point = (-0.9, 0.0)
 
@@ -141,8 +147,8 @@ nice_names = {
 
 base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
-output_path = f"../abcd/results_{do_region}"
-    
+output_path = f"../abcd/results_{do_region}_{collection}"
+
 if do_data:
     output_path += "_data"
 else:
