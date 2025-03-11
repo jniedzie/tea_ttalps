@@ -10,8 +10,8 @@ output_username = os.environ["USER"]
 
 # SR (+J/Psi CR) and tt̄ CR with no isolation requirement on the loose muons
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
@@ -28,6 +28,7 @@ sample_paths = dasSamples2018.keys()
 # sample_paths = dasData2018.keys()
 # sample_paths = QCD_dasBackgrounds2018.keys()
 # sample_paths = TT_dasBackgrounds2018.keys()
+# sample_paths = dasSignals2018_2GeV.keys()
 
 
 def extract_year(s):

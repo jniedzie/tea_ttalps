@@ -22,6 +22,7 @@ class TTAlpsHistogramFiller {
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
   void FillGenLevelMuonCollectionHistograms(const std::shared_ptr<Event> event);
+  void FillLooseMuonsFromALPsNminus1Histograms(const std::shared_ptr<Event> event);
 
   void FillNormCheck(const std::shared_ptr<Event> event);
 
@@ -29,7 +30,7 @@ class TTAlpsHistogramFiller {
 
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
-  void FillABCDHistograms(const std::shared_ptr<Event> event, std::string abcdCollection);
+  void FillABCDHistograms(const std::shared_ptr<Event> event, std::vector<std::string> abcdCollections);
 
  private:
 
@@ -59,7 +60,7 @@ class TTAlpsHistogramFiller {
   // LLPnanoAOD histograms
   void FillLLPnanoAODLooseMuonsHistograms(const std::shared_ptr<Event> event);
   void FillLLPnanoAODLooseMuonsVertexHistograms(const std::shared_ptr<Event> event);
-  void FillLLPnanoAODLooseMuonsNminus1VertexHistograms(const std::shared_ptr<Event> event);
+  void FillLLPnanoAODLooseMuonsNminus1VertexHistograms(const std::shared_ptr<Event> event);  // TODO: this is never called...
   void FillLooseMuonsHistograms(const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> objectCollection, std::string collectionName, float weight);
   void FillLooseMuonsHistograms(const std::shared_ptr<Event> event, std::string collectionName);
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Collection<std::shared_ptr<PhysicsObject> >> vertexCollection, std::string vertexName);
@@ -78,7 +79,6 @@ class TTAlpsHistogramFiller {
   void FillGenMuonsFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillGenMuonsNotFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsFromALPsHistograms(const std::shared_ptr<Event> event);
-  void FillLooseMuonsFromALPsNminus1Histograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsNotFromALPsHistograms(const std::shared_ptr<Event> event);
   void FillLooseMuonsFromWsHistograms(const std::shared_ptr<Event> event);
 
