@@ -11,49 +11,58 @@ cross_sections = get_cross_sections(year)
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR"
-# do_region = "JPsiCR"
+# do_region = "SR"
+do_region = "JPsiCR"
 # do_region = "ttZCR"
 
-do_data = False
+do_data = True
 
 if do_region == "SR":
-    do_data = False
+  do_data = False
 
 
 # collection = "GoodPFIsoDimuonVertex"
-collection = "BestPFIsoDimuonVertex"
-# collection = "BestDimuonVertex"
+# collection = "BestPFIsoDimuonVertex"
+collection = "BestDimuonVertex"
 
 variable_1 = "logLxySignificance"
 variable_2 = "log3Dangle"
 
-# your chosen ABCD crossing point that will be used to make 1D projections
-if do_region == "JPsiCR":
-    # abcd_point = (-0.94, 0.94) # from J/Psi MC optimization
-    abcd_point = (-0.74, 0.58) # from J/Psi data optimization
-    # abcd_point = (-0.90, 0.38) # from SR MC optimization
-elif do_region == "SR":
-    # abcd_point = (-0.94, 0.94) # from J/Psi MC optimization
-    abcd_point = (-0.74, 0.58) # from J/Psi data optimization
-    # abcd_point = (-0.90, 0.38) # from SR MC optimization
-elif do_region == "ttZCR":
-    abcd_point = (-0.9, 0.0)
+optimal_points = {
+    # optimizing on significance
+    "JPsi_noIso_mc": (-0.78, -0.06),
+    "JPsi_noIso_data": (-0.54, 0.42),  # all identical
+    "SR_noIso_mc": (0.46, -1.94),  # all identical
+
+    "JPsi_iso_mc": (-1.06, 0.22),
+    "JPsi_iso_data": (-1.18, 0.46),
+    "SR_iso_mc": (-0.34, 0.38),
+
+    # optimizing on error (same results on closure)
+    "JPsi_noIso_mc_optimalError": (-1.22, 0.06),
+    "JPsi_noIso_data_optimalError": (-1.38, -1.26),
+}
+
+abcd_point = optimal_points["JPsi_noIso_data_optimalError"]
+
+# optimization_param = "significance"
+# optimization_param = "error"
+optimization_param = "closure"
 
 # optimization parameters
 max_error = 1.0  # max allowed error expressed in number of sigmas
-max_closure = 0.10  # max allowed closure
+max_closure = 0.20  # max allowed closure
 
 
 if do_region == "JPsiCR":
-    min_n_events = 20  # min number of events in any of the CRs
-    max_signal_contamination = 1.0  # max allowed signal contamination in any of the CRs
+  min_n_events = 10  # min number of events in any of the CRs
+  max_signal_contamination = 1.0  # max allowed signal contamination in any of the CRs
 elif do_region == "SR":
-    min_n_events = 10
-    max_signal_contamination = 0.20
+  min_n_events = 10
+  max_signal_contamination = 0.20
 elif do_region == "ttZCR":
-    min_n_events = 10
-    max_signal_contamination = 1.0
+  min_n_events = 10
+  max_signal_contamination = 1.0
 
 
 # ------------------------------------------
@@ -84,14 +93,14 @@ rebin_optimization = 1
 
 # axes limits for the 1D projection
 if do_region == "JPsiCR":
-    y_max = 50
-    y_max_ratio = 3
+  y_max = 50
+  y_max_ratio = 3
 elif do_region == "SR":
-    y_max = 30
-    y_max_ratio = 10
+  y_max = 30
+  y_max_ratio = 10
 elif do_region == "ttZCR":
-    y_max = 10
-    y_max_ratio = 10
+  y_max = 10
+  y_max_ratio = 10
 
 
 # you can specify colors for the signals in the projection (otherwise they will default to red)
@@ -150,17 +159,17 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 output_path = f"../abcd/results_{do_region}_{collection}"
 
 if do_data:
-    output_path += "_data"
+  output_path += "_data"
 else:
-    output_path += "_mc"
+  output_path += "_mc"
 
 
 if do_region == "JPsiCR":
-    skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
+  skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 elif do_region == "ttZCR":
-    skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+  skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 elif do_region == "SR":
-    skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+  skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
 
 hist_dir = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 
@@ -170,8 +179,11 @@ background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
 data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_dir}.root"
 
 # signal points for which to run ABCD analysis
-masses = ["0p35", "1", "2", "12", "60"]
-ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
+# masses = ["0p35", "1", "2", "12", "60"]
+# ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
+
+masses = ["0p35", "1", "2"]
+ctaus = ["1e0", "1e1", "1e2", "1e3"]
 
 # masses = ["1", "12"]
 # ctaus = ["1e1", "1e2"]
@@ -220,14 +232,13 @@ backgrounds = (
 
 background_params = []
 for b in backgrounds:
-    for k, v in cross_sections.items():
-        if b in k:
-            background_params.append((b, v))
-            break
+  for k, v in cross_sections.items():
+    if b in k:
+      background_params.append((b, v))
+      break
 
 z_params = {
     "closure": ("|True - Pred|/True", 0, 1.0, False),
     "error": ("|True - Pred|/#sqrt{#Delta Pred^{2} + #Delta True^{2}}", 0, 5, False),
     "min_n_events": ("min(A, B, C, D)", 0, 100, True)
 }
-
