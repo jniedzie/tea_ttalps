@@ -34,7 +34,7 @@ lumi_label_value = luminosity
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
 show_ratio_plots = True
-ratio_limits = (0.5, 1.5)
+ratio_limits = (0.0, 3.0)
 
 legend_max_x = 0.82
 legend_max_y = 0.89
@@ -89,7 +89,7 @@ if year == "2018":  # can change this when central samples are done
 
 custom_stacks_order = configHelper.get_custom_stacks_order(samples)
 
-background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
+background_uncertainty_style = 3244  # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
 background_uncertainty_alpha = 0.3
 
@@ -147,21 +147,21 @@ histograms = (
   Histogram("TightMuons_minvMuonMET"              , "", False,  True  , default_norm              , 40 , 0     , 1000  , 1e-4  , 1e5   , "tight muon m_{MET, l} [GeV]"                    , "# events (2018)"   ),
   
   # ----------------------------------------------------------------------------
-  # Loose PAT muons
+  # Loose muons
   # ----------------------------------------------------------------------------
-  Histogram("LoosePATMuons_pt"                    , "", False,  True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "loose #mu p_{T} [GeV]"                          , "# events (2018)"   ),
-  Histogram("LoosePATMuons_leadingPt"             , "", False,  True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "leading loose #mu p_{T} [GeV]"                  , "# events (2018)"   ),
-  Histogram("LoosePATMuons_subleadingPt"          , "", False,  True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "all subleading loose #mu p_{T} [GeV]"           , "# events (2018)"   ),
-  Histogram("LoosePATMuons_eta"                   , "", False,  True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e6   , "loose #mu #eta"                                 , "# events (2018)"   ),
-  Histogram("LoosePATMuons_dxy"                   , "", False,  True  , default_norm              , 20 , -200  , 200   , 1e-2  , 1e6   , "loose #mu d_{xy} [cm]"                          , "# events (2018)"   ),
-  Histogram("LoosePATMuons_dz"                    , "", False,  True  , default_norm              , 20 , -200  , 200   , 1e-2  , 1e6   , "loose #mu d_{z} [cm]"                           , "# events (2018)"   ),
-  Histogram("LoosePATMuons_pfRelIso04_all"        , "", False,  True  , default_norm              , 1  , 0.0   , 0.2   , 1e-2  , 1e6   , "Loose #mu PF Rel Iso 0.4 (all)"                 , "# events (2018)"   ),
-  # Histogram("LoosePATMuons_pfRelIso03_chg"        , "", False,  True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "Loose #mu PF Rel Iso 0.3 (chg)"                 , "# events (2018)"   ),
-  # Histogram("LoosePATMuons_pfRelIso03_all"        , "", False,  True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "Loose #mu PF Rel Iso 0.3 (all)"                 , "# events (2018)"   ),
-  # Histogram("LoosePATMuons_miniPFRelIso_chg"      , "", False,  True  , default_norm              , 10 , -0.1  , 3.5   , 1e-2  , 1e6   , "Loose #mu mini PF Rel Iso (chg)"                , "# events (2018)"   ),
-  # Histogram("LoosePATMuons_miniPFRelIso_all"      , "", False,  True  , default_norm              , 5  , -0.1  , 3.5   , 1e-2  , 1e6   , "Loose #mu mini PF Rel Iso (all)"                , "# events (2018)"   ),
-  # Histogram("LoosePATMuons_jetRelIso"             , "", False,  True  , default_norm              , 50 , -1    , 8.0   , 1e-2  , 1e6   , "Loose #mu jet Rel Iso"                          , "# events (2018)"   ),
-  # Histogram("LoosePATMuons_tkRelIso"              , "", False,  True  , default_norm              , 20 , -0.1  , 8.0   , 1e-2  , 1e6   , "Loose #mu track Rel Iso"                        , "# events (2018)"   ),
+  Histogram("LooseMuonsSegmentMatch_pt"                    , "", False,  True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "loose #mu p_{T} [GeV]"                          , "# events (2018)"   ),
+  Histogram("LooseMuonsSegmentMatch_leadingPt"             , "", False,  True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "leading loose #mu p_{T} [GeV]"                  , "# events (2018)"   ),
+  Histogram("LooseMuonsSegmentMatch_subleadingPt"          , "", False,  True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "all subleading loose #mu p_{T} [GeV]"           , "# events (2018)"   ),
+  Histogram("LooseMuonsSegmentMatch_eta"                   , "", False,  True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e6   , "loose #mu #eta"                                 , "# events (2018)"   ),
+  Histogram("LooseMuonsSegmentMatch_dxy"                   , "", False,  True  , default_norm              , 20 , -200  , 200   , 1e-2  , 1e6   , "loose #mu d_{xy} [cm]"                          , "# events (2018)"   ),
+  Histogram("LooseMuonsSegmentMatch_dz"                    , "", False,  True  , default_norm              , 20 , -200  , 200   , 1e-2  , 1e6   , "loose #mu d_{z} [cm]"                           , "# events (2018)"   ),
+  Histogram("LooseMuonsSegmentMatch_pfRelIso04_all"        , "", False,  True  , default_norm              , 1  , 0.0   , 0.2   , 1e-2  , 1e6   , "Loose #mu PF Rel Iso 0.4 (all)"                 , "# events (2018)"   ),
+  # Histogram("LooseMuonsSegmentMatch_pfRelIso03_chg"        , "", False,  True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "Loose #mu PF Rel Iso 0.3 (chg)"                 , "# events (2018)"   ),
+  # Histogram("LooseMuonsSegmentMatch_pfRelIso03_all"        , "", False,  True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "Loose #mu PF Rel Iso 0.3 (all)"                 , "# events (2018)"   ),
+  # Histogram("LooseMuonsSegmentMatch_miniPFRelIso_chg"      , "", False,  True  , default_norm              , 10 , -0.1  , 3.5   , 1e-2  , 1e6   , "Loose #mu mini PF Rel Iso (chg)"                , "# events (2018)"   ),
+  # Histogram("LooseMuonsSegmentMatch_miniPFRelIso_all"      , "", False,  True  , default_norm              , 5  , -0.1  , 3.5   , 1e-2  , 1e6   , "Loose #mu mini PF Rel Iso (all)"                , "# events (2018)"   ),
+  # Histogram("LooseMuonsSegmentMatch_jetRelIso"             , "", False,  True  , default_norm              , 50 , -1    , 8.0   , 1e-2  , 1e6   , "Loose #mu jet Rel Iso"                          , "# events (2018)"   ),
+  # Histogram("LooseMuonsSegmentMatch_tkRelIso"              , "", False,  True  , default_norm              , 20 , -0.1  , 8.0   , 1e-2  , 1e6   , "Loose #mu track Rel Iso"                        , "# events (2018)"   ),
   
   # ----------------------------------------------------------------------------
   # Loose DSA muons
@@ -220,8 +220,8 @@ if skim[1] == "_SRDimuons":
   mass_max = 100.0
 elif skim[1] == "_JPsiDimuons":
   mass_rebin = 1
-  mass_min = 0.0
-  mass_max = 4.0
+  mass_min = 2.8
+  mass_max = 3.4
 elif skim[1] == "_ZDimuons":
   mass_rebin = 20
   mass_min = 70.0
@@ -230,7 +230,8 @@ elif skim[1] == "_ZDimuons":
 for collection, category in product(extraMuonVertexCollections, ("_PatDSA", "_DSA", "_Pat")):
   histograms += (
     Histogram("Event_n"+collection + category                          , "", False, True  , default_norm            , 1           , 0         , 5         , 1e-3  , 1e8   , "Number of loose #mu vertices"             , "# events (2018)" ),
-    Histogram(collection + category+"_invMass"                         , "", False, False , default_norm            , mass_rebin  , mass_min  , mass_max  , 0     , 1000  , "#mu vertex M_{#mu #mu} [GeV]"             , "# events (2018)" ),
+    Histogram(collection + category+"_invMass"                         , "", False, False , default_norm            , mass_rebin  , mass_min  , mass_max  , 0     , 1500  , "#mu vertex M_{#mu #mu} [GeV]"             , "# events (2018)" ),
+    Histogram(collection + category+"_logInvMass"                      , "", False, True  , default_norm            , 1           , 0.45      , 0.53      , 1e-2  , 1e6   , "#mu vertex log_{10}(M_{#mu #mu} [GeV])"   , "# events (2018)" ),
     Histogram(collection + category+"_eta"                             , "", False, True  , default_norm            , 5           , -3.5      , 3.5       , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                   , "# events (2018)" ),
     Histogram(collection + category+"_pt"                              , "", False, True  , default_norm            , 10          , 0         , 200       , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                   , "# events (2018)" ),
     Histogram(collection + category+"_leadingPt"                       , "", False, True  , default_norm            , 5           , 0         , 200       , 1e-3  , 1e6   , "#mu vertex leading p_{T} [GeV]"           , "# events (2018)" ),

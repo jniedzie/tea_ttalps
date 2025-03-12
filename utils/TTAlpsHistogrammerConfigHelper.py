@@ -149,7 +149,7 @@ class TTAlpsHistogrammerConfigHelper:
           (collection, "absCollinearityAngle", 500, 0, 5, ""),
           (collection, "absPtLxyDPhi1", 500, 0, 5, ""),
           (collection, "absPtLxyDPhi2", 500, 0, 5, ""),
-          (collection, "invMass", 2000, 0, 200, ""),
+          (collection, "invMass", 20000, 0, 200, ""),
           (collection, "logInvMass", 1000, -1, 2, ""),
           (collection, "pt", 2000, 0, 1000, ""),
           (collection, "eta", 500, -10, 10, ""),
@@ -197,7 +197,7 @@ class TTAlpsHistogrammerConfigHelper:
       name = self.__insert_into_name(collection, "Nminus1")
 
       params += (
-          (name, "invMass", 2000, 0, 200, ""),
+          (name, "invMass", 20000, 0, 200, ""),
           (name, "logInvMass", 1000, -1, 2, ""),
           (name, "chargeProduct", 4, -2, 2, ""),
           (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
@@ -222,7 +222,7 @@ class TTAlpsHistogrammerConfigHelper:
       name = self.__insert_into_name(collection, "FromALPNminus1")
 
       params += (
-          (name, "invMass", 2000, 0, 200, ""),
+          (name, "invMass", 20000, 0, 200, ""),
           (name, "logInvMass", 1000, -1, 2, ""),
           (name, "chargeProduct", 4, -2, 2, ""),
           (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
@@ -261,7 +261,7 @@ class TTAlpsHistogrammerConfigHelper:
             (name, "minDeltaR", 1000, 0, 10, ""),
             (name, "minOuterDeltaR", 1000, 0, 10, ""),
             (name, "minProxDeltaR", 1000, 0, 10, ""),
-            (name, "invMass", 2000, 0, 200, ""),
+            (name, "invMass", 20000, 0, 200, ""),
             (name, "logInvMass", 1000, -1, 2, ""),
             (name, "deltaR", 1000, 0, 10, ""),
             (name, "outerDeltaR", 1000, 0, 10, ""),
@@ -382,7 +382,7 @@ class TTAlpsHistogrammerConfigHelper:
           ("GenMuon"+name, "RecoMatch2MinDPhi", 1000, 0, 10, ""),
           ("GenMuon"+name, "RecoMatch1MinDEta", 1000, 0, 10, ""),
           ("GenMuon"+name, "RecoMatch2MinDEta", 1000, 0, 10, ""),
-          ("GenMuon"+name, "invMass", 2000, 0, 200, ""),
+          ("GenMuon"+name, "invMass", 20000, 0, 200, ""),
           ("GenMuon"+name, "logInvMass", 1000, -1, 2, ""),
           ("GenMuon"+name, "deltaR", 1000, 0, 10, ""),
           ("GenMuon"+name, "absCollinearityAngle", 500, 0, 5, ""),
@@ -409,7 +409,7 @@ class TTAlpsHistogrammerConfigHelper:
       for name in ["FromALP", "FromALPmindPhi2", "NotFromALP"]:
         params += (
             ("Event", "nGenDimuon"+name, 50, 0, 50, ""),
-            ("GenDimuon"+name, "invMass", 2000, 0, 200, ""),
+            ("GenDimuon"+name, "invMass", 20000, 0, 200, ""),
             ("GenDimuon"+name, "logInvMass", 1000, -1, 2, ""),
             ("GenDimuon"+name, "deltaR", 1000, 0, 10, ""),
             ("GenDimuon"+name, "absCollinearityAngle", 500, 0, 5, ""),
