@@ -4,6 +4,7 @@ from ttalps_cross_sections import get_cross_sections
 
 lumi = 137190  # pb^-1
 year = "2018"
+# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 
 

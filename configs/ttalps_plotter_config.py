@@ -9,6 +9,7 @@ from TTAlpsPlotterConfigHelper import TTAlpsPlotterConfigHelper
 from ttalps_cross_sections import *
 
 year = "2018"
+# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"

@@ -46,6 +46,8 @@ class TTAlpsHistogramFiller {
   std::vector<std::string> muonVertexCollectionNames;
   std::map<std::string, std::vector<std::string>> muonVertexCollections;
   std::vector<std::string> muonVertexNminus1Collections;
+
+  std::string year;
   
   std::vector<std::string> triggerNames;
   bool EndsWithTriggerName(std::string name);

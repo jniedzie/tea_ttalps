@@ -52,6 +52,12 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
     info() << "Couldn't read muonVertexNminus1Collections from config file - no N-1 muon vertex collection histograms will be filled"
            << endl;
   }
+  try {
+    config.GetValue("year", year);
+  } catch (const Exception &e) {
+    info() << "Couldn't read year from config file - will assume year 2018" << endl;
+    year = "2018";
+  }
 }
 
 TTAlpsHistogramFiller::~TTAlpsHistogramFiller() {}
@@ -61,7 +67,9 @@ float TTAlpsHistogramFiller::GetEventWeight(const shared_ptr<Event> event) {
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
   // change to "pileup" to use jsonPOG LUM values, or "custom" to use our own pileup distribution
-  float pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
+  float pileupSF;
+  if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all years?
+  else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
   float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(nanoEvent, "muonTriggerIsoMu24");
 
   return genWeight * pileupSF * muonTriggerSF;
@@ -75,11 +83,11 @@ bool TTAlpsHistogramFiller::EndsWithTriggerName(string name) {
 float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> object, string collectionName) {
   float weight = 1.0;
   if (collectionName == "TightMuons") {
-    weight *= asNanoMuon(object)->GetScaleFactor("muonIDTight", "muonIsoTight", "muonReco");
+    weight *= asNanoMuon(object)->GetScaleFactor("muonIDTight", "muonIsoTight", "muonReco", year);
   } else if (collectionName == "LooseMuons") {
-    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
+    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco", year);
   } else if (collectionName == "LoosePATMuons") {
-    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco");
+    weight *= asNanoMuon(object)->GetScaleFactor("muonIDLoose", "muonIsoLoose", "muonReco", year);
   } else if (collectionName == "GoodTightBtaggedJets") {
     weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingTight");
   } else if (collectionName == "GoodMediumBtaggedJets") {

@@ -4,7 +4,9 @@ from ttalps_object_cuts import *
 from math import pi
 
 year = "2018"
+# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
+scaleFactors = get_scale_factors(year)
 
 nEvents = -1
 printEveryNevents = 10000

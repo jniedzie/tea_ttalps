@@ -2,6 +2,7 @@ from ttalps_extra_collections import *
 from golden_json_config import goldenJsons
 
 year = "2018"
+# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 goldenJson = goldenJsons[year]
 extraEventCollections = get_extra_event_collections(year)
 
