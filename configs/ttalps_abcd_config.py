@@ -111,7 +111,7 @@ signal_colors = {
     ("12", "1e2"): ROOT.kViolet,
 }
 
-signal_label_position = (0.1, 0.1)
+signal_label_position = (0.11, 0.12)
 projections_legend_position = (0.6, 0.6, 0.9, 0.9)
 
 variable_1_min = -3.0

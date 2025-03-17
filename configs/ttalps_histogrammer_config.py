@@ -1,5 +1,5 @@
 from scale_factors_config import *
-from ttalps_extra_collections import *
+from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
@@ -13,8 +13,8 @@ runDefaultHistograms = True
 runLLPTriggerHistograms = False
 runPileupHistograms = False
 
-# LLPNanoAODHistograms: 
-#  - muonMatchingParams loose muons 
+# LLPNanoAODHistograms:
+#  - muonMatchingParams loose muons
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
 runLLPNanoAODHistograms = True
@@ -36,8 +36,8 @@ weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
 specialBranchSizes = {
-  "Proton_multiRP": "nProton_multiRP",
-  "Proton_singleRP": "nProton_singleRP",
+    "Proton_multiRP": "nProton_multiRP",
+    "Proton_singleRP": "nProton_singleRP",
 }
 # redirector = "xrootd-cms.infn.it"
 
@@ -45,11 +45,11 @@ pileupScaleFactorsPath = "/data/dust/user/jniedzie/ttalps_cms/pileup_scale_facto
 pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {
-  "muon": True,
-  "muonTrigger": True,
-  "pileup": True,
-  "bTagging": True,
-  "jetID": False,
+    "muon": True,
+    "muonTrigger": True,
+    "pileup": True,
+    "bTagging": True,
+    "jetID": False,
 }
 
 # For the signal histogramming all given mathcing methods are applied separately to histograms
@@ -60,26 +60,26 @@ applyScaleFactors = {
 # "OuterDR" : max Delta R (eg. 0.1)
 # "ProxDR" : max Delta R (eg. 0.1)
 muonMatchingParams = {
-    "Segment" : 2.0/3.0,
+    "Segment": 2.0 / 3.0,
     # "DR" : 0.1
     # "OuterDR" : 0.1
     # "ProxDR" : 0.1
 }
 
 muonVertexBaselineSelection = [
-  "InvariantMassCut", 
-  "ChargeCut", 
-  "HitsInFrontOfVertexCut", 
-  "DPhiBetweenMuonpTAndLxyCut", 
-  "DCACut", 
-  "CollinearityAngleCut", 
-  "Chi2Cut"
+    "InvariantMassCut",
+    "ChargeCut",
+    "HitsInFrontOfVertexCut",
+    "DPhiBetweenMuonpTAndLxyCut",
+    "DCACut",
+    "CollinearityAngleCut",
+    "Chi2Cut"
 ]
 
 muonVertexCollections = {
-  "GoodPFIsoDimuonVertex" : muonVertexBaselineSelection + ["PFRelIsolationCut"],
-  "BestPFIsoDimuonVertex" : muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"],
-  "BestDimuonVertex"      : muonVertexBaselineSelection + ["BestDimuonVertex"],
+    "GoodPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut"],
+    "BestPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"],
+    "BestDimuonVertex": muonVertexBaselineSelection + ["BestDimuonVertex"],
 }
 
 abcdCollections = tuple(muonVertexCollections.keys())
