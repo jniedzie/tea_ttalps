@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runLLPTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
-  bool runABCDHistograms;
+  bool runABCDHistograms, runNminus1Histograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
@@ -54,22 +54,22 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
+  config.GetValue("runNminus1Histograms", runNminus1Histograms);
 
-  string abcdCollection;
-  config.GetValue("abcdCollection", abcdCollection);
+  vector<string> abcdCollections;
+  config.GetVector("abcdCollections", abcdCollections);
 
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
 
   // check if cutflowmanager has cut "initial"
   cutFlowManager->RegisterCut("initial");
-  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager);
-  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager, "Pat");
-  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager, "PatDSA");
-  ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager, "DSA");
-  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager);
-  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager, "Pat");
-  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager, "PatDSA");
-  ttAlpsCuts->RegisterDimuonCuts(cutFlowManager, "DSA");
+
+  auto categories = {"", "Pat", "PatDSA", "DSA"};
+
+  for (string category : categories) {
+    ttAlpsCuts->RegisterInitialDimuonCuts(cutFlowManager, category);
+    ttAlpsCuts->RegisterDimuonCuts(cutFlowManager, category);
+  }
 
   info() << "Starting event loop..." << endl;
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
@@ -78,17 +78,18 @@ int main(int argc, char **argv) {
     if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runABCDHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
-      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     }
-    bool passesDimuonCuts = true;
+
+
+    bool passesDimuonCuts = false;
     if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPTriggerHistograms ||
         runABCDHistograms) {
       // To register the dimuon cutflow
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
-      passesDimuonCuts = ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager);
-      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "Pat");
-      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "PatDSA");
-      ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, "DSA");
+
+      for (string category : categories) {
+        passesDimuonCuts |= ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, category);
+      }
     }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
@@ -98,6 +99,12 @@ int main(int argc, char **argv) {
     if (runLLPNanoAODHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesFromLLPNanoAOD(event);
     }
+    
+    if (runNminus1Histograms) {
+      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+      ttalpsHistogramsFiller->FillLooseMuonsFromALPsNminus1Histograms(event);
+    }
+
     if (runMuonMatchingHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonEfficiencyCollections(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsMuonMatchingVariables(event);
@@ -110,8 +117,8 @@ int main(int argc, char **argv) {
     }
 
     if (runLLPTriggerHistograms && passesDimuonCuts) {
-      // first make histograms without having to pass a trigger
       ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "NoExtraTrigger");
+      
       if (ttAlpsCuts->PassesSingleMuonTrigger(event)) {
         ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "SingleMuonTrigger");
       }
@@ -126,16 +133,17 @@ int main(int argc, char **argv) {
     }
 
     if (runABCDHistograms) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event, abcdCollection);
+      ttalpsHistogramsFiller->FillABCDHistograms(event, abcdCollections);
     }
   }
 
-  if (runDefaultHistograms || runPileupHistograms) histogramFiller->FillCutFlow(cutFlowManager);
+  if (runDefaultHistograms || runPileupHistograms) {
+    histogramFiller->FillCutFlow(cutFlowManager);
+  }
   if (runDefaultHistograms) {
-    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager);
-    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "Pat");
-    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "PatDSA");
-    ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, "DSA");
+    for (string category : categories) {
+      ttalpsHistogramsFiller->FillDimuonCutFlows(cutFlowManager, category);
+    }
   }
 
   cutFlowManager->Print();
