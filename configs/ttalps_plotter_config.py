@@ -2,7 +2,7 @@ import ROOT
 import os
 
 from Sample import SampleType
-from Histogram import Histogram
+from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 
 from TTAlpsPlotterConfigHelper import TTAlpsPlotterConfigHelper
@@ -15,9 +15,9 @@ cross_sections = get_cross_sections(year)
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 
@@ -42,7 +42,7 @@ legend_width = 0.17 if show_ratio_plots else 0.20
 legend_height = 0.045 if show_ratio_plots else 0.03
 
 # only plot backgrounds with N_events > bkgRawEventsThreshold
-bkgRawEventsThreshold = 10
+bkgRawEventsThreshold = 0
 
 show_cms_labels = True
 extraText = "Preliminary"
@@ -50,12 +50,19 @@ extraText = "Preliminary"
 
 extraMuonVertexCollections = [
   # "MaskedDimuonVerex",      # invariant mass cut only
-  "BestDimuonVertex",       # best Dimuon selection without isolation cut
-  "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
+  # "BestDimuonVertex",       # best Dimuon selection without isolation cut
+  # "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
+]
+
+genMuonVertexCollections = [
+  "BestPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
+  "GoodPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
+  "BestPFIsoDimuonVertexNonresonancesNotFromALP",  # Non-resonant Dimuons
+  "GoodPFIsoDimuonVertexNonresonancesNotFromALP",  # Non-resonant Dimuons
 ]
 
 data_to_include = [
-  "SingleMuon2018",
+  # "SingleMuon2018",
 ]
 
 backgrounds_to_exclude = [
@@ -65,9 +72,9 @@ backgrounds_to_exclude = [
 ]
 
 signals_to_include = [
-  "tta_mAlp-0p35GeV_ctau-1e2mm", 
-  "tta_mAlp-0p35GeV_ctau-1e3mm", 
-  "tta_mAlp-0p35GeV_ctau-1e5mm"
+  # "tta_mAlp-0p35GeV_ctau-1e2mm", 
+  # "tta_mAlp-0p35GeV_ctau-1e3mm", 
+  # "tta_mAlp-0p35GeV_ctau-1e5mm"
 ]
 
 configHelper = TTAlpsPlotterConfigHelper(
@@ -107,6 +114,7 @@ default_norm = NormalizationType.to_lumi
 histogramsRatio = []
 weightsBranchName = "genWeight"
 
+histograms2D = ()
 histograms = (
 #           name                                  title logx    logy    norm_type                 rebin xmin   xmax    ymin    ymax,     xlabel                                             ylabel
   
@@ -217,10 +225,9 @@ for collection in extraMuonVertexCollections:
       # Histogram(collection + category+"_invMass"                         , "", False, False , default_norm            , 1  , 2.7   , 3.5   , 0     , 1500  , "#mu vertex M_{#mu #mu} [GeV]"             , "# events (2018)" ),
       Histogram(collection + category+"_invMass"                         , "", False, False , default_norm            , 20 , 70    , 110   , 0     , 30    , "#mu vertex M_{#mu #mu} [GeV]"             , "# events (2018)" ),
       Histogram(collection + category+"_pt"                              , "", False, True  , default_norm            , 10 , 0     , 200   , 1e-3  , 1e6   , "#mu vertex p_{T} [GeV]"                   , "# events (2018)" ),
-      Histogram(collection + category+"_vxySignificance"                 , "", False, True  , default_norm            , 2  , 0     , 200   , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"         , "# events (2018)" ),
-      Histogram(collection + category+"_vxy"                             , "", False, True  , default_norm            , 5  , 0     , 10    , 1e-10 , 1e6   , "#mu vertex L_{xy} [cm]"                   , "# events (2018)" ),
-      Histogram(collection + category+"_vxySigma"                        , "", False, True  , default_norm            , 2  , 0     , 1     , 1e-3  , 1e6   , "#mu vertex #sigma_{Lxy} [cm]"             , "# events (2018)" ),
-      Histogram(collection + category+"_vxySignificanceV2"               , "", False, True  , default_norm            , 2  , 0     , 80    , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"         , "# events (2018)" ),
+      Histogram(collection + category+"_LxySignificance"                 , "", False, True  , default_norm            , 2  , 0     , 200   , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"         , "# events (2018)" ),
+      Histogram(collection + category+"_Lxy"                             , "", False, True  , default_norm            , 5  , 0     , 10    , 1e-10 , 1e6   , "#mu vertex L_{xy} [cm]"                   , "# events (2018)" ),
+      Histogram(collection + category+"_LxySigma"                        , "", False, True  , default_norm            , 2  , 0     , 1     , 1e-3  , 1e6   , "#mu vertex #sigma_{Lxy} [cm]"             , "# events (2018)" ),
       Histogram(collection + category+"_dR"                              , "", False, True  , default_norm            , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex #Delta R"                      , "# events (2018)" ),
       Histogram(collection + category+"_proxDR"                          , "", False, True  , default_norm            , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex proximity #Delta R"            , "# events (2018)" ),
       Histogram(collection + category+"_outerDR"                         , "", False, True  , default_norm            , 5  , 0     , 6     , 1e-5  , 1e6   , "#mu vertex outer #Delta R"                , "# events (2018)" ),
@@ -259,3 +266,13 @@ for collection in extraMuonVertexCollections:
       Histogram(collection + category+"_tkRelIsoMuon2"                   , "", False, True  , default_norm            , 4  , 0     , 10    , 1e-3  , 1e6   , "#mu_{2} I_{tk}^{rel} ( #Delta R < 0.3 )"  , "# events (2018)" ),
     )
     
+for collection in genMuonVertexCollections:
+  for category in ["_PatDSA", "_DSA", "_Pat"]:
+    histograms += (
+      Histogram("Event_n"+collection + category                     , "", False, True  , default_norm     , 1  , 0     , 5     , 1e-3  , 1e6   , "Number of #mu vertices"            , "# events (2018)" ),
+      Histogram(collection + category+"_logLxySignificance"         , "", False, True  , default_norm     , 1  , -2    , 2     , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"  , "# events (2018)" ),
+      Histogram(collection + category+"_log3Dangle"                 , "", False, True  , default_norm     , 1  , -3    , 1     , 1e-3  , 1e6   , "#mu vertex #alpha"                 , "# events (2018)" ),
+    )
+    histograms2D += (
+      Histogram2D(collection + category+"_log3Dangle_logLxySignificance",  "",  False,  False,  True,  NormalizationType.to_lumi, 4, 4, -3, 1, -2,  20, 1e-3,  1e2,  "#mu vertex #alpha",  "#mu vertex L_{xy} / #sigma_{Lxy}",   "# events (2018)",  ""  ),
+    )

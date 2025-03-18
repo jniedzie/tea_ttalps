@@ -23,9 +23,9 @@ runLLPNanoAODHistograms = False
 
 runMuonMatchingHistograms = False
 runGenMuonHistograms = False  # can only be run on signal samples
-runGenMuonVertexCollectionHistograms = False  # can only be run on signal samples
+runGenMuonVertexCollectionHistograms = True
 
-runABCDHistograms = True
+runABCDHistograms = False
 abcdCollection = "BestPFIsoDimuonVertex"
 # abcdCollection = "BestDimuonVertex"
 
@@ -101,6 +101,7 @@ muonVertexCollectionNames = [collectionName for collectionName in muonVertexColl
 # N-1 collections need to be defined above
 muonVertexNminus1Collections = [
   "GoodPFIsoDimuonVertex",
+  "BestDimuonVertex",
   "BestPFIsoDimuonVertex",
 ]
 
@@ -539,41 +540,33 @@ for matchingMethod, param in muonMatchingParams.items():
 GenMuonVertexCollection_histParams = ()
 GenMuonVertexCollection_histParams2D = ()
 for muonVertexNminus1Collection in muonVertexNminus1Collections:
-  if muonVertexNminus1Collection.startswith("Best"):
-    continue
-  ####  N-1 Histograms  ####
-  muonVertexCollectionName = muonVertexNminus1Collection+"FromALPNminus1"
-  for category in allMuonVertexCollectionCategories:
-    muonVertexCollectionName = muonVertexNminus1Collection+"FromALPNminus1"+category
-    GenMuonVertexCollection_histParams += (
-    (muonVertexCollectionName , "invMass"                     , 2000   , 0      , 200   , ""  ),
-    (muonVertexCollectionName , "logInvMass"                  , 1000   , -1     , 2     , ""  ),
-    (muonVertexCollectionName , "chargeProduct"               , 4      , -2     , 2     , ""  ),
-    (muonVertexCollectionName , "maxHitsInFrontOfVert"        , 100    , 0      , 100   , ""  ),
-    (muonVertexCollectionName , "absPtLxyDPhi1"  , 500        , 0      , 5     , ""  ),
-    (muonVertexCollectionName , "dca"                         , 1000   , 0      , 20    , ""  ),
-    (muonVertexCollectionName , "absCollinearityAngle"        , 500    , 0      , 5     , ""  ),
-    (muonVertexCollectionName , "normChi2"                    , 50000  , 0      , 50    , ""  ),
-    (muonVertexCollectionName , "displacedTrackIso03Dimuon1"  , 800    , 0      , 20    , ""  ),
-    (muonVertexCollectionName , "displacedTrackIso03Dimuon2"  , 800    , 0      , 20    , ""  ),
-    (muonVertexCollectionName , "pfRelIso1"                   , 800    , 0      , 20    , ""  ),
-    (muonVertexCollectionName , "pfRelIso2"                   , 800    , 0      , 20    , ""  ),
-  )
   ####  From ALP, From Resonance and From Non-Resonant  ####
   for category in muonVertexCollectionCategories:
     dimuonFromALPsCollectionName = muonVertexNminus1Collection+"FromALP"+category
     dimuonNotFromALPsVertexCollectionName = muonVertexNminus1Collection+"ResonancesNotFromALP"+category
     muonNotFromALPsVertexCollectionName = muonVertexNminus1Collection+"NonresonancesNotFromALP"+category
     GenMuonVertexCollection_histParams += (
+      ("Event"  , "n"+dimuonFromALPsCollectionName                , 10     , 0    , 10    , ""  ),
+      ("Event"  , "n"+dimuonNotFromALPsVertexCollectionName       , 10     , 0    , 10    , ""  ),
+      ("Event"  , "n"+muonNotFromALPsVertexCollectionName         , 10     , 0    , 10    , ""  ),
       (dimuonFromALPsCollectionName          , "Lxy"              , 1000   , 0    , 1000  , ""  ),
       (dimuonNotFromALPsVertexCollectionName , "Lxy"              , 1000   , 0    , 1000  , ""  ),
       (muonNotFromALPsVertexCollectionName   , "Lxy"              , 1000   , 0    , 1000  , ""  ),
+      (dimuonFromALPsCollectionName          , "logLxy"           , 100    , -2   , 3     , ""  ),
+      (dimuonNotFromALPsVertexCollectionName , "logLxy"           , 100    , -2   , 3     , ""  ),
+      (muonNotFromALPsVertexCollectionName   , "logLxy"           , 100    , -2   , 3     , ""  ),
       (dimuonFromALPsCollectionName          , "LxySignificance"  , 1000   , 0    , 1000  , ""  ),
       (dimuonNotFromALPsVertexCollectionName , "LxySignificance"  , 1000   , 0    , 1000  , ""  ),
       (muonNotFromALPsVertexCollectionName   , "LxySignificance"  , 1000   , 0    , 1000  , ""  ),
+      (dimuonFromALPsCollectionName          , "logLxySignificance"  , 100   , -2    , 2  , ""  ),
+      (dimuonNotFromALPsVertexCollectionName , "logLxySignificance"  , 100   , -2    , 2  , ""  ),
+      (muonNotFromALPsVertexCollectionName   , "logLxySignificance"  , 100   , -2    , 2  , ""  ),
       (dimuonFromALPsCollectionName          , "3Dangle"            , 2000   , -10  , 10    , ""  ),
       (dimuonNotFromALPsVertexCollectionName , "3Dangle"            , 2000   , -10  , 10    , ""  ),
       (muonNotFromALPsVertexCollectionName   , "3Dangle"            , 2000   , -10  , 10    , ""  ),
+      (dimuonFromALPsCollectionName          , "log3Dangle"         , 100    , -3   , 1     , ""  ),
+      (dimuonNotFromALPsVertexCollectionName , "log3Dangle"         , 100    , -3   , 1     , ""  ),
+      (muonNotFromALPsVertexCollectionName   , "log3Dangle"         , 100    , -3   , 1     , ""  ),
       (dimuonFromALPsCollectionName          , "cos3Dangle"         , 400    , -2   , 2     , ""  ),
       (dimuonNotFromALPsVertexCollectionName , "cos3Dangle"         , 400    , -2   , 2     , ""  ),
       (muonNotFromALPsVertexCollectionName   , "cos3Dangle"         , 400    , -2   , 2     , ""  ),
@@ -588,12 +581,29 @@ for muonVertexNminus1Collection in muonVertexNminus1Collections:
       (dimuonFromALPsCollectionName+"_Lxy_maxTrackerLayers"          , 500   , 0    , 1000  , 50   , 0    , 50  , ""  ),
       (dimuonNotFromALPsVertexCollectionName+"_Lxy_maxTrackerLayers" , 500   , 0    , 1000  , 50   , 0    , 50  , ""  ),
       (muonNotFromALPsVertexCollectionName+"_Lxy_maxTrackerLayers"   , 500   , 0    , 1000  , 50   , 0    , 50  , ""  ),
-      (dimuonFromALPsCollectionName+"_Lxy_3Dangle"                     , 500   , 0    , 1000  , 400  , -10  , 10  , ""  ),
-      (dimuonNotFromALPsVertexCollectionName+"_Lxy_3Dangle"            , 500   , 0    , 1000  , 400  , -10  , 10  , ""  ),
-      (muonNotFromALPsVertexCollectionName+"_Lxy_3Dangle"              , 500   , 0    , 1000  , 400  , -10  , 10  , ""  ),
-      (dimuonFromALPsCollectionName+"_Lxy_cos3Dangle"                  , 500   , 0    , 1000  , 400  , -2   , 2   , ""  ),
-      (dimuonNotFromALPsVertexCollectionName+"_Lxy_cos3Dangle"         , 500   , 0    , 1000  , 400  , -2   , 2   , ""  ),
-      (muonNotFromALPsVertexCollectionName+"_Lxy_cos3Dangle"           , 500   , 0    , 1000  , 400  , -2   , 2   , ""  ),
+      (dimuonFromALPsCollectionName+"_log3Dangle_logLxySignificance"           , 100   , -3    , 1   , 100  , -2  , 2  , ""  ),
+      (dimuonNotFromALPsVertexCollectionName+"_log3Dangle_logLxySignificance"  , 100   , -3    , 1   , 100  , -2  , 2  , ""  ),
+      (muonNotFromALPsVertexCollectionName+"_log3Dangle_logLxySignificance"    , 100   , -3    , 1   , 100  , -2  , 2  , ""  ),
+    )
+    if muonVertexNminus1Collection.startswith("Best"):
+      continue
+    ####  N-1 Histograms  ####
+    muonVertexCollectionName = muonVertexNminus1Collection+"FromALPNminus1"
+    for category in allMuonVertexCollectionCategories:
+      muonVertexCollectionName = muonVertexNminus1Collection+"FromALPNminus1"+category
+      GenMuonVertexCollection_histParams += (
+      (muonVertexCollectionName , "invMass"                     , 2000   , 0      , 200   , ""  ),
+      (muonVertexCollectionName , "logInvMass"                  , 1000   , -1     , 2     , ""  ),
+      (muonVertexCollectionName , "chargeProduct"               , 4      , -2     , 2     , ""  ),
+      (muonVertexCollectionName , "maxHitsInFrontOfVert"        , 100    , 0      , 100   , ""  ),
+      (muonVertexCollectionName , "absPtLxyDPhi1"  , 500        , 0      , 5     , ""  ),
+      (muonVertexCollectionName , "dca"                         , 1000   , 0      , 20    , ""  ),
+      (muonVertexCollectionName , "absCollinearityAngle"        , 500    , 0      , 5     , ""  ),
+      (muonVertexCollectionName , "normChi2"                    , 50000  , 0      , 50    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso03Dimuon1"  , 800    , 0      , 20    , ""  ),
+      (muonVertexCollectionName , "displacedTrackIso03Dimuon2"  , 800    , 0      , 20    , ""  ),
+      (muonVertexCollectionName , "pfRelIso1"                   , 800    , 0      , 20    , ""  ),
+      (muonVertexCollectionName , "pfRelIso2"                   , 800    , 0      , 20    , ""  ),
     )
 
 ####  LLP Trigger Histograms  ####

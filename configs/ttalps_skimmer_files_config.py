@@ -3,7 +3,8 @@ import os
 
 max_files = -1
 
-base_path = f"/data/dust/user/{os.environ["USER"]}/ttalps_cms"
+username = os.environ["USER"]
+base_path = f"/data/dust/user/{username}/ttalps_cms"
 
 ### Input skims ###
 
@@ -17,13 +18,13 @@ input_skim = "skimmed_looseSemimuonic_v2_merged"
 ### Output skims ###
 
 # Signal like skim: SR, J/Psi CR and Z CR with no isolation requirement on the loose muons
-# output_skim = "skimmed_looseSemimuonic_v2_SR"
+output_skim = "skimmed_looseSemimuonic_v2_SR"
 
 # Signal like skim with Dimuon triggers for LLP trigger study
 # output_skim = "skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger"
 
 # tt̄ CR skim
-output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
 output_trees_dir = ""
 output_hists_dir = ""
@@ -35,7 +36,7 @@ sample_path = ""
 input_directory = f"{base_path}/{sample_path}/{input_skim}"
 output_trees_dir = f"{base_path}/{sample_path}/{output_skim}/"
 
-samples = dasSamples2018.keys()
+samples = V_dasBackgrounds2022preEE.keys()
 # samples = dasData2018.keys()
 # samples = QCD_dasBackgrounds2018.keys()
 # samples = TT_dasBackgrounds2018.keys()
