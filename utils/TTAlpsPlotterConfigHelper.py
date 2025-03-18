@@ -11,7 +11,10 @@ from collections import defaultdict
 
 
 class TTAlpsPlotterConfigHelper:
-  def __init__(self, year, base_path, skim, hist_path, data_to_include, backgrounds_to_exclude, signals_to_include, legend_pos_and_size):
+  def __init__(
+      self, year, base_path, skim, hist_path, data_to_include,
+      backgrounds_to_exclude, signals_to_include, legend_pos_and_size
+  ):
 
     self.year = year
     self.cross_sections = get_cross_sections(year)

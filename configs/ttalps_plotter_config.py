@@ -17,8 +17,9 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
 
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 
