@@ -30,24 +30,24 @@ variable_2 = "log3Dangle"
 
 optimal_points = {
     # optimizing on significance
-    "JPsi_noIso_mc": (-0.78, -0.06),
+    "JPsi_noIso_mc": (-0.9, 0.86),
     "JPsi_noIso_data": (-0.54, 0.42),  # all identical
     "SR_noIso_mc": (0.46, -1.94),  # all identical
 
-    "JPsi_iso_mc": (-1.06, 0.22),
+    "JPsi_iso_mc": (-1.06, 0.22),  # outdated
     "JPsi_iso_data": (-1.18, 0.46),
     "SR_iso_mc": (-0.34, 0.38),
 
     # optimizing on error (same results on closure)
-    "JPsi_noIso_mc_optimalError": (-1.22, 0.06),
-    "JPsi_noIso_data_optimalError": (-1.38, -1.26),
+    "JPsi_noIso_mc_optimalError": (-1.22, 0.06),  # outdated
+    "JPsi_noIso_data_optimalError": (-1.38, -1.26),  # outdated
 }
 
 abcd_point = optimal_points["JPsi_noIso_data_optimalError"]
 
-# optimization_param = "significance"
+optimization_param = "significance"
 # optimization_param = "error"
-optimization_param = "closure"
+# optimization_param = "closure"
 
 # optimization parameters
 max_error = 1.0  # max allowed error expressed in number of sigmas
@@ -216,11 +216,11 @@ backgrounds = (
     "DYJetsToMuMu_M-10to50",
     # "WJetsToLNu",
 
-    "QCD_Pt-15To20",
-    "QCD_Pt-20To30",
-    "QCD_Pt-30To50",
-    "QCD_Pt-50To80",
-    "QCD_Pt-80To120",
+    # "QCD_Pt-15To20",
+    # "QCD_Pt-20To30",
+    # "QCD_Pt-30To50",
+    # "QCD_Pt-50To80",
+    # "QCD_Pt-80To120",
     "QCD_Pt-120To170",
     "QCD_Pt-170To300",
     "QCD_Pt-300To470",
