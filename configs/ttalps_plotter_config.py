@@ -16,8 +16,8 @@ cross_sections = get_cross_sections(year)
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
@@ -43,7 +43,7 @@ legend_width = 0.17 if show_ratio_plots else 0.20
 legend_height = 0.045 if show_ratio_plots else 0.03
 
 # only plot backgrounds with N_events > bkgRawEventsThreshold
-bkgRawEventsThreshold = 0
+bkgRawEventsThreshold = 10
 
 show_cms_labels = True
 extraText = "Preliminary"
@@ -52,7 +52,7 @@ extraText = "Preliminary"
 extraMuonVertexCollections = [
   # "MaskedDimuonVerex",      # invariant mass cut only
   # "BestDimuonVertex",       # best Dimuon selection without isolation cut
-  # "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
+  "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
 ]
 
 genMuonVertexCollections = [
@@ -63,7 +63,7 @@ genMuonVertexCollections = [
 ]
 
 data_to_include = [
-  # "SingleMuon2018",
+  "SingleMuon2018",
 ]
 
 backgrounds_to_exclude = [
@@ -73,9 +73,9 @@ backgrounds_to_exclude = [
 ]
 
 signals_to_include = [
-  # "tta_mAlp-0p35GeV_ctau-1e2mm", 
-  # "tta_mAlp-0p35GeV_ctau-1e3mm", 
-  # "tta_mAlp-0p35GeV_ctau-1e5mm"
+  "tta_mAlp-0p35GeV_ctau-1e2mm", 
+  "tta_mAlp-0p35GeV_ctau-1e3mm", 
+  "tta_mAlp-0p35GeV_ctau-1e5mm"
 ]
 
 configHelper = TTAlpsPlotterConfigHelper(
@@ -236,7 +236,7 @@ elif skim[1] == "_ZDimuons":
   mass_min = 70.0
   mass_max = 110.0
 
-for collection, category in product(extraMuonVertexCollections, ("_PatDSA", "_DSA", "_Pat")):
+for collection, category in product(extraMuonVertexCollections, ("","_PatDSA", "_DSA", "_Pat")):
   histograms += (
     Histogram("Event_n"+collection + category                          , "", False, True  , default_norm            , 1           , 0         , 5         , 1e-3  , 1e8   , "Number of loose #mu vertices"             , "# events (2018)" ),
     Histogram(collection + category+"_invMass"                         , "", False, False , default_norm            , mass_rebin  , mass_min  , mass_max  , 0     , 1500  , "#mu vertex M_{#mu #mu} [GeV]"             , "# events (2018)" ),
@@ -262,20 +262,17 @@ for collection, category in product(extraMuonVertexCollections, ("_PatDSA", "_DS
     # Histogram(collection + category+"_displacedTrackIso04Dimuon1"      , "", False, True  , default_norm            , 1           , 0         , 0.5       , 1e-7  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "# events (2018)" ),
     # Histogram(collection + category+"_displacedTrackIso03Dimuon2"      , "", False, True  , default_norm            , 1           , 0         , 0.5       , 1e-7  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)" ),
     # Histogram(collection + category+"_displacedTrackIso04Dimuon2"      , "", False, True  , default_norm            , 1           , 0         , 0.5       , 1e-7  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )" , "# events (2018)" ),
-    # Histogram(collection + category+"_displacedTrackIso03Muon1"        , "", False, True  , default_norm            , 1           , 0         , 1         , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)" ),
-    # Histogram(collection + category+"_displacedTrackIso04Muon1"        , "", False, True  , default_norm            , 1           , 0         , 1         , 1e-3  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "# events (2018)" ),
-    # Histogram(collection + category+"_displacedTrackIso03Muon2"        , "", False, True  , default_norm            , 1           , 0         , 1         , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)" ),
-    # Histogram(collection + category+"_displacedTrackIso04Muon2"        , "", False, True  , default_norm            , 1           , 0         , 1         , 1e-3  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )" , "# events (2018)" ),
     Histogram(collection + category+"_pfRelIso04all1"                  , "", False, True  , default_norm            , 4           , 0         , 10        , 1e-3  , 1e6   , "#mu_{1} I_{PF}^{rel} ( #Delta R < 0.4 )"  , "# events (2018)" ),
     Histogram(collection + category+"_pfRelIso04all2"                  , "", False, True  , default_norm            , 4           , 0         , 10        , 1e-3  , 1e6   , "#mu_{2} I_{PF}^{rel} ( #Delta R < 0.4 )"  , "# events (2018)" ),
+  )
+  histograms2D += (
+    Histogram2D(collection + category+"_log3Dangle_logLxySignificance",  "",  False,  False,  True,  NormalizationType.to_lumi, 4, 4, -3, 1, -2,  20, 1e-3,  1e2,  "#mu vertex #alpha",  "#mu vertex L_{xy} / #sigma_{Lxy}",   "# events (2018)",  ""  ),
   )
   
 for collection in genMuonVertexCollections:
   for category in ["_PatDSA", "_DSA", "_Pat"]:
     histograms += (
       Histogram("Event_n"+collection + category                     , "", False, True  , default_norm     , 1  , 0     , 5     , 1e-3  , 1e6   , "Number of #mu vertices"            , "# events (2018)" ),
-      Histogram(collection + category+"_logLxySignificance"         , "", False, True  , default_norm     , 1  , -2    , 2     , 1e-3  , 1e6   , "#mu vertex L_{xy} / #sigma_{Lxy}"  , "# events (2018)" ),
-      Histogram(collection + category+"_log3Dangle"                 , "", False, True  , default_norm     , 1  , -3    , 1     , 1e-3  , 1e6   , "#mu vertex #alpha"                 , "# events (2018)" ),
     )
     histograms2D += (
       Histogram2D(collection + category+"_log3Dangle_logLxySignificance",  "",  False,  False,  True,  NormalizationType.to_lumi, 4, 4, -3, 1, -2,  20, 1e-3,  1e2,  "#mu vertex #alpha",  "#mu vertex L_{xy} / #sigma_{Lxy}",   "# events (2018)",  ""  ),
