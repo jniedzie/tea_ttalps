@@ -5,6 +5,7 @@ from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
 year = "2018"
 extraEventCollections = get_extra_event_collections(year)
+scaleFactors = get_scale_factors(year)
 
 nEvents = -1
 printEveryNevents = 10000
@@ -19,11 +20,9 @@ runPileupHistograms = False
 #  - extra muon vertex collections
 runLLPNanoAODHistograms = True
 
-runNminus1Histograms = False
-
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
 runGenMuonHistograms = False  # can only be run on signal samples
-runGenMuonVertexCollectionHistograms = False  # can only be run on signal samples
+runGenMuonVertexCollectionHistograms = False
 
 runABCDHistograms = True
 

@@ -61,14 +61,14 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
     
     // final passes cut will only be registered for the first "Best" dimuon collection
     bool bestCollection = originalCollectionName.find("Best") == 0;
+    if (!firstIteration && bestCollection) {
+      warn() << "Multiple Best dimuon collections registered. Only the first collection " << firstCollectionName << " will be used for final PassesDimuonCuts." << endl;
+    }
     if (firstIteration && bestCollection) {
       if(!passesDimuonCuts) finalPassesCuts = false;
       firstIteration = false;
       firstCollectionName = collectionName;
-    }
-    if (!firstIteration && bestCollection) {
-      warn() << "Multiple Best dimuon collections registered. Only the first collection " << firstCollectionName << " will be used for final PassesDimuonCuts." << endl;
-    }
+    }    
   }
   return finalPassesCuts;
 }
