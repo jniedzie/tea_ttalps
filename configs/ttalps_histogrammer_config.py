@@ -4,6 +4,7 @@ from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
 year = "2018"
+# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
 
@@ -78,7 +79,7 @@ muonVertexBaselineSelection = [
 muonVertexCollections = {
     "GoodPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut"],
     "BestPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"],
-    "BestDimuonVertex": muonVertexBaselineSelection + ["BestDimuonVertex"],
+    # "BestDimuonVertex": muonVertexBaselineSelection + ["BestDimuonVertex"],
 }
 
 abcdCollections = tuple(muonVertexCollections.keys())
