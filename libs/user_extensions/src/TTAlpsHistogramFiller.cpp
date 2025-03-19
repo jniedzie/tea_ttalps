@@ -100,6 +100,7 @@ float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> obj
 }
 
 /// --------- Default Histograms --------- ///
+/// ----- flag: runDefaultHistograms ----- ///
 
 void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) {
   float eventWeight = GetEventWeight(event);
@@ -156,6 +157,7 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, s
 }
 
 /// --------- LooseMuons Histograms --------- ///
+/// ----- flag: runLLPNanoAODHistograms ----- ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
@@ -170,6 +172,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_
 }
 
 /// --------- Dimuon Vertex Collection Histograms --------- ///
+/// ------------ flag: runLLPNanoAODHistograms ------------ ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
@@ -416,6 +419,7 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
 }
 
 /// --------- Gen-Level Muon Histograms --------- ///
+/// -------- flag: runGenMuonHistograms --------- ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsGenMuonVariables(const shared_ptr<Event> event) {
   FillGenALPsHistograms(event);
@@ -791,6 +795,7 @@ string collectionName, const shared_ptr<Collection<shared_ptr<PhysicsObject>>> v
 }
 
 /// --------- Gen-Level Dimuon Vertex Collection Histograms --------- ///
+/// ---------- flag: runGenMuonVertexCollectionHistograms ----------- ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsGenMuonVertexCollectionsVariables(const shared_ptr<Event> event) {
   // FillGenLevelMuonCollectionHistograms(event);
@@ -841,6 +846,7 @@ void TTAlpsHistogramFiller::FillMuonCollectionFromALPsNminus1Histograms(const sh
 }
 
 /// --------- Muon Matching Histograms --------- ///
+/// ----- flag: runMuonMatchingHistograms ------ ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsMuonMatchingVariables(const shared_ptr<Event> event) {
   FillMatchingHistograms(event, "LoosePATMuons", "LooseDSAMuons");
@@ -999,6 +1005,7 @@ void TTAlpsHistogramFiller::FillMatchedMuonHistograms(const shared_ptr<PhysicsOb
 }
 
 /// --------- Trigger study Histograms --------- ///
+/// ------ flag: runLLPTriggerHistograms ------ ///
 
 void TTAlpsHistogramFiller::FillTriggerStudyHistograms(const shared_ptr<Event> event, string triggerName) {
   float weight = GetEventWeight(event);
@@ -1059,6 +1066,7 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
 }
 
 /// --------- ABCD Histograms --------- ///
+/// ----- flag: runABCDHistograms ----- ///
 
 void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, vector<string> abcdCollections) {
   double weight = GetEventWeight(event);
