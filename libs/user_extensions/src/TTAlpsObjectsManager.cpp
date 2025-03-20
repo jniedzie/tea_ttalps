@@ -16,11 +16,6 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
     warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
   try {
-    config.GetMap("dimuonVertexCuts", dimuonVertexCuts);
-  } catch (const Exception &e) {
-    warn() << "Couldn't read dimuonVertexCuts from config file - is needed for GoodLooseMuonVertex collections" << endl;
-  }
-  try {
     config.GetMap("muonVertexCollections", muonVertexCollections);
   } catch (const Exception &e) {
     warn() << "Couldn't read muonVertexCollections from config file - is needed for GoodLooseMuonVertex collections" << endl;

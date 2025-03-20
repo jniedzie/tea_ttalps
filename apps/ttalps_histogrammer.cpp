@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runLLPTriggerHistograms, runPileupHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
-  bool runABCDHistograms, runNminus1Histograms;
+  bool runABCDHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
@@ -54,7 +54,6 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
-  config.GetValue("runNminus1Histograms", runNminus1Histograms);
 
   vector<string> abcdCollections;
   config.GetVector("abcdCollections", abcdCollections);
@@ -75,9 +74,10 @@ int main(int argc, char **argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runABCDHistograms) {
+    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runABCDHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
       ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
+      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     }
 
 
@@ -96,14 +96,9 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillNormCheck(event);
       ttalpsHistogramsFiller->FillDefaultVariables(event);
     }
-
     if (runLLPNanoAODHistograms) {
-      ttalpsHistogramsFiller->FillCustomTTAlpsVariablesFromLLPNanoAOD(event);
-    }
-    
-    if (runNminus1Histograms) {
-      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
-      ttalpsHistogramsFiller->FillLooseMuonsFromALPsNminus1Histograms(event);
+      ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event);
+      ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event);
     }
 
     if (runMuonMatchingHistograms) {

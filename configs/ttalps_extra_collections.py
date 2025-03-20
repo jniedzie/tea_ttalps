@@ -76,9 +76,9 @@ run3extraEventCollections = {
 }
 
 def get_extra_event_collections(year):
-  if year == "2016" or year == "2017" or year == "2018":
+  if year == "2016preVFP" or year == "2016postVFP" or year == "2017" or year == "2018":
     return {**commonExtraEventCollections, **run2extraEventCollections}
-  elif year == "2022" or year == "2023":
+  elif year == "2022preEE" or year == "2022postEE" or year == "2023preBPix" or year == "2023postBPix":
     return {**commonExtraEventCollections, **run3extraEventCollections}
   else:
     raise ValueError(f"Year {year} not supported.")

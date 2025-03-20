@@ -3,6 +3,7 @@ from ttalps_cross_sections import *
 from ttalps_limit_results import *
 
 year = "2018"
+# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 
 y_min = 1e-3

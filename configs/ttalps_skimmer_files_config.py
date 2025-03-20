@@ -3,7 +3,7 @@ import os
 
 max_files = -1
 
-base_path = f"/data/dust/user/{os.environ["USER"]}/ttalps_cms"
+base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 ### Input skims ###
 
