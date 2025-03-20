@@ -79,7 +79,7 @@ muonVertexBaselineSelection = [
 muonVertexCollections = {
     "GoodPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut"],
     "BestPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"],
-    # "BestDimuonVertex": muonVertexBaselineSelection + ["BestDimuonVertex"],
+    "BestDimuonVertex": muonVertexBaselineSelection + ["BestDimuonVertex"],
 }
 
 abcdCollections = tuple(muonVertexCollections.keys())
