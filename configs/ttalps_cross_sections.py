@@ -105,11 +105,8 @@ cross_sectionsRun2 = {
 }
 
 cross_sectionsRun3 = {
-  "MuonC": 1.0,
-  "Muon0Cv2": 1.0,
-  "Muon1Cv2": 1.0,
-  "Muon0Cv3": 1.0,
-  "Muon1Cv3": 1.0,
+  "Muon2022preEE": 1.0,
+  "Muon2022postEE": 1.0,
   "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 405.8099,
   "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8": 98.0963,
   "TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 19.36,

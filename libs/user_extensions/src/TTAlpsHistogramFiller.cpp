@@ -30,22 +30,10 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
   } catch (const Exception &e) {
     warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
-  bool nonIso = false;
   try {
-    config.GetVector("muonVertexCollectionNames", muonVertexCollectionNames);
+    config.GetPair("muonVertexCollection", muonVertexCollection);
   } catch (const Exception &e) {
-    info() << "Couldn't read muonVertexCollectionNames from config file - no muon vertex collection histograms will be filled" << endl;
-  }
-  try {
-    config.GetMap("muonVertexCollections", muonVertexCollections);
-  } catch (const Exception &e) {
-    info() << "Couldn't read muonVertexCollections from config file - no dimuon cutflows will be filled" << endl;
-  }
-  try {
-    config.GetVector("muonVertexNminus1Collections", muonVertexNminus1Collections);
-  } catch (const Exception &e) {
-    info() << "Couldn't read muonVertexNminus1Collections from config file - no N-1 muon vertex collection histograms will be filled"
-           << endl;
+    info() << "Couldn't read muonVertexCollection from config file - no muon vertex collection histograms will be filled" << endl;
   }
   try {
     config.GetValue("year", year);
@@ -132,37 +120,19 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
   }
 }
 
+/// --------- NormCheck Histogram --------- ///
+
 void TTAlpsHistogramFiller::FillNormCheck(const shared_ptr<Event> event) {
   float weight = nanoEventProcessor->GetGenWeight(asNanoEvent(event));
   histogramsHandler->Fill("Event_normCheck", 0.5, weight);
-}
-
-void TTAlpsHistogramFiller::FillLeadingPt(const shared_ptr<Event> event, string histName, const HistogramParams &params) {
-  auto maxPtObject = eventProcessor->GetMaxPtObject(event, params.collection);
-  if (!maxPtObject) return;
-
-  float weight = GetEventWeight(event);
-  weight *= GetObjectWeight(maxPtObject, params.collection);
-  histogramsHandler->Fill(histName, maxPtObject->Get("pt"), weight);
-}
-
-void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, string histName, const HistogramParams &params) {
-  float maxPt = eventProcessor->GetMaxPt(event, params.collection);
-
-  auto collection = event->GetCollection(params.collection);
-  float weight = GetEventWeight(event);
-
-  for (auto object : *collection) {
-    float pt = object->Get("pt");
-    if (pt == maxPt) continue;
-    histogramsHandler->Fill(histName, pt, weight * GetObjectWeight(object, params.collection));
-  }
 }
 
 /// --------- LooseMuons Histograms --------- ///
 /// ----- flag: runLLPNanoAODHistograms ----- ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_ptr<Event> event) {
+  if (muonMatchingParams.empty()) return;
+
   float weight = GetEventWeight(event);
 
   for (auto &[matchingMethod, param] : muonMatchingParams) {
@@ -178,12 +148,13 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_
 /// ------------ flag: runLLPNanoAODHistograms ------------ ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(const shared_ptr<Event> event) {
+  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+  
   float weight = GetEventWeight(event);
 
-  for (auto collectionName : muonVertexCollectionNames) {
-    FillMuonVertexHistograms(event, collectionName);
-  }
-  FillNminus1HistogramsForBestMuonVertexCollections(event);
+  string muonVertexCollectionName = muonVertexCollection.first;
+  FillMuonVertexHistograms(event, muonVertexCollectionName);
+  FillNminus1HistogramsForMuonVertexCollection(event);
 }
 
 void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuons> muons, string collectionName, float weight) {
@@ -330,38 +301,37 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   FillMuonVertexHistograms(event, vertexCollection, vertexName);
 }
 
-void TTAlpsHistogramFiller::FillNminus1HistogramsForBestMuonVertexCollections(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillNminus1HistogramsForMuonVertexCollection(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
 
-  for (auto collectionName : muonVertexNminus1Collections) {
-    // Only for the BestVertex collections
-    if (collectionName.find("Best") == string::npos) continue;
-    for (auto cut : muonVertexCollections[collectionName]) {
-      // Skip the BestDimuonVertex cut
-      if (cut == "BestDimuonVertex") continue;
+  string collectionName = muonVertexCollection.first;
+  auto collectionCuts = muonVertexCollection.second;
 
-      string nminus1CollectionName = collectionName + "Nminus1" + cut;
+  for (auto cut : collectionCuts) {
+    // Skip the BestDimuonVertex cut
+    if (cut == "BestDimuonVertex") continue;
 
-      auto bestMuonVertex = event->GetCollection(nminus1CollectionName);
-      if (bestMuonVertex->size() < 1) continue;
-      if (bestMuonVertex->size() > 1) {
-        warn() << "More than one vertex in collection: " << collectionName << ". Expected only one but the size is "
-               << bestMuonVertex->size() << std::endl;
-        continue;
-      }
-      auto dimuonVertex = asNanoDimuonVertex(bestMuonVertex->at(0), event);
-      float muon1Weight = GetObjectWeight(dimuonVertex->Muon1()->GetPhysicsObject(), "LooseMuons");
-      float muon2Weight = GetObjectWeight(dimuonVertex->Muon2()->GetPhysicsObject(), "LooseMuons");
-      string nminus1HistogramsName = collectionName + "Nminus1";
-      FillDimuonVertexNminus1HistogramForCut(nminus1HistogramsName, cut, dimuonVertex, weight * muon1Weight * muon2Weight);
-      if (dimuonVertex->isDSAMuon1() && dimuonVertex->isDSAMuon2())
-        nminus1HistogramsName = collectionName + "Nminus1_DSA";
-      else if (!dimuonVertex->isDSAMuon1() && !dimuonVertex->isDSAMuon2())
-        nminus1HistogramsName = collectionName + "Nminus1_Pat";
-      else
-        nminus1HistogramsName = collectionName + "Nminus1_PatDSA";
-      FillDimuonVertexNminus1HistogramForCut(nminus1HistogramsName, cut, dimuonVertex, weight * muon1Weight * muon2Weight);
+    string nminus1CollectionName = collectionName + "Nminus1" + cut;
+
+    auto bestMuonVertex = event->GetCollection(nminus1CollectionName);
+    if (bestMuonVertex->size() < 1) continue;
+    if (bestMuonVertex->size() > 1) {
+      warn() << "More than one vertex in collection: " << collectionName << ". Expected only one but the size is "
+              << bestMuonVertex->size() << std::endl;
+      continue;
     }
+    auto dimuonVertex = asNanoDimuonVertex(bestMuonVertex->at(0), event);
+    float muon1Weight = GetObjectWeight(dimuonVertex->Muon1()->GetPhysicsObject(), "LooseMuons");
+    float muon2Weight = GetObjectWeight(dimuonVertex->Muon2()->GetPhysicsObject(), "LooseMuons");
+    string nminus1HistogramsName = collectionName + "Nminus1";
+    FillDimuonVertexNminus1HistogramForCut(nminus1HistogramsName, cut, dimuonVertex, weight * muon1Weight * muon2Weight);
+    if (dimuonVertex->isDSAMuon1() && dimuonVertex->isDSAMuon2())
+      nminus1HistogramsName = collectionName + "Nminus1_DSA";
+    else if (!dimuonVertex->isDSAMuon1() && !dimuonVertex->isDSAMuon2())
+      nminus1HistogramsName = collectionName + "Nminus1_Pat";
+    else
+      nminus1HistogramsName = collectionName + "Nminus1_PatDSA";
+    FillDimuonVertexNminus1HistogramForCut(nminus1HistogramsName, cut, dimuonVertex, weight * muon1Weight * muon2Weight);
   }
 }
 
@@ -487,7 +457,9 @@ void TTAlpsHistogramFiller::FillGenDimuonResonancesHistograms(const shared_ptr<E
   }
 }
 
-void TTAlpsHistogramFiller::FillGenMatchedLooseMuonsHistograms(const shared_ptr<Event> event) {
+  void TTAlpsHistogramFiller::FillGenMatchedLooseMuonsHistograms(const shared_ptr<Event> event) {
+  if (muonMatchingParams.empty()) return;
+  
   float weight = GetEventWeight(event);
 
   auto pv_x = event->GetAs<float>("PV_x");
@@ -794,26 +766,28 @@ void TTAlpsHistogramFiller::FillRecoGenMatchedResonanceHistograms(const shared_p
 /// ---------- flag: runGenMuonVertexCollectionHistograms ----------- ///
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsGenMuonVertexCollectionsVariables(const shared_ptr<Event> event) {
-  // FillGenLevelMuonCollectionHistograms(event);
+  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
 
-  for (auto collectionName : muonVertexCollectionNames) {
-    // Only fill histograms for the good and best collections
-    if (collectionName.find("Good") == string::npos && collectionName.find("Best") == string::npos) continue;
-    auto vertexCollection = event->GetCollection(collectionName);
-    auto muonCollection = asTTAlpsEvent(event)->GetMuonsInVertexCollection(vertexCollection);
-
-    FillRecoGenMatchedResonanceHistograms(event, muonCollection, collectionName, vertexCollection);
-  }
+  string collectionName = muonVertexCollection.first;
+  auto vertexCollection = event->GetCollection(collectionName);
+  auto muonCollection = asTTAlpsEvent(event)->GetMuonsInVertexCollection(vertexCollection);
+  FillRecoGenMatchedResonanceHistograms(event, muonCollection, collectionName, vertexCollection);
+  
   FillMuonCollectionFromALPsNminus1Histograms(event);
 }
 
 void TTAlpsHistogramFiller::FillMuonCollectionFromALPsNminus1Histograms(const shared_ptr<Event> event) {
   float weight = GetEventWeight(event);
 
-  for (auto collectionName : muonVertexNminus1Collections) {
-    // Get the complete GoodVertices collections to choose loose reco muons from
-    if (collectionName.find("Best") != string::npos) continue;
-    for (auto cut : muonVertexCollections[collectionName]) {
+  // Gen-level muon vertex collection from ALP is given for both "Best" and "Good" collections
+  string bestMuonVertexCollectionName = muonVertexCollection.first;
+  auto muonVertexCollectionCuts = muonVertexCollection.second;
+  string goodMuonVertexCollectionName = bestMuonVertexCollectionName;
+  goodMuonVertexCollectionName.replace(0, 4, "Good");
+  vector<string> muonVertexNminus1CollectionNames = {bestMuonVertexCollectionName, goodMuonVertexCollectionName};
+
+  for (auto collectionName : muonVertexNminus1CollectionNames) {
+    for (auto cut : muonVertexCollectionCuts) {
       // Skip the BestDimuonVertex cut
       if (cut == "BestDimuonVertex") continue;
 
@@ -1029,37 +1003,37 @@ void TTAlpsHistogramFiller::FillTriggerStudyHistograms(const shared_ptr<Event> e
 /// --------- Dimuon Cutflow Histograms --------- ///
 
 void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  for (auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
-    string collectionName = originalCollectionName;
-    if (dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
-    int cutFlowLength = cutFlowManager->GetCutFlow(collectionName).size();
-    string cutFlowName = "dimuonCutFlow_" + collectionName;
-    string rawEventsCutFlowName = "rawEventsDimuonCutFlow_" + collectionName;
-    auto cutFlowHist = new TH1D(cutFlowName.c_str(), cutFlowName.c_str(), cutFlowLength, 0, cutFlowLength);
-    auto rawEventsCutFlowHist = new TH1D(rawEventsCutFlowName.c_str(), rawEventsCutFlowName.c_str(), cutFlowLength, 0, cutFlowLength);
+  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
 
-    map<int, pair<string, float>> sortedWeightsAfterCuts;
-    map<int, pair<string, float>> sortedRawEventsAfterCuts;
-    auto cutFlow = cutFlowManager->GetCutFlow(collectionName);
-    auto rawEventsCutFlow = cutFlowManager->GetRawEventsCutFlow(collectionName);
-    for (auto &[cutName, sumOfWeights] : cutFlowManager->GetCutFlow(collectionName)) {
-      string number = cutName.substr(0, cutName.find("_"));
-      int index = stoi(number);
-      sortedWeightsAfterCuts[index] = {cutName, sumOfWeights};
-      sortedRawEventsAfterCuts[index] = {cutName, rawEventsCutFlow[cutName]};
-    }
+  string collectionName = muonVertexCollection.first;
+  if (dimuonCategory != "") collectionName = collectionName + "_" + dimuonCategory;
+  int cutFlowLength = cutFlowManager->GetCutFlow(collectionName).size();
+  string cutFlowName = "dimuonCutFlow_" + collectionName;
+  string rawEventsCutFlowName = "rawEventsDimuonCutFlow_" + collectionName;
+  auto cutFlowHist = new TH1D(cutFlowName.c_str(), cutFlowName.c_str(), cutFlowLength, 0, cutFlowLength);
+  auto rawEventsCutFlowHist = new TH1D(rawEventsCutFlowName.c_str(), rawEventsCutFlowName.c_str(), cutFlowLength, 0, cutFlowLength);
 
-    int bin = 1;
-    for (auto &[index, values] : sortedWeightsAfterCuts) {
-      cutFlowHist->SetBinContent(bin, get<1>(values));
-      rawEventsCutFlowHist->SetBinContent(bin, get<1>(sortedRawEventsAfterCuts[index]));
-      cutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(values).c_str());
-      rawEventsCutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(sortedRawEventsAfterCuts[index]).c_str());
-      bin++;
-    }
-    histogramsHandler->SetHistogram1D(cutFlowName.c_str(), cutFlowHist);
-    histogramsHandler->SetHistogram1D(rawEventsCutFlowName.c_str(), rawEventsCutFlowHist);
+  map<int, pair<string, float>> sortedWeightsAfterCuts;
+  map<int, pair<string, float>> sortedRawEventsAfterCuts;
+  auto cutFlow = cutFlowManager->GetCutFlow(collectionName);
+  auto rawEventsCutFlow = cutFlowManager->GetRawEventsCutFlow(collectionName);
+  for (auto &[cutName, sumOfWeights] : cutFlowManager->GetCutFlow(collectionName)) {
+    string number = cutName.substr(0, cutName.find("_"));
+    int index = stoi(number);
+    sortedWeightsAfterCuts[index] = {cutName, sumOfWeights};
+    sortedRawEventsAfterCuts[index] = {cutName, rawEventsCutFlow[cutName]};
   }
+
+  int bin = 1;
+  for (auto &[index, values] : sortedWeightsAfterCuts) {
+    cutFlowHist->SetBinContent(bin, get<1>(values));
+    rawEventsCutFlowHist->SetBinContent(bin, get<1>(sortedRawEventsAfterCuts[index]));
+    cutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(values).c_str());
+    rawEventsCutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(sortedRawEventsAfterCuts[index]).c_str());
+    bin++;
+  }
+  histogramsHandler->SetHistogram1D(cutFlowName.c_str(), cutFlowHist);
+  histogramsHandler->SetHistogram1D(rawEventsCutFlowName.c_str(), rawEventsCutFlowHist);
 }
 
 /// --------- ABCD Histograms --------- ///

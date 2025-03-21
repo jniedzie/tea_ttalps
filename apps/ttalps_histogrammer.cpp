@@ -74,23 +74,17 @@ int main(int argc, char **argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runABCDHistograms) {
-      ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
-      ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
-      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+    ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
+    ttalpsObjectsManager->InsertMuonVertexCollection(event);
+    ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+    ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
+
+    bool passesDimuonCuts = true;
+    for (string category : categories) {
+      passesDimuonCuts |= ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, category);
     }
+    if (!passesDimuonCuts) continue;
 
-
-    bool passesDimuonCuts = false;
-    if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPTriggerHistograms ||
-        runABCDHistograms) {
-      // To register the dimuon cutflow
-      ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
-
-      for (string category : categories) {
-        passesDimuonCuts |= ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, category);
-      }
-    }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
       ttalpsHistogramsFiller->FillNormCheck(event);
