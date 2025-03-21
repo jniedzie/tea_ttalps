@@ -1,16 +1,20 @@
 from ttalps_samples_list import *
+from Logger import warn, logger_print
 
 import argparse
 import glob
 import os
+import ROOT
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Loose ttbar semimuonic skim
 # skim = "skimmed_looseSemimuonic_v2"
 
-# Loose non-ttbar skim (vetoing events with b-jets)
-skim = "skimmed_looseNonTT_v1"
+# Loose non-ttbar skims, vetoing events with too many (b-)jets
+# skim = "skimmed_looseNonTT_v1"
+# skim = "skimmed_looseNoBjets_lt4jets_v1"
+skim = "skimmed_loose_lt3bjets_lt4jets_v1"
 
 sample_paths = dasSamples2018.keys()
 
@@ -27,6 +31,7 @@ def get_args():
   parser.add_argument("--dry", action="store_true", default=False, help="dry run")
   parser.add_argument("--n", type=int, default=10, help="Number of files to merge into one")
   parser.add_argument("--condor", action="store_true", default=False, help="run on condor")
+  parser.add_argument("--fix_broken", action="store_true", default=False, help="only fix broken files")
   args = parser.parse_args()
   return args
 
@@ -84,12 +89,37 @@ def run_on_condor(commands, dry_run=False):
   if not dry_run:
     os.system(f"condor_submit {submit_file}")
     os.system(f"rm {submit_file}")
-  else:
-    exit(0)
 
 
-def merge_batch_of_files(files_to_merge, output_ntuple_counter, output_path, dry_run, condor):
+def is_broken_file(file_path):
+  # check for ROOT errors
+  try:
+    print(f"Checking file {file_path}")
+    file = ROOT.TFile.Open(file_path)
+  except OSError:
+    return True
+
+  # check for other errors
+  if not file:
+    return True
+  if file is None:
+    return True
+  if file.IsZombie():
+    return True
+  if file.TestBit(ROOT.TFile.kRecovered):
+    return True
+
+  return False
+
+
+def merge_batch_of_files(files_to_merge, output_ntuple_counter, output_path, dry_run, condor, fix_broken):
   output_filename = get_file_name(output_ntuple_counter, output_path)
+
+  if fix_broken:
+    if not is_broken_file(output_filename):
+      return
+    else:
+      warn("Found broken file")
 
   command = f"{python_path} hadd_safe.py -f -j -k {output_filename} {' '.join(files_to_merge)}"
 
@@ -114,7 +144,7 @@ def merge_n_files(input_path, output_path, args):
 
     # if full, merge and move to the next batch:
     if len(files_to_merge) == args.n:
-      merge_batch_of_files(files_to_merge, output_ntuple_counter, output_path, args.dry, args.condor)
+      merge_batch_of_files(files_to_merge, output_ntuple_counter, output_path, args.dry, args.condor, args.fix_broken)
       files_to_merge = []
       output_ntuple_counter += 1
 
@@ -122,10 +152,13 @@ def merge_n_files(input_path, output_path, args):
 
   # merge any remaining files:
   if len(files_to_merge) != 0:
-    merge_batch_of_files(files_to_merge, output_ntuple_counter, output_path, args.dry, args.condor)
+    merge_batch_of_files(files_to_merge, output_ntuple_counter, output_path, args.dry, args.condor, args.fix_broken)
 
 
 def main():
+  # suppress all ROOT errors, warnings and info messages
+  ROOT.gErrorIgnoreLevel = ROOT.kFatal
+
   args = get_args()
 
   for path in sample_paths:
@@ -135,6 +168,8 @@ def main():
 
   if args.condor:
     run_on_condor(condor_commands, args.dry)
+
+  logger_print()
 
 
 if __name__ == "__main__":
