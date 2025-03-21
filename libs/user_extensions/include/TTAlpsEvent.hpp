@@ -28,28 +28,28 @@ class TTAlpsEvent {
   std::shared_ptr<PhysicsObjects> GetGenMuonsFromW();
   std::vector<int> GetGenMuonIndicesFromW();
   
-  std::shared_ptr<MuonPair> GetDimuonMatchedToGenMuonsFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
+  std::shared_ptr<NanoMuonPair> GetDimuonMatchedToGenMuonsFromALP(std::shared_ptr<NanoMuons> muonCollection, float maxDeltaR = 0.3);
   
   std::shared_ptr<PhysicsObjects> GetMuonsMatchedToGenMuonsNotFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
-  std::shared_ptr<MuonPairs> GetMuonsMatchedToGenDimuonsNotFromALP(std::shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR = 0.3);
+  std::shared_ptr<NanoMuonPairs> GetMuonsMatchedToGenDimuonsNotFromALP(std::shared_ptr<NanoMuons> muonCollection, float maxDeltaR = 0.3);
   
-  std::shared_ptr<MuonPair> GetLooseDimuonMatchedToGenDimuon(std::shared_ptr<MuonPair> genMuonPair, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR = 0.3);
-  std::shared_ptr<PhysicsObjects> GetLooseMuonsMatchedToGenMuons(std::shared_ptr<PhysicsObjects> genMuonCollection, std::shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR);
-  std::shared_ptr<PhysicsObjects> GetRemainingNonResonantMuons(std::shared_ptr<PhysicsObjects> muonCollection, std::shared_ptr<MuonPairs> resonantCollection);
+  std::shared_ptr<NanoMuonPair> GetLooseDimuonMatchedToGenDimuon(std::shared_ptr<MuonPair> genMuonPair, std::shared_ptr<NanoMuons> looseMuonCollection, float maxDeltaR = 0.3);
+  std::shared_ptr<NanoMuons> GetLooseMuonsMatchedToGenMuons(std::shared_ptr<PhysicsObjects> genMuonCollection, std::shared_ptr<NanoMuons> looseMuonCollection, float maxDeltaR);
+  std::shared_ptr<NanoMuons> GetRemainingNonResonantMuons(std::shared_ptr<NanoMuons> muonCollection, std::shared_ptr<NanoMuonPairs> resonantCollection);
   
   std::vector<int> GetFiveFirstMotherIDsOfParticle(std::shared_ptr<PhysicsObject> particle);
 
   float GetPhiAngleBetweenDimuonAndALP(std::shared_ptr<PhysicsObject> muon1, std::shared_ptr<PhysicsObject> muon2, std::shared_ptr<PhysicsObject> alp, bool recoMuon);
 
-  std::shared_ptr<PhysicsObject> GetLeadingMuon(std::shared_ptr<PhysicsObjects> muonCollection);
-  bool IsLeadingMuonInCollection(std::shared_ptr<PhysicsObjects> collection, std::shared_ptr<PhysicsObjects> allMuons);
-  std::shared_ptr<PhysicsObjects> GetTightMuonsInCollection(std::shared_ptr<PhysicsObjects> muonCollection);
+  std::shared_ptr<NanoMuon> GetLeadingMuon(std::shared_ptr<NanoMuons> muonCollection);
+  bool IsLeadingMuonInCollection(std::shared_ptr<NanoMuons> collection, std::shared_ptr<NanoMuons> allMuons);
+  std::shared_ptr<NanoMuons> GetTightMuonsInCollection(std::shared_ptr<NanoMuons> muonCollection);
 
   bool IsALPDecayWithinCMS(float CMS_Lxy_max = 600);
 
   std::string GetTTbarEventCategory();
 
-  std::shared_ptr<PhysicsObjects> GetMuonsInVertexCollection(std::shared_ptr<PhysicsObjects> vertexCollection);
+  std::shared_ptr<NanoMuons> GetMuonsInVertexCollection(std::shared_ptr<PhysicsObjects> vertexCollection);
 
  private:
   std::shared_ptr<Event> event;
