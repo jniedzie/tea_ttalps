@@ -1,6 +1,8 @@
 #include "TTAlpsEvent.hpp"
-#include "ExtensionsHelpers.hpp"
+
 #include <tuple>
+
+#include "ExtensionsHelpers.hpp"
 
 using namespace std;
 
@@ -127,12 +129,11 @@ bool TTAlpsEvent::ParticleHasISRmotherAfterTopMother(int particleIndex) {
 }
 
 bool TTAlpsEvent::IsGoodMuonFromALP(int genMuonIndex) {
-
   auto genParticles = event->GetCollection("GenPart");
   auto muon = asNanoGenParticle(genParticles->at(genMuonIndex));
-  
+
   if (!muon->IsLastCopy()) return false;
-  if(!muon->IsMuon()) return false;
+  if (!muon->IsMuon()) return false;
 
   auto firstMuon = muon->GetFirstCopy(genParticles);
   if (firstMuon == nullptr) return false;
@@ -149,12 +150,11 @@ bool TTAlpsEvent::IsGoodMuonFromALP(int genMuonIndex) {
 }
 
 bool TTAlpsEvent::IsGoodMuonFromMotherWithParticleID(int genMuonIndex, int motherParticleID) {
-
   auto genParticles = event->GetCollection("GenPart");
   auto muon = asNanoGenParticle(genParticles->at(genMuonIndex));
-  
+
   if (!muon->IsLastCopy()) return false;
-  if(!muon->IsMuon()) return false;
+  if (!muon->IsMuon()) return false;
 
   auto firstMuon = muon->GetFirstCopy(genParticles);
   if (firstMuon == nullptr) return false;
@@ -170,12 +170,11 @@ bool TTAlpsEvent::IsGoodMuonFromMotherWithParticleID(int genMuonIndex, int mothe
 }
 
 bool TTAlpsEvent::IsGoodMuonNotFromALP(int genMuonIndex) {
-
   auto genParticles = event->GetCollection("GenPart");
   auto muon = asNanoGenParticle(genParticles->at(genMuonIndex));
-  
+
   if (!muon->IsLastCopy()) return false;
-  if(!muon->IsMuon()) return false;
+  if (!muon->IsMuon()) return false;
 
   auto firstMuon = muon->GetFirstCopy(genParticles);
   if (firstMuon == nullptr) return false;
@@ -196,10 +195,9 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenALPs() {
 
   auto genALPs = make_shared<PhysicsObjects>();
 
-  for (int i = 0; i < genParticles->size(); i++)
-  {
+  for (int i = 0; i < genParticles->size(); i++) {
     auto genParticle = asNanoGenParticle(genParticles->at(i));
-    if(!genParticle->IsGoodParticleWithID(54)) continue;
+    if (!genParticle->IsGoodParticleWithID(54)) continue;
     genALPs->push_back(genParticles->at(i));
   }
   return genALPs;
@@ -210,13 +208,12 @@ shared_ptr<MuonPair> TTAlpsEvent::GetGenDimuonFromALP() {
 
   auto genMuons = make_shared<PhysicsObjects>();
 
-  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++)
-  {
+  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++) {
     auto genParticle = asNanoGenParticle(genParticles->at(muon_idx));
     int motherIndex = genParticle->GetMotherIndex();
     if (motherIndex < 0) continue;
     auto mother = asNanoGenParticle(genParticles->at(motherIndex));
-    if(!IsGoodMuonFromALP(muon_idx)) continue;
+    if (!IsGoodMuonFromALP(muon_idx)) continue;
     genMuons->push_back(genParticles->at(muon_idx));
   }
   if (genMuons->size() != 2) return nullptr;
@@ -228,13 +225,12 @@ vector<int> TTAlpsEvent::GetGenMuonIndicesFromALP() {
 
   vector<int> genMuonIndices;
 
-  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++)
-  {
+  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++) {
     auto genParticle = asNanoGenParticle(genParticles->at(muon_idx));
     int motherIndex = genParticle->GetMotherIndex();
     if (motherIndex < 0) continue;
     auto mother = asNanoGenParticle(genParticles->at(motherIndex));
-    if(!IsGoodMuonFromALP(muon_idx)) continue;
+    if (!IsGoodMuonFromALP(muon_idx)) continue;
     genMuonIndices.push_back(muon_idx);
   }
   return genMuonIndices;
@@ -245,14 +241,13 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenMuonsFromW() {
 
   auto genMuons = make_shared<PhysicsObjects>();
 
-  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++)
-  {
+  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++) {
     auto genParticle = asNanoGenParticle(genParticles->at(muon_idx));
     int motherIndex = genParticle->GetMotherIndex();
     if (motherIndex < 0) continue;
     auto mother = asNanoGenParticle(genParticles->at(motherIndex));
     int WpdgId = 24;
-    if(!IsGoodMuonFromMotherWithParticleID(muon_idx, WpdgId)) continue;
+    if (!IsGoodMuonFromMotherWithParticleID(muon_idx, WpdgId)) continue;
     genMuons->push_back(genParticles->at(muon_idx));
   }
   return genMuons;
@@ -263,14 +258,13 @@ vector<int> TTAlpsEvent::GetGenMuonIndicesFromW() {
 
   vector<int> genMuonIndices;
 
-  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++)
-  {
+  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++) {
     auto genParticle = asNanoGenParticle(genParticles->at(muon_idx));
     int motherIndex = genParticle->GetMotherIndex();
     if (motherIndex < 0) continue;
     auto mother = asNanoGenParticle(genParticles->at(motherIndex));
     int WpdgId = 24;
-    if(!IsGoodMuonFromMotherWithParticleID(muon_idx, WpdgId)) continue;
+    if (!IsGoodMuonFromMotherWithParticleID(muon_idx, WpdgId)) continue;
     genMuonIndices.push_back(muon_idx);
   }
   return genMuonIndices;
@@ -282,8 +276,7 @@ shared_ptr<MuonPairs> TTAlpsEvent::GetGenDimuonsNotFromALP() {
   auto genMuons = GetGenMuonsNotFromALP();
   auto genDimuons = make_shared<MuonPairs>();
 
-  for (int muon1_idx = 0; muon1_idx < genMuons->size(); muon1_idx++)
-  {
+  for (int muon1_idx = 0; muon1_idx < genMuons->size(); muon1_idx++) {
     auto genMuon1 = asNanoGenParticle(genMuons->at(muon1_idx));
     auto firstMuon1 = genMuon1->GetFirstCopy(genParticles);
     if (firstMuon1 == nullptr) continue;
@@ -293,10 +286,10 @@ shared_ptr<MuonPairs> TTAlpsEvent::GetGenDimuonsNotFromALP() {
     auto mother1 = asNanoGenParticle(genParticles->at(motherIndex1));
     if (!mother1->IsLastCopy()) continue;
 
-    for (int muon2_idx = muon1_idx+1; muon2_idx < genMuons->size(); muon2_idx++) {
+    for (int muon2_idx = muon1_idx + 1; muon2_idx < genMuons->size(); muon2_idx++) {
       if (muon2_idx == muon1_idx) continue;
       auto genMuon2 = asNanoGenParticle(genMuons->at(muon2_idx));
-      auto firstMuon2 = genMuon2->GetFirstCopy(genParticles); 
+      auto firstMuon2 = genMuon2->GetFirstCopy(genParticles);
       if (firstMuon2 == nullptr) continue;
 
       int motherIndex2 = firstMuon2->GetMotherIndex();
@@ -304,7 +297,7 @@ shared_ptr<MuonPairs> TTAlpsEvent::GetGenDimuonsNotFromALP() {
       auto mother2 = asNanoGenParticle(genParticles->at(motherIndex2));
 
       if (!mother2->IsLastCopy()) continue;
-      
+
       if (motherIndex1 == motherIndex2) {
         auto dimuon = make_pair(genMuons->at(muon1_idx), genMuons->at(muon2_idx));
         genDimuons->push_back(dimuon);
@@ -319,122 +312,128 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetGenMuonsNotFromALP() {
 
   auto genMuons = make_shared<PhysicsObjects>();
 
-  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++)
-  {
+  for (int muon_idx = 0; muon_idx < genParticles->size(); muon_idx++) {
     auto genParticle = asNanoGenParticle(genParticles->at(muon_idx));
     int motherIndex = genParticle->GetMotherIndex();
     if (motherIndex < 0) continue;
     auto mother = asNanoGenParticle(genParticles->at(motherIndex));
 
-    if(!IsGoodMuonNotFromALP(muon_idx)) continue;
+    if (!IsGoodMuonNotFromALP(muon_idx)) continue;
     genMuons->push_back(genParticles->at(muon_idx));
   }
   return genMuons;
 }
 
-shared_ptr<MuonPair> TTAlpsEvent::GetDimuonMatchedToGenMuonsFromALP(shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR) {
+shared_ptr<NanoMuonPair> TTAlpsEvent::GetDimuonMatchedToGenMuonsFromALP(shared_ptr<NanoMuons> muonCollection, float maxDeltaR) {
   auto genMuonPair = GetGenDimuonFromALP();
 
   return GetLooseDimuonMatchedToGenDimuon(genMuonPair, muonCollection, maxDeltaR);
 }
 
-shared_ptr<MuonPair> TTAlpsEvent::GetLooseDimuonMatchedToGenDimuon(shared_ptr<MuonPair> genMuonPair, shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR) {
+shared_ptr<NanoMuonPair> TTAlpsEvent::GetLooseDimuonMatchedToGenDimuon(shared_ptr<MuonPair> genMuonPair,
+                                                                   shared_ptr<NanoMuons> looseMuonCollection, float maxDeltaR) {
   vector<int> savedMuonIndices;
   float muonMass = 0.105;
 
-  if(!genMuonPair) return nullptr;
+  if (!genMuonPair) return nullptr;
 
-  float minDeltaR1(9999),minDeltaR2(9999),secondMinDeltaR1(9999),secondMinDeltaR2(9999);
-  float minDeltaR1_muonIdx(-1),minDeltaR2_muonIdx(-1),secondMinDeltaR1_muonIdx(-1),secondMinDeltaR2_muonIdx(-1);
+  float minDeltaR1(9999), minDeltaR2(9999), secondMinDeltaR1(9999), secondMinDeltaR2(9999);
+  float minDeltaR1_muonIdx(-1), minDeltaR2_muonIdx(-1), secondMinDeltaR1_muonIdx(-1), secondMinDeltaR2_muonIdx(-1);
 
   auto genMuon1p4 = asNanoGenParticle(genMuonPair->first)->GetFourVector(muonMass);
   auto genMuon2p4 = asNanoGenParticle(genMuonPair->second)->GetFourVector(muonMass);
 
   for (int i = 0; i < looseMuonCollection->size(); i++) {
-    auto muonp4 = asNanoMuon(looseMuonCollection->at(i))->GetFourVector();
+    auto muonp4 = looseMuonCollection->at(i)->GetFourVector();
 
     float deltaR1 = muonp4.DeltaR(genMuon1p4);
     float deltaR2 = muonp4.DeltaR(genMuon2p4);
 
-    if(deltaR1 < maxDeltaR) {
-      if(deltaR1 < minDeltaR1) {
+    if (deltaR1 < maxDeltaR) {
+      if (deltaR1 < minDeltaR1) {
         minDeltaR1 = deltaR1;
         minDeltaR1_muonIdx = i;
-      }
-      else if(deltaR1 < secondMinDeltaR1) {
+      } else if (deltaR1 < secondMinDeltaR1) {
         secondMinDeltaR1 = deltaR1;
         secondMinDeltaR1_muonIdx = i;
       }
     }
-    if(deltaR2 < maxDeltaR) {
-      if(deltaR2 < minDeltaR2) {
+    if (deltaR2 < maxDeltaR) {
+      if (deltaR2 < minDeltaR2) {
         minDeltaR2 = deltaR2;
         minDeltaR2_muonIdx = i;
-      }
-      else if(deltaR2 < secondMinDeltaR2) {
+      } else if (deltaR2 < secondMinDeltaR2) {
         secondMinDeltaR2 = deltaR2;
         secondMinDeltaR2_muonIdx = i;
       }
     }
   }
-  if(minDeltaR1_muonIdx < 0 || minDeltaR2_muonIdx < 0) return nullptr;
+  if (minDeltaR1_muonIdx < 0 || minDeltaR2_muonIdx < 0) return nullptr;
   // minDeltaR1_muonIdx != minDeltaR2_muonIdx
-  if(minDeltaR1_muonIdx != minDeltaR2_muonIdx) {
-    return make_shared<MuonPair>(looseMuonCollection->at(minDeltaR1_muonIdx), looseMuonCollection->at(minDeltaR2_muonIdx));
+  if (minDeltaR1_muonIdx != minDeltaR2_muonIdx) {
+    return make_shared<NanoMuonPair>(
+      looseMuonCollection->at(minDeltaR1_muonIdx), 
+      looseMuonCollection->at(minDeltaR2_muonIdx)
+    );
   }
   // minDeltaR1_muonIdx < minDeltaR2_muonIdx
-  if(minDeltaR1 < minDeltaR2) {
-    if(secondMinDeltaR2_muonIdx >= 0) {
-      return make_shared<MuonPair>(looseMuonCollection->at(minDeltaR1_muonIdx), looseMuonCollection->at(secondMinDeltaR2_muonIdx));
+  if (minDeltaR1 < minDeltaR2) {
+    if (secondMinDeltaR2_muonIdx >= 0) {
+      return make_shared<NanoMuonPair>(
+        looseMuonCollection->at(minDeltaR1_muonIdx), 
+        looseMuonCollection->at(secondMinDeltaR2_muonIdx)
+      );
     }
   }
   // minDeltaR1_muonIdx > minDeltaR2_muonIdx
-  if(secondMinDeltaR1_muonIdx >= 0) {
-    return make_shared<MuonPair>(looseMuonCollection->at(secondMinDeltaR1_muonIdx), looseMuonCollection->at(minDeltaR2_muonIdx));
+  if (secondMinDeltaR1_muonIdx >= 0) {
+    return make_shared<NanoMuonPair>(
+      looseMuonCollection->at(secondMinDeltaR1_muonIdx), 
+      looseMuonCollection->at(minDeltaR2_muonIdx)
+    );
   }
   // secondMinDeltaR1_muonIdx < 0 or secondMinDeltaR2_muonIdx < 0
   return nullptr;
 }
 
-shared_ptr<PhysicsObjects> TTAlpsEvent::GetLooseMuonsMatchedToGenMuons(shared_ptr<PhysicsObjects> genMuonCollection, shared_ptr<PhysicsObjects> looseMuonCollection, float maxDeltaR) {
-  auto matchedLooseMuons = make_shared<PhysicsObjects>();
+shared_ptr<NanoMuons> TTAlpsEvent::GetLooseMuonsMatchedToGenMuons(
+    shared_ptr<PhysicsObjects> genMuonCollection,
+    shared_ptr<NanoMuons> looseMuonCollection, 
+    float maxDeltaR
+  ) {
+  auto matchedLooseMuons = make_shared<NanoMuons>();
   vector<int> savedMuonIndices;
   float muonMass = 0.105;
 
-  vector<vector<tuple<float,int>>> minDeltaRs;
+  vector<vector<tuple<float, int>>> minDeltaRs;
 
   for (int i = 0; i < genMuonCollection->size(); i++) {
-
     vector<tuple<float, int>> minDeltaR(5, make_tuple(9999.0f, -1));
 
     auto genMuonp4 = asNanoGenParticle(genMuonCollection->at(i))->GetFourVector(muonMass);
 
     for (int j = 0; j < looseMuonCollection->size(); j++) {
-      auto looseMuonp4 = asNanoMuon(looseMuonCollection->at(j))->GetFourVector();
+      auto looseMuonp4 = looseMuonCollection->at(j)->GetFourVector();
 
       float deltaR = looseMuonp4.DeltaR(genMuonp4);
 
-      if(deltaR > maxDeltaR) continue;
+      if (deltaR > maxDeltaR) continue;
 
       if (deltaR < get<0>(minDeltaR.back())) {
         minDeltaR.emplace_back(deltaR, j);
-        sort(minDeltaR.begin(), minDeltaR.end(), [](const auto& a, const auto& b) {
-            return get<0>(a) < get<0>(b);
-        });
-        if(minDeltaR.size() > 5) minDeltaR.pop_back();
+        sort(minDeltaR.begin(), minDeltaR.end(), [](const auto& a, const auto& b) { return get<0>(a) < get<0>(b); });
+        if (minDeltaR.size() > 5) minDeltaR.pop_back();
       }
     }
-    minDeltaRs.push_back(minDeltaR);  
+    minDeltaRs.push_back(minDeltaR);
   }
   for (auto& minDeltaRs : minDeltaRs) {
-    sort(minDeltaRs.begin(), minDeltaRs.end(), [](const auto& a, const auto& b) {
-      return get<0>(a) < get<0>(b);
-    });
+    sort(minDeltaRs.begin(), minDeltaRs.end(), [](const auto& a, const auto& b) { return get<0>(a) < get<0>(b); });
   }
   for (size_t i = 0; i < minDeltaRs.size(); ++i) {
     const auto& deltaRs = minDeltaRs[i];
     for (const auto& [deltaR, muonIdx] : deltaRs) {
-      if(muonIdx < 0) continue;
+      if (muonIdx < 0) continue;
       if (find(savedMuonIndices.begin(), savedMuonIndices.end(), muonIdx) == savedMuonIndices.end()) {
         savedMuonIndices.push_back(muonIdx);
         matchedLooseMuons->push_back(looseMuonCollection->at(muonIdx));
@@ -463,12 +462,12 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsMatchedToGenMuonsNotFromALP(shar
       auto muonp4 = asNanoMuon(muonCollection->at(i))->GetFourVector();
 
       float deltaR = muonp4.DeltaR(genMuonp4);
-      if(deltaR < maxDeltaR && deltaR < minDeltaR) {
+      if (deltaR < maxDeltaR && deltaR < minDeltaR) {
         minDeltaR = deltaR;
         minDeltaR_muonIdx = i;
       }
     }
-    if(minDeltaR_muonIdx >= 0 && find(savedMuonIndices.begin(), savedMuonIndices.end(), minDeltaR_muonIdx) == savedMuonIndices.end()) {
+    if (minDeltaR_muonIdx >= 0 && find(savedMuonIndices.begin(), savedMuonIndices.end(), minDeltaR_muonIdx) == savedMuonIndices.end()) {
       muonsNotFromALP->push_back(muonCollection->at(minDeltaR_muonIdx));
       savedMuonIndices.push_back(minDeltaR_muonIdx);
     }
@@ -476,10 +475,10 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsMatchedToGenMuonsNotFromALP(shar
   return muonsNotFromALP;
 }
 
-std::shared_ptr<MuonPairs> TTAlpsEvent::GetMuonsMatchedToGenDimuonsNotFromALP(shared_ptr<PhysicsObjects> muonCollection, float maxDeltaR) {
+std::shared_ptr<NanoMuonPairs> TTAlpsEvent::GetMuonsMatchedToGenDimuonsNotFromALP(shared_ptr<NanoMuons> muonCollection, float maxDeltaR) {
   auto genDimuons = GetGenDimuonsNotFromALP();
 
-  auto dimuonsNotFromALP = make_shared<MuonPairs>();
+  auto dimuonsNotFromALP = make_shared<NanoMuonPairs>();
   vector<int> savedMuonIndices;
   float muonMass = 0.105;
 
@@ -502,12 +501,11 @@ std::shared_ptr<MuonPairs> TTAlpsEvent::GetMuonsMatchedToGenDimuonsNotFromALP(sh
     int secondBestRecoMuonIdx2 = -1;
 
     for (int i = 0; i < muonCollection->size(); i++) {
-
       if (find(savedMuonIndices.begin(), savedMuonIndices.end(), i) != savedMuonIndices.end()) {
         continue;
       }
 
-      auto muonp4 = asNanoMuon(muonCollection->at(i))->GetFourVector();
+      auto muonp4 = muonCollection->at(i)->GetFourVector();
       float deltaR1 = muonp4.DeltaR(genMuon1p4);
       float deltaR2 = muonp4.DeltaR(genMuon2p4);
 
@@ -553,8 +551,8 @@ std::shared_ptr<MuonPairs> TTAlpsEvent::GetMuonsMatchedToGenDimuonsNotFromALP(sh
   return dimuonsNotFromALP;
 }
 
-shared_ptr<PhysicsObjects> TTAlpsEvent::GetRemainingNonResonantMuons(shared_ptr<PhysicsObjects> muonCollection, shared_ptr<MuonPairs> resonantCollection) {
-  auto nonResonantMuons = make_shared<PhysicsObjects>();
+shared_ptr<NanoMuons> TTAlpsEvent::GetRemainingNonResonantMuons(shared_ptr<NanoMuons> muonCollection, shared_ptr<NanoMuonPairs> resonantCollection) {
+  auto nonResonantMuons = make_shared<NanoMuons>();
 
   for (auto muon : *muonCollection) {
     bool isResonant = false;
@@ -569,14 +567,14 @@ shared_ptr<PhysicsObjects> TTAlpsEvent::GetRemainingNonResonantMuons(shared_ptr<
   return nonResonantMuons;
 }
 
-std::vector<int> TTAlpsEvent::GetFiveFirstMotherIDsOfParticle(shared_ptr<PhysicsObject> particle) {
+vector<int> TTAlpsEvent::GetFiveFirstMotherIDsOfParticle(shared_ptr<PhysicsObject> particle) {
   auto genParticles = event->GetCollection("GenPart");
-  
-  std::vector<int> motherIDs = {-1,-1,-1,-1,-1};
+
+  std::vector<int> motherIDs = {-1, -1, -1, -1, -1};
   bool mothersOk = true;
   int motherCount = 0;
   auto genParticle = asNanoGenParticle(particle);
-  while(mothersOk && motherCount < 5) {
+  while (mothersOk && motherCount < 5) {
     auto firstMuon = genParticle->GetFirstCopy(genParticles);
     if (firstMuon != nullptr) {
       int motherIndex = firstMuon->GetMotherIndex();
@@ -585,33 +583,40 @@ std::vector<int> TTAlpsEvent::GetFiveFirstMotherIDsOfParticle(shared_ptr<Physics
         if (mother->IsLastCopy()) {
           motherIDs[motherCount] = abs(mother->GetPdgId());
           genParticle = mother;
-        } else {mothersOk = false;}
-      } else {mothersOk = false;}
-    } else {mothersOk = false;}
+        } else {
+          mothersOk = false;
+        }
+      } else {
+        mothersOk = false;
+      }
+    } else {
+      mothersOk = false;
+    }
     motherCount++;
   }
   return motherIDs;
 }
 
 // Particle can be either a genParticle or a reco muon, Mother has to be a genParticle
-float TTAlpsEvent::GetPhiAngleBetweenDimuonAndALP(shared_ptr<PhysicsObject> muon1, shared_ptr<PhysicsObject> muon2, shared_ptr<PhysicsObject> alp, bool recoMuon) {
+float TTAlpsEvent::GetPhiAngleBetweenDimuonAndALP(shared_ptr<PhysicsObject> muon1, shared_ptr<PhysicsObject> muon2,
+                                                  shared_ptr<PhysicsObject> alp, bool recoMuon) {
   auto pv_x = GetAs<float>("PV_x");
   auto pv_y = GetAs<float>("PV_y");
   auto pv_z = GetAs<float>("PV_z");
 
-  TLorentzVector muon1fourVector,muon2fourVector;
+  TLorentzVector muon1fourVector, muon2fourVector;
   float muonMass = 0.105;
-  if(recoMuon) {
+  if (recoMuon) {
     muon1fourVector = asNanoMuon(muon1)->GetFourVector();
     muon2fourVector = asNanoMuon(muon2)->GetFourVector();
   } else {
-    muon1fourVector = asNanoGenParticle(muon1)->GetFourVector(muonMass); 
-    muon2fourVector = asNanoGenParticle(muon2)->GetFourVector(muonMass); 
+    muon1fourVector = asNanoGenParticle(muon1)->GetFourVector(muonMass);
+    muon2fourVector = asNanoGenParticle(muon2)->GetFourVector(muonMass);
   }
 
   TVector3 muon1ptVector(muon1fourVector.Px(), muon1fourVector.Py(), muon1fourVector.Pz());
   TVector3 muon2ptVector(muon2fourVector.Px(), muon2fourVector.Py(), muon2fourVector.Pz());
-  TVector3 alpLxyzVector((float)alp->Get("vx")-pv_x, (float)alp->Get("vy")-pv_y, (float)alp->Get("vz")-pv_z);
+  TVector3 alpLxyzVector((float)alp->Get("vx") - pv_x, (float)alp->Get("vy") - pv_y, (float)alp->Get("vz") - pv_z);
 
   TVector3 muonPtNormal = muon1ptVector.Cross(muon2ptVector).Unit();
 
@@ -623,26 +628,26 @@ float TTAlpsEvent::GetPhiAngleBetweenDimuonAndALP(shared_ptr<PhysicsObject> muon
   return muonPtNormal.Phi();
 }
 
-shared_ptr<PhysicsObject> TTAlpsEvent::GetLeadingMuon(shared_ptr<PhysicsObjects> muonCollection) {
+shared_ptr<NanoMuon> TTAlpsEvent::GetLeadingMuon(shared_ptr<NanoMuons> muonCollection) {
   int leadingMuonIdx = -1;
   float leadingMuonPt = -1;
 
-  for(int i = 0; i < muonCollection->size(); i++) {
-    if((float)muonCollection->at(i)->Get("pt") > leadingMuonPt) {
+  for (int i = 0; i < muonCollection->size(); i++) {
+    if ((float)muonCollection->at(i)->Get("pt") > leadingMuonPt) {
       leadingMuonPt = (float)muonCollection->at(i)->Get("pt");
       leadingMuonIdx = i;
     }
   }
-  if(leadingMuonIdx < 0) return make_shared<PhysicsObject>();
+  if (leadingMuonIdx < 0) return nullptr;
   return muonCollection->at(leadingMuonIdx);
 }
 
-shared_ptr<PhysicsObjects> TTAlpsEvent::GetTightMuonsInCollection(shared_ptr<PhysicsObjects> muonCollection) {
-  auto tightMuons = make_shared<PhysicsObjects>();
+shared_ptr<NanoMuons> TTAlpsEvent::GetTightMuonsInCollection(shared_ptr<NanoMuons> muonCollection) {
+  auto tightMuons = make_shared<NanoMuons>();
 
   for (auto muon : *muonCollection) {
-    if (asNanoMuon(muon)->isDSA()) continue;
-    if (asNanoMuon(muon)->isTight() && (float)muon->Get("pt") > 30 && abs((float)muon->Get("eta")) < 2.4) {
+    if (muon->isDSA()) continue;
+    if (muon->isTight() && (float)muon->Get("pt") > 30 && abs((float)muon->Get("eta")) < 2.4) {
       tightMuons->push_back(muon);
     }
   }
@@ -653,42 +658,40 @@ bool TTAlpsEvent::IsALPDecayWithinCMS(float CMS_Lxy_max) {
   auto genMuonsFromALP = GetGenDimuonFromALP();
   float ALPvx = genMuonsFromALP->first->Get("vx");
   float ALPvy = genMuonsFromALP->first->Get("vy");
-  float ALPvxy = sqrt(ALPvx*ALPvx + ALPvy*ALPvy);
+  float ALPvxy = sqrt(ALPvx * ALPvx + ALPvy * ALPvy);
   return ALPvxy < CMS_Lxy_max;
 }
 
-bool TTAlpsEvent::IsLeadingMuonInCollection(shared_ptr<PhysicsObjects> collection, shared_ptr<PhysicsObjects> allMuons) {
-  auto leadingLooseMuon = GetLeadingMuon(allMuons);  
+bool TTAlpsEvent::IsLeadingMuonInCollection(shared_ptr<NanoMuons> collection, shared_ptr<NanoMuons> allMuons) {
+  auto leadingLooseMuon = GetLeadingMuon(allMuons);
   float leadingLoosePt = leadingLooseMuon->Get("pt");
-  for(auto muon : *collection) {
-    if((float)muon->Get("pt") == leadingLoosePt) return true;
+  for (auto muon : *collection) {
+    if ((float)muon->Get("pt") == leadingLoosePt) return true;
   }
   return false;
 }
 
-shared_ptr<PhysicsObjects> TTAlpsEvent::GetMuonsInVertexCollection(shared_ptr<PhysicsObjects> vertexCollection) {
-  auto muons = make_shared<PhysicsObjects>();
+shared_ptr<NanoMuons> TTAlpsEvent::GetMuonsInVertexCollection(shared_ptr<PhysicsObjects> vertexCollection) {
+  auto muons = make_shared<NanoMuons>();
   vector<int> DSAmuonIndices;
   vector<int> PATmuonIndices;
-  for(auto vertex : *vertexCollection) {
+  for (auto vertex : *vertexCollection) {
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
-    if(dimuonVertex->isDSAMuon1()) {
-      if(std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex1()) != DSAmuonIndices.end()) continue;
+    if (dimuonVertex->isDSAMuon1()) {
+      if (std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex1()) != DSAmuonIndices.end()) continue;
       DSAmuonIndices.push_back(dimuonVertex->muonIndex1());
       muons->push_back(dimuonVertex->Muon1());
-    }
-    else {
-      if(std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex1()) != PATmuonIndices.end()) continue;
+    } else {
+      if (std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex1()) != PATmuonIndices.end()) continue;
       PATmuonIndices.push_back(dimuonVertex->muonIndex1());
       muons->push_back(dimuonVertex->Muon1());
     }
-    if(dimuonVertex->isDSAMuon2()) {
-      if(std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex2()) != DSAmuonIndices.end()) continue;
+    if (dimuonVertex->isDSAMuon2()) {
+      if (std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex2()) != DSAmuonIndices.end()) continue;
       DSAmuonIndices.push_back(dimuonVertex->muonIndex2());
       muons->push_back(dimuonVertex->Muon2());
-    }
-    else {
-      if(std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex2()) != PATmuonIndices.end()) continue;
+    } else {
+      if (std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex2()) != PATmuonIndices.end()) continue;
       PATmuonIndices.push_back(dimuonVertex->muonIndex2());
       muons->push_back(dimuonVertex->Muon2());
     }
