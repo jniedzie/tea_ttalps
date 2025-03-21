@@ -28,8 +28,8 @@ runGenMuonVertexCollectionHistograms = False
 runABCDHistograms = True
 
 # dimuonSelection is the name of the selection in ttalps_object_cuts
-# dimuonSelection = "SRDimuonVertex"
-dimuonSelection = "JPsiDimuonVertex"
+dimuonSelection = "SRDimuonVertex"
+# dimuonSelection = "JPsiDimuonVertex"
 # dimuonSelection = "ZDimuonVertex"
 
 weightsBranchName = "genWeight"

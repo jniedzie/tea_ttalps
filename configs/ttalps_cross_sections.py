@@ -1,4 +1,5 @@
 
+signal_xsec_scale = 1e0
 
 # Cross sections in (pb) from XSDB
 cross_sectionsRun2 = {
@@ -64,43 +65,43 @@ cross_sectionsRun2 = {
   
   "SingleMuon2018": 1.0,
   
-  "tta_mAlp-0p35GeV_ctau-1e-5mm": 0.003912, # +- 2.935e-05 pb
-  "tta_mAlp-0p35GeV_ctau-1e0mm": 0.003912, # +- 2.935e-05 pb
-  "tta_mAlp-0p35GeV_ctau-1e1mm": 0.003912, # +- 2.935e-05 pb
-  "tta_mAlp-0p35GeV_ctau-1e2mm": 0.003912, # +- 2.935e-05 pb
-  "tta_mAlp-0p35GeV_ctau-1e3mm": 0.003912, # +- 2.935e-05 pb
-  "tta_mAlp-0p35GeV_ctau-1e5mm": 0.003912, # +- 2.935e-05 pb
-  "tta_mAlp-0p35GeV_ctau-1e7mm": 0.003912, # +- 2.935e-05 pb
+  "tta_mAlp-0p35GeV_ctau-1e-5mm": signal_xsec_scale * 0.003912, # +- 2.935e-05 pb
+  "tta_mAlp-0p35GeV_ctau-1e0mm": signal_xsec_scale * 0.003912, # +- 2.935e-05 pb
+  "tta_mAlp-0p35GeV_ctau-1e1mm": signal_xsec_scale * 0.003912, # +- 2.935e-05 pb
+  "tta_mAlp-0p35GeV_ctau-1e2mm": signal_xsec_scale * 0.003912, # +- 2.935e-05 pb
+  "tta_mAlp-0p35GeV_ctau-1e3mm": signal_xsec_scale * 0.003912, # +- 2.935e-05 pb
+  "tta_mAlp-0p35GeV_ctau-1e5mm": signal_xsec_scale * 0.003912, # +- 2.935e-05 pb
+  "tta_mAlp-0p35GeV_ctau-1e7mm": signal_xsec_scale * 0.003912, # +- 2.935e-05 pb
 
-  "tta_mAlp-1GeV_ctau-1e-5mm": 0.004088, # +- 3.1e-05 pb,
-  "tta_mAlp-1GeV_ctau-1e0mm": 0.004088, # +- 3.1e-05 pb,
-  "tta_mAlp-1GeV_ctau-1e1mm": 0.004088, # +- 3.1e-05 pb,
-  "tta_mAlp-1GeV_ctau-1e2mm": 0.004088, # +- 3.1e-05 pb,
-  "tta_mAlp-1GeV_ctau-1e3mm": 0.004088, # +- 3.1e-05 pb,
-  "tta_mAlp-1GeV_ctau-1e5mm": 0.004088, # +- 3.1e-05 pb,
+  "tta_mAlp-1GeV_ctau-1e-5mm": signal_xsec_scale * 0.004088, # +- 3.1e-05 pb,
+  "tta_mAlp-1GeV_ctau-1e0mm": signal_xsec_scale * 0.004088, # +- 3.1e-05 pb,
+  "tta_mAlp-1GeV_ctau-1e1mm": signal_xsec_scale * 0.004088, # +- 3.1e-05 pb,
+  "tta_mAlp-1GeV_ctau-1e2mm": signal_xsec_scale * 0.004088, # +- 3.1e-05 pb,
+  "tta_mAlp-1GeV_ctau-1e3mm": signal_xsec_scale * 0.004088, # +- 3.1e-05 pb,
+  "tta_mAlp-1GeV_ctau-1e5mm": signal_xsec_scale * 0.004088, # +- 3.1e-05 pb,
 
-  "tta_mAlp-2GeV_ctau-1e-5mm": 0.004233, # +- 3.199e-05 pb,
-  "tta_mAlp-2GeV_ctau-1e0mm": 0.004233, # +- 3.199e-05 pb,
-  "tta_mAlp-2GeV_ctau-1e1mm": 0.004233, # +- 3.199e-05 pb,
-  "tta_mAlp-2GeV_ctau-1e2mm": 0.004233, # +- 3.199e-05 pb,
-  "tta_mAlp-2GeV_ctau-1e3mm": 0.004233, # +- 3.199e-05 pb,
+  "tta_mAlp-2GeV_ctau-1e-5mm": signal_xsec_scale * 0.004233, # +- 3.199e-05 pb,
+  "tta_mAlp-2GeV_ctau-1e0mm": signal_xsec_scale * 0.004233, # +- 3.199e-05 pb,
+  "tta_mAlp-2GeV_ctau-1e1mm": signal_xsec_scale * 0.004233, # +- 3.199e-05 pb,
+  "tta_mAlp-2GeV_ctau-1e2mm": signal_xsec_scale * 0.004233, # +- 3.199e-05 pb,
+  "tta_mAlp-2GeV_ctau-1e3mm": signal_xsec_scale * 0.004233, # +- 3.199e-05 pb,
 
-  "tta_mAlp-12GeV_ctau-1e0mm": 0.004019, # +- 3.065e-05 pb
-  "tta_mAlp-12GeV_ctau-1e1mm": 0.004019, # +- 3.065e-05 pb
-  "tta_mAlp-12GeV_ctau-1e2mm": 0.004019, # +- 3.065e-05 pb
-  "tta_mAlp-12GeV_ctau-1e3mm": 0.004019, # +- 3.065e-05 pb
+  "tta_mAlp-12GeV_ctau-1e0mm": signal_xsec_scale * 0.004019, # +- 3.065e-05 pb
+  "tta_mAlp-12GeV_ctau-1e1mm": signal_xsec_scale * 0.004019, # +- 3.065e-05 pb
+  "tta_mAlp-12GeV_ctau-1e2mm": signal_xsec_scale * 0.004019, # +- 3.065e-05 pb
+  "tta_mAlp-12GeV_ctau-1e3mm": signal_xsec_scale * 0.004019, # +- 3.065e-05 pb
 
-  "tta_mAlp-30GeV_ctau-1e0mm": 0.003504, # +- 2.162e-05 pb
-  "tta_mAlp-30GeV_ctau-1e1mm": 0.003504, # +- 2.162e-05 pb
-  "tta_mAlp-30GeV_ctau-1e2mm": 0.003504, # +- 2.162e-05 pb
-  "tta_mAlp-30GeV_ctau-1e3mm": 0.003504, # +- 2.162e-05 pb
+  "tta_mAlp-30GeV_ctau-1e0mm": signal_xsec_scale * 0.003504, # +- 2.162e-05 pb
+  "tta_mAlp-30GeV_ctau-1e1mm": signal_xsec_scale * 0.003504, # +- 2.162e-05 pb
+  "tta_mAlp-30GeV_ctau-1e2mm": signal_xsec_scale * 0.003504, # +- 2.162e-05 pb
+  "tta_mAlp-30GeV_ctau-1e3mm": signal_xsec_scale * 0.003504, # +- 2.162e-05 pb
 
-  "tta_mAlp-60GeV_ctau-1e0mm": 0.002679, # +- 1.323e-05 pb
-  "tta_mAlp-60GeV_ctau-1e1mm": 0.002679, # +- 1.323e-05 pb
-  "tta_mAlp-60GeV_ctau-1e2mm": 0.002679, # +- 1.323e-05 pb
-  "tta_mAlp-60GeV_ctau-1e3mm": 0.002679, # +- 1.323e-05 pb
+  "tta_mAlp-60GeV_ctau-1e0mm": signal_xsec_scale * 0.002679, # +- 1.323e-05 pb
+  "tta_mAlp-60GeV_ctau-1e1mm": signal_xsec_scale * 0.002679, # +- 1.323e-05 pb
+  "tta_mAlp-60GeV_ctau-1e2mm": signal_xsec_scale * 0.002679, # +- 1.323e-05 pb
+  "tta_mAlp-60GeV_ctau-1e3mm": signal_xsec_scale * 0.002679, # +- 1.323e-05 pb
 
-  "tta_mAlp-70GeV_ctau-1e0mm": 0.002438, # +- 1.888e-05 pb
+  "tta_mAlp-70GeV_ctau-1e0mm": signal_xsec_scale * 0.002438, # +- 1.888e-05 pb
 }
 
 cross_sectionsRun3 = {
