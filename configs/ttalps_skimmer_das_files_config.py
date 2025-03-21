@@ -12,9 +12,10 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # output_skim = "skimmed_looseSemimuonicv1_LLPtrigger_unmerged"
 
-# Loose non-ttbar skims (vetoing events with b-jets)
-# output_skim = "skimmed_looseNonTT_v1"
-output_skim = "skimmed_looseNoBjets_lt4jets_v1"
+# Loose non-ttbar skims, vetoing events with too many (b-)jets
+# output_skim = "skimmed_looseNonTT_v1"  
+# output_skim = "skimmed_looseNoBjets_lt4jets_v1"
+output_skim = "skimmed_loose_lt3bjets_lt4jets_v1"
 
 output_trees_dir = ""
 output_hists_dir = ""

@@ -1,13 +1,12 @@
 from ttalps_samples_list import *
 from ttalps_cross_sections import get_cross_sections
-from ttalps_plotting_styles import samples_params, samples_styles
 
-import ROOT
 from Logger import error, info
 from Sample import Sample, SampleType
 from Legend import Legend
 
 from collections import defaultdict
+import importlib
 
 
 class TTAlpsPlotterConfigHelper:
@@ -15,6 +14,13 @@ class TTAlpsPlotterConfigHelper:
       self, year, base_path, skim, hist_path, data_to_include,
       backgrounds_to_exclude, signals_to_include, legend_pos_and_size
   ):
+
+    region = skim.split("_")[-1]
+    module_name = f"ttalps_plotting_styles_{region}"
+    module = importlib.import_module(module_name)
+
+    self.samples_params = getattr(module, "samples_params")
+    self.samples_styles = getattr(module, "samples_styles")
 
     self.year = year
     self.cross_sections = get_cross_sections(year)
@@ -72,11 +78,11 @@ class TTAlpsPlotterConfigHelper:
               file_path=file_path,
               type=sample_type,
               cross_sections=self.cross_sections,
-              line_alpha=samples_styles[sample_type]["line_alpha"],
-              line_style=samples_styles[sample_type]["line_style"],
-              fill_alpha=samples_styles[sample_type]["fill_alpha"],
-              marker_size=samples_styles[sample_type]["marker_size"],
-              marker_style=samples_styles[sample_type]["marker_style"],
+              line_alpha=self.samples_styles[sample_type]["line_alpha"],
+              line_style=self.samples_styles[sample_type]["line_style"],
+              fill_alpha=self.samples_styles[sample_type]["fill_alpha"],
+              marker_size=self.samples_styles[sample_type]["marker_size"],
+              marker_style=self.samples_styles[sample_type]["marker_style"],
               marker_color=params["color"],
               fill_color=params["color"],
               line_color=params["color"],
@@ -84,7 +90,7 @@ class TTAlpsPlotterConfigHelper:
               custom_legend=self.__get_legend(
                   params["legend_column"],
                   params["legend_row"],
-                  samples_styles[sample_type]["legend_style"]
+                  self.samples_styles[sample_type]["legend_style"]
               ),
           )
       )
@@ -94,14 +100,14 @@ class TTAlpsPlotterConfigHelper:
     # Group samples by short names in samples_params
     sample_groups = defaultdict(list)
     for sample in samples:
-      for param in samples_params:
+      for param in self.samples_params:
         if param in sample.name:
           sample_groups[param].append(sample)
           break  # Stop after first match to avoid duplicate mappings
 
     # Create the final ordered list
     ordered_samples = []
-    for param in samples_params:
+    for param in self.samples_params:
       ordered_samples.extend(sample_groups[param])
 
     samples = ordered_samples
@@ -121,7 +127,7 @@ class TTAlpsPlotterConfigHelper:
     return long_name
 
   def __get_params_for_sample(self, long_name):
-    for key, params in samples_params.items():
+    for key, params in self.samples_params.items():
       if key in long_name:
         return params
     error(f"No sample parameters found for sample {long_name}")

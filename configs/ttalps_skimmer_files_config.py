@@ -15,7 +15,9 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 # input_skim = "skimmed_looseSemimuonicv1_LLPtrigger"
 
 # Loose non-ttbar skims (vetoing events with b-jets)
-input_skim = "skimmed_looseNonTT_v1_merged"
+# input_skim = "skimmed_looseNonTT_v1_merged"
+# input_skim = "skimmed_looseNoBjets_lt4jets_v1_merged"
+input_skim = "skimmed_loose_lt3bjets_lt4jets_v1_merged"
 
 ### Output skims ###
 
@@ -28,8 +30,11 @@ input_skim = "skimmed_looseNonTT_v1_merged"
 # tt̄ CR skim
 # output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 
-# QCD CR (vetoing events with b-jets, but identical to SR otherwise)
-output_skim = "skimmed_looseNonTT_v1_QCDCR"
+# Loose non-ttbar skims, vetoing events with too many (b-)jets
+# output_skim = "skimmed_looseNonTT_v1_QCDCR"  # this is in fact VV CR
+# output_skim = "skimmed_looseNoBjets_lt4jets_v1_QCDCR"
+# output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR"
+output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_bbCR"
 
 output_trees_dir = ""
 output_hists_dir = ""

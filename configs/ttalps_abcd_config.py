@@ -13,8 +13,12 @@ cross_sections = get_cross_sections(year)
 # ------------------------------------------
 
 # do_region = "SR"
-do_region = "JPsiCR"
+# do_region = "JPsiCR"
 # do_region = "ttZCR"
+# do_region = "VVCR"
+do_region = "QCDCR"
+# do_region = "WjetsCR"
+# do_region = "bbCR"
 
 do_data = True
 
@@ -23,8 +27,8 @@ if do_region == "SR":
 
 
 # collection = "GoodPFIsoDimuonVertex"
-# collection = "BestPFIsoDimuonVertex"
-collection = "BestDimuonVertex"
+collection = "BestPFIsoDimuonVertex"
+# collection = "BestDimuonVertex"
 
 variable_1 = "logLxySignificance"
 variable_2 = "log3Dangle"
@@ -33,21 +37,28 @@ optimal_points = {
     # optimizing on significance
     "JPsi_noIso_mc": (-0.9, 0.86),
     "JPsi_noIso_data": (-0.54, 0.42),  # all identical
-    "SR_noIso_mc": (0.46, -1.94),  # all identical
+    
 
     "JPsi_iso_mc": (-1.06, 0.22),  # outdated
     "JPsi_iso_data": (-1.18, 0.46),
-    "SR_iso_mc": (-0.34, 0.38),
+    
+    "SR_noIso_mc": (0.46, -1.94),  # all identical
+    "SR_iso_mc": (-0.78, 0.34),
+    
+    "QCD_iso_mc": (0.02, 0.82),
+    "QCD_iso_data": (0.46, 1.14),
 
     # optimizing on error (same results on closure)
     "JPsi_noIso_mc_optimalError": (-1.22, 0.06),  # outdated
     "JPsi_noIso_data_optimalError": (-1.38, -1.26),  # outdated
 }
 
-abcd_point = optimal_points["JPsi_noIso_data_optimalError"]
+abcd_point = (0.2, 0.0)
 
-optimization_param = "significance"
-# optimization_param = "error"
+# abcd_point = optimal_points["QCD_iso_data"]
+
+# optimization_param = "significance"
+optimization_param = "error"
 # optimization_param = "closure"
 
 # optimization parameters
@@ -62,6 +73,18 @@ elif do_region == "SR":
   min_n_events = 10
   max_signal_contamination = 0.20
 elif do_region == "ttZCR":
+  min_n_events = 10
+  max_signal_contamination = 1.0
+elif do_region == "VVCR":
+  min_n_events = 10
+  max_signal_contamination = 1.0
+elif do_region == "QCDCR":
+  min_n_events = 10
+  max_signal_contamination = 1.0
+elif do_region == "WjetsCR":
+  min_n_events = 10
+  max_signal_contamination = 1.0
+elif do_region == "bbCR":
   min_n_events = 10
   max_signal_contamination = 1.0
 
@@ -100,6 +123,18 @@ elif do_region == "SR":
   y_max = 30
   y_max_ratio = 10
 elif do_region == "ttZCR":
+  y_max = 10
+  y_max_ratio = 10
+elif do_region == "VVCR":
+  y_max = 10
+  y_max_ratio = 10
+elif do_region == "QCDCR":
+  y_max = 10
+  y_max_ratio = 10
+elif do_region == "WjetsCR":
+  y_max = 10
+  y_max_ratio = 10
+elif do_region == "bbCR":
   y_max = 10
   y_max_ratio = 10
 
@@ -171,6 +206,14 @@ elif do_region == "ttZCR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 elif do_region == "SR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+elif do_region == "VVCR":
+  skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
+elif do_region == "QCDCR":
+  skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
+elif do_region == "WjetsCR":
+  skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
+elif do_region == "bbCR":
+  skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
 
 hist_dir = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 

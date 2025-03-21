@@ -13,7 +13,10 @@ output_username = os.environ["USER"]
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
-skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
+# skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
+skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # skim = ("skimmed_looseSemimuonicv1_LLPtrigger", "_SRDimuons_TriggerStudy")
