@@ -39,9 +39,7 @@ class TTAlpsHistogramFiller {
 
   std::map<std::string, float> muonMatchingParams;
 
-  std::vector<std::string> muonVertexCollectionNames;
-  std::map<std::string, std::vector<std::string>> muonVertexCollections;
-  std::vector<std::string> muonVertexNminus1Collections;
+  std::pair<std::string, std::vector<std::string>> muonVertexCollection;
 
   std::string year;
 
@@ -60,7 +58,7 @@ class TTAlpsHistogramFiller {
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName);
 
   // Dimuon Vertex Collection Histograms
-  void FillNminus1HistogramsForBestMuonVertexCollections(const std::shared_ptr<Event> event);
+  void FillNminus1HistogramsForMuonVertexCollection(const std::shared_ptr<Event> event);
 
   // Nminus1 LLPnanoAOD histograms
   void FillDimuonVertexNminus1HistogramForCut(std::string collectionName, std::string cut, std::shared_ptr<NanoDimuonVertex> dimuonVertex, float weight);

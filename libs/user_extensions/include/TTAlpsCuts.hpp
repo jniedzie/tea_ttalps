@@ -52,9 +52,7 @@ class TTAlpsCuts {
  private:
   std::unique_ptr<EventProcessor> eventProcessor;
   std::map<std::string, float> muonMatchingParams;
-  std::map<std::string, std::vector<std::string>> muonVertexCollections;
-
-  bool PassesDimuonCuts(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string collectionName, std::vector<std::string> vertexCuts, std::string dimuonCategory = "");
+  std::pair<std::string, std::vector<std::string>> muonVertexCollection;
 
   std::vector<std::string> triggerWarningsPrinted;
 

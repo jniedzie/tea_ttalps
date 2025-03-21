@@ -76,23 +76,24 @@ muonVertexBaselineSelection = [
     "Chi2Cut"
 ]
 
-muonVertexCollections = {
-    "GoodPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut"],
-    "BestPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"],
-    "BestDimuonVertex": muonVertexBaselineSelection + ["BestDimuonVertex"],
-}
+## to use muonVertexCollection the collection name has to start with "Best" and have the ["BestDimuonVertex"] cut at the end
+## to not use muonVertexCollection use the empty pair
+muonVertexCollection = ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"])
+# muonVertexCollection = ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"])
 
-abcdCollections = tuple(muonVertexCollections.keys())
-muonVertexNminus1Collections = tuple(muonVertexCollections.keys())
-muonVertexCollectionNames = list(muonVertexCollections.keys())
-
-for matchingMethod in muonMatchingParams:
-  muonVertexCollectionNames.append(f"LooseMuonsVertex{matchingMethod}Match")
+abcdCollections = []
 
 histParams = ()
 histParams2D = ()
 
-helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollections)
+helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams)
+
+try:
+    muonVertexCollection
+    abcdCollections.append(muonVertexCollection[0])
+    helper.add_muon_vertex_collection(muonVertexCollection)
+except NameError:
+    abcdCollections = []
 
 defaultHistParams = helper.get_default_params()
 

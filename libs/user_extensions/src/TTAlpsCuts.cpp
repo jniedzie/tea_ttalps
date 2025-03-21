@@ -19,9 +19,9 @@ TTAlpsCuts::TTAlpsCuts(){
     warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
   }
   try {
-    config.GetMap("muonVertexCollections", muonVertexCollections);
+    config.GetPair("muonVertexCollection", muonVertexCollection);
   } catch (const Exception &e) {
-    warn() << "Couldn't read muonVertexCollections from config file - no muon vertex collection cuts can be made" << endl;
+    warn() << "Couldn't read muonVertexCollection from config file - no muon vertex collection cuts can be made" << endl;
   }
 }
 
@@ -30,50 +30,33 @@ void TTAlpsCuts::RegisterSignalLikeCuts(shared_ptr<CutFlowManager> cutFlowManage
 }
 
 void TTAlpsCuts::RegisterInitialDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  for(auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
-    string collectionName = originalCollectionName;
-    if(dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
-    cutFlowManager->RegisterCollection(collectionName);
-    cutFlowManager->RegisterCut("initial", collectionName);
-    cutFlowManager->RegisterCut("initialDimuon", collectionName);
-  }
+  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+
+  string collectionName = muonVertexCollection.first;
+  if(dimuonCategory != "") collectionName = collectionName + "_" + dimuonCategory;
+  cutFlowManager->RegisterCollection(collectionName);
+  cutFlowManager->RegisterCut("initial", collectionName);
+  cutFlowManager->RegisterCut("initialDimuon", collectionName);
 }
 
 void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  for(auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
-    string collectionName = originalCollectionName;
-    if(dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
-    for (auto cutName : vertexCuts) {
-      if(cutName == "BestDimuonVertex") continue;
-      cutFlowManager->RegisterCut(cutName, collectionName);
-    }
+  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+
+  string collectionName = muonVertexCollection.first;
+  auto vertexCuts = muonVertexCollection.second;
+  if(dimuonCategory != "") collectionName = collectionName + "_" + dimuonCategory;
+  for (auto cutName : vertexCuts) {
+    if(cutName == "BestDimuonVertex") continue;
+    cutFlowManager->RegisterCut(cutName, collectionName);
   }
 }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  bool finalPassesCuts = true;
-  bool firstIteration = true;
-  string firstCollectionName = "";
-  for (auto &[originalCollectionName, vertexCuts] : muonVertexCollections) {
-    string collectionName = originalCollectionName;
-    if (dimuonCategory != "") collectionName = originalCollectionName + "_" + dimuonCategory;
-    bool passesDimuonCuts = PassesDimuonCuts(event, cutFlowManager, collectionName, vertexCuts, dimuonCategory);
-    
-    // final passes cut will only be registered for the first "Best" dimuon collection
-    bool bestCollection = originalCollectionName.find("Best") == 0;
-    if (!firstIteration && bestCollection) {
-      warn() << "Multiple Best dimuon collections registered. Only the first collection " << firstCollectionName << " will be used for final PassesDimuonCuts." << endl;
-    }
-    if (firstIteration && bestCollection) {
-      if(!passesDimuonCuts) finalPassesCuts = false;
-      firstIteration = false;
-      firstCollectionName = collectionName;
-    }    
-  }
-  return finalPassesCuts;
-}
+  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return true;
 
-bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string collectionName, vector<string> vertexCuts, string dimuonCategory) {
+  string collectionName = muonVertexCollection.first;
+  auto vertexCuts = muonVertexCollection.second;
+
   std::unique_ptr<TTAlpsDimuonCuts> ttAlpsDimuonCuts = make_unique<TTAlpsDimuonCuts>();
 
   shared_ptr<PhysicsObjects> allDimuons = event->GetCollection("BaseDimuonVertices");
@@ -255,10 +238,8 @@ bool TTAlpsCuts::PassesHadronCuts(const shared_ptr<Event> event) {
 }
 
 void TTAlpsCuts::PrintDimuonCutFlow(shared_ptr<CutFlowManager> cutFlowManager) {
-  info() << "Dimuon cut flow for all muonVertexCollections" << endl;
-  for(auto &[collectionName, vertexCuts] : muonVertexCollections) {
-    info() << "CutFlow for dimuon collection " << collectionName << endl;
-    cutFlowManager->Print(collectionName);
-  }
+  string collectionName = muonVertexCollection.first;
+  info() << "CutFlow for dimuon collection " << collectionName << endl;
+  cutFlowManager->Print(collectionName);
 }
     

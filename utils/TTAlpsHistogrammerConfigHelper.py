@@ -2,9 +2,8 @@ from itertools import product
 from math import pi
 
 class TTAlpsHistogrammerConfigHelper:
-  def __init__(self, muonMatchingParams, muonVertexCollections):
+  def __init__(self, muonMatchingParams):
     self.muonMatchingParams = muonMatchingParams
-    self.muonVertexCollections = muonVertexCollections
 
     self.muonCollections = []
 
@@ -14,11 +13,15 @@ class TTAlpsHistogrammerConfigHelper:
 
     self.muonVertexCollections = []
 
-    for category, collection in product(("", "_PatDSA", "_DSA", "_Pat"), muonVertexCollections):
-      self.muonVertexCollections.append(f"{collection}{category}")
-
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.muonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
+
+  def add_muon_vertex_collection(self, muonVertexCollection):
+    muonVertexCollectionName = muonVertexCollection[0]
+    for category in ("", "_PatDSA", "_DSA", "_Pat"):
+      self.muonVertexCollections.append(f"{muonVertexCollectionName}{category}")
+      gooMuonVertexCollectionName = muonVertexCollectionName.replace("Best", "Good")
+      self.muonVertexCollections.append(f"{gooMuonVertexCollectionName}{category}")
 
   def get_default_params(self):
     return (
