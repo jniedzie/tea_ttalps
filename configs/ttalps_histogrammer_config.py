@@ -77,7 +77,7 @@ muonVertexBaselineSelection = [
 ]
 
 ## to use muonVertexCollection the collection name has to start with "Best" and have the ["BestDimuonVertex"] cut at the end
-## to not use muonVertexCollection use the empty pair
+## to not use muonVertexCollection comment out the variable completely
 muonVertexCollection = ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"])
 # muonVertexCollection = ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"])
 
