@@ -129,31 +129,11 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
   }
 }
 
+/// --------- NormCheck Histogram --------- ///
+
 void TTAlpsHistogramFiller::FillNormCheck(const shared_ptr<Event> event) {
   float weight = nanoEventProcessor->GetGenWeight(asNanoEvent(event));
   histogramsHandler->Fill("Event_normCheck", 0.5, weight);
-}
-
-void TTAlpsHistogramFiller::FillLeadingPt(const shared_ptr<Event> event, string histName, const HistogramParams &params) {
-  auto maxPtObject = eventProcessor->GetMaxPtObject(event, params.collection);
-  if (!maxPtObject) return;
-
-  float weight = GetEventWeight(event);
-  weight *= GetObjectWeight(maxPtObject, params.collection);
-  histogramsHandler->Fill(histName, maxPtObject->Get("pt"), weight);
-}
-
-void TTAlpsHistogramFiller::FillAllSubLeadingPt(const shared_ptr<Event> event, string histName, const HistogramParams &params) {
-  float maxPt = eventProcessor->GetMaxPt(event, params.collection);
-
-  auto collection = event->GetCollection(params.collection);
-  float weight = GetEventWeight(event);
-
-  for (auto object : *collection) {
-    float pt = object->Get("pt");
-    if (pt == maxPt) continue;
-    histogramsHandler->Fill(histName, pt, weight * GetObjectWeight(object, params.collection));
-  }
 }
 
 /// --------- LooseMuons Histograms --------- ///

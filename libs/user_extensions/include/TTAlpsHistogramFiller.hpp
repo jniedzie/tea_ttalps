@@ -13,9 +13,6 @@ class TTAlpsHistogramFiller {
   TTAlpsHistogramFiller(std::shared_ptr<HistogramsHandler> histogramsHandler_);
   ~TTAlpsHistogramFiller();
 
-  void FillLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params);
-  void FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params);
-
   void FillDefaultVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesForLooseMuons(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event);
