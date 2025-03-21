@@ -239,13 +239,13 @@ dasData2022_standard = {
 }
 dasData2022 = {
   # preEE:
-  # "collision_data2022/SingleMuonC" : "/SingleMuon/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2022C-27Jun2023-v1-00000000000000000000000000000000/USER", # 0.539404395 fb-1
-  # # # "collision_data2022/MuonC" : "",
-  # "collision_data2022/MuonD" : "/Muon/lrygaard-LLPnanoAODv1_Run2022D-27Jun2023-v2-00000000000000000000000000000000/USER", # 2,968787020 fb-1
+  # "collision_data2022/SingleMuon2022C" : "/SingleMuon/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2022C-27Jun2023-v1-00000000000000000000000000000000/USER", # 0.539404395 fb-1
+  # # # "collision_data2022/Muon2022C" : "",
+  # "collision_data2022/Muon2022D" : "/Muon/lrygaard-LLPnanoAODv1_Run2022D-27Jun2023-v2-00000000000000000000000000000000/USER", # 2,968787020 fb-1
   # postEE
-  # "collision_data2022/MuonE" : "", # fb-1
-  "collision_data2022/MuonF" : "/Muon/lrygaard-LLPnanoAODv1_Run2022F-PromptReco-v1-00000000000000000000000000000000/USER", # 17.779126207 fb-1
-  "collision_data2022/MuonG" : "/Muon/lrygaard-LLPnanoAODv1_Run2022G-PromptReco-v1-00000000000000000000000000000000/USER", # 3,082753036 fb-1
+  # "collision_data2022/Muon2022E" : "", # fb-1
+  "collision_data2022/Muon2022F" : "/Muon/lrygaard-LLPnanoAODv1_Run2022F-PromptReco-v1-00000000000000000000000000000000/USER", # 17.779126207 fb-1
+  "collision_data2022/Muon2022G" : "/Muon/lrygaard-LLPnanoAODv1_Run2022G-PromptReco-v1-00000000000000000000000000000000/USER", # 3,082753036 fb-1
 }
 
 ##################     2023    ##################
@@ -340,21 +340,21 @@ dasData2023_standard = {
 }
 dasData2023 = {
   ## preBPix (C)
-  "collision_data2022/Muon0Cv1" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v1-00000000000000000000000000000000/USER", # 0Cv1 4.343001987 fb-1
-  "collision_data2022/Muon0Cv2" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v2-00000000000000000000000000000000/USER", # 0Cv2 1.270749295 fb-1
-  "collision_data2022/Muon0Cv3" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v3-00000000000000000000000000000000/USER", # 0Cv3 1.606429085 fb-1
+  "collision_data2023/Muon02023Cv1" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v1-00000000000000000000000000000000/USER", # 0Cv1 4.343001987 fb-1
+  "collision_data2023/Muon02023Cv2" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v2-00000000000000000000000000000000/USER", # 0Cv2 1.270749295 fb-1
+  "collision_data2023/Muon02023Cv3" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v3-00000000000000000000000000000000/USER", # 0Cv3 1.606429085 fb-1
 
-  "collision_data2022/Muon1Cv2" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v2-00000000000000000000000000000000/USER", # 1Cv2 1.270749295 fb-1
-  "collision_data2022/Muon1Cv3" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v3-00000000000000000000000000000000/USER", # 1Cv3 1.606429085 fb-1
+  "collision_data2023/Muon12023Cv2" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v2-00000000000000000000000000000000/USER", # 1Cv2 1.270749295 fb-1
+  "collision_data2023/Muon12023Cv3" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v3-00000000000000000000000000000000/USER", # 1Cv3 1.606429085 fb-1
 
   ## postBPix (D)
-  "collision_data2022/Muon0Dv2" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023D-PromptReco-v2-00000000000000000000000000000000/USER", # 0Dv2 1.707094295 fb-1
-  "collision_data2022/Muon1Dv2" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023D-PromptReco-v2-00000000000000000000000000000000/USER", # 1Dv2 1.707094295 fb-1
+  "collision_data2023/Muon02023Dv2" : "/Muon0/lrygaard-LLPnanoAODv1_Run2023D-PromptReco-v2-00000000000000000000000000000000/USER", # 0Dv2 1.707094295 fb-1
+  "collision_data2023/Muon12023Dv2" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023D-PromptReco-v2-00000000000000000000000000000000/USER", # 1Dv2 1.707094295 fb-1
 }
 dasData2023_WIP = {
-  "collision_data2022/Muon0Cv4" : "/Muon0/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2023C-PromptReco-v4-00000000000000000000000000000000/USER", # 0Cv4
-  "collision_data2022/Muon1Cv1" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v1-00000000000000000000000000000000/USER", # 1Cv1
-  "collision_data2022/Muon1Cv4" : "/Muon1/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2023C-PromptReco-v4-00000000000000000000000000000000/USER", # 1Cv4
+  "collision_data2023/Muon02023Cv4" : "/Muon0/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2023C-PromptReco-v4-00000000000000000000000000000000/USER", # 0Cv4
+  "collision_data2023/Muon12023Cv1" : "/Muon1/lrygaard-LLPnanoAODv1_Run2023C-PromptReco-v1-00000000000000000000000000000000/USER", # 1Cv1
+  "collision_data2023/Muon12023Cv4" : "/Muon1/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2023C-PromptReco-v4-00000000000000000000000000000000/USER", # 1Cv4
 }
 
 
