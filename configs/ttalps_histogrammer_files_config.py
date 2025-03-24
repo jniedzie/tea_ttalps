@@ -38,7 +38,7 @@ applyScaleFactors = {
   "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
-  "jetID": False,  # no need to apply jet ID SFs in UL
+  "PUjetID": False,  # no need to apply jet ID SFs in UL
 }
 
 # this has to be here, otherwise the script will not work:

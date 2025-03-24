@@ -36,12 +36,16 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("Event", "nGoodJets", 20, 0, 20, ""),
         ("GoodJets", "pt", 1000, 0, 1000, ""),
+        ("GoodJets", "leadingPt", 1000, 0, 1000, ""),
+        ("GoodJets", "subleadingPt", 1000, 0, 1000, ""),
         ("GoodJets", "eta", 300, -3, 3, ""),
         ("GoodJets", "phi", 300, -3, 3, ""),
         ("GoodJets", "mass", 1000, 0, 1000, ""),
 
         ("Event", "nGoodMediumBtaggedJets", 20, 0, 20, ""),
         ("GoodMediumBtaggedJets", "pt", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "leadingPt", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "subleadingPt", 1000, 0, 1000, ""),
         ("GoodMediumBtaggedJets", "eta", 300, -3, 3, ""),
         ("GoodMediumBtaggedJets", "phi", 300, -3, 3, ""),
         ("GoodMediumBtaggedJets", "mass", 1000, 0, 1000, ""),
@@ -54,6 +58,8 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("Event", "nTightMuons", 50, 0, 50, ""),
         ("TightMuons", "pt", 2000, 0, 1000, ""),
+        ("TightMuons", "leadingPt", 2000, 0, 1000, ""),
+        ("TightMuons", "subleadingPt", 2000, 0, 1000, ""),
         ("TightMuons", "eta", 300, -3, 3, ""),
         ("TightMuons", "phi", 300, -3, 3, ""),
     )

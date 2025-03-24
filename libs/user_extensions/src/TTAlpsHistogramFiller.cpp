@@ -81,7 +81,7 @@ float TTAlpsHistogramFiller::GetObjectWeight(const shared_ptr<PhysicsObject> obj
   } else if (collectionName == "GoodMediumBtaggedJets") {
     weight *= asNanoJet(object)->GetBtaggingScaleFactor("bTaggingMedium");
   } else if (collectionName == "GoodJets") {
-    weight *= asNanoJet(object)->GetJetIDScaleFactor("jetIDtight");
+    weight *= asNanoJet(object)->GetPUJetIDScaleFactor("PUjetIDtight");
   } else {
     fatal() << "Unknown collection name " << collectionName << " in GetObjectWeight" << endl;
     exit(1);
@@ -111,10 +111,26 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
       histogramsHandler->Fill(title, value, eventWeight);
     } else {
       auto collection = event->GetCollection(collectionName);
-      for (auto object : *collection) {
-        value = object->GetAs<float>(branchName);
+      if (branchName == "leadingPt") {
+        auto object = eventProcessor->GetMaxPtObject(event, collectionName);
+        if (!object) continue;
+        value = object->GetAs<float>("pt");
         float objectWeight = GetObjectWeight(object, collectionName);
         histogramsHandler->Fill(title, value, eventWeight * objectWeight);
+      }
+      else if (branchName == "subleadingPt") {
+        auto object = eventProcessor->GetSubleadingPtObject(event, collectionName);
+        if (!object) continue;
+        value = object->GetAs<float>("pt");
+        float objectWeight = GetObjectWeight(object, collectionName);
+        histogramsHandler->Fill(title, value, eventWeight * objectWeight);
+      }
+      else {
+        for (auto object : *collection) {
+          value = object->GetAs<float>(branchName);
+          float objectWeight = GetObjectWeight(object, collectionName);
+          histogramsHandler->Fill(title, value, eventWeight * objectWeight);
+        }
       }
     }
   }

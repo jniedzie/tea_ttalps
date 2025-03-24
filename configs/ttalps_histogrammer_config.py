@@ -49,7 +49,7 @@ applyScaleFactors = {
     "muonTrigger": True,
     "pileup": True,
     "bTagging": True,
-    "jetID": False,
+    "PUjetID": False,
 }
 
 # For the signal histogramming all given mathcing methods are applied separately to histograms

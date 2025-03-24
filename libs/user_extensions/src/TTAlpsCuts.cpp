@@ -30,7 +30,7 @@ void TTAlpsCuts::RegisterSignalLikeCuts(shared_ptr<CutFlowManager> cutFlowManage
 }
 
 void TTAlpsCuts::RegisterInitialDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   string collectionName = muonVertexCollection.first;
   if(dimuonCategory != "") collectionName = collectionName + "_" + dimuonCategory;
@@ -40,7 +40,7 @@ void TTAlpsCuts::RegisterInitialDimuonCuts(shared_ptr<CutFlowManager> cutFlowMan
 }
 
 void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   string collectionName = muonVertexCollection.first;
   auto vertexCuts = muonVertexCollection.second;
@@ -52,7 +52,7 @@ void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, s
 }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
-  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return true;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return true;
 
   string collectionName = muonVertexCollection.first;
   auto vertexCuts = muonVertexCollection.second;

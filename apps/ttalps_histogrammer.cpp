@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
     ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
 
-    bool passesDimuonCuts = true;
+    bool passesDimuonCuts = false;
     for (string category : categories) {
       passesDimuonCuts |= ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, category);
     }

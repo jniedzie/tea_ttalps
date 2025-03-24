@@ -107,7 +107,7 @@ void TTAlpsObjectsManager::InsertBaseLooseMuonVertexCollection(shared_ptr<Event>
 
 void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
   if (muonMatchingParams.size() == 0) return;
-  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   // Only segment matched muons for now
   string matchingMethod = muonMatchingParams.begin()->first;
@@ -154,7 +154,7 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
 
 void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> event) {
   if (muonMatchingParams.size() == 0) return;
-  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   // Only segment matched muons for now
   string matchingMethod = muonMatchingParams.begin()->first;

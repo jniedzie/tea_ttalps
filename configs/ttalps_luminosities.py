@@ -14,5 +14,5 @@ def get_luminosity(year):
   if year in luminosities:
     return luminosities[year]
   else:
-    warn(f"Luminosity for year {year} is not defined. Luminosity set to 1.")
+    error(f"Luminosity for year {year} is not defined. Luminosity set to 1.")
     return 1.
