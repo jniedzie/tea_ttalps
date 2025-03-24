@@ -76,21 +76,18 @@ muonVertexBaselineSelection = [
     "Chi2Cut"
 ]
 
-## to use muonVertexCollection the collection name has to start with "Best" and have the ["BestDimuonVertex"] cut at the end
-## to not use muonVertexCollection comment out the variable completely
-muonVertexCollection = ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"])
-# muonVertexCollection = ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"])
+# Muon Vertex Collection:
+#  - to use muonVertexCollection the collection name has to start with "Best" and have the ["BestDimuonVertex"] cut at the end
+#  - to not use muonVertexCollection set it to None
+# muonVertexCollection = ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"])
+muonVertexCollection = ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"])
+# muonVertexCollection = None
 
 histParams = ()
 histParams2D = ()
 
-helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams)
+helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection)
 
-try:
-    muonVertexCollection
-    helper.add_muon_vertex_collection(muonVertexCollection)
-except NameError:
-    print("No muonVertexCollection defined for histograms")
 
 defaultHistParams = helper.get_default_params()
 
