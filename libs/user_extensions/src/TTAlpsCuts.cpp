@@ -55,6 +55,7 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return true;
 
   string collectionName = muonVertexCollection.first;
+  if (dimuonCategory != "") collectionName = collectionName + "_" + dimuonCategory;
   auto vertexCuts = muonVertexCollection.second;
 
   std::unique_ptr<TTAlpsDimuonCuts> ttAlpsDimuonCuts = make_unique<TTAlpsDimuonCuts>();
