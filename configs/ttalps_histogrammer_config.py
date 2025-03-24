@@ -27,11 +27,6 @@ runGenMuonVertexCollectionHistograms = False
 
 runABCDHistograms = True
 
-# dimuonSelection is the name of the selection in ttalps_object_cuts
-dimuonSelection = "SRDimuonVertex"
-# dimuonSelection = "JPsiDimuonVertex"
-# dimuonSelection = "ZDimuonVertex"
-
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
@@ -49,7 +44,7 @@ applyScaleFactors = {
     "muonTrigger": True,
     "pileup": True,
     "bTagging": True,
-    "jetID": False,
+    "PUjetID": False,
 }
 
 # For the signal histogramming all given mathcing methods are applied separately to histograms
@@ -76,23 +71,29 @@ muonVertexBaselineSelection = [
     "Chi2Cut"
 ]
 
+
+# dimuonSelection and muonVertexCollection:
+#  - uncomment the dimuonSelection you want to use and the muonVertexCollection will be given automatically
+#  - to not use dimuonSelection and muonVertexCollection: set dimuonSelection to None
+dimuonSelection = "SRDimuonVertex"
+# dimuonSelection = "JPsiDimuonVertex"
+# dimuonSelection = "ZDimuonVertex"
+# dimuonSelection = None
 muonVertexCollections = {
-    "GoodPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut"],
-    "BestPFIsoDimuonVertex": muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"],
-    "BestDimuonVertex": muonVertexBaselineSelection + ["BestDimuonVertex"],
+    "SRDimuonVertex" : ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]), 
+    "JPsiDimuonVertex" : ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]), 
+    "ZDimuonVertex" : ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]), 
 }
+muonVertexCollection = None
+if dimuonSelection is not None:
+    muonVertexCollection = muonVertexCollections[dimuonSelection]
 
-abcdCollections = tuple(muonVertexCollections.keys())
-muonVertexNminus1Collections = tuple(muonVertexCollections.keys())
-muonVertexCollectionNames = list(muonVertexCollections.keys())
-
-for matchingMethod in muonMatchingParams:
-  muonVertexCollectionNames.append(f"LooseMuonsVertex{matchingMethod}Match")
 
 histParams = ()
 histParams2D = ()
 
-helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollections)
+helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection)
+
 
 defaultHistParams = helper.get_default_params()
 

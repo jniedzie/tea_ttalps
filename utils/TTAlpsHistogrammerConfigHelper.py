@@ -3,9 +3,8 @@ from math import pi
 
 
 class TTAlpsHistogrammerConfigHelper:
-  def __init__(self, muonMatchingParams, muonVertexCollections):
+  def __init__(self, muonMatchingParams, muonVertexCollection):
     self.muonMatchingParams = muonMatchingParams
-    self.muonVertexCollections = muonVertexCollections
 
     self.muonCollections = []
 
@@ -15,11 +14,15 @@ class TTAlpsHistogrammerConfigHelper:
 
     self.muonVertexCollections = []
 
-    for category, collection in product(("", "_PatDSA", "_DSA", "_Pat"), muonVertexCollections):
-      self.muonVertexCollections.append(f"{collection}{category}")
-
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.muonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
+
+    if muonVertexCollection is not None:
+      muonVertexCollectionName = muonVertexCollection[0]
+      for category in ("", "_PatDSA", "_DSA", "_Pat"):
+        self.muonVertexCollections.append(f"{muonVertexCollectionName}{category}")
+        gooMuonVertexCollectionName = muonVertexCollectionName.replace("Best", "Good")
+        self.muonVertexCollections.append(f"{gooMuonVertexCollectionName}{category}")
 
   def get_default_params(self):
     return (
@@ -33,12 +36,16 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("Event", "nGoodJets", 20, 0, 20, ""),
         ("GoodJets", "pt", 1000, 0, 1000, ""),
+        ("GoodJets", "leadingPt", 1000, 0, 1000, ""),
+        ("GoodJets", "subleadingPt", 1000, 0, 1000, ""),
         ("GoodJets", "eta", 300, -3, 3, ""),
         ("GoodJets", "phi", 300, -3, 3, ""),
         ("GoodJets", "mass", 1000, 0, 1000, ""),
 
         ("Event", "nGoodMediumBtaggedJets", 20, 0, 20, ""),
         ("GoodMediumBtaggedJets", "pt", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "leadingPt", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "subleadingPt", 1000, 0, 1000, ""),
         ("GoodMediumBtaggedJets", "eta", 300, -3, 3, ""),
         ("GoodMediumBtaggedJets", "phi", 300, -3, 3, ""),
         ("GoodMediumBtaggedJets", "mass", 1000, 0, 1000, ""),
@@ -51,6 +58,8 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("Event", "nTightMuons", 50, 0, 50, ""),
         ("TightMuons", "pt", 2000, 0, 1000, ""),
+        ("TightMuons", "leadingPt", 2000, 0, 1000, ""),
+        ("TightMuons", "subleadingPt", 2000, 0, 1000, ""),
         ("TightMuons", "eta", 300, -3, 3, ""),
         ("TightMuons", "phi", 300, -3, 3, ""),
     )

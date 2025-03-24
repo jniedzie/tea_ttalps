@@ -55,9 +55,6 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
 
-  vector<string> abcdCollections;
-  config.GetVector("abcdCollections", abcdCollections);
-
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
 
   // check if cutflowmanager has cut "initial"
@@ -74,23 +71,17 @@ int main(int argc, char **argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    if (runLLPNanoAODHistograms || runMuonMatchingHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runABCDHistograms) {
-      ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
-      ttalpsObjectsManager->InsertGoodLooseMuonVertexCollection(event);
-      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
-    }
-
+    ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
+    ttalpsObjectsManager->InsertMuonVertexCollection(event);
+    ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+    ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
 
     bool passesDimuonCuts = false;
-    if (runLLPNanoAODHistograms || runGenMuonHistograms || runGenMuonVertexCollectionHistograms || runLLPTriggerHistograms ||
-        runABCDHistograms) {
-      // To register the dimuon cutflow
-      ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
-
-      for (string category : categories) {
-        passesDimuonCuts |= ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, category);
-      }
+    for (string category : categories) {
+      passesDimuonCuts |= ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, category);
     }
+    if (!passesDimuonCuts) continue;
+
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
       ttalpsHistogramsFiller->FillNormCheck(event);
@@ -129,7 +120,7 @@ int main(int argc, char **argv) {
     }
 
     if (runABCDHistograms) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event, abcdCollections);
+      ttalpsHistogramsFiller->FillABCDHistograms(event);
     }
   }
 

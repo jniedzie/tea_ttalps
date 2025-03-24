@@ -8,10 +8,12 @@ from HistogramNormalizer import NormalizationType
 
 from TTAlpsPlotterConfigHelper import TTAlpsPlotterConfigHelper
 from ttalps_cross_sections import *
+from ttalps_luminosities import *
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
+luminosity = get_luminosity(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
@@ -30,11 +32,8 @@ output_formats = ["pdf"]
 
 output_path = f"../plots/{skim[0].replace('skimmed_', '')}_{hist_path.replace('histograms_', '').replace('histograms', '')}_{year}/"
 
-luminosity = 59820. # 2018 eras A+B+C+D (A+B+C) was 27972.887358 before)
-# luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 lumi_label_offset = 0.02
 lumi_label_value = luminosity
-
 
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
@@ -59,15 +58,18 @@ extraMuonVertexCollections = [
   "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
 ]
 
+# Gen-level resonances plots - comment out to avoid plots for these collections 
 genMuonVertexCollections = [
-  "BestPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
-  "GoodPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
-  "BestPFIsoDimuonVertexNonresonancesNotFromALP",  # Non-resonant Dimuons
-  "GoodPFIsoDimuonVertexNonresonancesNotFromALP",  # Non-resonant Dimuons
+  # "BestPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
+  # "GoodPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
+  # "BestPFIsoDimuonVertexNonresonancesNotFromALP",  # Non-resonant Dimuons
+  # "GoodPFIsoDimuonVertexNonresonancesNotFromALP",  # Non-resonant Dimuons
 ]
 
 data_to_include = [
   "SingleMuon2018",
+  # "Muon2022preEE",
+  # "Muon2022postEE",
 ]
 
 backgrounds_to_exclude = [
@@ -253,19 +255,11 @@ for collection, category in product(extraMuonVertexCollections, ("","_PatDSA", "
     Histogram(collection + category+"_Lxy"                             , "", False, True  , default_norm            , 1           , 0         , 20        , 1e-10 , 1e6   , "#mu vertex L_{xy} [cm]"                   , "# events (2018)" ),
     Histogram(collection + category+"_LxySigma"                        , "", False, True  , default_norm            , 1           , 0         , 1         , 1e-3  , 1e6   , "#mu vertex #sigma_{Lxy} [cm]"             , "# events (2018)" ),
     
-    # Histogram(collection + category+"_dR"                              , "", False, True  , default_norm            , 1           , 0         , 2         , 1e-5  , 1e6   , "#mu vertex #Delta R"                      , "# events (2018)" ),
-    # Histogram(collection + category+"_proxDR"                          , "", False, True  , default_norm            , 5           , 0         , 6         , 1e-5  , 1e6   , "#mu vertex proximity #Delta R"            , "# events (2018)" ),
-    # Histogram(collection + category+"_outerDR"                         , "", False, True  , default_norm            , 5           , 0         , 6         , 1e-5  , 1e6   , "#mu vertex outer #Delta R"                , "# events (2018)" ),
     # Histogram(collection + category+"_normChi2"                        , "", False, True  , default_norm            , 100         , 0         , 5         , 1e-5  , 1e4   , "#mu vertex #chi^{2}/ndof"                 , "# events (2018)" ),
     # Histogram(collection + category+"_maxHitsInFrontOfVert"            , "", False, True  , default_norm            , 1           , 0         , 35        , 1e-6  , 1e6   , "Max N(hits before vertex)"                , "# events (2018)" ),
     # Histogram(collection + category+"_dca"                             , "", False, True  , default_norm            , 10          , 0         , 10        , 1e-6  , 1e6   , "DCA [cm]"                                 , "# events (2018)" ),
     # Histogram(collection + category+"_absCollinearityAngle"            , "", False, True  , default_norm            , 10          , 0         , 3.15      , 1e-6  , 1e6   , "#mu vertex |#Delta #Phi|"                 , "# events (2018)" ),
     # Histogram(collection + category+"_absPtLxyDPhi1"                   , "", False, True  , default_norm            , 10          , 0         , 3.15      , 1e-4  , 1e5   , "#mu vertex |#Delta #phi_{#mu1}|"          , "# events (2018)" ),
-    
-    # Histogram(collection + category+"_displacedTrackIso03Dimuon1"      , "", False, True  , default_norm            , 1           , 0         , 0.5       , 1e-7  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)" ),
-    # Histogram(collection + category+"_displacedTrackIso04Dimuon1"      , "", False, True  , default_norm            , 1           , 0         , 0.5       , 1e-7  , 1e9   , "#mu_{1} I_{trk}^{rel} ( #Delta R < 0.4 )" , "# events (2018)" ),
-    # Histogram(collection + category+"_displacedTrackIso03Dimuon2"      , "", False, True  , default_norm            , 1           , 0         , 0.5       , 1e-7  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.3 )" , "# events (2018)" ),
-    # Histogram(collection + category+"_displacedTrackIso04Dimuon2"      , "", False, True  , default_norm            , 1           , 0         , 0.5       , 1e-7  , 1e9   , "#mu_{2} I_{trk}^{rel} ( #Delta R < 0.4 )" , "# events (2018)" ),
     # Histogram(collection + category+"_pfRelIso04all1"                  , "", False, True  , default_norm            , 4           , 0         , 10        , 1e-3  , 1e6   , "#mu_{1} I_{PF}^{rel} ( #Delta R < 0.4 )"  , "# events (2018)" ),
     # Histogram(collection + category+"_pfRelIso04all2"                  , "", False, True  , default_norm            , 4           , 0         , 10        , 1e-3  , 1e6   , "#mu_{2} I_{PF}^{rel} ( #Delta R < 0.4 )"  , "# events (2018)" ),
   )
