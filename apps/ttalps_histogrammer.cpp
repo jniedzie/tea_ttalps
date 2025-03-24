@@ -55,9 +55,6 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
 
-  vector<string> abcdCollections;
-  config.GetVector("abcdCollections", abcdCollections);
-
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
 
   // check if cutflowmanager has cut "initial"
@@ -123,7 +120,7 @@ int main(int argc, char **argv) {
     }
 
     if (runABCDHistograms) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event, abcdCollections);
+      ttalpsHistogramsFiller->FillABCDHistograms(event);
     }
   }
 

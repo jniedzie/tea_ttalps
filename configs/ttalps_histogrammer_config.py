@@ -81,8 +81,6 @@ muonVertexBaselineSelection = [
 muonVertexCollection = ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"])
 # muonVertexCollection = ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"])
 
-abcdCollections = []
-
 histParams = ()
 histParams2D = ()
 
@@ -90,10 +88,9 @@ helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams)
 
 try:
     muonVertexCollection
-    abcdCollections.append(muonVertexCollection[0])
     helper.add_muon_vertex_collection(muonVertexCollection)
 except NameError:
-    abcdCollections = []
+    print("No muonVertexCollection defined for histograms")
 
 defaultHistParams = helper.get_default_params()
 
