@@ -27,11 +27,6 @@ runGenMuonVertexCollectionHistograms = False
 
 runABCDHistograms = True
 
-# dimuonSelection is the name of the selection in ttalps_object_cuts
-dimuonSelection = "SRDimuonVertex"
-# dimuonSelection = "JPsiDimuonVertex"
-# dimuonSelection = "ZDimuonVertex"
-
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
@@ -76,12 +71,23 @@ muonVertexBaselineSelection = [
     "Chi2Cut"
 ]
 
-# Muon Vertex Collection:
-#  - to use muonVertexCollection the collection name has to start with "Best" and have the ["BestDimuonVertex"] cut at the end
-#  - to not use muonVertexCollection set it to None
-# muonVertexCollection = ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"])
-muonVertexCollection = ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"])
-# muonVertexCollection = None
+
+# dimuonSelection and muonVertexCollection:
+#  - uncomment the dimuonSelection you want to use and the muonVertexCollection will be given automatically
+#  - to not use dimuonSelection and muonVertexCollection: set dimuonSelection to None
+dimuonSelection = "SRDimuonVertex"
+# dimuonSelection = "JPsiDimuonVertex"
+# dimuonSelection = "ZDimuonVertex"
+# dimuonSelection = None
+muonVertexCollections = {
+    "SRDimuonVertex" : ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]), 
+    "JPsiDimuonVertex" : ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]), 
+    "ZDimuonVertex" : ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]), 
+}
+muonVertexCollection = None
+if dimuonSelection is not None:
+    muonVertexCollection = muonVertexCollections[dimuonSelection]
+
 
 histParams = ()
 histParams2D = ()
