@@ -58,6 +58,7 @@ extraMuonVertexCollections = [
   "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
 ]
 
+# Gen-level resonances plots - comment out to avoid plots for these collections 
 genMuonVertexCollections = [
   # "BestPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
   # "GoodPFIsoDimuonVertexResonancesNotFromALP",  # Dimuon resonances
