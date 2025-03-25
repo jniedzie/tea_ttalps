@@ -283,14 +283,14 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     float weight = eventWeight * muonWeight1 * muonWeight2;
     string vertexCategory = dimuonVertex->GetVertexCategory();
 
-    FillMuonVertexHistograms(dimuonVertex, "", weight);
+    FillMuonVertexHistograms(dimuonVertex, vertexName, weight);
     FillMuonVertexHistograms(dimuonVertex, vertexName + "_" + vertexCategory, weight);
 
     count[""]++;
     count[vertexCategory]++;
   }
   for (auto &[category, n] : count) {
-    histogramsHandler->Fill("Event_n" + vertexName + category, n, eventWeight);
+    histogramsHandler->Fill("Event_n" + vertexName + (category == "" ? "" : "_") + category, n, eventWeight);
   }
 }
 
