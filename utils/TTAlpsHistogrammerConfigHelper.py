@@ -16,10 +16,10 @@ class TTAlpsHistogrammerConfigHelper:
 
     self.muonVertexCollections = []
 
-    for category, collection in product(("", "_PatDSA", "_DSA", "_Pat"), muonVertexCollections):
-      self.muonVertexCollections.append(f"{collection}{category}")
-      self.muonVertexCollections.append(f"{collection}{category}_fakes")
-      self.muonVertexCollections.append(f"{collection}{category}_nonFakes")
+    for category in ("", "_PatDSA", "_DSA", "_Pat"):
+      self.muonVertexCollections.append(f"{muonVertexCollection}{category}")
+      self.muonVertexCollections.append(f"{muonVertexCollection}{category}_fakes")
+      self.muonVertexCollections.append(f"{muonVertexCollection}{category}_nonFakes")
 
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.muonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
@@ -329,7 +329,7 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "dxy", 20000, -2000, 2000, ""),
         (name, "pfRelIso04all", 800, 0, 20, ""),
         (name, "isPAT", 10, 0, 10, ""),
-        (name, "isTight", 10, 0, 10, ""),
+        (name, "IsTight", 10, 0, 10, ""),
     )
 
   def __insert_MuonVertexHistograms(self, params, name):
