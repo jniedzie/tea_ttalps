@@ -203,113 +203,95 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<Event> eve
   FillLooseMuonsHistograms(muons, collectionName, weight);
 }
 
-void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> event,
-                                                     const shared_ptr<Collection<shared_ptr<PhysicsObject>>> vertexCollection,
-                                                     string vertexName) {
-  float weight = GetEventWeight(event);
+void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuonVertex> dimuon, string name, float weight) {
+  histogramsHandler->Fill(name + "_normChi2", dimuonVertex->Get("normChi2"), weight);
+  histogramsHandler->Fill(name + "_Lxy", dimuonVertex->GetLxyFromPV(), weight);
+  histogramsHandler->Fill(name + "_logLxy", log10(dimuonVertex->GetLxyFromPV()), weight);
+  histogramsHandler->Fill(name + "_LxySigma", dimuonVertex->GetLxySigmaFromPV(), weight);
+  histogramsHandler->Fill(name + "_LxySignificance", dimuonVertex->GetLxyFromPV() / dimuonVertex->GetLxySigmaFromPV(), weight);
+  histogramsHandler->Fill(name + "_dR", dimuonVertex->Get("dR"), weight);
+  histogramsHandler->Fill(name + "_proxDR", dimuonVertex->Get("dRprox"), weight);
+  histogramsHandler->Fill(name + "_outerDR", dimuonVertex->GetOuterDeltaR(), weight);
+  histogramsHandler->Fill(name + "_maxHitsInFrontOfVert",
+                          max(float(dimuonVertex->Get("hitsInFrontOfVert1")), float(dimuonVertex->Get("hitsInFrontOfVert2"))), weight);
+  histogramsHandler->Fill(name + "_hitsInFrontOfVert1", dimuonVertex->Get("hitsInFrontOfVert1"), weight * muonWeight1);
+  histogramsHandler->Fill(name + "_hitsInFrontOfVert2", dimuonVertex->Get("hitsInFrontOfVert2"), weight * muonWeight2);
+  histogramsHandler->Fill(name + "_dca", dimuonVertex->Get("dca"), weight);
+  histogramsHandler->Fill(name + "_absCollinearityAngle", abs(dimuonVertex->GetCollinearityAngle()), weight);
+  histogramsHandler->Fill(name + "_absPtLxyDPhi1", abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)), weight);
+  histogramsHandler->Fill(name + "_absPtLxyDPhi2", abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(2)), weight);
+  histogramsHandler->Fill(name + "_invMass", dimuonVertex->GetInvariantMass(), weight);
+  histogramsHandler->Fill(name + "_logInvMass", log10(dimuonVertex->GetInvariantMass()), weight);
+  histogramsHandler->Fill(name + "_pt", dimuonVertex->GetDimuonPt(), weight);
+  histogramsHandler->Fill(name + "_eta", dimuonVertex->GetDimuonEta(), weight);
+  histogramsHandler->Fill(name + "_dEta", abs((float)muon1->Get("eta") - (float)muon2->Get("eta")), weight);
+  histogramsHandler->Fill(name + "_dPhi", abs((float)muon1->Get("phi") - (float)muon2->Get("phi")), weight);
+  histogramsHandler->Fill(name + "_chargeProduct", dimuonVertex->GetDimuonChargeProduct(), weight);
 
-  int nPatDSA = 0;
-  int nPat = 0;
-  int nDSA = 0;
+  histogramsHandler->Fill(name + "_3Dangle", dimuonVertex->Get3DOpeningAngle(), weight);
+  histogramsHandler->Fill(name + "_cos3Dangle", dimuonVertex->GetCosine3DOpeningAngle(), weight);
+  histogramsHandler->Fill(name + "_nSegments", dimuonVertex->GetTotalNumberOfSegments(), weight);
+
+  // Isolations:
+  histogramsHandler->Fill(name + "_displacedTrackIso03Dimuon1", dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight);
+  histogramsHandler->Fill(name + "_displacedTrackIso04Dimuon1", dimuonVertex->Get("displacedTrackIso04Dimuon1"), weight);
+  histogramsHandler->Fill(name + "_displacedTrackIso03Dimuon2", dimuonVertex->Get("displacedTrackIso03Dimuon2"), weight);
+  histogramsHandler->Fill(name + "_displacedTrackIso04Dimuon2", dimuonVertex->Get("displacedTrackIso04Dimuon2"), weight);
+  float pfRelIso04_all1(0), pfRelIso04_all2(0), nSegments1(0), nSegments2(0);
+
+  if (name.find("_PatDSA") != string::npos) {
+    pfRelIso04_all1 = muon1->Get("pfRelIso04_all");
+    nSegments2 = muon2->Get("nSegments");
+  }
+  elif (name.find("_DSA") != string::npos) {
+    nSegments1 = muon1->Get("nSegments");
+    nSegments2 = muon2->Get("nSegments");
+  }
+  elif (name.find("_Pat") != string::npos) {
+    pfRelIso04_all1 = muon1->Get("pfRelIso04_all");
+    pfRelIso04_all2 = muon2->Get("pfRelIso04_all");
+  }
+
+  histogramsHandler->Fill(name + "_nSegments1", nSegments1, weight);
+  histogramsHandler->Fill(name + "_nSegments2", nSegments2, weight);
+  histogramsHandler->Fill(name + "_pfRelIso04all1", pfRelIso04_all1, weight);
+  histogramsHandler->Fill(name + "_pfRelIso04all2", pfRelIso04_all2, weight);
+
+  // Muons in vertex variables:
+  histogramsHandler->Fill(name + "_leadingPt", max((float)muon1->Get("pt"), (float)muon2->Get("pt")), weight);
+  histogramsHandler->Fill(name + "_dxyPVTraj1", muon1->Get("dxyPVTraj"), weight);
+  histogramsHandler->Fill(name + "_dxyPVTraj2", muon2->Get("dxyPVTraj"), weight);
+  histogramsHandler->Fill(name + "_dxyPVTrajSig1", (float)muon1->Get("dxyPVTraj") / (float)muon1->Get("dxyPVTrajErr"), weight);
+  histogramsHandler->Fill(name + "_dxyPVTrajSig2", (float)muon2->Get("dxyPVTraj") / (float)muon2->Get("dxyPVTrajErr"), weight);
+
+  histogramsHandler->Fill(name + "_log3Dangle_logLxySignificance", log10(dimuonVertex->Get3DOpeningAngle()),
+                          log10(dimuonVertex->GetLxyFromPV() / dimuonVertex->GetLxySigmaFromPV()), weight);
+}
+
+void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> event, const shared_ptr<PhysicsObjects> vertexCollection,
+                                                     string vertexName) {
+  float eventWeight = GetEventWeight(event);
+
+  map<string, int> count = {{"", 0}, {"PatDSA", 0}, {"Pat", 0}, {"DSA", 0}};
+
   for (auto vertex : *vertexCollection) {
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
     auto muon1 = dimuonVertex->Muon1();
     auto muon2 = dimuonVertex->Muon2();
     float muonWeight1 = GetObjectWeight(muon1->GetPhysicsObject(), "LooseMuons");
     float muonWeight2 = GetObjectWeight(muon2->GetPhysicsObject(), "LooseMuons");
-
+    float weight = eventWeight * muonWeight1 * muonWeight2;
     string vertexCategory = dimuonVertex->GetVertexCategory();
-    vector<string> categories = {"", "_" + vertexCategory};
 
-    for (string category : categories) {
-      histogramsHandler->Fill(vertexName + category + "_normChi2", dimuonVertex->Get("normChi2"), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_Lxy", dimuonVertex->GetLxyFromPV(), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_logLxy", log10(dimuonVertex->GetLxyFromPV()), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_LxySigma", dimuonVertex->GetLxySigmaFromPV(), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_LxySignificance", dimuonVertex->GetLxyFromPV() / dimuonVertex->GetLxySigmaFromPV(),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dR", dimuonVertex->Get("dR"), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_proxDR", dimuonVertex->Get("dRprox"), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_outerDR", dimuonVertex->GetOuterDeltaR(), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_maxHitsInFrontOfVert",
-                              max(float(dimuonVertex->Get("hitsInFrontOfVert1")), float(dimuonVertex->Get("hitsInFrontOfVert2"))),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_hitsInFrontOfVert1", dimuonVertex->Get("hitsInFrontOfVert1"), weight * muonWeight1);
-      histogramsHandler->Fill(vertexName + category + "_hitsInFrontOfVert2", dimuonVertex->Get("hitsInFrontOfVert2"), weight * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dca", dimuonVertex->Get("dca"), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_absCollinearityAngle", abs(dimuonVertex->GetCollinearityAngle()),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_absPtLxyDPhi1", abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_absPtLxyDPhi2", abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(2)),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_invMass", dimuonVertex->GetInvariantMass(), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_logInvMass", log10(dimuonVertex->GetInvariantMass()),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_pt", dimuonVertex->GetDimuonPt(), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_eta", dimuonVertex->GetDimuonEta(), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dEta", abs((float)muon1->Get("eta") - (float)muon2->Get("eta")),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dPhi", abs((float)muon1->Get("phi") - (float)muon2->Get("phi")),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_chargeProduct", dimuonVertex->GetDimuonChargeProduct(),
-                              weight * muonWeight1 * muonWeight2);
+    FillMuonVertexHistograms(dimuonVertex, "", weight);
+    FillMuonVertexHistograms(dimuonVertex, vertexName + "_" + vertexCategory, weight);
 
-      histogramsHandler->Fill(vertexName + category + "_3Dangle", dimuonVertex->Get3DOpeningAngle(), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_cos3Dangle", dimuonVertex->GetCosine3DOpeningAngle(),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_nSegments", dimuonVertex->GetTotalNumberOfSegments(),
-                              weight * muonWeight1 * muonWeight2);
-
-      // Isolations:
-      histogramsHandler->Fill(vertexName + category + "_displacedTrackIso03Dimuon1", dimuonVertex->Get("displacedTrackIso03Dimuon1"),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_displacedTrackIso04Dimuon1", dimuonVertex->Get("displacedTrackIso04Dimuon1"),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_displacedTrackIso03Dimuon2", dimuonVertex->Get("displacedTrackIso03Dimuon2"),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_displacedTrackIso04Dimuon2", dimuonVertex->Get("displacedTrackIso04Dimuon2"),
-                              weight * muonWeight1 * muonWeight2);
-      float pfRelIso04_all1(0), pfRelIso04_all2(0), nSegments1(0), nSegments2(0);
-      if (category == "_Pat") {
-        pfRelIso04_all1 = muon1->Get("pfRelIso04_all");
-        pfRelIso04_all2 = muon2->Get("pfRelIso04_all");
-      }
-      if (category == "_PatDSA") {
-        pfRelIso04_all1 = muon1->Get("pfRelIso04_all");
-        nSegments2 = muon2->Get("nSegments");
-      }
-      if (category == "_DSA") {
-        nSegments1 = muon1->Get("nSegments");
-        nSegments2 = muon2->Get("nSegments");
-      }
-      histogramsHandler->Fill(vertexName + category + "_nSegments1", nSegments1, weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_nSegments2", nSegments2, weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_pfRelIso04all1", pfRelIso04_all1, weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_pfRelIso04all2", pfRelIso04_all2, weight * muonWeight1 * muonWeight2);
-
-      // Muons in vertex variables:
-      histogramsHandler->Fill(vertexName + category + "_leadingPt", max((float)muon1->Get("pt"), (float)muon2->Get("pt")),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dxyPVTraj1", muon1->Get("dxyPVTraj"), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dxyPVTraj2", muon2->Get("dxyPVTraj"), weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dxyPVTrajSig1", (float)muon1->Get("dxyPVTraj") / (float)muon1->Get("dxyPVTrajErr"),
-                              weight * muonWeight1 * muonWeight2);
-      histogramsHandler->Fill(vertexName + category + "_dxyPVTrajSig2", (float)muon2->Get("dxyPVTraj") / (float)muon2->Get("dxyPVTrajErr"),
-                              weight * muonWeight1 * muonWeight2);
-
-      histogramsHandler->Fill(vertexName + category + "_log3Dangle_logLxySignificance", log10(dimuonVertex->Get3DOpeningAngle()),
-                              log10(dimuonVertex->GetLxyFromPV() / dimuonVertex->GetLxySigmaFromPV()), weight * muonWeight1 * muonWeight2);
-    }
-
-    if (vertexCategory == "PatDSA") nPatDSA++;
-    if (vertexCategory == "Pat") nPat++;
-    if (vertexCategory == "DSA") nDSA++;
+    count[""]++;
+    count[vertexCategory]++;
   }
-  histogramsHandler->Fill("Event_n" + vertexName, vertexCollection->size(), weight);
-  histogramsHandler->Fill("Event_n" + vertexName + "_PatDSA", nPatDSA, weight);
-  histogramsHandler->Fill("Event_n" + vertexName + "_Pat", nPat, weight);
-  histogramsHandler->Fill("Event_n" + vertexName + "_DSA", nDSA, weight);
+  for (auto &[category, n] : count) {
+    histogramsHandler->Fill("Event_n" + vertexName + category, n, eventWeight);
+  }
 }
 
 void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> event, string vertexName) {
@@ -1067,13 +1049,13 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 
   if (collection->size() < 1) return;
 
-  for (auto vertex : *collection) {
-    auto dimuon = asNanoDimuonVertex(vertex, event);
-    auto muon1 = dimuon->Muon1();
-    auto muon2 = dimuon->Muon2();
-
-    float muon1weight = GetObjectWeight(muon1->GetPhysicsObject(), "LooseMuons");
-    float muon2weight = GetObjectWeight(muon2->GetPhysicsObject(), "LooseMuons");
+    for (auto vertex : *collection) {
+      auto dimuon = asNanoDimuonVertex(vertex, event);
+      auto muon1 = dimuon->Muon1();
+      auto muon2 = dimuon->Muon2();
+      float muon1weight = GetObjectWeight(muon1->GetPhysicsObject(), "LooseMuons");
+      float muon2weight = GetObjectWeight(muon2->GetPhysicsObject(), "LooseMuons");
+      float eventWeight = weight * muon1weight * muon2weight;
 
     map<string, double> variables = {
         {"Lxy", dimuon->GetLxyFromPV()},
@@ -1081,44 +1063,75 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
         {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
         {"3Dangle", dimuon->Get3DOpeningAngle()},
 
-        {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
-        {"logLxySignificance", TMath::Log10(dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV())},
-        {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
-        {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
-    };
+          {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
+          {"logLxySignificance", TMath::Log10(dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV())},
+          {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
+          {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
+      };
 
-    for (auto &[varName_1, varValue_1] : variables) {
-      for (auto &[varName_2, varValue_2] : variables) {
-        if (varName_1 == varName_2) continue;
-        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2,
-                                weight * muon1weight * muon2weight);
+      string category = dimuon->GetVertexCategory();
+
+      for (auto &[varName_1, varValue_1] : variables) {
+        for (auto &[varName_2, varValue_2] : variables) {
+          if (varName_1 == varName_2) continue;
+          histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2, eventWeight);
+          histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2, eventWeight);
+        }
       }
-    }
-    auto genMuon1 = muon1->GetGenMuon(genMuons, 0.3);
-    auto genMuon2 = muon2->GetGenMuon(genMuons, 0.3);
 
-    auto mother1_index = genMuon1 ? genMuon1->GetMotherIndex() : -1;
-    auto mother2_index = genMuon2 ? genMuon2->GetMotherIndex() : -1;
+      continue;
 
-    int mother1_pid = mother1_index >= 0 ? genMuons->at(mother1_index)->Get("pdgId") : -1;
-    int mother2_pid = mother2_index >= 0 ? genMuons->at(mother2_index)->Get("pdgId") : -1;
+      float deltaR = 0.5;
 
-    histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2", mother1_pid, mother2_pid, weight * muon1weight * muon2weight);
+      auto genMuon1 = muon1->GetGenMuon(genMuons, deltaR);
+      auto genMuon2 = muon2->GetGenMuon(genMuons, deltaR);
+
+      int mother1_pid = 0;
+      int mother2_pid = 0;
+      if (!genMuon1)
+        mother1_pid = muon1->isDSA() ? 91 : 90;
+      else {
+        mother1_pid = genMuons->at(genMuon1->GetMotherIndex())->Get("pdgId");
+      }
+      if (!genMuon2)
+        mother2_pid = muon2->isDSA() ? 91 : 90;
+      else {
+        mother2_pid = genMuons->at(genMuon2->GetMotherIndex())->Get("pdgId");
+      }
+
+      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2", mother1_pid, mother2_pid, eventWeight);
+
+      if ((mother1_pid == 24 && mother2_pid == 24) || (mother1_pid == -24 && mother2_pid == -24)) {
+        // Same sign WW
+        histogramsHandler->Fill(collectionName + "_deltaR_WW", dimuon->GetDeltaR(), eventWeight);
+        histogramsHandler->Fill(collectionName + "_logDeltaR_WW", log10(dimuon->GetDeltaR()), eventWeight);
+      } else if ((mother1_pid == 24 && mother2_pid == 15) || (mother1_pid == -24 && mother2_pid == -15)) {
+        // Same sign Wτ
+        histogramsHandler->Fill(collectionName + "_deltaR_Wtau", dimuon->GetDeltaR(), eventWeight);
+        histogramsHandler->Fill(collectionName + "_logDeltaR_Wtau", log10(dimuon->GetDeltaR()), eventWeight);
+      } else {
+        histogramsHandler->Fill(collectionName + "_deltaR_OS", dimuon->GetDeltaR(), eventWeight);
+        histogramsHandler->Fill(collectionName + "_logDeltaR_OS", log10(dimuon->GetDeltaR()), eventWeight);
+      }
 
     float lxySignificance = variables["logLxySignificance"];
     float angle3D = variables["log3Dangle"];
 
-    if (lxySignificance > -2.0 && lxySignificance < -1.0 && angle3D > -1.5 && angle3D < -1.0) {
-      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowBlob", mother1_pid, mother2_pid,
-                              weight * muon1weight * muon2weight);
-    }
-    if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > 0.0 && angle3D < 0.4) {
-      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_rightBlob", mother1_pid, mother2_pid,
-                              weight * muon1weight * muon2weight);
-    }
-    if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > -1.5 && angle3D < -1.0) {
-      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid,
-                              weight * muon1weight * muon2weight);
+      if (lxySignificance > -2.0 && lxySignificance < -1.0 && angle3D > -1.5 && angle3D < -1.0) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowBlob", mother1_pid, mother2_pid, eventWeight);
+      }
+      if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > 0.0 && angle3D < 0.4) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_rightBlob", mother1_pid, mother2_pid, eventWeight);
+      }
+      if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > -1.5 && angle3D < -1.0) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid, eventWeight);
+      }
+      if (lxySignificance > -2.0 && lxySignificance < -1.8 && angle3D > -0.5 && angle3D < 0.2) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowLine", mother1_pid, mother2_pid, eventWeight);
+      }
+      if (lxySignificance > -2.0 && lxySignificance < -1.0 && angle3D > 0.2 && angle3D < 0.4) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_rightLine", mother1_pid, mother2_pid, eventWeight);
+      }
     }
   }
 }

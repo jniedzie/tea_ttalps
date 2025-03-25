@@ -11,8 +11,15 @@ class TTAlpsHistogrammerConfigHelper:
     for category, matching in product(("", "DSA", "PAT"), muonMatchingParams):
       self.muonCollections.append(f"Tight{category}Muons{matching}Match")
       self.muonCollections.append(f"Loose{category}Muons{matching}Match")
+      self.muonCollections.append(f"Loose{category}Muons{matching}Match_fakes")
+      self.muonCollections.append(f"Loose{category}Muons{matching}Match_nonFakes")
 
     self.muonVertexCollections = []
+
+    for category, collection in product(("", "_PatDSA", "_DSA", "_Pat"), muonVertexCollections):
+      self.muonVertexCollections.append(f"{collection}{category}")
+      self.muonVertexCollections.append(f"{collection}{category}_fakes")
+      self.muonVertexCollections.append(f"{collection}{category}_nonFakes")
 
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.muonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
@@ -239,18 +246,17 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
 
     for collection in self.muonVertexCollections:
-
-      params.append((collection+"_motherPid1_vs_motherPid2", 2000, -1000, 1000, 2000, -1000, 1000, ""))
-      params.append((collection+"_motherPid1_vs_motherPid2_lowBlob", 2000, -1000, 1000, 2000, -1000, 1000, ""))
-      params.append((collection+"_motherPid1_vs_motherPid2_rightBlob", 2000, -1000, 1000, 2000, -1000, 1000, ""))
-      params.append((collection+"_motherPid1_vs_motherPid2_centralBlob", 2000, -1000, 1000, 2000, -1000, 1000, ""))
+      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
+        params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
 
       for variable_1, (nBins_1, xMin_1, xMax_1) in ABCD_variables.items():
         for variable_2, (nBins_2, xMin_2, xMax_2) in ABCD_variables.items():
           if variable_1 == variable_2:
             continue
-          params.append((f"{collection}_{variable_2}_vs_{variable_1}",
-                        nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+
+          for category in ["", "_Pat", "_DSA", "_PatDSA"]:
+            params.append((f"{collection}_{variable_2}_vs_{variable_1}{category}",
+                          nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
 
@@ -335,6 +341,12 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "LxySigma", 10000, 0, 100, ""),
         (name, "LxySignificance", 1000, 0, 1000, ""),
         (name, "dR", 500, 0, 10, ""),
+        (name, "deltaR_WW", 500, 0, 10, ""),
+        (name, "deltaR_Wtau", 500, 0, 10, ""),
+        (name, "deltaR_OS", 500, 0, 10, ""),
+        (name, "logDeltaR_WW", 100, -5, 5, ""),
+        (name, "logDeltaR_Wtau", 100, -5, 5, ""),
+        (name, "logDeltaR_OS", 100, -5, -5, ""),
         (name, "proxDR", 500, 0, 10, ""),
         (name, "outerDR", 500, 0, 10, ""),
         (name, "dEta", 500, 0, 10, ""),
