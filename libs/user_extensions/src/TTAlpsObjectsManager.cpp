@@ -234,7 +234,7 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_pt
 
   for (auto muon : *looseMuonsSegmentMatch) {
     float muon_idx = muon->Get("idx");
-    if (asNanoEvent(event)->MuonIndexExist(looseMuonsDRMatch, muon_idx, muon->isDSA())) {
+    if (asNanoEvent(event)->MuonIndexExist(looseMuonsDRMatch, muon_idx, muon->IsDSA())) {
       looseMuonsSegmentDRMatch->push_back(muon);
     }
   }
@@ -245,7 +245,7 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_pt
   auto looseMuonsSegmentOuterDRMatch = make_shared<NanoMuons>();
   for (auto muon : *looseMuonsSegmentMatch) {
     float muon_idx = muon->Get("idx");
-    if (asNanoEvent(event)->MuonIndexExist(looseMuonsOuterDRMatch, muon_idx, muon->isDSA())) {
+    if (asNanoEvent(event)->MuonIndexExist(looseMuonsOuterDRMatch, muon_idx, muon->IsDSA())) {
       looseMuonsSegmentOuterDRMatch->push_back(muon);
     }
   }

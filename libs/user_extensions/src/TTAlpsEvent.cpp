@@ -646,8 +646,8 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTightMuonsInCollection(shared_ptr<NanoMuon
   auto tightMuons = make_shared<NanoMuons>();
 
   for (auto muon : *muonCollection) {
-    if (muon->isDSA()) continue;
-    if (muon->isTight() && (float)muon->Get("pt") > 30 && abs((float)muon->Get("eta")) < 2.4) {
+    if (muon->IsDSA()) continue;
+    if (muon->IsTight() && (float)muon->Get("pt") > 30 && abs((float)muon->Get("eta")) < 2.4) {
       tightMuons->push_back(muon);
     }
   }
@@ -677,22 +677,22 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetMuonsInVertexCollection(shared_ptr<Physics
   vector<int> PATmuonIndices;
   for (auto vertex : *vertexCollection) {
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
-    if (dimuonVertex->isDSAMuon1()) {
-      if (std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex1()) != DSAmuonIndices.end()) continue;
-      DSAmuonIndices.push_back(dimuonVertex->muonIndex1());
+    if (dimuonVertex->IsDSAMuon1()) {
+      if (std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->MuonIndex1()) != DSAmuonIndices.end()) continue;
+      DSAmuonIndices.push_back(dimuonVertex->MuonIndex1());
       muons->push_back(dimuonVertex->Muon1());
     } else {
-      if (std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex1()) != PATmuonIndices.end()) continue;
-      PATmuonIndices.push_back(dimuonVertex->muonIndex1());
+      if (std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->MuonIndex1()) != PATmuonIndices.end()) continue;
+      PATmuonIndices.push_back(dimuonVertex->MuonIndex1());
       muons->push_back(dimuonVertex->Muon1());
     }
-    if (dimuonVertex->isDSAMuon2()) {
-      if (std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->muonIndex2()) != DSAmuonIndices.end()) continue;
-      DSAmuonIndices.push_back(dimuonVertex->muonIndex2());
+    if (dimuonVertex->IsDSAMuon2()) {
+      if (std::find(DSAmuonIndices.begin(), DSAmuonIndices.end(), dimuonVertex->MuonIndex2()) != DSAmuonIndices.end()) continue;
+      DSAmuonIndices.push_back(dimuonVertex->MuonIndex2());
       muons->push_back(dimuonVertex->Muon2());
     } else {
-      if (std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->muonIndex2()) != PATmuonIndices.end()) continue;
-      PATmuonIndices.push_back(dimuonVertex->muonIndex2());
+      if (std::find(PATmuonIndices.begin(), PATmuonIndices.end(), dimuonVertex->MuonIndex2()) != PATmuonIndices.end()) continue;
+      PATmuonIndices.push_back(dimuonVertex->MuonIndex2());
       muons->push_back(dimuonVertex->Muon2());
     }
   }

@@ -171,26 +171,28 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
   FillNminus1HistogramsForMuonVertexCollection(event);
 }
 
+void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const std::shared_ptr<NanoMuon> muon, std::string name, float weight) {
+  histogramsHandler->Fill(name + "_pt", muon->Get("pt"), weight);
+  histogramsHandler->Fill(name + "_eta", muon->Get("eta"), weight);
+  histogramsHandler->Fill(name + "_phi", muon->Get("phi"), weight);
+  histogramsHandler->Fill(name + "_dxy", muon->Get("dxy"), weight);
+
+  int isPATMuon(0), IsTightMuon(0);
+  if (!muon->IsDSA()) {
+    histogramsHandler->Fill(name + "_pfRelIso04all", muon->Get("pfRelIso04_all"), weight);
+    isPATMuon = 1;
+    if (muon->IsTight()) IsTightMuon = 1;
+  }
+  histogramsHandler->Fill(name + "_isPAT", isPATMuon, weight);
+  histogramsHandler->Fill(name + "_IsTight", IsTightMuon, weight);
+}
+
 void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuons> muons, string collectionName, float weight) {
   float size = muons->size();
   histogramsHandler->Fill("Event_n" + collectionName, muons->size(), weight);
-
   for (auto muon : *muons) {
     float muonWeight = GetObjectWeight(muon->GetPhysicsObject(), "LooseMuons");
-
-    histogramsHandler->Fill(collectionName + "_pt", muon->Get("pt"), weight * muonWeight);
-    histogramsHandler->Fill(collectionName + "_eta", muon->Get("eta"), weight * muonWeight);
-    histogramsHandler->Fill(collectionName + "_phi", muon->Get("phi"), weight * muonWeight);
-    histogramsHandler->Fill(collectionName + "_dxy", muon->Get("dxy"), weight * muonWeight);
-
-    int isPATMuon(0), isTightMuon(0);
-    if (!muon->isDSA()) {
-      histogramsHandler->Fill(collectionName + "_pfRelIso04all", muon->Get("pfRelIso04_all"), weight * muonWeight);
-      isPATMuon = 1;
-      if (muon->isTight()) isTightMuon = 1;
-    }
-    histogramsHandler->Fill(collectionName + "_isPAT", isPATMuon, weight * muonWeight);
-    histogramsHandler->Fill(collectionName + "_isTight", isTightMuon, weight * muonWeight);
+    FillLooseMuonsHistograms(muon, collectionName, weight * muonWeight);
   }
 }
 
@@ -321,9 +323,9 @@ void TTAlpsHistogramFiller::FillNminus1HistogramsForMuonVertexCollection(const s
     float muon2Weight = GetObjectWeight(dimuonVertex->Muon2()->GetPhysicsObject(), "LooseMuons");
     string nminus1HistogramsName = collectionName + "Nminus1";
     FillDimuonVertexNminus1HistogramForCut(nminus1HistogramsName, cut, dimuonVertex, weight * muon1Weight * muon2Weight);
-    if (dimuonVertex->isDSAMuon1() && dimuonVertex->isDSAMuon2())
+    if (dimuonVertex->IsDSAMuon1() && dimuonVertex->IsDSAMuon2())
       nminus1HistogramsName = collectionName + "Nminus1_DSA";
-    else if (!dimuonVertex->isDSAMuon1() && !dimuonVertex->isDSAMuon2())
+    else if (!dimuonVertex->IsDSAMuon1() && !dimuonVertex->IsDSAMuon2())
       nminus1HistogramsName = collectionName + "Nminus1_Pat";
     else
       nminus1HistogramsName = collectionName + "Nminus1_PatDSA";
@@ -343,7 +345,7 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
     histogramsHandler->Fill(collectionName + "_maxHitsInFrontOfVert",
                             max(float(dimuonVertex->Get("hitsInFrontOfVert1")), float(dimuonVertex->Get("hitsInFrontOfVert2"))), weight);
   if (cut == "DPhiBetweenMuonpTAndLxyCut") {
-    if (!dimuonVertex->isDSAMuon1())
+    if (!dimuonVertex->IsDSAMuon1())
       histogramsHandler->Fill(collectionName + "_absPtLxyDPhi1", abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)), weight);
   }
   if (cut == "DCACut") histogramsHandler->Fill(collectionName + "_dca", dimuonVertex->Get("dca"), weight);
@@ -353,9 +355,9 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
   if (cut == "DisplacedIsolationCut" || cut == "PFRelIsolationCut") {
     histogramsHandler->Fill(collectionName + "_displacedTrackIso03Dimuon1", dimuonVertex->Get("displacedTrackIso03Dimuon1"), weight);
     histogramsHandler->Fill(collectionName + "_displacedTrackIso03Dimuon2", dimuonVertex->Get("displacedTrackIso03Dimuon2"), weight);
-    if (!dimuonVertex->isDSAMuon1())
+    if (!dimuonVertex->IsDSAMuon1())
       histogramsHandler->Fill(collectionName + "_pfRelIso1", dimuonVertex->Muon1()->Get("pfRelIso04_all"), weight);
-    if (!dimuonVertex->isDSAMuon2())
+    if (!dimuonVertex->IsDSAMuon2())
       histogramsHandler->Fill(collectionName + "_pfRelIso2", dimuonVertex->Muon2()->Get("pfRelIso04_all"), weight);
   }
   if (cut == "LxyCut") histogramsHandler->Fill(collectionName + "_Lxy", dimuonVertex->GetLxyFromPV(), weight);
@@ -801,9 +803,9 @@ void TTAlpsHistogramFiller::FillMuonCollectionFromALPsNminus1Histograms(const sh
       float muon2Weight = GetObjectWeight(looseMuonsFromALP->second->GetPhysicsObject(), "LooseMuons");
       FillDimuonVertexNminus1HistogramForCut(muonFromALPsCollectionName, cut, asNanoDimuonVertex(dimuonVertex, event),
                                              weight * muon1Weight * muon2Weight);
-      if (looseMuonsFromALP->first->isDSA() && looseMuonsFromALP->second->isDSA()) {
+      if (looseMuonsFromALP->first->IsDSA() && looseMuonsFromALP->second->IsDSA()) {
         muonFromALPsCollectionName = collectionName + "FromALPNminus1_DSA";
-      } else if (!looseMuonsFromALP->first->isDSA() && !looseMuonsFromALP->second->isDSA()) {
+      } else if (!looseMuonsFromALP->first->IsDSA() && !looseMuonsFromALP->second->IsDSA()) {
         muonFromALPsCollectionName = collectionName + "FromALPNminus1_Pat";
       } else {
         muonFromALPsCollectionName = collectionName + "FromALPNminus1_PatDSA";
@@ -1088,12 +1090,12 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
     int mother1_pid = 0;
     int mother2_pid = 0;
     if (!genMuon1)
-      mother1_pid = muon1->isDSA() ? 91 : 90;
+      mother1_pid = muon1->IsDSA() ? 91 : 90;
     else {
       mother1_pid = genMuons->at(genMuon1->GetMotherIndex())->Get("pdgId");
     }
     if (!genMuon2)
-      mother2_pid = muon2->isDSA() ? 91 : 90;
+      mother2_pid = muon2->IsDSA() ? 91 : 90;
     else {
       mother2_pid = genMuons->at(genMuon2->GetMotherIndex())->Get("pdgId");
     }
@@ -1121,7 +1123,23 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
     }
     if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > 0.0 && angle3D < 0.4) {
       histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_rightBlob", mother1_pid, mother2_pid, eventWeight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes", eventWeight);
+
+      if (muon1->IsDSA()) FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_fakes", eventWeight);
+      else FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_fakes", eventWeight);
+
+      if (muon2->IsDSA()) FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_fakes", eventWeight);
+      else FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_fakes", eventWeight);
+      
+    } else {
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes", eventWeight);
+      if (muon1->IsDSA()) FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_nonFakes", eventWeight);
+      else FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_nonFakes", eventWeight);
+
+      if (muon2->IsDSA()) FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_nonFakes", eventWeight);
+      else FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_nonFakes", eventWeight);
     }
+
     if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > -1.5 && angle3D < -1.0) {
       histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid, eventWeight);
     }
