@@ -28,8 +28,6 @@ class TTAlpsHistogrammerConfigHelper:
       for category in ("", "_PatDSA", "_DSA", "_Pat"):
         self.muonVertexCollections.append(f"{muonVertexCollection}{category}")
         self.muonVertexCollections.append(f"{muonVertexCollection.replace('Best', 'Good')}{category}")
-        
-    print(f"{self.muonVertexCollections=}")
 
   def get_default_params(self):
     return (

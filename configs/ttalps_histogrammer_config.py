@@ -86,13 +86,13 @@ muonVertexCollections = {
 }
 muonVertexCollection = None
 if dimuonSelection is not None:
-    muonVertexCollection = muonVertexCollections[dimuonSelection][0]
+    muonVertexCollection = muonVertexCollections[dimuonSelection]
 
 
 histParams = ()
 histParams2D = ()
 
-helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection)
+helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection[0])
 
 
 defaultHistParams = helper.get_default_params()
