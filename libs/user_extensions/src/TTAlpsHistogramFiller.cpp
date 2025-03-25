@@ -1080,10 +1080,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
       }
     }
 
-    continue;
-
     float deltaR = 0.5;
-
     auto genMuon1 = muon1->GetGenMuon(genMuons, deltaR);
     auto genMuon2 = muon2->GetGenMuon(genMuons, deltaR);
 

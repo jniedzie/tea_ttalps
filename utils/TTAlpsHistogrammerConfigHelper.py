@@ -25,11 +25,11 @@ class TTAlpsHistogrammerConfigHelper:
       self.muonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
 
     if muonVertexCollection is not None:
-      muonVertexCollectionName = muonVertexCollection[0]
       for category in ("", "_PatDSA", "_DSA", "_Pat"):
-        self.muonVertexCollections.append(f"{muonVertexCollectionName}{category}")
-        gooMuonVertexCollectionName = muonVertexCollectionName.replace("Best", "Good")
-        self.muonVertexCollections.append(f"{gooMuonVertexCollectionName}{category}")
+        self.muonVertexCollections.append(f"{muonVertexCollection}{category}")
+        self.muonVertexCollections.append(f"{muonVertexCollection.replace('Best', 'Good')}{category}")
+        
+    print(f"{self.muonVertexCollections=}")
 
   def get_default_params(self):
     return (

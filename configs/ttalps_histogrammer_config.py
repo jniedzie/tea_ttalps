@@ -86,7 +86,7 @@ muonVertexCollections = {
 }
 muonVertexCollection = None
 if dimuonSelection is not None:
-    muonVertexCollection = muonVertexCollections[dimuonSelection]
+    muonVertexCollection = muonVertexCollections[dimuonSelection][0]
 
 
 histParams = ()
