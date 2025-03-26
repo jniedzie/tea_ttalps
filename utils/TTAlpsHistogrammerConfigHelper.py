@@ -68,6 +68,7 @@ class TTAlpsHistogrammerConfigHelper:
     return (
         #  collection         variable                      bins   xmin   xmax    dir
         ("Event", "normCheck", 1, 0, 1, ""),
+        ("Event", "isData",    2, 0, 2, ""),
     )
 
   def get_llp_params(self):

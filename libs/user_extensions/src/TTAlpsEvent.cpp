@@ -3,8 +3,123 @@
 #include <tuple>
 
 #include "ExtensionsHelpers.hpp"
+#include "ConfigManager.hpp"
 
 using namespace std;
+
+TTAlpsEvent::TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {
+  eventProcessor = make_unique<EventProcessor>();
+  nanoEventProcessor = make_unique<NanoEventProcessor>();
+  auto &config = ConfigManager::GetInstance();
+
+  try {
+    config.GetValue("weightsBranchName", weightsBranchName);
+  } catch (const Exception &e) {
+    warn() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
+  }
+  try {
+    config.GetMap("muonMatchingParams", muonMatchingParams);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read muonMatchingParams from config file - will assume all PAT and DSA muons for SFs" << endl;
+  }
+  try {
+    config.GetPair("muonVertexCollection", muonVertexCollection);
+  } catch (const Exception &e) {
+    warn() << "muonVertexCollection not defined - it is needed to define the SF for the muonVertexCollection in the event" << endl;
+  }
+}
+
+map<string,float> TTAlpsEvent::GetEventWeights() {
+  if (IsDataEvent()) {
+    return {{"central", 1.0}};
+  }
+
+  auto nanoEvent = asNanoEvent(event);
+  float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
+
+  float pileupSF;
+  // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all years?
+  // else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
+  pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
+  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(nanoEvent, "muonTriggerIsoMu24");
+
+  int maxNbjets = 2;
+  auto leadingbJets = eventProcessor->GetLeadingObjects(event, "GoodMediumBtaggedJets", maxNbjets);
+  map<string,float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(asNanoJets(leadingbJets));
+
+  int maxNjets = 4;
+  auto leadingJets = eventProcessor->GetLeadingObjects(event, "GoodJets", maxNjets);
+  map<string,float> PUjetIDSF = nanoEventProcessor->GetPUJetIDScaleFactors(asNanoJets(leadingJets));
+
+  auto muons = GetTTAlpsEventMuons();
+  map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
+  
+  float weigthNom = genWeight * pileupSF * muonTriggerSF * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
+  map<string,float> scaleFactorMap;
+  scaleFactorMap["central"] = weigthNom; 
+  return scaleFactorMap;
+}
+
+bool TTAlpsEvent::IsDataEvent() {
+  // Test 1: gen wights branch only for MC
+  bool isData = false;
+  if (!weightsBranchName.empty()) {
+    try {
+      float genWeight = event->Get(weightsBranchName);
+    } catch (const Exception &e) {
+      isData = true;
+    }
+  }
+  // Test 2: run run = 1 for MC
+  int run = event->GetAs<int>("run");
+  if (run == 1) {
+    if (isData) {
+      warn() << "Conflicting TTAlpsEvent::IsDataEvent results. Returning IsDataEvent true";
+      return true;
+    }
+    return false;
+  }
+  if (!isData) warn() << "Conflicting TTAlpsEvent::IsDataEvent results. Returning IsDataEvent true";
+  return true;
+}
+
+shared_ptr<NanoMuons> TTAlpsEvent::GetAllLooseMuons() {
+  auto allMuons = make_shared<NanoMuons>();
+  if (muonMatchingParams.empty()) {
+    for (auto muon : *event->GetCollection("LoosePATMuons")) {
+      allMuons->push_back(asNanoMuon(muon));
+    }
+    for (auto muon : *event->GetCollection("LooseDSAMuons")) {
+      allMuons->push_back(asNanoMuon(muon));
+    }
+    return allMuons;
+  }
+  // Only segment matched muons for now
+  string matchingMethod = muonMatchingParams.begin()->first;
+  return asNanoMuons(GetCollection("LooseMuons" + matchingMethod + "Match"));
+}
+
+shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
+  auto allMuons = GetAllLooseMuons();
+  auto muons = make_shared<NanoMuons>();
+  if (!muonVertexCollection.first.empty() && !muonVertexCollection.second.empty()) {
+    auto vertex = event->GetCollection(muonVertexCollection.first);
+    if (vertex->size() > 0) {
+      auto muonVertex = asNanoDimuonVertex(vertex->at(0),event);
+      muons->push_back(muonVertex->Muon1());
+      muons->push_back(muonVertex->Muon2());
+
+      auto remainingMuons = make_shared<NanoMuons>();
+      for (auto muon : *allMuons) {
+        if(muon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject() || muon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject()) continue;
+        remainingMuons->push_back(muon);
+      }
+      allMuons = make_shared<NanoMuons>(*remainingMuons);
+    }
+  }
+  if (GetLeadingMuon(allMuons)) muons->push_back(GetLeadingMuon(allMuons));
+  return muons;
+}
 
 string TTAlpsEvent::GetTTbarEventCategory() {
   vector<int> topIndices = GetTopIndices();

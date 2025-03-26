@@ -4,10 +4,12 @@
 #include "Event.hpp"
 #include "NanoEvent.hpp"
 #include "Helpers.hpp"
+#include "EventProcessor.hpp"
+#include "NanoEventProcessor.hpp"
 
 class TTAlpsEvent {
  public:
-  TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {}
+  TTAlpsEvent(std::shared_ptr<Event> event_);
 
   auto Get(std::string branchName, const char* file = __builtin_FILE(), const char* function = __builtin_FUNCTION(),
            int line = __builtin_LINE()) {
@@ -18,6 +20,12 @@ class TTAlpsEvent {
   T GetAs(std::string branchName) { return event->GetAs<T>(branchName); }
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
   
+  std::map<std::string,float> GetEventWeights();
+  bool IsDataEvent();
+
+  std::shared_ptr<NanoMuons> GetAllLooseMuons();
+  std::shared_ptr<NanoMuons> GetTTAlpsEventMuons();
+
   std::shared_ptr<PhysicsObjects> GetGenALPs();
   std::shared_ptr<MuonPair> GetGenDimuonFromALP();
   std::vector<int> GetGenMuonIndicesFromALP();
@@ -53,6 +61,11 @@ class TTAlpsEvent {
 
  private:
   std::shared_ptr<Event> event;
+  std::unique_ptr<EventProcessor> eventProcessor;
+  std::unique_ptr<NanoEventProcessor> nanoEventProcessor;
+  std::string weightsBranchName;
+  std::map<std::string, float> muonMatchingParams;
+  std::pair<std::string, std::vector<std::string>> muonVertexCollection;
 
   std::vector<int> GetTopIndices();
   std::vector<int> GetBottomIndices();
