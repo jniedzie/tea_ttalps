@@ -27,13 +27,7 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}_newSFs" # all SFs
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}_newSFs" # no PUjetIDSFs
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_PUjetIDSFs{skim[1]}_newSFs" # no bTaggingSFs
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_bTaggingSFs_PUjetIDSFs{skim[1]}_newSFs" # no pileup
-# hist_path = f"histograms_muonSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}_newSFs" # no muonTriggerSF
-# hist_path = f"histograms_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}_newSFs" # no muonSF
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
 
 output_formats = ["pdf"]
 

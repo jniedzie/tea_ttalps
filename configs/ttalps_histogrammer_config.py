@@ -44,8 +44,17 @@ applyScaleFactors = {
     "muonTrigger": True,
     "pileup": True,
     "bTagging": True,
-    "PUjetID": False,
+    "PUjetID": True,
 }
+# Extra up/down SFs: comment out all to run not include them in histograms
+extraSFs = [ 
+    "btagUpCorrelated", 
+    "btagDownCorrelated", 
+    "btagUpUncorrelated", 
+    "btagDownUncorrelated", 
+    "pujetIDUp", 
+    "pujetIDDown"
+]
 
 # For the signal histogramming all given mathcing methods are applied separately to histograms
 # More than one given method will not affect the other histograms
@@ -108,3 +117,5 @@ histParams += helper.get_matching_params()
 histParams2D += helper.get_2D_params()
 histParams2D += helper.get_abcd_params()
 histParams2D += helper.get_2D_matching_params()
+
+extraSFsHistParams2D = helper.get_abcd_params()
