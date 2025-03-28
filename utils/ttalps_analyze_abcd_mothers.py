@@ -1,29 +1,51 @@
+from Logger import info, warn, error, fatal, logger_print
+
 import ROOT
 import os
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
+
 hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 
-input_path = f"{base_path}/backgrounds2018/TTTo2L2Nu/{skim[0]}/{hist_base_name}{skim[1]}/histograms.root"
-# input_path = f"{base_path}/backgrounds2018/TTTo2L2Nu/{skim[0]}/{hist_base_name}{skim[1]}/output_850.root"
+process = "backgrounds2018/TTTo2L2Nu"
+# process = "backgrounds2018/TTToSemiLeptonic"
+# process = "backgrounds2018/ST_tW_antitop"
+# process = "backgrounds2018/ST_t-channel_antitop"
+# process = "backgrounds2018/ST_tW_top"
+# process = "backgrounds2018/ST_t-channel_top"
 
 
-# variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
-variants = [""]
+input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}/histograms.root"
 
-min_fraction_to_show = 0.05
+
+variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
+# variants = [""]
+
+min_fraction_to_show = 0.15
 # min_fraction_to_show = 0.0
 
 code_to_name = {
     -1: "d~",
     1: "d",
+    -2: "u~",
+    2: "u",
+    -6: "t~",
+    6: "t",
     -13: "mu+",
     13: "mu-",
     -15: "tau+",
     15: "tau-",
+    -21: "g",
+    21: "g",
     22: "gamma",
+    -23: "Z~",
+    23: "Z",
     -24: "W-",
     24: "W+",
     -521: "B-",
@@ -36,6 +58,8 @@ code_to_name = {
     421: "D0",
     -431: "D_s-",
     431: "D_s+",
+    -443: "J/#psi",
+    443: "J/#psi",
     -531: "B_s0~",
     531: "B_s0",
 
@@ -57,6 +81,9 @@ def symmetrize_hist(hist):
 def hist_to_dict(hist):
 
   result = {}
+
+  if not isinstance(hist, ROOT.TH2):
+    return result
 
   for i in range(1, hist.GetNbinsX() + 1):
     for j in range(1, hist.GetNbinsY() + 1):
@@ -106,6 +133,8 @@ def main():
   hist_name = "BestPFIsoDimuonVertex_motherPid1_vs_motherPid2"
 
   for variant in variants:
+    print(f"\n\nvariant {variant}")
+
     hist = file.Get(hist_name + variant)
     results = hist_to_dict(hist)
 
@@ -113,9 +142,18 @@ def main():
     results = merge_charge_conjugate(results)
     results = sorted(results.items(), key=lambda x: x[1], reverse=True)
 
+    has_negative = False
+    for key, value in results:
+      if value < 0:
+        has_negative = True
+        break
+
+    if has_negative:
+      error(f"Negative values found")
+      continue
+
     sum_all = sum([value for _, value in results])
-  
-    print(f"\n\nvariant {variant}")
+
     for key, value in results:
       if value/sum_all < min_fraction_to_show:
         continue
@@ -136,13 +174,28 @@ def main():
 
   # deltaR_name = "logDeltaR"
   rebin = 1
-  
+
   deltaR_name = "deltaR"
   rebin = 20
 
   hist_deltaR_OS = file.Get(f"BestPFIsoDimuonVertex_{deltaR_name}_OS")
   hist_deltaR_WW = file.Get(f"BestPFIsoDimuonVertex_{deltaR_name}_WW")
   hist_deltaR_Wtau = file.Get(f"BestPFIsoDimuonVertex_{deltaR_name}_Wtau")
+
+  if hist_deltaR_OS is None or not isinstance(hist_deltaR_OS, ROOT.TH1D):
+    error(f"{hist_deltaR_OS} not found in file {input_path}")
+    logger_print()
+    return
+
+  if hist_deltaR_WW is None or not isinstance(hist_deltaR_WW, ROOT.TH1D):
+    error(f"{hist_deltaR_WW} not found in file {input_path}")
+    logger_print()
+    return
+
+  if hist_deltaR_Wtau is None or not isinstance(hist_deltaR_Wtau, ROOT.TH1D):
+    error(f"{hist_deltaR_Wtau} not found in file {input_path}")
+    logger_print()
+    return
 
   canvas = ROOT.TCanvas("canvas", "canvas", 800, 800)
 
@@ -162,7 +215,6 @@ def main():
   hist_deltaR_OS.Scale(1/rebin)
   hist_deltaR_WW.Scale(1/rebin)
   hist_deltaR_Wtau.Scale(1/rebin)
-  
 
   hist_deltaR_OS.Draw()
   hist_deltaR_WW.Draw("same")
@@ -171,7 +223,7 @@ def main():
   hist_deltaR_OS.GetXaxis().SetRangeUser(0, 2*3.1415)
   hist_deltaR_OS.GetYaxis().SetRangeUser(0, 0.03)
   hist_deltaR_OS.GetXaxis().SetTitle("#Delta R_{#mu#mu}")
-  
+
   legend = ROOT.TLegend(0.1, 0.7, 0.3, 0.9)
   legend.AddEntry(hist_deltaR_WW, "WW (SS)", "l")
   legend.AddEntry(hist_deltaR_Wtau, "W#tau (OS)", "l")
@@ -179,6 +231,8 @@ def main():
   legend.Draw()
 
   canvas.SaveAs("../plots/deltaR_OS_vs_SS.pdf")
+
+  logger_print()
 
 
 if __name__ == "__main__":
