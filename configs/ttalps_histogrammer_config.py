@@ -92,7 +92,7 @@ if dimuonSelection is not None:
 histParams = ()
 histParams2D = ()
 
-helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection)
+helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection[0] if muonVertexCollection is not None else None)
 
 
 defaultHistParams = helper.get_default_params()
