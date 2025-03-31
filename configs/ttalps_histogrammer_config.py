@@ -103,19 +103,26 @@ histParams2D = ()
 
 helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection[0] if muonVertexCollection is not None else None)
 
-
 defaultHistParams = helper.get_default_params()
-
 histParams += helper.get_basic_params()
-histParams += helper.get_llp_params()
-histParams += helper.get_nminus1_params()
-histParams += helper.get_gen_matched_params()
-histParams += helper.get_gen_params()
-histParams += helper.get_trigger_params()
-histParams += helper.get_matching_params()
 
-histParams2D += helper.get_2D_params()
-histParams2D += helper.get_abcd_params()
-histParams2D += helper.get_2D_matching_params()
+if runLLPNanoAODHistograms:
+    histParams += helper.get_llp_params()
 
-extraSFsHistParams2D = helper.get_abcd_params()
+if runGenMuonVertexCollectionHistograms:
+    histParams += helper.get_gen_vertex_params()
+if runGenMuonHistograms:
+    histParams += helper.get_gen_params()
+    histParams += helper.get_gen_matched_params()
+
+if runLLPTriggerHistograms:
+    histParams += helper.get_trigger_params()
+if runMuonMatchingHistograms:
+    histParams += helper.get_matching_params()
+    histParams2D += helper.get_2D_matching_params()
+
+if runABCDHistograms:
+    histParams += helper.get_abcd_1Dparams()
+    histParams2D += helper.get_abcd_2Dparams()
+
+extraSFsHistParams2D = helper.get_abcd_2Dparams()
