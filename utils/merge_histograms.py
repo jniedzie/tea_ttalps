@@ -1,9 +1,14 @@
 from ttalps_samples_list import *
 import os
 import re
+import argparse
 
-base_path = "/data/dust/user/{}/ttalps_cms"
-output_username = os.environ["USER"]
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--single_thread", action="store_true", default=False, help="Use single thread.")
+args = parser.parse_args()
+
+base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Loose semimuonic skim
 # skim = ("skimmed_looseSemimuonic_v2", "")
@@ -70,21 +75,21 @@ def main():
       clean_path = clean_path_after_year(sample_path, year)
 
       output_data_path[year] = f"{clean_path}_{skim[0]}_{hist_path}.root"
-      input_data_paths[year] += f"{base_path.format(output_username)}/{input_path} "
+      input_data_paths[year] += f"{base_path}/{input_path} "
     else:
 
       output_path = input_path.replace("*.root", "histograms.root")
-      os.system(f"rm {base_path.format(output_username)}/{output_path}")
+      os.system(f"rm {base_path}/{output_path}")
       os.system(
-          f"hadd -f -j -k "
-          f"{base_path.format(output_username)}/{output_path} "
-          f"{base_path.format(output_username)}/{input_path}")
+          f"{'hadd -f -k ' if args.single_thread else 'hadd -f -j -k '}"
+          f"{base_path}/{output_path} "
+          f"{base_path}/{input_path}")
       print(f"{output_path=}")
 
   for year, input_data_path in input_data_paths.items():
     output_data_path = output_data_path[year]
-    os.system(f"rm {base_path.format(output_username)}/{output_data_path}")
-    os.system(f"hadd -f -j -k {base_path.format(output_username)}/{output_data_path} {input_data_path}")
+    os.system(f"rm {base_path}/{output_data_path}")
+    os.system(f"hadd -f -j -k {base_path}/{output_data_path} {input_data_path}")
 
 
 if __name__ == "__main__":

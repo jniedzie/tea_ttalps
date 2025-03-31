@@ -12,15 +12,15 @@ cross_sections = get_cross_sections(year)
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-# do_region = "SR"
+do_region = "SR"
 # do_region = "JPsiCR"
 # do_region = "ttZCR"
 # do_region = "VVCR"
-do_region = "QCDCR"
+# do_region = "QCDCR"
 # do_region = "WjetsCR"
 # do_region = "bbCR"
 
-do_data = True
+do_data = False
 
 if do_region == "SR":
   do_data = False
@@ -33,12 +33,16 @@ collection = "BestPFIsoDimuonVertex"
 variable_1 = "logLxySignificance"
 variable_2 = "log3Dangle"
 
+# category = ""
+# category = "_Pat"
+# category = "_PatDSA"
+category = "_DSA"
+
 optimal_points = {
     # optimizing on significance
     "JPsi_noIso_mc": (-0.9, 0.86),
     "JPsi_noIso_data": (-0.54, 0.42),  # all identical
     
-
     "JPsi_iso_mc": (-1.06, 0.22),  # outdated
     "JPsi_iso_data": (-1.18, 0.46),
     
@@ -265,8 +269,8 @@ backgrounds = (
     # "QCD_Pt-30To50",
     # "QCD_Pt-50To80",
     # "QCD_Pt-80To120",
-    "QCD_Pt-120To170",
-    "QCD_Pt-170To300",
+    # "QCD_Pt-120To170",
+    # "QCD_Pt-170To300",
     "QCD_Pt-300To470",
     "QCD_Pt-470To600",
     "QCD_Pt-600To800",

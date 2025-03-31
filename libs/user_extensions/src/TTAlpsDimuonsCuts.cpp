@@ -69,7 +69,7 @@ bool TTAlpsDimuonCuts::PassesCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex,
 
 bool TTAlpsDimuonCuts::PassesLLPnanoAODVertexCuts(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
-  if (!dimuonVertex->isValid()) return false;
+  if (!dimuonVertex->IsValid()) return false;
   if ((float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxDCA"]) return false;
   return true;
 }
