@@ -1,7 +1,7 @@
 from ttalps_samples_list import *
 import os
 
-max_files = 1-
+max_files = -1
 
 # input_username = "lrygaard"
 input_username = "jniedzie"
