@@ -19,7 +19,7 @@ runPileupHistograms = False
 #  - muonMatchingParams loose muons
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
-runLLPNanoAODHistograms = True
+runLLPNanoAODHistograms = False
 
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
 runGenMuonHistograms = False  # can only be run on signal samples
@@ -46,19 +46,6 @@ applyScaleFactors = {
     "bTagging": True,
     "PUjetID": True,
 }
-# Extra up/down SFs: comment out all to run not include them in histograms
-extraSFs = [ 
-    "btagUpCorrelated", 
-    "btagDownCorrelated", 
-    "btagUpUncorrelated", 
-    "btagDownUncorrelated", 
-    "pujetIDUp", 
-    "pujetIDDown",
-    "muonUp",
-    "muonDown",
-    "muonTriggerUp",
-    "muonTriggerDown"
-]
 
 # For the signal histogramming all given mathcing methods are applied separately to histograms
 # More than one given method will not affect the other histograms
@@ -129,4 +116,4 @@ if runABCDHistograms:
     histParams += helper.get_abcd_1Dparams()
     histParams2D += helper.get_abcd_2Dparams()
 
-extraSFsHistParams2D = helper.get_abcd_2Dparams()
+SFvariationVariables = helper.get_SF_variation_variables()

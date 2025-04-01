@@ -21,7 +21,6 @@ class TTAlpsEvent {
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
   
   std::map<std::string,float> GetEventWeights();
-  bool IsDataEvent();
 
   std::shared_ptr<NanoMuons> GetAllLooseMuons();
   std::shared_ptr<NanoMuons> GetTTAlpsEventMuons();

@@ -101,7 +101,7 @@ void TTAlpsHistogramFiller::FillNormCheck(const shared_ptr<Event> event) {
 
 void TTAlpsHistogramFiller::FillDataCheck(const shared_ptr<Event> event) {
   int isData = 0;
-  if (asTTAlpsEvent(event)->IsDataEvent()) isData = 1;
+  if (nanoEventProcessor->IsDataEvent(asNanoEvent(event))) isData = 1;
   histogramsHandler->Fill("Event_isData", isData);
 }
 
@@ -924,8 +924,8 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
     rawEventsCutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(sortedRawEventsAfterCuts[index]).c_str());
     bin++;
   }
-  histogramsHandler->SetHistogram1D(cutFlowName.c_str(), cutFlowHist);
-  histogramsHandler->SetHistogram1D(rawEventsCutFlowName.c_str(), rawEventsCutFlowHist);
+  histogramsHandler->SetHistogram1D(make_tuple(cutFlowName.c_str(),""), cutFlowHist);
+  histogramsHandler->SetHistogram1D(make_tuple(rawEventsCutFlowName.c_str(),""), rawEventsCutFlowHist);
 }
 
 /// --------- ABCD Histograms --------- ///

@@ -212,9 +212,8 @@ class TTAlpsHistogrammerConfigHelper:
           if variable_1 == variable_2:
             continue
 
-          for category in ["", "_Pat", "_DSA", "_PatDSA"]:
-            params.append((f"{collection}_{variable_2}_vs_{variable_1}{category}",
-                          nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+          params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
 
@@ -293,6 +292,23 @@ class TTAlpsHistogrammerConfigHelper:
     )
 
     return tuple(params)
+
+  def get_SF_variation_variables(self):
+
+    ABCD_variables = ["logLxySignificance", "log3Dangle"]
+
+    SF_variables = []
+
+    for collection in self.bestMuonVertexCollections: 
+      for variable_1 in ABCD_variables:
+        for variable_2 in ABCD_variables:
+          if variable_2 == variable_1:
+            continue
+          
+          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+          SF_variables.append(name)
+
+    return SF_variables
 
   def __insert_into_name(self, collection, to_insert):
     if "_" in collection:

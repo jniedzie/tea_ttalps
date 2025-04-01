@@ -30,19 +30,9 @@ TTAlpsEvent::TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {
 }
 
 map<string,float> TTAlpsEvent::GetEventWeights() {
-  map<string,float> scaleFactorMap;
-  if (IsDataEvent()) {
-    scaleFactorMap["central"] = 1.0;
-    scaleFactorMap["btagUpCorrelated"] = 1.0;
-    scaleFactorMap["btagDownCorrelated"] = 1.0;
-    scaleFactorMap["btagUpUncorrelated"] = 1.0;
-    scaleFactorMap["btagDownUncorrelated"] = 1.0;
-    scaleFactorMap["pujetIDUp"] = 1.0;
-    scaleFactorMap["pujetIDDown"] = 1.0;
-    return scaleFactorMap;
-  }
-
   auto nanoEvent = asNanoEvent(event);
+  if (nanoEventProcessor->IsDataEvent(nanoEvent)) return {{"systematic", 1.0}};
+
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
   float pileupSF;
@@ -67,42 +57,25 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
   auto muons = GetTTAlpsEventMuons();
   map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
   
-  scaleFactorMap["central"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagUpCorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["upCorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagDownCorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["downCorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagUpUncorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["upUncorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagDownUncorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["downUncorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["pujetIDUp"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["up"] * muonSF["central"];
-  scaleFactorMap["pujetIDdown"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["down"] * muonSF["central"];
-  scaleFactorMap["muonUp"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["up"];
-  scaleFactorMap["muonDown"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["down"];
-  scaleFactorMap["muonTriggerUp"] = genWeight * pileupSF * muonTriggerSF["up"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["muonTriggerDown"] = genWeight * pileupSF * muonTriggerSF["down"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
-  
+  map<string,float> scaleFactorMap;
+  scaleFactorMap["systematic"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  for (auto &[name, weight]: muonTriggerSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF[name] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  }
+  for (auto &[name, weight]: btagSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF[name] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  }
+  for (auto &[name, weight]: PUjetIDSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF[name] * muonSF["systematic"];
+  }
+  for (auto &[name, weight]: muonSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF[name];
+  }
   return scaleFactorMap;
-}
-
-bool TTAlpsEvent::IsDataEvent() {
-  // Test 1: gen wights branch only for MC
-  bool isData = false;
-  if (!weightsBranchName.empty()) {
-    try {
-      float genWeight = event->Get(weightsBranchName);
-    } catch (const Exception &e) {
-      isData = true;
-    }
-  }
-  // Test 2: run run = 1 for MC
-  int run = event->GetAs<int>("run");
-  if (run == 1) {
-    if (isData) {
-      warn() << "Conflicting TTAlpsEvent::IsDataEvent results. Returning IsDataEvent true";
-      return true;
-    }
-    return false;
-  }
-  if (!isData) warn() << "Conflicting TTAlpsEvent::IsDataEvent results. Returning IsDataEvent true";
-  return true;
 }
 
 shared_ptr<NanoMuons> TTAlpsEvent::GetAllLooseMuons() {
