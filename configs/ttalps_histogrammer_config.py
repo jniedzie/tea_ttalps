@@ -53,7 +53,11 @@ extraSFs = [
     "btagUpUncorrelated", 
     "btagDownUncorrelated", 
     "pujetIDUp", 
-    "pujetIDDown"
+    "pujetIDDown",
+    "muonUp",
+    "muonDown",
+    "muonTriggerUp",
+    "muonTriggerDown"
 ]
 
 # For the signal histogramming all given mathcing methods are applied separately to histograms

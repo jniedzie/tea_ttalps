@@ -49,7 +49,7 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
   // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all years?
   // else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
   pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
-  float muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(nanoEvent, "muonTriggerIsoMu24");
+  map<string,float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactor(nanoEvent, "muonTriggerIsoMu24");
 
   int maxNjets = 4;
   auto leadingJets = eventProcessor->GetLeadingObjects(event, "GoodJets", maxNjets);
@@ -67,13 +67,17 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
   auto muons = GetTTAlpsEventMuons();
   map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
   
-  scaleFactorMap["central"] = genWeight * pileupSF * muonTriggerSF * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagUpCorrelated"] = genWeight * pileupSF * muonTriggerSF * btagSF["upCorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagDownCorrelated"] = genWeight * pileupSF * muonTriggerSF * btagSF["downCorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagUpUncorrelated"] = genWeight * pileupSF * muonTriggerSF * btagSF["upUncorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["btagDownUncorrelated"] = genWeight * pileupSF * muonTriggerSF * btagSF["downUncorrelated"] * PUjetIDSF["central"] * muonSF["central"];
-  scaleFactorMap["pujetIDUp"] = genWeight * pileupSF * muonTriggerSF * btagSF["central"] * PUjetIDSF["up"] * muonSF["central"];
-  scaleFactorMap["pujetIDdown"] = genWeight * pileupSF * muonTriggerSF * btagSF["central"] * PUjetIDSF["down"] * muonSF["central"];
+  scaleFactorMap["central"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
+  scaleFactorMap["btagUpCorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["upCorrelated"] * PUjetIDSF["central"] * muonSF["central"];
+  scaleFactorMap["btagDownCorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["downCorrelated"] * PUjetIDSF["central"] * muonSF["central"];
+  scaleFactorMap["btagUpUncorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["upUncorrelated"] * PUjetIDSF["central"] * muonSF["central"];
+  scaleFactorMap["btagDownUncorrelated"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["downUncorrelated"] * PUjetIDSF["central"] * muonSF["central"];
+  scaleFactorMap["pujetIDUp"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["up"] * muonSF["central"];
+  scaleFactorMap["pujetIDdown"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["down"] * muonSF["central"];
+  scaleFactorMap["muonUp"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["up"];
+  scaleFactorMap["muonDown"] = genWeight * pileupSF * muonTriggerSF["central"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["down"];
+  scaleFactorMap["muonTriggerUp"] = genWeight * pileupSF * muonTriggerSF["up"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
+  scaleFactorMap["muonTriggerDown"] = genWeight * pileupSF * muonTriggerSF["down"] * btagSF["central"] * PUjetIDSF["central"] * muonSF["central"];
   
   return scaleFactorMap;
 }
