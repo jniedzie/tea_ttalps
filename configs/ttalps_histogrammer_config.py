@@ -17,7 +17,7 @@ runPileupHistograms = False
 
 # LLPNanoAODHistograms:
 #  - muonMatchingParams loose muons
-#  - muonMatchingParams loose muon vertex
+#  - muonMatchingParams loose muon vertex 
 #  - extra muon vertex collections
 runLLPNanoAODHistograms = True
 
@@ -25,7 +25,14 @@ runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
 runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False
 
+# Create 2D histograms for ABCD background estimation
 runABCDHistograms = True
+
+# [MC only] Create histograms with mother PIDs of dimuons entering ABCD histograms (quite heavy, turn off if not needed)
+runABCDMothersHistograms = False
+
+# [MC only] Create histograms for dimuons in the fakes region vs. non-fakes region
+runFakesHistograms = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)

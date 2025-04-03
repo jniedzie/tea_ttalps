@@ -9,32 +9,41 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
 
 hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 
-process = "backgrounds2018/TTTo2L2Nu"
+# process = "backgrounds2018/TTTo2L2Nu"
 # process = "backgrounds2018/TTToSemiLeptonic"
 # process = "backgrounds2018/ST_tW_antitop"
 # process = "backgrounds2018/ST_t-channel_antitop"
 # process = "backgrounds2018/ST_tW_top"
 # process = "backgrounds2018/ST_t-channel_top"
 
+# process = "signals/tta_mAlp-1GeV_ctau-1e-5mm"
+# process = "signals/tta_mAlp-1GeV_ctau-1e0mm"
+# process = "signals/tta_mAlp-1GeV_ctau-1e3mm"
+process = "signals/tta_mAlp-12GeV_ctau-1e0mm"
 
 input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}/histograms.root"
 
 
-variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
-# variants = [""]
+# variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
+variants = [""]
 
-min_fraction_to_show = 0.15
-# min_fraction_to_show = 0.0
+# min_fraction_to_show = 0.15
+min_fraction_to_show = 0.0
 
 code_to_name = {
     -1: "d~",
     1: "d",
     -2: "u~",
     2: "u",
+    -4: "c~",
+    4: "c",
+    -5: "b~",
+    5: "b",
     -6: "t~",
     6: "t",
     -13: "mu+",
@@ -48,6 +57,11 @@ code_to_name = {
     23: "Z",
     -24: "W-",
     24: "W+",
+    
+    113: "rho",
+    223: "omega",
+    333: "phi",
+    
     -521: "B-",
     521: "B+",
     -511: "B0~",
@@ -65,6 +79,8 @@ code_to_name = {
 
     90: "X_{PAT}",  # no gen matching reco
     91: "X_{DSA}",
+    
+    54: "ALP",
 }
 
 
@@ -149,8 +165,7 @@ def main():
         break
 
     if has_negative:
-      error(f"Negative values found")
-      continue
+      error("Negative values found")
 
     sum_all = sum([value for _, value in results])
 

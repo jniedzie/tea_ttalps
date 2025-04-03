@@ -15,7 +15,7 @@ class TTAlpsPlotterConfigHelper:
       backgrounds_to_exclude, signals_to_include, legend_pos_and_size
   ):
 
-    region = skim.split("_")[-1]
+    region = skim[2]
     module_name = f"ttalps_plotting_styles_{region}"
     module = importlib.import_module(module_name)
 
@@ -25,7 +25,7 @@ class TTAlpsPlotterConfigHelper:
     self.year = year
     self.cross_sections = get_cross_sections(year)
     self.base_path = base_path
-    self.skim = skim
+    self.skim = skim[0]
     self.hist_path = hist_path
     self.data_to_include = data_to_include
     self.backgrounds_to_exclude = backgrounds_to_exclude

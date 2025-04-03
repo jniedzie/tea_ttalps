@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runLLPTriggerHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
-  bool runABCDHistograms;
+  bool runABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
+  config.GetValue("runABCDMothersHistograms", runABCDMothersHistograms);
+  config.GetValue("runFakesHistograms", runFakesHistograms);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -119,6 +121,14 @@ int main(int argc, char **argv) {
     }
     if (runABCDHistograms) {
       ttalpsHistogramsFiller->FillABCDHistograms(event);
+    }
+
+    if (runABCDMothersHistograms) {
+      ttalpsHistogramsFiller->FillABCDMothersHistograms(event);
+    }
+
+    if (runFakesHistograms) {
+      ttalpsHistogramsFiller->FillFakesHistograms(event);
     }
   }
 

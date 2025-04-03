@@ -42,13 +42,15 @@ optimal_points = {
     # optimizing on significance
     "JPsi_noIso_mc": (-0.9, 0.86),
     "JPsi_noIso_data": (-0.54, 0.42),  # all identical
-    
+
     "JPsi_iso_mc": (-1.06, 0.22),  # outdated
     "JPsi_iso_data": (-1.18, 0.46),
-    
+
     "SR_noIso_mc": (0.46, -1.94),  # all identical
     "SR_iso_mc": (-0.78, 0.34),
-    
+
+    "SR_iso_PATDSA_muEtaLt1p2_muPtGt10_mc": (0.1, -0.54),  # middle ground
+
     "QCD_iso_mc": (0.02, 0.82),
     "QCD_iso_data": (0.46, 1.14),
 
@@ -57,12 +59,14 @@ optimal_points = {
     "JPsi_noIso_data_optimalError": (-1.38, -1.26),  # outdated
 }
 
-abcd_point = (0.2, 0.0)
+abcd_point = (999, 999)
+
+# abcd_point = (0.2, 0.0)
 
 # abcd_point = optimal_points["QCD_iso_data"]
 
-# optimization_param = "significance"
-optimization_param = "error"
+optimization_param = "significance"
+# optimization_param = "error"
 # optimization_param = "closure"
 
 # optimization parameters
@@ -70,12 +74,12 @@ max_error = 1.0  # max allowed error expressed in number of sigmas
 max_closure = 0.20  # max allowed closure
 
 
-if do_region == "JPsiCR":
+if do_region == "SR":
   min_n_events = 10  # min number of events in any of the CRs
-  max_signal_contamination = 1.0  # max allowed signal contamination in any of the CRs
-elif do_region == "SR":
+  max_signal_contamination = 0.20  # max allowed signal contamination in any of the CRs
+elif do_region == "JPsiCR":
   min_n_events = 10
-  max_signal_contamination = 0.20
+  max_signal_contamination = 1.0
 elif do_region == "ttZCR":
   min_n_events = 10
   max_signal_contamination = 1.0
@@ -119,6 +123,8 @@ rebin_optimization = 1
 # Plotting settings
 # ------------------------------------------
 
+canvas_size = 200
+
 # axes limits for the 1D projection
 if do_region == "JPsiCR":
   y_max = 50
@@ -153,11 +159,6 @@ signal_colors = {
 
 signal_label_position = (0.11, 0.12)
 projections_legend_position = (0.6, 0.6, 0.9, 0.9)
-
-variable_1_min = -3.0
-variable_1_max = 1.0
-variable_2_min = -2.0
-variable_2_max = 2.0
 
 background_color = ROOT.kBlack
 signal_color = ROOT.kRed
@@ -196,7 +197,7 @@ nice_names = {
 
 base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
-output_path = f"../abcd/results_{do_region}_{collection}"
+output_path = f"/afs/desy.de/user/j/jniedzie/tea_ttalps/abcd/results_{do_region}_{collection}"
 
 if do_data:
   output_path += "_data"
@@ -204,12 +205,17 @@ else:
   output_path += "_mc"
 
 
+output_path += category
+
 if do_region == "JPsiCR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 elif do_region == "ttZCR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 elif do_region == "SR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+  # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
+  # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
+  # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
 elif do_region == "VVCR":
   skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
 elif do_region == "QCDCR":
@@ -218,6 +224,9 @@ elif do_region == "WjetsCR":
   skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
 elif do_region == "bbCR":
   skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
+  # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt10", "_SRDimuons")
+  # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
+  # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
 
 hist_dir = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
 
@@ -227,11 +236,11 @@ background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
 data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_dir}.root"
 
 # signal points for which to run ABCD analysis
-# masses = ["0p35", "1", "2", "12", "60"]
-# ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
+masses = ["0p35", "1", "2", "12", "60"]
+ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
 
-masses = ["0p35", "1", "2"]
-ctaus = ["1e0", "1e1", "1e2", "1e3"]
+# masses = ["1", "2"]
+# ctaus = ["1e0", "1e1", "1e2", "1e3"]
 
 # masses = ["1", "12"]
 # ctaus = ["1e1", "1e2"]
@@ -242,7 +251,7 @@ ctaus = ["1e0", "1e1", "1e2", "1e3"]
 backgrounds = (
     "TTToSemiLeptonic",
     "TTToHadronic",
-    "TTTo2L2Nu",
+    "TTTo2L2Nu",  # fluctuates in SR DSA-DSA
 
     "TTZToLLNuNu_M-10",
     "TTZToLL_M-1to10",
