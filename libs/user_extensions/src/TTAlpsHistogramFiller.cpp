@@ -924,8 +924,8 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
     rawEventsCutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(sortedRawEventsAfterCuts[index]).c_str());
     bin++;
   }
-  histogramsHandler->SetHistogram1D(make_tuple(cutFlowName.c_str(),""), cutFlowHist);
-  histogramsHandler->SetHistogram1D(make_tuple(rawEventsCutFlowName.c_str(),""), rawEventsCutFlowHist);
+  histogramsHandler->SetHistogram1D(make_pair(cutFlowName.c_str(),""), cutFlowHist);
+  histogramsHandler->SetHistogram1D(make_pair(rawEventsCutFlowName.c_str(),""), rawEventsCutFlowHist);
 }
 
 /// --------- ABCD Histograms --------- ///
