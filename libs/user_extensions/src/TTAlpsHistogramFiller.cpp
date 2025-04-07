@@ -93,16 +93,14 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
 
 /// --------- NormCheck Histogram --------- ///
 
-void TTAlpsHistogramFiller::FillNormCheck(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillNormCheck() {
   histogramsHandler->Fill("Event_normCheck", 0.5);
 }
 
 /// --------- NormCheck Histogram --------- ///
 
 void TTAlpsHistogramFiller::FillDataCheck(const shared_ptr<Event> event) {
-  int isData = 0;
-  if (nanoEventProcessor->IsDataEvent(asNanoEvent(event))) isData = 1;
-  histogramsHandler->Fill("Event_isData", isData);
+  histogramsHandler->Fill("Event_isData", nanoEventProcessor->IsDataEvent(asNanoEvent(event)));
 }
 
 /// --------- LooseMuons Histograms --------- ///
@@ -186,7 +184,9 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_chargeProduct", dimuon->GetDimuonChargeProduct());
 
   histogramsHandler->Fill(name + "_3Dangle", dimuon->Get3DOpeningAngle());
+  histogramsHandler->Fill(name + "_3Dangle2", dimuon->Get3DOpeningAngle2());
   histogramsHandler->Fill(name + "_cos3Dangle", dimuon->GetCosine3DOpeningAngle());
+  histogramsHandler->Fill(name + "_cos3Dangle2", dimuon->GetCosine3DOpeningAngle2());
   histogramsHandler->Fill(name + "_nSegments", dimuon->GetTotalNumberOfSegments());
 
   // Isolations:
@@ -213,7 +213,12 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_pfRelIso04all2", pfRelIso04_all2);
 
   // Muons in vertex variables:
-  histogramsHandler->Fill(name + "_leadingPt", dimuon->GetLeadingMuonPt());
+  auto leadingMuon = dimuon->GetLeadingMuon();
+  auto subleadingMuon = dimuon->GetSubleadingMuon();
+  histogramsHandler->Fill(name + "_leadingPt", leadingMuon->GetPt());
+  histogramsHandler->Fill(name + "_subleadingPt", subleadingMuon->GetPt());
+  histogramsHandler->Fill(name + "_leadingEta", leadingMuon->GetEta());
+  histogramsHandler->Fill(name + "_subleadingEta", subleadingMuon->GetEta());
   histogramsHandler->Fill(name + "_dxyPVTraj1", dimuon->Muon1()->Get("dxyPVTraj"));
   histogramsHandler->Fill(name + "_dxyPVTraj2", dimuon->Muon2()->Get("dxyPVTraj"));
   histogramsHandler->Fill(name + "_dxyPVTrajSig1", (float)dimuon->Muon1()->Get("dxyPVTraj") / (float)dimuon->Muon1()->Get("dxyPVTrajErr"));

@@ -23,6 +23,8 @@ class TTAlpsEvent {
   std::map<std::string,float> GetEventWeights();
 
   std::shared_ptr<NanoMuons> GetAllLooseMuons();
+
+  // returns 2 muons from the dimuon vertex (if there is one), and the leading remaining muon
   std::shared_ptr<NanoMuons> GetTTAlpsEventMuons();
 
   std::shared_ptr<PhysicsObjects> GetGenALPs();

@@ -45,14 +45,14 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
   auto leadingJets = eventProcessor->GetLeadingObjects(event, "GoodJets", maxNjets);
   map<string,float> PUjetIDSF = nanoEventProcessor->GetPUJetIDScaleFactors(asNanoJets(leadingJets));
 
-  auto leadingbJets = make_shared<NanoJets>();
+  auto leadingBJets = make_shared<NanoJets>();
   auto allBJets = event->GetCollection("GoodMediumBtaggedJets");
   for (auto jet : *leadingJets) {
     for (auto bJet : *allBJets) {
-      if (jet == bJet) leadingbJets->push_back(asNanoJet(jet));
+      if (jet == bJet) leadingBJets->push_back(asNanoJet(jet));
     }
   }
-  map<string,float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingbJets);
+  map<string,float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingBJets);
 
   auto muons = GetTTAlpsEventMuons();
   map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);

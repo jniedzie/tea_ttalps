@@ -1,12 +1,11 @@
 from ttalps_extra_collections import *
 from golden_json_config import goldenJsons
-from ttalps_met_filters import *
+from ttalps_met_filters import get_met_filters
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 goldenJson = goldenJsons[year]
 extraEventCollections = get_extra_event_collections(year)
-met_filters = get_met_filters(year)
 
 nEvents = -1
 printEveryNevents = 10000
@@ -28,7 +27,7 @@ eventCuts = {
     "nGoodMediumBtaggedJets": (1, 9999999),
 }
 
-requiredFlags = met_filters
+requiredFlags = get_met_filters(year)
 
 branchesToKeep = ["*"]
 branchesToRemove = []

@@ -20,7 +20,7 @@ class TTAlpsHistogramFiller {
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
 
-  void FillNormCheck(const std::shared_ptr<Event> event);
+  void FillNormCheck();
   void FillDataCheck(const std::shared_ptr<Event> event);
 
   void FillDimuonCutFlows(const std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");

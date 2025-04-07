@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");
-      ttalpsHistogramsFiller->FillNormCheck(event);
+      ttalpsHistogramsFiller->FillNormCheck();
       ttalpsHistogramsFiller->FillDataCheck(event);
       ttalpsHistogramsFiller->FillDefaultVariables(event);
     }
@@ -112,6 +112,9 @@ int main(int argc, char **argv) {
       }
       if (ttAlpsCuts->PassesDoubleMuonTrigger(event)) {
         ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "DoubleMuonTrigger");
+      }
+      if (ttAlpsCuts->PassesSingleMuonTrigger(event) || ttAlpsCuts->PassesDoubleMuonTrigger(event)) {
+        ttalpsHistogramsFiller->FillTriggerStudyHistograms(event, "SingleorDoubleMuonTrigger");
       }
     }
     if (runABCDHistograms) {

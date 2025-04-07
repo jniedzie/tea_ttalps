@@ -17,10 +17,13 @@ class TTAlpsHistogrammerConfigHelper:
     self.goodMuonVertexCollections = []
     self.fakeStudyBestMuonVertexCollections = []
 
+    self.bestMuonVertexCollectionCuts = []
+
     if muonVertexCollection is not None:
       for category in ("", "_PatDSA", "_DSA", "_Pat"):
-        self.bestMuonVertexCollections.append(f"{muonVertexCollection}{category}")
-        self.goodMuonVertexCollections.append(f"{muonVertexCollection.replace('Best', 'Good')}{category}")
+        self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}{category}")
+        self.goodMuonVertexCollections.append(f"{muonVertexCollection[0].replace('Best', 'Good')}{category}")
+      self.bestMuonVertexCollectionCuts = muonVertexCollection[1]
 
     self.looseMuonVertexCollections = []
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
@@ -82,9 +85,10 @@ class TTAlpsHistogrammerConfigHelper:
     for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
       self.__insert_MuonVertexHistograms(params, collection)
 
-    for collection in self.bestMuonVertexCollections:  
-      name = self.__insert_into_name(collection, "Nminus1")
-      self.__insert_Nminus1Histograms(params, name)
+    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:  
+      for cut in self.bestMuonVertexCollectionCuts:
+        name = self.__insert_into_name(collection, "Nminus1")
+        self.__insert_Nminus1Histograms(params, name)
 
     return tuple(params)
 
@@ -93,8 +97,9 @@ class TTAlpsHistogrammerConfigHelper:
 
     for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:
 
-      name = self.__insert_into_name(collection, "FromALPNminus1")
-      self.__insert_Nminus1Histograms(params, name)
+      for cut in self.bestMuonVertexCollectionCuts:
+        name = self.__insert_into_name(collection, "FromALPNminus1")
+        self.__insert_Nminus1Histograms(params, name)
 
     for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
 
@@ -177,7 +182,7 @@ class TTAlpsHistogrammerConfigHelper:
   def get_trigger_params(self):
     params = []
 
-    for name in ["NoExtra", "SingleMuon", "DoubleMuon"]:
+    for name in ["NoExtra", "SingleMuon", "DoubleMuon", "SingleorDoubleMuon"]:
       params += (
           ("Event", "n"+name+"TriggerGenMuonFromALP", 50, 0, 50, ""),
           (name+"TriggerGenMuonFromALP", "pt1", 2000, 0, 1000, ""),
@@ -355,6 +360,9 @@ class TTAlpsHistogrammerConfigHelper:
       (name, "eta", 500, -10, 10, ""),
       (name, "chargeProduct", 4, -2, 2, ""),
       (name, "leadingPt", 2000, 0, 1000, ""),
+      (name, "subleadingPt", 2000, 0, 1000, ""),
+      (name, "leadingEta", 500, -10, 10, ""),
+      (name, "subleadingEta", 500, -10, 10, ""),
       (name, "dxyPVTraj1", 1000, 0, 1000, ""),
       (name, "dxyPVTraj2", 1000, 0, 1000, ""),
       (name, "dxyPVTrajSig1", 1000, 0, 1000, ""),

@@ -19,7 +19,7 @@ runPileupHistograms = False
 #  - muonMatchingParams loose muons
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
-runLLPNanoAODHistograms = False
+runLLPNanoAODHistograms = True
 
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
 runGenMuonHistograms = False  # can only be run on signal samples
@@ -92,7 +92,7 @@ if dimuonSelection is not None:
 histParams = ()
 histParams2D = ()
 
-helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection[0] if muonVertexCollection is not None else None)
+helper = TTAlpsHistogrammerConfigHelper(muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None)
 
 defaultHistParams = helper.get_default_params()
 histParams += helper.get_basic_params()
