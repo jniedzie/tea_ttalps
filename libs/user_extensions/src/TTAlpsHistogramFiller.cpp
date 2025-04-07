@@ -129,7 +129,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
   FillNminus1HistogramsForMuonVertexCollection(event);
 }
 
-void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const std::shared_ptr<NanoMuon> muon, std::string name, float weight) {
+void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const std::shared_ptr<NanoMuon> muon, std::string name) {
   vector<string> variables = {
       "pt",
       "eta",
@@ -178,9 +178,9 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const std::shared_ptr<NanoM
 
   for (auto variable : variables) {
     try {
-      histogramsHandler->Fill(name + "_" + variable, muon->Get(variable), weight);
+      histogramsHandler->Fill(name + "_" + variable, muon->Get(variable, false));
     } catch (const Exception &e) {
-      warn() << "Couldn't fill muon histogram for one of the variables" << endl;
+      warn() << "Couldn't fill muon histogram for at least one of the variables" << endl;
     }
   }
 
@@ -207,7 +207,7 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<Event> eve
   FillLooseMuonsHistograms(muons, collectionName);
 }
 
-void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuonVertex> dimuon, string name, float weight) {
+void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuonVertex> dimuon, string name) {
   vector<string> variables = {
       "isValid",
       "vxy",
@@ -284,14 +284,14 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
 
   double deltaIso03 = dimuon->GetDeltaIso03();
   double deltaIso04 = dimuon->GetDeltaIso04();
-  histogramsHandler->Fill(name + "_deltaIso03", deltaIso03, weight);
-  histogramsHandler->Fill(name + "_deltaIso04", deltaIso04, weight);
-  histogramsHandler->Fill(name + "_logDeltaIso03", TMath::Log10(deltaIso03), weight);
-  histogramsHandler->Fill(name + "_logDeltaIso04", TMath::Log10(deltaIso04), weight);
-  histogramsHandler->Fill(name + "_deltaSquaredIso03", pow(deltaIso03, 2), weight);
-  histogramsHandler->Fill(name + "_deltaSquaredIso04", pow(deltaIso04, 2), weight);
-  histogramsHandler->Fill(name + "_logDeltaSquaredIso03", TMath::Log10(pow(deltaIso03, 2)), weight);
-  histogramsHandler->Fill(name + "_logDeltaSquaredIso04", TMath::Log10(pow(deltaIso04, 2)), weight);
+  histogramsHandler->Fill(name + "_deltaIso03", deltaIso03);
+  histogramsHandler->Fill(name + "_deltaIso04", deltaIso04);
+  histogramsHandler->Fill(name + "_logDeltaIso03", TMath::Log10(deltaIso03));
+  histogramsHandler->Fill(name + "_logDeltaIso04", TMath::Log10(deltaIso04));
+  histogramsHandler->Fill(name + "_deltaSquaredIso03", pow(deltaIso03, 2));
+  histogramsHandler->Fill(name + "_deltaSquaredIso04", pow(deltaIso04, 2));
+  histogramsHandler->Fill(name + "_logDeltaSquaredIso03", TMath::Log10(pow(deltaIso03, 2)));
+  histogramsHandler->Fill(name + "_logDeltaSquaredIso04", TMath::Log10(pow(deltaIso04, 2)));
 
   if (name.find("_PatDSA") != string::npos) {
     pfRelIso04_all1 = dimuon->Muon1()->Get("pfRelIso04_all");
@@ -1036,8 +1036,6 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
 void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  double weight = GetEventWeight(event);
-
   string collectionName = muonVertexCollection.first;
   auto collection = event->GetCollection(collectionName);
 
@@ -1102,9 +1100,8 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
     for (auto &[varName_1, varValue_1] : variables) {
       for (auto &[varName_2, varValue_2] : variables) {
         if (varName_1 == varName_2) continue;
-        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2, eventWeight);
-        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2,
-                                eventWeight);
+        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2);
+        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2);
 
       }
     }
@@ -1117,8 +1114,6 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  double weight = GetEventWeight(event);
-
   auto genMuons = event->GetCollection("GenPart");
 
   string collectionName = muonVertexCollection.first;
@@ -1130,9 +1125,6 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
     auto dimuon = asNanoDimuonVertex(vertex, event);
     auto muon1 = dimuon->Muon1();
     auto muon2 = dimuon->Muon2();
-    float muon1weight = GetObjectWeight(muon1->GetPhysicsObject(), "LooseMuons");
-    float muon2weight = GetObjectWeight(muon2->GetPhysicsObject(), "LooseMuons");
-    float eventWeight = weight * muon1weight * muon2weight;
 
     string category = dimuon->GetVertexCategory();
 
@@ -1211,8 +1203,6 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
 void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  double eventWeight = GetEventWeight(event);
-
   string collectionName = muonVertexCollection.first;
   auto collection = event->GetCollection(collectionName);
 
@@ -1224,10 +1214,6 @@ void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
     auto dimuon = asNanoDimuonVertex(vertex, event);
     auto muon1 = dimuon->Muon1();
     auto muon2 = dimuon->Muon2();
-    float muon1weight = GetObjectWeight(muon1->GetPhysicsObject(), "LooseMuons");
-    float muon2weight = GetObjectWeight(muon2->GetPhysicsObject(), "LooseMuons");
-    float weight = eventWeight * muon1weight * muon2weight;
-
     string category = dimuon->GetVertexCategory();
 
     float deltaR = 0.5;
@@ -1248,31 +1234,31 @@ void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
     }
 
     if (mother1_pid == 90) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes", weight);
-      FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_fakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
+      FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_fakes");
     } else if (mother1_pid == 91) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes", weight);
-      FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_fakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
+      FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_fakes");
     } else if (muon1->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes", weight);
-      FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_nonFakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
+      FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_nonFakes");
     } else if (!muon1->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes", weight);
-      FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_nonFakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
+      FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_nonFakes");
     }
 
     if (mother2_pid == 90) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes", weight);
-      FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_fakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
+      FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_fakes");
     } else if (mother2_pid == 91) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes", weight);
-      FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_fakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
+      FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_fakes");
     } else if (muon2->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes", weight);
-      FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_nonFakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
+      FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_nonFakes");
     } else if (!muon2->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes", weight);
-      FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_nonFakes", weight);
+      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
+      FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_nonFakes");
     }
   }
 }
