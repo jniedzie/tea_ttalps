@@ -30,8 +30,8 @@ JPsiDimuonVertexCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
     "maxChargeProduct": [-0.1, -0.1, -0.1],
     # J/Psi mass cut
-    "maxInvariantMass": [3.3, 3.3, 3.3],
-    "minInvariantMass": [2.9, 2.9, 2.9],
+    "maxInvariantMass": [3.2, 3.2, 3.2],
+    "minInvariantMass": [3.0, 3.0, 3.0],
     "maxDCA": [9999.0, 2.0, 2.0],
     "maxChi2": [3.0, 3.0, 3.0],
     "maxHitsInFrontOfVertex": [3.0, 6.0, 9999.0],
