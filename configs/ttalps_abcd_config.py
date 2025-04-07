@@ -69,34 +69,6 @@ optimization_param = "significance"
 # optimization_param = "error"
 # optimization_param = "closure"
 
-# optimization parameters
-max_error = 1.0  # max allowed error expressed in number of sigmas
-max_closure = 0.20  # max allowed closure
-
-
-if do_region == "SR":
-  min_n_events = 10  # min number of events in any of the CRs
-  max_signal_contamination = 0.20  # max allowed signal contamination in any of the CRs
-elif do_region == "JPsiCR":
-  min_n_events = 10
-  max_signal_contamination = 1.0
-elif do_region == "ttZCR":
-  min_n_events = 10
-  max_signal_contamination = 1.0
-elif do_region == "VVCR":
-  min_n_events = 10
-  max_signal_contamination = 1.0
-elif do_region == "QCDCR":
-  min_n_events = 10
-  max_signal_contamination = 1.0
-elif do_region == "WjetsCR":
-  min_n_events = 10
-  max_signal_contamination = 1.0
-elif do_region == "bbCR":
-  min_n_events = 10
-  max_signal_contamination = 1.0
-
-
 # ------------------------------------------
 # Rebinning and projection settings
 # ------------------------------------------
@@ -236,8 +208,8 @@ background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
 data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_dir}.root"
 
 # signal points for which to run ABCD analysis
-masses = ["0p35", "1", "2", "12", "60"]
-ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
+masses = ["0p35", "1", "2", "12"]
+ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 
 # masses = ["1", "2"]
 # ctaus = ["1e0", "1e1", "1e2", "1e3"]
@@ -246,7 +218,7 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3", "1e5"]
 # ctaus = ["1e1", "1e2"]
 
 # masses = ["0p35"]
-# ctaus = ["1e3"]
+# ctaus = ["1e1"]
 
 backgrounds = (
     "TTToSemiLeptonic",
