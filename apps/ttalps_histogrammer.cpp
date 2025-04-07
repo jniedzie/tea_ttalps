@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
 
     map<string,float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
     histogramsHandler->SetEventWeights(eventWeights);
-    cutFlowManager->SetEventWeight(eventWeights["systematic"]);
+    cutFlowManager->SetEventWeight(eventWeights["default"]);
 
     bool passesDimuonCuts = false;
     for (string category : categories) {

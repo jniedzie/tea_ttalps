@@ -31,7 +31,7 @@ TTAlpsEvent::TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {
 
 map<string,float> TTAlpsEvent::GetEventWeights() {
   auto nanoEvent = asNanoEvent(event);
-  if (nanoEventProcessor->IsDataEvent(nanoEvent)) return {{"systematic", 1.0}};
+  if (nanoEventProcessor->IsDataEvent(nanoEvent)) return {{"default", 1.0}};
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
@@ -58,7 +58,7 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
   map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
   
   map<string,float> scaleFactorMap;
-  scaleFactorMap["systematic"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
   for (auto &[name, weight]: muonTriggerSF) {
     if (name == "systematic") continue;
     scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF[name] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];

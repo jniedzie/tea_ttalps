@@ -184,9 +184,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_chargeProduct", dimuon->GetDimuonChargeProduct());
 
   histogramsHandler->Fill(name + "_3Dangle", dimuon->Get3DOpeningAngle());
-  histogramsHandler->Fill(name + "_3Dangle2", dimuon->Get3DOpeningAngle2());
   histogramsHandler->Fill(name + "_cos3Dangle", dimuon->GetCosine3DOpeningAngle());
-  histogramsHandler->Fill(name + "_cos3Dangle2", dimuon->GetCosine3DOpeningAngle2());
   histogramsHandler->Fill(name + "_nSegments", dimuon->GetTotalNumberOfSegments());
 
   // Isolations:
