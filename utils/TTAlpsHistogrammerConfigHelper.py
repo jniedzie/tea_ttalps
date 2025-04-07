@@ -6,28 +6,28 @@ class TTAlpsHistogrammerConfigHelper:
   def __init__(self, muonMatchingParams, muonVertexCollection):
     self.muonMatchingParams = muonMatchingParams
 
-    self.muonCollections = []
+    self.looseMuonCollections = []
+    self.tightMuonCollections = []
 
     for category, matching in product(("", "DSA", "PAT"), muonMatchingParams):
-      self.muonCollections.append(f"Tight{category}Muons{matching}Match")
-      self.muonCollections.append(f"Loose{category}Muons{matching}Match")
-      self.muonCollections.append(f"Loose{category}Muons{matching}Match_fakes")
-      self.muonCollections.append(f"Loose{category}Muons{matching}Match_nonFakes")
+      self.tightMuonCollections.append(f"Tight{category}Muons{matching}Match")
+      self.looseMuonCollections.append(f"Loose{category}Muons{matching}Match")
 
-    self.muonVertexCollections = []
+    self.bestMuonVertexCollections = []
+    self.goodMuonVertexCollections = []
+    self.fakeStudyBestMuonVertexCollections = []
 
-    for category in ("", "_PatDSA", "_DSA", "_Pat"):
-      self.muonVertexCollections.append(f"{muonVertexCollection}{category}")
-      self.muonVertexCollections.append(f"{muonVertexCollection}{category}_fakes")
-      self.muonVertexCollections.append(f"{muonVertexCollection}{category}_nonFakes")
-
-    for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
-      self.muonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
+    self.bestMuonVertexCollectionCuts = []
 
     if muonVertexCollection is not None:
       for category in ("", "_PatDSA", "_DSA", "_Pat"):
-        self.muonVertexCollections.append(f"{muonVertexCollection}{category}")
-        self.muonVertexCollections.append(f"{muonVertexCollection.replace('Best', 'Good')}{category}")
+        self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}{category}")
+        self.goodMuonVertexCollections.append(f"{muonVertexCollection[0].replace('Best', 'Good')}{category}")
+      self.bestMuonVertexCollectionCuts = muonVertexCollection[1]
+
+    self.looseMuonVertexCollections = []
+    for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
+      self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
 
   def get_default_params(self):
     return (
@@ -73,50 +73,59 @@ class TTAlpsHistogrammerConfigHelper:
     return (
         #  collection         variable                      bins   xmin   xmax    dir
         ("Event", "normCheck", 1, 0, 1, ""),
+        ("Event", "isData",    2, 0, 2, ""),
     )
 
   def get_llp_params(self):
     params = []
 
-    for collection in self.muonCollections:
+    for collection in self.looseMuonCollections:
       self.__insert_MuonHistograms(params, collection)
 
-    for collection in self.muonVertexCollections:
+    for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
       self.__insert_MuonVertexHistograms(params, collection)
 
-    return tuple(params)
-
-  def get_nminus1_params(self):
-    params = []
-
-    for collection in self.muonVertexCollections:
-      if not collection.startswith("Best") and not collection.startswith("Good"):
-        continue
-
-      names = (
-          self.__insert_into_name(collection, "Nminus1"),
-          self.__insert_into_name(collection, "FromALPNminus1")
-      )
-      for name in names:
+    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:  
+      for cut in self.bestMuonVertexCollectionCuts:
+        name = self.__insert_into_name(collection, "Nminus1")
         self.__insert_Nminus1Histograms(params, name)
+
     return tuple(params)
 
-  def get_gen_matched_params(self):
+  def get_gen_vertex_params(self):
     params = []
 
-    for collection in self.muonVertexCollections:
+    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:
+
+      for cut in self.bestMuonVertexCollectionCuts:
+        name = self.__insert_into_name(collection, "FromALPNminus1")
+        self.__insert_Nminus1Histograms(params, name)
+
+    for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
 
       names = (
           self.__insert_into_name(collection, "FromALP"),
           self.__insert_into_name(collection, "ResonancesNotFromALP"),
           self.__insert_into_name(collection, "NonresonancesNotFromALP"),
       )
-
       for name in names:
-        self.__insert_MuonHistograms(params, name)
         self.__insert_MuonVertexHistograms(params, name)
 
-    for collection in self.muonCollections:
+    return tuple(params)
+
+  def get_gen_matched_params(self):
+    params = []
+
+    for collection in self.looseMuonVertexCollections:
+      names = (
+          self.__insert_into_name(collection, "FromALP"),
+          self.__insert_into_name(collection, "ResonancesNotFromALP"),
+          self.__insert_into_name(collection, "NonresonancesNotFromALP"),
+      )
+      for name in names:
+        self.__insert_MuonVertexHistograms(params, name)
+
+    for collection in self.looseMuonCollections + self.tightMuonCollections:
       names = (
           self.__insert_into_name(collection, "FromALP"),
           self.__insert_into_name(collection, "FromW"),
@@ -149,67 +158,23 @@ class TTAlpsHistogrammerConfigHelper:
     )
 
     for name in ["GenDimuonFromALP", "GenDimuonResonancesNotFromALP", "GenDimuonsNonresonancesNotFromALP", "GenMuonFromW"]:
-      for i in range(1, 6):
+      self.__insert_GenDimuonHistograms(params, name)
+
+    for matchingMethod in self.muonMatchingParams:
+      for name in ["GenDimuonFromALP", "GenMuonFromW"]:
         params += (
-            (name, "motherID1"+str(i), 10010, -10, 10000, ""),
-            (name, "motherID2"+str(i), 10010, -10, 10000, ""),
-        )
-      params += (
-          ("Event", "n"+name, 50, 0, 50, ""),
-          (name, "index1", 100, 0, 100, ""),
-          (name, "index2", 100, 0, 100, ""),
-          (name, "index3", 100, 0, 100, ""),
-          (name, "Lxy", 50000, 0, 5000, ""),
-          (name, "Lxyz", 50000, 0, 5000, ""),
-          (name, "properLxy", 50000, 0, 5000, ""),
-          (name, "invMass", 20000, 0, 200, ""),
-          (name, "logInvMass", 1000, -1, 2, ""),
-          (name, "deltaR", 1000, 0, 10, ""),
-          (name, "absCollinearityAngle", 500, 0, 5, ""),
-          (name, "absPtLxyDPhi1", 500, 0, 5, ""),
-          (name, "absPtLxyDPhi2", 500, 0, 5, ""),
-          (name, "logLxy", 2000, -10, 10, ""),
-      )
-
-      for matchingMethod in self.muonMatchingParams:
-        for name in ["GenDimuonFromALP", "GenMuonFromW"]:
-          params += (
-              (name+"1", "LooseMuons"+matchingMethod+"MatchMinDR", 1000, 0, 10, ""),
-              (name+"1", "LooseMuons"+matchingMethod+"MatchMinDPhi", 1000, 0, 10, ""),
-              (name+"1", "LooseMuons"+matchingMethod+"MatchMinDEta", 1000, 0, 10, ""),
-              (name+"2", "LooseMuons"+matchingMethod+"MatchMinDR", 1000, 0, 10, ""),
-              (name+"2", "LooseMuons"+matchingMethod+"MatchMinDPhi", 1000, 0, 10, ""),
-              (name+"2", "LooseMuons"+matchingMethod+"MatchMinDEta", 1000, 0, 10, ""),
-              (name+"1", "LooseMuons"+matchingMethod+"MatchFinalMinDR", 1000, 0, 10, ""),
-              (name+"1", "LooseMuons"+matchingMethod+"MatchFinalMinDPhi", 1000, 0, 10, ""),
-              (name+"1", "LooseMuons"+matchingMethod+"MatchFinalMinDEta", 1000, 0, 10, ""),
-              (name+"2", "LooseMuons"+matchingMethod+"MatchFinalMinDR", 1000, 0, 10, ""),
-              (name+"2", "LooseMuons"+matchingMethod+"MatchFinalMinDPhi", 1000, 0, 10, ""),
-              (name+"2", "LooseMuons"+matchingMethod+"MatchFinalMinDEta", 1000, 0, 10, ""),
-          )
-
-    return tuple(params)
-
-  def get_2D_params(self):
-    params = []
-
-    for collection in self.muonVertexCollections:
-
-      params += (
-          (collection+"_log3Dangle_logLxySignificance", 100, -3, 1, 100, -2, 2, ""),
-      )
-
-      names = (
-          self.__insert_into_name(collection, "FromALP"),
-          self.__insert_into_name(collection, "NotFromALP"),
-          self.__insert_into_name(collection, "NonResonant"),
-          self.__insert_into_name(collection, "ResonancesNotFromALP"),
-          self.__insert_into_name(collection, "NonresonancesNotFromALP"),
-      )
-
-      for name in names:
-        params += (
-            (name+"_log3Dangle_logLxySignificance", 100, -3, 1, 100, -2, 2, ""),
+            (name+"1", "LooseMuons"+matchingMethod+"MatchMinDR", 1000, 0, 10, ""),
+            (name+"1", "LooseMuons"+matchingMethod+"MatchMinDPhi", 1000, 0, 10, ""),
+            (name+"1", "LooseMuons"+matchingMethod+"MatchMinDEta", 1000, 0, 10, ""),
+            (name+"2", "LooseMuons"+matchingMethod+"MatchMinDR", 1000, 0, 10, ""),
+            (name+"2", "LooseMuons"+matchingMethod+"MatchMinDPhi", 1000, 0, 10, ""),
+            (name+"2", "LooseMuons"+matchingMethod+"MatchMinDEta", 1000, 0, 10, ""),
+            (name+"1", "LooseMuons"+matchingMethod+"MatchFinalMinDR", 1000, 0, 10, ""),
+            (name+"1", "LooseMuons"+matchingMethod+"MatchFinalMinDPhi", 1000, 0, 10, ""),
+            (name+"1", "LooseMuons"+matchingMethod+"MatchFinalMinDEta", 1000, 0, 10, ""),
+            (name+"2", "LooseMuons"+matchingMethod+"MatchFinalMinDR", 1000, 0, 10, ""),
+            (name+"2", "LooseMuons"+matchingMethod+"MatchFinalMinDPhi", 1000, 0, 10, ""),
+            (name+"2", "LooseMuons"+matchingMethod+"MatchFinalMinDEta", 1000, 0, 10, ""),
         )
 
     return tuple(params)
@@ -217,7 +182,7 @@ class TTAlpsHistogrammerConfigHelper:
   def get_trigger_params(self):
     params = []
 
-    for name in ["NoExtra", "SingleMuon", "DoubleMuon"]:
+    for name in ["NoExtra", "SingleMuon", "DoubleMuon", "SingleorDoubleMuon"]:
       params += (
           ("Event", "n"+name+"TriggerGenMuonFromALP", 50, 0, 50, ""),
           (name+"TriggerGenMuonFromALP", "pt1", 2000, 0, 1000, ""),
@@ -228,7 +193,7 @@ class TTAlpsHistogrammerConfigHelper:
 
     return tuple(params)
 
-  def get_abcd_params(self):
+  def get_abcd_2Dparams(self):
     ABCD_variables = {
         "Lxy": (100, 0, 1000),
         "LxySignificance": (100, 0, 100),
@@ -243,7 +208,7 @@ class TTAlpsHistogrammerConfigHelper:
 
     params = []
 
-    for collection in self.muonVertexCollections:
+    for collection in self.bestMuonVertexCollections:
       for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
         params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
 
@@ -252,9 +217,30 @@ class TTAlpsHistogrammerConfigHelper:
           if variable_1 == variable_2:
             continue
 
-          for category in ["", "_Pat", "_DSA", "_PatDSA"]:
-            params.append((f"{collection}_{variable_2}_vs_{variable_1}{category}",
-                          nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+          params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+
+    return tuple(params)
+
+  def get_abcd_1Dparams(self):
+    params = []
+
+    for collection in self.bestMuonVertexCollections:
+      params += (
+        (collection, "deltaR_WW", 500, 0, 10, ""),
+        (collection, "deltaR_Wtau", 500, 0, 10, ""),
+        (collection, "deltaR_OS", 500, 0, 10, ""),
+        (collection, "logDeltaR_WW", 100, -5, 5, ""),
+        (collection, "logDeltaR_Wtau", 100, -5, 5, ""),
+        (collection, "logDeltaR_OS", 100, -5, -5, ""),
+      )
+
+      for type in ["_fakes", "_nonFakes"]:
+        self.__insert_MuonVertexHistograms(params, collection + type)
+
+    for collection in self.looseMuonCollections:
+      for type in ["_fakes", "_nonFakes"]:
+        self.__insert_MuonHistograms(params, collection + type)
 
     return tuple(params)
 
@@ -312,6 +298,23 @@ class TTAlpsHistogrammerConfigHelper:
 
     return tuple(params)
 
+  def get_SF_variation_variables(self):
+
+    ABCD_variables = ["logLxySignificance", "log3Dangle"]
+
+    SF_variables = []
+
+    for collection in self.bestMuonVertexCollections: 
+      for variable_1 in ABCD_variables:
+        for variable_2 in ABCD_variables:
+          if variable_2 == variable_1:
+            continue
+          
+          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+          SF_variables.append(name)
+
+    return SF_variables
+
   def __insert_into_name(self, collection, to_insert):
     if "_" in collection:
       return collection.rsplit("_", 1)[0] + to_insert + "_" + collection.rsplit("_", 1)[1]
@@ -330,67 +333,89 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "IsTight", 10, 0, 10, ""),
     )
 
+  ## FillMuonVertexHistograms function
   def __insert_MuonVertexHistograms(self, params, name):
     params += (
-        ("Event", "n"+name, 50, 0, 50, ""),
-        (name, "normChi2", 50000, 0, 50, ""),
-        (name, "Lxy", 10000, 0, 1000, ""),
-        (name, "logLxy", 2000, -10, 10, ""),
-        (name, "LxySigma", 10000, 0, 100, ""),
-        (name, "LxySignificance", 1000, 0, 1000, ""),
-        (name, "dR", 500, 0, 10, ""),
-        (name, "deltaR_WW", 500, 0, 10, ""),
-        (name, "deltaR_Wtau", 500, 0, 10, ""),
-        (name, "deltaR_OS", 500, 0, 10, ""),
-        (name, "logDeltaR_WW", 100, -5, 5, ""),
-        (name, "logDeltaR_Wtau", 100, -5, 5, ""),
-        (name, "logDeltaR_OS", 100, -5, -5, ""),
-        (name, "proxDR", 500, 0, 10, ""),
-        (name, "outerDR", 500, 0, 10, ""),
-        (name, "dEta", 500, 0, 10, ""),
-        (name, "dPhi", 500, 0, 10, ""),
-        (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
-        (name, "hitsInFrontOfVert1", 100, 0, 100, ""),
-        (name, "hitsInFrontOfVert2", 100, 0, 100, ""),
-        (name, "dca", 1000, 0, 20, ""),
-        (name, "absCollinearityAngle", 500, 0, 5, ""),
-        (name, "absPtLxyDPhi1", 500, 0, 5, ""),
-        (name, "absPtLxyDPhi2", 500, 0, 5, ""),
-        (name, "invMass", 20000, 0, 200, ""),
-        (name, "logInvMass", 1000, -1, 2, ""),
-        (name, "pt", 2000, 0, 1000, ""),
-        (name, "eta", 500, -10, 10, ""),
-        (name, "chargeProduct", 4, -2, 2, ""),
-        (name, "leadingPt", 2000, 0, 1000, ""),
-        (name, "dxyPVTraj1", 1000, 0, 1000, ""),
-        (name, "dxyPVTraj2", 1000, 0, 1000, ""),
-        (name, "dxyPVTrajSig1", 1000, 0, 1000, ""),
-        (name, "dxyPVTrajSig2", 1000, 0, 1000, ""),
-        (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
-        (name, "displacedTrackIso04Dimuon1", 800, 0, 20, ""),
-        (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
-        (name, "displacedTrackIso04Dimuon2", 800, 0, 20, ""),
-        (name, "pfRelIso04all1", 800, 0, 20, ""),
-        (name, "pfRelIso04all2", 800, 0, 20, ""),
-        (name, "3Dangle", 2000, -10, 10, ""),
-        (name, "cos3Dangle", 400, -2, 2, ""),
-        (name, "nSegments", 50, 0, 50, ""),
-        (name, "nSegments1", 50, 0, 50, ""),
-        (name, "nSegments2", 50, 0, 50, ""),
+      ("Event", "n"+name, 50, 0, 50, ""),
+      (name, "normChi2", 50000, 0, 50, ""),
+      (name, "Lxy", 10000, 0, 1000, ""),
+      (name, "logLxy", 2000, -10, 10, ""),
+      (name, "LxySigma", 10000, 0, 100, ""),
+      (name, "LxySignificance", 1000, 0, 1000, ""),
+      (name, "dR", 500, 0, 10, ""),
+      (name, "proxDR", 500, 0, 10, ""),
+      (name, "outerDR", 500, 0, 10, ""),
+      (name, "dEta", 500, 0, 10, ""),
+      (name, "dPhi", 500, 0, 10, ""),
+      (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
+      (name, "hitsInFrontOfVert1", 100, 0, 100, ""),
+      (name, "hitsInFrontOfVert2", 100, 0, 100, ""),
+      (name, "dca", 1000, 0, 20, ""),
+      (name, "absCollinearityAngle", 500, 0, 5, ""),
+      (name, "absPtLxyDPhi1", 500, 0, 5, ""),
+      (name, "absPtLxyDPhi2", 500, 0, 5, ""),
+      (name, "invMass", 20000, 0, 200, ""),
+      (name, "logInvMass", 1000, -1, 2, ""),
+      (name, "pt", 2000, 0, 1000, ""),
+      (name, "eta", 500, -10, 10, ""),
+      (name, "chargeProduct", 4, -2, 2, ""),
+      (name, "leadingPt", 2000, 0, 1000, ""),
+      (name, "subleadingPt", 2000, 0, 1000, ""),
+      (name, "leadingEta", 500, -10, 10, ""),
+      (name, "subleadingEta", 500, -10, 10, ""),
+      (name, "dxyPVTraj1", 1000, 0, 1000, ""),
+      (name, "dxyPVTraj2", 1000, 0, 1000, ""),
+      (name, "dxyPVTrajSig1", 1000, 0, 1000, ""),
+      (name, "dxyPVTrajSig2", 1000, 0, 1000, ""),
+      (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
+      (name, "displacedTrackIso04Dimuon1", 800, 0, 20, ""),
+      (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
+      (name, "displacedTrackIso04Dimuon2", 800, 0, 20, ""),
+      (name, "pfRelIso04all1", 800, 0, 20, ""),
+      (name, "pfRelIso04all2", 800, 0, 20, ""),
+      (name, "3Dangle", 2000, -10, 10, ""),
+      (name, "cos3Dangle", 400, -2, 2, ""),
+      (name, "nSegments", 50, 0, 50, ""),
+      (name, "nSegments1", 50, 0, 50, ""),
+      (name, "nSegments2", 50, 0, 50, ""),
     )
 
   def __insert_Nminus1Histograms(self, params, name):
     params += (
-        (name, "invMass", 20000, 0, 200, ""),
-        (name, "logInvMass", 1000, -1, 2, ""),
-        (name, "chargeProduct", 4, -2, 2, ""),
-        (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
-        (name, "absPtLxyDPhi1", 500, 0, 5, ""),
-        (name, "dca", 1000, 0, 20, ""),
-        (name, "absCollinearityAngle", 500, 0, 5, ""),
-        (name, "normChi2", 50000, 0, 50, ""),
-        (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
-        (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
-        (name, "pfRelIso1", 800, 0, 20, ""),
-        (name, "pfRelIso2", 800, 0, 20, ""),
+      (name, "invMass", 20000, 0, 200, ""),
+      (name, "logInvMass", 1000, -1, 2, ""),
+      (name, "chargeProduct", 4, -2, 2, ""),
+      (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
+      (name, "absPtLxyDPhi1", 500, 0, 5, ""),
+      (name, "dca", 1000, 0, 20, ""),
+      (name, "absCollinearityAngle", 500, 0, 5, ""),
+      (name, "normChi2", 50000, 0, 50, ""),
+      (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
+      (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
+      (name, "pfRelIso1", 800, 0, 20, ""),
+      (name, "pfRelIso2", 800, 0, 20, ""),
+    )
+
+  ## For FillGenDimuonHistograms function
+  def __insert_GenDimuonHistograms(self, params, name):
+    for i in range(1, 6):
+      params += (
+          (name, "motherID1"+str(i), 10010, -10, 10000, ""),
+          (name, "motherID2"+str(i), 10010, -10, 10000, ""),
+      )
+    params += (
+      ("Event", "n"+name, 50, 0, 50, ""),
+      (name, "index1", 100, 0, 100, ""),
+      (name, "index2", 100, 0, 100, ""),
+      (name, "index3", 100, 0, 100, ""),
+      (name, "Lxy", 50000, 0, 5000, ""),
+      (name, "Lxyz", 50000, 0, 5000, ""),
+      (name, "properLxy", 50000, 0, 5000, ""),
+      (name, "invMass", 20000, 0, 200, ""),
+      (name, "logInvMass", 1000, -1, 2, ""),
+      (name, "deltaR", 1000, 0, 10, ""),
+      (name, "absCollinearityAngle", 500, 0, 5, ""),
+      (name, "absPtLxyDPhi1", 500, 0, 5, ""),
+      (name, "absPtLxyDPhi2", 500, 0, 5, ""),
+      (name, "logLxy", 2000, -10, 10, ""),
     )

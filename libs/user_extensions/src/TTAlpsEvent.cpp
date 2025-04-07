@@ -3,8 +3,118 @@
 #include <tuple>
 
 #include "ExtensionsHelpers.hpp"
+#include "ConfigManager.hpp"
 
 using namespace std;
+
+TTAlpsEvent::TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {
+  eventProcessor = make_unique<EventProcessor>();
+  nanoEventProcessor = make_unique<NanoEventProcessor>();
+  auto &config = ConfigManager::GetInstance();
+
+  try {
+    config.GetValue("weightsBranchName", weightsBranchName);
+  } catch (const Exception &e) {
+    warn() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
+  }
+  try {
+    config.GetMap("muonMatchingParams", muonMatchingParams);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read muonMatchingParams from config file - will assume all PAT and DSA muons for SFs" << endl;
+  }
+  try {
+    config.GetPair("muonVertexCollection", muonVertexCollection);
+  } catch (const Exception &e) {
+    warn() << "muonVertexCollection not defined - it is needed to define the SF for the muonVertexCollection in the event" << endl;
+  }
+}
+
+map<string,float> TTAlpsEvent::GetEventWeights() {
+  auto nanoEvent = asNanoEvent(event);
+  if (nanoEventProcessor->IsDataEvent(nanoEvent)) return {{"default", 1.0}};
+
+  float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
+
+  float pileupSF;
+  // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all years?
+  // else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
+  pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
+  map<string,float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTriggerIsoMu24");
+
+  int maxNjets = 4;
+  auto leadingJets = eventProcessor->GetLeadingObjects(event, "GoodJets", maxNjets);
+  map<string,float> PUjetIDSF = nanoEventProcessor->GetPUJetIDScaleFactors(asNanoJets(leadingJets));
+
+  auto leadingBJets = make_shared<NanoJets>();
+  auto allBJets = event->GetCollection("GoodMediumBtaggedJets");
+  for (auto jet : *leadingJets) {
+    for (auto bJet : *allBJets) {
+      if (jet == bJet) leadingBJets->push_back(asNanoJet(jet));
+    }
+  }
+  map<string,float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingBJets);
+
+  auto muons = GetTTAlpsEventMuons();
+  map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
+  
+  map<string,float> scaleFactorMap;
+  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  for (auto &[name, weight]: muonTriggerSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF[name] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  }
+  for (auto &[name, weight]: btagSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF[name] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  }
+  for (auto &[name, weight]: PUjetIDSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF[name] * muonSF["systematic"];
+  }
+  for (auto &[name, weight]: muonSF) {
+    if (name == "systematic") continue;
+    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF[name];
+  }
+  return scaleFactorMap;
+}
+
+shared_ptr<NanoMuons> TTAlpsEvent::GetAllLooseMuons() {
+  auto allMuons = make_shared<NanoMuons>();
+  if (muonMatchingParams.empty()) {
+    for (auto muon : *event->GetCollection("LoosePATMuons")) {
+      allMuons->push_back(asNanoMuon(muon));
+    }
+    for (auto muon : *event->GetCollection("LooseDSAMuons")) {
+      allMuons->push_back(asNanoMuon(muon));
+    }
+    return allMuons;
+  }
+  // Only segment matched muons for now
+  string matchingMethod = muonMatchingParams.begin()->first;
+  return asNanoMuons(GetCollection("LooseMuons" + matchingMethod + "Match"));
+}
+
+shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
+  auto allMuons = GetAllLooseMuons();
+  auto muons = make_shared<NanoMuons>();
+  if (!muonVertexCollection.first.empty() && !muonVertexCollection.second.empty()) {
+    auto vertex = event->GetCollection(muonVertexCollection.first);
+    if (vertex->size() > 0) {
+      auto muonVertex = asNanoDimuonVertex(vertex->at(0),event);
+      muons->push_back(muonVertex->Muon1());
+      muons->push_back(muonVertex->Muon2());
+
+      auto remainingMuons = make_shared<NanoMuons>();
+      for (auto muon : *allMuons) {
+        if(muon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject() || muon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject()) continue;
+        remainingMuons->push_back(muon);
+      }
+      allMuons = make_shared<NanoMuons>(*remainingMuons);
+    }
+  }
+  if (GetLeadingMuon(allMuons)) muons->push_back(GetLeadingMuon(allMuons));
+  return muons;
+}
 
 string TTAlpsEvent::GetTTbarEventCategory() {
   vector<int> topIndices = GetTopIndices();

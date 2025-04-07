@@ -63,6 +63,9 @@ int main(int argc, char **argv) {
     auto event = eventReader->GetEvent(iEvent);
     ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
 
+    // map<string,float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
+    // cutFlowManager->SetEventWeight(eventWeights["default"]);
+
     cutFlowManager->UpdateCutFlow("initial");
 
     

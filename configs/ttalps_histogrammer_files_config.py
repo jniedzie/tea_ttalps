@@ -10,18 +10,18 @@ input_username = "jniedzie"
 # skim = ("skimmed_looseSemimuonic_v2", "")
 
 # SR (+J/Psi CR), tt̄ CR, and QCD CR, with no isolation requirement on the loose muons
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
 # skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")  # this is in fact VV CR
 # skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
-skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
-# skim = ("skimmed_looseSemimuonicv1_LLPtrigger", "_SRDimuons_TriggerStudy")
-# skim = ("skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger", "_SRDimuons_TriggerStudy")
+# skim = ("skimmed_looseSemimuonic_v2_LLPtrigger_SR", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "_SRDimuons")
 
 samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
@@ -38,7 +38,7 @@ applyScaleFactors = {
   "muonTrigger": True,
   "pileup": True,
   "bTagging": True,
-  "PUjetID": False,  # no need to apply jet ID SFs in UL
+  "PUjetID": True,
 }
 
 # this has to be here, otherwise the script will not work:

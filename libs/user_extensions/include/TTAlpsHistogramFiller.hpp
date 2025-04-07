@@ -20,7 +20,8 @@ class TTAlpsHistogramFiller {
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
 
-  void FillNormCheck(const std::shared_ptr<Event> event);
+  void FillNormCheck();
+  void FillDataCheck(const std::shared_ptr<Event> event);
 
   void FillDimuonCutFlows(const std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
 
@@ -47,24 +48,20 @@ class TTAlpsHistogramFiller {
   std::vector<std::string> triggerNames;
   bool EndsWithTriggerName(std::string name);
 
-  float GetEventWeight(const std::shared_ptr<Event> event);
-  float GetObjectWeight(const std::shared_ptr<PhysicsObject> object, std::string collectionName);
-
   // Loose Muons and Loose muon vertex histograms
-  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuons> muons, std::string collectionName, float weight);
+  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuons> muons, std::string collectionName);
   void FillLooseMuonsHistograms(const std::shared_ptr<Event> event, std::string collectionName);
-  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuon> muon, std::string name, float weight);
+  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuon> muon, std::string name);
   
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<PhysicsObjects> vertexCollection, std::string vertexName);
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName);
-  void FillMuonVertexHistograms(const std::shared_ptr<NanoDimuonVertex> dimuon, std::string name, float weight);
+  void FillMuonVertexHistograms(const std::shared_ptr<NanoDimuonVertex> dimuon, std::string name);
 
   // Dimuon Vertex Collection Histograms
   void FillNminus1HistogramsForMuonVertexCollection(const std::shared_ptr<Event> event);
 
   // Nminus1 LLPnanoAOD histograms
-  void FillDimuonVertexNminus1HistogramForCut(std::string collectionName, std::string cut, std::shared_ptr<NanoDimuonVertex> dimuonVertex,
-                                              float weight);
+  void FillDimuonVertexNminus1HistogramForCut(std::string collectionName, std::string cut, std::shared_ptr<NanoDimuonVertex> dimuonVertex);
 
   // Gen-Level histograms
   void FillGenALPsHistograms(const std::shared_ptr<Event> event);
@@ -75,7 +72,7 @@ class TTAlpsHistogramFiller {
 
   void FillGenDimuonHistograms(std::shared_ptr<MuonPair> muonPair, std::string collectionName, const std::shared_ptr<Event> event);
   void FillGenMuonMinDRHistograms(const std::shared_ptr<PhysicsObject> genMuon, const std::shared_ptr<NanoMuons> muonCollection,
-                                  std::string genMuonCollectionName, std::string looseMuonCollectionName, float weight);
+                                  std::string genMuonCollectionName, std::string looseMuonCollectionName);
   void FillRecoGenMatchedResonanceHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<NanoMuons> muonCollection,
                                              std::string collectionName, const std::shared_ptr<PhysicsObjects> vertexCollection = nullptr);
 
@@ -83,7 +80,7 @@ class TTAlpsHistogramFiller {
   void FillMuonCollectionFromALPsNminus1Histograms(const std::shared_ptr<Event> event);
 
   // Muon Matching histograms
-  void FillMatchedMuonHistograms(const std::shared_ptr<NanoMuon> muon, std::string muonCollectionName, float weight);
+  void FillMatchedMuonHistograms(const std::shared_ptr<NanoMuon> muon, std::string muonCollectionName);
   void FillMatchingHistograms(const std::shared_ptr<Event> event, std::string patMuonCollection, std::string dsaMuonCollection);
 };
 
