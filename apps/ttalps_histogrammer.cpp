@@ -148,5 +148,7 @@ int main(int argc, char **argv) {
   auto &logger = Logger::GetInstance();
   logger.Print();
 
+  // info() << "\nAll done, exitting" << endl;
+  // _exit(0);
   return 0;
 }
