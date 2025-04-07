@@ -208,6 +208,10 @@ class TTAlpsHistogrammerConfigHelper:
         "maxHitsInFrontOfVert": (10, 0, 10),
         "absPtLxyDPhi1": (100, 0, pi),
         "absPtLxyDPhi2": (100, 0, pi),
+        
+        "logAbsPtLxyDPhi1": (100, -5, 0),
+        "logAbsPtLxyDPhi2": (100, -5, 0),
+        
         "invMass": (100, 0, 100),
         "logInvMass": (100, -1, 2),
         "pt": (100, 0, 200),

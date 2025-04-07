@@ -1062,6 +1062,10 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
         
         {"absPtLxyDPhi1", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
         {"absPtLxyDPhi2", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
+
+        {"logAbsPtLxyDPhi1", TMath::Log10(abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)))},
+        {"logAbsPtLxyDPhi2", TMath::Log10(abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)))},
+
         {"invMass", dimuon->GetInvariantMass()},
         {"logInvMass", log10(dimuon->GetInvariantMass())},
         {"pt", dimuon->GetDimuonPt()},
