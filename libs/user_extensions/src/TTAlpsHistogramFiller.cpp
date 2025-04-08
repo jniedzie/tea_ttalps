@@ -282,8 +282,8 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_displacedTrackIso04Dimuon2", dimuon->Get("displacedTrackIso04Dimuon2"));
   float pfRelIso04_all1(0), pfRelIso04_all2(0), nSegments1(0), nSegments2(0);
 
-  double deltaIso03 = dimuon->GetDeltaIso03();
-  double deltaIso04 = dimuon->GetDeltaIso04();
+  double deltaIso03 = dimuon->GetDeltaDisplacedTrackIso03();
+  double deltaIso04 = dimuon->GetDeltaDisplacedTrackIso04();
   histogramsHandler->Fill(name + "_deltaIso03", deltaIso03);
   histogramsHandler->Fill(name + "_deltaIso04", deltaIso04);
   histogramsHandler->Fill(name + "_logDeltaIso03", TMath::Log10(deltaIso03));
@@ -1083,14 +1083,14 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
         {"logDxyPVTrajSig2", TMath::Log10((float)dimuon->Muon2()->Get("dxyPVTraj") / (float)dimuon->Muon2()->Get("dxyPVTrajErr"))},
 
 
-        {"deltaIso03", dimuon->GetDeltaIso03()},
-        {"deltaIso04", dimuon->GetDeltaIso04()},
-        {"logDeltaIso03", TMath::Log10(dimuon->GetDeltaIso03())},
-        {"logDeltaIso04", TMath::Log10(dimuon->GetDeltaIso04())},
-        {"deltaSquaredIso03", pow(dimuon->GetDeltaIso03(), 2)},
-        {"deltaSquaredIso04", pow(dimuon->GetDeltaIso04(), 2)},
-        {"logDeltaSquaredIso03", TMath::Log10(pow(dimuon->GetDeltaIso03(), 2))},
-        {"logDeltaSquaredIso04", TMath::Log10(pow(dimuon->GetDeltaIso04(), 2))},
+        {"deltaIso03", dimuon->GetDeltaDisplacedTrackIso03()},
+        {"deltaIso04", dimuon->GetDeltaDisplacedTrackIso04()},
+        {"logDeltaIso03", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso03())},
+        {"logDeltaIso04", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso04())},
+        {"deltaSquaredIso03", pow(dimuon->GetDeltaDisplacedTrackIso03(), 2)},
+        {"deltaSquaredIso04", pow(dimuon->GetDeltaDisplacedTrackIso04(), 2)},
+        {"logDeltaSquaredIso03", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso03(), 2))},
+        {"logDeltaSquaredIso04", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso04(), 2))},
     };
 
     string category = dimuon->GetVertexCategory();

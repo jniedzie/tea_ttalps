@@ -29,6 +29,51 @@ class TTAlpsHistogrammerConfigHelper:
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
 
+    self.ABCD_variables = {
+
+        "absCollinearityAngle": (100, 0, 2),
+        "3Dangle": (100, 0, pi),
+
+        "logLxy": (100, -2, 3),
+        "logLxySignificance": (100, -2, 2),
+        "logAbsCollinearityAngle": (100, -5, 1),
+        "log3Dangle": (100, -3, 1),
+
+        "outerDR": (100, 0, 5),
+        "maxHitsInFrontOfVert": (10, 0, 10),
+        "absPtLxyDPhi1": (100, 0, pi),
+        "absPtLxyDPhi2": (100, 0, pi),
+
+        "logAbsPtLxyDPhi1": (100, -5, 0),
+        "logAbsPtLxyDPhi2": (100, -5, 0),
+
+        "invMass": (100, 0, 100),
+        "logInvMass": (100, -1, 2),
+        "pt": (100, 0, 200),
+        "eta": (100, -3, 3),
+        "dEta": (100, 0, 3),
+        "dPhi": (100, 0, 2*pi),
+        "nSegments": (10, 0, 10),
+        "logDisplacedTrackIso03Dimuon1": (100, -3, 0),
+        "logDisplacedTrackIso04Dimuon1": (100, -3, 0),
+        "logDisplacedTrackIso03Dimuon2": (100, -3, 0),
+        "logDisplacedTrackIso04Dimuon2": (100, -3, 0),
+        "leadingPt": (100, 0, 500),
+        "logDxyPVTraj1": (100, -5, 1),
+        "logDxyPVTraj2": (100, -5, 1),
+        "logDxyPVTrajSig1": (100, -3, 1),
+        "logDxyPVTrajSig2": (100, -3, 1),
+
+        "deltaIso03": (100, 0, 10),
+        "deltaIso04": (100, 0, 10),
+        "logDeltaIso03": (100, -5, 5),
+        "logDeltaIso04": (100, -5, 5),
+        "deltaSquaredIso03": (100, 0, 10),
+        "deltaSquaredIso04": (100, 0, 10),
+        "logDeltaSquaredIso03": (100, -5, 5),
+        "logDeltaSquaredIso04": (100, -5, 5),
+    }
+
   def get_default_params(self):
     return (
         #  collection             variable               bins    xmin    xmax    dir
@@ -194,64 +239,25 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_abcd_2Dparams(self):
-    ABCD_variables = {
-
-        "absCollinearityAngle": (100, 0, 2),
-        "3Dangle": (100, 0, pi),
-
-        "logLxy": (100, -2, 3),
-        "logLxySignificance": (100, -2, 2),
-        "logAbsCollinearityAngle": (100, -5, 1),
-        "log3Dangle": (100, -3, 1),
-
-        "outerDR": (100, 0, 5),
-        "maxHitsInFrontOfVert": (10, 0, 10),
-        "absPtLxyDPhi1": (100, 0, pi),
-        "absPtLxyDPhi2": (100, 0, pi),
-        
-        "logAbsPtLxyDPhi1": (100, -5, 0),
-        "logAbsPtLxyDPhi2": (100, -5, 0),
-        
-        "invMass": (100, 0, 100),
-        "logInvMass": (100, -1, 2),
-        "pt": (100, 0, 200),
-        "eta": (100, -3, 3),
-        "dEta": (100, 0, 3),
-        "dPhi": (100, 0, 2*pi),
-        "nSegments": (10, 0, 10),
-        "logDisplacedTrackIso03Dimuon1": (100, -3, 0),
-        "logDisplacedTrackIso04Dimuon1": (100, -3, 0),
-        "logDisplacedTrackIso03Dimuon2": (100, -3, 0),
-        "logDisplacedTrackIso04Dimuon2": (100, -3, 0),
-        "leadingPt": (100, 0, 500),
-        "logDxyPVTraj1": (100, -5, 1),
-        "logDxyPVTraj2": (100, -5, 1),
-        "logDxyPVTrajSig1": (100, -3, 1),
-        "logDxyPVTrajSig2": (100, -3, 1),
-
-        "deltaIso03": (100, 0, 10),
-        "deltaIso04": (100, 0, 10),
-        "logDeltaIso03": (100, -5, 5),
-        "logDeltaIso04": (100, -5, 5),
-        "deltaSquaredIso03": (100, 0, 10),
-        "deltaSquaredIso04": (100, 0, 10),
-        "logDeltaSquaredIso03": (100, -5, 5),
-        "logDeltaSquaredIso04": (100, -5, 5),
-    }
-
     params = []
 
     for collection in self.bestMuonVertexCollections:
-      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
-        params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
-
-      for variable_1, (nBins_1, xMin_1, xMax_1) in ABCD_variables.items():
-        for variable_2, (nBins_2, xMin_2, xMax_2) in ABCD_variables.items():
+      for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
+        for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
           if variable_1 == variable_2:
             continue
 
           name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
           params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+
+    return tuple(params)
+
+  def get_abcd_mothers_2Dparams(self):
+    params = []
+
+    for collection in self.bestMuonVertexCollections:
+      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
+        params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
 
     return tuple(params)
 
@@ -268,6 +274,12 @@ class TTAlpsHistogrammerConfigHelper:
           (collection, "logDeltaR_OS", 100, -5, -5, ""),
       )
 
+    return tuple(params)
+
+  def get_fakes_params(self):
+    params = []
+
+    for collection in self.bestMuonVertexCollections:
       for type in ["_fakes", "_nonFakes"]:
         self.__insert_MuonVertexHistograms(params, collection + type)
 

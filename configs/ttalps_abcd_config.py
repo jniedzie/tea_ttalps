@@ -1,3 +1,4 @@
+import os
 import ROOT
 from ttalps_cross_sections import get_cross_sections
 
@@ -169,7 +170,8 @@ nice_names = {
 
 base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
-output_path = f"/afs/desy.de/user/j/jniedzie/tea_ttalps/abcd/results_{do_region}_{collection}"
+username = os.getenv("USER")
+output_path = f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_{do_region}_{collection}"
 
 if do_data:
   output_path += "_data"
