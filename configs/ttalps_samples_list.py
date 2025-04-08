@@ -98,27 +98,25 @@ dasData2018 = {
 }
 
 dasSignals2018_0p35GeV = {
+  "signals/tta_mAlp-0p35GeV_ctau-1e-5mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-0p35GeV_ctau-1e0mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-0p35GeV_ctau-1e1mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-0p35GeV_ctau-1e2mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-0p35GeV_ctau-1e3mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  "signals/tta_mAlp-0p35GeV_ctau-1e5mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  "signals/tta_mAlp-0p35GeV_ctau-1e-5mm" : "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
 }
 dasSignals2018_1GeV = {
+  "signals/tta_mAlp-1GeV_ctau-1e-5mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-1GeV_ctau-1e0mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-1GeV_ctau-1e1mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e1mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-1GeV_ctau-1e2mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e2mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-1GeV_ctau-1e3mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e3mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  "signals/tta_mAlp-1GeV_ctau-1e5mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
-  "signals/tta_mAlp-1GeV_ctau-1e-5mm" : "/ttalps/lrygaard-ttalps_m-1GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
 }
 dasSignals2018_2GeV = {
+  "signals/tta_mAlp-2GeV_ctau-1e-5mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-2GeV_ctau-1e-5mm-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-2GeV_ctau-1e0mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-2GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-2GeV_ctau-1e1mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-2GeV_ctau-1e1mm-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-2GeV_ctau-1e2mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-2GeV_ctau-1e2mm-00000000000000000000000000000000/USER",
   "signals/tta_mAlp-2GeV_ctau-1e3mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-2GeV_ctau-1e3mm-00000000000000000000000000000000/USER",
-  "signals/tta_mAlp-2GeV_ctau-1e-5mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-2GeV_ctau-1e-5mm-00000000000000000000000000000000/USER",
 }
 dasSignals2018_12GeV = {
   "signals/tta_mAlp-12GeV_ctau-1e0mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
@@ -141,7 +139,7 @@ dasSignals2018_60GeV = {
 dasSignals2018_70GeV = {
   "signals/tta_mAlp-70GeV_ctau-1e0mm" : "/ttalps/lrygaard-LLPnanoAODv1_m-70GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
 }
-dasSignals2018 = {key: value for d in (dasSignals2018_0p35GeV, dasSignals2018_1GeV, dasSignals2018_2GeV, dasSignals2018_12GeV, dasSignals2018_70GeV) for key, value in d.items()}
+dasSignals2018 = {key: value for d in (dasSignals2018_0p35GeV, dasSignals2018_1GeV, dasSignals2018_2GeV, dasSignals2018_12GeV, dasSignals2018_60GeV, dasSignals2018_70GeV) for key, value in d.items()}
 
 dasSamples2018 = {key: value for d in (dasBackgrounds2018, dasSignals2018, dasData2018) for key, value in d.items()}
 

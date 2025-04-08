@@ -29,6 +29,51 @@ class TTAlpsHistogrammerConfigHelper:
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
 
+    self.ABCD_variables = {
+
+        "absCollinearityAngle": (100, 0, 2),
+        "3Dangle": (100, 0, pi),
+
+        "logLxy": (100, -2, 3),
+        "logLxySignificance": (100, -2, 2),
+        "logAbsCollinearityAngle": (100, -5, 1),
+        "log3Dangle": (100, -3, 1),
+
+        "outerDR": (100, 0, 5),
+        "maxHitsInFrontOfVert": (10, 0, 10),
+        "absPtLxyDPhi1": (100, 0, pi),
+        "absPtLxyDPhi2": (100, 0, pi),
+
+        "logAbsPtLxyDPhi1": (100, -5, 0),
+        "logAbsPtLxyDPhi2": (100, -5, 0),
+
+        "invMass": (100, 0, 100),
+        "logInvMass": (100, -1, 2),
+        "pt": (100, 0, 200),
+        "eta": (100, -3, 3),
+        "dEta": (100, 0, 3),
+        "dPhi": (100, 0, 2*pi),
+        "nSegments": (10, 0, 10),
+        "logDisplacedTrackIso03Dimuon1": (100, -3, 0),
+        "logDisplacedTrackIso04Dimuon1": (100, -3, 0),
+        "logDisplacedTrackIso03Dimuon2": (100, -3, 0),
+        "logDisplacedTrackIso04Dimuon2": (100, -3, 0),
+        "leadingPt": (100, 0, 500),
+        "logDxyPVTraj1": (100, -5, 1),
+        "logDxyPVTraj2": (100, -5, 1),
+        "logDxyPVTrajSig1": (100, -3, 1),
+        "logDxyPVTrajSig2": (100, -3, 1),
+
+        "deltaIso03": (100, 0, 10),
+        "deltaIso04": (100, 0, 10),
+        "logDeltaIso03": (100, -5, 5),
+        "logDeltaIso04": (100, -5, 5),
+        "deltaSquaredIso03": (100, 0, 10),
+        "deltaSquaredIso04": (100, 0, 10),
+        "logDeltaSquaredIso03": (100, -5, 5),
+        "logDeltaSquaredIso04": (100, -5, 5),
+    }
+
   def get_default_params(self):
     return (
         #  collection             variable               bins    xmin    xmax    dir
@@ -85,7 +130,7 @@ class TTAlpsHistogrammerConfigHelper:
     for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
       self.__insert_MuonVertexHistograms(params, collection)
 
-    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:  
+    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:
       for cut in self.bestMuonVertexCollectionCuts:
         name = self.__insert_into_name(collection, "Nminus1")
         self.__insert_Nminus1Histograms(params, name)
@@ -194,26 +239,11 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_abcd_2Dparams(self):
-    ABCD_variables = {
-        "Lxy": (100, 0, 1000),
-        "LxySignificance": (100, 0, 100),
-        "absCollinearityAngle": (100, 0, 2),
-        "3Dangle": (100, 0, pi),
-
-        "logLxy": (100, -2, 3),
-        "logLxySignificance": (100, -2, 2),
-        "logAbsCollinearityAngle": (100, -5, 1),
-        "log3Dangle": (100, -3, 1),
-    }
-
     params = []
 
     for collection in self.bestMuonVertexCollections:
-      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
-        params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
-
-      for variable_1, (nBins_1, xMin_1, xMax_1) in ABCD_variables.items():
-        for variable_2, (nBins_2, xMin_2, xMax_2) in ABCD_variables.items():
+      for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
+        for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
           if variable_1 == variable_2:
             continue
 
@@ -222,19 +252,34 @@ class TTAlpsHistogrammerConfigHelper:
 
     return tuple(params)
 
+  def get_abcd_mothers_2Dparams(self):
+    params = []
+
+    for collection in self.bestMuonVertexCollections:
+      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
+        params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
+
+    return tuple(params)
+
   def get_abcd_1Dparams(self):
     params = []
 
     for collection in self.bestMuonVertexCollections:
       params += (
-        (collection, "deltaR_WW", 500, 0, 10, ""),
-        (collection, "deltaR_Wtau", 500, 0, 10, ""),
-        (collection, "deltaR_OS", 500, 0, 10, ""),
-        (collection, "logDeltaR_WW", 100, -5, 5, ""),
-        (collection, "logDeltaR_Wtau", 100, -5, 5, ""),
-        (collection, "logDeltaR_OS", 100, -5, -5, ""),
+          (collection, "deltaR_WW", 500, 0, 10, ""),
+          (collection, "deltaR_Wtau", 500, 0, 10, ""),
+          (collection, "deltaR_OS", 500, 0, 10, ""),
+          (collection, "logDeltaR_WW", 100, -5, 5, ""),
+          (collection, "logDeltaR_Wtau", 100, -5, 5, ""),
+          (collection, "logDeltaR_OS", 100, -5, -5, ""),
       )
 
+    return tuple(params)
+
+  def get_fakes_params(self):
+    params = []
+
+    for collection in self.bestMuonVertexCollections:
       for type in ["_fakes", "_nonFakes"]:
         self.__insert_MuonVertexHistograms(params, collection + type)
 
@@ -304,12 +349,12 @@ class TTAlpsHistogrammerConfigHelper:
 
     SF_variables = []
 
-    for collection in self.bestMuonVertexCollections: 
+    for collection in self.bestMuonVertexCollections:
       for variable_1 in ABCD_variables:
         for variable_2 in ABCD_variables:
           if variable_2 == variable_1:
             continue
-          
+
           name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
           SF_variables.append(name)
 
@@ -331,72 +376,148 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "pfRelIso04all", 800, 0, 20, ""),
         (name, "isPAT", 10, 0, 10, ""),
         (name, "IsTight", 10, 0, 10, ""),
+        (name, "ptErr", 2000, 0, 1000, ""),
+        (name, "etaErr", 300, -3, 3, ""),
+        (name, "phiErr", 300, -3, 3, ""),
+        (name, "dz", 20000, -2000, 2000, ""),
+        (name, "vx", 200, -100, 100, ""),
+        (name, "vy", 200, -100, 100, ""),
+        (name, "vz", 200, -100, 100, ""),
+        (name, "chi2", 1000, 0, 100, ""),
+        (name, "ndof", 100, 0, 100, ""),
+        (name, "trkNumPlanes", 20, 0, 20, ""),
+        (name, "trkNumHits", 50, 0, 50, ""),
+        (name, "trkNumDTHits", 50, 0, 50, ""),
+        (name, "trkNumCSCHits", 50, 0, 50, ""),
+        (name, "normChi2", 50000, 0, 50, ""),
+        (name, "outerEta", 300, -3, 3, ""),
+        (name, "outerPhi", 300, -3, 3, ""),
+        (name, "dzPV", 20000, -2000, 2000, ""),
+        (name, "dzPVErr", 20000, -2000, 2000, ""),
+        (name, "dxyPVTraj", 20000, -2000, 2000, ""),
+        (name, "dxyPVTrajErr", 20000, -2000, 2000, ""),
+        (name, "dxyPVSigned", 20000, -2000, 2000, ""),
+        (name, "dxyPVSignedErr", 20000, -2000, 2000, ""),
+        (name, "ip3DPVSigned", 20000, -2000, 2000, ""),
+        (name, "ip3DPVSignedErr", 20000, -2000, 2000, ""),
+        (name, "dxyBS", 20000, -2000, 2000, ""),
+        (name, "dxyBSErr", 20000, -2000, 2000, ""),
+        (name, "dzBS", 20000, -2000, 2000, ""),
+        (name, "dzBSErr", 20000, -2000, 2000, ""),
+        (name, "dxyBSTraj", 20000, -2000, 2000, ""),
+        (name, "dxyBSTrajErr", 20000, -2000, 2000, ""),
+        (name, "dxyBSSigned", 20000, -2000, 2000, ""),
+        (name, "dxyBSSignedErr", 20000, -2000, 2000, ""),
+        (name, "ip3DBSSigned", 20000, -2000, 2000, ""),
+        (name, "ip3DBSSignedErr", 20000, -2000, 2000, ""),
+        (name, "displacedID", 10, 0, 10, ""),
+        (name, "nSegments", 50, 0, 50, ""),
+        (name, "nDTSegments", 50, 0, 50, ""),
+        (name, "nCSCSegments", 50, 0, 50, ""),
+
+
+
+
     )
 
-  ## FillMuonVertexHistograms function
+  # FillMuonVertexHistograms function
   def __insert_MuonVertexHistograms(self, params, name):
     params += (
-      ("Event", "n"+name, 50, 0, 50, ""),
-      (name, "normChi2", 50000, 0, 50, ""),
-      (name, "Lxy", 10000, 0, 1000, ""),
-      (name, "logLxy", 2000, -10, 10, ""),
-      (name, "LxySigma", 10000, 0, 100, ""),
-      (name, "LxySignificance", 1000, 0, 1000, ""),
-      (name, "dR", 500, 0, 10, ""),
-      (name, "proxDR", 500, 0, 10, ""),
-      (name, "outerDR", 500, 0, 10, ""),
-      (name, "dEta", 500, 0, 10, ""),
-      (name, "dPhi", 500, 0, 10, ""),
-      (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
-      (name, "hitsInFrontOfVert1", 100, 0, 100, ""),
-      (name, "hitsInFrontOfVert2", 100, 0, 100, ""),
-      (name, "dca", 1000, 0, 20, ""),
-      (name, "absCollinearityAngle", 500, 0, 5, ""),
-      (name, "absPtLxyDPhi1", 500, 0, 5, ""),
-      (name, "absPtLxyDPhi2", 500, 0, 5, ""),
-      (name, "invMass", 20000, 0, 200, ""),
-      (name, "logInvMass", 1000, -1, 2, ""),
-      (name, "pt", 2000, 0, 1000, ""),
-      (name, "eta", 500, -10, 10, ""),
-      (name, "chargeProduct", 4, -2, 2, ""),
-      (name, "leadingPt", 2000, 0, 1000, ""),
-      (name, "subleadingPt", 2000, 0, 1000, ""),
-      (name, "leadingEta", 500, -10, 10, ""),
-      (name, "subleadingEta", 500, -10, 10, ""),
-      (name, "dxyPVTraj1", 1000, 0, 1000, ""),
-      (name, "dxyPVTraj2", 1000, 0, 1000, ""),
-      (name, "dxyPVTrajSig1", 1000, 0, 1000, ""),
-      (name, "dxyPVTrajSig2", 1000, 0, 1000, ""),
-      (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
-      (name, "displacedTrackIso04Dimuon1", 800, 0, 20, ""),
-      (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
-      (name, "displacedTrackIso04Dimuon2", 800, 0, 20, ""),
-      (name, "pfRelIso04all1", 800, 0, 20, ""),
-      (name, "pfRelIso04all2", 800, 0, 20, ""),
-      (name, "3Dangle", 2000, -10, 10, ""),
-      (name, "cos3Dangle", 400, -2, 2, ""),
-      (name, "nSegments", 50, 0, 50, ""),
-      (name, "nSegments1", 50, 0, 50, ""),
-      (name, "nSegments2", 50, 0, 50, ""),
+        ("Event", "n"+name, 50, 0, 50, ""),
+        (name, "normChi2", 50000, 0, 50, ""),
+        (name, "Lxy", 10000, 0, 1000, ""),
+        (name, "logLxy", 2000, -10, 10, ""),
+        (name, "LxySigma", 10000, 0, 100, ""),
+        (name, "LxySignificance", 1000, 0, 1000, ""),
+        (name, "dR", 500, 0, 10, ""),
+        (name, "proxDR", 500, 0, 10, ""),
+        (name, "outerDR", 500, 0, 10, ""),
+        (name, "dEta", 500, 0, 10, ""),
+        (name, "dPhi", 500, 0, 10, ""),
+        (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
+        (name, "hitsInFrontOfVert1", 100, 0, 100, ""),
+        (name, "hitsInFrontOfVert2", 100, 0, 100, ""),
+        (name, "dca", 1000, 0, 20, ""),
+        (name, "absCollinearityAngle", 500, 0, 5, ""),
+        (name, "absPtLxyDPhi1", 500, 0, 5, ""),
+        (name, "absPtLxyDPhi2", 500, 0, 5, ""),
+        (name, "invMass", 20000, 0, 200, ""),
+        (name, "logInvMass", 1000, -1, 2, ""),
+        (name, "pt", 2000, 0, 1000, ""),
+        (name, "eta", 500, -10, 10, ""),
+        (name, "chargeProduct", 4, -2, 2, ""),
+        (name, "leadingPt", 2000, 0, 1000, ""),
+        (name, "subleadingPt", 2000, 0, 1000, ""),
+        (name, "leadingEta", 500, -10, 10, ""),
+        (name, "subleadingEta", 500, -10, 10, ""),
+        (name, "dxyPVTraj1", 1000, 0, 1000, ""),
+        (name, "dxyPVTraj2", 1000, 0, 1000, ""),
+        (name, "dxyPVTrajSig1", 1000, 0, 1000, ""),
+        (name, "dxyPVTrajSig2", 1000, 0, 1000, ""),
+        (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
+        (name, "displacedTrackIso04Dimuon1", 800, 0, 20, ""),
+        (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
+        (name, "displacedTrackIso04Dimuon2", 800, 0, 20, ""),
+        (name, "pfRelIso04all1", 800, 0, 20, ""),
+        (name, "pfRelIso04all2", 800, 0, 20, ""),
+        (name, "3Dangle", 2000, -10, 10, ""),
+        (name, "cos3Dangle", 400, -2, 2, ""),
+        (name, "nSegments", 50, 0, 50, ""),
+        (name, "nSegments1", 50, 0, 50, ""),
+        (name, "nSegments2", 50, 0, 50, ""),
+        (name, "isValid", 10, 0, 10, ""),
+        (name, "vxy", 10000, 0, 1000, ""),
+        (name, "vxySigma", 10000, 0, 100, ""),
+        (name, "vxyz", 10000, 0, 1000, ""),
+        (name, "vxyzSigma", 10000, 0, 100, ""),
+        (name, "chi2", 1000, 0, 100, ""),
+        (name, "ndof", 100, 0, 100, ""),
+        (name, "vx", 200, -100, 100, ""),
+        (name, "vy", 200, -100, 100, ""),
+        (name, "vz", 200, -100, 100, ""),
+        (name, "t", 200, -100, 100, ""),
+        (name, "vxErr", 200, -100, 100, ""),
+        (name, "vyErr", 200, -100, 100, ""),
+        (name, "vzErr", 200, -100, 100, ""),
+        (name, "tErr", 200, -100, 100, ""),
+        (name, "displacedTrackIso03Muon1", 800, 0, 20, ""),
+        (name, "displacedTrackIso04Muon1", 800, 0, 20, ""),
+        (name, "displacedTrackIso03Muon2", 800, 0, 20, ""),
+        (name, "displacedTrackIso04Muon2", 800, 0, 20, ""),
+        (name, "dRprox", 500, 0, 10, ""),
+        (name, "dcaStatus", 10, 0, 10, ""),
+        (name, "dcax", 200, -100, 100, ""),
+        (name, "dcay", 200, -100, 100, ""),
+        (name, "dcaz", 200, -100, 100, ""),
+        (name, "missHitsAfterVert1", 100, 0, 100, ""),
+        (name, "missHitsAfterVert2", 100, 0, 100, ""),
+        (name, "deltaIso03", 1000, 0, 10, ""),
+        (name, "deltaIso04", 1000, 0, 10, ""),
+        (name, "logDeltaIso03", 1000, -5, 5, ""),
+        (name, "logDeltaIso04", 1000, -5, 5, ""),
+        (name, "deltaSquaredIso03", 1000, 0, 10, ""),
+        (name, "deltaSquaredIso04", 1000, 0, 10, ""),
+        (name, "logDeltaSquaredIso03", 1000, -5, 5, ""),
+        (name, "logDeltaSquaredIso04", 1000, -5, 5, ""),
     )
 
   def __insert_Nminus1Histograms(self, params, name):
     params += (
-      (name, "invMass", 20000, 0, 200, ""),
-      (name, "logInvMass", 1000, -1, 2, ""),
-      (name, "chargeProduct", 4, -2, 2, ""),
-      (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
-      (name, "absPtLxyDPhi1", 500, 0, 5, ""),
-      (name, "dca", 1000, 0, 20, ""),
-      (name, "absCollinearityAngle", 500, 0, 5, ""),
-      (name, "normChi2", 50000, 0, 50, ""),
-      (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
-      (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
-      (name, "pfRelIso1", 800, 0, 20, ""),
-      (name, "pfRelIso2", 800, 0, 20, ""),
+        (name, "invMass", 20000, 0, 200, ""),
+        (name, "logInvMass", 1000, -1, 2, ""),
+        (name, "chargeProduct", 4, -2, 2, ""),
+        (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
+        (name, "absPtLxyDPhi1", 500, 0, 5, ""),
+        (name, "dca", 1000, 0, 20, ""),
+        (name, "absCollinearityAngle", 500, 0, 5, ""),
+        (name, "normChi2", 50000, 0, 50, ""),
+        (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
+        (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
+        (name, "pfRelIso1", 800, 0, 20, ""),
+        (name, "pfRelIso2", 800, 0, 20, ""),
     )
 
-  ## For FillGenDimuonHistograms function
+  # For FillGenDimuonHistograms function
   def __insert_GenDimuonHistograms(self, params, name):
     for i in range(1, 6):
       params += (
@@ -404,18 +525,18 @@ class TTAlpsHistogrammerConfigHelper:
           (name, "motherID2"+str(i), 10010, -10, 10000, ""),
       )
     params += (
-      ("Event", "n"+name, 50, 0, 50, ""),
-      (name, "index1", 100, 0, 100, ""),
-      (name, "index2", 100, 0, 100, ""),
-      (name, "index3", 100, 0, 100, ""),
-      (name, "Lxy", 50000, 0, 5000, ""),
-      (name, "Lxyz", 50000, 0, 5000, ""),
-      (name, "properLxy", 50000, 0, 5000, ""),
-      (name, "invMass", 20000, 0, 200, ""),
-      (name, "logInvMass", 1000, -1, 2, ""),
-      (name, "deltaR", 1000, 0, 10, ""),
-      (name, "absCollinearityAngle", 500, 0, 5, ""),
-      (name, "absPtLxyDPhi1", 500, 0, 5, ""),
-      (name, "absPtLxyDPhi2", 500, 0, 5, ""),
-      (name, "logLxy", 2000, -10, 10, ""),
+        ("Event", "n"+name, 50, 0, 50, ""),
+        (name, "index1", 100, 0, 100, ""),
+        (name, "index2", 100, 0, 100, ""),
+        (name, "index3", 100, 0, 100, ""),
+        (name, "Lxy", 50000, 0, 5000, ""),
+        (name, "Lxyz", 50000, 0, 5000, ""),
+        (name, "properLxy", 50000, 0, 5000, ""),
+        (name, "invMass", 20000, 0, 200, ""),
+        (name, "logInvMass", 1000, -1, 2, ""),
+        (name, "deltaR", 1000, 0, 10, ""),
+        (name, "absCollinearityAngle", 500, 0, 5, ""),
+        (name, "absPtLxyDPhi1", 500, 0, 5, ""),
+        (name, "absPtLxyDPhi2", 500, 0, 5, ""),
+        (name, "logLxy", 2000, -10, 10, ""),
     )
