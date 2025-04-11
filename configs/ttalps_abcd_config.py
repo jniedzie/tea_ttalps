@@ -31,13 +31,18 @@ if do_region == "SR":
 collection = "BestPFIsoDimuonVertex"
 # collection = "BestDimuonVertex"
 
+# Pat-Pat:
+# variable_1 = "logLxySignificance"
+# variable_2 = "log3Dangle"
+
+# DSA-DSA:
 variable_1 = "logLxySignificance"
-variable_2 = "log3Dangle"
+variable_2 = "logAbsPtLxyDPhi1"
 
 # category = ""
-# category = "_Pat"
+category = "_Pat"
 # category = "_PatDSA"
-category = "_DSA"
+# category = "_DSA"
 
 optimal_points = {
     # optimizing on significance
@@ -70,6 +75,8 @@ optimization_param = "significance"
 # optimization_param = "error"
 # optimization_param = "closure"
 
+common_signals_optimization = True
+
 # ------------------------------------------
 # Rebinning and projection settings
 # ------------------------------------------
@@ -86,10 +93,9 @@ smart_rebin_max_error = 0.30  # max allowed ralative error for smart rebinning
 # or you can use standard rebinning for the 1D projection (the number is the rebin factor)
 standard_rebin = 1
 
-rebin_grid = 5  # rebinning factor for the 2D histograms of signals and backgrounds
-
-# rebinning factor for the 2D optimization histograms (closure, error, min_n_events, significance, contamination)
-rebin_optimization = 1
+# rebinning factor for the 2D histograms of signals and backgrounds and optimization histograms
+# (closure, error, min_n_events, significance, contamination)
+rebin_2D = 5
 
 
 # ------------------------------------------
@@ -137,7 +143,7 @@ background_color = ROOT.kBlack
 signal_color = ROOT.kRed
 
 abcd_line_color = ROOT.kCyan+1
-abcd_line_width = 2
+abcd_line_width = 1
 
 true_background_color = ROOT.kRed
 true_background_description = "Background in A"
@@ -202,7 +208,7 @@ elif do_region == "bbCR":
   # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
   # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
 
-hist_dir = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
+hist_dir = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
 
 signal_path_pattern = "signals/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
@@ -210,7 +216,7 @@ background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
 data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_dir}.root"
 
 # signal points for which to run ABCD analysis
-masses = ["0p35", "1", "2", "12"]
+masses = ["0p35", "1", "2", "12", "30", "60"]
 ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 
 # masses = ["1", "2"]
@@ -222,10 +228,10 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # masses = ["0p35"]
 # ctaus = ["1e1"]
 
-backgrounds = (
+backgrounds = [
     "TTToSemiLeptonic",
     "TTToHadronic",
-    "TTTo2L2Nu",  # fluctuates in SR DSA-DSA
+    # "TTTo2L2Nu",  # fluctuates in SR DSA-DSA
 
     "TTZToLLNuNu_M-10",
     "TTZToLL_M-1to10",
@@ -259,7 +265,10 @@ backgrounds = (
     "QCD_Pt-600To800",
     "QCD_Pt-800To1000",
     "QCD_Pt-1000",
-)
+]
+
+if category != "_DSA" or do_region != "SR":
+  backgrounds.append("TTTo2L2Nu")  # fluctuates in SR DSA-DSA
 
 background_params = []
 for b in backgrounds:

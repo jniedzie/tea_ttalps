@@ -66,9 +66,7 @@ def main():
   category = config.category
 
   for i in range(len(variables)):
-    for j in range(len(variables)):
-      if i == j:
-        continue
+    for j in range(i+1, len(variables)):
       config_path = f"tmp_ttalps_abcd_config_{variables[i]}_{variables[j]}{category}.py"
 
       with open(base_config_path, "r") as base_config_file:
@@ -109,6 +107,7 @@ def main():
   # log        = ./log/$(ClusterId).log
   request_cpus = 1
   request_memory = 512MB
+  # request_memory = 8000MB
   initialdir = .
   getenv = True
   queue cmd from cmds.txt
