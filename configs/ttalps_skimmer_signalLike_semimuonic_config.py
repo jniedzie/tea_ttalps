@@ -1,4 +1,4 @@
-from ttalps_extra_collections import *
+from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 
 year = "2018"
@@ -23,7 +23,7 @@ eventsTreeNames = ("Events",)
 # "OuterDR" : max Delta R (eg. 0.1)
 # "ProxDR" : max Delta R (eg. 0.1)
 muonMatchingParams = {
-    "Segment" : 2.0/3.0,
+    "Segment": 2.0/3.0,
     # "DR" : 0.1,
     # "OuterDR" : 0.1,
     # "ProxDR" : 0.1,
@@ -41,6 +41,6 @@ branchesToKeep = ["*"]
 branchesToRemove = []
 
 specialBranchSizes = {
-  "Proton_multiRP": "nProton_multiRP",
-  "Proton_singleRP": "nProton_singleRP",
+    "Proton_multiRP": "nProton_multiRP",
+    "Proton_singleRP": "nProton_singleRP",
 }
