@@ -31,13 +31,21 @@ if do_region == "SR":
 collection = "BestPFIsoDimuonVertex"
 # collection = "BestDimuonVertex"
 
+
 # Pat-Pat:
 variable_1 = "logLxySignificance"
 variable_2 = "log3Dangle"
+abcd_point = (22, 2)  # binning always expressed in bin numbers, not values
+
+# Pat-DSA
+# variable_1 = "dPhi"
+# variable_2 = "logDxyPVTraj1"
+# abcd_point = (21, 7)
 
 # DSA-DSA:
-# variable_1 = "logLxySignificance"
-# variable_2 = "logAbsPtLxyDPhi1"
+# variable_1 = "logLxy"
+# variable_2 = "log3Dangle"
+# abcd_point = (19, 16)
 
 # category = ""
 # category = "_Pat"
@@ -65,11 +73,6 @@ optimal_points = {
     "JPsi_noIso_mc_optimalError": (-1.22, 0.06),  # outdated
     "JPsi_noIso_data_optimalError": (-1.38, -1.26),  # outdated
 }
-
-# binning always expressed in bin numbers, not values
-abcd_point = (999, 999)
-# abcd_point = (18, 2)
-# abcd_point = (3, 2)
 
 # abcd_point = optimal_points["QCD_iso_data"]
 

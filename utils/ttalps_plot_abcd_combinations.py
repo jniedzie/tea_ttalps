@@ -1,9 +1,11 @@
 import subprocess
 import importlib
 import argparse
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, default="", help="Path to the config file.")
+parser.add_argument("--condor", action="store_true", help="Run in condor mode.")
 parser.add_argument("--max_correlation", type=float, default=1.0, help="Max correlation for the background histograms.")
 parser.add_argument("--min_signals", type=int, default=0, help="Min number of ""good"" signals.")
 parser.add_argument("--max_overlap", type=float, default=0.5, help="Max overlap between background and signal.")
@@ -81,6 +83,10 @@ def main():
 
       command = (
           f"abcd_plotter.py --config {config_path} "
+          f"--max_error {args.max_error} "
+          f"--max_closure {args.max_closure} "
+          f"--min_n_events {args.min_n_events} "
+          f"--max_signal_contamination {args.max_signal_contamination} "
           f"--max_correlation {args.max_correlation} "
           f"--min_signals {args.min_signals} "
           f"--max_overlap {args.max_overlap}"
@@ -92,29 +98,35 @@ def main():
     for i, cmd in enumerate(commands_to_run):
       f.write(f'{cmd}\n')
 
-  # Create the submit file
-  submit_file = "submit_jobs.sub"
-  with open(submit_file, "w") as f:
-    f.write('''\
-  universe   = vanilla
-  executable = /usr/bin/python3
-  arguments  = $(cmd)
-  output     = /dev/null
-  error      = /dev/null
-  log        = /dev/null
-  # output     = ./output/$(ClusterId).$(ProcId).out
-  # error      = ./error/$(ClusterId).$(ProcId).err
-  # log        = ./log/$(ClusterId).log
-  request_cpus = 1
-  request_memory = 512MB
-  # request_memory = 8000MB
-  initialdir = .
-  getenv = True
-  queue cmd from cmds.txt
-  ''')
+  if args.condor:
+    # Create the submit file
+    submit_file = "submit_jobs.sub"
+    with open(submit_file, "w") as f:
+      f.write('''\
+    universe   = vanilla
+    executable = /usr/bin/python3
+    arguments  = $(cmd)
+    output     = /dev/null
+    error      = /dev/null
+    log        = /dev/null
+    # output     = ./output/$(ClusterId).$(ProcId).out
+    # error      = ./error/$(ClusterId).$(ProcId).err
+    # log        = ./log/$(ClusterId).log
+    request_cpus = 1
+    request_memory = 512MB
+    # request_memory = 8000MB
+    initialdir = .
+    getenv = True
+    queue cmd from cmds.txt
+    ''')
 
-  # Submit the jobs
-  subprocess.run(["condor_submit", submit_file], check=True)
+    # Submit the jobs
+    subprocess.run(["condor_submit", submit_file], check=True)
+  else:
+    for cmd in commands_to_run:
+      print(f"Running command: {cmd}")
+      os.system(f"python {cmd}")
+      
 
   # cleanup
   # os.system("rm cmds.txt")
