@@ -31,19 +31,28 @@ if do_region == "SR":
 collection = "BestPFIsoDimuonVertex"
 # collection = "BestDimuonVertex"
 
+
 # Pat-Pat:
-# variable_1 = "logLxySignificance"
-# variable_2 = "log3Dangle"
+variable_1 = "logLxySignificance"
+variable_2 = "log3Dangle"
+abcd_point = (22, 2)  # binning always expressed in bin numbers, not values
+
+# Pat-DSA
+# variable_1 = "dPhi"
+# variable_2 = "logDxyPVTraj1"
+# abcd_point = (21, 7)
 
 # DSA-DSA:
-variable_1 = "logLxySignificance"
-variable_2 = "logAbsPtLxyDPhi1"
+# variable_1 = "logLxy"
+# variable_2 = "log3Dangle"
+# abcd_point = (19, 16)
 
 # category = ""
-category = "_Pat"
+# category = "_Pat"
 # category = "_PatDSA"
-# category = "_DSA"
+category = "_DSA"
 
+# this is obsolete, and also has to move to bin-based rather than value-based
 optimal_points = {
     # optimizing on significance
     "JPsi_noIso_mc": (-0.9, 0.86),
@@ -64,10 +73,6 @@ optimal_points = {
     "JPsi_noIso_mc_optimalError": (-1.22, 0.06),  # outdated
     "JPsi_noIso_data_optimalError": (-1.38, -1.26),  # outdated
 }
-
-abcd_point = (999, 999)
-
-# abcd_point = (0.2, 0.0)
 
 # abcd_point = optimal_points["QCD_iso_data"]
 
@@ -95,7 +100,7 @@ standard_rebin = 1
 
 # rebinning factor for the 2D histograms of signals and backgrounds and optimization histograms
 # (closure, error, min_n_events, significance, contamination)
-rebin_2D = 5
+rebin_2D = 4
 
 
 # ------------------------------------------
@@ -225,8 +230,8 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # masses = ["1", "12"]
 # ctaus = ["1e1", "1e2"]
 
-# masses = ["0p35"]
-# ctaus = ["1e1"]
+# masses = ["1"]
+# ctaus = ["1e0"]
 
 backgrounds = [
     "TTToSemiLeptonic",

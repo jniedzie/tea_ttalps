@@ -1,4 +1,4 @@
-from ttalps_extra_collections import *
+from ttalps_extra_collections import get_extra_event_collections
 from golden_json_config import goldenJsons
 from ttalps_met_filters import get_met_filters
 
