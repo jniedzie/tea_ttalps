@@ -25,6 +25,13 @@ commonExtraEventCollections = {
         "eta": (-2.5, 2.5),
     },
 
+    # To get IsoMu24 trigger object
+    "MuonTrigObj": {
+        "inputCollections": ("TrigObj",),
+        "pt": (24., 9999999.),
+        "id": 13,
+    },
+
     # Used for the loose skim
     "GoodJets": {
         "inputCollections": ("Jet", ),

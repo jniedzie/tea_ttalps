@@ -21,6 +21,9 @@ runPileupHistograms = False
 #  - extra muon vertex collections
 runLLPNanoAODHistograms = True
 
+runMuonTriggerHistograms = True
+runNonTriggerVertexCollection = True
+
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
 runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False
@@ -115,5 +118,10 @@ if runMuonMatchingHistograms:
 if runABCDHistograms:
     histParams += helper.get_abcd_1Dparams()
     histParams2D += helper.get_abcd_2Dparams()
+
+if runMuonTriggerHistograms:
+    histParams += helper.get_muon_trigger_params()
+if runNonTriggerVertexCollection:
+    histParams += helper.get_nontrigger_muon_vertex_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()

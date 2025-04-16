@@ -29,6 +29,9 @@ class TTAlpsHistogramFiller {
 
   void FillABCDHistograms(const std::shared_ptr<Event> event);
 
+  void FillMuonTriggerVariables(const std::shared_ptr<Event> event);
+  void FillNonTriggerMuonVertexHistograms(const std::shared_ptr<Event> event);
+
  private:
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;

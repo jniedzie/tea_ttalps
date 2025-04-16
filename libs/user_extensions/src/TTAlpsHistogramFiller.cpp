@@ -164,6 +164,16 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_logLxy", log10(dimuon->GetLxyFromPV()));
   histogramsHandler->Fill(name + "_LxySigma", dimuon->GetLxySigmaFromPV());
   histogramsHandler->Fill(name + "_LxySignificance", dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV());
+  float vx = dimuon->Get("vx");
+  float vy = dimuon->Get("vy");
+  float vxErr = dimuon->Get("vxErr");
+  float vyErr = dimuon->Get("vyErr");
+  histogramsHandler->Fill(name + "_Vxy", sqrt(vx * vx + vy * vy));
+  histogramsHandler->Fill(name + "_VxySigma", sqrt(vxErr * vxErr + vyErr * vyErr));
+  histogramsHandler->Fill(name + "_vx", vx);
+  histogramsHandler->Fill(name + "_vy", vy);
+  histogramsHandler->Fill(name + "_vxErr", vxErr);
+  histogramsHandler->Fill(name + "_vyErr", vyErr);
   histogramsHandler->Fill(name + "_dR", dimuon->Get("dR"));
   histogramsHandler->Fill(name + "_proxDR", dimuon->Get("dRprox"));
   histogramsHandler->Fill(name + "_outerDR", dimuon->GetOuterDeltaR());
@@ -326,6 +336,90 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
     histogramsHandler->Fill(collectionName + "_DeltaEta", abs(dimuonVertex->GetDeltaEta()));
   }
   if (cut.find("LogLxy") != string::npos) histogramsHandler->Fill(collectionName + "_LogLxy", log(dimuonVertex->GetLxyFromPV()));
+}
+
+/// --------- TrigObj muon Histograms --------- ///
+/// -------- flag: runMuonTrigObjHistograms --------- ///
+
+void TTAlpsHistogramFiller::FillMuonTriggerVariables(const shared_ptr<Event> event) {
+  auto tightMuons = event->GetCollection("TightMuons");
+  auto triggerMuonMatchCollection = event->GetCollection("TriggerMuonMatch");
+  vector<string> muonTrigerCollectionNames = {"MuonTrigObj", "MuonTriggers", "LeadingMuonTrigger"};
+  for (auto collectionName : muonTrigerCollectionNames) {
+    auto muonTrigObjs = event->GetCollection(collectionName);
+    histogramsHandler->Fill("Event_n"+collectionName, muonTrigObjs->size());
+    for (const auto &muonTrigObj : *muonTrigObjs) {
+      histogramsHandler->Fill(collectionName+"_pt", float(muonTrigObj->Get("pt")));
+      histogramsHandler->Fill(collectionName+"_eta", float(muonTrigObj->Get("eta")));
+      histogramsHandler->Fill(collectionName+"_phi", float(muonTrigObj->Get("phi")));
+      histogramsHandler->Fill(collectionName+"_filterBits", int(muonTrigObj->Get("filterBits")));
+      histogramsHandler->Fill(collectionName+"_l1iso", int(muonTrigObj->Get("l1iso")));
+      histogramsHandler->Fill(collectionName+"_l1pt", float(muonTrigObj->Get("l1pt")));
+      histogramsHandler->Fill(collectionName+"_l1pt_2", float(muonTrigObj->Get("l1pt_2")));
+      if (int(muonTrigObj->Get("filterBits")) & 2) histogramsHandler->Fill(collectionName+"_hasFilterBits2", 1);
+      else histogramsHandler->Fill(collectionName+"_hasFilterBits2", 0);
+      TLorentzVector muonTrigObj4Vector;;
+      muonTrigObj4Vector.SetPtEtaPhiM(muonTrigObj->Get("pt"), muonTrigObj->Get("eta"), muonTrigObj->Get("phi"), 0.105);
+      float minDR = 9999.;
+      for (auto tightMuon : *tightMuons) {
+        TLorentzVector tightMuon4Vector = asNanoMuon(tightMuon)->GetFourVector();
+        float dR = muonTrigObj4Vector.DeltaR(tightMuon4Vector);
+        if (dR < minDR) minDR = dR;
+      }
+      histogramsHandler->Fill(collectionName+"_minDRTightLooseMuon", minDR);
+      if (minDR < 0.3) {
+        histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p3", 1);
+        if (minDR < 0.1) {
+          histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p1", 1);
+        }
+        else {
+          histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p1", 0);
+        }
+      } else {
+        histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p3", 0);
+        histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p1", 0);
+      }
+      if (triggerMuonMatchCollection->size() > 0) {
+        auto triggerMuonMatch = asNanoMuon(triggerMuonMatchCollection->at(0));
+        auto triggerMuonMatch4Vector = triggerMuonMatch->GetFourVector();
+        float triggerMuonMatchDR = muonTrigObj4Vector.DeltaR(triggerMuonMatch4Vector);
+        histogramsHandler->Fill(collectionName+"_triggerMuonMatchDR", triggerMuonMatchDR);
+      }
+    }
+  }
+
+/// --------- Vertex Histograms excluding trigger matched muon and leading tright muon --------- ///
+/// -------- flag: runNonTriggerVertexCollection --------- ///
+
+void TTAlpsHistogramFiller::FillNonTriggerMuonVertexHistograms(const shared_ptr<Event> event) {
+  if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
+
+  auto nonTriggerMuonVertexCollectionName = "BestNonTrigger" + muonVertexCollection.first.substr(4);
+  auto bestNonTriggerMuonVertexCollection = event->GetCollection(nonTriggerMuonVertexCollectionName);
+  if (bestNonTriggerMuonVertexCollection->size() > 0) {
+    auto dimuonVertex = asNanoDimuonVertex(bestNonTriggerMuonVertexCollection->at(0),event);
+    FillMuonVertexHistograms(dimuonVertex, nonTriggerMuonVertexCollectionName);
+    string vertexCategory = dimuonVertex->GetVertexCategory();
+    FillMuonVertexHistograms(dimuonVertex, nonTriggerMuonVertexCollectionName + "_" + vertexCategory);
+    
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_x", event->GetAs<float>("PV_x"));
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_y", event->GetAs<float>("PV_y"));
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_z", event->GetAs<float>("PV_z"));
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_chi2", event->GetAs<float>("PV_chi2"));
+  }
+  auto nonLeadingMuonVertexCollectionName = "BestNonLeading" + muonVertexCollection.first.substr(4);
+  auto bestNonLeadingMuonVertexCollection = event->GetCollection(nonLeadingMuonVertexCollectionName);
+  if (bestNonLeadingMuonVertexCollection->size() > 0) {
+    auto dimuonVertex = asNanoDimuonVertex(bestNonLeadingMuonVertexCollection->at(0),event);
+    FillMuonVertexHistograms(dimuonVertex, nonLeadingMuonVertexCollectionName);
+    string vertexCategory = dimuonVertex->GetVertexCategory();
+    FillMuonVertexHistograms(dimuonVertex, nonLeadingMuonVertexCollectionName + "_" + vertexCategory);
+
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_x", event->GetAs<float>("PV_x"));
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_y", event->GetAs<float>("PV_y"));
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_z", event->GetAs<float>("PV_z"));
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_chi2", event->GetAs<float>("PV_chi2"));
+  }
 }
 
 /// --------- Gen-Level Muon Histograms --------- ///

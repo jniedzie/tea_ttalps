@@ -35,9 +35,10 @@ class TTAlpsHistogrammerConfigHelper:
         ("Event", "MET_pt", 1000, 0, 1000, ""),
         ("Event", "PV_npvs", 300, 0, 300, ""),
         ("Event", "PV_npvsGood", 300, 0, 300, ""),
-        ("Event", "PV_x", 200, -100, 100, ""),
-        ("Event", "PV_y", 200, -100, 100, ""),
-        ("Event", "PV_z", 200, -100, 100, ""),
+        ("Event", "PV_x", 2000, -100, 100, ""),
+        ("Event", "PV_y", 2000, -100, 100, ""),
+        ("Event", "PV_z", 2000, -100, 100, ""),
+        ("Event", "PV_chi2", 2000, -100, 100, ""),
 
         ("Event", "nGoodJets", 20, 0, 20, ""),
         ("GoodJets", "pt", 1000, 0, 1000, ""),
@@ -315,6 +316,46 @@ class TTAlpsHistogrammerConfigHelper:
 
     return SF_variables
 
+  def get_muon_trigger_params(self):
+    params = []
+    for collection in ("MuonTrigObj", "MuonTriggers", "LeadingMuonTrigger"):
+      params += (
+        ("Event", "n"+collection, 50, 0, 50, ""),
+        (collection, "pt", 2000, 0, 1000, ""),
+        (collection, "eta", 300, -3, 3, ""),
+        (collection, "phi", 300, -3, 3, ""),
+        (collection, "filterBits", 5000, 0, 5000, ""),
+        (collection, "hasFilterBits2", 10, 0, 10, ""),
+        (collection, "l1iso", 800, 0, 20, ""),
+        (collection, "l1pt", 2000, 0, 1000, ""),
+        (collection, "l1pt_2", 2000, 0, 1000, ""),
+        (collection, "minDRTightLooseMuon", 500, 0, 10, ""),
+        (collection, "tightLooseMuonMatch0p3", 10, 0, 10, ""),
+        (collection, "tightLooseMuonMatch0p1", 10, 0, 10, ""),
+        (collection, "triggerMuonMatchDR", 500, 0, 10, ""),
+      )
+
+  def get_nontrigger_muon_vertex_params(self):
+    params = []
+    for bestMuonVertexCollection in self.bestMuonVertexCollections:
+      if "Best" not in bestMuonVertexCollection:
+        continue
+      collection_ = bestMuonVertexCollection
+      collection = collection_.replace("Best", "BestNonTrigger")
+      self.__insert_MuonVertexHistograms(params, collection)
+      collection_ = bestMuonVertexCollection
+      collection = collection_.replace("Best", "BestNonLeading")
+      self.__insert_MuonVertexHistograms(params, collection)
+      
+      params += (
+        ("Event", collection+"_PV_x", 2000, -100, 100, ""),
+        ("Event", collection+"_PV_y", 2000, -100, 100, ""),
+        ("Event", collection+"_PV_z", 2000, -100, 100, ""),
+        ("Event", collection+"_PV_chi2", 2000, -100, 100, ""),
+      )
+
+    return tuple(params)
+
   def __insert_into_name(self, collection, to_insert):
     if "_" in collection:
       return collection.rsplit("_", 1)[0] + to_insert + "_" + collection.rsplit("_", 1)[1]
@@ -342,6 +383,12 @@ class TTAlpsHistogrammerConfigHelper:
       (name, "logLxy", 2000, -10, 10, ""),
       (name, "LxySigma", 10000, 0, 100, ""),
       (name, "LxySignificance", 1000, 0, 1000, ""),
+      (name, "Vxy", 10000, 0, 1000, ""),
+      (name, "VxySigma", 10000, 0, 100, ""),
+      (name, "vx", 20000, -800, 800, ""),
+      (name, "vy", 20000, -800, 800, ""),
+      (name, "vxErr", 10000, 0, 100, ""),
+      (name, "vyErr", 10000, 0, 100, ""),
       (name, "dR", 500, 0, 10, ""),
       (name, "proxDR", 500, 0, 10, ""),
       (name, "outerDR", 500, 0, 10, ""),

@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runLLPTriggerHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
-  bool runABCDHistograms;
+  bool runABCDHistograms, runMuonTriggerHistograms, runNonTriggerVertexCollection;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
+  config.GetValue("runMuonTriggerHistograms", runMuonTriggerHistograms);
+  config.GetValue("runNonTriggerVertexCollection", runNonTriggerVertexCollection);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -67,10 +69,12 @@ int main(int argc, char **argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
+    ttalpsObjectsManager->InsertMuonTriggerCollections(event);
     ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
     ttalpsObjectsManager->InsertMuonVertexCollection(event);
     ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
+    if (runNonTriggerVertexCollection) ttalpsObjectsManager->InsertNonTriggerMuonVertexCollection(event);
 
     map<string,float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
     histogramsHandler->SetEventWeights(eventWeights);
@@ -92,6 +96,13 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event);
     }
+    if (runNonTriggerVertexCollection) {
+      ttalpsHistogramsFiller->FillNonTriggerMuonVertexHistograms(event);
+    }
+    if (runMuonTriggerHistograms) {
+      ttalpsHistogramsFiller->FillMuonTriggerVariables(event);
+    }
+
 
     if (runMuonMatchingHistograms) {
       ttalpsObjectsManager->InsertMatchedLooseMuonEfficiencyCollections(event);

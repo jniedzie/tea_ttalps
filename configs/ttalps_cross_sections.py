@@ -16,10 +16,16 @@ cross_sectionsRun2 = {
   "DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos": 1976.0,
   
   "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8": 52850.0,
+  "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8": 9024.0,
+  "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8": 2832.0,
+  "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8": 820.7,
+  "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8": 385.5,
   
-  "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8": 0.2439,
-  "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8": 0.05324,
-  "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8": 0.5407,
+  "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8":  0.2439, # 0.28136
+  "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8": 0.05324, 
+  # "TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8": 0.07468, 
+  "TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8": 0.5104, # 0.5297
+  "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8": 5.407, # 0.5407,
   
   "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8": 0.2163,
   "ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8": 0.4611,
@@ -33,6 +39,13 @@ cross_sectionsRun2 = {
   "TTZZ_TuneCP5_13TeV-madgraph-pythia8": 0.001386,
   "TTZH_TuneCP5_13TeV-madgraph-pythia8": 0.00113,
   "TTTT_TuneCP5_13TeV-amcatnlo-pythia8": 0.008213,
+
+  "TT4b_TuneCP5_13TeV_madgraph_pythia8": 0.06784,
+  "TTbb_tttosemileptonic_TuneCP5-Powheg-Openloops-Pythia8": 19.2,
+  "TTbb_ttto2l2nu_TuneCP5-Powheg-Openloops-Pythia8": 4.6,
+  "TTbb_tttohadronic_TuneCP5-Powheg-Openloops-Pythia8": 19.9,
+
+  "BBLLNuNu_TuneCP5_13TeV-powheg-pythia8": 80.91,
   
   "QCD_Pt_15to30_TuneCP5_13TeV_pythia8": 1248000000.0,
   "QCD_Pt_30to50_TuneCP5_13TeV_pythia8": 106600000.0,
@@ -102,6 +115,9 @@ cross_sectionsRun2 = {
   "tta_mAlp-60GeV_ctau-1e3mm": signal_xsec_scale * 0.002679, # +- 1.323e-05 pb
 
   "tta_mAlp-70GeV_ctau-1e0mm": signal_xsec_scale * 0.002438, # +- 1.888e-05 pb
+
+  "TTALPto2Mu_MALP-2_ctau-1e0mm": signal_xsec_scale * 0.004233, # +- 3.199e-05 pb
+  "TTALPto2Mu_MALP-2_ctau-1e2mm": signal_xsec_scale * 0.004233, # +- 3.199e-05 pb
 }
 
 cross_sectionsRun3 = {
@@ -111,7 +127,7 @@ cross_sectionsRun3 = {
   "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8": 98.0963,
   "TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 19.36,
   "TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 19.36,
-  "WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8": 64481.58,
+  "WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8": 64481.58, # 62552.7
   "TTLL_MLL-4to50_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.03949,
   "TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.08646,
   "TTHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8": 0.331968,

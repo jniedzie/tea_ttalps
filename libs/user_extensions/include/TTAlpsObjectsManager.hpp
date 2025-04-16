@@ -20,8 +20,11 @@ class TTAlpsObjectsManager {
   void InsertSegmentMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float minSegmentRatio, std::shared_ptr<NanoMuons> muonCollection = nullptr);
   void InsertBaseLooseMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertMuonVertexCollection(std::shared_ptr<Event> event);
+  void InsertMuonVertexCollection(std::shared_ptr<Event> event, std::shared_ptr<PhysicsObjects> vertices, std::string muonVertexCollectionName = "");
+  void InsertNonTriggerMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertNminus1VertexCollections(std::shared_ptr<Event> event);
   void InsertMatchedLooseMuonEfficiencyCollections(std::shared_ptr<Event> event);
+  void InsertMuonTriggerCollections(std::shared_ptr<Event> event);
 
  private:
 

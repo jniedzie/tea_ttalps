@@ -112,8 +112,48 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
   // Only segment matched muons for now
   string matchingMethod = muonMatchingParams.begin()->first;
   auto vertices = event->GetCollection("LooseMuonsVertex" + matchingMethod + "Match");
+  InsertMuonVertexCollection(event, vertices);
+}
 
-  auto muonVertexCollectionName = muonVertexCollection.first;
+void TTAlpsObjectsManager::InsertNonTriggerMuonVertexCollection(shared_ptr<Event> event) {
+  if (muonMatchingParams.size() == 0) return;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
+
+  auto triggerMuonCollection = event->GetCollection("TriggerMuonMatch");
+  auto nonTriggerMuonVertexCollectionName = "BestNonTrigger" + muonVertexCollection.first.substr(4);
+  auto nonTriggerVertices = make_shared<PhysicsObjects>();
+  if (triggerMuonCollection->size() < 1) warn() << "TriggerMuonMatch collection is empty" << endl;
+  else {
+    auto triggerMuon = triggerMuonCollection->at(0);
+    for (auto vertex : *vertices) {
+      auto muon1 = asNanoDimuonVertex(vertex, event)->Muon1();
+      auto muon2 = asNanoDimuonVertex(vertex, event)->Muon2();
+      if (muon1->GetPhysicsObject() == triggerMuon || muon2->GetPhysicsObject() == triggerMuon) continue;
+      nonTriggerVertices->push_back(vertex);
+    }
+  }
+  InsertMuonVertexCollection(event, nonTriggerVertices, nonTriggerMuonVertexCollectionName);
+
+  auto tightMuons = event->GetCollection("TightMuons");
+  auto leadingTightMuon = asTTAlpsEvent(event)->GetLeadingMuon(asNanoMuons(tightMuons));
+  auto nonLeadingMuonVertexCollectionName = "BestNonLeading" + muonVertexCollection.first.substr(4);
+  auto nonLeadingMuonVertices = make_shared<PhysicsObjects>();
+  if (leadingTightMuon) {
+    for (auto vertex : *vertices) {
+      auto muon1 = asNanoDimuonVertex(vertex, event)->Muon1();
+      auto muon2 = asNanoDimuonVertex(vertex, event)->Muon2();
+      if(muon1->GetPhysicsObject() == leadingTightMuon->GetPhysicsObject() || muon2->GetPhysicsObject() == leadingTightMuon->GetPhysicsObject()) continue;
+      nonLeadingMuonVertices->push_back(vertex);
+    }
+  }
+  InsertMuonVertexCollection(event, nonLeadingMuonVertices, nonLeadingMuonVertexCollectionName);
+}
+
+void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, shared_ptr<PhysicsObjects> vertices, string muonVertexCollectionName) {
+  if (muonMatchingParams.size() == 0) return;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
+
+  if (muonVertexCollectionName =="") muonVertexCollectionName = muonVertexCollection.first;
   auto muonVertexCollectionCuts = muonVertexCollection.second;
   bool bestVertex = false;
   for (auto cutName : muonVertexCollectionCuts) {
@@ -252,4 +292,48 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_pt
   event->AddCollection("LooseMuonsSegmentOuterDRMatch", asPhysicsObjects(looseMuonsSegmentOuterDRMatch));
   auto looseMuonsVertexSegmentOuterDRMatch = asNanoEvent(event)->GetVerticesForMuons(looseMuonsSegmentOuterDRMatch);
   event->AddCollection("LooseMuonsVertexSegmentOuterDRMatch", looseMuonsVertexSegmentOuterDRMatch);
+}
+
+void TTAlpsObjectsManager::InsertMuonTriggerCollections(shared_ptr<Event> event) {
+  auto muonTrigObjs = event->GetCollection("MuonTrigObj");
+  auto muonTriggersCollection = make_shared<PhysicsObjects>();
+  auto muonTriggerCollection = make_shared<PhysicsObjects>();
+  auto triggerMuonCollection = make_shared<PhysicsObjects>();
+
+  for (auto muonTrigObj : *muonTrigObjs) {
+    int filterBits = muonTrigObj->Get("filterBits");
+    if (!(filterBits & 2)) continue;
+    muonTriggersCollection->push_back(muonTrigObj);
+  }
+  event->AddCollection("MuonTriggers", muonTriggersCollection);
+  int leadingMuonTrigger_idx = -1;
+  float leadingMuonTrigger_pt = -1.;
+  for (int i=0; i < muonTriggersCollection->size(); i++) {
+    auto muonTrigger = muonTriggersCollection->at(i);
+    if ((float)muonTrigger->Get("pt") > leadingMuonTrigger_pt) {
+      leadingMuonTrigger_pt = muonTrigger->Get("pt");
+      leadingMuonTrigger_idx = i;
+    }
+  }
+  auto leadingMuonTrigger = muonTriggersCollection->at(leadingMuonTrigger_idx);
+  muonTriggerCollection->push_back(leadingMuonTrigger);
+  event->AddCollection("LeadingMuonTrigger", muonTriggerCollection);
+
+  auto tightMuons = event->GetCollection("TightMuons");
+  float minDR = 9999.;
+  int minDR_idx = -1;
+  float maxDR = 0.3;
+  TLorentzVector muonTrigger4Vector;;
+  muonTrigger4Vector.SetPtEtaPhiM(leadingMuonTrigger->Get("pt"), leadingMuonTrigger->Get("eta"), leadingMuonTrigger->Get("phi"), 0.105);
+  for (int i=0; i < tightMuons->size(); i++) {
+    auto muon = tightMuons->at(i);
+    auto muon4Vector = asNanoMuon(muon)->GetFourVector();
+    float dR = muonTrigger4Vector.DeltaR(muon4Vector);
+    if (dR < minDR && dR < maxDR) {
+      minDR = dR;
+      minDR_idx = i;
+    }
+  }
+  if(minDR_idx > -1) triggerMuonCollection->push_back(tightMuons->at(minDR_idx));
+  event->AddCollection("TriggerMuonMatch", triggerMuonCollection);
 }
