@@ -121,31 +121,38 @@ dasSignals2018_2GeV = {
     "signals/tta_mAlp-2GeV_ctau-1e3mm": "/ttalps/lrygaard-LLPnanoAODv1_m-2GeV_ctau-1e3mm-00000000000000000000000000000000/USER",
 }
 dasSignals2018_12GeV = {
+    # "signals/tta_mAlp-12GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-12_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-12GeV_ctau-1e0mm": "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-12GeV_ctau-1e1mm": "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e1mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-12GeV_ctau-1e2mm": "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e2mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-12GeV_ctau-1e3mm": "/ttalps/lrygaard-LLPnanoAODv1_m-12GeV_ctau-1e3mm-00000000000000000000000000000000/USER",
 }
 dasSignals2018_30GeV = {
+    # "signals/tta_mAlp-30GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-30_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-30GeV_ctau-1e0mm": "/ttalps/lrygaard-LLPnanoAODv1_m-30GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-30GeV_ctau-1e1mm": "/ttalps/lrygaard-LLPnanoAODv1_m-30GeV_ctau-1e1mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-30GeV_ctau-1e2mm": "/ttalps/lrygaard-LLPnanoAODv1_m-30GeV_ctau-1e2mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-30GeV_ctau-1e3mm": "/ttalps/lrygaard-LLPnanoAODv1_m-30GeV_ctau-1e3mm-00000000000000000000000000000000/USER",
 }
 dasSignals2018_60GeV = {
+    # "signals/tta_mAlp-60GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-60_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-60GeV_ctau-1e0mm": "/ttalps/lrygaard-LLPnanoAODv1_m-60GeV_ctau-1e0mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-60GeV_ctau-1e1mm": "/ttalps/lrygaard-LLPnanoAODv1_m-60GeV_ctau-1e1mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-60GeV_ctau-1e2mm": "/ttalps/lrygaard-LLPnanoAODv1_m-60GeV_ctau-1e2mm-00000000000000000000000000000000/USER",
     "signals/tta_mAlp-60GeV_ctau-1e3mm": "/ttalps/lrygaard-LLPnanoAODv1_m-60GeV_ctau-1e3mm-00000000000000000000000000000000/USER",
 }
 
-dasSignals2018 = {key: value for d in (dasSignals2018_0p35GeV,
-                                       dasSignals2018_1GeV,
-                                       dasSignals2018_2GeV,
-                                       dasSignals2018_12GeV,
-                                       dasSignals2018_30GeV,
-                                       dasSignals2018_60GeV)
-                  for key, value in d.items()}
+dasSignals2018 = {
+  key: value for d in (
+    dasSignals2018_0p35GeV,
+    dasSignals2018_1GeV,
+    dasSignals2018_2GeV,
+    dasSignals2018_12GeV,
+    dasSignals2018_30GeV,
+    dasSignals2018_60GeV
+  )
+  for key, value in d.items()
+}
 
 dasSamples2018 = {key: value for d in (dasBackgrounds2018, dasSignals2018, dasData2018) for key, value in d.items()}
 

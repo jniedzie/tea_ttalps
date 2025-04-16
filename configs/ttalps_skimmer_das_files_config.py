@@ -1,4 +1,4 @@
-from ttalps_samples_list import *
+from ttalps_samples_list import dasSamples2018, dasData2018, dasSignals2018
 import os
 
 max_files = -1
@@ -15,7 +15,7 @@ output_skim = "skimmed_looseSemimuonic_v2"
 # Loose non-ttbar skims, vetoing events with too many (b-)jets
 # output_skim = "skimmed_looseNonTT_v1"  
 # output_skim = "skimmed_looseNoBjets_lt4jets_v1"
-output_skim = "skimmed_loose_lt3bjets_lt4jets_v1"
+# output_skim = "skimmed_loose_lt3bjets_lt4jets_v1"
 
 output_trees_dir = ""
 output_hists_dir = ""
