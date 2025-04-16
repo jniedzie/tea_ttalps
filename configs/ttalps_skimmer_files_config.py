@@ -24,6 +24,9 @@ input_skim = "skimmed_looseSemimuonic_v2_merged"
 
 # Signal like skim: SR, J/Psi CR and Z CR with no isolation requirement on the loose muons
 # output_skim = "skimmed_looseSemimuonic_v2_SR"
+# output_skim = "skimmed_looseSemimuonic_v2_SR_muEtaLt1p2"
+# output_skim = "skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10"
+output_skim = "skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7"
 
 # Skims with no triggers for LLP trigger study
 # input_skim = "skimmed_looseSemimuonic_v2_notrigger_merged"
@@ -37,6 +40,9 @@ input_skim = "skimmed_looseSemimuonic_v2_merged"
 # output_skim = "skimmed_looseNoBjets_lt4jets_v1_QCDCR"
 # output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR"
 # output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_bbCR"
+# output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt10"
+# output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20"
+# output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20"
 
 output_trees_dir = ""
 output_hists_dir = ""
@@ -48,7 +54,9 @@ sample_path = ""
 input_directory = f"{input_base_path}/{sample_path}/{input_skim}"
 output_trees_dir = f"{output_base_path}/{sample_path}/{output_skim}/"
 
-samples = dasSamples2018.keys()
+# samples = dasSamples2018.keys()
+samples = dasBackgrounds2018.keys()
+# samples = dasSignals2018.keys()
 # samples = dasData2018.keys()
 # samples = QCD_dasBackgrounds2018.keys()
 # samples = TT_dasBackgrounds2018.keys()

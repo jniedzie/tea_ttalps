@@ -28,6 +28,8 @@ class TTAlpsHistogramFiller {
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
   void FillABCDHistograms(const std::shared_ptr<Event> event);
+  void FillABCDMothersHistograms(const std::shared_ptr<Event> event);
+  void FillFakesHistograms(const std::shared_ptr<Event> event);
 
   void FillMuonTriggerVariables(const std::shared_ptr<Event> event);
   void FillNonTriggerMuonVertexHistograms(const std::shared_ptr<Event> event);
