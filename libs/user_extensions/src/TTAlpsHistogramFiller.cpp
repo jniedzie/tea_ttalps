@@ -387,6 +387,7 @@ void TTAlpsHistogramFiller::FillMuonTriggerVariables(const shared_ptr<Event> eve
       }
     }
   }
+}
 
 /// --------- Vertex Histograms excluding trigger matched muon and leading tright muon --------- ///
 /// -------- flag: runNonTriggerVertexCollection --------- ///
@@ -402,10 +403,10 @@ void TTAlpsHistogramFiller::FillNonTriggerMuonVertexHistograms(const shared_ptr<
     string vertexCategory = dimuonVertex->GetVertexCategory();
     FillMuonVertexHistograms(dimuonVertex, nonTriggerMuonVertexCollectionName + "_" + vertexCategory);
     
-    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_x", event->GetAs<float>("PV_x"));
-    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_y", event->GetAs<float>("PV_y"));
-    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_z", event->GetAs<float>("PV_z"));
-    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName"_PV_chi2", event->GetAs<float>("PV_chi2"));
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName+"_PV_x", event->GetAs<float>("PV_x"));
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName+"_PV_y", event->GetAs<float>("PV_y"));
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName+"_PV_z", event->GetAs<float>("PV_z"));
+    histogramsHandler->Fill("Event_"+nonTriggerMuonVertexCollectionName+"_PV_chi2", event->GetAs<float>("PV_chi2"));
   }
   auto nonLeadingMuonVertexCollectionName = "BestNonLeading" + muonVertexCollection.first.substr(4);
   auto bestNonLeadingMuonVertexCollection = event->GetCollection(nonLeadingMuonVertexCollectionName);
@@ -415,10 +416,10 @@ void TTAlpsHistogramFiller::FillNonTriggerMuonVertexHistograms(const shared_ptr<
     string vertexCategory = dimuonVertex->GetVertexCategory();
     FillMuonVertexHistograms(dimuonVertex, nonLeadingMuonVertexCollectionName + "_" + vertexCategory);
 
-    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_x", event->GetAs<float>("PV_x"));
-    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_y", event->GetAs<float>("PV_y"));
-    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_z", event->GetAs<float>("PV_z"));
-    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName"_PV_chi2", event->GetAs<float>("PV_chi2"));
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName+"_PV_x", event->GetAs<float>("PV_x"));
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName+"_PV_y", event->GetAs<float>("PV_y"));
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName+"_PV_z", event->GetAs<float>("PV_z"));
+    histogramsHandler->Fill("Event_"+nonLeadingMuonVertexCollectionName+"_PV_chi2", event->GetAs<float>("PV_chi2"));
   }
 }
 

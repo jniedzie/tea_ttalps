@@ -119,6 +119,10 @@ void TTAlpsObjectsManager::InsertNonTriggerMuonVertexCollection(shared_ptr<Event
   if (muonMatchingParams.size() == 0) return;
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
+  // Only segment matched muons for now
+  string matchingMethod = muonMatchingParams.begin()->first;
+  auto vertices = event->GetCollection("LooseMuonsVertex" + matchingMethod + "Match");
+
   auto triggerMuonCollection = event->GetCollection("TriggerMuonMatch");
   auto nonTriggerMuonVertexCollectionName = "BestNonTrigger" + muonVertexCollection.first.substr(4);
   auto nonTriggerVertices = make_shared<PhysicsObjects>();
