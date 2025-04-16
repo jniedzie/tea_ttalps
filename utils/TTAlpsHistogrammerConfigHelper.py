@@ -344,19 +344,20 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
+    collection = "BestPFIsoDimuonVertex"
 
-    ABCD_variables = ["logLxySignificance", "log3Dangle"]
+    variables = (
+        "logLxySignificance_vs_log3Dangle",
+        "dPhi_vs_logDxyPVTraj1",
+        "logLxy_vs_log3Dangle",
+    )
 
     SF_variables = []
 
-    for collection in self.bestMuonVertexCollections:
-      for variable_1 in ABCD_variables:
-        for variable_2 in ABCD_variables:
-          if variable_2 == variable_1:
-            continue
-
-          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
-          SF_variables.append(name)
+    for variable in variables:
+      for category in ("", "_PatDSA", "_DSA", "_Pat"):
+        name = self.__insert_into_name(collection, f"_{variable}{category}")
+        SF_variables.append(name)
 
     return SF_variables
 
