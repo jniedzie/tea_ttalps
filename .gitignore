@@ -9,3 +9,4 @@ abcd/*
 data/*
 *.root
 .__afs*
+*.pyc
