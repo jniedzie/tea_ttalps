@@ -1,4 +1,4 @@
-from scale_factors_config import *
+from scale_factors_config import get_scale_factors
 from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper

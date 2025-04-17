@@ -4,8 +4,10 @@ plots/*
 .vscode/*
 
 datacards/*
+limits/*
 abcd/*
 
 data/*
 *.root
 .__afs*
+*.pyc

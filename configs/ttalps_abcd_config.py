@@ -1,13 +1,14 @@
 import os
 import ROOT
 from ttalps_cross_sections import get_cross_sections
+from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 
 
 lumi = 137190  # pb^-1
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
-
+config_helper = TTAlpsABCDConfigHelper(year)
 
 # ------------------------------------------
 # ABCD calculation and optimization settings
@@ -275,12 +276,7 @@ backgrounds = [
 if category != "_DSA" or do_region != "SR":
   backgrounds.append("TTTo2L2Nu")  # fluctuates in SR DSA-DSA
 
-background_params = []
-for b in backgrounds:
-  for k, v in cross_sections.items():
-    if b in k:
-      background_params.append((b, v))
-      break
+background_params = config_helper.get_background_params(backgrounds)
 
 z_params = {
     "closure": ("|True - Pred|/True", 0, 1.0, False),

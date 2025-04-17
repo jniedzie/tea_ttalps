@@ -1,4 +1,4 @@
-from ttalps_samples_list import *
+from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018
 import os
 
 max_files = -1
@@ -36,10 +36,7 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
 samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
 # samples = dasBackgrounds2018.keys()
-# samples = QCD_dasBackgrounds2018.keys()
-# samples = TT_dasBackgrounds2018.keys()
 # samples = dasSignals2018.keys()
-# samples = dasSignals2018_2GeV.keys()
 
 base_path = "/data/dust/user/{}/ttalps_cms"
 
