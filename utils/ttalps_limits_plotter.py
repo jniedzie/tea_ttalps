@@ -17,20 +17,20 @@ output_path = "../limits/plots/"
 
 luminosity = 59830.  # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 
-coupling_scale = 0.1
+reference_coupling = 0.1  # this is the coupling we used to generate signal samples
 
-# variable = "mass"
+variable = "mass"
 # variable = "ctau"
-variable = "mass_theory"  # assign lifetime according to theory and interpolate between ctau points
+# variable = "mass_theory"  # assign lifetime according to theory and interpolate between ctau points
 # variable = "2d"
 
 if variable == "mass":
   x_min = 0.35
   x_max = 60.0
-  
+
   y_min = 1e-3
   y_max = 1e6
-  
+
   x_title = "m_{a} [GeV]"
   scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
 
@@ -50,7 +50,7 @@ if variable == "mass_theory":
 
   y_min = 1e-3
   y_max = 1e6
-  
+
   x_title = "m_{a} [GeV]"
 
 y_title = "95% CL lower limit on g_{#Psi}"
@@ -60,7 +60,7 @@ if variable == "2d":
   x_min = log10(0.35)
   x_max = log10(60.0)
 
-  y_min = 0
+  y_min = -5
   y_max = 3
 
   z_min = -1
@@ -89,7 +89,7 @@ def draw_brazil_plots():
         continue
 
       # scale = cross_sections[name]  # TODO: implement cross section limits
-      scale = coupling_scale
+      scale = reference_coupling
       graph.set_point(i, x_value, r_value, scale)
 
     canvas = ROOT.TCanvas(f"canvas_{scan_point}", "", 800, 600)
@@ -121,7 +121,7 @@ def draw_brazil_plot_for_theory_lifetime():
       continue
 
     # scale = cross_sections[name]  # TODO: implement cross section limits
-    scale = coupling_scale
+    scale = reference_coupling
     graph.set_point(i, x_value, r_value, scale)
 
   pion_graph = helper.get_pion_graph()
@@ -148,7 +148,7 @@ def draw_brazil_plot_for_theory_lifetime():
 def draw_2d_plot():
 
   # scale = cross_sections[name]  # TODO: implement cross section limits
-  scale = 1
+  scale = reference_coupling
   helper.get_2d_graph(scale, expected=False)
 
   canvas = ROOT.TCanvas("canvas_2d_expected", "", 800, 600)
