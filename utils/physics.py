@@ -362,8 +362,8 @@ def ctaua(ma, ctL, ctR, Lambda):
   following hep-ph: [2012.12272]"""
   gamma = Gammaa(ma, ctL, ctR, Lambda)
   if gamma == 0:
-    print("The decay width of a with ma=" + str(ma) + "GeV and cff=" +
-          str(cff) + ", cWW=" + str(cww) + ", cBB=" + str(cbb) + " is zero.")
+    # print("The decay width of a with ma=" + str(ma) + "GeV and cff=" +
+    #       str(cff) + ", cWW=" + str(cww) + ", cBB=" + str(cbb) + " is zero.")
     return 0
   return sm['c']*sm['hbar']/gamma
 

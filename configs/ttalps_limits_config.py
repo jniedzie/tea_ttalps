@@ -2,7 +2,7 @@ from Sample import Sample, SampleType
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from ttalps_cross_sections import get_cross_sections
-from ttalps_samples_list import dasSignals2018, dasSignals2018_30GeV, dasSignals2018_1GeV, dasSignals2018_12GeV, dasSignals2018_0p35GeV
+from ttalps_samples_list import dasSignals2018
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 
 year = "2018"
@@ -20,7 +20,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
 # SR dimuon cuts applied
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
 
-output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps/datacards/"
+datacards_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps/limits/datacards/"
+plots_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps/limits/plots/"
+results_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps/limits/results/"
 
 # If True, poisson error on empty bins (1.84) will be added to data histograms
 add_uncertainties_on_zero = False
@@ -41,7 +43,7 @@ config_helper = TTAlpsABCDConfigHelper(
     hist_path,
 )
 
-skip_combine = True
+skip_combine = False
 
 # category = ""
 category = "_Pat"
@@ -131,8 +133,6 @@ else:
 
 # List nuisance parameters (they will only be added for processes for which they were listed)
 nuisances = {
-    "bck_syst": {name: 1.1 for name in backgrounds},
-
     "PUjetIDtight_down": "variation",
     "PUjetIDtight_up": "variation",
     "bTaggingMedium_down_correlated": "variation",
@@ -141,15 +141,12 @@ nuisances = {
     "bTaggingMedium_up_uncorrelated": "variation",
     "muonIDLoose_systdown": "variation",
     "muonIDLoose_systup": "variation",
-    "muonReco_systdown": "variation",
-    "muonReco_systup": "variation",
+    # "muonReco_systdown": "variation",
+    # "muonReco_systup": "variation",
     "muonTriggerIsoMu24_systdown": "variation",
     "muonTriggerIsoMu24_systup": "variation",
 
-    "bck_nonClosure": {name: 1.2 for name in backgrounds},
-    "signal_unc": {
-        "signal": 1.05,
-    }
+    "abcd_nonClosure": "closure",
 }
 
 # combineCards.py datacard_BestPFIsoDimuonVertex_Pat_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_PatDSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_DSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt > datacard_BestPFIsoDimuonVertex_combined_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt

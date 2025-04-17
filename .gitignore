@@ -4,6 +4,7 @@ plots/*
 .vscode/*
 
 datacards/*
+limits/*
 abcd/*
 
 data/*
