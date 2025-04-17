@@ -1,7 +1,7 @@
 import re
 import ROOT
 import physics
-from math import pi
+from math import pi, log10
 
 from Logger import error
 
@@ -82,6 +82,45 @@ class TTAlpsLimitsPlotterHelper:
 
     return limits
 
+  def get_2d_graph(self, scale, expected=False):
+    self.graph_2d_exp = ROOT.TGraph2D()
+    self.graph_2d_exp.SetTitle("")
+    self.graph_2d_exp.SetLineColor(ROOT.kBlack)
+    self.graph_2d_exp.SetLineWidth(2)
+    self.graph_2d_exp.SetLineStyle(2)
+    self.graph_2d_exp.SetMarkerStyle(20)
+    self.graph_2d_exp.SetMarkerSize(0.5)
+
+    for (m, ct), values in self.data.items():
+      self.graph_2d_exp.SetPoint(self.graph_2d_exp.GetN(), log10(m), log10(ct), log10(scale * values[3 if expected else 0]))
+
+    return self.graph_2d_exp
+
+  def draw_2d_graph(self, x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max):
+    self.graph_2d_exp.SetNpx(500)
+    self.graph_2d_exp.SetNpy(500)
+    
+    self.graph_2d_exp.DrawClone("COLZ")
+
+    contour = self.graph_2d_exp.GetHistogram().Clone("contour")
+    contour.SetContour(1)  # We need 2 levels: below and above 1.0
+    contour.SetContourLevel(0, 0.0)
+
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetTitle(x_title)
+    self.graph_2d_exp.GetHistogram().GetYaxis().SetTitle(y_title)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetTitle(z_title)
+    
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
+    self.graph_2d_exp.GetHistogram().GetYaxis().SetRangeUser(y_min, y_max)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
+    
+    self.graph_2d_exp.GetHistogram().DrawClone("COLZ")
+    
+    
+
+    # Overlay the contour line
+    contour.DrawClone("CONT3 SAME")
+
   def draw_pion_label(self):
     tex = ROOT.TLatex(0.60, 0.80, "tt+a, a #rightarrow #pi's")
     tex.SetNDC()
@@ -122,7 +161,7 @@ class TTAlpsLimitsPlotterHelper:
     tex.SetLineWidth(2)
     tex.DrawClone()
 
-  def find_lifetime_for_mass(self, mass, coupling=0.1, Lambda=4*pi*1000, boost=False):
+  def find_lifetime_for_mass(self, mass, boost, coupling=0.1, Lambda=4*pi*1000):
     ctau = physics.ctaua(mass, coupling, coupling, Lambda)  # in cm
 
     if boost:
@@ -144,13 +183,13 @@ class TTAlpsLimitsPlotterHelper:
 
     return ctau
 
-  def get_limits_for_theory_lifetime(self):
+  def get_limits_for_theory_lifetime(self, boost):
 
     mass_vs_ctau = {}
 
     for (m, ct), values in self.data.items():
       if m not in mass_vs_ctau:
-        theory_ct = self.find_lifetime_for_mass(m, boost=True)
+        theory_ct = self.find_lifetime_for_mass(m, boost)
         mass_vs_ctau[m] = theory_ct
 
     limits = {}
