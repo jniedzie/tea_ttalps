@@ -141,12 +141,16 @@ nuisances = {
     "bTaggingMedium_up_uncorrelated": "variation",
     "muonIDLoose_systdown": "variation",
     "muonIDLoose_systup": "variation",
-    # "muonReco_systdown": "variation",
-    # "muonReco_systup": "variation",
+    "muonReco_systdown": "variation",
+    "muonReco_systup": "variation",
     "muonTriggerIsoMu24_systdown": "variation",
     "muonTriggerIsoMu24_systup": "variation",
 
     "abcd_nonClosure": "closure",
+    "lumi": {
+      "signal": 1.017,  # arxiv.org/abs/2503.03946
+      "bkg": 1.017,
+    }
 }
 
 # combineCards.py datacard_BestPFIsoDimuonVertex_Pat_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_PatDSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_DSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt > datacard_BestPFIsoDimuonVertex_combined_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt

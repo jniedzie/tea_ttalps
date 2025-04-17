@@ -71,6 +71,26 @@ def get_min_max_uncertainty(uncertainties):
   return min_uncertainty, max_uncertainty
 
 
+nice_names = {
+    "PUjetIDtight_down": "PU jet ID (down)",
+    "PUjetIDtight_up": "PU jet ID (up)",
+    "bTaggingMedium_down_correlated": "b-tagging down (uncorrelated)",
+    "bTaggingMedium_down_uncorrelated": "b-tagging down (correlated)",
+    "bTaggingMedium_up_correlated": "b-tagging up (uncorrelated)",
+    "bTaggingMedium_up_uncorrelated": "b-tagging up (correlated)",
+    "muonIDLoose_systdown": "muon ID (down)",
+    "muonIDLoose_systup": "muon ID (up)",
+    "muonReco_systdown": "muon reco (down)",
+    "muonReco_systup": "muon reco (up)",
+    "muonTriggerIsoMu24_systdown": "IsoMu24 trigger (down)",
+    "muonTriggerIsoMu24_systup": "IsoMu24 trigger (up)",
+    "abcd_nonClosure": "ABCD non-closure",
+    "lumi": "luminosity",
+    "stat_err_sig": "statistical (signal)",
+    "stat_err_bkg": "statistical (background)",
+}
+
+
 def main():
   config = importlib.import_module(args.config.replace(".py", "").replace("/", "."))
 
@@ -84,9 +104,15 @@ def main():
 
   min_uncertainty, max_uncertainty = get_min_max_uncertainty(uncertainties)
 
-  info("\n\nMin/Max Uncertainties:")
-  for unc_name, unc_value in min_uncertainty.items():
-    info(f"{unc_name}: {unc_value:.4f} -- {max_uncertainty[unc_name]:.4f}")
+  info("\n\nMin/Max Uncertainties:\n")
+  merged_uncertainties = {key: (min_uncertainty[key], max_uncertainty[key]) for key in min_uncertainty.keys()}
+
+  # sort merged uncertainties by the average of min and max (keep it as a dictionary)
+  sorted_uncertainties = {k: v for k, v in sorted(
+      merged_uncertainties.items(), key=lambda item: (item[1][0] + item[1][1]) / 2, reverse=True)}
+
+  for unc_name, (min, max) in sorted_uncertainties.items():
+    info(f"{nice_names[unc_name]}\t{min:.4f}\t{max:.4f}".replace(".", ","))
 
 
 if __name__ == "__main__":
