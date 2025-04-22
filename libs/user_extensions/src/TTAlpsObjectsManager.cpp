@@ -319,25 +319,30 @@ void TTAlpsObjectsManager::InsertMuonTriggerCollections(shared_ptr<Event> event)
       leadingMuonTrigger_idx = i;
     }
   }
-  auto leadingMuonTrigger = muonTriggersCollection->at(leadingMuonTrigger_idx);
-  muonTriggerCollection->push_back(leadingMuonTrigger);
-  event->AddCollection("LeadingMuonTrigger", muonTriggerCollection);
+  if (leadingMuonTrigger_idx >= 0) {
+    auto leadingMuonTrigger = muonTriggersCollection->at(leadingMuonTrigger_idx);
+    muonTriggerCollection->push_back(leadingMuonTrigger);
 
-  auto tightMuons = event->GetCollection("TightMuons");
-  float minDR = 9999.;
-  int minDR_idx = -1;
-  float maxDR = 0.3;
-  TLorentzVector muonTrigger4Vector;;
-  muonTrigger4Vector.SetPtEtaPhiM(leadingMuonTrigger->Get("pt"), leadingMuonTrigger->Get("eta"), leadingMuonTrigger->Get("phi"), 0.105);
-  for (int i=0; i < tightMuons->size(); i++) {
-    auto muon = tightMuons->at(i);
-    auto muon4Vector = asNanoMuon(muon)->GetFourVector();
-    float dR = muonTrigger4Vector.DeltaR(muon4Vector);
-    if (dR < minDR && dR < maxDR) {
-      minDR = dR;
-      minDR_idx = i;
+    auto tightMuons = event->GetCollection("TightMuons");
+    float minDR = 9999.;
+    int minDR_idx = -1;
+    float maxDR = 0.3;
+    TLorentzVector muonTrigger4Vector;;
+    muonTrigger4Vector.SetPtEtaPhiM(leadingMuonTrigger->Get("pt"), leadingMuonTrigger->Get("eta"), leadingMuonTrigger->Get("phi"), 0.105);
+    for (int i=0; i < tightMuons->size(); i++) {
+      auto muon = tightMuons->at(i);
+      auto muon4Vector = asNanoMuon(muon)->GetFourVector();
+      float dR = muonTrigger4Vector.DeltaR(muon4Vector);
+      if (dR < minDR && dR < maxDR) {
+        minDR = dR;
+        minDR_idx = i;
+      }
     }
+    if(minDR_idx > -1) triggerMuonCollection->push_back(tightMuons->at(minDR_idx));
+    
+  } else {
+    warn() << "No valid leading muon trigger found in MuonTriggers collection" << endl;
   }
-  if(minDR_idx > -1) triggerMuonCollection->push_back(tightMuons->at(minDR_idx));
+  event->AddCollection("LeadingMuonTrigger", muonTriggerCollection);
   event->AddCollection("TriggerMuonMatch", triggerMuonCollection);
 }

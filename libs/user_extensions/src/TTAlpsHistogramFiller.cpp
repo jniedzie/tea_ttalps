@@ -426,8 +426,8 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
 void TTAlpsHistogramFiller::FillMuonTriggerVariables(const shared_ptr<Event> event) {
   auto tightMuons = event->GetCollection("TightMuons");
   auto triggerMuonMatchCollection = event->GetCollection("TriggerMuonMatch");
-  vector<string> muonTrigerCollectionNames = {"MuonTrigObj", "MuonTriggers", "LeadingMuonTrigger"};
-  for (auto collectionName : muonTrigerCollectionNames) {
+  vector<string> muonTriggerCollectionNames = {"MuonTrigObj", "MuonTriggers", "LeadingMuonTrigger"};
+  for (auto collectionName : muonTriggerCollectionNames) {
     auto muonTrigObjs = event->GetCollection(collectionName);
     histogramsHandler->Fill("Event_n"+collectionName, muonTrigObjs->size());
     for (const auto &muonTrigObj : *muonTrigObjs) {
