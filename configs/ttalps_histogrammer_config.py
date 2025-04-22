@@ -23,9 +23,6 @@ runLLPNanoAODHistograms = True
 
 # Histograms for Muon Trigger Objects
 runMuonTriggerObjectsHistograms = False
-# Histograms for "BestDimuonVertex" excluding trigger matched muon and leading tight muon
-# Needed for BestNonLeadingDimuonVertex ABCD histograms
-runNonLeadingVertexCollection = True
 
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
 runGenMuonHistograms = False  # can only be run on signal samples
@@ -100,13 +97,15 @@ muonVertexCollections = {
 muonVertexCollection = None
 if dimuonSelection is not None:
   muonVertexCollection = muonVertexCollections[dimuonSelection]
+# input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
+muonVertexCollectionInput = "LooseNonLeadingMuonsVertexSegmentMatch"
 
 
 histParams = ()
 histParams2D = ()
 
 helper = TTAlpsHistogrammerConfigHelper(
-    muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None)
+    muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput)
 
 defaultHistParams = helper.get_default_params()
 histParams += helper.get_basic_params()
@@ -138,7 +137,5 @@ if runFakesHistograms:
 
 if runMuonTriggerObjectsHistograms:
     histParams += helper.get_muon_trigger_objects_params()
-if runNonLeadingVertexCollection:
-    histParams += helper.get_nontrigger_muon_vertex_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()

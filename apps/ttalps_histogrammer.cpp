@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runLLPTriggerHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
-  bool runMuonTriggerObjectsHistograms, runNonLeadingVertexCollection;
+  bool runMuonTriggerObjectsHistograms;
   bool runABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
@@ -55,7 +55,6 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
   config.GetValue("runMuonTriggerObjectsHistograms", runMuonTriggerObjectsHistograms);
-  config.GetValue("runNonLeadingVertexCollection", runNonLeadingVertexCollection);
   config.GetValue("runABCDMothersHistograms", runABCDMothersHistograms);
   config.GetValue("runFakesHistograms", runFakesHistograms);
 
@@ -74,10 +73,10 @@ int main(int argc, char **argv) {
 
     ttalpsObjectsManager->InsertMuonTriggerCollections(event);
     ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
+    ttalpsObjectsManager->InsertNonLeadingMuonVertexCollections(event);
     ttalpsObjectsManager->InsertMuonVertexCollection(event);
     ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
-    if (runNonLeadingVertexCollection) ttalpsObjectsManager->InsertNonLeadingMuonVertexCollection(event);
 
     map<string,float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
     histogramsHandler->SetEventWeights(eventWeights);
@@ -98,9 +97,6 @@ int main(int argc, char **argv) {
     if (runLLPNanoAODHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event);
-    }
-    if (runNonLeadingVertexCollection) {
-      ttalpsHistogramsFiller->FillNonLeadingMuonVertexHistograms(event);
     }
     if (runMuonTriggerObjectsHistograms) {
       ttalpsHistogramsFiller->FillMuonTriggerObjectsHistograms(event);
@@ -132,7 +128,7 @@ int main(int argc, char **argv) {
       }
     }
     if (runABCDHistograms) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event, runNonLeadingVertexCollection);
+      ttalpsHistogramsFiller->FillABCDHistograms(event);
     }
 
     if (runABCDMothersHistograms) {

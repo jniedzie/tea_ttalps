@@ -3,7 +3,7 @@ from math import pi
 
 
 class TTAlpsHistogrammerConfigHelper:
-  def __init__(self, muonMatchingParams, muonVertexCollection):
+  def __init__(self, muonMatchingParams, muonVertexCollection, muonVertexCollectionInput):
     self.muonMatchingParams = muonMatchingParams
 
     self.looseMuonCollections = []
@@ -28,6 +28,7 @@ class TTAlpsHistogrammerConfigHelper:
     self.looseMuonVertexCollections = []
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
+      self.looseMuonVertexCollections.append(f"{muonVertexCollectionInput}{category}")
 
     self.ABCD_variables = {
 
@@ -243,19 +244,16 @@ class TTAlpsHistogrammerConfigHelper:
   def get_abcd_2Dparams(self):
     params = []
 
-    for bestMuonVertexCollection in self.bestMuonVertexCollections:
-      for name in ("Best", "BestNonLeading"):
-        collection_ = bestMuonVertexCollection
-        collection = collection_.replace("Best", name)
+    for collection in self.bestMuonVertexCollections:
 
-        for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
-          for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
-            if variable_1 == variable_2:
-              continue
+      for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
+        for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
+          if variable_1 == variable_2:
+            continue
 
-            name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
 
-            params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+          params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
 
@@ -271,20 +269,15 @@ class TTAlpsHistogrammerConfigHelper:
   def get_abcd_1Dparams(self):
     params = []
 
-    for bestMuonVertexCollection in self.bestMuonVertexCollections:
-
-      for name in ("Best", "BestNonLeading"):
-        collection_ = bestMuonVertexCollection
-        collection = collection_.replace("Best", name)
-      
-        params += (
-            (collection, "deltaR_WW", 500, 0, 10, ""),
-            (collection, "deltaR_Wtau", 500, 0, 10, ""),
-            (collection, "deltaR_OS", 500, 0, 10, ""),
-            (collection, "logDeltaR_WW", 100, -5, 5, ""),
-            (collection, "logDeltaR_Wtau", 100, -5, 5, ""),
-            (collection, "logDeltaR_OS", 100, -5, -5, ""),
-        )
+    for collection in self.bestMuonVertexCollections:
+      params += (
+          (collection, "deltaR_WW", 500, 0, 10, ""),
+          (collection, "deltaR_Wtau", 500, 0, 10, ""),
+          (collection, "deltaR_OS", 500, 0, 10, ""),
+          (collection, "logDeltaR_WW", 100, -5, 5, ""),
+          (collection, "logDeltaR_Wtau", 100, -5, 5, ""),
+          (collection, "logDeltaR_OS", 100, -5, -5, ""),
+      )
 
     return tuple(params)
 
@@ -356,10 +349,7 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
-    collections = (
-      "BestPFIsoDimuonVertex",
-      "BestNonLeadingPFIsoDimuonVertex",
-    )
+    collection = "BestPFIsoDimuonVertex"
 
 
     variables = (
@@ -370,11 +360,10 @@ class TTAlpsHistogrammerConfigHelper:
 
     SF_variables = []
 
-    for collection in collections:
-        for variable in variables:
-          for category in ("", "_PatDSA", "_DSA", "_Pat"):
-            name = self.__insert_into_name(collection, f"_{variable}{category}")
-            SF_variables.append(name)    
+    for variable in variables:
+      for category in ("", "_PatDSA", "_DSA", "_Pat"):
+        name = self.__insert_into_name(collection, f"_{variable}{category}")
+        SF_variables.append(name)    
 
     return SF_variables
 
@@ -396,26 +385,6 @@ class TTAlpsHistogrammerConfigHelper:
         (collection, "tightLooseMuonMatch0p1", 10, 0, 10, ""),
         (collection, "triggerMuonMatchDR", 500, 0, 10, ""),
       )
-    return tuple(params)
-
-  def get_nontrigger_muon_vertex_params(self):
-    params = []
-    for bestMuonVertexCollection in self.bestMuonVertexCollections:
-      if "Best" not in bestMuonVertexCollection:
-        continue
-
-      for name in ("BestNonTrigger", "BestNonLeading"):
-        collection_ = bestMuonVertexCollection
-        collection = collection_.replace("Best", name)
-        self.__insert_MuonVertexHistograms(params, collection)
-              
-        params += (
-          ("Event", collection+"_PV_x", 4000, -20, 20, ""),
-          ("Event", collection+"_PV_y", 4000, -20, 20, ""),
-          ("Event", collection+"_PV_z", 4000, -20, 20, ""),
-          ("Event", collection+"_PV_chi2", 4000, -20, 20, ""),
-        )
-
     return tuple(params)
 
   def __insert_into_name(self, collection, to_insert):

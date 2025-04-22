@@ -65,11 +65,7 @@ extraText = "Preliminary"
 extraMuonVertexCollections = [
   # "MaskedDimuonVerex",      # invariant mass cut only
   # "BestDimuonVertex",       # best Dimuon selection without isolation cut
-  # "BestNonTriggerDimuonVertex", # without tight muon matched to muon trigger object
-  # "BestNonLeadingDimuonVertex", # without leading tight muon
   "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
-  # "BestNonTriggerPFIsoDimuonVertex",  # without tight muon matched to muon trigger object
-  "BestNonLeadingPFIsoDimuonVertex",  # without leading tight muon
   # "BestPFIsoDimuonVertexNminus1",  # best Dimuon selection with isolation cut
 ]
 
@@ -314,15 +310,6 @@ histograms = (
     Histogram("Event_PV_y", "", False, True, default_norm, 1, -0.2, 0.2, 1e-5, 1e10, "PV y [cm]", f"# events ({year})"),
     Histogram("Event_PV_z", "", False, True, default_norm, 50, -10, 10, 1e-2, 1e8, "PV z [cm]", f"# events ({year})"),
     Histogram("Event_PV_chi2" , "", False, True, default_norm , 1, 0, 1.4, 1e-3, 1e6, "PV #chi^{2}", f"# events ({year})"),
-
-    # Histogram("Event_BestNonTriggerDimuonVertex_PV_x", "", False, True, default_norm, 1, -0.2, 0.2, 1e-5, 1e10, "PV x [cm]", f"# events ({year})"),
-    # Histogram("Event_BestNonTriggerDimuonVertex_PV_y", "", False, True, default_norm, 1, -0.2, 0.2, 1e-5, 1e10, "PV y [cm]", f"# events ({year})"),
-    # Histogram("Event_BestNonTriggerDimuonVertex_PV_z", "", False, True, default_norm, 50, -10, 10, 1e-2, 1e8, "PV z [cm]", f"# events ({year})"),
-    # Histogram("Event_BestNonTriggerDimuonVertex_PV_chi2" , "", False, True, default_norm , 1, 0, 1.4, 1e-3, 1e6, "PV #chi^{2}", f"# events ({year})"),
-    # Histogram("Event_BestNonLeadingDimuonVertex_PV_x", "", False, True, default_norm, 1, -0.2, 0.2, 1e-5, 1e10, "PV x [cm]", f"# events ({year})"),
-    # Histogram("Event_BestNonLeadingDimuonVertex_PV_y", "", False, True, default_norm, 1, -0.2, 0.2, 1e-5, 1e10, "PV y [cm]", f"# events ({year})"),
-    # Histogram("Event_BestNonLeadingDimuonVertex_PV_z", "", False, True, default_norm, 50, -10, 10, 1e-2, 1e8, "PV z [cm]", f"# events ({year})"),
-    # Histogram("Event_BestNonLeadingDimuonVertex_PV_chi2" , "", False, True, default_norm , 1, 0, 1.4, 1e-3, 1e6, "PV #chi^{2}", f"# events ({year})"),
 
     # ----------------------------------------------------------------------------
     # Muon Trigger Objects
