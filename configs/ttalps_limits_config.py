@@ -36,13 +36,6 @@ include_shapes = True
 if do_abcd:
   include_shapes = False  # currently not supported for ABCD
 
-config_helper = TTAlpsABCDConfigHelper(
-    year,
-    skim,
-    base_path,
-    hist_path,
-)
-
 skip_combine = False
 
 # category = ""
@@ -75,20 +68,15 @@ for name in dasSignals2018:
   # ),
 
 
-backgrounds_to_exclude = [
-    "QCD_Pt-15To20",
-    "QCD_Pt-20To30",
-    "QCD_Pt-30To50",
-    "QCD_Pt-50To80",
-    "QCD_Pt-80To120",
-    "QCD_Pt-120To170",
-    "QCD_Pt-170To300",
-]
+config_helper = TTAlpsABCDConfigHelper(
+    year,
+    skim,
+    category,
+    base_path,
+    hist_path,
+)
 
-if category == "_DSA":
-  backgrounds_to_exclude.append("TTTo2L2Nu")  # fluctuates in SR DSA-DSA
-
-background_samples, backgrounds = config_helper.get_background_samples(backgrounds_to_exclude)
+background_samples, backgrounds = config_helper.get_background_samples()
 samples = signal_samples + background_samples
 background_params = config_helper.get_background_params(backgrounds)
 
