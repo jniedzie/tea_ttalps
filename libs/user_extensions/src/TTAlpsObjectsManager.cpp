@@ -300,27 +300,27 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonEfficiencyCollections(shared_pt
 
 void TTAlpsObjectsManager::InsertMuonTriggerCollections(shared_ptr<Event> event) {
   auto muonTrigObjs = event->GetCollection("MuonTrigObj");
-  auto muonTriggersCollection = make_shared<PhysicsObjects>();
+  auto muonTriggerObjectsCollection = make_shared<PhysicsObjects>();
   auto muonTriggerCollection = make_shared<PhysicsObjects>();
   auto triggerMuonCollection = make_shared<PhysicsObjects>();
 
   for (auto muonTrigObj : *muonTrigObjs) {
     int filterBits = muonTrigObj->Get("filterBits");
     if (!(filterBits & 2)) continue;
-    muonTriggersCollection->push_back(muonTrigObj);
+    muonTriggerObjectsCollection->push_back(muonTrigObj);
   }
-  event->AddCollection("MuonTriggers", muonTriggersCollection);
+  event->AddCollection("MuonTriggerObjects", muonTriggerObjectsCollection);
   int leadingMuonTrigger_idx = -1;
   float leadingMuonTrigger_pt = -1.;
-  for (int i=0; i < muonTriggersCollection->size(); i++) {
-    auto muonTrigger = muonTriggersCollection->at(i);
+  for (int i=0; i < muonTriggerObjectsCollection->size(); i++) {
+    auto muonTrigger = muonTriggerObjectsCollection->at(i);
     if ((float)muonTrigger->Get("pt") > leadingMuonTrigger_pt) {
       leadingMuonTrigger_pt = muonTrigger->Get("pt");
       leadingMuonTrigger_idx = i;
     }
   }
   if (leadingMuonTrigger_idx >= 0) {
-    auto leadingMuonTrigger = muonTriggersCollection->at(leadingMuonTrigger_idx);
+    auto leadingMuonTrigger = muonTriggerObjectsCollection->at(leadingMuonTrigger_idx);
     muonTriggerCollection->push_back(leadingMuonTrigger);
 
     auto tightMuons = event->GetCollection("TightMuons");
@@ -339,10 +339,10 @@ void TTAlpsObjectsManager::InsertMuonTriggerCollections(shared_ptr<Event> event)
       }
     }
     if(minDR_idx > -1) triggerMuonCollection->push_back(tightMuons->at(minDR_idx));
-    
+
   } else {
-    warn() << "No valid leading muon trigger found in MuonTriggers collection" << endl;
+    warn() << "No valid leading muon trigger found in MuonTriggerObjects collection" << endl;
   }
-  event->AddCollection("LeadingMuonTrigger", muonTriggerCollection);
+  event->AddCollection("LeadingMuonTriggerObject", muonTriggerCollection);
   event->AddCollection("TriggerMuonMatch", triggerMuonCollection);
 }

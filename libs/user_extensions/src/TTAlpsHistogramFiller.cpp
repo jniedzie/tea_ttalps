@@ -420,13 +420,13 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
   if (cut.find("LogLxy") != string::npos) histogramsHandler->Fill(collectionName + "_LogLxy", log(dimuonVertex->GetLxyFromPV()));
 }
 
-/// --------- TrigObj muon Histograms --------- ///
+/// --------- Muon trigger objects and Muon matched to trigger object Histograms --------- ///
 /// -------- flag: runMuonTrigObjHistograms --------- ///
 
-void TTAlpsHistogramFiller::FillMuonTriggerVariables(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillMuonTriggerObjectsHistograms(const shared_ptr<Event> event) {
   auto tightMuons = event->GetCollection("TightMuons");
   auto triggerMuonMatchCollection = event->GetCollection("TriggerMuonMatch");
-  vector<string> muonTriggerCollectionNames = {"MuonTrigObj", "MuonTriggers", "LeadingMuonTrigger"};
+  vector<string> muonTriggerCollectionNames = {"MuonTrigObj", "MuonTriggerObjects", "LeadingMuonTriggerObject"};
   for (auto collectionName : muonTriggerCollectionNames) {
     auto muonTrigObjs = event->GetCollection(collectionName);
     histogramsHandler->Fill("Event_n"+collectionName, muonTrigObjs->size());
@@ -471,7 +471,7 @@ void TTAlpsHistogramFiller::FillMuonTriggerVariables(const shared_ptr<Event> eve
   }
 }
 
-/// --------- Vertex Histograms excluding trigger matched muon and leading tright muon --------- ///
+/// --------- Vertex Histograms excluding trigger matched muon and leading tight muon --------- ///
 /// -------- flag: runNonLeadingVertexCollection --------- ///
 
 void TTAlpsHistogramFiller::FillNonLeadingMuonVertexHistograms(const shared_ptr<Event> event) {

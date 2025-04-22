@@ -31,7 +31,7 @@ class TTAlpsHistogramFiller {
   void FillABCDMothersHistograms(const std::shared_ptr<Event> event, bool runFakesHistograms);
   void FillFakesHistograms(const std::shared_ptr<Event> event);
 
-  void FillMuonTriggerVariables(const std::shared_ptr<Event> event);
+  void FillMuonTriggerObjectsHistograms(const std::shared_ptr<Event> event);
   void FillNonLeadingMuonVertexHistograms(const std::shared_ptr<Event> event);
 
  private:

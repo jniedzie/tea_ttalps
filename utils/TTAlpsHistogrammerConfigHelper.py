@@ -378,9 +378,9 @@ class TTAlpsHistogrammerConfigHelper:
 
     return SF_variables
 
-  def get_muon_trigger_params(self):
+  def get_muon_trigger_objects_params(self):
     params = []
-    for collection in ("MuonTrigObj", "MuonTriggers", "LeadingMuonTrigger"):
+    for collection in ("MuonTrigObj", "MuonTriggerObjects", "LeadingMuonTriggerObject"):
       params += (
         ("Event", "n"+collection, 50, 0, 50, ""),
         (collection, "pt", 2000, 0, 1000, ""),

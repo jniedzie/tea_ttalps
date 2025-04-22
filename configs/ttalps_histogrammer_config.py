@@ -22,7 +22,7 @@ runPileupHistograms = False
 runLLPNanoAODHistograms = True
 
 # Histograms for Muon Trigger Objects
-runMuonTriggerHistograms = False
+runMuonTriggerObjectsHistograms = False
 # Histograms for "BestDimuonVertex" excluding trigger matched muon and leading tight muon
 # Needed for BestNonLeadingDimuonVertex ABCD histograms
 runNonLeadingVertexCollection = True
@@ -136,8 +136,8 @@ if runABCDMothersHistograms:
 if runFakesHistograms:
   histParams += helper.get_fakes_params()
 
-if runMuonTriggerHistograms:
-    histParams += helper.get_muon_trigger_params()
+if runMuonTriggerObjectsHistograms:
+    histParams += helper.get_muon_trigger_objects_params()
 if runNonLeadingVertexCollection:
     histParams += helper.get_nontrigger_muon_vertex_params()
 

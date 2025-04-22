@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
   bool runDefaultHistograms, runLLPTriggerHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
-  bool runMuonTriggerHistograms, runNonLeadingVertexCollection;
+  bool runMuonTriggerObjectsHistograms, runNonLeadingVertexCollection;
   bool runABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
-  config.GetValue("runMuonTriggerHistograms", runMuonTriggerHistograms);
+  config.GetValue("runMuonTriggerObjectsHistograms", runMuonTriggerObjectsHistograms);
   config.GetValue("runNonLeadingVertexCollection", runNonLeadingVertexCollection);
   config.GetValue("runABCDMothersHistograms", runABCDMothersHistograms);
   config.GetValue("runFakesHistograms", runFakesHistograms);
@@ -102,8 +102,8 @@ int main(int argc, char **argv) {
     if (runNonLeadingVertexCollection) {
       ttalpsHistogramsFiller->FillNonLeadingMuonVertexHistograms(event);
     }
-    if (runMuonTriggerHistograms) {
-      ttalpsHistogramsFiller->FillMuonTriggerVariables(event);
+    if (runMuonTriggerObjectsHistograms) {
+      ttalpsHistogramsFiller->FillMuonTriggerObjectsHistograms(event);
     }
 
 
