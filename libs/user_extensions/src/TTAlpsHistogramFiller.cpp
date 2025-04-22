@@ -1060,6 +1060,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
         {"invMass", dimuon->GetInvariantMass()},
         {"logInvMass", log10(dimuon->GetInvariantMass())},
         {"pt", dimuon->GetDimuonPt()},
+        {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
         {"eta", dimuon->GetDimuonEta()},
         {"dEta", abs(dimuon->GetDeltaEta())},
         {"dPhi", abs(dimuon->GetDeltaPhi())},
