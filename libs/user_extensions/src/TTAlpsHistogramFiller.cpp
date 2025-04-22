@@ -1118,73 +1118,76 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
 void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  string collectionName = muonVertexCollection.first;
-  auto collection = event->GetCollection(collectionName);
+  // string collectionName = muonVertexCollection.first;
 
-  if (collection->size() < 1) return;
+  vector<string> collectionNames = {muonVertexCollection.first, "BestNonLeading" + muonVertexCollection.first.substr(4)};
+  for (auto collectionName : collectionNames) {
+    auto collection = event->GetCollection(collectionName);
+    if (collection->size() < 1) continue;
 
-  for (auto vertex : *collection) {
-    auto dimuon = asNanoDimuonVertex(vertex, event);
-    auto muon1 = dimuon->Muon1();
-    auto muon2 = dimuon->Muon2();
+    for (auto vertex : *collection) {
+      auto dimuon = asNanoDimuonVertex(vertex, event);
+      auto muon1 = dimuon->Muon1();
+      auto muon2 = dimuon->Muon2();
 
-    map<string, double> variables = {
-        {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
-        {"3Dangle", dimuon->Get3DOpeningAngle()},
+      map<string, double> variables = {
+          {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
+          {"3Dangle", dimuon->Get3DOpeningAngle()},
 
-        {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
-        {"logLxySignificance", TMath::Log10(dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV())},
-        {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
-        {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
+          {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
+          {"logLxySignificance", TMath::Log10(dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV())},
+          {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
+          {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
 
-        {"outerDR", dimuon->GetOuterDeltaR()},
-        {"maxHitsInFrontOfVert", max(float(dimuon->Get("hitsInFrontOfVert1")), float(dimuon->Get("hitsInFrontOfVert2")))},
-        
-        {"absPtLxyDPhi1", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
-        {"absPtLxyDPhi2", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
+          {"outerDR", dimuon->GetOuterDeltaR()},
+          {"maxHitsInFrontOfVert", max(float(dimuon->Get("hitsInFrontOfVert1")), float(dimuon->Get("hitsInFrontOfVert2")))},
+          
+          {"absPtLxyDPhi1", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
+          {"absPtLxyDPhi2", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
 
-        {"logAbsPtLxyDPhi1", TMath::Log10(abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)))},
-        {"logAbsPtLxyDPhi2", TMath::Log10(abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)))},
+          {"logAbsPtLxyDPhi1", TMath::Log10(abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)))},
+          {"logAbsPtLxyDPhi2", TMath::Log10(abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)))},
 
-        {"invMass", dimuon->GetInvariantMass()},
-        {"logInvMass", log10(dimuon->GetInvariantMass())},
-        {"pt", dimuon->GetDimuonPt()},
-        {"eta", dimuon->GetDimuonEta()},
-        {"dEta", abs(dimuon->GetDeltaEta())},
-        {"dPhi", abs(dimuon->GetDeltaPhi())},
-        
-        {"nSegments", dimuon->GetTotalNumberOfSegments()},
-        {"logDisplacedTrackIso03Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon1"))},
-        {"logDisplacedTrackIso04Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon1"))},
-        {"logDisplacedTrackIso03Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon2"))},
-        {"logDisplacedTrackIso04Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon2"))},
-        {"leadingPt", dimuon->GetLeadingMuonPt()},
-        {"logDxyPVTraj1", TMath::Log10(dimuon->Muon1()->Get("dxyPVTraj"))},
-        {"logDxyPVTraj2", TMath::Log10(dimuon->Muon2()->Get("dxyPVTraj"))},
-        {"logDxyPVTrajSig1", TMath::Log10((float)dimuon->Muon1()->Get("dxyPVTraj") / (float)dimuon->Muon1()->Get("dxyPVTrajErr"))},
-        {"logDxyPVTrajSig2", TMath::Log10((float)dimuon->Muon2()->Get("dxyPVTraj") / (float)dimuon->Muon2()->Get("dxyPVTrajErr"))},
+          {"invMass", dimuon->GetInvariantMass()},
+          {"logInvMass", log10(dimuon->GetInvariantMass())},
+          {"pt", dimuon->GetDimuonPt()},
+          {"eta", dimuon->GetDimuonEta()},
+          {"dEta", abs(dimuon->GetDeltaEta())},
+          {"dPhi", abs(dimuon->GetDeltaPhi())},
+          
+          {"nSegments", dimuon->GetTotalNumberOfSegments()},
+          {"logDisplacedTrackIso03Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon1"))},
+          {"logDisplacedTrackIso04Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon1"))},
+          {"logDisplacedTrackIso03Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon2"))},
+          {"logDisplacedTrackIso04Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon2"))},
+          {"leadingPt", dimuon->GetLeadingMuonPt()},
+          {"logDxyPVTraj1", TMath::Log10(dimuon->Muon1()->Get("dxyPVTraj"))},
+          {"logDxyPVTraj2", TMath::Log10(dimuon->Muon2()->Get("dxyPVTraj"))},
+          {"logDxyPVTrajSig1", TMath::Log10((float)dimuon->Muon1()->Get("dxyPVTraj") / (float)dimuon->Muon1()->Get("dxyPVTrajErr"))},
+          {"logDxyPVTrajSig2", TMath::Log10((float)dimuon->Muon2()->Get("dxyPVTraj") / (float)dimuon->Muon2()->Get("dxyPVTrajErr"))},
 
 
-        {"deltaIso03", dimuon->GetDeltaDisplacedTrackIso03()},
-        {"deltaIso04", dimuon->GetDeltaDisplacedTrackIso04()},
-        {"logDeltaIso03", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso03())},
-        {"logDeltaIso04", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso04())},
-        {"deltaSquaredIso03", pow(dimuon->GetDeltaDisplacedTrackIso03(), 2)},
-        {"deltaSquaredIso04", pow(dimuon->GetDeltaDisplacedTrackIso04(), 2)},
-        {"logDeltaSquaredIso03", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso03(), 2))},
-        {"logDeltaSquaredIso04", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso04(), 2))},
-    };
+          {"deltaIso03", dimuon->GetDeltaDisplacedTrackIso03()},
+          {"deltaIso04", dimuon->GetDeltaDisplacedTrackIso04()},
+          {"logDeltaIso03", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso03())},
+          {"logDeltaIso04", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso04())},
+          {"deltaSquaredIso03", pow(dimuon->GetDeltaDisplacedTrackIso03(), 2)},
+          {"deltaSquaredIso04", pow(dimuon->GetDeltaDisplacedTrackIso04(), 2)},
+          {"logDeltaSquaredIso03", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso03(), 2))},
+          {"logDeltaSquaredIso04", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso04(), 2))},
+      };
 
-    string category = dimuon->GetVertexCategory();
+      string category = dimuon->GetVertexCategory();
 
-    float deltaEta = dimuon->GetDeltaEta();
+      float deltaEta = dimuon->GetDeltaEta();
 
-    for (auto &[varName_1, varValue_1] : variables) {
-      for (auto &[varName_2, varValue_2] : variables) {
-        if (varName_1 == varName_2) continue;
-        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2);
-        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2);
+      for (auto &[varName_1, varValue_1] : variables) {
+        for (auto &[varName_2, varValue_2] : variables) {
+          if (varName_1 == varName_2) continue;
+          histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2);
+          histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2);
 
+        }
       }
     }
   }

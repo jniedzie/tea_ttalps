@@ -242,14 +242,19 @@ class TTAlpsHistogrammerConfigHelper:
   def get_abcd_2Dparams(self):
     params = []
 
-    for collection in self.bestMuonVertexCollections:
-      for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
-        for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
-          if variable_1 == variable_2:
-            continue
+    for bestMuonVertexCollection in self.bestMuonVertexCollections:
+      for name in ("Best", "BestNonLeading"):
+        collection_ = bestMuonVertexCollection
+        collection = collection_.replace("Best", name)
 
-          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
-          params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+        for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
+          for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
+            if variable_1 == variable_2:
+              continue
+
+            name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+
+            params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
 
@@ -265,15 +270,20 @@ class TTAlpsHistogrammerConfigHelper:
   def get_abcd_1Dparams(self):
     params = []
 
-    for collection in self.bestMuonVertexCollections:
-      params += (
-          (collection, "deltaR_WW", 500, 0, 10, ""),
-          (collection, "deltaR_Wtau", 500, 0, 10, ""),
-          (collection, "deltaR_OS", 500, 0, 10, ""),
-          (collection, "logDeltaR_WW", 100, -5, 5, ""),
-          (collection, "logDeltaR_Wtau", 100, -5, 5, ""),
-          (collection, "logDeltaR_OS", 100, -5, -5, ""),
-      )
+    for bestMuonVertexCollection in self.bestMuonVertexCollections:
+
+      for name in ("Best", "BestNonLeading"):
+        collection_ = bestMuonVertexCollection
+        collection = collection_.replace("Best", name)
+      
+        params += (
+            (collection, "deltaR_WW", 500, 0, 10, ""),
+            (collection, "deltaR_Wtau", 500, 0, 10, ""),
+            (collection, "deltaR_OS", 500, 0, 10, ""),
+            (collection, "logDeltaR_WW", 100, -5, 5, ""),
+            (collection, "logDeltaR_Wtau", 100, -5, 5, ""),
+            (collection, "logDeltaR_OS", 100, -5, -5, ""),
+        )
 
     return tuple(params)
 
@@ -350,14 +360,19 @@ class TTAlpsHistogrammerConfigHelper:
 
     SF_variables = []
 
-    for collection in self.bestMuonVertexCollections:
-      for variable_1 in ABCD_variables:
-        for variable_2 in ABCD_variables:
-          if variable_2 == variable_1:
-            continue
+    for bestMuonVertexCollection in self.bestMuonVertexCollections:
 
-          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
-          SF_variables.append(name)
+      for name in ("Best", "BestNonLeading"):
+        collection_ = bestMuonVertexCollection
+        collection = collection_.replace("Best", name)
+
+        for variable_1 in ABCD_variables:
+          for variable_2 in ABCD_variables:
+            if variable_2 == variable_1:
+              continue
+
+            name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+            SF_variables.append(name)
 
     return SF_variables
 
@@ -379,25 +394,25 @@ class TTAlpsHistogrammerConfigHelper:
         (collection, "tightLooseMuonMatch0p1", 10, 0, 10, ""),
         (collection, "triggerMuonMatchDR", 500, 0, 10, ""),
       )
+    return tuple(params)
 
   def get_nontrigger_muon_vertex_params(self):
     params = []
     for bestMuonVertexCollection in self.bestMuonVertexCollections:
       if "Best" not in bestMuonVertexCollection:
         continue
-      collection_ = bestMuonVertexCollection
-      collection = collection_.replace("Best", "BestNonTrigger")
-      self.__insert_MuonVertexHistograms(params, collection)
-      collection_ = bestMuonVertexCollection
-      collection = collection_.replace("Best", "BestNonLeading")
-      self.__insert_MuonVertexHistograms(params, collection)
-      
-      params += (
-        ("Event", collection+"_PV_x", 2000, -100, 100, ""),
-        ("Event", collection+"_PV_y", 2000, -100, 100, ""),
-        ("Event", collection+"_PV_z", 2000, -100, 100, ""),
-        ("Event", collection+"_PV_chi2", 2000, -100, 100, ""),
-      )
+
+      for name in ("BestNonTrigger", "BestNonLeading"):
+        collection_ = bestMuonVertexCollection
+        collection = collection_.replace("Best", name)
+        self.__insert_MuonVertexHistograms(params, collection)
+              
+        params += (
+          ("Event", collection+"_PV_x", 4000, -20, 20, ""),
+          ("Event", collection+"_PV_y", 4000, -20, 20, ""),
+          ("Event", collection+"_PV_z", 4000, -20, 20, ""),
+          ("Event", collection+"_PV_chi2", 4000, -20, 20, ""),
+        )
 
     return tuple(params)
 
@@ -455,10 +470,6 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "nSegments", 50, 0, 50, ""),
         (name, "nDTSegments", 50, 0, 50, ""),
         (name, "nCSCSegments", 50, 0, 50, ""),
-
-
-
-
     )
 
   # FillMuonVertexHistograms function
@@ -517,9 +528,9 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "vy", 200, -100, 100, ""),
         (name, "vz", 200, -100, 100, ""),
         (name, "t", 200, -100, 100, ""),
-        (name, "vxErr", 200, -100, 100, ""),
-        (name, "vyErr", 200, -100, 100, ""),
-        (name, "vzErr", 200, -100, 100, ""),
+        (name, "vxErr", 1000, -50, 50, ""),
+        (name, "vyErr", 1000, -50, 50, ""),
+        (name, "vzErr", 1000, -50, 50, ""),
         (name, "tErr", 200, -100, 100, ""),
         (name, "displacedTrackIso03Muon1", 800, 0, 20, ""),
         (name, "displacedTrackIso04Muon1", 800, 0, 20, ""),

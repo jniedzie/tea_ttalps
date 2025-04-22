@@ -132,6 +132,7 @@ cross_sectionsRun3 = {
   "TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8": 0.08646,
   "TTHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8": 0.331968,
   # Cross sections from XSDB
+  "TBbarQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8": 123.8,
   "TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8": 762.1,
   "DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8": 5558.0, #6345.99
   "WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8": 55390.0, 

@@ -44,7 +44,7 @@ TT_dasBackgrounds2018 = {
   "backgrounds2018/TTZToLLNuNu_M-10" : "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
   "backgrounds2018/TTZToLL_M-1to10" : "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
   # "backgrounds2018/TTZToLL" : "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
-  "backgrounds2018/TTZToQQ" : "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
+#   "backgrounds2018/TTZToQQ" : "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
 
     "backgrounds2018/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
@@ -55,10 +55,10 @@ TT_dasBackgrounds2018 = {
   "backgrounds2018/TTZH" : "/TTZH_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
   "backgrounds2018/TTTT" : "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-  # # "backgrounds2018/TT4b" : "/TT4b_TuneCP5_13TeV_madgraph_pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
-    # "backgrounds2018/TTbb_tttosemileptonic" : "/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-    # "backgrounds2018/TTbb_ttto2l2nu" : "/TTbb_4f_TTTo2L2Nu_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-    # "backgrounds2018/TTbb_tttohadronic" : "/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+    # # "backgrounds2018/TT4b" : "/TT4b_TuneCP5_13TeV_madgraph_pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
+    # # "backgrounds2018/TTbb_tttosemileptonic" : "/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+    # # "backgrounds2018/TTbb_ttto2l2nu" : "/TTbb_4f_TTTo2L2Nu_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+    # # "backgrounds2018/TTbb_tttohadronic" : "/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
   }
 ST_dasBackgrounds2018 = {
     "backgrounds2018/ST_tW_antitop": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
@@ -71,11 +71,11 @@ DY_dasBackgrounds2018 = {
   "backgrounds2018/DYJetsToMuMu_M-10to50" : "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 } 
 V_dasBackgrounds2018 = {
-  # "backgrounds2018/WJetsToLNu" : "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-  "backgrounds2018/W1JetsToLNu" : "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
-  "backgrounds2018/W2JetsToLNu" : "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
-  "backgrounds2018/W3JetsToLNu" : "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
-  "backgrounds2018/W4JetsToLNu" : "/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
+  "backgrounds2018/WJetsToLNu" : "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+#   "backgrounds2018/W1JetsToLNu" : "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
+#   "backgrounds2018/W2JetsToLNu" : "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
+#   "backgrounds2018/W3JetsToLNu" : "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
+#   "backgrounds2018/W4JetsToLNu" : "/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
 } 
 QCD_dasBackgrounds2018 = {
   "backgrounds2018/QCD_Pt-15To20" : "/QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-crab_QCD_Pt-15To20_LLPminiAOD-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
@@ -154,8 +154,8 @@ dasSignals2018_60GeV = {
 }
 
 dasSignalsCentral2018 = {
-  "signals/TTALPto2Mu_MALP-2_ctau-1e0mm" : "/TTALPto2Mu_MALP-2_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-  "signals/TTALPto2Mu_MALP-2_ctau-1e2mm" : "/TTALPto2Mu_MALP-2_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+#   "signals/TTALPto2Mu_MALP-2_ctau-1e0mm" : "/TTALPto2Mu_MALP-2_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+#   "signals/TTALPto2Mu_MALP-2_ctau-1e2mm" : "/TTALPto2Mu_MALP-2_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
 }
 
 dasSignals2018 = {key: value for d in (dasSignals2018_0p35GeV,
@@ -230,24 +230,26 @@ TT_dasBackgrounds2022postEE = {
 ST_dasBackgrounds2022postEE = {
     "backgrounds2022postEE/TWminustoLNu2Q": "/TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/TbarWplustoLNu2Q": "/TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
+    "backgrounds2022postEE/TBbarQ_t-channel": "/TBbarQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v4-00000000000000000000000000000000/USER",
+    # # "backgrounds2022postEE/TbarBQ_t-channel": "",
 }
 DY_dasBackgrounds2022postEE = {
-    # "backgrounds2022postEE/DYJetsToLL_M-50" : "",
+    "backgrounds2022postEE/DYJetsToLL_M-50" : "/DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2022postEE = {
-    # "backgrounds2022postEE/WtoLNu-2Jets" : "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v3-00000000000000000000000000000000/USER",
+    "backgrounds2022postEE/WtoLNu-2Jets" : "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v3-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/WtoLNu-4Jets": "/WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v2-00000000000000000000000000000000/USER",
 }
 QCD_dasBackgrounds2022postEE = {
-    # "backgrounds2022postEE/QCD_PT-15To20" : "/QCD_PT-15to20_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
+    "backgrounds2022postEE/QCD_PT-15To20" : "/QCD_PT-15to20_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/QCD_PT-20To30": "/QCD_PT-20to30_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
-    # "backgrounds2022postEE/QCD_PT-30To50" : "",
-    # "backgrounds2022postEE/QCD_PT-50To80" : "",
+    "backgrounds2022postEE/QCD_PT-30To50" : "/QCD_PT-30to50_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v1-00000000000000000000000000000000/USER",
+    "backgrounds2022postEE/QCD_PT-50To80" : "/QCD_PT-50to80_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v2-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/QCD_PT-80To120": "/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
-    # "backgrounds2022postEE/QCD_PT-120To170" : "",
+    "backgrounds2022postEE/QCD_PT-120To170" : "/QCD_PT-120to170_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v1-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/QCD_PT-170To300": "/QCD_PT-170to300_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/QCD_PT-300To470": "/QCD_PT-300to470_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
-    # "backgrounds2022postEE/QCD_PT-470To600" : "",
+    # # "backgrounds2022postEE/QCD_PT-470To600" : "",
     "backgrounds2022postEE/QCD_PT-600To800": "/QCD_PT-600to800_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/QCD_PT-800To1000": "/QCD_PT-800to1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/QCD_PT-1000": "/QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v1-00000000000000000000000000000000/USER",
@@ -265,10 +267,10 @@ dasData2022_standard = {
 dasData2022 = {
     # preEE:
     # "collision_data2022/SingleMuon2022C" : "/SingleMuon/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2022C-27Jun2023-v1-00000000000000000000000000000000/USER", # 0.539404395 fb-1
-    # # # "collision_data2022/Muon2022C" : "",
+    # "collision_data2022/Muon2022C" : "/Muon/lrygaard-LLPnanoAODv1_Run2022C-27Jun2023-v1-00000000000000000000000000000000/USER",
     # "collision_data2022/Muon2022D" : "/Muon/lrygaard-LLPnanoAODv1_Run2022D-27Jun2023-v2-00000000000000000000000000000000/USER", # 2,968787020 fb-1
     # postEE
-    # "collision_data2022/Muon2022E" : "", # fb-1
+    "collision_data2022/Muon2022E" : "/Muon/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2022E-27Jun2023-v1-00000000000000000000000000000000/USER", # 5.80527 fb-1
     "collision_data2022/Muon2022F": "/Muon/lrygaard-LLPnanoAODv1_Run2022F-PromptReco-v1-00000000000000000000000000000000/USER",  # 17.779126207 fb-1
     "collision_data2022/Muon2022G": "/Muon/lrygaard-LLPnanoAODv1_Run2022G-PromptReco-v1-00000000000000000000000000000000/USER",  # 3,082753036 fb-1
 }

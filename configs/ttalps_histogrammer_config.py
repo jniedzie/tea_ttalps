@@ -21,7 +21,9 @@ runPileupHistograms = False
 #  - extra muon vertex collections
 runLLPNanoAODHistograms = True
 
+# Histograms for Muon Trigger Objects
 runMuonTriggerHistograms = True
+# Histograms for "BestDimuonVertex" excluding trigger matched muon and leading tight muon
 runNonTriggerVertexCollection = True
 
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
