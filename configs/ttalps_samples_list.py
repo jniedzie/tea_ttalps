@@ -53,14 +53,9 @@ TT_dasBackgrounds2018 = {
     "backgrounds2018/TTZH" : "/TTZH_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
     "backgrounds2018/TTTT" : "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    ## testing additional backgrounds - files on lrygaard user space
-    # #   "backgrounds2018/TTZToQQ" : "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
-    # # "backgrounds2018/TTZToLL" : "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
-    # # "backgrounds2018/TT4b" : "/TT4b_TuneCP5_13TeV_madgraph_pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
-    ## standard NanoAOD files
-    # # "backgrounds2018/TTbb_tttosemileptonic" : "/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-    # # "backgrounds2018/TTbb_ttto2l2nu" : "/TTbb_4f_TTTo2L2Nu_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-    # # "backgrounds2018/TTbb_tttohadronic" : "/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+    ## ¨files on lrygaard user space - TTZToLL is overlapping with TZToLL* above
+    #   "backgrounds2018/TTZToQQ" : "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZToLL" : "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
   }
 ST_dasBackgrounds2018 = {
     "backgrounds2018/ST_tW_antitop": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
@@ -74,7 +69,7 @@ DY_dasBackgrounds2018 = {
 } 
 V_dasBackgrounds2018 = {
   "backgrounds2018/WJetsToLNu" : "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-## testing additional backgrounds - files on lrygaard user space
+## files on lrygaard user space - overlapping with WJetsToLNu above
 #   "backgrounds2018/W1JetsToLNu" : "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
 #   "backgrounds2018/W2JetsToLNu" : "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
 #   "backgrounds2018/W3JetsToLNu" : "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
