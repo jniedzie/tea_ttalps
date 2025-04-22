@@ -1,6 +1,7 @@
 from ttalps_cross_sections import get_cross_sections
 from Sample import Sample, SampleType
 from ttalps_samples_list import dasSignals2018, dasSignals2018_30GeV, dasBackgrounds2018
+from Logger import fatal
 
 
 class TTAlpsABCDConfigHelper:
@@ -111,6 +112,11 @@ class TTAlpsABCDConfigHelper:
           # "QCD_Pt-800To1000",
           # "QCD_Pt-1000",
       ]
+    else:
+      fatal(
+          f"Category {category} not recognized. Please use one of the following: _Pat, _PatDSA, _DSA"
+      )
+      exit(0)
 
   def get_background_params(self, backgrounds):
     background_params = []
