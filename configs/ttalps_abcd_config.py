@@ -8,7 +8,6 @@ lumi = 137190  # pb^-1
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
-config_helper = TTAlpsABCDConfigHelper(year)
 
 # ------------------------------------------
 # ABCD calculation and optimization settings
@@ -29,29 +28,28 @@ if do_region == "SR":
 
 
 # collection = "GoodPFIsoDimuonVertex"
-collection = "BestPFIsoDimuonVertex"
+# collection = "BestPFIsoDimuonVertex"
 # collection = "BestDimuonVertex"
-
-
-# Pat-Pat:
-variable_1 = "logLxySignificance"
-variable_2 = "log3Dangle"
-abcd_point = (22, 2)  # binning always expressed in bin numbers, not values
-
-# Pat-DSA
-# variable_1 = "dPhi"
-# variable_2 = "logDxyPVTraj1"
-# abcd_point = (21, 7)
-
-# DSA-DSA:
-# variable_1 = "logLxy"
-# variable_2 = "log3Dangle"
-# abcd_point = (19, 16)
+collection = "BestNonLeadingPFIsoDimuonVertex"
 
 # category = ""
 # category = "_Pat"
-# category = "_PatDSA"
-category = "_DSA"
+category = "_PatDSA"
+# category = "_DSA"
+
+if category == "_Pat":
+  variable_1 = "logLxySignificance"
+  variable_2 = "log3Dangle"
+  abcd_point = (22, 2)  # binning always expressed in bin numbers, not values
+elif category == "_PatDSA":
+  variable_1 = "dPhi"
+  variable_2 = "logDxyPVTraj1"
+  abcd_point = (21, 7)
+elif category == "_DSA":
+  variable_1 = "logLxy"
+  variable_2 = "log3Dangle"
+  abcd_point = (19, 16)
+
 
 # this is obsolete, and also has to move to bin-based rather than value-based
 optimal_points = {
@@ -180,7 +178,8 @@ nice_names = {
 # Samples settings
 # ------------------------------------------
 
-base_path = "/data/dust/user/jniedzie/ttalps_cms"
+# base_path = "/data/dust/user/jniedzie/ttalps_cms"
+base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 username = os.getenv("USER")
 output_path = f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_{do_region}_{collection}"
@@ -199,9 +198,6 @@ elif do_region == "ttZCR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 elif do_region == "SR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-  # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
-  # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
-  # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
 elif do_region == "VVCR":
   skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
 elif do_region == "QCDCR":
@@ -210,20 +206,20 @@ elif do_region == "WjetsCR":
   skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
 elif do_region == "bbCR":
   skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
-  # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt10", "_SRDimuons")
-  # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
-  # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
 
-hist_dir = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
 
 signal_path_pattern = "signals/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
 
-data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_dir}.root"
+data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_path}.root"
 
 # signal points for which to run ABCD analysis
 masses = ["0p35", "1", "2", "12", "30", "60"]
 ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
+
+# masses = ["0p35", "1", "2"]
+# ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 
 # masses = ["1", "2"]
 # ctaus = ["1e0", "1e1", "1e2", "1e3"]
@@ -234,48 +230,15 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # masses = ["1"]
 # ctaus = ["1e0"]
 
-backgrounds = [
-    "TTToSemiLeptonic",
-    "TTToHadronic",
-    # "TTTo2L2Nu",  # fluctuates in SR DSA-DSA
+config_helper = TTAlpsABCDConfigHelper(
+    year,
+    skim,
+    category,
+    base_path,
+    hist_path,
+)
 
-    "TTZToLLNuNu_M-10",
-    "TTZToLL_M-1to10",
-    "TTZZ",
-    "TTZH",
-    "TTTT",
-
-    "TTWJetsToLNu",
-
-    "ttHTobb",
-    "ttHToNonbb",
-
-    "ST_tW_antitop",
-    "ST_t-channel_antitop",
-    "ST_tW_top",
-    "ST_t-channel_top",
-
-    "DYJetsToMuMu_M-50",
-    "DYJetsToMuMu_M-10to50",
-    # "WJetsToLNu",
-
-    # "QCD_Pt-15To20",
-    # "QCD_Pt-20To30",
-    # "QCD_Pt-30To50",
-    # "QCD_Pt-50To80",
-    # "QCD_Pt-80To120",
-    # "QCD_Pt-120To170",
-    # "QCD_Pt-170To300",
-    "QCD_Pt-300To470",
-    "QCD_Pt-470To600",
-    "QCD_Pt-600To800",
-    "QCD_Pt-800To1000",
-    "QCD_Pt-1000",
-]
-
-if category != "_DSA" or do_region != "SR":
-  backgrounds.append("TTTo2L2Nu")  # fluctuates in SR DSA-DSA
-
+background_samples, backgrounds = config_helper.get_background_samples()
 background_params = config_helper.get_background_params(backgrounds)
 
 z_params = {

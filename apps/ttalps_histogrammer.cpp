@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
     }
 
     if (runABCDMothersHistograms) {
-      ttalpsHistogramsFiller->FillABCDMothersHistograms(event);
+      ttalpsHistogramsFiller->FillABCDMothersHistograms(event, runFakesHistograms);
     }
 
     if (runFakesHistograms) {

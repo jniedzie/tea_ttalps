@@ -44,12 +44,13 @@ class TTAlpsHistogrammerConfigHelper:
         "absPtLxyDPhi1": (100, 0, pi),
         "absPtLxyDPhi2": (100, 0, pi),
 
-        "logAbsPtLxyDPhi1": (100, -5, 0),
-        "logAbsPtLxyDPhi2": (100, -5, 0),
+        "logAbsPtLxyDPhi1": (100, -5, 1),
+        "logAbsPtLxyDPhi2": (100, -5, 1),
 
         "invMass": (100, 0, 100),
         "logInvMass": (100, -1, 2),
         "pt": (100, 0, 200),
+        "logPt": (100, -5, 3),
         "eta": (100, -3, 3),
         "dEta": (100, 0, 3),
         "dPhi": (100, 0, 2*pi),
@@ -256,7 +257,7 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
 
     for collection in self.bestMuonVertexCollections:
-      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
+      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine", "_mysteriousBlob"]:
         params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
 
     return tuple(params)
