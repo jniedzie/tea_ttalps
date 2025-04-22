@@ -1,4 +1,4 @@
-from ttalps_samples_list import *
+from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018
 import os
 import re
 import argparse
@@ -8,6 +8,7 @@ import subprocess
 parser = argparse.ArgumentParser()
 parser.add_argument("--single_thread", action="store_true", default=False, help="Use single thread.")
 parser.add_argument("--condor", action="store_true", default=False, help="Run on condor.")
+parser.add_argument("--dry", action="store_true", default=False, help="Dry run.")
 args = parser.parse_args()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
@@ -37,8 +38,8 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger", "_SRDimuons_TriggerStudy")
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}"
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}_newSFs" # all SFs
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}_newSFs" # all SFs
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}_newSFs" # no PUjetIDSFs
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_PUjetIDSFs{skim[1]}_newSFs" # no bTaggingSFs
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_bTaggingSFs_PUjetIDSFs{skim[1]}_newSFs" # no pilup
@@ -49,12 +50,10 @@ hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs
 # Samples
 # ------------------------------------------------------------------------------
 
-# sample_paths = dasSamples2018.keys()
+sample_paths = dasSamples2018.keys()
 # sample_paths = dasData2018.keys()
-sample_paths = dasBackgrounds2018.keys()
-# sample_paths = TT_dasBackgrounds2018.keys()
+# sample_paths = dasBackgrounds2018.keys()
 # sample_paths = dasSignals2018.keys()
-# sample_paths = dasSignals2018_12GeV.keys()
 
 
 def extract_year(s):
@@ -106,7 +105,7 @@ def main():
     commands.append(command)
 
   if args.condor:
-    
+
     os.makedirs("scripts", exist_ok=True)
     with open("merge_cmds.txt", "w") as f:
       for i, cmd in enumerate(commands):
@@ -137,10 +136,14 @@ def main():
     ''')
 
     # Submit the jobs
-    subprocess.run(["condor_submit", submit_file], check=True)
+    if not args.dry:
+      subprocess.run(["condor_submit", submit_file], check=True)
   else:
     for command in commands:
-      os.system(command)
+      if args.dry:
+        print(command)
+      else:
+        os.system(command)
 
 
 if __name__ == "__main__":

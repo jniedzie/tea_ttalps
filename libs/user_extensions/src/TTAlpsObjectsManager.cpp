@@ -115,7 +115,7 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
   InsertMuonVertexCollection(event, vertices);
 }
 
-void TTAlpsObjectsManager::InsertNonTriggerMuonVertexCollection(shared_ptr<Event> event) {
+void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollection(shared_ptr<Event> event) {
   if (muonMatchingParams.size() == 0) return;
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 

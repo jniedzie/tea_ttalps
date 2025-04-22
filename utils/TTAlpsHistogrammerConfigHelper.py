@@ -44,12 +44,13 @@ class TTAlpsHistogrammerConfigHelper:
         "absPtLxyDPhi1": (100, 0, pi),
         "absPtLxyDPhi2": (100, 0, pi),
 
-        "logAbsPtLxyDPhi1": (100, -5, 0),
-        "logAbsPtLxyDPhi2": (100, -5, 0),
+        "logAbsPtLxyDPhi1": (100, -5, 1),
+        "logAbsPtLxyDPhi2": (100, -5, 1),
 
         "invMass": (100, 0, 100),
         "logInvMass": (100, -1, 2),
         "pt": (100, 0, 200),
+        "logPt": (100, -5, 3),
         "eta": (100, -3, 3),
         "dEta": (100, 0, 3),
         "dPhi": (100, 0, 2*pi),
@@ -262,7 +263,7 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
 
     for collection in self.bestMuonVertexCollections:
-      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine"]:
+      for blob in ["", "_lowBlob", "_rightBlob", "_centralBlob", "_lowLine", "_rightLine", "_mysteriousBlob"]:
         params.append((collection+"_motherPid1_vs_motherPid2"+blob, 2000, -1000, 1000, 2000, -1000, 1000, ""))
 
     return tuple(params)
@@ -355,24 +356,25 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
+    collections = (
+      "BestPFIsoDimuonVertex",
+      "BestNonLeadingPFIsoDimuonVertex",
+    )
 
-    ABCD_variables = ["logLxySignificance", "log3Dangle"]
+
+    variables = (
+        "logLxySignificance_vs_log3Dangle",
+        "dPhi_vs_logDxyPVTraj1",
+        "logLxy_vs_log3Dangle",
+    )
 
     SF_variables = []
 
-    for bestMuonVertexCollection in self.bestMuonVertexCollections:
-
-      for name in ("Best", "BestNonLeading"):
-        collection_ = bestMuonVertexCollection
-        collection = collection_.replace("Best", name)
-
-        for variable_1 in ABCD_variables:
-          for variable_2 in ABCD_variables:
-            if variable_2 == variable_1:
-              continue
-
-            name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
-            SF_variables.append(name)
+    for collection in collections:
+        for variable in variables:
+          for category in ("", "_PatDSA", "_DSA", "_Pat"):
+            name = self.__insert_into_name(collection, f"_{variable}{category}")
+            SF_variables.append(name)    
 
     return SF_variables
 

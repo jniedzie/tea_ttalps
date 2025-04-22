@@ -1,4 +1,4 @@
-from scale_factors_config import *
+from scale_factors_config import get_scale_factors
 from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
@@ -22,9 +22,10 @@ runPileupHistograms = False
 runLLPNanoAODHistograms = True
 
 # Histograms for Muon Trigger Objects
-runMuonTriggerHistograms = True
+runMuonTriggerHistograms = False
 # Histograms for "BestDimuonVertex" excluding trigger matched muon and leading tight muon
-runNonTriggerVertexCollection = True
+# Needed for BestNonLeadingDimuonVertex ABCD histograms
+runNonLeadingVertexCollection = True
 
 runMuonMatchingHistograms = False  # TODO: this doesn't seem to work
 runGenMuonHistograms = False  # can only be run on signal samples
@@ -137,7 +138,7 @@ if runFakesHistograms:
 
 if runMuonTriggerHistograms:
     histParams += helper.get_muon_trigger_params()
-if runNonTriggerVertexCollection:
+if runNonLeadingVertexCollection:
     histParams += helper.get_nontrigger_muon_vertex_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()

@@ -93,9 +93,7 @@ void TTAlpsHistogramFiller::FillDefaultVariables(const shared_ptr<Event> event) 
 
 /// --------- NormCheck Histogram --------- ///
 
-void TTAlpsHistogramFiller::FillNormCheck() {
-  histogramsHandler->Fill("Event_normCheck", 0.5);
-}
+void TTAlpsHistogramFiller::FillNormCheck() { histogramsHandler->Fill("Event_normCheck", 0.5); }
 
 /// --------- NormCheck Histogram --------- ///
 
@@ -123,7 +121,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
-  
+
   string muonVertexCollectionName = muonVertexCollection.first;
   FillMuonVertexHistograms(event, muonVertexCollectionName);
   FillNminus1HistogramsForMuonVertexCollection(event);
@@ -397,10 +395,8 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
   if (cut == "DisplacedIsolationCut" || cut == "PFRelIsolationCut") {
     histogramsHandler->Fill(collectionName + "_displacedTrackIso03Dimuon1", dimuonVertex->Get("displacedTrackIso03Dimuon1"));
     histogramsHandler->Fill(collectionName + "_displacedTrackIso03Dimuon2", dimuonVertex->Get("displacedTrackIso03Dimuon2"));
-    if (!dimuonVertex->IsDSAMuon1())
-      histogramsHandler->Fill(collectionName + "_pfRelIso1", dimuonVertex->Muon1()->Get("pfRelIso04_all"));
-    if (!dimuonVertex->IsDSAMuon2())
-      histogramsHandler->Fill(collectionName + "_pfRelIso2", dimuonVertex->Muon2()->Get("pfRelIso04_all"));
+    if (!dimuonVertex->IsDSAMuon1()) histogramsHandler->Fill(collectionName + "_pfRelIso1", dimuonVertex->Muon1()->Get("pfRelIso04_all"));
+    if (!dimuonVertex->IsDSAMuon2()) histogramsHandler->Fill(collectionName + "_pfRelIso2", dimuonVertex->Muon2()->Get("pfRelIso04_all"));
   }
   if (cut == "LxyCut") histogramsHandler->Fill(collectionName + "_Lxy", dimuonVertex->GetLxyFromPV());
   if (cut == "DeltaEtaCut") {
@@ -476,9 +472,9 @@ void TTAlpsHistogramFiller::FillMuonTriggerVariables(const shared_ptr<Event> eve
 }
 
 /// --------- Vertex Histograms excluding trigger matched muon and leading tright muon --------- ///
-/// -------- flag: runNonTriggerVertexCollection --------- ///
+/// -------- flag: runNonLeadingVertexCollection --------- ///
 
-void TTAlpsHistogramFiller::FillNonTriggerMuonVertexHistograms(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillNonLeadingMuonVertexHistograms(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() && muonVertexCollection.second.empty()) return;
 
   auto nonTriggerMuonVertexCollectionName = "BestNonTrigger" + muonVertexCollection.first.substr(4);
@@ -782,12 +778,9 @@ void TTAlpsHistogramFiller::FillGenMuonMinDRHistograms(const shared_ptr<PhysicsO
       deltaEtamin = dEta;
     }
   }
-  if (deltaRmin < 9999.)
-    histogramsHandler->Fill(genMuonCollectionName + "_" + looseMuonCollectionName + "MinDR", deltaRmin);
-  if (deltaPhimin < 9999.)
-    histogramsHandler->Fill(genMuonCollectionName + "_" + looseMuonCollectionName + "MinDPhi", deltaPhimin);
-  if (deltaEtamin < 9999.)
-    histogramsHandler->Fill(genMuonCollectionName + "_" + looseMuonCollectionName + "MinDEta", deltaEtamin);
+  if (deltaRmin < 9999.) histogramsHandler->Fill(genMuonCollectionName + "_" + looseMuonCollectionName + "MinDR", deltaRmin);
+  if (deltaPhimin < 9999.) histogramsHandler->Fill(genMuonCollectionName + "_" + looseMuonCollectionName + "MinDPhi", deltaPhimin);
+  if (deltaEtamin < 9999.) histogramsHandler->Fill(genMuonCollectionName + "_" + looseMuonCollectionName + "MinDEta", deltaEtamin);
 }
 
 void TTAlpsHistogramFiller::FillRecoGenMatchedResonanceHistograms(const shared_ptr<Event> event, const shared_ptr<NanoMuons> muonCollection,
@@ -1108,19 +1101,19 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
     rawEventsCutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(sortedRawEventsAfterCuts[index]).c_str());
     bin++;
   }
-  histogramsHandler->SetHistogram1D(make_pair(cutFlowName.c_str(),""), cutFlowHist);
-  histogramsHandler->SetHistogram1D(make_pair(rawEventsCutFlowName.c_str(),""), rawEventsCutFlowHist);
+  histogramsHandler->SetHistogram1D(make_pair(cutFlowName.c_str(), ""), cutFlowHist);
+  histogramsHandler->SetHistogram1D(make_pair(rawEventsCutFlowName.c_str(), ""), rawEventsCutFlowHist);
 }
 
 /// --------- ABCD Histograms --------- ///
 /// ----- flag: runABCDHistograms ----- ///
 
-void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bool runNonLeadingVertexCollection) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  // string collectionName = muonVertexCollection.first;
+  vector<string> collectionNames = {muonVertexCollection.first};
+  if (runNonLeadingVertexCollection) collectionNames.push_back("BestNonLeading" + muonVertexCollection.first.substr(4));
 
-  vector<string> collectionNames = {muonVertexCollection.first, "BestNonLeading" + muonVertexCollection.first.substr(4)};
   for (auto collectionName : collectionNames) {
     auto collection = event->GetCollection(collectionName);
     if (collection->size() < 1) continue;
@@ -1141,7 +1134,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 
           {"outerDR", dimuon->GetOuterDeltaR()},
           {"maxHitsInFrontOfVert", max(float(dimuon->Get("hitsInFrontOfVert1")), float(dimuon->Get("hitsInFrontOfVert2")))},
-          
+
           {"absPtLxyDPhi1", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
           {"absPtLxyDPhi2", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
 
@@ -1151,10 +1144,11 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
           {"invMass", dimuon->GetInvariantMass()},
           {"logInvMass", log10(dimuon->GetInvariantMass())},
           {"pt", dimuon->GetDimuonPt()},
+          {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
           {"eta", dimuon->GetDimuonEta()},
           {"dEta", abs(dimuon->GetDeltaEta())},
           {"dPhi", abs(dimuon->GetDeltaPhi())},
-          
+
           {"nSegments", dimuon->GetTotalNumberOfSegments()},
           {"logDisplacedTrackIso03Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon1"))},
           {"logDisplacedTrackIso04Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon1"))},
@@ -1165,7 +1159,6 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
           {"logDxyPVTraj2", TMath::Log10(dimuon->Muon2()->Get("dxyPVTraj"))},
           {"logDxyPVTrajSig1", TMath::Log10((float)dimuon->Muon1()->Get("dxyPVTraj") / (float)dimuon->Muon1()->Get("dxyPVTrajErr"))},
           {"logDxyPVTrajSig2", TMath::Log10((float)dimuon->Muon2()->Get("dxyPVTraj") / (float)dimuon->Muon2()->Get("dxyPVTrajErr"))},
-
 
           {"deltaIso03", dimuon->GetDeltaDisplacedTrackIso03()},
           {"deltaIso04", dimuon->GetDeltaDisplacedTrackIso04()},
@@ -1186,7 +1179,6 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
           if (varName_1 == varName_2) continue;
           histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2);
           histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2);
-
         }
       }
     }
@@ -1196,7 +1188,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 /// --------- ABCD mothers Histograms --------- ///
 /// ----- flag: runABCDMothersHistograms ----- ///
 
-void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> event, bool runFakesHistograms) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   auto genMuons = event->GetCollection("GenPart");
@@ -1247,41 +1239,58 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
 
     float lxySignificance = TMath::Log10(dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV());
     float angle3D = TMath::Log10(dimuon->Get3DOpeningAngle());
+    float logInvMass = log10(dimuon->GetInvariantMass());
+    float logDeltaIso03 = TMath::Log10(dimuon->GetDeltaDisplacedTrackIso03());
+
+    if (logInvMass > 1.6 && logInvMass < 1.9 && logDeltaIso03 > -1.6 && logDeltaIso03 < -1.0) {
+      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_mysteriousBlob", mother1_pid, mother2_pid);
+      if (runFakesHistograms) {
+        FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
+
+        if (muon1->IsDSA())
+          FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_fakes");
+        else
+          FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_fakes");
+
+        if (muon2->IsDSA())
+          FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_fakes");
+        else
+          FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_fakes");
+      }
+
+    } else {
+      if (runFakesHistograms) {
+        FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
+        if (muon1->IsDSA())
+          FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_nonFakes");
+        else
+          FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_nonFakes");
+
+        if (muon2->IsDSA())
+          FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_nonFakes");
+        else
+          FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_nonFakes");
+      }
+    }
 
     if (lxySignificance > -2.0 && lxySignificance < -1.0 && angle3D > -1.5 && angle3D < -1.0) {
       histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowBlob", mother1_pid, mother2_pid);
     }
     if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > 0.0 && angle3D < 0.4) {
       histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_rightBlob", mother1_pid, mother2_pid);
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
 
-      if (muon1->IsDSA()) FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_fakes");
-      else FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_fakes");
-
-      if (muon2->IsDSA()) FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_fakes");
-      else FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_fakes");
-      
-    } else {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
-      if (muon1->IsDSA()) FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_nonFakes");
-      else FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_nonFakes");
-
-      if (muon2->IsDSA()) FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_nonFakes");
-      else FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_nonFakes");
-    }
-
-    if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > -1.5 && angle3D < -1.0) {
-      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid);
-    }
-    if (lxySignificance > -2.0 && lxySignificance < -1.8 && angle3D > -0.5 && angle3D < 0.2) {
-      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowLine", mother1_pid, mother2_pid);
-    }
-    if (lxySignificance > -2.0 && lxySignificance < -1.0 && angle3D > 0.2 && angle3D < 0.4) {
-      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_rightLine", mother1_pid, mother2_pid);
+      if (lxySignificance > -0.5 && lxySignificance < 0.5 && angle3D > -1.5 && angle3D < -1.0) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid);
+      }
+      if (lxySignificance > -2.0 && lxySignificance < -1.8 && angle3D > -0.5 && angle3D < 0.2) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowLine", mother1_pid, mother2_pid);
+      }
+      if (lxySignificance > -2.0 && lxySignificance < -1.0 && angle3D > 0.2 && angle3D < 0.4) {
+        histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_rightLine", mother1_pid, mother2_pid);
+      }
     }
   }
 }
-
 /// --------- Fakes Histograms --------- ///
 /// ----- flag: runFakesHistograms ----- ///
 

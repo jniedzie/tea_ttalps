@@ -1,4 +1,4 @@
-from ttalps_samples_list import *
+from ttalps_samples_list import dasSamples2018, dasSignals2018
 from Logger import warn, logger_print
 
 import argparse
@@ -9,14 +9,15 @@ import ROOT
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Loose ttbar semimuonic skim
-# skim = "skimmed_looseSemimuonic_v2"
+skim = "skimmed_looseSemimuonic_v2"
 
 # Loose non-ttbar skims, vetoing events with too many (b-)jets
 # skim = "skimmed_looseNonTT_v1"
 # skim = "skimmed_looseNoBjets_lt4jets_v1"
-skim = "skimmed_loose_lt3bjets_lt4jets_v1"
+# skim = "skimmed_loose_lt3bjets_lt4jets_v1"
 
 sample_paths = dasSamples2018.keys()
+# sample_paths = dasSignals2018.keys()
 
 input_pattern = "output_*.root"
 output_pattern = "output_{}.root"

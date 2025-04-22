@@ -30,7 +30,9 @@ input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}/histogr
 
 
 # variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
-variants = [""]
+# variants = [""]
+
+variants = ["", "_mysteriousBlob"]
 
 # min_fraction_to_show = 0.15
 min_fraction_to_show = 0.0
