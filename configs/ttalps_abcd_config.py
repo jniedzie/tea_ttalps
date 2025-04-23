@@ -2,9 +2,10 @@ import os
 import ROOT
 from ttalps_cross_sections import get_cross_sections
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
+from Histogram import Histogram2D
+from HistogramNormalizer import NormalizationType
 
-
-lumi = 137190  # pb^-1
+luminosity = 59830.  # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
@@ -28,13 +29,13 @@ if do_region == "SR":
 
 
 # collection = "GoodPFIsoDimuonVertex"
-# collection = "BestPFIsoDimuonVertex"
+collection = "BestPFIsoDimuonVertex"
 # collection = "BestDimuonVertex"
-collection = "BestNonLeadingPFIsoDimuonVertex"
+# collection = "BestNonLeadingPFIsoDimuonVertex"
 
 # category = ""
-# category = "_Pat"
-category = "_PatDSA"
+category = "_Pat"
+# category = "_PatDSA"
 # category = "_DSA"
 
 if category == "_Pat":
@@ -101,6 +102,12 @@ standard_rebin = 1
 # (closure, error, min_n_events, significance, contamination)
 rebin_2D = 4
 
+histogram = Histogram2D(
+    name=f"{collection}_{variable_1}_vs_{variable_2}{category}",
+    norm_type=NormalizationType.to_lumi,
+    x_rebin=rebin_2D,
+    y_rebin=rebin_2D,
+)
 
 # ------------------------------------------
 # Plotting settings
@@ -178,8 +185,8 @@ nice_names = {
 # Samples settings
 # ------------------------------------------
 
-# base_path = "/data/dust/user/jniedzie/ttalps_cms"
-base_path = "/data/dust/user/lrygaard/ttalps_cms"
+base_path = "/data/dust/user/jniedzie/ttalps_cms"
+# base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 username = os.getenv("USER")
 output_path = f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_{do_region}_{collection}"
@@ -197,7 +204,8 @@ if do_region == "JPsiCR":
 elif do_region == "ttZCR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 elif do_region == "SR":
-  skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+  skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "")
+  # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 elif do_region == "VVCR":
   skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
 elif do_region == "QCDCR":
@@ -207,7 +215,7 @@ elif do_region == "WjetsCR":
 elif do_region == "bbCR":
   skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
 
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}"
 
 signal_path_pattern = "signals/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
@@ -239,6 +247,7 @@ config_helper = TTAlpsABCDConfigHelper(
 )
 
 background_samples, backgrounds = config_helper.get_background_samples()
+samples = background_samples
 background_params = config_helper.get_background_params(backgrounds)
 
 z_params = {
