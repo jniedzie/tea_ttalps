@@ -32,22 +32,26 @@ samples_params = {
     # ------------------------------------------------------------------------------
     # Backgrounds
     # ------------------------------------------------------------------------------
-
-    "TTTo2L2Nu"         : {"color": cms_colors[4] , "legend_column": 2, "legend_row": 1, "legend_title": "t#bar{t} leptonic"      },
-    "TTto2L2Nu"         : {"color": cms_colors[4] , "legend_column": 2, "legend_row": 1, "legend_title": "t#bar{t} leptonic"      },
     
-    "TTToSemiLeptonic"  : {"color": cms_colors[0] , "legend_column": 2, "legend_row": 2, "legend_title": "t#bar{t} semi-leptonic" },
+    "TTToSemiLeptonic"  : {"color": cms_colors[0] , "legend_column": 2, "legend_row": 1, "legend_title": "t#bar{t} semi-leptonic" },
+
+    "TTTo2L2Nu"         : {"color": cms_colors[4] , "legend_column": 2, "legend_row": 2, "legend_title": "t#bar{t} leptonic"      },
+    "TTto2L2Nu"         : {"color": cms_colors[4] , "legend_column": 2, "legend_row": 2, "legend_title": "t#bar{t} leptonic"      },
+    
     "TTtoLNu2Q"         : {"color": cms_colors[0] , "legend_column": 2, "legend_row": 2, "legend_title": "t#bar{t} semi-leptonic" },
     
     "ST_t"              : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
     "TWminustoLNu2Q"    : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
     "TbarWplustoLNu2Q"  : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
-    
-    "TTZToLL"           : {"color": cms_colors[6] , "legend_column": 2, "legend_row": 4, "legend_title": "t#bar{t}Z"              },
+    "TBbarQ"            : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
+
+    "TTZTo"             : {"color": cms_colors[6] , "legend_column": 2, "legend_row": 4, "legend_title": "t#bar{t}Z"              },
     "TTLL"              : {"color": cms_colors[6] , "legend_column": 2, "legend_row": 4, "legend_title": "t#bar{t}Z"              },
     
     "ttH"               : {"color": cms_colors[7] , "legend_column": 2, "legend_row": 5, "legend_title": "t#bar{t}H"              },
     "TTH"               : {"color": cms_colors[7] , "legend_column": 2, "legend_row": 5, "legend_title": "t#bar{t}H"              },
+
+    "TTW"               : {"color": cms_colors[7] , "legend_column": 2, "legend_row": 6, "legend_title": "t#bar{t}W"              },
     
     "QCD"               : {"color": cms_colors[1] , "legend_column": 1, "legend_row": 1, "legend_title": "QCD"                    },
     
@@ -55,9 +59,11 @@ samples_params = {
     "TTto4Q"            : {"color": cms_colors[5] , "legend_column": 1, "legend_row": 2, "legend_title": "t#bar{t} hadronic"      },
     
     "WJets"             : {"color": cms_colors[2] , "legend_column": 1, "legend_row": 3, "legend_title": "W+jets"                 },
+    "W1Jets"            : {"color": cms_colors[2] , "legend_column": 1, "legend_row": 3, "legend_title": "W+jets"                 },
+    "W2Jets"            : {"color": cms_colors[2] , "legend_column": 1, "legend_row": 3, "legend_title": "W+jets"                 },
+    "W3Jets"            : {"color": cms_colors[2] , "legend_column": 1, "legend_row": 3, "legend_title": "W+jets"                 },
+    "W4Jets"            : {"color": cms_colors[2] , "legend_column": 1, "legend_row": 3, "legend_title": "W+jets"                 },
     "WtoLNu"            : {"color": cms_colors[2] , "legend_column": 1, "legend_row": 3, "legend_title": "W+jets"                 },
-    
-    
     
     
     "TTTT"              : {"color": cms_colors[8] , "legend_column": 1, "legend_row": 4, "legend_title": "t#bar{t}t#bar{t}"       },
@@ -82,6 +88,8 @@ samples_params = {
     "tta_mAlp-12GeV_ctau-1e2mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 6, "legend_title": "12 GeV, 1e2 mm"},
     "tta_mAlp-12GeV_ctau-1e3mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 7, "legend_title": "12 GeV, 1e3 mm"},
     
+    "TTALPto2Mu_MALP-2_ctau-1e2mm": {"color": ROOT.kBlue+1  , "legend_column": 1, "legend_row": 2, "legend_title": "2 GeV, 10 cm, central"},
+    "TTALPto2Mu_MALP-2_ctau-1e0mm": {"color": ROOT.kBlue+1  , "legend_column": 1, "legend_row": 2, "legend_title": "2 GeV, 1 mm, central"},
 }
 
 
@@ -96,7 +104,7 @@ samples_styles = {
     },
     SampleType.signal: {
         "line_alpha": 1,
-        "line_style": 2,
+        "line_style": 1,
         "fill_alpha": 0,
         "marker_size": 0,
         "marker_style": 0,

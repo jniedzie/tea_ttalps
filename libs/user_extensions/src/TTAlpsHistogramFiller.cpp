@@ -36,6 +36,13 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histo
     info() << "Couldn't read muonVertexCollection from config file - no muon vertex collection histograms will be filled" << endl;
   }
   try {
+    config.GetValue("muonVertexCollectionInput", muonVertexCollectionInput);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read muonVertexCollectionInput from config file - using first defined muonMatchingParams vertex collection as default" << endl;
+    string matchingMethod = muonMatchingParams.begin()->first;
+    muonVertexCollectionInput = "LooseMuonsVertex" + matchingMethod + "Match";
+  }
+  try {
     config.GetValue("year", year);
   } catch (const Exception &e) {
     info() << "Couldn't read year from config file - will assume year 2018" << endl;
@@ -107,13 +114,16 @@ void TTAlpsHistogramFiller::FillDataCheck(const shared_ptr<Event> event) {
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_ptr<Event> event) {
   if (muonMatchingParams.empty()) return;
 
+  bool muonVertexCollectionInput_filled = false;
   for (auto &[matchingMethod, param] : muonMatchingParams) {
     string muonCollectionName = "LooseMuons" + matchingMethod + "Match";
     FillLooseMuonsHistograms(event, muonCollectionName);
 
     string muonVertexCollectionName = "LooseMuonsVertex" + matchingMethod + "Match";
     FillMuonVertexHistograms(event, muonVertexCollectionName);
+    if (muonVertexCollectionName == muonVertexCollectionInput) muonVertexCollectionInput_filled = true;
   }
+  if (!muonVertexCollectionInput_filled) FillMuonVertexHistograms(event, muonVertexCollectionInput);
 }
 
 /// --------- Dimuon Vertex Collection Histograms --------- ///
@@ -255,9 +265,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_outerDR", dimuon->GetOuterDeltaR());
   histogramsHandler->Fill(name + "_maxHitsInFrontOfVert",
                           max(float(dimuon->Get("hitsInFrontOfVert1")), float(dimuon->Get("hitsInFrontOfVert2"))));
-  histogramsHandler->Fill(name + "_hitsInFrontOfVert1", dimuon->Get("hitsInFrontOfVert1"));
-  histogramsHandler->Fill(name + "_hitsInFrontOfVert2", dimuon->Get("hitsInFrontOfVert2"));
-  histogramsHandler->Fill(name + "_dca", dimuon->Get("dca"));
   histogramsHandler->Fill(name + "_absCollinearityAngle", abs(dimuon->GetCollinearityAngle()));
   histogramsHandler->Fill(name + "_absPtLxyDPhi1", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)));
   histogramsHandler->Fill(name + "_absPtLxyDPhi2", abs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)));
@@ -421,6 +428,57 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
     histogramsHandler->Fill(collectionName + "_DeltaEta", abs(dimuonVertex->GetDeltaEta()));
   }
   if (cut.find("LogLxy") != string::npos) histogramsHandler->Fill(collectionName + "_LogLxy", log(dimuonVertex->GetLxyFromPV()));
+}
+
+/// --------- Muon trigger objects and Muon matched to trigger object Histograms --------- ///
+/// -------- flag: runMuonTrigObjHistograms --------- ///
+
+void TTAlpsHistogramFiller::FillMuonTriggerObjectsHistograms(const shared_ptr<Event> event) {
+  auto tightMuons = event->GetCollection("TightMuons");
+  auto triggerMuonMatchCollection = event->GetCollection("TriggerMuonMatch");
+  vector<string> muonTriggerCollectionNames = {"MuonTrigObj", "MuonTriggerObjects", "LeadingMuonTriggerObject"};
+  for (auto collectionName : muonTriggerCollectionNames) {
+    auto muonTrigObjs = event->GetCollection(collectionName);
+    histogramsHandler->Fill("Event_n"+collectionName, muonTrigObjs->size());
+    for (const auto &muonTrigObj : *muonTrigObjs) {
+      histogramsHandler->Fill(collectionName+"_pt", float(muonTrigObj->Get("pt")));
+      histogramsHandler->Fill(collectionName+"_eta", float(muonTrigObj->Get("eta")));
+      histogramsHandler->Fill(collectionName+"_phi", float(muonTrigObj->Get("phi")));
+      histogramsHandler->Fill(collectionName+"_filterBits", int(muonTrigObj->Get("filterBits")));
+      histogramsHandler->Fill(collectionName+"_l1iso", int(muonTrigObj->Get("l1iso")));
+      histogramsHandler->Fill(collectionName+"_l1pt", float(muonTrigObj->Get("l1pt")));
+      histogramsHandler->Fill(collectionName+"_l1pt_2", float(muonTrigObj->Get("l1pt_2")));
+      if (int(muonTrigObj->Get("filterBits")) & 2) histogramsHandler->Fill(collectionName+"_hasFilterBits2", 1);
+      else histogramsHandler->Fill(collectionName+"_hasFilterBits2", 0);
+      TLorentzVector muonTrigObj4Vector;;
+      muonTrigObj4Vector.SetPtEtaPhiM(muonTrigObj->Get("pt"), muonTrigObj->Get("eta"), muonTrigObj->Get("phi"), 0.105);
+      float minDR = 9999.;
+      for (auto tightMuon : *tightMuons) {
+        TLorentzVector tightMuon4Vector = asNanoMuon(tightMuon)->GetFourVector();
+        float dR = muonTrigObj4Vector.DeltaR(tightMuon4Vector);
+        if (dR < minDR) minDR = dR;
+      }
+      histogramsHandler->Fill(collectionName+"_minDRTightLooseMuon", minDR);
+      if (minDR < 0.3) {
+        histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p3", 1);
+        if (minDR < 0.1) {
+          histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p1", 1);
+        }
+        else {
+          histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p1", 0);
+        }
+      } else {
+        histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p3", 0);
+        histogramsHandler->Fill(collectionName+"_tightLooseMuonMatch0p1", 0);
+      }
+      if (triggerMuonMatchCollection->size() > 0) {
+        auto triggerMuonMatch = asNanoMuon(triggerMuonMatchCollection->at(0));
+        auto triggerMuonMatch4Vector = triggerMuonMatch->GetFourVector();
+        float triggerMuonMatchDR = muonTrigObj4Vector.DeltaR(triggerMuonMatch4Vector);
+        histogramsHandler->Fill(collectionName+"_triggerMuonMatchDR", triggerMuonMatchDR);
+      }
+    }
+  }
 }
 
 /// --------- Gen-Level Muon Histograms --------- ///
@@ -1031,7 +1089,6 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 
   string collectionName = muonVertexCollection.first;
   auto collection = event->GetCollection(collectionName);
-
   if (collection->size() < 1) return;
 
   for (auto vertex : *collection) {

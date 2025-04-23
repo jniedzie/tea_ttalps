@@ -136,7 +136,7 @@ class TTAlpsPlotterConfigHelper:
 
   def __get_params_for_sample(self, long_name):
     for key, params in self.samples_params.items():
-      if key in long_name:
+      if long_name.startswith(key):
         return params
     error(f"No sample parameters found for sample {long_name}")
     return None

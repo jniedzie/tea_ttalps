@@ -3,7 +3,7 @@ from math import pi
 
 
 class TTAlpsHistogrammerConfigHelper:
-  def __init__(self, muonMatchingParams, muonVertexCollection):
+  def __init__(self, muonMatchingParams, muonVertexCollection, muonVertexCollectionInput):
     self.muonMatchingParams = muonMatchingParams
 
     self.looseMuonCollections = []
@@ -28,6 +28,7 @@ class TTAlpsHistogrammerConfigHelper:
     self.looseMuonVertexCollections = []
     for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
       self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
+      self.looseMuonVertexCollections.append(f"{muonVertexCollectionInput}{category}")
 
     self.ABCD_variables = {
 
@@ -81,9 +82,10 @@ class TTAlpsHistogrammerConfigHelper:
         ("Event", "MET_pt", 1000, 0, 1000, ""),
         ("Event", "PV_npvs", 300, 0, 300, ""),
         ("Event", "PV_npvsGood", 300, 0, 300, ""),
-        ("Event", "PV_x", 200, -100, 100, ""),
-        ("Event", "PV_y", 200, -100, 100, ""),
-        ("Event", "PV_z", 200, -100, 100, ""),
+        ("Event", "PV_x", 2000, -100, 100, ""),
+        ("Event", "PV_y", 2000, -100, 100, ""),
+        ("Event", "PV_z", 2000, -100, 100, ""),
+        ("Event", "PV_chi2", 2000, -100, 100, ""),
 
         ("Event", "nGoodJets", 20, 0, 20, ""),
         ("GoodJets", "pt", 1000, 0, 1000, ""),
@@ -243,12 +245,14 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
 
     for collection in self.bestMuonVertexCollections:
+
       for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
         for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
           if variable_1 == variable_2:
             continue
 
           name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+
           params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
@@ -347,6 +351,7 @@ class TTAlpsHistogrammerConfigHelper:
   def get_SF_variation_variables(self):
     collection = "BestPFIsoDimuonVertex"
 
+
     variables = (
         "logLxySignificance_vs_log3Dangle",
         "dPhi_vs_logDxyPVTraj1",
@@ -358,9 +363,29 @@ class TTAlpsHistogrammerConfigHelper:
     for variable in variables:
       for category in ("", "_PatDSA", "_DSA", "_Pat"):
         name = self.__insert_into_name(collection, f"_{variable}{category}")
-        SF_variables.append(name)
+        SF_variables.append(name)    
 
     return SF_variables
+
+  def get_muon_trigger_objects_params(self):
+    params = []
+    for collection in ("MuonTrigObj", "MuonTriggerObjects", "LeadingMuonTriggerObject"):
+      params += (
+        ("Event", "n"+collection, 50, 0, 50, ""),
+        (collection, "pt", 2000, 0, 1000, ""),
+        (collection, "eta", 300, -3, 3, ""),
+        (collection, "phi", 300, -3, 3, ""),
+        (collection, "filterBits", 5000, 0, 5000, ""),
+        (collection, "hasFilterBits2", 10, 0, 10, ""),
+        (collection, "l1iso", 800, 0, 20, ""),
+        (collection, "l1pt", 2000, 0, 1000, ""),
+        (collection, "l1pt_2", 2000, 0, 1000, ""),
+        (collection, "minDRTightLooseMuon", 500, 0, 10, ""),
+        (collection, "tightLooseMuonMatch0p3", 10, 0, 10, ""),
+        (collection, "tightLooseMuonMatch0p1", 10, 0, 10, ""),
+        (collection, "triggerMuonMatchDR", 500, 0, 10, ""),
+      )
+    return tuple(params)
 
   def __insert_into_name(self, collection, to_insert):
     if "_" in collection:
@@ -416,10 +441,6 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "nSegments", 50, 0, 50, ""),
         (name, "nDTSegments", 50, 0, 50, ""),
         (name, "nCSCSegments", 50, 0, 50, ""),
-
-
-
-
     )
 
   # FillMuonVertexHistograms function
@@ -478,9 +499,9 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "vy", 200, -100, 100, ""),
         (name, "vz", 200, -100, 100, ""),
         (name, "t", 200, -100, 100, ""),
-        (name, "vxErr", 200, -100, 100, ""),
-        (name, "vyErr", 200, -100, 100, ""),
-        (name, "vzErr", 200, -100, 100, ""),
+        (name, "vxErr", 1000, -50, 50, ""),
+        (name, "vyErr", 1000, -50, 50, ""),
+        (name, "vzErr", 1000, -50, 50, ""),
         (name, "tErr", 200, -100, 100, ""),
         (name, "displacedTrackIso03Muon1", 800, 0, 20, ""),
         (name, "displacedTrackIso04Muon1", 800, 0, 20, ""),

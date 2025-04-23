@@ -4,8 +4,8 @@ luminosities = {
   "2016postVFP": 0.,
   "2017": 0.,
   "2018": 59820., 
-  "2022preEE": 3508.191415, # 2022preEE eras SingleMuonC and MuonD
-  "2022postEE": 20861.879243, # 2022postEE eras MuonG and MuonF
+  "2022preEE": 7970.89, # 2022preEE eras SingleMuonC, MuonC and MuonD
+  "2022postEE": 26667.15, # 2022postEE eras MuonE, MuonG and MuonF
   "2023preBPix": 0.,
   "2023postBPix": 0.,
 }
