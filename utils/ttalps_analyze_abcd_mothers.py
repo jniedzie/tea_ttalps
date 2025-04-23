@@ -222,9 +222,12 @@ def main():
   hist_deltaR_WW.SetLineColor(ROOT.kRed)
   hist_deltaR_Wtau.SetLineColor(ROOT.kBlue)
 
-  hist_deltaR_OS.Scale(1/hist_deltaR_OS.Integral())
-  hist_deltaR_WW.Scale(1/hist_deltaR_WW.Integral())
-  hist_deltaR_Wtau.Scale(1/hist_deltaR_Wtau.Integral())
+  if 1/hist_deltaR_OS.Integral() != 0 and hist_deltaR_WW.Integral() != 0 and hist_deltaR_Wtau.Integral() != 0:
+    hist_deltaR_OS.Scale(1/hist_deltaR_OS.Integral())
+    hist_deltaR_WW.Scale(1/hist_deltaR_WW.Integral())
+    hist_deltaR_Wtau.Scale(1/hist_deltaR_Wtau.Integral())
+  else:
+    error("One of the histograms has zero integral")
 
   hist_deltaR_OS.Rebin(rebin)
   hist_deltaR_WW.Rebin(rebin)
