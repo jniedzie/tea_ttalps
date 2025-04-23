@@ -1194,6 +1194,7 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
       mother2_pid = genMuons->at(genMuon2->GetMotherIndex())->Get("pdgId");
     }
 
+    histogramsHandler->Fill(collectionName + "_" + category + "_motherPid1_vs_motherPid2", mother1_pid, mother2_pid);
     histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2", mother1_pid, mother2_pid);
 
     if ((mother1_pid == 24 && mother2_pid == 24) || (mother1_pid == -24 && mother2_pid == -24)) {
