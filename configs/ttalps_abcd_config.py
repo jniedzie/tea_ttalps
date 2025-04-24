@@ -47,7 +47,8 @@ if category == "_Pat":
   # optimized after we removed the leading tight muon and fixed some bugs:
   variable_1 = "logAbsCollinearityAngle"
   variable_2 = "logPt"
-  abcd_point = (6, 10)
+  abcd_point = (11, 10)
+  signal_bin = "D"
 elif category == "_PatDSA":
   # optimized before we removed the leading tight muon and with some bugs:
   # variable_1 = "dPhi"
@@ -55,9 +56,10 @@ elif category == "_PatDSA":
   # abcd_point = (15, 12)
 
   # optimized after we removed the leading tight muon and fixed some bugs:
-  variable_1 = "logPt"
+  variable_1 = "dPhi"
   variable_2 = "logDxyPVTraj1"
-  abcd_point = (14, 19)
+  abcd_point = (15, 15)
+  signal_bin = "D"
 elif category == "_DSA":
   # optimized before we removed the leading tight muon and with some bugs:
   # variable_1 = "logLxy"
@@ -65,9 +67,10 @@ elif category == "_DSA":
   # abcd_point = (19, 16)
 
   # optimized after we removed the leading tight muon and fixed some bugs:
-  variable_1 = "logLxy"
-  variable_2 = "log3Dangle"
-  abcd_point = (19, 16)
+  variable_1 = "logLeadingPt"
+  variable_2 = "dPhi"
+  abcd_point = (10, 13)
+  signal_bin = "A"
 
 
 # this is obsolete, and also has to move to bin-based rather than value-based
