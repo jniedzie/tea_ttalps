@@ -100,8 +100,6 @@ nuisances = {
     "bTaggingMedium_down_uncorrelated": "variation",
     "bTaggingMedium_up_correlated": "variation",
     "bTaggingMedium_up_uncorrelated": "variation",
-    "muonIDLoose_systdown": "variation",
-    "muonIDLoose_systup": "variation",
     "muonReco_systdown": "variation",
     "muonReco_systup": "variation",
     "muonTriggerIsoMu24_systdown": "variation",
@@ -113,3 +111,7 @@ nuisances = {
         "bkg": 1.017,
     }
 }
+
+if abcd_config.category != "_DSA":
+  nuisances["muonIDLoose_systdown"] = "variation"
+  nuisances["muonIDLoose_systup"] = "variation"
