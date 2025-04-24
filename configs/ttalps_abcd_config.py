@@ -31,22 +31,40 @@ if do_region == "SR":
 # collection = "GoodPFIsoDimuonVertex"
 collection = "BestPFIsoDimuonVertex"
 # collection = "BestDimuonVertex"
-# collection = "BestNonLeadingPFIsoDimuonVertex"
 
 # category = ""
-category = "_Pat"
+# category = "_Pat"
 # category = "_PatDSA"
-# category = "_DSA"
+category = "_DSA"
 
+# binning always expressed in bin numbers, not values
 if category == "_Pat":
-  variable_1 = "logLxySignificance"
-  variable_2 = "log3Dangle"
-  abcd_point = (22, 2)  # binning always expressed in bin numbers, not values
+  # optimized before we removed the leading tight muon and with some bugs:
+  # variable_1 = "logLxySignificance"
+  # variable_2 = "log3Dangle"
+  # abcd_point = (22, 2)
+
+  # optimized after we removed the leading tight muon and fixed some bugs:
+  variable_1 = "logAbsCollinearityAngle"
+  variable_2 = "logPt"
+  abcd_point = (6, 10)
 elif category == "_PatDSA":
-  variable_1 = "dPhi"
+  # optimized before we removed the leading tight muon and with some bugs:
+  # variable_1 = "dPhi"
+  # variable_2 = "logDxyPVTraj1"
+  # abcd_point = (15, 12)
+
+  # optimized after we removed the leading tight muon and fixed some bugs:
+  variable_1 = "logPt"
   variable_2 = "logDxyPVTraj1"
-  abcd_point = (21, 7)
+  abcd_point = (14, 19)
 elif category == "_DSA":
+  # optimized before we removed the leading tight muon and with some bugs:
+  # variable_1 = "logLxy"
+  # variable_2 = "log3Dangle"
+  # abcd_point = (19, 16)
+
+  # optimized after we removed the leading tight muon and fixed some bugs:
   variable_1 = "logLxy"
   variable_2 = "log3Dangle"
   abcd_point = (19, 16)
@@ -188,24 +206,13 @@ nice_names = {
 base_path = "/data/dust/user/jniedzie/ttalps_cms"
 # base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-username = os.getenv("USER")
-output_path = f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_{do_region}_{collection}"
-
-if do_data:
-  output_path += "_data"
-else:
-  output_path += "_mc"
-
-
-output_path += category
-
 if do_region == "JPsiCR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
 elif do_region == "ttZCR":
   skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 elif do_region == "SR":
-  skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "")
-  # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+  # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "")
+  skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 elif do_region == "VVCR":
   skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
 elif do_region == "QCDCR":
@@ -214,6 +221,17 @@ elif do_region == "WjetsCR":
   skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
 elif do_region == "bbCR":
   skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
+
+username = os.getenv("USER")
+output_path = f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_{do_region}_{collection}{skim[2]}"
+
+if do_data:
+  output_path += "_data"
+else:
+  output_path += "_mc"
+
+
+output_path += category
 
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}"
 

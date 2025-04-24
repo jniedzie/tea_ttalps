@@ -31,6 +31,7 @@ variables = (
     "invMass",
     "logInvMass",
     "pt",
+    "logPt",
     "eta",
     "dEta",
     "dPhi",

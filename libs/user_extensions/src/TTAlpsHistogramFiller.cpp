@@ -1116,8 +1116,12 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 
         {"invMass", dimuon->GetInvariantMass()},
         {"logInvMass", log10(dimuon->GetInvariantMass())},
+        
         {"pt", dimuon->GetDimuonPt()},
         {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
+        {"leadingPt", dimuon->GetLeadingMuonPt()},
+        {"logLeadingPt", TMath::Log10(dimuon->GetLeadingMuonPt())},
+
         {"eta", dimuon->GetDimuonEta()},
         {"dEta", abs(dimuon->GetDeltaEta())},
         {"dPhi", abs(dimuon->GetDeltaPhi())},
@@ -1127,7 +1131,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
         {"logDisplacedTrackIso04Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon1"))},
         {"logDisplacedTrackIso03Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon2"))},
         {"logDisplacedTrackIso04Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon2"))},
-        {"leadingPt", dimuon->GetLeadingMuonPt()},
+        
         {"logDxyPVTraj1", TMath::Log10(dimuon->Muon1()->Get("dxyPVTraj"))},
         {"logDxyPVTraj2", TMath::Log10(dimuon->Muon2()->Get("dxyPVTraj"))},
         {"logDxyPVTrajSig1", TMath::Log10((float)dimuon->Muon1()->Get("dxyPVTraj") / (float)dimuon->Muon1()->Get("dxyPVTrajErr"))},

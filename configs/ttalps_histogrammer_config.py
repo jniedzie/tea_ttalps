@@ -98,6 +98,7 @@ muonVertexCollection = None
 if dimuonSelection is not None:
   muonVertexCollection = muonVertexCollections[dimuonSelection]
 # input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
+# muonVertexCollectionInput = "LooseMuonsVertexSegmentMatch"
 muonVertexCollectionInput = "LooseNonLeadingMuonsVertexSegmentMatch"
 
 
