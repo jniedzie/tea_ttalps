@@ -50,8 +50,13 @@ class TTAlpsHistogrammerConfigHelper:
 
         "invMass": (100, 0, 100),
         "logInvMass": (100, -1, 2),
+
         "pt": (100, 0, 200),
-        "logPt": (100, -5, 3),
+        "leadingPt": (100, 0, 200),
+
+        "logPt": (100, -1, 3),
+        "logLeadingPt": (100, -1, 3),
+
         "eta": (100, -3, 3),
         "dEta": (100, 0, 3),
         "dPhi": (100, 0, 2*pi),
@@ -60,7 +65,8 @@ class TTAlpsHistogrammerConfigHelper:
         "logDisplacedTrackIso04Dimuon1": (100, -3, 0),
         "logDisplacedTrackIso03Dimuon2": (100, -3, 0),
         "logDisplacedTrackIso04Dimuon2": (100, -3, 0),
-        "leadingPt": (100, 0, 500),
+
+
         "logDxyPVTraj1": (100, -5, 1),
         "logDxyPVTraj2": (100, -5, 1),
         "logDxyPVTrajSig1": (100, -3, 1),
@@ -351,11 +357,14 @@ class TTAlpsHistogrammerConfigHelper:
   def get_SF_variation_variables(self):
     collection = "BestPFIsoDimuonVertex"
 
-
     variables = (
         "logLxySignificance_vs_log3Dangle",
         "dPhi_vs_logDxyPVTraj1",
         "logLxy_vs_log3Dangle",
+        "logAbsCollinearityAngle_vs_logPt",
+        "logPt_vs_logDxyPVTraj1",
+        "logLxy_vs_log3Dangle",
+        "logLeadingPt_vs_dPhi"
     )
 
     SF_variables = []
@@ -363,7 +372,7 @@ class TTAlpsHistogrammerConfigHelper:
     for variable in variables:
       for category in ("", "_PatDSA", "_DSA", "_Pat"):
         name = self.__insert_into_name(collection, f"_{variable}{category}")
-        SF_variables.append(name)    
+        SF_variables.append(name)
 
     return SF_variables
 
@@ -371,19 +380,19 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
     for collection in ("MuonTrigObj", "MuonTriggerObjects", "LeadingMuonTriggerObject"):
       params += (
-        ("Event", "n"+collection, 50, 0, 50, ""),
-        (collection, "pt", 2000, 0, 1000, ""),
-        (collection, "eta", 300, -3, 3, ""),
-        (collection, "phi", 300, -3, 3, ""),
-        (collection, "filterBits", 5000, 0, 5000, ""),
-        (collection, "hasFilterBits2", 10, 0, 10, ""),
-        (collection, "l1iso", 800, 0, 20, ""),
-        (collection, "l1pt", 2000, 0, 1000, ""),
-        (collection, "l1pt_2", 2000, 0, 1000, ""),
-        (collection, "minDRTightLooseMuon", 500, 0, 10, ""),
-        (collection, "tightLooseMuonMatch0p3", 10, 0, 10, ""),
-        (collection, "tightLooseMuonMatch0p1", 10, 0, 10, ""),
-        (collection, "triggerMuonMatchDR", 500, 0, 10, ""),
+          ("Event", "n"+collection, 50, 0, 50, ""),
+          (collection, "pt", 2000, 0, 1000, ""),
+          (collection, "eta", 300, -3, 3, ""),
+          (collection, "phi", 300, -3, 3, ""),
+          (collection, "filterBits", 5000, 0, 5000, ""),
+          (collection, "hasFilterBits2", 10, 0, 10, ""),
+          (collection, "l1iso", 800, 0, 20, ""),
+          (collection, "l1pt", 2000, 0, 1000, ""),
+          (collection, "l1pt_2", 2000, 0, 1000, ""),
+          (collection, "minDRTightLooseMuon", 500, 0, 10, ""),
+          (collection, "tightLooseMuonMatch0p3", 10, 0, 10, ""),
+          (collection, "tightLooseMuonMatch0p1", 10, 0, 10, ""),
+          (collection, "triggerMuonMatchDR", 500, 0, 10, ""),
       )
     return tuple(params)
 

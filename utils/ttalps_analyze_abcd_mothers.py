@@ -10,12 +10,13 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 
-hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
 
 # process = "backgrounds2018/TTTo2L2Nu"
-# process = "backgrounds2018/TTToSemiLeptonic"
+process = "backgrounds2018/TTToSemiLeptonic"
 # process = "backgrounds2018/ST_tW_antitop"
 # process = "backgrounds2018/ST_t-channel_antitop"
 # process = "backgrounds2018/ST_tW_top"
@@ -24,15 +25,21 @@ hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 # process = "signals/tta_mAlp-1GeV_ctau-1e-5mm"
 # process = "signals/tta_mAlp-1GeV_ctau-1e0mm"
 # process = "signals/tta_mAlp-1GeV_ctau-1e3mm"
-process = "signals/tta_mAlp-12GeV_ctau-1e0mm"
+# process = "signals/tta_mAlp-12GeV_ctau-1e0mm"
 
-input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}/histograms.root"
+input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 
+# input_path = "../test.root"
 
 # variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
-# variants = [""]
+variants = [""]
 
-variants = ["", "_mysteriousBlob"]
+# variants = ["", "_mysteriousBlob"]
+
+# category = ""
+category = "_Pat"
+# category = "_PatDSA"
+# category = "_DSA"
 
 # min_fraction_to_show = 0.15
 min_fraction_to_show = 0.0
@@ -148,7 +155,7 @@ def merge_charge_conjugate(results):
 def main():
   file = ROOT.TFile(input_path)
 
-  hist_name = "BestPFIsoDimuonVertex_motherPid1_vs_motherPid2"
+  hist_name = f"BestPFIsoDimuonVertex{category}_motherPid1_vs_motherPid2"
 
   for variant in variants:
     print(f"\n\nvariant {variant}")
@@ -222,9 +229,12 @@ def main():
   hist_deltaR_WW.SetLineColor(ROOT.kRed)
   hist_deltaR_Wtau.SetLineColor(ROOT.kBlue)
 
-  hist_deltaR_OS.Scale(1/hist_deltaR_OS.Integral())
-  hist_deltaR_WW.Scale(1/hist_deltaR_WW.Integral())
-  hist_deltaR_Wtau.Scale(1/hist_deltaR_Wtau.Integral())
+  if 1/hist_deltaR_OS.Integral() != 0 and hist_deltaR_WW.Integral() != 0 and hist_deltaR_Wtau.Integral() != 0:
+    hist_deltaR_OS.Scale(1/hist_deltaR_OS.Integral())
+    hist_deltaR_WW.Scale(1/hist_deltaR_WW.Integral())
+    hist_deltaR_Wtau.Scale(1/hist_deltaR_Wtau.Integral())
+  else:
+    error("One of the histograms has zero integral")
 
   hist_deltaR_OS.Rebin(rebin)
   hist_deltaR_WW.Rebin(rebin)

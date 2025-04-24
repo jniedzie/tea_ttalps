@@ -110,7 +110,7 @@ class TTAlpsLimitsPlotterHelper:
     contour = self.graph_2d_exp.GetHistogram().Clone("contour")
     contour.SetContour(1)  # We need 2 levels: below and above 1.0
     contour.SetContourLevel(0, log10(1.0))
-    
+
     contour_0p2 = self.graph_2d_exp.GetHistogram().Clone("contour")
     contour_0p2.SetContour(1)  # We need 2 levels: below and above 1.0
     contour_0p2.SetContourLevel(0, log10(0.2))
@@ -121,19 +121,18 @@ class TTAlpsLimitsPlotterHelper:
 
     self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
     self.graph_2d_exp.GetHistogram().GetYaxis().SetRangeUser(y_min, y_max)
-    # self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
 
     self.graph_2d_exp.GetHistogram().DrawClone("COLZ")
 
     # Overlay the contour line
     contour.SetLineColor(ROOT.kRed)
     contour_0p2.SetLineColor(ROOT.kYellow+1)
-    
+
     # fill contour with hashing
     contour.SetFillStyle(3013)
     contour.SetFillColorAlpha(ROOT.kRed, 0.5)
-    
-    
+
     contour.DrawClone("CONT3 SAME")
     contour_0p2.DrawClone("CONT3 SAME")
 

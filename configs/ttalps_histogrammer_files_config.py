@@ -10,7 +10,7 @@ input_username = "jniedzie"
 # skim = ("skimmed_looseSemimuonic_v2", "")
 
 # SR (+J/Psi CR), tt̄ CR, and QCD CR, with no isolation requirement on the loose muons
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
@@ -60,4 +60,4 @@ for name, apply in applyScaleFactors.items():
   
   output_hists_dir += f"_{name}SFs"
 
-output_hists_dir += f"{skim[1]}/"
+output_hists_dir += f"{skim[1]}{skim[2]}/"
