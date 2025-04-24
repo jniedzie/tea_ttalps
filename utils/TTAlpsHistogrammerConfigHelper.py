@@ -364,6 +364,7 @@ class TTAlpsHistogrammerConfigHelper:
         "logAbsCollinearityAngle_vs_logPt",
         "logPt_vs_logDxyPVTraj1",
         "logLxy_vs_log3Dangle",
+        "logLeadingPt_vs_dPhi"
     )
 
     SF_variables = []

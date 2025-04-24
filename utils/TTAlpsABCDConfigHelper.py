@@ -31,8 +31,8 @@ class TTAlpsABCDConfigHelper:
           # "ST_tW_top",
           # "ST_t-channel_top",
           # "DYJetsToMuMu_M-50",
-          # "DYJetsToMuMu_M-10to50",
-          # "WJetsToLNu",
+          "DYJetsToMuMu_M-10to50",
+          "WJetsToLNu",
           "QCD_Pt-15To20",
           "QCD_Pt-20To30",
           "QCD_Pt-30To50",
@@ -43,7 +43,7 @@ class TTAlpsABCDConfigHelper:
           # "QCD_Pt-300To470",
           # "QCD_Pt-470To600",
           # "QCD_Pt-600To800",
-          # "QCD_Pt-800To1000",
+          "QCD_Pt-800To1000",
           # "QCD_Pt-1000",
       ]
     elif category == "_PatDSA":
@@ -109,7 +109,7 @@ class TTAlpsABCDConfigHelper:
           # "QCD_Pt-300To470",
           # "QCD_Pt-470To600",
           # "QCD_Pt-600To800",
-          # "QCD_Pt-800To1000",
+          "QCD_Pt-800To1000",
           # "QCD_Pt-1000",
       ]
     else:
