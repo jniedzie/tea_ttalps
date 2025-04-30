@@ -14,11 +14,12 @@ cross_sections = get_cross_sections(year)
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR"
+# do_region = "SR"
 # do_region = "JPsiCR"
+# do_region = "JPsiCRwithIso"
 # do_region = "ttZCR"
 # do_region = "VVCR"
-# do_region = "QCDCR"
+do_region = "QCDCR"
 # do_region = "WjetsCR"
 # do_region = "bbCR"
 
@@ -27,75 +28,102 @@ do_data = False
 if do_region == "SR":
   do_data = False
 
-
-# collection = "GoodPFIsoDimuonVertex"
-collection = "BestPFIsoDimuonVertex"
-# collection = "BestDimuonVertex"
+if do_region == "SR" or do_region == "bbCR" or do_region == "QCDCR" or do_region == "JPsiCRwithIso":
+  background_collection = "BestPFIsoDimuonVertex"
+  signal_collection = "BestPFIsoDimuonVertex"
+elif do_region == "JPsiCR":
+  background_collection = "BestDimuonVertex"
+  signal_collection = "BestPFIsoDimuonVertex"
 
 # category = ""
-# category = "_Pat"
+category = "_Pat"
 # category = "_PatDSA"
-category = "_DSA"
+# category = "_DSA"
 
 # binning always expressed in bin numbers, not values
-if category == "_Pat":
-  # optimized before we removed the leading tight muon and with some bugs:
-  # variable_1 = "logLxySignificance"
-  # variable_2 = "log3Dangle"
-  # abcd_point = (22, 2)
+optimal_parameters = {
+    # optimized on MC (rebin 4):
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),  # best
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "leadingPt", (24, 11), "D"),
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
+    # ("_Pat", "SR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
+    # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (9, 7), "A"),
 
-  # optimized after we removed the leading tight muon and fixed some bugs:
-  variable_1 = "logAbsCollinearityAngle"
-  variable_2 = "logPt"
-  abcd_point = (11, 10)
-  signal_bin = "D"
-elif category == "_PatDSA":
-  # optimized before we removed the leading tight muon and with some bugs:
-  # variable_1 = "dPhi"
-  # variable_2 = "logDxyPVTraj1"
-  # abcd_point = (15, 12)
+    # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
+    # ("_Pat", "JPsiCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
+    # ("_Pat", "JPsiCR"): ("invMass", "logDeltaSquaredIso03", (9, 7), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "leadingPt", (24, 11), "D"),
+    # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
 
-  # optimized after we removed the leading tight muon and fixed some bugs:
-  variable_1 = "dPhi"
-  variable_2 = "logDxyPVTraj1"
-  abcd_point = (15, 15)
-  signal_bin = "D"
-elif category == "_DSA":
-  # optimized before we removed the leading tight muon and with some bugs:
-  # variable_1 = "logLxy"
-  # variable_2 = "log3Dangle"
-  # abcd_point = (19, 16)
+    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logPt", (9, 14), "D"),
+    # ("_Pat", "bbCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
+    # ("_Pat", "bbCR"): ("invMass", "logDeltaSquaredIso03", (8, 7), "A"),
+    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "leadingPt", (23, 13), "D"),
+    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
 
-  # optimized after we removed the leading tight muon and fixed some bugs:
-  variable_1 = "logLeadingPt"
-  variable_2 = "dPhi"
-  abcd_point = (10, 13)
-  signal_bin = "A"
+    # ("_Pat", "bbCR"): ("absPtLxyDPhi2", "logPt", (10, 19), "D"),
+    # ("_Pat", "bbCR"): ("invMass", "eta", (17, 7), "A"),
+    # ("_Pat", "bbCR"): ("log3Dangle", "logPt", (10, 8), "D"),
+    # ("_Pat", "bbCR"): ("logInvMass", "logDeltaIso03", (12, 17), "A"),
+    # ("_Pat", "bbCR"): ("logInvMass", "logDeltaSquaredIso04", (11, 17), "A"),
+    # ("_Pat", "bbCR"): ("logPt", "dPhi", (4, 16), "A"),
+    # ("_Pat", "bbCR"): ("pt", "dEta", (10, 5), "A"),
+    # ("_Pat", "bbCR"): ("pt", "dPhi", (4, 4), "A"),
+    
+    # ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
+    # ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "logPt", (11, 11), "D"),
+    ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "pt", (22, 10), "D"),
+    
+    # ("_Pat", "JPsiCRwithIso"): ("log3Dangle", "logDeltaIso04", (12, 16), "A"),
+    # ("_Pat", "JPsiCRwithIso"): ("log3Dangle", "logDeltaSquaredIso04", (10, 16), "A"),
+    # ("_Pat", "JPsiCRwithIso"): ("log3Dangle", "logDisplacedTrackIso04Dimuon2", (24, 15), "A"),
+    # ("_Pat", "JPsiCRwithIso"): ("logAbsCollinearityAngle", "eta", (20, 12), "D"),
+    # ("_Pat", "JPsiCRwithIso"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso04Dimuon1", (20, 15), "A"),
+    
+
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (21, 19), "A"),
+
+    ("_PatDSA", "SR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
+    ("_PatDSA", "JPsiCR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
+    ("_DSA", "SR"): ("logLeadingPt", "dPhi", (10, 13), "A"),
+    ("_DSA", "JPsiCR"): ("logLeadingPt", "dPhi", (10, 13), "A"),
+
+    # optimized on MC (rebin 10):
+    # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logPt", (4, 9), "D"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso03Dimuon1", (9, 7), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso04Dimuon1", (8, 6), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (9, 8), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso04Dimuon1", (9, 7), "A"),
+    # ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon1", (9, 6), "A"),
+
+    # optimized on data (rebin 4):
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (13, 16), "A"),
+
+    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logPt", (9, 14), "D"),
+    # ("_Pat", "bbCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
+    # ("_Pat", "bbCR"): ("invMass", "logDeltaSquaredIso03", (8, 7), "A"),
+    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "leadingPt", (23, 13), "D"),
+    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
+
+    # optimized on data (rebin 10):
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso03Dimuon1", (6, 6), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso04Dimuon1", (7, 6), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (10, 7), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso04Dimuon1", (7, 5), "A"),  # N_min not satisfied
+    # ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon1", (9, 6), "A"),
 
 
-# this is obsolete, and also has to move to bin-based rather than value-based
-optimal_points = {
-    # optimizing on significance
-    "JPsi_noIso_mc": (-0.9, 0.86),
-    "JPsi_noIso_data": (-0.54, 0.42),  # all identical
-
-    "JPsi_iso_mc": (-1.06, 0.22),  # outdated
-    "JPsi_iso_data": (-1.18, 0.46),
-
-    "SR_noIso_mc": (0.46, -1.94),  # all identical
-    "SR_iso_mc": (-0.78, 0.34),
-
-    "SR_iso_PATDSA_muEtaLt1p2_muPtGt10_mc": (0.1, -0.54),  # middle ground
-
-    "QCD_iso_mc": (0.02, 0.82),
-    "QCD_iso_data": (0.46, 1.14),
-
-    # optimizing on error (same results on closure)
-    "JPsi_noIso_mc_optimalError": (-1.22, 0.06),  # outdated
-    "JPsi_noIso_data_optimalError": (-1.38, -1.26),  # outdated
 }
-
-# abcd_point = optimal_points["QCD_iso_data"]
+if (category, do_region) in optimal_parameters:
+  variable_1 = optimal_parameters[(category, do_region)][0]
+  variable_2 = optimal_parameters[(category, do_region)][1]
+  abcd_point = optimal_parameters[(category, do_region)][2]
+  signal_bin = optimal_parameters[(category, do_region)][3]
+else:
+  variable_1 = optimal_parameters[(category, "SR")][0]
+  variable_2 = optimal_parameters[(category, "SR")][1]
+  abcd_point = optimal_parameters[(category, "SR")][2]
+  signal_bin = optimal_parameters[(category, "SR")][3]
 
 optimization_param = "significance"
 # optimization_param = "error"
@@ -124,7 +152,7 @@ standard_rebin = 1
 rebin_2D = 4
 
 histogram = Histogram2D(
-    name=f"{collection}_{variable_1}_vs_{variable_2}{category}",
+    name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}",
     norm_type=NormalizationType.to_lumi,
     x_rebin=rebin_2D,
     y_rebin=rebin_2D,
@@ -137,7 +165,7 @@ histogram = Histogram2D(
 canvas_size = 200
 
 # axes limits for the 1D projection
-if do_region == "JPsiCR":
+if do_region == "JPsiCR" or do_region == "JPsiCRwithIso":
   y_max = 50
   y_max_ratio = 3
 elif do_region == "SR":
@@ -209,42 +237,57 @@ nice_names = {
 base_path = "/data/dust/user/jniedzie/ttalps_cms"
 # base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-if do_region == "JPsiCR":
-  skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
-elif do_region == "ttZCR":
-  skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
-elif do_region == "SR":
-  # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "")
-  skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-elif do_region == "VVCR":
-  skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")
-elif do_region == "QCDCR":
-  skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
-elif do_region == "WjetsCR":
-  skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
-elif do_region == "bbCR":
-  skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
+skims = {
+    "SR": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    "JPsiCR": (
+        ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    ),
+    "JPsiCRwithIso": (
+        ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuonsWithIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    ),
+    "ttZCR": ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons"),
+    "VVCR": ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons"),
+    "QCDCR": (
+        ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    ),
+    "WjetsCR": ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons"),
+    "bbCR": (
+        ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    )
+}
+
+if isinstance(skims[do_region][0], str):
+  background_skim = skims[do_region]
+  signal_skim = skims[do_region]
+else:
+  background_skim = skims[do_region][0]
+  signal_skim = skims[do_region][1]
 
 username = os.getenv("USER")
-output_path = f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_{do_region}_{collection}{skim[2]}"
-
-if do_data:
-  output_path += "_data"
-else:
-  output_path += "_mc"
-
-
+output_path = (
+    f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_"
+    f"{do_region}_{background_collection}{background_skim[2]}"
+)
+output_path += "_data" if do_data else "_mc"
 output_path += category
 
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}"
+background_hist_path = (
+    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{background_skim[1]}{background_skim[2]}"
+)
+signal_hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{signal_skim[1]}{signal_skim[2]}"
 
 signal_path_pattern = "signals/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
 
-data_path = f"collision_data2018/SingleMuon2018_{skim[0]}_{hist_path}.root"
+data_path = f"collision_data2018/SingleMuon2018_{background_skim[0]}_{background_hist_path}.root"
 
 # signal points for which to run ABCD analysis
-masses = ["0p35", "1", "2", "12", "30", "60"]
+masses = ["0p35", "2", "12", "30", "60"]
 ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 
 # masses = ["0p35", "1", "2"]
@@ -261,10 +304,10 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 
 config_helper = TTAlpsABCDConfigHelper(
     year,
-    skim,
+    background_skim,
     category,
     base_path,
-    hist_path,
+    background_hist_path,
 )
 
 background_samples, backgrounds = config_helper.get_background_samples()
