@@ -1,3 +1,4 @@
+#include "ArgsManager.hpp"
 #include "ConfigManager.hpp"
 #include "CutFlowManager.hpp"
 #include "Event.hpp"
@@ -8,12 +9,10 @@
 #include "TTAlpsCuts.hpp"
 #include "TTAlpsObjectsManager.hpp"
 #include "UserExtensionsHelpers.hpp"
-#include "ArgsManager.hpp"
 
 using namespace std;
 
 int main(int argc, char **argv) {
-
   auto args = make_unique<ArgsManager>(argc, argv);
   // check if optional value "config" is present
   if (!args->GetString("config").has_value()) {
@@ -23,14 +22,14 @@ int main(int argc, char **argv) {
 
   ConfigManager::Initialize(args->GetString("config").value());
   auto &config = ConfigManager::GetInstance();
-  
+
   if (args->GetString("input_path").has_value()) {
     config.SetInputPath(args->GetString("input_path").value());
   }
   if (args->GetString("output_trees_path").has_value()) {
     config.SetTreesOutputPath(args->GetString("output_trees_path").value());
   }
-  
+
   auto eventReader = make_shared<EventReader>();
   auto eventWriter = make_shared<EventWriter>(eventReader);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
@@ -47,16 +46,16 @@ int main(int argc, char **argv) {
   info() << "Registering cuts" << endl;
 
   cutFlowManager->RegisterCut("initial");
-  if(applyLooseSkimming){
+  if (applyLooseSkimming) {
     cutFlowManager->RegisterCut("goldenJson");
     cutFlowManager->RegisterCut("trigger");
     cutFlowManager->RegisterCut("metFilters");
   }
 
-  if(applyTTZLikeSkimming) ttAlpsCuts->RegisterTTZLikeCuts(cutFlowManager);
+  if (applyTTZLikeSkimming) ttAlpsCuts->RegisterTTZLikeCuts(cutFlowManager);
 
   eventProcessor->RegisterCuts(cutFlowManager);
-    
+
   info() << "Starting events loop" << endl;
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
@@ -68,9 +67,7 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
-    
-
-    if(applyLooseSkimming){
+    if (applyLooseSkimming) {
       if (!eventProcessor->PassesGoldenJson(event)) continue;
       cutFlowManager->UpdateCutFlow("goldenJson");
 
@@ -81,12 +78,12 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("metFilters");
     }
 
-    if(applyTTZLikeSkimming){
-      if(!ttAlpsCuts->PassesTTZLikeCuts(event, cutFlowManager)) continue;
+    if (applyTTZLikeSkimming) {
+      if (!ttAlpsCuts->PassesTTZLikeCuts(event, cutFlowManager)) continue;
     }
 
-    if(!eventProcessor->PassesEventCuts(event, cutFlowManager)) continue;
-    
+    if (!eventProcessor->PassesEventCuts(event, cutFlowManager)) continue;
+
     eventWriter->AddCurrentEvent("Events");
   }
   cutFlowManager->Print();

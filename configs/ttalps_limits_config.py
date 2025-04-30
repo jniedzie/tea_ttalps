@@ -1,7 +1,7 @@
 from Sample import Sample, SampleType
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
-from ttalps_cross_sections import get_cross_sections
+from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
 from ttalps_samples_list import dasSignals2018
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 import ttalps_abcd_config as abcd_config
@@ -16,11 +16,19 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms/"
 combine_path = "/afs/desy.de/user/j/jniedzie/combine/CMSSW_14_1_0_pre4/src/"
 
 # SR dimuon cuts applied
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{abcd_config.skim[1]}{abcd_config.skim[2]}"
+signal_hist_path = (
+    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{abcd_config.signal_skim[1]}{abcd_config.signal_skim[2]}"
+)
+
+background_hist_path = (
+    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{abcd_config.background_skim[1]}{abcd_config.background_skim[2]}"
+)
 
 base_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps"
 
-datacards_output_path = f"{base_output_path}/limits/datacards/"
+datacards_output_path = f"{base_output_path}/limits/datacards_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/plots/"
 results_output_path = f"{base_output_path}/limits/results/"
 
@@ -47,7 +55,7 @@ for name in dasSignals2018:
   signal_samples.append(
       Sample(
           name="signal_"+signal_name,
-          file_path=f"{base_path}/signals/{signal_name}/{abcd_config.skim[0]}/{hist_path}/histograms.root",
+          file_path=f"{base_path}/signals/{signal_name}/{abcd_config.signal_skim[0]}/{signal_hist_path}/histograms.root",
           type=SampleType.signal,
           cross_sections=cross_sections,
       )
@@ -63,10 +71,10 @@ for name in dasSignals2018:
 
 config_helper = TTAlpsABCDConfigHelper(
     year,
-    abcd_config.skim,
+    abcd_config.background_skim,
     abcd_config.category,
     base_path,
-    hist_path,
+    background_hist_path,
 )
 
 background_samples, backgrounds = config_helper.get_background_samples()
@@ -90,6 +98,7 @@ else:
   abcd_point = abcd_config.abcd_point
   rebin_2D = abcd_config.rebin_2D
   histogram = abcd_config.histogram
+  signal_bin = abcd_config.signal_bin
 
 
 # List nuisance parameters (they will only be added for processes for which they were listed)

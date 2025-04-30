@@ -51,6 +51,8 @@ JPsiDimuonVertexCuts = {
     "maxDeltaPixelHits": [9999.0, 9999.0, 9999.0],
 }
 
+JPsiDimuonIsoVertexCuts = JPsiDimuonVertexCuts
+
 # good object definitions for ttZ CR
 ZDimuonVertexCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA

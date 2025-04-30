@@ -168,7 +168,7 @@ dasSignalsCentral2018 = {
 dasSignals2018 = {
     key: value for d in (
         dasSignals2018_0p35GeV,
-        dasSignals2018_1GeV,
+        # dasSignals2018_1GeV,
         dasSignals2018_2GeV,
         dasSignals2018_12GeV,
         dasSignals2018_30GeV,
