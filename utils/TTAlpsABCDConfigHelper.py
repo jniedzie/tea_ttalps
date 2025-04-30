@@ -5,12 +5,12 @@ from Logger import fatal
 
 
 class TTAlpsABCDConfigHelper:
-  def __init__(self, year, skim, category, base_path, hist_path):
+  def __init__(self, year, background_skim, category, base_path, background_hist_path):
     self.year = year
-    self.skim = skim
+    self.background_skim = background_skim
     self.category = category
     self.base_path = base_path
-    self.hist_path = hist_path
+    self.background_hist_path = background_hist_path
     self.cross_sections = get_cross_sections(year)
 
     if category == "_Pat":
@@ -44,7 +44,7 @@ class TTAlpsABCDConfigHelper:
           # "QCD_Pt-470To600",
           # "QCD_Pt-600To800",
           "QCD_Pt-800To1000",
-          # "QCD_Pt-1000",
+          "QCD_Pt-1000",
       ]
     elif category == "_PatDSA":
       self.backgrounds_to_exclude = [
@@ -97,7 +97,7 @@ class TTAlpsABCDConfigHelper:
           # "ST_tW_top",
           # "ST_t-channel_top",
           # "DYJetsToMuMu_M-50",
-          # "DYJetsToMuMu_M-10to50",
+          "DYJetsToMuMu_M-10to50",
           "WJetsToLNu",
           "QCD_Pt-15To20",
           "QCD_Pt-20To30",
@@ -147,7 +147,7 @@ class TTAlpsABCDConfigHelper:
       background_samples.append(
           Sample(
               name=name.split("/")[-1],
-              file_path=f"{self.base_path}/{name}/{self.skim[0]}/{self.hist_path}/histograms.root",
+              file_path=f"{self.base_path}/{name}/{self.background_skim[0]}/{self.background_hist_path}/histograms.root",
               type=SampleType.background,
               cross_sections=self.cross_sections,
           )

@@ -85,22 +85,25 @@ muonVertexBaselineSelection = [
 # dimuonSelection and muonVertexCollection:
 #  - uncomment the dimuonSelection you want to use and the muonVertexCollection will be given automatically
 #  - to not use dimuonSelection and muonVertexCollection: set dimuonSelection to None
-dimuonSelection = "SRDimuonVertex"
+# dimuonSelection = "SRDimuonVertex"
+# dimuonSelection = "JPsiDimuonIsoVertex"
 # dimuonSelection = "JPsiDimuonVertex"
 # dimuonSelection = "ZDimuonVertex"
-# dimuonSelection = None
+dimuonSelection = None
+
 muonVertexCollections = {
     "SRDimuonVertex": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "JPsiDimuonIsoVertex": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "JPsiDimuonVertex": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "ZDimuonVertex": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
 }
-muonVertexCollection = None
-if dimuonSelection is not None:
-  muonVertexCollection = muonVertexCollections[dimuonSelection]
-# input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
-# muonVertexCollectionInput = "LooseMuonsVertexSegmentMatch"
-muonVertexCollectionInput = "LooseNonLeadingMuonsVertexSegmentMatch"
+muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None
 
+# input for muonVertexCollection, options are:
+muonVertexCollectionInput = None
+# muonVertexCollectionInput = "LooseMuonsVertexSegmentMatch"
+# muonVertexCollectionInput = "LooseNonLeadingMuonsVertexSegmentMatch"
+# muonVertexCollectionInput = "LooseNonTriggerMuonsVertexSegmentMatch"
 
 histParams = ()
 histParams2D = ()
@@ -137,6 +140,6 @@ if runFakesHistograms:
   histParams += helper.get_fakes_params()
 
 if runMuonTriggerObjectsHistograms:
-    histParams += helper.get_muon_trigger_objects_params()
+  histParams += helper.get_muon_trigger_objects_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()
