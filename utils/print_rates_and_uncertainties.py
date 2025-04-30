@@ -102,10 +102,10 @@ def main():
 
   rates, uncertainties = load_uncertainties(config)
 
-  # get first signal key in uncertainties dict
-  signal_name = list(uncertainties.keys())[0]
-  if signal_name == "background":
-    signal_name = list(uncertainties.keys())[1]
+  # explicitly select the first signal key, excluding "background"
+  signal_name = next(key for key in uncertainties.keys() if key != "background")
+  
+  
 
   background_rate = rates.pop("background")
   background_err = uncertainties[signal_name]["stat_err_bkg"] * background_rate
