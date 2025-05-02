@@ -108,6 +108,11 @@ dasData2018_standard = {
     "collision_data2018/SingleMuon2018B": "/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
     "collision_data2018/SingleMuon2018C": "/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
     "collision_data2018/SingleMuon2018D": "/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
+    
+    "collision_data2018/EGamma2018A": "/EGamma/Run2018A-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
+    "collision_data2018/EGamma2018B": "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
+    "collision_data2018/EGamma2018C": "/EGamma/Run2018C-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
+    "collision_data2018/EGamma2018D": "/EGamma/Run2018D-UL2018_MiniAODv2_NanoAODv9-v3/NANOAOD",
 }
 dasData2018 = {
     "collision_data2018/SingleMuon2018A": "/SingleMuon/lrygaard-LLPnanoAODv1A_Run2018A-12Nov2019_UL2018-v5-00000000000000000000000000000000/USER",
