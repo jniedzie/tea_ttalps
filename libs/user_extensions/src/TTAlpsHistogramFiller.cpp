@@ -1107,7 +1107,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 
   try {
     collection = event->GetCollection(collectionName);
-  } catch (const std::exception &e) {
+  } catch (const Exception &e) {
     warn() << "Collection " << collectionName << " not found in event." << endl;
     return;
   }
