@@ -25,6 +25,8 @@ SRDimuonVertexCuts = {
     "maxDeltaPixelHits": [9999.0, 9999.0, 9999.0],
 }
 
+SRDimuonNoIsoVertexCuts = SRDimuonVertexCuts
+
 # good object definitions for JPsi CR
 JPsiDimuonVertexCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
