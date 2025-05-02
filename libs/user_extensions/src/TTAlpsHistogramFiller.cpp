@@ -354,8 +354,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   try {
     auto vertexCollection = event->GetCollection(vertexName);
     FillMuonVertexHistograms(event, vertexCollection, vertexName);
-  }
-  catch (const Exception &e) {
+  } catch (const Exception &e) {
     warn() << "Couldn't find muon vertex collection: " << vertexName << endl;
   }
 }
@@ -369,7 +368,15 @@ void TTAlpsHistogramFiller::FillNminus1HistogramsForMuonVertexCollection(const s
     if (cut == "BestDimuonVertex") continue;
 
     string nminus1CollectionName = collectionName + "Nminus1" + cut;
-    auto bestMuonVertex = event->GetCollection(nminus1CollectionName);
+
+    shared_ptr<PhysicsObjects> bestMuonVertex;
+
+    try {
+      bestMuonVertex = event->GetCollection(nminus1CollectionName);
+    } catch (const Exception &e) {
+      warn() << "Couldn't find muon vertex collection: " << nminus1CollectionName << endl;
+      continue;
+    }
     if (bestMuonVertex->size() < 1) continue;
     if (bestMuonVertex->size() > 1) {
       warn() << "More than one vertex in collection: " << collectionName << ". Expected only one but the size is " << bestMuonVertex->size()
@@ -1096,7 +1103,14 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   string collectionName = muonVertexCollection.first;
-  auto collection = event->GetCollection(collectionName);
+  shared_ptr<PhysicsObjects> collection;
+
+  try {
+    collection = event->GetCollection(collectionName);
+  } catch (const std::exception &e) {
+    warn() << "Collection " << collectionName << " not found in event." << endl;
+    return;
+  }
   if (collection->size() < 1) return;
 
   for (auto vertex : *collection) {
@@ -1195,17 +1209,19 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
 
     int mother1_pid = muon1->IsDSA() ? 91 : 90;
     int mother2_pid = muon2->IsDSA() ? 91 : 90;
-    if (genMuon1) mother1_pid = genMuons->at(genMuon1->GetMotherIndex())->Get("pdgId");
-    else{
+    if (genMuon1)
+      mother1_pid = genMuons->at(genMuon1->GetMotherIndex())->Get("pdgId");
+    else {
       auto genParticle = muon1->GetGenMuon(genMuons, deltaR, true);
       if (genParticle) mother1_pid = 1000000 + (int)genParticle->Get("pdgId");
     }
-    if (genMuon2) mother2_pid = genMuons->at(genMuon2->GetMotherIndex())->Get("pdgId");
+    if (genMuon2)
+      mother2_pid = genMuons->at(genMuon2->GetMotherIndex())->Get("pdgId");
     else {
       auto genParticle = muon2->GetGenMuon(genMuons, deltaR, true);
       if (genParticle) mother2_pid = 1000000 + (int)genParticle->Get("pdgId");
     }
-    
+
     histogramsHandler->Fill(collectionName + "_" + category + "_motherPid1_vs_motherPid2", mother1_pid, mother2_pid);
     histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2", mother1_pid, mother2_pid);
 
