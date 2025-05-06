@@ -28,6 +28,8 @@ class TTAlpsEvent {
   // returns 2 muons from the dimuon vertex (if there is one defined in the config), and the leading remaining muon
   std::shared_ptr<NanoMuons> GetTTAlpsEventMuons();
 
+  std::map<std::string,float> GetJpsiScaleFactors();
+
   std::shared_ptr<PhysicsObjects> GetGenALPs();
   std::shared_ptr<MuonPair> GetGenDimuonFromALP();
   std::vector<int> GetGenMuonIndicesFromALP();

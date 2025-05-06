@@ -1,5 +1,5 @@
 # good object definitions for SR
-SRDimuonVertexCuts = {
+SRDimuonCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
     "maxChargeProduct": [-0.1, -0.1, -0.1],
     # SR mass cut
@@ -26,7 +26,7 @@ SRDimuonVertexCuts = {
 }
 
 # good object definitions for JPsi CR
-JPsiDimuonVertexCuts = {
+JPsiDimuonCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
     "maxChargeProduct": [-0.1, -0.1, -0.1],
     # J/Psi mass cut
@@ -52,7 +52,7 @@ JPsiDimuonVertexCuts = {
 }
 
 # good object definitions for ttZ CR
-ZDimuonVertexCuts = {
+ZDimuonCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
     "maxChargeProduct": [-0.1, -0.1, -0.1],
     # Z mass cut

@@ -3,6 +3,8 @@ from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
+from ttalps_histogrammer_files_config import skim, applyScaleFactors
+
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
@@ -49,14 +51,6 @@ specialBranchSizes = {
 pileupScaleFactorsPath = "/data/dust/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
 pileupScaleFactorsHistName = "pileup_scale_factors"
 
-applyScaleFactors = {
-    "muon": True,
-    "muonTrigger": True,
-    "pileup": True,
-    "bTagging": True,
-    "PUjetID": True,
-}
-
 # For the signal histogramming all given mathcing methods are applied separately to histograms
 # More than one given method will not affect the other histograms
 # Matching methods implemented are:
@@ -70,6 +64,8 @@ muonMatchingParams = {
     # "OuterDR" : 0.1
     # "ProxDR" : 0.1
 }
+if skim[1] == "":
+    muonMatchingParams = {}
 
 muonVertexBaselineSelection = [
     "InvariantMassCut",
@@ -85,21 +81,24 @@ muonVertexBaselineSelection = [
 # dimuonSelection and muonVertexCollection:
 #  - uncomment the dimuonSelection you want to use and the muonVertexCollection will be given automatically
 #  - to not use dimuonSelection and muonVertexCollection: set dimuonSelection to None
-dimuonSelection = "SRDimuonVertex"
-# dimuonSelection = "JPsiDimuonVertex"
-# dimuonSelection = "ZDimuonVertex"
-# dimuonSelection = None
+dimuonSelection = skim[1]
+if dimuonSelection == "":
+    dimuonSelection = None
 muonVertexCollections = {
-    "SRDimuonVertex": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
-    "JPsiDimuonVertex": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
-    "ZDimuonVertex": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
+    "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "JPsiDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
+    "ZDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
 }
 muonVertexCollection = None
 if dimuonSelection is not None:
-  muonVertexCollection = muonVertexCollections[dimuonSelection]
+    muonVertexCollection = muonVertexCollections[dimuonSelection]
 # input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
-muonVertexCollectionInput = "LooseNonLeadingMuonsVertexSegmentMatch"
-
+muonVertexCollectionInput = skim[2]
+if muonVertexCollectionInput == "":
+    if muonMatchingParams != {}:
+        muonVertexCollectionInput = "LooseMuonsVertexSegmentMatch"
+    else:
+        muonVertexCollectionInput = None
 
 histParams = ()
 histParams2D = ()

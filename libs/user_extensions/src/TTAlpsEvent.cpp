@@ -56,25 +56,26 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
 
   auto muons = GetTTAlpsEventMuons();
   map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
+
+  map<string,float> jpsiSF = GetJpsiScaleFactors();
   
   map<string,float> scaleFactorMap;
-  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
-  for (auto &[name, weight]: muonTriggerSF) {
-    if (name == "systematic") continue;
-    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF[name] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"];
+  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"] * jpsiSF["systematic"];
+  vector<map<string, float>*> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &jpsiSF};
+
+  for (auto scaleFactorMapPtr : scaleFactorMaps) {
+    for (auto &[name, weight] : *scaleFactorMapPtr) {
+      if (name == "systematic") continue;
+
+      scaleFactorMap[name] = genWeight * pileupSF
+          * (scaleFactorMapPtr == &muonTriggerSF ? (*scaleFactorMapPtr)[name] : muonTriggerSF["systematic"])
+          * (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"])
+          * (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"])
+          * (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"])
+          * (scaleFactorMapPtr == &jpsiSF ? (*scaleFactorMapPtr)[name] : jpsiSF["systematic"]);
+    }
   }
-  for (auto &[name, weight]: btagSF) {
-    if (name == "systematic") continue;
-    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF[name] * PUjetIDSF["systematic"] * muonSF["systematic"];
-  }
-  for (auto &[name, weight]: PUjetIDSF) {
-    if (name == "systematic") continue;
-    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF[name] * muonSF["systematic"];
-  }
-  for (auto &[name, weight]: muonSF) {
-    if (name == "systematic") continue;
-    scaleFactorMap[name] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF[name];
-  }
+  
   return scaleFactorMap;
 }
 
@@ -114,6 +115,20 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
   }
   if (GetLeadingMuon(allMuons)) muons->push_back(GetLeadingMuon(allMuons));
   return muons;
+}
+
+map<string,float> TTAlpsEvent::GetJpsiScaleFactors() {
+  map<string,float> jpsiSF;
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return jpsiSF;
+
+  auto vertex = event->GetCollection(muonVertexCollection.first);
+  // category is set to "" if no vertex is found - this is needed to set all SFs names for the first event
+  string dimuonCategory = "";
+  if (vertex->size() > 0) dimuonCategory = asNanoDimuonVertex(vertex->at(0),event)->GetVertexCategory();
+
+  auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
+  jpsiSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("JpsiInvMassSFs", dimuonCategory);
+  return jpsiSF;
 }
 
 string TTAlpsEvent::GetTTbarEventCategory() {
