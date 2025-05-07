@@ -11,6 +11,9 @@ scaleFactors = get_scale_factors(year)
 nEvents = -1
 printEveryNevents = 10000
 
+# Should dimuon checks be skipped? Used for tt̄ CR, where we don't have dimuons
+ignoreDimuons = False
+
 runDefaultHistograms = True
 runLLPTriggerHistograms = False
 runPileupHistograms = False
