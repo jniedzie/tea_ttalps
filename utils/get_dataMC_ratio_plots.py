@@ -59,7 +59,7 @@ def get_inital_weight_sum(root_file):
 def get_final_weight_sum(root_file, hist_name):
     cutflow_histogram = root_file.Get(hist_name)
     if not cutflow_histogram:
-        print("Error: Histogram "+hist_name+" not found in the file " + file_path)
+        print("Error: Histogram "+hist_name+" not found")
         root_file.Close()
     return cutflow_histogram.Integral()
 
@@ -86,12 +86,11 @@ def get_data_hist(ratio_name, hist_name, data_sample):
     # dataset = data
     title = f"{ratio_name}_{hist_name}_{random.randint(1, 1000)}"
 
-    # file_path = os.path.join(base_path, f"{dataset}_{skim}{ratio_name}_{hist_path}.root")
     root_file = get_root_file(data_sample.file_path)
 
     histogram = deepcopy(root_file.Get(hist_name))
     if not histogram or histogram.ClassName() == "TObject":
-        print("Error: Histogram "+hist_name+" not found in the file " + file_path)
+        print("Error: Histogram "+hist_name+" not found in the file " + data_sample.file_path)
         root_file.Close()
 
     rebinned_histogram = deepcopy(get_rebinned_histogram(histogram, title))
