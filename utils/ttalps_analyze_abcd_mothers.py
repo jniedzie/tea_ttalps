@@ -10,12 +10,13 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 
-hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
 
 # process = "backgrounds2018/TTTo2L2Nu"
-# process = "backgrounds2018/TTToSemiLeptonic"
+process = "backgrounds2018/TTToSemiLeptonic"
 # process = "backgrounds2018/ST_tW_antitop"
 # process = "backgrounds2018/ST_t-channel_antitop"
 # process = "backgrounds2018/ST_tW_top"
@@ -24,65 +25,56 @@ hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
 # process = "signals/tta_mAlp-1GeV_ctau-1e-5mm"
 # process = "signals/tta_mAlp-1GeV_ctau-1e0mm"
 # process = "signals/tta_mAlp-1GeV_ctau-1e3mm"
-process = "signals/tta_mAlp-12GeV_ctau-1e0mm"
+# process = "signals/tta_mAlp-12GeV_ctau-1e0mm"
 
-input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}/histograms.root"
+input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 
+# input_path = "../test.root"
 
 # variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
+variants = ["", "_lowBlob", "_centralBlob"]
 # variants = [""]
 
-variants = ["", "_mysteriousBlob"]
+# variants = ["", "_mysteriousBlob"]
+
+# category = ""
+category = "_Pat"
+# category = "_PatDSA"
+# category = "_DSA"
 
 # min_fraction_to_show = 0.15
-min_fraction_to_show = 0.0
+min_fraction_to_show = 0.01
 
 code_to_name = {
-    -1: "d~",
-    1: "d",
-    -2: "u~",
-    2: "u",
-    -4: "c~",
-    4: "c",
-    -5: "b~",
-    5: "b",
-    -6: "t~",
-    6: "t",
-    -13: "mu+",
-    13: "mu-",
-    -15: "tau+",
-    15: "tau-",
-    -21: "g",
-    21: "g",
-    22: "gamma",
-    -23: "Z~",
-    23: "Z",
-    -24: "W-",
-    24: "W+",
-    
-    113: "rho",
-    223: "omega",
-    333: "phi",
-    
-    -521: "B-",
-    521: "B+",
-    -511: "B0~",
-    511: "B0",
-    -411: "D-",
-    411: "D+",
-    -421: "D0~",
-    421: "D0",
-    -431: "D_s-",
-    431: "D_s+",
-    -443: "J/#psi",
-    443: "J/#psi",
-    -531: "B_s0~",
-    531: "B_s0",
+    (-1, 1): "d",
+    (-2, 2): "u",
+    (-3, 3): "s",
+    (-4, 4): "c",
+    (-5, 5): "b",
+    (-6, 6): "t",
 
-    90: "X_{PAT}",  # no gen matching reco
-    91: "X_{DSA}",
-    
-    54: "ALP",
+    (-11, 11): "e",
+    (-13, 13): "mu",
+
+    (-21, 21): "g",
+    (-22, 22): "gamma",
+    (-23, 23): "Z",
+    (-15, 15, -24, 24): "W",  # putting W and τ together, because in our case the tau comes from a W anyway
+
+    (113, ): "rho",
+    (221, ): "pi0",
+    (223, ): "omega",
+    (333, ): "phi",
+    (553, ): "Upsilon",
+
+    (-443, 443): "J/#psi",
+
+    (-521, 521, -511, 511, -531, 531, -411, 411, -421, 421, -431, 431): "B/D",
+
+    (90, ): "X_{PAT}",  # no gen matching reco
+    (91, ): "X_{DSA}",
+
+    (54, ): "ALP",
 }
 
 
@@ -145,23 +137,60 @@ def merge_charge_conjugate(results):
   return new_results
 
 
-def main():
-  file = ROOT.TFile(input_path)
+def replace_keys_with_names(results):
+  new_results = {}
+  for key, value in results.items():
+    part0 = None
+    part1 = None
 
-  hist_name = "BestPFIsoDimuonVertex_motherPid1_vs_motherPid2"
+    for codes, name in code_to_name.items():
+      if key[0] in codes:
+        part0 = name
+      if key[1] in codes:
+        part1 = name
+
+    if part0 is None:
+      print(f"Unknown code: {key[0]}")
+      part0 = str(key[0])
+
+    if part1 is None:
+      print(f"Unknown code: {key[1]}")
+      part1 = str(key[1])
+
+    new_results[(part0, part1)] = value
+  return new_results
+
+
+def main():
+  ROOT.gROOT.SetBatch(True)
+
+  file = ROOT.TFile(input_path)
+  info(f"\n\nOpening file {input_path}\n\n")
+
+  hist_name = f"BestPFIsoDimuonVertex{category}_motherPid1_vs_motherPid2"
 
   for variant in variants:
     print(f"\n\nvariant {variant}")
 
     hist = file.Get(hist_name + variant)
-    results = hist_to_dict(hist)
 
+    if hist is None or not isinstance(hist, ROOT.TH2):
+      warn(f"{hist_name + variant} not found in file {input_path}")
+      continue
+
+    if hist.GetEntries() == 0:
+      warn(f"{hist_name + variant} has no entries")
+      continue
+
+    results = hist_to_dict(hist)
+    results = replace_keys_with_names(results)
     results = merge_identical(results)
-    results = merge_charge_conjugate(results)
-    results = sorted(results.items(), key=lambda x: x[1], reverse=True)
+    # results = merge_charge_conjugate(results)
+
+    results = dict(sorted(results.items(), key=lambda item: item[1], reverse=True))
 
     has_negative = False
-    for key, value in results:
+    for value in results.values():
       if value < 0:
         has_negative = True
         break
@@ -169,28 +198,16 @@ def main():
     if has_negative:
       error("Negative values found")
 
-    sum_all = sum([value for _, value in results])
+    sum_all = sum(results.values())
 
-    for key, value in results:
+    for key, value in results.items():
       if value/sum_all < min_fraction_to_show:
         continue
 
-      if key[0] in code_to_name:
-        part0 = code_to_name[key[0]]
-      else:
-        print(f"Unknown code: {key[0]}")
-        part0 = str(key[0])
-
-      if key[1] in code_to_name:
-        part1 = code_to_name[key[1]]
-      else:
-        print(f"Unknown code: {key[1]}")
-        part1 = str(key[1])
-
-      print(f"{part0} {part1}: {value/sum_all:.2f}")
+      print(f"{key[0]} {key[1]}: {value/sum_all:.2f}")
 
   # deltaR_name = "logDeltaR"
-  rebin = 1
+  # rebin = 1
 
   deltaR_name = "deltaR"
   rebin = 20
@@ -222,9 +239,12 @@ def main():
   hist_deltaR_WW.SetLineColor(ROOT.kRed)
   hist_deltaR_Wtau.SetLineColor(ROOT.kBlue)
 
-  hist_deltaR_OS.Scale(1/hist_deltaR_OS.Integral())
-  hist_deltaR_WW.Scale(1/hist_deltaR_WW.Integral())
-  hist_deltaR_Wtau.Scale(1/hist_deltaR_Wtau.Integral())
+  if hist_deltaR_OS.Integral() != 0 and hist_deltaR_WW.Integral() != 0 and hist_deltaR_Wtau.Integral() != 0:
+    hist_deltaR_OS.Scale(1/hist_deltaR_OS.Integral())
+    hist_deltaR_WW.Scale(1/hist_deltaR_WW.Integral())
+    hist_deltaR_Wtau.Scale(1/hist_deltaR_Wtau.Integral())
+  else:
+    error("One of the histograms has zero integral")
 
   hist_deltaR_OS.Rebin(rebin)
   hist_deltaR_WW.Rebin(rebin)

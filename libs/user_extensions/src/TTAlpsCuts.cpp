@@ -58,9 +58,17 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
   if (dimuonCategory != "") collectionName = collectionName + "_" + dimuonCategory;
   auto vertexCuts = muonVertexCollection.second;
 
-  std::unique_ptr<TTAlpsDimuonCuts> ttAlpsDimuonCuts = make_unique<TTAlpsDimuonCuts>();
+  unique_ptr<TTAlpsDimuonCuts> ttAlpsDimuonCuts = make_unique<TTAlpsDimuonCuts>();
+  shared_ptr<PhysicsObjects> allDimuons;
 
-  shared_ptr<PhysicsObjects> allDimuons = event->GetCollection("BaseDimuonVertices");
+  try {
+    allDimuons = event->GetCollection("BaseDimuonVertices");
+  }
+  catch (const Exception &e) {
+    warn() << "Couldn't get BaseDimuonVertices collection - no dimuon cuts will be applied" << endl;
+    return true;
+  }
+
   cutFlowManager->UpdateCutFlow("initial", collectionName);
 
   auto dimuons = make_shared<PhysicsObjects>();

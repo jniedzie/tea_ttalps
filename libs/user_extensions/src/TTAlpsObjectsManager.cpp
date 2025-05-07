@@ -9,7 +9,6 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
   auto &config = ConfigManager::GetInstance();
 
   ttAlpsCuts = make_unique<TTAlpsDimuonCuts>();
-
   try {
     config.GetMap("muonMatchingParams", muonMatchingParams);
   } catch (const Exception &e) {
@@ -23,16 +22,22 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
   try {
     config.GetValue("muonVertexCollectionInput", muonVertexCollectionInput);
   } catch (const Exception &e) {
-    warn() << "Couldn't read muonVertexCollectionInput from config file - using first defined muonMatchingParams vertex collection as default" << endl;
-    string matchingMethod = muonMatchingParams.begin()->first;
-    muonVertexCollectionInput = "LooseMuonsVertex" + matchingMethod + "Match";
+    warn()
+        << "Couldn't read muonVertexCollectionInput from config file - using first defined muonMatchingParams vertex collection as default"
+        << endl;
+    try {
+      string matchingMethod = muonMatchingParams.begin()->first;
+
+      muonVertexCollectionInput = "LooseMuonsVertex" + matchingMethod + "Match";
+    } catch (const std::bad_alloc &e) {
+      warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
+      muonVertexCollectionInput = "";
+    }
   }
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> event) {
-
   if (muonMatchingParams.empty()) return;
-
   auto loosePATMuons = asNanoMuons(event->GetCollection("LoosePATMuons"));
   auto looseDSAMuons = asNanoMuons(event->GetCollection("LooseDSAMuons"));
   auto looseMuons = make_shared<NanoMuons>();
@@ -92,31 +97,44 @@ void TTAlpsObjectsManager::InsertProximityDRMatchedLooseMuonsCollections(shared_
 void TTAlpsObjectsManager::InsertSegmentMatchedLooseMuonsCollections(shared_ptr<Event> event, float minSegmentRatio,
                                                                      shared_ptr<NanoMuons> muonCollection) {
   auto looseMuonsSegmentMatch = asNanoEvent(event)->GetSegmentMatchedMuons(muonCollection, minSegmentRatio);
-  auto looseMuonVerticesSegmentMatch = asNanoEvent(event)->GetVerticesForMuons(looseMuonsSegmentMatch);
-
   event->AddCollection("LooseMuonsSegmentMatch", asPhysicsObjects(looseMuonsSegmentMatch));
-  event->AddCollection("LooseMuonsVertexSegmentMatch", looseMuonVerticesSegmentMatch);
+
+  try {
+    auto looseMuonVerticesSegmentMatch = asNanoEvent(event)->GetVerticesForMuons(looseMuonsSegmentMatch);
+    event->AddCollection("LooseMuonsVertexSegmentMatch", looseMuonVerticesSegmentMatch);
+  } catch (const Exception &e) {
+    warn() << "Couldn't get vertices for segment matched muons. Collection will not be inserted." << endl;
+  }
 }
 
 void TTAlpsObjectsManager::InsertBaseLooseMuonVertexCollection(shared_ptr<Event> event) {
   if (muonMatchingParams.size() == 0) return;
+  if (muonVertexCollectionInput.empty()) return;
 
-  auto vertices = event->GetCollection(muonVertexCollectionInput);
+  try {
+    auto vertices = event->GetCollection(muonVertexCollectionInput);
 
-  auto baseDimuonVertices = make_shared<PhysicsObjects>();
-  for (auto vertex : *vertices) {
-    if (IsGoodBaseMuonVertex(vertex, event)) baseDimuonVertices->push_back(vertex);
+    auto baseDimuonVertices = make_shared<PhysicsObjects>();
+    for (auto vertex : *vertices) {
+      if (IsGoodBaseMuonVertex(vertex, event)) baseDimuonVertices->push_back(vertex);
+    }
+    event->AddCollection("BaseDimuonVertices", baseDimuonVertices);
+  } catch (const Exception &e) {
+    warn() << "Couldn't insert the base dimuon vertex collection." << endl;
   }
-  event->AddCollection("BaseDimuonVertices", baseDimuonVertices);
 }
 
 void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
   if (muonMatchingParams.size() == 0) return;
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  auto vertices = event->GetCollection(muonVertexCollectionInput);
+  try {
+    auto vertices = event->GetCollection(muonVertexCollectionInput);
 
-  InsertMuonVertexCollection(event, vertices);
+    InsertMuonVertexCollection(event, vertices);
+  } catch (const Exception &e) {
+    warn() << "Couldn't insert the muon vertex collection." << endl;
+  }
 }
 
 void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Event> event) {
@@ -125,36 +143,43 @@ void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Even
 
   // Only segment matched muons for now
   string matchingMethod = muonMatchingParams.begin()->first;
-  auto vertices = event->GetCollection("LooseMuonsVertex" + matchingMethod + "Match");
+  try {
+    auto vertices = event->GetCollection("LooseMuonsVertex" + matchingMethod + "Match");
 
-  auto triggerMuonCollection = event->GetCollection("TriggerMuonMatch");
-  auto nonTriggerMuonVertexCollectionName = "BestNonTrigger" + muonVertexCollection.first.substr(4);
-  auto nonTriggerVertices = make_shared<PhysicsObjects>();
-  if (triggerMuonCollection->size() < 1) warn() << "TriggerMuonMatch collection is empty" << endl;
-  else {
-    auto triggerMuon = triggerMuonCollection->at(0);
-    for (auto vertex : *vertices) {
-      auto muon1 = asNanoDimuonVertex(vertex, event)->Muon1();
-      auto muon2 = asNanoDimuonVertex(vertex, event)->Muon2();
-      if (muon1->GetPhysicsObject() == triggerMuon || muon2->GetPhysicsObject() == triggerMuon) continue;
-      nonTriggerVertices->push_back(vertex);
+    auto triggerMuonCollection = event->GetCollection("TriggerMuonMatch");
+    auto nonTriggerMuonVertexCollectionName = "BestNonTrigger" + muonVertexCollection.first.substr(4);
+    auto nonTriggerVertices = make_shared<PhysicsObjects>();
+    if (triggerMuonCollection->size() < 1)
+      warn() << "TriggerMuonMatch collection is empty" << endl;
+    else {
+      auto triggerMuon = triggerMuonCollection->at(0);
+      for (auto vertex : *vertices) {
+        auto muon1 = asNanoDimuonVertex(vertex, event)->Muon1();
+        auto muon2 = asNanoDimuonVertex(vertex, event)->Muon2();
+        if (muon1->GetPhysicsObject() == triggerMuon || muon2->GetPhysicsObject() == triggerMuon) continue;
+        nonTriggerVertices->push_back(vertex);
+      }
     }
-  }
-  event->AddCollection("LooseNonTriggerMuonsVertex" + matchingMethod + "Match", nonTriggerVertices);
+    event->AddCollection("LooseNonTriggerMuonsVertex" + matchingMethod + "Match", nonTriggerVertices);
 
-  auto tightMuons = event->GetCollection("TightMuons");
-  auto leadingTightMuon = asTTAlpsEvent(event)->GetLeadingMuon(asNanoMuons(tightMuons));
-  auto nonLeadingMuonVertexCollectionName = "BestNonLeading" + muonVertexCollection.first.substr(4);
-  auto nonLeadingMuonVertices = make_shared<PhysicsObjects>();
-  if (leadingTightMuon) {
-    for (auto vertex : *vertices) {
-      auto muon1 = asNanoDimuonVertex(vertex, event)->Muon1();
-      auto muon2 = asNanoDimuonVertex(vertex, event)->Muon2();
-      if(muon1->GetPhysicsObject() == leadingTightMuon->GetPhysicsObject() || muon2->GetPhysicsObject() == leadingTightMuon->GetPhysicsObject()) continue;
-      nonLeadingMuonVertices->push_back(vertex);
+    auto tightMuons = event->GetCollection("TightMuons");
+    auto leadingTightMuon = asTTAlpsEvent(event)->GetLeadingMuon(asNanoMuons(tightMuons));
+    auto nonLeadingMuonVertexCollectionName = "BestNonLeading" + muonVertexCollection.first.substr(4);
+    auto nonLeadingMuonVertices = make_shared<PhysicsObjects>();
+    if (leadingTightMuon) {
+      for (auto vertex : *vertices) {
+        auto muon1 = asNanoDimuonVertex(vertex, event)->Muon1();
+        auto muon2 = asNanoDimuonVertex(vertex, event)->Muon2();
+        if (muon1->GetPhysicsObject() == leadingTightMuon->GetPhysicsObject() ||
+            muon2->GetPhysicsObject() == leadingTightMuon->GetPhysicsObject())
+          continue;
+        nonLeadingMuonVertices->push_back(vertex);
+      }
     }
+    event->AddCollection("LooseNonLeadingMuonsVertex" + matchingMethod + "Match", nonLeadingMuonVertices);
+  } catch (const Exception &e) {
+    warn() << "Couldn't insert the non-leading muon vertex collection." << endl;
   }
-  event->AddCollection("LooseNonLeadingMuonsVertex" + matchingMethod + "Match", nonLeadingMuonVertices);
 }
 
 void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, shared_ptr<PhysicsObjects> vertices) {
@@ -194,7 +219,7 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, s
     string goodMuonVertexCollectionName = muonVertexCollectionName;
     goodMuonVertexCollectionName.replace(0, 4, "Good");
     event->AddCollection(goodMuonVertexCollectionName, passedVertices);
-  } else 
+  } else
     finalCollection = passedVertices;
 
   event->AddCollection(muonVertexCollectionName, finalCollection);
@@ -204,42 +229,46 @@ void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> even
   if (muonMatchingParams.size() == 0) return;
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  auto vertices = event->GetCollection(muonVertexCollectionInput);
+  try {
+    auto vertices = event->GetCollection(muonVertexCollectionInput);
 
-  auto muonVertexCollectionName = muonVertexCollection.first;
-  auto muonVertexCollectionCuts = muonVertexCollection.second;
-  bool bestVertex = false;
-  if (muonVertexCollectionCuts.back() == "BestDimuonVertex") {
-    bestVertex = true;
-    muonVertexCollectionCuts.pop_back();
-  }
-
-  int nCuts = muonVertexCollectionCuts.size();
-  for (int i = 0; i < nCuts; i++) {
-    auto passedVertices = make_shared<PhysicsObjects>();
-    for (auto vertex : *vertices) {
-      bool passed = true;
-      auto dimuonVertex = asNanoDimuonVertex(vertex, event);
-      for (int j = 0; j < nCuts; j++) {
-        if (j == i) continue;
-        if (!ttAlpsCuts->PassesCut(dimuonVertex, muonVertexCollectionCuts[j])) {
-          passed = false;
-          break;
-        }
-      }
-      if (passed) passedVertices->push_back(vertex);
+    auto muonVertexCollectionName = muonVertexCollection.first;
+    auto muonVertexCollectionCuts = muonVertexCollection.second;
+    bool bestVertex = false;
+    if (muonVertexCollectionCuts.back() == "BestDimuonVertex") {
+      bestVertex = true;
+      muonVertexCollectionCuts.pop_back();
     }
-    string nminus1CollectionName = muonVertexCollectionName + "Nminus1" + muonVertexCollectionCuts[i];
-    auto finalCollection = make_shared<PhysicsObjects>();
-    if (bestVertex) {
-      if (GetBestMuonVertex(passedVertices, event)) finalCollection->push_back(GetBestMuonVertex(passedVertices, event));
-      // If input muonVertexCollection is "Best" vertex collection we also make a good vertex collection
-      string goodMuonVertexCollectionName = nminus1CollectionName;
-      goodMuonVertexCollectionName.replace(0, 4, "Good");
-      event->AddCollection(goodMuonVertexCollectionName, passedVertices);
-    } else 
-      finalCollection = passedVertices;
-    event->AddCollection(nminus1CollectionName, finalCollection);
+
+    int nCuts = muonVertexCollectionCuts.size();
+    for (int i = 0; i < nCuts; i++) {
+      auto passedVertices = make_shared<PhysicsObjects>();
+      for (auto vertex : *vertices) {
+        bool passed = true;
+        auto dimuonVertex = asNanoDimuonVertex(vertex, event);
+        for (int j = 0; j < nCuts; j++) {
+          if (j == i) continue;
+          if (!ttAlpsCuts->PassesCut(dimuonVertex, muonVertexCollectionCuts[j])) {
+            passed = false;
+            break;
+          }
+        }
+        if (passed) passedVertices->push_back(vertex);
+      }
+      string nminus1CollectionName = muonVertexCollectionName + "Nminus1" + muonVertexCollectionCuts[i];
+      auto finalCollection = make_shared<PhysicsObjects>();
+      if (bestVertex) {
+        if (GetBestMuonVertex(passedVertices, event)) finalCollection->push_back(GetBestMuonVertex(passedVertices, event));
+        // If input muonVertexCollection is "Best" vertex collection we also make a good vertex collection
+        string goodMuonVertexCollectionName = nminus1CollectionName;
+        goodMuonVertexCollectionName.replace(0, 4, "Good");
+        event->AddCollection(goodMuonVertexCollectionName, passedVertices);
+      } else
+        finalCollection = passedVertices;
+      event->AddCollection(nminus1CollectionName, finalCollection);
+    }
+  } catch (const Exception &e) {
+    warn() << "Couldn't insert the N-1 muon vertex collection." << endl;
   }
 }
 
@@ -314,7 +343,7 @@ void TTAlpsObjectsManager::InsertMuonTriggerCollections(shared_ptr<Event> event)
   event->AddCollection("MuonTriggerObjects", muonTriggerObjectsCollection);
   int leadingMuonTrigger_idx = -1;
   float leadingMuonTrigger_pt = -1.;
-  for (int i=0; i < muonTriggerObjectsCollection->size(); i++) {
+  for (int i = 0; i < muonTriggerObjectsCollection->size(); i++) {
     auto muonTrigger = muonTriggerObjectsCollection->at(i);
     if ((float)muonTrigger->Get("pt") > leadingMuonTrigger_pt) {
       leadingMuonTrigger_pt = muonTrigger->Get("pt");
@@ -329,9 +358,10 @@ void TTAlpsObjectsManager::InsertMuonTriggerCollections(shared_ptr<Event> event)
     float minDR = 9999.;
     int minDR_idx = -1;
     float maxDR = 0.3;
-    TLorentzVector muonTrigger4Vector;;
+    TLorentzVector muonTrigger4Vector;
+    ;
     muonTrigger4Vector.SetPtEtaPhiM(leadingMuonTrigger->Get("pt"), leadingMuonTrigger->Get("eta"), leadingMuonTrigger->Get("phi"), 0.105);
-    for (int i=0; i < tightMuons->size(); i++) {
+    for (int i = 0; i < tightMuons->size(); i++) {
       auto muon = tightMuons->at(i);
       auto muon4Vector = asNanoMuon(muon)->GetFourVector();
       float dR = muonTrigger4Vector.DeltaR(muon4Vector);
@@ -340,7 +370,7 @@ void TTAlpsObjectsManager::InsertMuonTriggerCollections(shared_ptr<Event> event)
         minDR_idx = i;
       }
     }
-    if(minDR_idx > -1) triggerMuonCollection->push_back(tightMuons->at(minDR_idx));
+    if (minDR_idx > -1) triggerMuonCollection->push_back(tightMuons->at(minDR_idx));
 
   } else {
     warn() << "No valid leading muon trigger found in MuonTriggerObjects collection" << endl;

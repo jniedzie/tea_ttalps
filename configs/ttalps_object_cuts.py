@@ -25,6 +25,8 @@ SRDimuonCuts = {
     "maxDeltaPixelHits": [9999.0, 9999.0, 9999.0],
 }
 
+SRDimuonNoIsoCuts = SRDimuonCuts
+
 # good object definitions for JPsi CR
 JPsiDimuonCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
@@ -50,6 +52,8 @@ JPsiDimuonCuts = {
     "minLxy": [0.0, 0.0, 0.0],
     "maxDeltaPixelHits": [9999.0, 9999.0, 9999.0],
 }
+
+JPsiDimuonIsoCuts = JPsiDimuonCuts
 
 # good object definitions for ttZ CR
 ZDimuonCuts = {

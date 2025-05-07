@@ -12,11 +12,11 @@ args = parser.parse_args()
 
 
 def load_uncertainties(config):
+  rates = {}
   uncertainties = {}
 
   # loop over all signal samples and open datacard files corresponding to them
   for signal_sample in config.signal_samples:
-    info(f"\n\nSignal: {signal_sample.name}")
     uncertainties[signal_sample.name] = {}
 
     datacard_file_name = get_datacard_file_name(config, signal_sample)
@@ -34,6 +34,10 @@ def load_uncertainties(config):
       for line in lines:
         if line.startswith("rate"):
           read = True
+          values = line.split()
+          rates[signal_sample.name] = float(values[1])
+          rates["background"] = float(values[2])
+
           continue
 
         if read:
@@ -50,7 +54,7 @@ def load_uncertainties(config):
           else:
             uncertainties[signal_sample.name][unc_name] = unc
 
-  return uncertainties
+  return rates, uncertainties
 
 
 def get_min_max_uncertainty(uncertainties):
@@ -94,13 +98,63 @@ nice_names = {
 def main():
   config = importlib.import_module(args.config.replace(".py", "").replace("/", "."))
 
-  uncertainties = load_uncertainties(config)
+  cross_sections = config.cross_sections
 
-  for signal_name, unc_dict in uncertainties.items():
-    info(f"\n\nSignal: {signal_name}")
+  rates, uncertainties = load_uncertainties(config)
 
-    for unc_name, unc_value in unc_dict.items():
-      info(f"{unc_name}: {unc_value*100:.1f}%")
+  # explicitly select the first signal key, excluding "background"
+  signal_name = next(key for key in uncertainties.keys() if key != "background")
+  
+  
+
+  background_rate = rates.pop("background")
+  background_err = uncertainties[signal_name]["stat_err_bkg"] * background_rate
+
+  info(f"\n\nBackground Rate: {background_rate:.1f} +/- {background_err:.1f}")
+
+  signal_rates = {}
+
+  for name, rate in rates.items():
+    mass = name.split("_")[2]
+    mass = mass.split("-")[1]
+    mass = mass.replace("p", ".").replace("GeV", "")
+    mass = float(mass)
+
+    ctau = name.split("_")[3]
+
+    ctau = ctau.replace("mm", "").replace("ctau-", "")
+    ctau = float(ctau)
+
+    theory_cross_section = config.get_theory_cross_section(mass)
+    reference_cross_section = cross_sections[signal_name.replace("signal_", "")]
+    coupling_ref = 0.1
+    coupling_target = 1.0
+    signal_scale = (theory_cross_section / reference_cross_section) * (coupling_target/coupling_ref)**2 
+
+    signal_rate = signal_scale * rate
+    signal_err = uncertainties[name]["stat_err_sig"] * signal_rate
+
+    signal_rates[(mass, ctau)] = (signal_rate, signal_err)
+
+  # get a list of ctaus in increasing order:
+  masses = sorted(set([mass for mass, _ in signal_rates.keys()]))
+  ctaus = sorted(set([ctau for _, ctau in signal_rates.keys()]))
+  
+  # print a header line with the ctaus
+  print("\n\n\t", end="")
+  for ctau in ctaus:
+    print(f"{ctau:.0e} mm", end="\t")
+  print()
+  
+  # print the signal rates for each mass
+  for mass in masses:
+    print(f"\n{mass:.2f} GeV:\t", end="")
+    for ctau in ctaus:
+      if (mass, ctau) in signal_rates:
+        rate, err = signal_rates[(mass, ctau)]
+        print(f"{rate:.1f} +/- {err:.1f}", end="\t")
+      else:
+        print("N/A", end="\t\t")
 
   min_uncertainty, max_uncertainty = get_min_max_uncertainty(uncertainties)
 

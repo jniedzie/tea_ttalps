@@ -1,9 +1,10 @@
 from Sample import Sample, SampleType
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
-from ttalps_cross_sections import get_cross_sections
+from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
 from ttalps_samples_list import dasSignals2018
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
+import ttalps_abcd_config as abcd_config
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
@@ -14,20 +15,27 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms/"
 
 combine_path = "/afs/desy.de/user/j/jniedzie/combine/CMSSW_14_1_0_pre4/src/"
 
-# For signal like skim: SR and J/Psi CR with no isolation requirement on the loose muons
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-
 # SR dimuon cuts applied
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}"
+signal_hist_path = (
+    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{abcd_config.signal_skim[1]}{abcd_config.signal_skim[2]}"
+)
 
-datacards_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps/limits/datacards/"
-plots_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps/limits/plots/"
-results_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps/limits/results/"
+background_hist_path = (
+    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{abcd_config.background_skim[1]}{abcd_config.background_skim[2]}"
+)
+
+base_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps"
+
+datacards_output_path = f"{base_output_path}/limits/datacards_{abcd_config.do_region}/"
+plots_output_path = f"{base_output_path}/limits/plots/"
+results_output_path = f"{base_output_path}/limits/results/"
 
 # If True, poisson error on empty bins (1.84) will be added to data histograms
 add_uncertainties_on_zero = False
 
-luminosity = 59830.  # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
+luminosity = abcd_config.luminosity
 
 do_abcd = True
 use_abcd_prediction = True  # if False, it will use the actual number of events in the signal bin
@@ -36,14 +44,7 @@ include_shapes = True
 if do_abcd:
   include_shapes = False  # currently not supported for ABCD
 
-skip_combine = False
-
-# category = ""
-category = "_Pat"
-# category = "_PatDSA"
-# category = "_DSA"
-
-collection = "BestPFIsoDimuonVertex"
+skip_combine = True
 
 signal_samples = []
 
@@ -54,7 +55,7 @@ for name in dasSignals2018:
   signal_samples.append(
       Sample(
           name="signal_"+signal_name,
-          file_path=f"{base_path}/signals/{signal_name}/{skim[0]}/{hist_path}/histograms.root",
+          file_path=f"{base_path}/signals/{signal_name}/{abcd_config.signal_skim[0]}/{signal_hist_path}/histograms.root",
           type=SampleType.signal,
           cross_sections=cross_sections,
       )
@@ -70,10 +71,10 @@ for name in dasSignals2018:
 
 config_helper = TTAlpsABCDConfigHelper(
     year,
-    skim,
-    category,
+    abcd_config.background_skim,
+    abcd_config.category,
     base_path,
-    hist_path,
+    background_hist_path,
 )
 
 background_samples, backgrounds = config_helper.get_background_samples()
@@ -87,36 +88,17 @@ if not do_abcd:
   # variable = "Lxy"
 
   histogram = Histogram(
-      name=f"{collection}{category}_{variable}",
+      name=f"{abcd_config.collection}{abcd_config.category}_{variable}",
       norm_type=NormalizationType.to_lumi,
       x_max=140,
       rebin=5
   )
 else:
   # Use this 2D histogram to calculate limits with cut-and-count and optionally ABCD background prediction
-  # Binning is always expressed in bin numbers, not values. The abcd_points it's the first bin to the top-right
-  # of the ABCD division lines.
-  if category == "_Pat":
-    variable_1 = "logLxySignificance"
-    variable_2 = "log3Dangle"
-    abcd_point = (22, 2)
-  elif category == "_PatDSA":
-    variable_1 = "dPhi"
-    variable_2 = "logDxyPVTraj1"
-    abcd_point = (21, 7)
-  elif category == "_DSA":
-    variable_1 = "logLxy"
-    variable_2 = "log3Dangle"
-    abcd_point = (19, 16)
-
-  rebin_2D = 4
-
-  histogram = Histogram2D(
-      name=f"{collection}_{variable_1}_vs_{variable_2}{category}",
-      norm_type=NormalizationType.to_lumi,
-      x_rebin=rebin_2D,
-      y_rebin=rebin_2D,
-  )
+  abcd_point = abcd_config.abcd_point
+  rebin_2D = abcd_config.rebin_2D
+  histogram = abcd_config.histogram
+  signal_bin = abcd_config.signal_bin
 
 
 # List nuisance parameters (they will only be added for processes for which they were listed)
@@ -127,8 +109,6 @@ nuisances = {
     "bTaggingMedium_down_uncorrelated": "variation",
     "bTaggingMedium_up_correlated": "variation",
     "bTaggingMedium_up_uncorrelated": "variation",
-    "muonIDLoose_systdown": "variation",
-    "muonIDLoose_systup": "variation",
     "muonReco_systdown": "variation",
     "muonReco_systup": "variation",
     "muonTriggerIsoMu24_systdown": "variation",
@@ -136,9 +116,11 @@ nuisances = {
 
     "abcd_nonClosure": "closure",
     "lumi": {
-      "signal": 1.017,  # arxiv.org/abs/2503.03946
-      "bkg": 1.017,
+        "signal": 1.017,  # arxiv.org/abs/2503.03946
+        "bkg": 1.017,
     }
 }
 
-# combineCards.py datacard_BestPFIsoDimuonVertex_Pat_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_PatDSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt datacard_BestPFIsoDimuonVertex_DSA_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt > datacard_BestPFIsoDimuonVertex_combined_LxySignificance_tta_mAlp-2GeV_ctau-1e-5mm_PFIso.txt
+if abcd_config.category != "_DSA":
+  nuisances["muonIDLoose_systdown"] = "variation"
+  nuisances["muonIDLoose_systup"] = "variation"

@@ -13,6 +13,9 @@ scaleFactors = get_scale_factors(year)
 nEvents = -1
 printEveryNevents = 10000
 
+# Should dimuon checks be skipped? Used for tt̄ CR, where we don't have dimuons
+ignoreDimuons = False
+
 runDefaultHistograms = True
 runLLPTriggerHistograms = False
 runPileupHistograms = False
@@ -86,12 +89,12 @@ if dimuonSelection == "":
     dimuonSelection = None
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "SRDimuonNoIso": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
+    "JPsiDimuonIso": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "JPsiDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "ZDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
 }
-muonVertexCollection = None
-if dimuonSelection is not None:
-    muonVertexCollection = muonVertexCollections[dimuonSelection]
+muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None
 # input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
 muonVertexCollectionInput = skim[2]
 if muonVertexCollectionInput == "":
@@ -135,6 +138,6 @@ if runFakesHistograms:
   histParams += helper.get_fakes_params()
 
 if runMuonTriggerObjectsHistograms:
-    histParams += helper.get_muon_trigger_objects_params()
+  histParams += helper.get_muon_trigger_objects_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()

@@ -4,22 +4,31 @@ import physics
 from math import pi, log10
 
 from Logger import error
+from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
 
 
 class TTAlpsLimitsPlotterHelper:
-  def __init__(self, input_path):
+  def __init__(self, input_path, year):
     self.data = {}
     self.input_path = input_path
 
     self.__load_limits()
+    self.cross_sections = get_cross_sections(year)
+    self.reference_coupling = 0.1
+    self.target_coupling = 1.0
 
   def __load_limits(self):
 
     pattern = re.compile(r"signal_tta_mAlp-(\d+p?\d*)GeV_ctau-(\S+)mm: \[(.*?)\]")
+    pattern_alt = re.compile(r"mass_(\d+p?\d*)_ctau_([-\deEpP\.]+): \[(.*?)\]")
 
     with open(self.input_path, 'r') as f:
       for line in f:
         match = pattern.match(line.strip())
+
+        if not match:
+          match = pattern_alt.match(line.strip())
+
         if match:
           mass_str, ctau_str, values_str = match.groups()
           mass = float(mass_str.replace('p', '.'))
@@ -82,7 +91,29 @@ class TTAlpsLimitsPlotterHelper:
 
     return limits
 
-  def get_2d_graph(self, scale, expected=False):
+  def get_scale(self, mass, ctau):
+
+    mass_string = f"{mass:.2f}" if mass < 1.0 else f"{mass:.0f}"
+    mass_string = mass_string.replace(".", "p")
+
+    ctau_string = f"{ctau:.0e}"
+    ctau_string = ctau_string.replace("+0", "").replace("-0", "-")
+
+    signal_name = f"tta_mAlp-{mass_string}GeV_ctau-{ctau_string}mm"
+
+    sigma_ref = self.cross_sections[signal_name]
+    
+    # fot limits on coupling - work in progress
+    # sigma_theory_0p1 = get_theory_cross_section(mass)
+    # scale = sigma_ref/sigma_theory_0p1 * self.reference_coupling / self.target_coupling
+    # scale = self.reference_coupling * sigma_ref
+
+    # for limit on cross_section:
+    scale = sigma_ref
+
+    return scale
+
+  def get_2d_graph(self, expected=False):
     self.graph_2d_exp = ROOT.TGraph2D()
     self.graph_2d_exp.SetTitle("")
     self.graph_2d_exp.SetLineColor(ROOT.kBlack)
@@ -96,7 +127,7 @@ class TTAlpsLimitsPlotterHelper:
           self.graph_2d_exp.GetN(),
           log10(m),
           log10(ct),
-          log10(scale * values[3 if expected else 0])
+          log10(self.get_scale(m, ct) * values[3 if expected else 0])
       )
 
     return self.graph_2d_exp
@@ -107,13 +138,16 @@ class TTAlpsLimitsPlotterHelper:
 
     self.graph_2d_exp.DrawClone("COLZ")
 
-    contour = self.graph_2d_exp.GetHistogram().Clone("contour")
-    contour.SetContour(1)  # We need 2 levels: below and above 1.0
-    contour.SetContourLevel(0, log10(1.0))
-    
-    contour_0p2 = self.graph_2d_exp.GetHistogram().Clone("contour")
-    contour_0p2.SetContour(1)  # We need 2 levels: below and above 1.0
-    contour_0p2.SetContourLevel(0, log10(0.2))
+    # work in progress:
+    # sigma_theory_0p1 = get_theory_cross_section(mass)
+
+    # contour = self.graph_2d_exp.GetHistogram().Clone("contour")
+    # contour.SetContour(1)  # We need 2 levels: below and above 1.0
+    # contour.SetContourLevel(0, log10(1.0))
+
+    # contour_0p2 = self.graph_2d_exp.GetHistogram().Clone("contour")
+    # contour_0p2.SetContour(1)  # We need 2 levels: below and above 1.0
+    # contour_0p2.SetContourLevel(0, log10(0.2))
 
     self.graph_2d_exp.GetHistogram().GetXaxis().SetTitle(x_title)
     self.graph_2d_exp.GetHistogram().GetYaxis().SetTitle(y_title)
@@ -121,21 +155,21 @@ class TTAlpsLimitsPlotterHelper:
 
     self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
     self.graph_2d_exp.GetHistogram().GetYaxis().SetRangeUser(y_min, y_max)
-    # self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
 
     self.graph_2d_exp.GetHistogram().DrawClone("COLZ")
 
+    # work in progress:
     # Overlay the contour line
-    contour.SetLineColor(ROOT.kRed)
-    contour_0p2.SetLineColor(ROOT.kYellow+1)
-    
-    # fill contour with hashing
-    contour.SetFillStyle(3013)
-    contour.SetFillColorAlpha(ROOT.kRed, 0.5)
-    
-    
-    contour.DrawClone("CONT3 SAME")
-    contour_0p2.DrawClone("CONT3 SAME")
+    # contour.SetLineColor(ROOT.kRed)
+    # contour_0p2.SetLineColor(ROOT.kYellow+1)
+
+    # # fill contour with hashing
+    # contour.SetFillStyle(3013)
+    # contour.SetFillColorAlpha(ROOT.kRed, 0.5)
+
+    # contour.DrawClone("CONT3 SAME")
+    # contour_0p2.DrawClone("CONT3 SAME")
 
   def draw_pion_label(self):
     tex = ROOT.TLatex(0.60, 0.80, "tt+a, a #rightarrow #pi's")
@@ -266,13 +300,15 @@ class TTAlpsLimitsPlotterHelper:
 
 
 class BrazilGraph:
-  def __init__(self, input_path, x_title, y_title, x_min, x_max, y_min, y_max):
-    self.helper = TTAlpsLimitsPlotterHelper(input_path)
+  def __init__(self, input_path, year, x_title, y_title, x_min, x_max, y_min, y_max, show_obs=False):
+    self.helper = TTAlpsLimitsPlotterHelper(input_path, year)
 
     self.obs_graph = self.helper.get_central_graph()
     self.exp_graph = self.helper.get_central_graph(expected=True)
     self.exp_graph_1sigma = self.helper.get_band_graph()
     self.exp_graph_2sigma = self.helper.get_band_graph(x_title, y_title, two_sigma=True)
+
+    self.show_obs = show_obs
 
     self.x_min = x_min
     self.x_max = x_max
@@ -293,7 +329,8 @@ class BrazilGraph:
     self.exp_graph_2sigma.Draw("A3")
     self.exp_graph_1sigma.Draw("3same")
     self.exp_graph.Draw("Lsame")
-    self.obs_graph.Draw("Lsame")
+    if self.show_obs:
+      self.obs_graph.Draw("Lsame")
 
     self.exp_graph_2sigma.GetXaxis().SetLimits(self.x_min, self.x_max)
     self.exp_graph_2sigma.SetMinimum(self.y_min)
@@ -305,8 +342,25 @@ class BrazilGraph:
     legend.SetFillStyle(0)
     legend.SetTextFont(42)
     legend.SetTextSize(0.04)
-    legend.AddEntry(self.obs_graph, "Observed", "L")
+    if self.show_obs:
+      legend.AddEntry(self.obs_graph, "Observed", "L")
     legend.AddEntry(self.exp_graph, "Expected", "L")
     legend.AddEntry(self.exp_graph_1sigma, "Expected #pm 1 #sigma", "F")
     legend.AddEntry(self.exp_graph_2sigma, "Expected #pm 2 #sigma", "F")
     legend.DrawClone()
+
+
+class SimpleGraph:
+  def __init__(self, points, title, color):
+    self.graph = ROOT.TGraph()
+    self.title = title
+    self.graph.SetLineColor(color)
+
+    for x, y in points:
+      self.graph.SetPoint(self.graph.GetN(), x, y)
+
+  def get_graph(self):
+    return self.graph, self.title
+
+  def draw(self):
+    self.graph.DrawClone("Lsame")
