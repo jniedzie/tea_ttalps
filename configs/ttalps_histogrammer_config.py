@@ -11,6 +11,9 @@ scaleFactors = get_scale_factors(year)
 nEvents = -1
 printEveryNevents = 10000
 
+# Should dimuon checks be skipped? Used for tt̄ CR, where we don't have dimuons
+ignoreDimuons = False
+
 runDefaultHistograms = True
 runLLPTriggerHistograms = False
 runPileupHistograms = False
@@ -85,14 +88,16 @@ muonVertexBaselineSelection = [
 # dimuonSelection and muonVertexCollection:
 #  - uncomment the dimuonSelection you want to use and the muonVertexCollection will be given automatically
 #  - to not use dimuonSelection and muonVertexCollection: set dimuonSelection to None
-# dimuonSelection = "SRDimuonVertex"
+dimuonSelection = "SRDimuonVertex"
+# dimuonSelection = "SRDimuonNoIsoVertex"
 # dimuonSelection = "JPsiDimuonIsoVertex"
 # dimuonSelection = "JPsiDimuonVertex"
 # dimuonSelection = "ZDimuonVertex"
-dimuonSelection = None
+# dimuonSelection = None
 
 muonVertexCollections = {
     "SRDimuonVertex": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "SRDimuonNoIsoVertex": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "JPsiDimuonIsoVertex": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "JPsiDimuonVertex": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "ZDimuonVertex": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
@@ -100,9 +105,9 @@ muonVertexCollections = {
 muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None
 
 # input for muonVertexCollection, options are:
-muonVertexCollectionInput = None
+# muonVertexCollectionInput = None
 # muonVertexCollectionInput = "LooseMuonsVertexSegmentMatch"
-# muonVertexCollectionInput = "LooseNonLeadingMuonsVertexSegmentMatch"
+muonVertexCollectionInput = "LooseNonLeadingMuonsVertexSegmentMatch"
 # muonVertexCollectionInput = "LooseNonTriggerMuonsVertexSegmentMatch"
 
 histParams = ()

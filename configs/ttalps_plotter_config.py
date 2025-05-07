@@ -24,6 +24,7 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
+# skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
 
 # skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")  # this is in fact VV CR
 # skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
@@ -81,6 +82,8 @@ data_to_include = [
     "SingleMuon2018",
     # "Muon2022preEE",
     # "Muon2022postEE",
+    
+    # "EGamma2018",
 ]
 if not data_to_include:
   show_ratio_plots = False
@@ -260,44 +263,44 @@ histograms = (
     # ----------------------------------------------------------------------------
     # Loose electrons
     # ----------------------------------------------------------------------------
-    # Histogram("LooseElectrons_pt", "", False,  True, default_norm, 10, 0, 500,
-    #           1e-2, 1e6, "loose electron p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("LooseElectrons_leadingPt", "", False,  True, default_norm, 10, 0, 500,
-    #           1e-2, 1e6, "leading loose electron p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("LooseElectrons_subleadingPt", "", False,  True, default_norm, 10, 0, 500,
-    #           1e-2, 1e6, "all subleading loose electron p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("LooseElectrons_eta", "", False,  True, default_norm, 5, -
-    #           3.5, 3.5, 1e-2, 1e6, "loose electron #eta", f"# events ({year})"),
-    # Histogram("LooseElectrons_dxy", "", False,  True, default_norm, 10, -
-    #           10, 10, 1e-2, 1e6, "loose electron d_{xy}", f"# events ({year})"),
-    # Histogram("LooseElectrons_dz", "", False,  True, default_norm, 10, -
-    #           10, 10, 1e-2, 1e6, "loose electron d_{z}", f"# events ({year})"),
+    Histogram("LooseElectrons_pt", "", False,  True, default_norm, 10, 0, 500,
+              1e-2, 1e6, "loose electron p_{T} [GeV]", f"# events ({year})"),
+    Histogram("LooseElectrons_leadingPt", "", False,  True, default_norm, 10, 0, 500,
+              1e-2, 1e6, "leading loose electron p_{T} [GeV]", f"# events ({year})"),
+    Histogram("LooseElectrons_subleadingPt", "", False,  True, default_norm, 10, 0, 500,
+              1e-2, 1e6, "all subleading loose electron p_{T} [GeV]", f"# events ({year})"),
+    Histogram("LooseElectrons_eta", "", False,  True, default_norm, 5, -
+              3.5, 3.5, 1e-2, 1e6, "loose electron #eta", f"# events ({year})"),
+    Histogram("LooseElectrons_dxy", "", False,  True, default_norm, 10, -
+              10, 10, 1e-2, 1e6, "loose electron d_{xy}", f"# events ({year})"),
+    Histogram("LooseElectrons_dz", "", False,  True, default_norm, 10, -
+              10, 10, 1e-2, 1e6, "loose electron d_{z}", f"# events ({year})"),
 
     # ----------------------------------------------------------------------------
     # Good jets
     # ----------------------------------------------------------------------------
-    # Histogram("GoodJets_pt", "", False,  True, default_norm, 10, 0, 1300,
-    #           1e-3, 1e6, "good jet p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("GoodJets_eta", "", False,  True, default_norm, 10, -
-    #           3, 5.0, 1e-3, 1e6, "good jet #eta", f"# events ({year})"),
-    # Histogram("GoodJets_btagDeepB", "", False,  True, default_norm, 10, 0,
-    #           1.5, 2e0, 1e8, "good jet deepCSV score", f"# events ({year})"),
-    # Histogram("GoodJets_btagDeepFlavB", "", False,  True, default_norm, 10,
-    #           0, 1.8, 1e-1, 1e8, "good jet deepJet score", f"# events ({year})"),
-    # Histogram("GoodJets_minvBjet2jets", "", False,  True, default_norm, 25, 0,
-    #           1500, 1e-1, 1e5, "good jets m_{bjj} [GeV]", f"# events ({year})"),
+    Histogram("GoodJets_pt", "", False,  True, default_norm, 10, 0, 1300,
+              1e-3, 1e6, "good jet p_{T} [GeV]", f"# events ({year})"),
+    Histogram("GoodJets_eta", "", False,  True, default_norm, 10, -
+              3, 5.0, 1e-3, 1e6, "good jet #eta", f"# events ({year})"),
+    Histogram("GoodJets_btagDeepB", "", False,  True, default_norm, 10, 0,
+              1.5, 2e0, 1e8, "good jet deepCSV score", f"# events ({year})"),
+    Histogram("GoodJets_btagDeepFlavB", "", False,  True, default_norm, 10,
+              0, 1.8, 1e-1, 1e8, "good jet deepJet score", f"# events ({year})"),
+    Histogram("GoodJets_minvBjet2jets", "", False,  True, default_norm, 25, 0,
+              1500, 1e-1, 1e5, "good jets m_{bjj} [GeV]", f"# events ({year})"),
 
     # ----------------------------------------------------------------------------
     # Good b-jets
     # ----------------------------------------------------------------------------
-    # Histogram("GoodMediumBtaggedJets_pt", "", False,  True, default_norm, 20,
-    #           0, 2000, 1e-3, 1e6, "good b-jet p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("GoodMediumBtaggedJets_eta", "", False,  True, default_norm,
-    #           5, -3.5, 3.5, 1e-3, 1e6, "good b-jet #eta", f"# events ({year})"),
-    # Histogram("GoodMediumBtaggedJets_btagDeepB", "", False,  True, default_norm,
-    #           10, -1, 1, 1e0, 1e8, "good b-jet deepCSV score", f"# events ({year})"),
-    # Histogram("GoodMediumBtaggedJets_btagDeepFlavB", "", False,  True, default_norm,
-    # 10, -1, 1, 1e0, 1e8, "good b-jet deepJet score", f"# events ({year})"),
+    Histogram("GoodMediumBtaggedJets_pt", "", False,  True, default_norm, 20,
+              0, 2000, 1e-3, 1e6, "good b-jet p_{T} [GeV]", f"# events ({year})"),
+    Histogram("GoodMediumBtaggedJets_eta", "", False,  True, default_norm,
+              5, -3.5, 3.5, 1e-3, 1e6, "good b-jet #eta", f"# events ({year})"),
+    Histogram("GoodMediumBtaggedJets_btagDeepB", "", False,  True, default_norm,
+              10, -1, 1, 1e0, 1e8, "good b-jet deepCSV score", f"# events ({year})"),
+    Histogram("GoodMediumBtaggedJets_btagDeepFlavB", "", False,  True, default_norm,
+    10, -1, 1, 1e0, 1e8, "good b-jet deepJet score", f"# events ({year})"),
 
     # ----------------------------------------------------------------------------
     # Primary vertices
@@ -353,11 +356,11 @@ histograms = (
 # Dimuons
 # ----------------------------------------------------------------------------
 
-if skim[1] == "_SRDimuons":
-  mass_rebin = 200
-  mass_min = 0.0
-  mass_max = 70.0
-elif skim[1] == "_JPsiDimuons":
+mass_rebin = 200
+mass_min = 0.0
+mass_max = 70.0
+
+if skim[1] == "_JPsiDimuons":
   mass_rebin = 1
   mass_min = 2.9
   mass_max = 3.3

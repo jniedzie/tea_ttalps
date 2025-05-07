@@ -94,6 +94,7 @@ cross_sectionsRun2 = {
     "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8": 1.085,
 
     "SingleMuon2018": 1.0,
+    "EGamma2018": 1.0,
 
     "tta_mAlp-0p35GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(0.35),
     "tta_mAlp-0p35GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(0.35),

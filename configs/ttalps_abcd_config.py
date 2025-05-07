@@ -14,18 +14,19 @@ cross_sections = get_cross_sections(year)
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-# do_region = "SR"
+do_region = "SR"
+# do_region = "SRnoIso"
 # do_region = "JPsiCR"
 # do_region = "JPsiCRwithIso"
 # do_region = "ttZCR"
 # do_region = "VVCR"
-do_region = "QCDCR"
+# do_region = "QCDCR"
 # do_region = "WjetsCR"
 # do_region = "bbCR"
 
 do_data = False
 
-if do_region == "SR":
+if do_region == "SR" or do_region == "SRnoIso":
   do_data = False
 
 if do_region == "SR" or do_region == "bbCR" or do_region == "QCDCR" or do_region == "JPsiCRwithIso":
@@ -34,6 +35,9 @@ if do_region == "SR" or do_region == "bbCR" or do_region == "QCDCR" or do_region
 elif do_region == "JPsiCR":
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
+elif do_region == "SRnoIso":
+  background_collection = "BestDimuonVertex"
+  signal_collection = "BestDimuonVertex"
 
 # category = ""
 category = "_Pat"
@@ -43,17 +47,24 @@ category = "_Pat"
 # binning always expressed in bin numbers, not values
 optimal_parameters = {
     # optimized on MC (rebin 4):
-    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),  # best
+    ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),  # best
     # ("_Pat", "SR"): ("logAbsCollinearityAngle", "leadingPt", (24, 11), "D"),
     # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
     # ("_Pat", "SR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
     # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (9, 7), "A"),
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logInvMass", (11, 10), "D"),
+
+
+    # ("_Pat", "SRnoIso"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
+    # ("_Pat", "SRnoIso"): ("logAbsCollinearityAngle", "logInvMass", (11, 10), "D"),
+    ("_Pat", "SRnoIso"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "D"),
 
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
     # ("_Pat", "JPsiCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
     # ("_Pat", "JPsiCR"): ("invMass", "logDeltaSquaredIso03", (9, 7), "A"),
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "leadingPt", (24, 11), "D"),
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
+    ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "D"),
 
     # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logPt", (9, 14), "D"),
     # ("_Pat", "bbCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
@@ -239,6 +250,7 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
 skims = {
     "SR": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    "SRnoIso": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuonsNoIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     "JPsiCR": (
         ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
         ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
