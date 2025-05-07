@@ -17,7 +17,7 @@ weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
 triggerSelection = (
-    "HLT_Ele27_WPTight_Gsf",
+    "HLT_Ele32_WPTight_Gsf",
 )
 
 eventCuts = {
