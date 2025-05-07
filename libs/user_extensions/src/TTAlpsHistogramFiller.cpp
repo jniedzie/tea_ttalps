@@ -189,7 +189,8 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const std::shared_ptr<NanoM
 
   for (auto variable : variables) {
     try {
-      histogramsHandler->Fill(name + "_" + variable, muon->Get(variable, false));
+      bool verbose = false;
+      histogramsHandler->Fill(name + "_" + variable, muon->Get(variable, verbose));
     } catch (const Exception &e) {
       warn() << "Couldn't fill muon histogram for at least one of the variables" << endl;
     }
@@ -1196,6 +1197,9 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
 
   if (collection->size() < 1) return;
 
+  auto tightMuons = asNanoMuons(event->GetCollection("TightMuons"));
+  auto leadingTightMuon = tightMuons->at(0);
+
   for (auto vertex : *collection) {
     auto dimuon = asNanoDimuonVertex(vertex, event);
     auto muon1 = dimuon->Muon1();
@@ -1243,13 +1247,14 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
     float logInvMass = log10(dimuon->GetInvariantMass());
     float logDeltaIso03 = TMath::Log10(dimuon->GetDeltaDisplacedTrackIso03());
     float logPt = TMath::Log10(dimuon->GetDimuonPt());
+    float logLeadingPt = TMath::Log10(dimuon->GetLeadingMuonPt());
     float logCollinearityAngle = TMath::Log10(fabs(dimuon->GetCollinearityAngle()));
 
-    if (logPt > 1.4 && logPt < 1.7 && logCollinearityAngle > -0.2 && logCollinearityAngle < 0.3) {
-      histogramsHandler->Fill(collectionName + "_" + category + "_motherPid1_vs_motherPid2_lowBlob", mother1_pid, mother2_pid);
-      histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowBlob", mother1_pid, mother2_pid);
-    }
-    if (logPt > 1.1 && logPt < 1.6 && logCollinearityAngle > -1.9 && logCollinearityAngle < -1.2) {
+    // if (logPt > 1.4 && logPt < 1.7 && logCollinearityAngle > -0.2 && logCollinearityAngle < 0.3) {
+    //   histogramsHandler->Fill(collectionName + "_" + category + "_motherPid1_vs_motherPid2_lowBlob", mother1_pid, mother2_pid);
+    //   histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_lowBlob", mother1_pid, mother2_pid);
+    // }
+    if (logLeadingPt > 0.8 && logLeadingPt < 1.2 && logCollinearityAngle > -1.8 && logCollinearityAngle < -1.0) {
       histogramsHandler->Fill(collectionName + "_" + category + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid);
       histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid);
     }
@@ -1261,6 +1266,16 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
       FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_" + dimuonFake);
       FillLooseMuonsHistograms(muon1, "Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon1fake);
       FillLooseMuonsHistograms(muon2, "Loose" + string(muon2->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon2fake);
+
+      
+      float deltaZfromTightMuon = fabs(leadingTightMuon->GetAs<float>("dz") - muon1->GetAs<float>("dz"));
+      histogramsHandler->Fill("Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" +  muon1fake + "_absDzFromLeadingTight",
+                              deltaZfromTightMuon);
+
+      histogramsHandler->Fill("Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" +  muon1fake + "_logAbsDzFromLeadingTight",
+                              TMath::Log10(deltaZfromTightMuon));
+
+
     }
   }
 }

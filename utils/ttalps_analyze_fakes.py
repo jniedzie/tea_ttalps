@@ -7,14 +7,19 @@ from math import pi
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 
-hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
+skim = ("skimmed_looseNoBjets_lt4jets_looseMuonPtGt5GeV_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
 
 # for signal
 # mass = "0p35"
 # mass = "2"
 # mass = "12"
 # mass = "30"
-mass = "60"
+mass = "12"
 
 # ctau = "1e-5"
 # ctau = "1e0"
@@ -24,35 +29,23 @@ ctau = "1e3"
 
 # process = f"signals/tta_mAlp-{mass}GeV_ctau-{ctau}mm"
 
-# input_path = f"{base_path}/signals/tta_mAlp-{mass}GeV_ctau-{ctau}mm/{skim[0]}/{hist_base_name}{skim[1]}/histograms.root"
+# input_path = f"{base_path}/signals/tta_mAlp-{mass}GeV_ctau-{ctau}mm/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 # output_path = f"../plots/fakes_{mass}GeV_{ctau}mm.pdf"
 
 
 # for background
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt10", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
-
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
-
-hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
 
 
-process = "backgrounds2018/TTTo2L2Nu"
-# process = "backgrounds2018/TTToSemiLeptonic"
+# process = "backgrounds2018/TTTo2L2Nu"
+process = "backgrounds2018/TTToSemiLeptonic"
 # process = "backgrounds2018/ST_tW_antitop"
 # process = "backgrounds2018/ST_t-channel_antitop"
 # process = "backgrounds2018/ST_tW_top"
 # process = "backgrounds2018/ST_t-channel_top"
 
 
-input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 # input_path = "../test.root"
-
+input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 output_path = f"../plots/fakes_{process.split('/')[-1]}.pdf"
 
 # canvas_divide = (4, 4)
@@ -140,6 +133,9 @@ canvas_divide = (2, 2)
 # collection_name = "LooseDSAMuonsSegmentMatch"
 collection_name = "LoosePATMuonsSegmentMatch"
 hist_params = {
+    # "absDzFromLeadingTight": (100, 0, 20, 1e-5, 1e0, True),  # check
+    # "logAbsDzFromLeadingTight": (200, -5, 3, 1e-3, 1e0, True),  # check
+    
     "pt": (5, 0, 100, 1e-5, 2e0, True),  # check
     # "dxy": (5, -20, 20, 1e-6, 2e0, True),
     # "dxyPVTrajErr": (5, 0, 50, 1e-6, 2e0, True),
