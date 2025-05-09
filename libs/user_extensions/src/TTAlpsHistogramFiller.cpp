@@ -1197,9 +1197,6 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
 
   if (collection->size() < 1) return;
 
-  auto tightMuons = asNanoMuons(event->GetCollection("TightMuons"));
-  auto leadingTightMuon = tightMuons->at(0);
-
   for (auto vertex : *collection) {
     auto dimuon = asNanoDimuonVertex(vertex, event);
     auto muon1 = dimuon->Muon1();
@@ -1258,25 +1255,6 @@ void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> ev
       histogramsHandler->Fill(collectionName + "_" + category + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid);
       histogramsHandler->Fill(collectionName + "_motherPid1_vs_motherPid2_centralBlob", mother1_pid, mother2_pid);
     }
-
-    if (runFakesHistograms) {
-      string muon1fake = (mother1_pid == 90 || mother1_pid == 91) ? "fakes" : "nonFakes";
-      string muon2fake = (mother2_pid == 90 || mother2_pid == 91) ? "fakes" : "nonFakes";
-      string dimuonFake = (muon1fake == "fakes" && muon2fake == "fakes") ? "fakes" : "nonFakes";
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_" + dimuonFake);
-      FillLooseMuonsHistograms(muon1, "Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon1fake);
-      FillLooseMuonsHistograms(muon2, "Loose" + string(muon2->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon2fake);
-
-      
-      float deltaZfromTightMuon = fabs(leadingTightMuon->GetAs<float>("dz") - muon1->GetAs<float>("dz"));
-      histogramsHandler->Fill("Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" +  muon1fake + "_absDzFromLeadingTight",
-                              deltaZfromTightMuon);
-
-      histogramsHandler->Fill("Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" +  muon1fake + "_logAbsDzFromLeadingTight",
-                              TMath::Log10(deltaZfromTightMuon));
-
-
-    }
   }
 }
 /// --------- Fakes Histograms --------- ///
@@ -1291,6 +1269,13 @@ void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
   if (collection->size() < 1) return;
 
   auto genMuons = event->GetCollection("GenPart");
+
+  auto tightMuons = asNanoMuons(event->GetCollection("TightMuons"));
+  auto leadingTightMuon = tightMuons->at(0);
+
+  int nGoodPVs = event->Get("PV_npvsGood");
+  string PUstring = (nGoodPVs < 30) ? "PUlt30" : "PUge30";
+  string PUstring2 = nGoodPVs < 15 ? "PUlt15" : (nGoodPVs > 45 ? "PUgt45" : "");
 
   for (auto vertex : *collection) {
     auto dimuon = asNanoDimuonVertex(vertex, event);
@@ -1315,32 +1300,29 @@ void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
       mother2_pid = genMuons->at(genMuon2->GetMotherIndex())->Get("pdgId");
     }
 
-    if (mother1_pid == 90) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
-      FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_fakes");
-    } else if (mother1_pid == 91) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
-      FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_fakes");
-    } else if (muon1->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
-      FillLooseMuonsHistograms(muon1, "LooseDSAMuonsSegmentMatch_nonFakes");
-    } else if (!muon1->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
-      FillLooseMuonsHistograms(muon1, "LoosePATMuonsSegmentMatch_nonFakes");
-    }
+    string muon1fake = (mother1_pid == 90 || mother1_pid == 91) ? "fakes" : "nonFakes";
+    string muon2fake = (mother2_pid == 90 || mother2_pid == 91) ? "fakes" : "nonFakes";
+    string dimuonFake = (muon1fake == "fakes" && muon2fake == "fakes") ? "fakes" : "nonFakes";
 
-    if (mother2_pid == 90) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
-      FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_fakes");
-    } else if (mother2_pid == 91) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_fakes");
-      FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_fakes");
-    } else if (muon2->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
-      FillLooseMuonsHistograms(muon2, "LooseDSAMuonsSegmentMatch_nonFakes");
-    } else if (!muon2->IsDSA()) {
-      FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_nonFakes");
-      FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_nonFakes");
-    }
+    FillMuonVertexHistograms(dimuon, collectionName + "_" + category + "_" + dimuonFake);
+    FillLooseMuonsHistograms(muon1, "Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon1fake);
+    FillLooseMuonsHistograms(muon2, "Loose" + string(muon2->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon2fake);
+
+    float deltaZfromTightMuon = fabs(leadingTightMuon->GetAs<float>("dz") - muon1->GetAs<float>("dz"));
+
+    histogramsHandler->Fill("Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon1fake + "_absDzFromLeadingTight",
+                            deltaZfromTightMuon);
+
+    histogramsHandler->Fill(
+        "Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon1fake + "_logAbsDzFromLeadingTight",
+        TMath::Log10(deltaZfromTightMuon));
+
+    histogramsHandler->Fill(
+        "Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon1fake + "_logAbsDzFromLeadingTight" + PUstring,
+        TMath::Log10(deltaZfromTightMuon));
+
+    histogramsHandler->Fill(
+        "Loose" + string(muon1->IsDSA() ? "DSA" : "PAT") + "MuonsSegmentMatch_" + muon1fake + "_logAbsDzFromLeadingTight" + PUstring2,
+        TMath::Log10(deltaZfromTightMuon));
   }
 }
