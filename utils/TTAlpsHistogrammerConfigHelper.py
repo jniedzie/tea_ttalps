@@ -110,11 +110,6 @@ class TTAlpsHistogrammerConfigHelper:
         ("GoodMediumBtaggedJets", "mass", 1000, 0, 1000, ""),
         ("GoodMediumBtaggedJets", "btagDeepFlavB", 1000, 0, 1, ""),
 
-        ("Event", "nLooseMuonsSegmentMatch", 50, 0, 50, ""),
-        ("LooseMuonsSegmentMatch", "pt", 2000, 0, 1000, ""),
-        ("LooseMuonsSegmentMatch", "eta", 300, -3, 3, ""),
-        ("LooseMuonsSegmentMatch", "phi", 300, -3, 3, ""),
-
         ("Event", "nTightMuons", 50, 0, 50, ""),
         ("TightMuons", "pt", 2000, 0, 1000, ""),
         ("TightMuons", "leadingPt", 2000, 0, 1000, ""),

@@ -8,26 +8,27 @@ input_username = "jniedzie"
 
 # Loose semimuonic skim
 # skim = ("skimmed_looseSemimuonic_v2", "")
+# skim = ("skimmed_looseSemimuonic_v2", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # SR, J/Psi CR, ttZ CR (no isolation requirement on the loose muons)
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuonsNoIso", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuonsWithIso", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuonsNoIso", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuonsWithIso", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
-# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
+# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "")
-# skim = ("skimmed_looseNonTT_v1_VVCR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseNonTT_v1_VVCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
-# skim = ("skimmed_looseSemimuonic_v2_LLPtrigger_SR", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "_SRDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_LLPtrigger_SR", "SRDimuons", "")
+# skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "SRDimuons", "")
+# skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
@@ -38,11 +39,16 @@ samples = dasBackgrounds2018.keys()
 base_path = "/data/dust/user/{}/ttalps_cms"
 
 applyScaleFactors = {
-    "muon": True,
-    "muonTrigger": True,
-    "pileup": True,
-    "bTagging": True,
-    "PUjetID": True,
+  # name : (apply nominal, apply variation)
+  "muon": (True, True),
+  "muonTrigger": (True, True),
+  "pileup": (True, True),
+  "bTagging": (True, True),
+  "PUjetID": (True, True),
+  # "JpsiInvMassSFs": (True, True),
+  # "jetEnergy" : (False, True),
+  # "met" : (False, True),
+  # "QCDscale" : (False, True),
 }
 
 # this has to be here, otherwise the script will not work:
@@ -57,4 +63,8 @@ for name, apply in applyScaleFactors.items():
 
   output_hists_dir += f"_{name}SFs"
 
-output_hists_dir += f"{skim[1]}{skim[2]}/"
+if skim[1] != "":
+  output_hists_dir += f"_{skim[1]}"
+if skim[2] != "":
+  output_hists_dir += f"_{skim[2]}"
+output_hists_dir += "/"

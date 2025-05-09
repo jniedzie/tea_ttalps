@@ -17,17 +17,20 @@ luminosity = get_luminosity(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "SR")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
-# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
+# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
 
 # skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")  # this is in fact VV CR
 # skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_JPsiDimuons", "SR")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
 
@@ -79,7 +82,7 @@ genMuonVertexCollections = [
 ]
 
 data_to_include = [
-    "SingleMuon2018",
+    # "SingleMuon2018",
     # "Muon2022preEE",
     # "Muon2022postEE",
     
@@ -317,38 +320,38 @@ histograms = (
     # ----------------------------------------------------------------------------
     # Muon Trigger Objects
     # ----------------------------------------------------------------------------
-    Histogram("Event_nMuonTriggerObjects", "", False, True, default_norm, 1, 0, 10, 
-              1e-5, 1e8, "Number of muon trigger objects", f"# events ({year})"),
-    Histogram("MuonTriggerObjects_pt", "", False, True, default_norm, 5, 0, 200, 
-              1e-5, 1e8, "Muon trigger objects p_{T} [GeV]", f"# events ({year})"),
-    Histogram("MuonTriggerObjects_eta", "", False, True, default_norm, 5, -3, 3, 
-              1e-5, 1e8, "Muon trigger objects #eta", f"# events ({year})"),
-    Histogram("MuonTriggerObjects_phi", "", False, True, default_norm, 5, -3, 3, 
-              1e-5, 1e8, "Muon trigger objects #phi", f"# events ({year})"),
-    Histogram("MuonTriggerObjects_hasFilterBits2", "", False, True, default_norm, 1, 
-              0, 10, 1e-5, 1e8, "Muon trigger objects has filerBits 2", f"# events ({year})"),
-    Histogram("MuonTriggerObjects_minDRTightLooseMuon", "", False, True, default_norm, 1, 
-              0, 10, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons)", f"# events ({year})"),
-    Histogram("MuonTriggerObjects_tightLooseMuonMatch0p3", "", False, True, default_norm, 1, 
-              0, 10, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons) < 0.3", f"# events ({year})"),
-    Histogram("MuonTriggerObjects_tightLooseMuonMatch0p1", "", False, True, default_norm, 1, 
-              0, 10, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons) < 0.1", f"# events ({year})"),
-    Histogram("Event_nLeadingMuonTriggerObject", "", False, True, default_norm, 1, 0, 10, 
-              1e-5, 1e8, "Number of muon trigger objects", f"# events ({year})"),
-    Histogram("LeadingMuonTriggerObject_pt", "", False, True, default_norm, 5, 0, 200, 
-              1e-5, 1e8, "Muon trigger objects p_{T} [GeV]", f"# events ({year})"),
-    Histogram("LeadingMuonTriggerObject_eta", "", False, True, default_norm, 5, -3, 3, 
-              1e-5, 1e8, "Muon trigger objects #eta", f"# events ({year})"),
-    Histogram("LeadingMuonTriggerObject_phi", "", False, True, default_norm, 5, -3, 3, 
-              1e-5, 1e8, "Muon trigger objects #phi", f"# events ({year})"),
-    Histogram("LeadingMuonTriggerObject_hasFilterBits2", "", False, True, default_norm, 1, 0, 
-              10, 1e-5, 1e8, "Muon trigger objects has filerBits 2", f"# events ({year})"),
-    Histogram("LeadingMuonTriggerObject_minDRTightLooseMuon", "", False, True, default_norm, 1, 
-              0, 1, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons)", f"# events ({year})"),
-    Histogram("LeadingMuonTriggerObject_tightLooseMuonMatch0p3", "", False, True, default_norm, 
-              1, 0, 2, 1e-5, 1e10, "min #Delta R (Muon trigger, tight muons) < 0.3", f"# events ({year})"),
-    Histogram("LeadingMuonTriggerObject_tightLooseMuonMatch0p1", "", False, True, default_norm, 
-              1, 0, 2, 1e-5, 1e10, "min #Delta R (Muon trigger, tight muons) < 0.1", f"# events ({year})"),
+    # Histogram("Event_nMuonTriggerObjects", "", False, True, default_norm, 1, 0, 10, 
+    #           1e-5, 1e8, "Number of muon trigger objects", f"# events ({year})"),
+    # Histogram("MuonTriggerObjects_pt", "", False, True, default_norm, 5, 0, 200, 
+    #           1e-5, 1e8, "Muon trigger objects p_{T} [GeV]", f"# events ({year})"),
+    # Histogram("MuonTriggerObjects_eta", "", False, True, default_norm, 5, -3, 3, 
+    #           1e-5, 1e8, "Muon trigger objects #eta", f"# events ({year})"),
+    # Histogram("MuonTriggerObjects_phi", "", False, True, default_norm, 5, -3, 3, 
+    #           1e-5, 1e8, "Muon trigger objects #phi", f"# events ({year})"),
+    # Histogram("MuonTriggerObjects_hasFilterBits2", "", False, True, default_norm, 1, 
+    #           0, 10, 1e-5, 1e8, "Muon trigger objects has filerBits 2", f"# events ({year})"),
+    # Histogram("MuonTriggerObjects_minDRTightLooseMuon", "", False, True, default_norm, 1, 
+    #           0, 10, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons)", f"# events ({year})"),
+    # Histogram("MuonTriggerObjects_tightLooseMuonMatch0p3", "", False, True, default_norm, 1, 
+    #           0, 10, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons) < 0.3", f"# events ({year})"),
+    # Histogram("MuonTriggerObjects_tightLooseMuonMatch0p1", "", False, True, default_norm, 1, 
+    #           0, 10, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons) < 0.1", f"# events ({year})"),
+    # Histogram("Event_nLeadingMuonTriggerObject", "", False, True, default_norm, 1, 0, 10, 
+    #           1e-5, 1e8, "Number of muon trigger objects", f"# events ({year})"),
+    # Histogram("LeadingMuonTriggerObject_pt", "", False, True, default_norm, 5, 0, 200, 
+    #           1e-5, 1e8, "Muon trigger objects p_{T} [GeV]", f"# events ({year})"),
+    # Histogram("LeadingMuonTriggerObject_eta", "", False, True, default_norm, 5, -3, 3, 
+    #           1e-5, 1e8, "Muon trigger objects #eta", f"# events ({year})"),
+    # Histogram("LeadingMuonTriggerObject_phi", "", False, True, default_norm, 5, -3, 3, 
+    #           1e-5, 1e8, "Muon trigger objects #phi", f"# events ({year})"),
+    # Histogram("LeadingMuonTriggerObject_hasFilterBits2", "", False, True, default_norm, 1, 0, 
+    #           10, 1e-5, 1e8, "Muon trigger objects has filerBits 2", f"# events ({year})"),
+    # Histogram("LeadingMuonTriggerObject_minDRTightLooseMuon", "", False, True, default_norm, 1, 
+    #           0, 1, 1e-5, 1e8, "min #Delta R (Muon trigger, tight muons)", f"# events ({year})"),
+    # Histogram("LeadingMuonTriggerObject_tightLooseMuonMatch0p3", "", False, True, default_norm, 
+    #           1, 0, 2, 1e-5, 1e10, "min #Delta R (Muon trigger, tight muons) < 0.3", f"# events ({year})"),
+    # Histogram("LeadingMuonTriggerObject_tightLooseMuonMatch0p1", "", False, True, default_norm, 
+    #           1, 0, 2, 1e-5, 1e10, "min #Delta R (Muon trigger, tight muons) < 0.1", f"# events ({year})"),
 
 )
 
@@ -360,11 +363,11 @@ mass_rebin = 200
 mass_min = 0.0
 mass_max = 70.0
 
-if skim[1] == "_JPsiDimuons":
+if "JPsiDimuons" in skim[1]:
   mass_rebin = 1
   mass_min = 2.9
   mass_max = 3.3
-elif skim[1] == "_ZDimuons":
+elif "ZDimuons" in skim[1]:
   mass_rebin = 20
   mass_min = 70.0
   mass_max = 110.0
@@ -373,10 +376,10 @@ norm_one = NormalizationType.to_one
 
 for collection, category in product(extraMuonVertexCollections, ("", "_PatDSA", "_DSA", "_Pat")):
   histograms += (
-      # Histogram("Event_n"+collection + category, "", False, True, default_norm, 1,
-      #           0, 5, 1e-2, 1e6, "Number of loose #mu vertices", f"# events ({year})"),
+      Histogram("Event_n"+collection + category, "", False, True, default_norm, 1,
+                0, 5, 1e0, 1e3, "Number of #mu vertices", f"# events ({year})"),
       Histogram(collection + category+"_invMass", "", False, False, default_norm, mass_rebin,
-                mass_min, mass_max, 0, 10, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
+                mass_min, mass_max, 0, 20, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
       # Histogram(collection + category+"_invMass", "", False, True, default_norm, mass_rebin,
       #           mass_min, mass_max, 1e-5, 1e6, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
       Histogram(collection + category+"_logInvMass", "", False, True, default_norm, 1, 0.45,

@@ -125,6 +125,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_
     FillMuonVertexHistograms(event, muonVertexCollectionName);
     if (muonVertexCollectionName == muonVertexCollectionInput) muonVertexCollectionInput_filled = true;
   }
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
   if (!muonVertexCollectionInput_filled) FillMuonVertexHistograms(event, muonVertexCollectionInput);
 }
 
@@ -585,12 +586,11 @@ void TTAlpsHistogramFiller::FillGenMatchedLooseMuonsHistograms(const shared_ptr<
 
   for (auto &[matchingMethod, param] : muonMatchingParams) {
     string muonCollectionName = "LooseMuons" + matchingMethod + "Match";
-    string muonVertexCollectionName = "LooseMuonsVertex" + matchingMethod + "Match";
 
     auto looseMuons = asNanoMuons(event->GetCollection(muonCollectionName));
     auto tightMuons = ttAlpsEvent->GetTightMuonsInCollection(looseMuons);
 
-    FillRecoGenMatchedResonanceHistograms(event, looseMuons, muonVertexCollectionName);
+    FillRecoGenMatchedResonanceHistograms(event, looseMuons, muonVertexCollectionInput);
 
     auto looseDimuonFromALP = ttAlpsEvent->GetDimuonMatchedToGenMuonsFromALP(looseMuons);
     // string looseMuonVertexFromALPsName = "LooseMuonsVertex" + matchingMethod + "MatchFromALP";
