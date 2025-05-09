@@ -57,7 +57,9 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
   auto muons = GetTTAlpsEventMuons();
   map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
 
-  map<string,float> jpsiSF = GetJpsiScaleFactors();
+  // TODO: JPsi CR SFs to be defined
+  // map<string,float> jpsiSF = GetJpsiScaleFactors();
+  map<string,float> jpsiSF = {{"systematic", 1.0}};
   
   map<string,float> scaleFactorMap;
   scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"] * jpsiSF["systematic"];

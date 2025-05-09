@@ -7,9 +7,11 @@ import random
 
 from ttalps_samples_list import dasBackgrounds2018
 from Sample import Sample, SampleType
-
 from ttalps_cross_sections import get_cross_sections
 from ttalps_luminosities import get_luminosity
+from ScaleFactorProducer import ScaleFactorProducer
+from Histogram import Histogram
+from HistogramNormalizer import NormalizationType
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
@@ -21,9 +23,11 @@ luminosity = get_luminosity(year)
 
 # CRs and SRs
 skim = "skimmed_looseSemimuonic_v2_SR"
+# skim = "skimmed_looseNoBjets_lt4jets_v1_merged"
 
 # Histograms
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JPsiDimuons_LooseNonLeadingMuonsVertexSegmentMatch" # all SFs
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JPsiDimuons" # all SFs
 
 # base_path = "/data/dust/user/jniedzie/ttalps_cms"
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
@@ -46,90 +50,13 @@ matching_ratios = {
     "_segmentMatch1p5": 1.5,
 }
 
-def get_root_file(file_path):
-    root_file = ROOT.TFile.Open(file_path)
-    if not root_file or root_file.IsZombie():
-        print("Error: Unable to open the ROOT file: " + file_path)
-    return root_file
-
-def get_inital_weight_sum(root_file):
-    cut_flow = root_file.Get("cutFlow")
-    return cut_flow.GetBinContent(1)
-
-def get_final_weight_sum(root_file, hist_name):
-    cutflow_histogram = root_file.Get(hist_name)
-    if not cutflow_histogram:
-        print("Error: Histogram "+hist_name+" not found")
-        root_file.Close()
-    return cutflow_histogram.Integral()
-
-def get_rebinned_histogram(histogram, title):
-    original_bins = [histogram.GetBinLowEdge(i) for i in range(1, histogram.GetNbinsX() + 2)]
-    new_bin_edges = [x for x in original_bins if 3.0 <= x <= 3.2]
-    if 3.2 not in new_bin_edges:
-        new_bin_edges.append(3.2)
-
-    new_n_bins = len(new_bin_edges) - 1
-    new_histogram = ROOT.TH1F(title, title, new_n_bins, array('d', new_bin_edges))
-
-    for i in range(1, new_n_bins + 1):
-        original_bin = histogram.FindBin(new_bin_edges[i-1])
-        new_histogram.SetBinContent(i, histogram.GetBinContent(original_bin))
-        new_histogram.SetBinError(i, histogram.GetBinError(original_bin))
-        original_label = histogram.GetXaxis().GetBinLabel(original_bin)
-        if original_label != "":
-            new_histogram.GetXaxis().SetBinLabel(i, original_label)
-    new_histogram.Rebin(20)
-    return new_histogram
-
-def get_data_hist(ratio_name, hist_name, data_sample):
-    # dataset = data
-    title = f"{ratio_name}_{hist_name}_{random.randint(1, 1000)}"
-
-    root_file = get_root_file(data_sample.file_path)
-
-    histogram = deepcopy(root_file.Get(hist_name))
-    if not histogram or histogram.ClassName() == "TObject":
-        print("Error: Histogram "+hist_name+" not found in the file " + data_sample.file_path)
-        root_file.Close()
-
-    rebinned_histogram = deepcopy(get_rebinned_histogram(histogram, title))
-    rebinned_histogram.SetFillStyle(1001)
-    rebinned_histogram.SetLineColorAlpha(ROOT.kBlack, 1.0)
-    rebinned_histogram.SetFillColorAlpha(ROOT.kBlue, 0.0)
-    rebinned_histogram.SetBinErrorOption(ROOT.TH1.kPoisson)
-    root_file.Close()
-
-    return rebinned_histogram
-
-def get_background_stack(ratio_name, hist_name, background_samples):
-    title = f"{ratio_name}_{hist_name}"
-    stack = ROOT.THStack(title, title)
-    # for dataset in backgrounds.keys():
-    for sample in background_samples:
-        root_file = get_root_file(sample.file_path)
-
-        initial_weight_sum = get_inital_weight_sum(root_file)
-        histogram = deepcopy(root_file.Get(hist_name))
-        if not histogram:
-            print("Error: Histogram "+hist_name+" not found in the file " + sample.file_path)
-            continue
-        rebinned_histogram = deepcopy(get_rebinned_histogram(histogram, title))
-        rebinned_histogram.SetFillStyle(1001)
-        rebinned_histogram.SetLineColorAlpha(ROOT.kBlack, 0.0)
-        rebinned_histogram.SetFillColorAlpha(ROOT.kBlue, 0.6)
-        rebinned_histogram.SetBinErrorOption(ROOT.TH1.kPoisson)
-
-        cross_section = sample.cross_section
-        scale = cross_section * luminosity / initial_weight_sum
-        rebinned_histogram.Scale(scale)
-        stack.Add(rebinned_histogram)
-
-        root_file.Close()
-    return stack
 
 def plot_hists(data, background, title):
     canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
+    for bkg in background:
+        bkg.SetFillStyle(1001)
+        bkg.SetLineColorAlpha(ROOT.kBlack, 0.0)
+        bkg.SetFillColorAlpha(ROOT.kBlue, 0.6)
     background.Draw("HIST")
 
     # Create an uncertainty band
@@ -147,9 +74,9 @@ def plot_hists(data, background, title):
     uncertainty_band.Draw("E2 SAME")
 
     # total_data = data.GetStack().Last() 
-    data.SetMarkerStyle(20)
-    data.SetMarkerSize(1)
-    data.SetLineColor(ROOT.kBlack)
+    data.SetFillStyle(1001)
+    data.SetLineColorAlpha(ROOT.kBlack, 1.0)
+    data.SetFillColorAlpha(ROOT.kBlue, 0.0)
     data.Draw("E1 SAME")
 
     max_value = max(total_background.GetMaximum(), data.GetMaximum())
@@ -163,52 +90,38 @@ def plot_hists(data, background, title):
     canvas.SaveAs(f"../plots/dataMCcomparisons/{title}.pdf")
     canvas.Close()
 
-def get_asymmetric_uncertainties(histogram):
-    graph = ROOT.TGraphAsymmErrors(histogram)
-    if graph.GetN() == 0:
-        return 0.0, 0.0, 0.0  # Handle empty hist gracefully
-    y = float(graph.GetY()[0])
-    err_low = float(graph.GetEYlow()[0])
-    err_high = float(graph.GetEYhigh()[0])
-    return y, err_low, err_high
-
-def get_dataMC_ratio(data_yield, data_uncertainty_down, data_uncertainty_up, background_yield, background_uncertainty_down, background_uncertainty_up):
-    ratio = data_yield / background_yield if background_yield > 0 else 0
-    data_low  = data_yield - data_uncertainty_down
-    data_high = data_yield + data_uncertainty_up
-    background_low  = background_yield  - background_uncertainty_down
-    background_high = background_yield  + background_uncertainty_up
-
-    ratio_low = data_low / background_high if background_high > 0 else 0
-    ratio_high = data_high / background_low if background_low > 0 else 0
-
-    ratio_uncertainty_down = ratio - ratio_low
-    ratio_uncertainty_up   = ratio_high - ratio
-    return ratio, ratio_uncertainty_down, ratio_uncertainty_up
 
 def main():
 
-    nSamples = len(backgrounds)
-
-    total_expected_bkg_for_ratio = {}
-    total_expected_bkg_for_ratio_uncertainty = {}
-    total_data_for_ratio = {}
-    total_data_for_ratio_uncertainty = {}
     data_MC_ratios = {}
     data_MC_ratios_uncertainty_up = {}
     data_MC_ratios_uncertainty_down = {}
+    data_yields = {}
+    background_yields = {}
+
+    sfProducer = ScaleFactorProducer()
+    sfProducer.setLuminosity(luminosity)
 
     for ratio_name, ratio in matching_ratios.items():
         print(f"--- {ratio_name} ---")
 
-        for category in ("Pat", "PatDSA", "DSA"):
+        for category in ("", "Pat", "PatDSA", "DSA"):
             if ratio_name == "_segmentMatch0" and category != "Pat":
                 continue
             hist_name = f"{collection}_{category}_{variable}"
+            if category == "":
+                hist_name = f"{collection}_{variable}"
+            histogram = Histogram(
+                name=hist_name,
+                title=hist_name,
+                norm_type=NormalizationType.to_lumi,
+                x_min=3.0,
+                x_max=3.2
+            )
 
-            background_samples = []
+            samples = []
             for background in backgrounds.keys():
-                background_samples.append(
+                samples.append(
                     Sample(
                         name=background.split("/")[-1],
                         file_path=os.path.join(base_path, background, f"{skim}{ratio_name}", hist_path, "histograms.root"),
@@ -216,27 +129,32 @@ def main():
                         cross_sections=cross_sections,
                     )
                 )
-            data_sample = Sample(
-                name=data,
-                file_path=os.path.join(base_path, f"{data}_{skim}{ratio_name}_{hist_path}.root"),
-                type=SampleType.data,
+            samples.append(
+                Sample(
+                    name=data,
+                    file_path=os.path.join(base_path, f"{data}_{skim}{ratio_name}_{hist_path}.root"),
+                    type=SampleType.data,
+                )
             )
+            sfProducer.setSamples(samples)
 
-            background_stack = get_background_stack(ratio_name, hist_name, background_samples)
-            data_hist = get_data_hist(ratio_name, hist_name, data_sample)
+            background_stack = sfProducer.getBackgroundStack(histogram)
+            data_hist = sfProducer.getDataHist(histogram)
             plot_hists(data_hist, background_stack, f"{ratio_name}_{hist_name}_{category}")
             
-            data_yield, data_uncertainty_down, data_uncertainty_up = get_asymmetric_uncertainties(data_hist)
-            background_yield, background_uncertainty_down, background_uncertainty_up = get_asymmetric_uncertainties(background_stack.GetStack().Last())
+            data_yield, data_uncertainty_down, data_uncertainty_up = sfProducer.getYieldAndAsymmetricUncertainties(data_hist)
+            background_yield, background_uncertainty_down, background_uncertainty_up = sfProducer.getYieldAndAsymmetricUncertainties(background_stack.GetStack().Last())
             print(f"Data yields: {data_yield:.5f} pm {data_uncertainty_down:.5f} (down) pm {data_uncertainty_up:.5f} (up)")
             print(f"Background yields: {background_yield:.5f} pm {background_uncertainty_down:.5f} (down) pm {background_uncertainty_up:.5f} (up)")
 
-            ratio,ratio_uncertainty_down,ratio_uncertainty_up = get_dataMC_ratio(data_yield, data_uncertainty_down, data_uncertainty_up, background_yield, background_uncertainty_down, background_uncertainty_up)
+            ratio,ratio_uncertainty_down,ratio_uncertainty_up = sfProducer.getDataMCRatio(data_yield, data_uncertainty_down, data_uncertainty_up, background_yield, background_uncertainty_down, background_uncertainty_up)
 
             print(f"Data / MC ratio: {ratio:.5f} pm {ratio_uncertainty_down:.5f} (down) pm {ratio_uncertainty_up:.5f} (up)")
             data_MC_ratios[ratio_name,category] = ratio
             data_MC_ratios_uncertainty_up[ratio_name,category] = ratio_uncertainty_up
             data_MC_ratios_uncertainty_down[ratio_name,category] = ratio_uncertainty_down
+            data_yields[ratio_name,category] = [data_yield,data_uncertainty_up,data_uncertainty_down]
+            background_yields[ratio_name,category] = [background_yield,background_uncertainty_up,background_uncertainty_down]
             
 
     # Loop over categories

@@ -46,7 +46,7 @@ applyScaleFactors = {
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),
-  "JpsiInvMassSFs": (True, True),
+  # "JpsiInvMassSFs": (True, True),
   # "jetEnergy" : (False, True),
   # "met" : (False, True),
   # "QCDscale" : (False, True),
