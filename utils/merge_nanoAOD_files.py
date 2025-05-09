@@ -18,10 +18,12 @@ skim = "skimmed_looseSemimuonic_v2"
 # skim = "skimmed_looseNonTT_v1"
 # skim = "skimmed_looseNoBjets_lt4jets_v1"
 # skim = "skimmed_loose_lt3bjets_lt4jets_v1"
+# skim = "skimmed_looseNoBjets_lt4jets_looseMuonPtGt8GeV_v1"
 
 sample_paths = dasSamples2018.keys()
 # sample_paths = dasSignals2018.keys()
 # sample_paths = dasBackgrounds2018.keys()
+# sample_paths = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 # sample_paths = dasData2018.keys()
 # sample_paths = dasData2018_standard.keys()
 

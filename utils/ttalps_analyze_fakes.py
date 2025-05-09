@@ -10,9 +10,9 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-skim = ("skimmed_looseNoBjets_lt4jets_looseMuonPtGt5GeV_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
+# skim = ("skimmed_looseNoBjets_lt4jets_looseMuonPtGt5GeV_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
 
 # for signal
 # mass = "0p35"
@@ -133,18 +133,24 @@ canvas_divide = (2, 2)
 # collection_name = "LooseDSAMuonsSegmentMatch"
 collection_name = "LoosePATMuonsSegmentMatch"
 hist_params = {
-    # "absDzFromLeadingTight": (100, 0, 20, 1e-5, 1e0, True),  # check
-    # "logAbsDzFromLeadingTight": (200, -5, 3, 1e-3, 1e0, True),  # check
+    "absDzFromLeadingTight": (100, 0, 20, 1e-5, 1e0, True),  # check
+    "logAbsDzFromLeadingTight": (200, -5, 3, 1e-3, 1e0, True),  # check
     
-    "pt": (5, 0, 100, 1e-5, 2e0, True),  # check
-    # "dxy": (5, -20, 20, 1e-6, 2e0, True),
-    # "dxyPVTrajErr": (5, 0, 50, 1e-6, 2e0, True),
-    "eta": (20, -3, 3, 1e-4, 2e0, True),  # check
-    "dz": (20, -50, 50, 1e-6, 2e0, True),  # check
-    # "dzPVErr": (5, 0, 50, 1e-6, 2e0, True),
-    "normChi2": (100, 0, 4, 1e-5, 1e0, True),  # check
-    # "phi": (20, -3.5, 3.5, 1e-4, 2e0, True),
-    # "ptErr": (10, 0, 50, 1e-5, 2e0, True),
+    # "logAbsDzFromLeadingTightPUlt30": (200, -5, 3, 1e-3, 1e0, True),
+    # "logAbsDzFromLeadingTightPUge30": (200, -5, 3, 1e-3, 1e0, True),
+    
+    "logAbsDzFromLeadingTightPU12to15": (200, -5, 3, 1e-3, 1e0, True),
+    "logAbsDzFromLeadingTightPU43to46": (200, -5, 3, 1e-3, 1e0, True),
+    
+    # "pt": (5, 0, 100, 1e-5, 2e0, True),  # check
+    # # "dxy": (5, -20, 20, 1e-6, 2e0, True),
+    # # "dxyPVTrajErr": (5, 0, 50, 1e-6, 2e0, True),
+    # "eta": (20, -3, 3, 1e-4, 2e0, True),  # check
+    # "dz": (20, -50, 50, 1e-6, 2e0, True),  # check
+    # # "dzPVErr": (5, 0, 50, 1e-6, 2e0, True),
+    # "normChi2": (100, 0, 4, 1e-5, 1e0, True),  # check
+    # # "phi": (20, -3.5, 3.5, 1e-4, 2e0, True),
+    # # "ptErr": (10, 0, 50, 1e-5, 2e0, True),
 
     # "etaErr": (2, 0, 1, 1e-5, 2e0, True),
     # "phiErr": (2, 0, 1, 1e-5, 2e0, True),
@@ -199,7 +205,7 @@ def main():
   canvas = ROOT.TCanvas("canvas", "canvas", 2500, 2500)
   canvas.Divide(*canvas_divide)
 
-  legend = ROOT.TLegend(0.6, 0.6, 0.9, 0.9)
+  legend = ROOT.TLegend(0.1, 0.6, 0.4, 0.9)
 
   for i, (hist_name, (rebin, x_min, x_max, y_min, y_max, log_y)) in enumerate(hist_params.items()):
     hist_nonFakes_name = f"{collection_name}_nonFakes_{hist_name}"

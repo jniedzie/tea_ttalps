@@ -20,6 +20,8 @@ output_skim = "skimmed_looseSemimuonic_v2"
 # output_skim = "skimmed_looseNoBjets_lt4jets_v1"
 # output_skim = "skimmed_loose_lt3bjets_lt4jets_v1"
 
+# output_skim = "skimmed_looseNoBjets_lt4jets_looseMuonPtGt8GeV_v1"
+
 output_trees_dir = ""
 output_hists_dir = ""
 input_directory = ""

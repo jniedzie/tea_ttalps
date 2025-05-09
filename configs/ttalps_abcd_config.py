@@ -46,83 +46,48 @@ category = "_Pat"
 
 # binning always expressed in bin numbers, not values
 optimal_parameters = {
-    # optimized on MC (rebin 4):
-    ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),  # best
+    # optimized on MC, pT > 3 GeV:
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (12, 10), "D"),  # best
     # ("_Pat", "SR"): ("logAbsCollinearityAngle", "leadingPt", (24, 11), "D"),
     # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
     # ("_Pat", "SR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
     # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (9, 7), "A"),
     # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logInvMass", (11, 10), "D"),
-
-
     # ("_Pat", "SRnoIso"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
     # ("_Pat", "SRnoIso"): ("logAbsCollinearityAngle", "logInvMass", (11, 10), "D"),
-    ("_Pat", "SRnoIso"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "D"),
-
+    # ("_Pat", "SRnoIso"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "D"),
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
     # ("_Pat", "JPsiCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
     # ("_Pat", "JPsiCR"): ("invMass", "logDeltaSquaredIso03", (9, 7), "A"),
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "leadingPt", (24, 11), "D"),
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
-    ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "D"),
-
-    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logPt", (9, 14), "D"),
-    # ("_Pat", "bbCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
-    # ("_Pat", "bbCR"): ("invMass", "logDeltaSquaredIso03", (8, 7), "A"),
-    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "leadingPt", (23, 13), "D"),
-    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
-
-    # ("_Pat", "bbCR"): ("absPtLxyDPhi2", "logPt", (10, 19), "D"),
-    # ("_Pat", "bbCR"): ("invMass", "eta", (17, 7), "A"),
-    # ("_Pat", "bbCR"): ("log3Dangle", "logPt", (10, 8), "D"),
-    # ("_Pat", "bbCR"): ("logInvMass", "logDeltaIso03", (12, 17), "A"),
-    # ("_Pat", "bbCR"): ("logInvMass", "logDeltaSquaredIso04", (11, 17), "A"),
-    # ("_Pat", "bbCR"): ("logPt", "dPhi", (4, 16), "A"),
-    # ("_Pat", "bbCR"): ("pt", "dEta", (10, 5), "A"),
-    # ("_Pat", "bbCR"): ("pt", "dPhi", (4, 4), "A"),
-    
-    # ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
-    # ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "logPt", (11, 11), "D"),
-    ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "pt", (22, 10), "D"),
-    
-    # ("_Pat", "JPsiCRwithIso"): ("log3Dangle", "logDeltaIso04", (12, 16), "A"),
-    # ("_Pat", "JPsiCRwithIso"): ("log3Dangle", "logDeltaSquaredIso04", (10, 16), "A"),
-    # ("_Pat", "JPsiCRwithIso"): ("log3Dangle", "logDisplacedTrackIso04Dimuon2", (24, 15), "A"),
-    # ("_Pat", "JPsiCRwithIso"): ("logAbsCollinearityAngle", "eta", (20, 12), "D"),
-    # ("_Pat", "JPsiCRwithIso"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso04Dimuon1", (20, 15), "A"),
-    
-
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "
     # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (21, 19), "A"),
 
-    ("_PatDSA", "SR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
+    # optimized on MC (rebin 4, μ pt > 8 GeV):
+    # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (23, 2), "C"),
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (10, 12), "D"),
+
+    # ("_Pat", "JPsiCR"): ("log3Dangle", "logDeltaIso03", (13, 15), "A"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 13), "A"),
+    # ("_Pat", "JPsiCR"): ("outerDR", "logDeltaIso03", (14, 2), "A"),
+
+
+    # ("_PatDSA", "SR"): ("logLxy", "outerDR", (7, 14), "A"),
+    ("_PatDSA", "SR"): ("outerDR", "logAbsPtLxyDPhi1", (17, 12), "D"),
+
     ("_PatDSA", "JPsiCR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
-    ("_DSA", "SR"): ("logLeadingPt", "dPhi", (10, 13), "A"),
+
+    # ("_DSA", "SR"): ("absPtLxyDPhi2", "leadingPt", (24, 21), "D"),
+    # ("_DSA", "SR"): ("leadingPt", "dEta", (4, 3), "A"),
+    # ("_DSA", "SR"): ("leadingPt", "dPhi", (3, 3), "A"),
+    # ("_DSA", "SR"): ("logLeadingPt", "dEta", (4, 15), "A"),
+    # ("_DSA", "SR"): ("logLeadingPt", "dPhi", (3, 15), "A"),
+    ("_DSA", "SR"): ("logLxySignificance", "outerDR", (6, 14), "A"),
+
+
     ("_DSA", "JPsiCR"): ("logLeadingPt", "dPhi", (10, 13), "A"),
-
-    # optimized on MC (rebin 10):
-    # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logPt", (4, 9), "D"),
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso03Dimuon1", (9, 7), "A"),
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso04Dimuon1", (8, 6), "A"),
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (9, 8), "A"),
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso04Dimuon1", (9, 7), "A"),
-    # ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon1", (9, 6), "A"),
-
-    # optimized on data (rebin 4):
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (13, 16), "A"),
-
-    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logPt", (9, 14), "D"),
-    # ("_Pat", "bbCR"): ("invMass", "logDeltaIso03", (10, 2), "A"),
-    # ("_Pat", "bbCR"): ("invMass", "logDeltaSquaredIso03", (8, 7), "A"),
-    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "leadingPt", (23, 13), "D"),
-    # ("_Pat", "bbCR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
-
-    # optimized on data (rebin 10):
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso03Dimuon1", (6, 6), "A"),
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDisplacedTrackIso04Dimuon1", (7, 6), "A"),
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (10, 7), "A"),
-    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso04Dimuon1", (7, 5), "A"),  # N_min not satisfied
-    # ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon1", (9, 6), "A"),
-
 
 }
 if (category, do_region) in optimal_parameters:
@@ -249,11 +214,16 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 # base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
-    "SR": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    "SR": (
+        # "skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+    ),
     "SRnoIso": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuonsNoIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     "JPsiCR": (
-        ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     ),
     "JPsiCRwithIso": (
         ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuonsWithIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
@@ -262,8 +232,11 @@ skims = {
     "ttZCR": ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons"),
     "VVCR": ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons"),
     "QCDCR": (
-        ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+
+        ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     ),
     "WjetsCR": ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons"),
     "bbCR": (
