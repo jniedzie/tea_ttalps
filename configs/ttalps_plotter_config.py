@@ -25,11 +25,12 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons_LooseNonLeadingMuonsVertexS
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
-# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "")
+# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
 
 # skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")  # this is in fact VV CR
 # skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_JPsiDimuons", "SR")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
 
@@ -362,11 +363,11 @@ mass_rebin = 200
 mass_min = 0.0
 mass_max = 70.0
 
-if skim[1] == "_JPsiDimuons" or skim[1] == "_JPsiDimuons_LooseNonLeadingMuonsVertexSegmentMatch":
+if "JPsiDimuons" in skim[1]:
   mass_rebin = 1
   mass_min = 2.9
   mass_max = 3.3
-elif skim[1] == "_ZDimuons":
+elif "ZDimuons" in skim[1]:
   mass_rebin = 20
   mass_min = 70.0
   mass_max = 110.0
