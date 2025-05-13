@@ -5,7 +5,9 @@ from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
 from ttalps_histogrammer_files_config import skim, applyScaleFactors
 
+# year = "2016preVFP"
 year = "2018"
+# year = "2022preEE"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)

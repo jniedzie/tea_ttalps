@@ -1,4 +1,6 @@
+from ttalps_samples_list import dasBackgrounds2016
 from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
+from ttalps_samples_list import dasBackgrounds2022preEE
 import os
 
 max_files = -1
@@ -34,6 +36,8 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVer
 # skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "SRDimuons", "")
 # skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
+# samples = dasBackgrounds2016.keys()
+
 # samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
 samples = dasBackgrounds2018.keys()
@@ -41,6 +45,8 @@ samples = dasBackgrounds2018.keys()
 # samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
+
+# samples = dasBackgrounds2022preEE.keys()
 
 base_path = "/data/dust/user/{}/ttalps_cms"
 

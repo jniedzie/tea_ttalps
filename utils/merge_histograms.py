@@ -1,4 +1,6 @@
+from ttalps_samples_list import dasBackgrounds2016
 from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
+from ttalps_samples_list import dasBackgrounds2022preEE
 import os
 import re
 import argparse
@@ -51,6 +53,10 @@ if skim[2] != "":
 # Samples
 # ------------------------------------------------------------------------------
 
+# sample_paths = dasBackgrounds2016.keys()
+
+# sample_paths = dasBackgrounds2016.keys()
+
 # sample_paths = dasSamples2018.keys()
 sample_paths = dasData2018.keys()
 # sample_paths = dasBackgrounds2018.keys()
@@ -58,6 +64,8 @@ sample_paths = dasData2018.keys()
 # sample_paths = dasSignals2018.keys()
 # sample_paths = dasData2018_standard.keys()
 # sample_paths = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
+
+# sample_paths = dasBackgrounds2022preEE.keys()
 
 
 def extract_year(s):

@@ -10,7 +10,8 @@ from TTAlpsPlotterConfigHelper import TTAlpsPlotterConfigHelper
 from ttalps_cross_sections import get_cross_sections
 from ttalps_luminosities import get_luminosity
 
-year = "2018"
+# year = "2018"
+year = "2022preEE"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 luminosity = get_luminosity(year)

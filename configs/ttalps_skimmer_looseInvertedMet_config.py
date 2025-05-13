@@ -23,7 +23,8 @@ triggerSelection = (
 )
 
 eventCuts = {
-    "MET_pt": (30, 9999999),
+    # "MET_pt": (30, 9999999),
+    "MET_pt": (0, 30),
     "nLoosePATMuons": (1, 9999999),
     "nGoodJets": (4, 9999999),
     "nGoodMediumBtaggedJets": (1, 9999999),

@@ -1273,7 +1273,7 @@ void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
   auto tightMuons = asNanoMuons(event->GetCollection("TightMuons"));
   auto leadingTightMuon = tightMuons->at(0);
 
-  int nGoodPVs = event->Get("PV_npvsGood");
+  int nGoodPVs = event->GetAs<int>("PV_npvsGood");
   string PUstring = (nGoodPVs < 30) ? "PUlt30" : "PUge30";
   string PUstring2 = nGoodPVs < 15 ? "PUlt15" : (nGoodPVs > 45 ? "PUgt45" : "");
 

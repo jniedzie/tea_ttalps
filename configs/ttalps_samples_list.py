@@ -99,8 +99,8 @@ TT_dasBackgrounds2018 = {
     "backgrounds2018/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
     # ¨files on lrygaard user space - TTZToLL is overlapping with TZToLL* above
-    # "backgrounds2018/TTZToQQ" : "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
-    # "backgrounds2018/TTZToLL" : "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZToLL": "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
 }
 ST_dasBackgrounds2018 = {
     "backgrounds2018/ST_tW_antitop": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
@@ -139,7 +139,14 @@ BB_dasBackgrounds2018 = {
     # "backgrounds2018/BBLLNuNu" : "/BBLLNuNu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
 }
 dasBackgrounds2018test = {
-    "backgrounds2018/TTToSemiLeptonic": "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER", }
+    "backgrounds2018/TTToSemiLeptonic": "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+}
+
+dasBackgrounds2016 = {key: value for d in (
+    TT_dasBackgrounds2016,
+) for key, value in d.items()}
+
+
 dasBackgrounds2018 = {key: value for d in (
     TT_dasBackgrounds2018,
     ST_dasBackgrounds2018,
@@ -153,7 +160,7 @@ dasData2018_standard = {
     "collision_data2018/SingleMuon2018B": "/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
     "collision_data2018/SingleMuon2018C": "/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
     "collision_data2018/SingleMuon2018D": "/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
-    
+
     "collision_data2018/EGamma2018A": "/EGamma/Run2018A-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
     "collision_data2018/EGamma2018B": "/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
     "collision_data2018/EGamma2018C": "/EGamma/Run2018C-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
@@ -222,12 +229,17 @@ dasSignals2018 = {
         dasSignals2018_2GeV,
         dasSignals2018_12GeV,
         dasSignals2018_30GeV,
-        dasSignals2018_60GeV
+        dasSignals2018_60GeV,
     )
     for key, value in d.items()
 }
 
-dasSamples2018 = {key: value for d in (dasBackgrounds2018, dasSignals2018, dasData2018) for key, value in d.items()}
+dasSamples2018 = {key: value for d in (
+    dasBackgrounds2018,
+    dasSignals2018,
+    dasData2018)
+    for key, value in d.items()
+}
 
 ##################     2022    ##################
 TT_dasBackgrounds2022preEE = {
@@ -270,8 +282,16 @@ QCD_dasBackgrounds2022preEE = {
     "backgrounds2022preEE/QCD_PT-800To1000": "/QCD_PT-800to1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v1-00000000000000000000000000000000/USER",
     "backgrounds2022preEE/QCD_PT-1000": "/QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v3-00000000000000000000000000000000/USER",
 }
-dasBackgrounds2022preEE = {key: value for d in (TT_dasBackgrounds2022preEE, ST_dasBackgrounds2022preEE,
-                                                DY_dasBackgrounds2022preEE, V_dasBackgrounds2022preEE, QCD_dasBackgrounds2022preEE) for key, value in d.items()}
+dasBackgrounds2022preEE = {
+    key: value for d in (
+        TT_dasBackgrounds2022preEE,
+        ST_dasBackgrounds2022preEE,
+        DY_dasBackgrounds2022preEE,
+        V_dasBackgrounds2022preEE,
+        QCD_dasBackgrounds2022preEE
+    )
+    for key, value in d.items()
+}
 
 TT_dasBackgrounds2022postEE = {
     "backgrounds2022postEE/TTtoLNu2Q": "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022PostEE.txt",
