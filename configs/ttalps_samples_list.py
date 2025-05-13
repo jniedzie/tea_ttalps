@@ -143,7 +143,11 @@ dasBackgrounds2018test = {
 }
 
 dasBackgrounds2016 = {key: value for d in (
-    TT_dasBackgrounds2016,
+    TT_dasBackgrounds2016PostVFP,
+    ST_dasBackgrounds2016PostVFP,
+    DY_dasBackgrounds2016PostVFP,
+    V_dasBackgrounds2016PostVFP,
+    QCD_dasBackgrounds2016PostVFP
 ) for key, value in d.items()}
 
 
