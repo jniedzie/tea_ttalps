@@ -22,8 +22,9 @@ skim = "skimmed_looseSemimuonic_v2"
 # skim = "skimmed_loose_lt3bjets_lt4jets_v1"
 # skim = "skimmed_looseNoBjets_lt4jets_looseMuonPtGt8GeV_v1"
 
-# Inverted MET skim
+# Inverted/no MET skims
 # skim = "skimmed_looseInvertedMet_v1"
+# skim = "skimmed_looseNoMet_v1"
 
 # sample_paths = dasBackgrounds2016.keys()
 

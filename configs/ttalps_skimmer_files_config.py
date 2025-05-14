@@ -44,9 +44,13 @@ output_skim = "skimmed_looseSemimuonic_v2_SR"
 # input_skim = "skimmed_looseSemimuonic_v2_notrigger_merged"
 # output_skim = "skimmed_looseSemimuonic_v2_notrigger_SR"
 
-# Inverted MET skim
+# Inverted MET skims
 # input_skim = "skimmed_looseInvertedMet_v1_merged"
 # output_skim = "skimmed_looseInvertedMet_v1_SR"
+
+# input_skim = "skimmed_looseNoMet_v1_merged"
+# output_skim = "skimmed_looseNoMet_v1_SR"
+
 
 output_trees_dir = ""
 output_hists_dir = ""
