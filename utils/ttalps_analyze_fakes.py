@@ -7,14 +7,19 @@ from math import pi
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 
-hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs"
+hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
+skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
+# skim = ("skimmed_looseNoBjets_lt4jets_looseMuonPtGt5GeV_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
 
 # for signal
 # mass = "0p35"
 # mass = "2"
 # mass = "12"
 # mass = "30"
-mass = "60"
+mass = "12"
 
 # ctau = "1e-5"
 # ctau = "1e0"
@@ -24,35 +29,26 @@ ctau = "1e3"
 
 # process = f"signals/tta_mAlp-{mass}GeV_ctau-{ctau}mm"
 
-# input_path = f"{base_path}/signals/tta_mAlp-{mass}GeV_ctau-{ctau}mm/{skim[0]}/{hist_base_name}{skim[1]}/histograms.root"
+# input_path = f"{base_path}/signals/tta_mAlp-{mass}GeV_ctau-{ctau}mm/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 # output_path = f"../plots/fakes_{mass}GeV_{ctau}mm.pdf"
 
 
 # for background
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt10", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
 
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
+# process = "backgrounds2016/TTToSemiLeptonic"
 
-hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-
-
-process = "backgrounds2018/TTTo2L2Nu"
-# process = "backgrounds2018/TTToSemiLeptonic"
+# process = "backgrounds2018/TTTo2L2Nu"
+process = "backgrounds2018/TTToSemiLeptonic"
 # process = "backgrounds2018/ST_tW_antitop"
 # process = "backgrounds2018/ST_t-channel_antitop"
 # process = "backgrounds2018/ST_tW_top"
 # process = "backgrounds2018/ST_t-channel_top"
 
+# process = "backgrounds2022preEE/TTtoLNu2Q"
 
-input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
+
 # input_path = "../test.root"
-
+input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 output_path = f"../plots/fakes_{process.split('/')[-1]}.pdf"
 
 # canvas_divide = (4, 4)
@@ -140,15 +136,24 @@ canvas_divide = (2, 2)
 # collection_name = "LooseDSAMuonsSegmentMatch"
 collection_name = "LoosePATMuonsSegmentMatch"
 hist_params = {
-    "pt": (5, 0, 100, 1e-5, 2e0, True),  # check
-    # "dxy": (5, -20, 20, 1e-6, 2e0, True),
-    # "dxyPVTrajErr": (5, 0, 50, 1e-6, 2e0, True),
-    "eta": (20, -3, 3, 1e-4, 2e0, True),  # check
-    "dz": (20, -50, 50, 1e-6, 2e0, True),  # check
-    # "dzPVErr": (5, 0, 50, 1e-6, 2e0, True),
-    "normChi2": (100, 0, 4, 1e-5, 1e0, True),  # check
-    # "phi": (20, -3.5, 3.5, 1e-4, 2e0, True),
-    # "ptErr": (10, 0, 50, 1e-5, 2e0, True),
+    # "absDzFromLeadingTight": (100, 0, 20, 1e-5, 1e0, True),  # check
+    # "logAbsDzFromLeadingTight": (200, -5, 3, 1e-3, 1e0, True),  # check
+
+    "logAbsDzFromLeadingTightPUlt30": (500, -5, 3, 1e-2, 0.14, False),
+    "logAbsDzFromLeadingTightPUge30": (500, -5, 3, 1e-2, 0.14, False),
+
+    "logAbsDzFromLeadingTightPUlt15": (1000, -5, 3, 1e-2, 0.3, False),
+    "logAbsDzFromLeadingTightPUgt45": (1000, -5, 3, 1e-2, 0.3, False),
+
+    # "pt": (5, 0, 100, 1e-5, 2e0, True),  # check
+    # # "dxy": (5, -20, 20, 1e-6, 2e0, True),
+    # # "dxyPVTrajErr": (5, 0, 50, 1e-6, 2e0, True),
+    # "eta": (20, -3, 3, 1e-4, 2e0, True),  # check
+    # "dz": (20, -50, 50, 1e-6, 2e0, True),  # check
+    # # "dzPVErr": (5, 0, 50, 1e-6, 2e0, True),
+    # "normChi2": (100, 0, 4, 1e-5, 1e0, True),  # check
+    # # "phi": (20, -3.5, 3.5, 1e-4, 2e0, True),
+    # # "ptErr": (10, 0, 50, 1e-5, 2e0, True),
 
     # "etaErr": (2, 0, 1, 1e-5, 2e0, True),
     # "phiErr": (2, 0, 1, 1e-5, 2e0, True),
@@ -189,6 +194,16 @@ hist_params = {
 }
 
 
+def get_n_events_in_n_PV_range(nPVsHist, nPV_min, nPV_max):
+  nPVsHist.GetXaxis().SetRangeUser(nPV_min, nPV_max)
+  nPVsHist.SetDirectory(0)
+  nPVsHist.SetName("nPVsHist")
+  nPVsHist.SetTitle("")
+
+  n_events = nPVsHist.Integral()
+  return n_events
+
+
 def main():
   ROOT.gROOT.SetBatch(True)
 
@@ -203,7 +218,9 @@ def main():
   canvas = ROOT.TCanvas("canvas", "canvas", 2500, 2500)
   canvas.Divide(*canvas_divide)
 
-  legend = ROOT.TLegend(0.6, 0.6, 0.9, 0.9)
+  legend = ROOT.TLegend(0.1, 0.6, 0.4, 0.9)
+
+  nPVsHist = file.Get("Event_PV_npvsGood")
 
   for i, (hist_name, (rebin, x_min, x_max, y_min, y_max, log_y)) in enumerate(hist_params.items()):
     hist_nonFakes_name = f"{collection_name}_nonFakes_{hist_name}"
@@ -223,17 +240,36 @@ def main():
     ROOT.gPad.SetLeftMargin(0.05)
     ROOT.gPad.SetRightMargin(0.01)
     hist_nonFakes.SetLineColor(ROOT.kBlue)
+    hist_nonFakes.SetFillColorAlpha(ROOT.kBlue, 0.35)
     hist_fakes.SetLineColor(ROOT.kRed)
+    hist_fakes.SetFillColorAlpha(ROOT.kRed, 0.35)
 
     hist_nonFakes.Rebin(rebin)
     hist_fakes.Rebin(rebin)
 
-    if hist_nonFakes.Integral() > 0 and hist_fakes.Integral() > 0:
-      hist_nonFakes.Scale(1 / hist_nonFakes.Integral())
-      hist_fakes.Scale(1 / hist_fakes.Integral())
+    n_events = None
 
-    hist_nonFakes.Draw("")
-    hist_fakes.Draw("same")
+    if hist_name == "logAbsDzFromLeadingTightPUlt30":
+      n_events = get_n_events_in_n_PV_range(nPVsHist, 0, 30)
+    elif hist_name == "logAbsDzFromLeadingTightPUge30":
+      n_events = get_n_events_in_n_PV_range(nPVsHist, 30, 999999)
+    elif hist_name == "logAbsDzFromLeadingTightPUlt15":
+      n_events = get_n_events_in_n_PV_range(nPVsHist, 0, 15)
+    elif hist_name == "logAbsDzFromLeadingTightPUgt45":
+      n_events = get_n_events_in_n_PV_range(nPVsHist, 45, 999999)
+
+    print(f"{hist_name=}, {n_events=}")
+
+    if n_events is None:
+      if hist_nonFakes.Integral() > 0 and hist_fakes.Integral() > 0:
+        hist_nonFakes.Scale(1 / hist_nonFakes.Integral())
+        hist_fakes.Scale(1 / hist_fakes.Integral())
+    else:
+      hist_nonFakes.Scale(1 / n_events)
+      hist_fakes.Scale(1 / n_events)
+
+    hist_nonFakes.Draw("histe")
+    hist_fakes.Draw("samehiste")
 
     hist_nonFakes.GetXaxis().SetRangeUser(x_min, x_max)
     hist_nonFakes.GetYaxis().SetRangeUser(y_min, y_max)
@@ -241,11 +277,11 @@ def main():
 
     if i == 0:
       legend.AddEntry(hist_nonFakes, "non-fakes", "l")
-      legend.AddEntry(hist_fakes, "fakes", "l") 
+      legend.AddEntry(hist_fakes, "fakes", "l")
 
     ROOT.gPad.SetLogy(log_y)
 
-  legend.Draw()
+  # legend.Draw()
 
   canvas.Update()
   canvas.SaveAs(output_path)

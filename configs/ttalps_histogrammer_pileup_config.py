@@ -20,7 +20,7 @@ pileupScaleFactorsHistName = "pileup_scale_factors"
 
 applyScaleFactors = {
   "muon": False,
-  "muonTrigger": False,
+  "muonTriggerIsoMu24": False,
   "pileup": False,
 }
 

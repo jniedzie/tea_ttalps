@@ -1,4 +1,6 @@
+from ttalps_samples_list import dasBackgrounds2016
 from ttalps_samples_list import dasSamples2018, dasData2018, dasSignals2018, dasBackgrounds2018, dasData2018_standard
+from ttalps_samples_list import dasBackgrounds2022preEE
 import os
 
 max_files = -1
@@ -20,6 +22,11 @@ output_skim = "skimmed_looseSemimuonic_v2"
 # output_skim = "skimmed_looseNoBjets_lt4jets_v1"
 # output_skim = "skimmed_loose_lt3bjets_lt4jets_v1"
 
+# output_skim = "skimmed_looseNoBjets_lt4jets_looseMuonPtGt8GeV_v1"
+
+# Inverted MET skim
+# output_skim = "skimmed_looseInvertedMet_v1"
+
 output_trees_dir = ""
 output_hists_dir = ""
 input_directory = ""
@@ -27,11 +34,15 @@ input_directory = ""
 dbs_instance = "prod/phys03"
 # dbs_instance = "prod/global"
 
+# dasSamples = dasBackgrounds2016
+
 dasSamples = dasSamples2018
 # dasSamples = dasData2018
 # dasSamples = dasSignals2018
 # dasSamples = dasBackgrounds2018
 # dasSamples = dasData2018_standard
+
+# dasSamples = dasBackgrounds2022preEE
 
 dirs = [(v, f"{base_path}/{k}/{output_skim}/") for k, v in dasSamples.items()]
 

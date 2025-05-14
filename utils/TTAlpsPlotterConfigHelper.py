@@ -15,10 +15,10 @@ class TTAlpsPlotterConfigHelper:
       backgrounds_to_exclude, signals_to_include, legend_pos_and_size
   ):
 
-    if len(skim) != 3:
+    if len(skim) != 4:
         error("The 'skim' list must have three elements, e.g.: (\"my_skim\", \"_histType\", \"SR\")")
 
-    region = skim[2]
+    region = skim[-1]
     module_name = f"ttalps_plotting_styles_{region}"
     module = importlib.import_module(module_name)
 
