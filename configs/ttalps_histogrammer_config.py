@@ -36,7 +36,7 @@ runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False
 
 # Create 2D histograms for ABCD background estimation
-runABCDHistograms = True
+runABCDHistograms = False
 
 # [MC only] Create histograms with mother PIDs of dimuons entering ABCD histograms (quite heavy, turn off if not needed)
 runABCDMothersHistograms = False
@@ -92,8 +92,8 @@ if dimuonSelection == "":
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonNoIso": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
-    "JPsiDimuonIso": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "JPsiDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
+    "JPsiDimuonIso": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "ZDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
 }
 muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None

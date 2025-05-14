@@ -10,33 +10,35 @@ from TTAlpsPlotterConfigHelper import TTAlpsPlotterConfigHelper
 from ttalps_cross_sections import get_cross_sections
 from ttalps_luminosities import get_luminosity
 
-# year = "2018"
-year = "2022preEE"
+year = "2018"
+# year = "2022preEE"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 luminosity = get_luminosity(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
-# skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
 
-# skim = ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons")  # this is in fact VV CR
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "_SRDimuons")
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_JPsiDimuons", "SR")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
+# skim = ("skimmed_looseNonTT_v1_QCDCR", "SRDimuons")  # this is in fact VV CR
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "SRDimuons")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "JPsiDimuons", "SR")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons")
 
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}"
+# skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_{skim[1]}_{skim[2]}"
 if year == "2022preEE" or year == "2022postEE" or year == "2023preBPix" or year == "2023postBPix":
-  hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs{skim[1]}{skim[2]}" # no PUjetIDSFs for Run 3
+  hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_{skim[1]}_{skim[2]}" # no PUjetIDSFs for Run 3
 
 
 output_formats = ["pdf"]
@@ -82,7 +84,7 @@ genMuonVertexCollections = [
 ]
 
 data_to_include = [
-    # "SingleMuon2018",
+    "SingleMuon2018",
     # "Muon2022preEE",
     # "Muon2022postEE",
     
