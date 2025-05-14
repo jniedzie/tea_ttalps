@@ -56,9 +56,9 @@ class TTAlpsHistogramFiller {
   bool EndsWithTriggerName(std::string name);
 
   // Loose Muons and Loose muon vertex histograms
-  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuons> muons, std::string collectionName);
+  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuon> muon, const std::shared_ptr<NanoMuon> leadingTightMuon, std::string name);
+  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuons> muons, const std::shared_ptr<NanoMuon> leadingTightMuon, std::string collectionName);
   void FillLooseMuonsHistograms(const std::shared_ptr<Event> event, std::string collectionName);
-  void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuon> muon, std::string name);
   
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<PhysicsObjects> vertexCollection, std::string vertexName);
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName);

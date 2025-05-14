@@ -7,20 +7,22 @@ from ttalps_cross_sections import get_theory_cross_section
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 
-# input_path = "../datacards/limits_BestPFIsoDimuonVertex_Pat_LxySignificance.txt"
-# input_path = "../datacards/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_log3Dangle_Pat_ABCDreal.txt"
+# PAT-PAT
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_invMass_vs_logDeltaSquaredIso03_Pat_ABCDpred.txt"
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
 
-# optimized before we removed the leading tight muon and with some bugs:
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_log3Dangle_Pat_ABCDpred.txt"
+# PAT-DSA
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_dPhi_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxy_vs_log3Dangle_DSA_ABCDpred.txt"
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_PatDSA_ABCDpred.txt"
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_outerDR_vs_logAbsPtLxyDPhi1_PatDSA_ABCDpred.txt"
 
-# optimized after we removed the leading tight muon and fixed some bugs:
-
-input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_dPhi_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
+# DSA-DSA
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dPhi_DSA_ABCDpred.txt"
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dEta_DSA_ABCDpred.txt"
+input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_outerDR_DSA_ABCDpred.txt"
 
+# Combined
 # input_path = "../limits/results/limits_combined.txt"
 
 output_path = "../limits/plots/"
@@ -76,7 +78,7 @@ if variable == "2d":
   y_min = -5
   y_max = 3
 
-  z_min = -1.3
+  z_min = -2.2
   z_max = 2
 
   x_title = "log_{10}(m_{a} [GeV])"

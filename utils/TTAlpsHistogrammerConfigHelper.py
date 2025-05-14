@@ -116,6 +116,12 @@ class TTAlpsHistogrammerConfigHelper:
         ("TightMuons", "subleadingPt", 2000, 0, 1000, ""),
         ("TightMuons", "eta", 300, -3, 3, ""),
         ("TightMuons", "phi", 300, -3, 3, ""),
+        
+        ("Event", "nLooseElectrons", 50, 0, 50, ""),
+        ("LooseElectrons", "pt", 2000, 0, 1000, ""),
+        ("LooseElectrons", "leadingPt", 2000, 0, 1000, ""),
+        ("LooseElectrons", "eta", 300, -3, 3, ""),
+        ("LooseElectrons", "phi", 300, -3, 3, ""),
     )
 
   def get_basic_params(self):
@@ -421,6 +427,12 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "etaErr", 300, -3, 3, ""),
         (name, "phiErr", 300, -3, 3, ""),
         (name, "dz", 20000, -2000, 2000, ""),
+        (name, "absDzFromLeadingTight", 10000, 0, 100, ""),
+        (name, "logAbsDzFromLeadingTight", 10000, -5, 3, ""),
+        (name, "logAbsDzFromLeadingTightPUlt30", 10000, -5, 3, ""),
+        (name, "logAbsDzFromLeadingTightPUge30", 10000, -5, 3, ""),
+        (name, "logAbsDzFromLeadingTightPUlt15", 10000, -5, 3, ""),
+        (name, "logAbsDzFromLeadingTightPUgt45", 10000, -5, 3, ""),
         (name, "vx", 200, -100, 100, ""),
         (name, "vy", 200, -100, 100, ""),
         (name, "vz", 200, -100, 100, ""),

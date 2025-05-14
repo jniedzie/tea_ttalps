@@ -5,13 +5,10 @@ import os
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_DSAmuPtGt20", "_SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR_muPtGt20", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt10", "_SRDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR_muEtaLt1p2_muPtGt7", "_SRDimuons")
-skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
+# skim = ("skimmed_looseNoBjets_lt4jets_looseMuonPtGt5GeV_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
+skim = ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
 
 hist_base_name = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
 
@@ -32,7 +29,7 @@ input_path = f"{base_path}/{process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]
 # input_path = "../test.root"
 
 # variants = ["", "_lowBlob", "_centralBlob", "_rightBlob", "_lowLine", "_rightLine"]
-variants = ["", "_lowBlob", "_centralBlob"]
+variants = ["", "_centralBlob"]
 # variants = [""]
 
 # variants = ["", "_mysteriousBlob"]
@@ -64,12 +61,13 @@ code_to_name = {
     (113, ): "rho",
     (221, ): "pi0",
     (223, ): "omega",
+    (331, ): "K*0",
     (333, ): "phi",
     (553, ): "Upsilon",
 
     (-443, 443): "J/#psi",
 
-    (-521, 521, -511, 511, -531, 531, -411, 411, -421, 421, -431, 431): "B/D",
+    (-541, 541, -521, 521, -511, 511, -531, 531, -411, 411, -421, 421, -431, 431): "B/D",
 
     (90, ): "X_{PAT}",  # no gen matching reco
     (91, ): "X_{DSA}",

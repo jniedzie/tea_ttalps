@@ -2,8 +2,8 @@
 
 #include <tuple>
 
-#include "ExtensionsHelpers.hpp"
 #include "ConfigManager.hpp"
+#include "ExtensionsHelpers.hpp"
 
 using namespace std;
 
@@ -29,21 +29,21 @@ TTAlpsEvent::TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {
   }
 }
 
-map<string,float> TTAlpsEvent::GetEventWeights() {
+map<string, float> TTAlpsEvent::GetEventWeights() {
   auto nanoEvent = asNanoEvent(event);
   if (nanoEventProcessor->IsDataEvent(nanoEvent)) return {{"default", 1.0}};
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
   float pileupSF;
-  // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all years?
-  // else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
+  // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all
+  // years? else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
   pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
-  map<string,float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTriggerIsoMu24");
+  map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTriggerIsoMu24");
 
   int maxNjets = 4;
   auto leadingJets = eventProcessor->GetLeadingObjects(event, "GoodJets", maxNjets);
-  map<string,float> PUjetIDSF = nanoEventProcessor->GetPUJetIDScaleFactors(asNanoJets(leadingJets));
+  map<string, float> PUjetIDSF = nanoEventProcessor->GetPUJetIDScaleFactors(asNanoJets(leadingJets));
 
   auto leadingBJets = make_shared<NanoJets>();
   auto allBJets = event->GetCollection("GoodMediumBtaggedJets");
@@ -52,31 +52,31 @@ map<string,float> TTAlpsEvent::GetEventWeights() {
       if (jet == bJet) leadingBJets->push_back(asNanoJet(jet));
     }
   }
-  map<string,float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingBJets);
-
+  map<string, float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingBJets);
   auto muons = GetTTAlpsEventMuons();
-  map<string,float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
+  map<string, float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
 
   // TODO: JPsi CR SFs to be defined
   map<string,float> jpsiSF = GetJpsiScaleFactors();
-  
-  map<string,float> scaleFactorMap;
-  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] * muonSF["systematic"] * jpsiSF["systematic"];
-  vector<map<string, float>*> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &jpsiSF};
+
+  map<string, float> scaleFactorMap;
+  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
+                              muonSF["systematic"] * jpsiSF["systematic"];
+  vector<map<string, float> *> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &jpsiSF};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
       if (name == "systematic") continue;
 
-      scaleFactorMap[name] = genWeight * pileupSF
-          * (scaleFactorMapPtr == &muonTriggerSF ? (*scaleFactorMapPtr)[name] : muonTriggerSF["systematic"])
-          * (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"])
-          * (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"])
-          * (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"])
-          * (scaleFactorMapPtr == &jpsiSF ? (*scaleFactorMapPtr)[name] : jpsiSF["systematic"]);
+      scaleFactorMap[name] = genWeight * pileupSF *
+                             (scaleFactorMapPtr == &muonTriggerSF ? (*scaleFactorMapPtr)[name] : muonTriggerSF["systematic"]) *
+                             (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"]) *
+                             (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"]) *
+                             (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"]) *
+                             (scaleFactorMapPtr == &jpsiSF ? (*scaleFactorMapPtr)[name] : jpsiSF["systematic"]);
     }
   }
-  
+
   return scaleFactorMap;
 }
 
@@ -100,15 +100,22 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
   auto allMuons = GetAllLooseMuons();
   auto muons = make_shared<NanoMuons>();
   if (!muonVertexCollection.first.empty() && !muonVertexCollection.second.empty()) {
-    auto vertex = event->GetCollection(muonVertexCollection.first);
-    if (vertex->size() > 0) {
-      auto muonVertex = asNanoDimuonVertex(vertex->at(0),event);
+    shared_ptr<PhysicsObjects> vertex = nullptr;
+    try {
+      vertex = event->GetCollection(muonVertexCollection.first);
+    } catch (const Exception &e) {
+      warn() << "Couldn't get muon vertex collection - no dimuon cuts will be applied" << endl;
+    }
+    if (vertex && vertex->size() > 0) {
+      auto muonVertex = asNanoDimuonVertex(vertex->at(0), event);
       muons->push_back(muonVertex->Muon1());
       muons->push_back(muonVertex->Muon2());
 
       auto remainingMuons = make_shared<NanoMuons>();
       for (auto muon : *allMuons) {
-        if(muon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject() || muon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject()) continue;
+        if (muon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject() ||
+            muon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject())
+          continue;
         remainingMuons->push_back(muon);
       }
       allMuons = make_shared<NanoMuons>(*remainingMuons);
@@ -118,14 +125,14 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
   return muons;
 }
 
-map<string,float> TTAlpsEvent::GetJpsiScaleFactors() {
-  map<string,float> jpsiSF = {{"systematic", 1.0}};
+map<string, float> TTAlpsEvent::GetJpsiScaleFactors() {
+  map<string, float> jpsiSF = {{"systematic", 1.0}};
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return jpsiSF;
 
   auto vertex = event->GetCollection(muonVertexCollection.first);
   // category is set to "" if no vertex is found - this is needed to set all SFs names for the first event
   string dimuonCategory = "";
-  if (vertex->size() > 0) dimuonCategory = asNanoDimuonVertex(vertex->at(0),event)->GetVertexCategory();
+  if (vertex->size() > 0) dimuonCategory = asNanoDimuonVertex(vertex->at(0), event)->GetVertexCategory();
 
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
   jpsiSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("JpsiInvMassSFs", dimuonCategory);
@@ -136,7 +143,7 @@ string TTAlpsEvent::GetTTbarEventCategory() {
   vector<int> topIndices = GetTopIndices();
 
   if (topIndices[0] < 0 || topIndices[1] < 0) {
-    cout << "ERROR -- couldn't find tt̄ pair in the event..." << endl;
+    error() << "ERROR -- couldn't find tt̄ pair in the event..." << endl;
     return "error";
   }
 
@@ -457,7 +464,7 @@ shared_ptr<NanoMuonPair> TTAlpsEvent::GetDimuonMatchedToGenMuonsFromALP(shared_p
 }
 
 shared_ptr<NanoMuonPair> TTAlpsEvent::GetLooseDimuonMatchedToGenDimuon(shared_ptr<MuonPair> genMuonPair,
-                                                                   shared_ptr<NanoMuons> looseMuonCollection, float maxDeltaR) {
+                                                                       shared_ptr<NanoMuons> looseMuonCollection, float maxDeltaR) {
   vector<int> savedMuonIndices;
   float muonMass = 0.105;
 
@@ -497,36 +504,24 @@ shared_ptr<NanoMuonPair> TTAlpsEvent::GetLooseDimuonMatchedToGenDimuon(shared_pt
   if (minDeltaR1_muonIdx < 0 || minDeltaR2_muonIdx < 0) return nullptr;
   // minDeltaR1_muonIdx != minDeltaR2_muonIdx
   if (minDeltaR1_muonIdx != minDeltaR2_muonIdx) {
-    return make_shared<NanoMuonPair>(
-      looseMuonCollection->at(minDeltaR1_muonIdx), 
-      looseMuonCollection->at(minDeltaR2_muonIdx)
-    );
+    return make_shared<NanoMuonPair>(looseMuonCollection->at(minDeltaR1_muonIdx), looseMuonCollection->at(minDeltaR2_muonIdx));
   }
   // minDeltaR1_muonIdx < minDeltaR2_muonIdx
   if (minDeltaR1 < minDeltaR2) {
     if (secondMinDeltaR2_muonIdx >= 0) {
-      return make_shared<NanoMuonPair>(
-        looseMuonCollection->at(minDeltaR1_muonIdx), 
-        looseMuonCollection->at(secondMinDeltaR2_muonIdx)
-      );
+      return make_shared<NanoMuonPair>(looseMuonCollection->at(minDeltaR1_muonIdx), looseMuonCollection->at(secondMinDeltaR2_muonIdx));
     }
   }
   // minDeltaR1_muonIdx > minDeltaR2_muonIdx
   if (secondMinDeltaR1_muonIdx >= 0) {
-    return make_shared<NanoMuonPair>(
-      looseMuonCollection->at(secondMinDeltaR1_muonIdx), 
-      looseMuonCollection->at(minDeltaR2_muonIdx)
-    );
+    return make_shared<NanoMuonPair>(looseMuonCollection->at(secondMinDeltaR1_muonIdx), looseMuonCollection->at(minDeltaR2_muonIdx));
   }
   // secondMinDeltaR1_muonIdx < 0 or secondMinDeltaR2_muonIdx < 0
   return nullptr;
 }
 
-shared_ptr<NanoMuons> TTAlpsEvent::GetLooseMuonsMatchedToGenMuons(
-    shared_ptr<PhysicsObjects> genMuonCollection,
-    shared_ptr<NanoMuons> looseMuonCollection, 
-    float maxDeltaR
-  ) {
+shared_ptr<NanoMuons> TTAlpsEvent::GetLooseMuonsMatchedToGenMuons(shared_ptr<PhysicsObjects> genMuonCollection,
+                                                                  shared_ptr<NanoMuons> looseMuonCollection, float maxDeltaR) {
   auto matchedLooseMuons = make_shared<NanoMuons>();
   vector<int> savedMuonIndices;
   float muonMass = 0.105;
@@ -547,18 +542,18 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetLooseMuonsMatchedToGenMuons(
 
       if (deltaR < get<0>(minDeltaR.back())) {
         minDeltaR.emplace_back(deltaR, j);
-        sort(minDeltaR.begin(), minDeltaR.end(), [](const auto& a, const auto& b) { return get<0>(a) < get<0>(b); });
+        sort(minDeltaR.begin(), minDeltaR.end(), [](const auto &a, const auto &b) { return get<0>(a) < get<0>(b); });
         if (minDeltaR.size() > 5) minDeltaR.pop_back();
       }
     }
     minDeltaRs.push_back(minDeltaR);
   }
-  for (auto& minDeltaRs : minDeltaRs) {
-    sort(minDeltaRs.begin(), minDeltaRs.end(), [](const auto& a, const auto& b) { return get<0>(a) < get<0>(b); });
+  for (auto &minDeltaRs : minDeltaRs) {
+    sort(minDeltaRs.begin(), minDeltaRs.end(), [](const auto &a, const auto &b) { return get<0>(a) < get<0>(b); });
   }
   for (size_t i = 0; i < minDeltaRs.size(); ++i) {
-    const auto& deltaRs = minDeltaRs[i];
-    for (const auto& [deltaR, muonIdx] : deltaRs) {
+    const auto &deltaRs = minDeltaRs[i];
+    for (const auto &[deltaR, muonIdx] : deltaRs) {
       if (muonIdx < 0) continue;
       if (find(savedMuonIndices.begin(), savedMuonIndices.end(), muonIdx) == savedMuonIndices.end()) {
         savedMuonIndices.push_back(muonIdx);
@@ -677,7 +672,8 @@ std::shared_ptr<NanoMuonPairs> TTAlpsEvent::GetMuonsMatchedToGenDimuonsNotFromAL
   return dimuonsNotFromALP;
 }
 
-shared_ptr<NanoMuons> TTAlpsEvent::GetRemainingNonResonantMuons(shared_ptr<NanoMuons> muonCollection, shared_ptr<NanoMuonPairs> resonantCollection) {
+shared_ptr<NanoMuons> TTAlpsEvent::GetRemainingNonResonantMuons(shared_ptr<NanoMuons> muonCollection,
+                                                                shared_ptr<NanoMuonPairs> resonantCollection) {
   auto nonResonantMuons = make_shared<NanoMuons>();
 
   for (auto muon : *muonCollection) {
