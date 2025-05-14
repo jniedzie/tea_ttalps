@@ -25,6 +25,8 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons_LooseNonLeadingMuonsVertexS
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
 
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
 
@@ -459,3 +461,20 @@ for collection in genMuonVertexCollections:
         Histogram("Event_n"+collection + category, "", False, True, default_norm,
                   1, 0, 5, 1e-3, 1e6, "Number of #mu vertices", f"# events ({year})"),
     )
+
+
+muonMatchingRatiosVertexCollections = [
+  # "BestDimuonVertex",
+  # "BestDimuonVertex2over3",
+]
+
+for collection in muonMatchingRatiosVertexCollections:
+  for category1 in ("_Pat", "_PatDSA", "_DSA"):
+    for category2 in ("_Pat", "_PatDSA", "_DSA"):
+      histograms += (
+        Histogram("Event_n"+collection + category1 + category2 , "", False, False, default_norm, 1,
+                  0, 5, 0, 10, "Number of #mu vertices", f"# events ({year})"),
+        Histogram(collection + category1 + category2 +"_invMass", "", False, False, default_norm, mass_rebin,
+                  mass_min, mass_max, 0, 20, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
+
+

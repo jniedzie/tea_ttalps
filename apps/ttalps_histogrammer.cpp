@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
   bool runMuonTriggerObjectsHistograms;
   bool runABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
-  bool ignoreDimuons;
+  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -59,6 +59,7 @@ int main(int argc, char **argv) {
   config.GetValue("runABCDMothersHistograms", runABCDMothersHistograms);
   config.GetValue("runFakesHistograms", runFakesHistograms);
   config.GetValue("ignoreDimuons", ignoreDimuons);
+  config.GetValue("runMuonMatchingRatioEffectHistograms", runMuonMatchingRatioEffectHistograms);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -139,6 +140,10 @@ int main(int argc, char **argv) {
     }
     if (runFakesHistograms) {
       ttalpsHistogramsFiller->FillFakesHistograms(event);
+    }
+
+    if (runMuonMatchingRatioEffectHistograms && !ignoreDimuons) {
+      ttalpsHistogramsFiller->FillMuonMatchingRatioEffectHistograms(event);
     }
   }
 

@@ -5,15 +5,20 @@ from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
 from ttalps_samples_list import dasSignals2018
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 import ttalps_abcd_config as abcd_config
+import os
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 
-
-base_path = "/data/dust/user/jniedzie/ttalps_cms/"
-
+username = os.getenv("USER")
+base_path = f"/data/dust/user/jniedzie/ttalps_cms/"
 combine_path = "/afs/desy.de/user/j/jniedzie/combine/CMSSW_14_1_0_pre4/src/"
+base_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps"
+if username == "lrygaard":
+  # base_path = f"/data/dust/user/lrygaard/ttalps_cms/"
+  combine_path = "/afs/desy.de/user/l/lrygaard/Combine/CMSSW_14_1_0_pre4/src/"
+  base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
 # SR dimuon cuts applied
 signal_hist_path = (
@@ -26,7 +31,6 @@ background_hist_path = (
     f"{abcd_config.background_skim[1]}{abcd_config.background_skim[2]}"
 )
 
-base_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps"
 
 datacards_output_path = f"{base_output_path}/limits/datacards_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/plots/"

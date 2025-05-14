@@ -4,6 +4,7 @@
 #include "ExtensionsHelpers.hpp"
 #include "TTAlpsCuts.hpp"
 #include "UserExtensionsHelpers.hpp"
+#include "TTAlpsObjectsManager.hpp"
 
 using namespace std;
 
@@ -301,13 +302,13 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_logDeltaSquaredIso03", TMath::Log10(pow(deltaIso03, 2)));
   histogramsHandler->Fill(name + "_logDeltaSquaredIso04", TMath::Log10(pow(deltaIso04, 2)));
 
-  if (name.find("_PatDSA") != string::npos) {
+  if (dimuon->GetVertexCategory() == "PatDSA") {
     pfRelIso04_all1 = dimuon->Muon1()->Get("pfRelIso04_all");
     nSegments2 = dimuon->Muon2()->Get("nSegments");
-  } else if (name.find("_DSA") != string::npos) {
+  } else if (dimuon->GetVertexCategory() == "DSA") {
     nSegments1 = dimuon->Muon1()->Get("nSegments");
     nSegments2 = dimuon->Muon2()->Get("nSegments");
-  } else if (name.find("_Pat") != string::npos) {
+  } else if (dimuon->GetVertexCategory() == "Pat") {
     pfRelIso04_all1 = dimuon->Muon1()->Get("pfRelIso04_all");
     pfRelIso04_all2 = dimuon->Muon2()->Get("pfRelIso04_all");
   }
@@ -1328,4 +1329,58 @@ void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
       FillLooseMuonsHistograms(muon2, "LoosePATMuonsSegmentMatch_nonFakes");
     }
   }
+}
+
+/// --------- Finding BestDimuons moving from PAT to DSA with different ratios --------- ///
+/// ----- flag: runMuonMatchingRatioEffectHistograms ----- ///
+
+void TTAlpsHistogramFiller::FillMuonMatchingRatioEffectHistograms(const shared_ptr<Event> event) {
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
+
+  string collectionName = muonVertexCollection.first;
+  auto collection = event->GetCollection(collectionName);
+
+  if (collection->size() < 1) return;
+  auto dimuonVertex = asNanoDimuonVertex(collection->at(0), event);
+  // if (dimuonVertex->IsPatDimuon()) return;
+
+  auto looseMuons = make_shared<NanoMuons>();
+  auto loosePATMuons = asNanoMuons(event->GetCollection("LoosePATMuons"));
+  for (auto muon : *loosePATMuons) {
+    looseMuons->push_back(muon);
+  }
+
+  auto looseDSAMuons = asNanoMuons(event->GetCollection("LooseDSAMuons"));
+  for (auto muon : *looseDSAMuons) {
+    looseMuons->push_back(muon);
+  }
+  
+  // get segment matched muon vertices with ratio = 2/3
+  float minSegmentRatio = 2.0/3.0; // our original ratio
+  auto muonMatch2over3 = asNanoEvent(event)->GetSegmentMatchedMuons(looseMuons, minSegmentRatio);
+  auto verticesMatch2over3 = asNanoEvent(event)->GetVerticesForMuons(muonMatch2over3);
+  string vertexCollectionName2over3 = "LooseMuonsVertexSegmentMatch2over3";
+  event->AddCollection(vertexCollectionName2over3, verticesMatch2over3);
+
+  // get non-leading vertex collection
+  auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
+  ttalpsObjectsManager->InsertNonLeadingMuonVertexCollections(event, vertexCollectionName2over3);
+  string nonLeadingVertexCollectionName2over3 = "LooseMuonsVertexSegmentMatch2over3NonLeading";
+  auto nonLeadingVertexCollection2over3 = event->GetCollection(nonLeadingVertexCollectionName2over3);
+
+  // get best dimuon vertex
+  auto muonVertexCollection2over3 = muonVertexCollection;
+  string muonVertexCollectionName2over3 = muonVertexCollection.first + "2over3";
+  muonVertexCollection2over3.first = muonVertexCollectionName2over3;
+  ttalpsObjectsManager->InsertMuonVertexCollection(event, nonLeadingVertexCollection2over3, muonVertexCollection2over3);
+  auto bestMuonVertexCollection2over3 = event->GetCollection(muonVertexCollectionName2over3);
+  
+  if (bestMuonVertexCollection2over3->size() < 1) return; 
+  auto dimuonVertex2over3 = asNanoDimuonVertex(bestMuonVertexCollection2over3->at(0), event);
+  // if (!dimuonVertex2over3->IsPatDimuon()) return;
+
+  histogramsHandler->Fill("Event_n"+muonVertexCollection.first+"_"+dimuonVertex->GetVertexCategory()+"_"+dimuonVertex2over3->GetVertexCategory(), 1);
+  histogramsHandler->Fill("Event_n"+muonVertexCollectionName2over3+"_"+dimuonVertex->GetVertexCategory()+"_"+dimuonVertex2over3->GetVertexCategory(), 1);
+  FillMuonVertexHistograms(dimuonVertex, muonVertexCollection.first+"_"+dimuonVertex->GetVertexCategory()+"_"+dimuonVertex2over3->GetVertexCategory());
+  FillMuonVertexHistograms(dimuonVertex2over3, muonVertexCollectionName2over3+"_"+dimuonVertex->GetVertexCategory()+"_"+dimuonVertex2over3->GetVertexCategory());
 }

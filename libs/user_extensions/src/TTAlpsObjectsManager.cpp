@@ -127,6 +127,7 @@ void TTAlpsObjectsManager::InsertBaseLooseMuonVertexCollection(shared_ptr<Event>
 void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
   if (muonMatchingParams.size() == 0) return;
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
+  if (muonVertexCollectionInput.empty()) return;
 
   try {
     auto vertices = event->GetCollection(muonVertexCollectionInput);
@@ -137,14 +138,16 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
   }
 }
 
-void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Event> event) {
+void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Event> event, string inputCollection) {
   if (muonMatchingParams.size() == 0) return;
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   // Only segment matched muons for now
   string matchingMethod = muonMatchingParams.begin()->first;
   try {
-    auto vertices = event->GetCollection("LooseMuonsVertex" + matchingMethod + "Match");
+    shared_ptr<PhysicsObjects> vertices;
+    if (inputCollection != "") vertices = event->GetCollection(inputCollection);
+    else vertices = event->GetCollection("LooseMuonsVertex" + matchingMethod + "Match");
 
     auto triggerMuonCollection = event->GetCollection("TriggerMuonMatch");
     auto nonTriggerMuonVertexCollectionName = "BestNonTrigger" + muonVertexCollection.first.substr(4);
@@ -160,6 +163,9 @@ void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Even
         nonTriggerVertices->push_back(vertex);
       }
     }
+    string outputName;
+    if (inputCollection != "") outputName = inputCollection + "NonTrigger";
+    else outputName = "LooseNonTriggerMuonsVertex" + matchingMethod + "Match";
     event->AddCollection("LooseNonTriggerMuonsVertex" + matchingMethod + "Match", nonTriggerVertices);
 
     auto tightMuons = event->GetCollection("TightMuons");
@@ -176,18 +182,30 @@ void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Even
         nonLeadingMuonVertices->push_back(vertex);
       }
     }
-    event->AddCollection("LooseNonLeadingMuonsVertex" + matchingMethod + "Match", nonLeadingMuonVertices);
+    if (inputCollection != "") outputName = inputCollection + "NonLeading";
+    else outputName = "LooseNonLeadingMuonsVertex" + matchingMethod + "Match";
+    event->AddCollection(outputName, nonLeadingMuonVertices);
   } catch (const Exception &e) {
     warn() << "Couldn't insert the non-leading muon vertex collection." << endl;
   }
 }
 
-void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, shared_ptr<PhysicsObjects> vertices) {
+void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, shared_ptr<PhysicsObjects> vertices, pair<string, vector<string>> muonVertexCollectionInput) {
   if (muonMatchingParams.size() == 0) return;
-  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
+  if ((muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) &&
+      (muonVertexCollectionInput.first.empty() || muonVertexCollectionInput.second.empty())) return;
 
-  string muonVertexCollectionName = muonVertexCollection.first;
-  auto muonVertexCollectionCuts = muonVertexCollection.second;
+  
+  string muonVertexCollectionName;
+  vector<string> muonVertexCollectionCuts;
+  if (!muonVertexCollectionInput.first.empty() && !muonVertexCollectionInput.second.empty()) {
+    muonVertexCollectionName = muonVertexCollectionInput.first;
+    muonVertexCollectionCuts = muonVertexCollectionInput.second;
+  }
+  else {
+    muonVertexCollectionName = muonVertexCollection.first;
+    muonVertexCollectionCuts = muonVertexCollection.second;
+  }
   bool bestVertex = false;
   for (auto cutName : muonVertexCollectionCuts) {
     if (cutName == "BestDimuonVertex") {

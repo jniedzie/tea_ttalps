@@ -42,6 +42,9 @@ runABCDMothersHistograms = False
 # [MC only] Create histograms for dimuons in the fakes region vs. non-fakes region
 runFakesHistograms = False
 
+# Create histograms for Best PAT-PAT dimuons -> DSA Best Dimuons due changed ratio
+runMuonMatchingRatioEffectHistograms = False
+
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
@@ -87,6 +90,7 @@ muonVertexBaselineSelection = [
 dimuonSelection = skim[1]
 if dimuonSelection == "":
     dimuonSelection = None
+    ignoreDimuons = True
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonNoIso": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
@@ -139,5 +143,8 @@ if runFakesHistograms:
 
 if runMuonTriggerObjectsHistograms:
   histParams += helper.get_muon_trigger_objects_params()
+
+if runMuonMatchingRatioEffectHistograms:
+  histParams += helper.get_muon_matching_effect_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()

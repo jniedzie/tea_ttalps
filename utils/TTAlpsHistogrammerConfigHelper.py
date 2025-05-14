@@ -391,6 +391,16 @@ class TTAlpsHistogrammerConfigHelper:
       )
     return tuple(params)
 
+  def get_muon_matching_effect_params(self):
+    params = []
+    for collection in self.bestMuonVertexCollections:
+      for category in ("_Pat", "_PatDSA", "_DSA"):
+        collectionName = collection+category
+        collectionName2over3 = self.__insert_into_name(collection, "2over3")+category
+        self.__insert_MuonVertexHistograms(params, collectionName)
+        self.__insert_MuonVertexHistograms(params, collectionName2over3)
+    return tuple(params)
+
   def __insert_into_name(self, collection, to_insert):
     if "_" in collection:
       return collection.rsplit("_", 1)[0] + to_insert + "_" + collection.rsplit("_", 1)[1]

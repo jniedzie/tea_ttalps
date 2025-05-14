@@ -36,6 +36,7 @@ commonExtraEventCollections = {
     "GoodJets": {
         "inputCollections": ("Jet", ),
         "pt": (30., 9999999.),
+        # "jecPt": (30., 9999999.), # pt after jet energy correction (jec)
         "eta": (-2.4, 2.4),
         # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
         "jetId": 6,
@@ -44,6 +45,7 @@ commonExtraEventCollections = {
     # To consider in CRs and SR
     "GoodTightBtaggedJets": {
         "inputCollections": ("Jet", ),
+        # "jecPt": (30., 9999999.), # pt after jet energy correction (jec)
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
         "btagDeepFlavB": (0.7100, 9999999.),
@@ -54,6 +56,7 @@ commonExtraEventCollections = {
     # Used in all skims
     "GoodMediumBtaggedJets": {
         "inputCollections": ("Jet", ),
+        # "jecPt": (30., 9999999.), # pt after jet energy correction (jec)
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
         "btagDeepFlavB": (0.2783, 9999999.),

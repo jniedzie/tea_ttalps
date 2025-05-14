@@ -17,6 +17,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVerte
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuonsWithIso", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
+# J/Psi CR with different segment match ratio
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "")
@@ -46,7 +49,8 @@ applyScaleFactors = {
   "bTagging": (True, True),
   "PUjetID": (True, True),
   # "JpsiInvMassSFs": (True, True),
-  # "jetEnergy" : (False, True),
+  "JpsiInvMassSFs": (False, False),
+  # "jec" : (False, True),
   # "met" : (False, True),
   # "QCDscale" : (False, True),
 }
@@ -58,7 +62,7 @@ input_directory = f"{base_path.format(input_username)}/{sample_path}/{skim[0]}/"
 output_hists_dir = f"{base_path.format(output_username)}/{sample_path}/{skim[0]}/histograms"
 
 for name, apply in applyScaleFactors.items():
-  if not apply:
+  if not apply[0] and not apply[1]:
     continue
 
   output_hists_dir += f"_{name}SFs"
