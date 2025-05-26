@@ -59,7 +59,6 @@ base_path = "/data/dust/user/{}/ttalps_cms"
 applyScaleFactors = {
   # name : (apply nominal, apply variation)
   "muon": (True, True),
-  # "muonTriggerIsoMu24": (True, True),
   "muonTrigger": (True, True),
   "pileup": (True, True),
   "bTagging": (True, True),
