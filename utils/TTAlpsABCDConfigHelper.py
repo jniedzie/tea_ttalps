@@ -1,7 +1,6 @@
 from ttalps_cross_sections import get_cross_sections
 from Sample import Sample, SampleType
-from ttalps_samples_list import dasSignals2018, dasSignals2018_30GeV, dasBackgrounds2018
-from Logger import fatal
+from ttalps_samples_list import dasBackgrounds2018
 
 
 class TTAlpsABCDConfigHelper:
@@ -12,111 +11,6 @@ class TTAlpsABCDConfigHelper:
     self.base_path = base_path
     self.background_hist_path = background_hist_path
     self.cross_sections = get_cross_sections(year)
-
-    if category == "_Pat":
-      self.backgrounds_to_exclude = [
-          # "TTToSemiLeptonic",
-          # "TTToHadronic",
-          # "TTTo2L2Nu",
-          # "TTZToLLNuNu_M-10",
-          # "TTZToLL_M-1to10",
-          # "TTWJetsToLNu",
-          # "ttHTobb",
-          # "ttHToNonbb",
-          # "TTZZ",
-          # "TTZH",
-          # "TTTT",
-          # "ST_tW_antitop",
-          # "ST_t-channel_antitop",
-          # "ST_tW_top",
-          # "ST_t-channel_top",
-          # "DYJetsToMuMu_M-50",
-          "DYJetsToMuMu_M-10to50",
-          "WJetsToLNu",
-          "QCD_Pt-15To20",
-          "QCD_Pt-20To30",
-          "QCD_Pt-30To50",
-          "QCD_Pt-50To80",
-          "QCD_Pt-80To120",
-          "QCD_Pt-120To170",
-          "QCD_Pt-170To300",
-          # "QCD_Pt-300To470",
-          # "QCD_Pt-470To600",
-          # "QCD_Pt-600To800",
-          "QCD_Pt-800To1000",
-          "QCD_Pt-1000",
-      ]
-    elif category == "_PatDSA":
-      self.backgrounds_to_exclude = [
-          # "TTToSemiLeptonic",
-          # "TTToHadronic",
-          # "TTTo2L2Nu",
-          # "TTZToLLNuNu_M-10",
-          # "TTZToLL_M-1to10",
-          # "TTWJetsToLNu",
-          # "ttHTobb",
-          # "ttHToNonbb",
-          # "TTZZ",
-          # "TTZH",
-          # "TTTT",
-          # "ST_tW_antitop",
-          # "ST_t-channel_antitop",
-          # "ST_tW_top",
-          # "ST_t-channel_top",
-          # "DYJetsToMuMu_M-50",
-          # "DYJetsToMuMu_M-10to50",
-          # "WJetsToLNu",
-          "QCD_Pt-15To20",
-          "QCD_Pt-20To30",
-          "QCD_Pt-30To50",
-          "QCD_Pt-50To80",
-          "QCD_Pt-80To120",
-          "QCD_Pt-120To170",
-          "QCD_Pt-170To300",
-          # "QCD_Pt-300To470",
-          # "QCD_Pt-470To600",
-          # "QCD_Pt-600To800",
-          # "QCD_Pt-800To1000",
-          # "QCD_Pt-1000",
-      ]
-    elif category == "_DSA":
-      self.backgrounds_to_exclude = [
-          # "TTToSemiLeptonic",
-          # "TTToHadronic",
-          # "TTTo2L2Nu",
-          # "TTZToLLNuNu_M-10",
-          # "TTZToLL_M-1to10",
-          # "TTWJetsToLNu",
-          # "ttHTobb",
-          # "ttHToNonbb",
-          # "TTZZ",
-          # "TTZH",
-          # "TTTT",
-          # "ST_tW_antitop",
-          # "ST_t-channel_antitop",
-          # "ST_tW_top",
-          # "ST_t-channel_top",
-          # "DYJetsToMuMu_M-50",
-          "DYJetsToMuMu_M-10to50",
-          "WJetsToLNu",
-          "QCD_Pt-15To20",
-          "QCD_Pt-20To30",
-          "QCD_Pt-30To50",
-          "QCD_Pt-50To80",
-          "QCD_Pt-80To120",
-          "QCD_Pt-120To170",
-          "QCD_Pt-170To300",
-          # "QCD_Pt-300To470",
-          # "QCD_Pt-470To600",
-          # "QCD_Pt-600To800",
-          "QCD_Pt-800To1000",
-          # "QCD_Pt-1000",
-      ]
-    else:
-      fatal(
-          f"Category {category} not recognized. Please use one of the following: _Pat, _PatDSA, _DSA"
-      )
-      exit(0)
 
   def get_background_params(self, backgrounds):
     background_params = []
@@ -133,15 +27,6 @@ class TTAlpsABCDConfigHelper:
     backgrounds = []
 
     for name in dasBackgrounds2018:
-      skip = False
-      for exclude in self.backgrounds_to_exclude:
-        if exclude in name:
-          skip = True
-          break
-
-      if skip:
-        continue
-
       backgrounds.append(name.split("/")[-1])
 
       background_samples.append(
