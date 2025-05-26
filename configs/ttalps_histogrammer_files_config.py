@@ -14,6 +14,7 @@ input_username = "jniedzie"
 
 # SR, J/Psi CR, ttZ CR (no isolation requirement on the loose muons)
 skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "AlpDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuonsNoIso", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -39,17 +40,18 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVerte
 
 # Inverted MET skim
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # samples = dasBackgrounds2016.keys()
 
 samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
 # samples = dasBackgrounds2018.keys()
+# samples = list(dasBackgrounds2018.keys()) + list(dasSignals2018.keys())
+# samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 # samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()
-# samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
-
 # samples = dasBackgrounds2022preEE.keys()
 
 base_path = "/data/dust/user/{}/ttalps_cms"
@@ -57,7 +59,8 @@ base_path = "/data/dust/user/{}/ttalps_cms"
 applyScaleFactors = {
   # name : (apply nominal, apply variation)
   "muon": (True, True),
-  "muonTriggerIsoMu24": (True, True),
+  # "muonTriggerIsoMu24": (True, True),
+  "muonTrigger": (True, True),
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),

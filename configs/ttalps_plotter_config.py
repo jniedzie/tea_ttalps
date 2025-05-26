@@ -18,23 +18,26 @@ luminosity = get_luminosity(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
-skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+skim = ("skimmed_looseSemimuonic_v2_SR", "AlpDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons", "")
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
 
-# skim = ("skimmed_looseNonTT_v1_QCDCR", "SRDimuons")  # this is in fact VV CR
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "SRDimuons")
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseNonTT_v1_QCDCR", "SRDimuons", "SR")  # this is in fact VV CR
+# skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "SRDimuons", "SR")
 # skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "JPsiDimuons", "SR")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons", "SR")
+# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons", "SR")
 
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_{skim[1]}_{skim[2]}"
 if year == "2022preEE" or year == "2022postEE" or year == "2023preBPix" or year == "2023postBPix":
@@ -53,7 +56,7 @@ lumi_label_value = luminosity
 
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
-show_ratio_plots = True
+show_ratio_plots = False
 ratio_limits = (0.0, 3.0)
 
 legend_max_x = 0.82 if show_ratio_plots else 0.75
@@ -70,8 +73,8 @@ extraText = "Preliminary"
 
 extraMuonVertexCollections = [
   # "MaskedDimuonVerex",      # invariant mass cut only
-  "BestDimuonVertex",       # best Dimuon selection without isolation cut
-  # "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
+  # "BestDimuonVertex",       # best Dimuon selection without isolation cut
+  "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
   # "BestPFIsoDimuonVertexNminus1",  # best Dimuon selection with isolation cut
 ]
 
@@ -102,10 +105,11 @@ backgrounds_to_exclude = [
 signals_to_include = [
     # "tta_mAlp-0p35GeV_ctau-1e1mm",
 
-    # "tta_mAlp-2GeV_ctau-1e-5mm",
-    # "tta_mAlp-2GeV_ctau-1e1mm",
-    # "tta_mAlp-2GeV_ctau-1e2mm",
-    # "tta_mAlp-2GeV_ctau-1e3mm"
+    "tta_mAlp-2GeV_ctau-1e-5mm",
+    "tta_mAlp-2GeV_ctau-1e0mm",
+    "tta_mAlp-2GeV_ctau-1e1mm",
+    "tta_mAlp-2GeV_ctau-1e2mm",
+    "tta_mAlp-2GeV_ctau-1e3mm"
 
     # "tta_mAlp-12GeV_ctau-1e1mm",
     # "tta_mAlp-12GeV_ctau-1e2mm",
@@ -220,49 +224,52 @@ histograms = (
     # ----------------------------------------------------------------------------
     # Loose muons
     # ----------------------------------------------------------------------------
-    # Histogram("LooseMuonsSegmentMatch_pt", "", False,  True, default_norm, 20,
-    #           0, 500, 1e-2, 1e6, "loose #mu p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_leadingPt", "", False,  True, default_norm, 20,
-    #           0, 500, 1e-2, 1e6, "leading loose #mu p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_subleadingPt", "", False,  True, default_norm, 20, 0,
-    #           500, 1e-2, 1e6, "all subleading loose #mu p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_eta", "", False,  True, default_norm,
-    #           5, -3.5, 3.5, 1e0, 1e6, "loose #mu #eta", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_dxy", "", False,  True, default_norm, 20, -
-    #           200, 200, 1e-2, 1e6, "loose #mu d_{xy} [cm]", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_dz", "", False,  True, default_norm, 20, -
-    #           200, 200, 1e-2, 1e6, "loose #mu d_{z} [cm]", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_pfRelIso04_all", "", False,  True, default_norm, 1,
-    #           0.0, 0.2, 1e-2, 1e6, "Loose #mu PF Rel Iso 0.4 (all)", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_pfRelIso03_chg", "", False,  True, default_norm,
-    #           1, 0, 0.5, 1e-2, 1e6, "Loose #mu PF Rel Iso 0.3 (chg)", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_pfRelIso03_all", "", False,  True, default_norm,
-    #           1, 0, 0.5, 1e-2, 1e6, "Loose #mu PF Rel Iso 0.3 (all)", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_miniPFRelIso_chg", "", False,  True, default_norm,
-    #           10, -0.1, 3.5, 1e-2, 1e6, "Loose #mu mini PF Rel Iso (chg)", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_miniPFRelIso_all", "", False,  True, default_norm,
-    #           5, -0.1, 3.5, 1e-2, 1e6, "Loose #mu mini PF Rel Iso (all)", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_jetRelIso", "", False,  True, default_norm,
-    #           50, -1, 8.0, 1e-2, 1e6, "Loose #mu jet Rel Iso", f"# events ({year})"),
-    # Histogram("LooseMuonsSegmentMatch_tkRelIso", "", False,  True, default_norm,
-    #           20, -0.1, 8.0, 1e-2, 1e6, "Loose #mu track Rel Iso", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_pt", "", False,  True, default_norm, 1,
+              0, 100, 1e-2, 1e6, "loose #mu p_{T} [GeV]", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_leadingPt", "", False,  True, default_norm, 20,
+              0, 500, 1e-2, 1e6, "leading loose #mu p_{T} [GeV]", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_subleadingPt", "", False,  True, default_norm, 20, 0,
+              500, 1e-2, 1e6, "all subleading loose #mu p_{T} [GeV]", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_eta", "", False,  True, default_norm,
+              5, -3.5, 3.5, 1e0, 1e6, "loose #mu #eta", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_dxy", "", False,  True, default_norm, 20, -
+              200, 200, 1e-2, 1e6, "loose #mu d_{xy} [cm]", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_dz", "", False,  True, default_norm, 20, -
+              200, 200, 1e-2, 1e6, "loose #mu d_{z} [cm]", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_pfRelIso04_all", "", False,  True, default_norm, 1,
+              0.0, 0.2, 1e-2, 1e6, "Loose #mu PF Rel Iso 0.4 (all)", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_pfRelIso03_chg", "", False,  True, default_norm,
+              1, 0, 0.5, 1e-2, 1e6, "Loose #mu PF Rel Iso 0.3 (chg)", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_pfRelIso03_all", "", False,  True, default_norm,
+              1, 0, 0.5, 1e-2, 1e6, "Loose #mu PF Rel Iso 0.3 (all)", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_miniPFRelIso_chg", "", False,  True, default_norm,
+              10, -0.1, 3.5, 1e-2, 1e6, "Loose #mu mini PF Rel Iso (chg)", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_miniPFRelIso_all", "", False,  True, default_norm,
+              5, -0.1, 3.5, 1e-2, 1e6, "Loose #mu mini PF Rel Iso (all)", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_jetRelIso", "", False,  True, default_norm,
+              50, -1, 8.0, 1e-2, 1e6, "Loose #mu jet Rel Iso", f"# events ({year})"),
+    Histogram("LooseMuonsSegmentMatch_tkRelIso", "", False,  True, default_norm,
+              20, -0.1, 8.0, 1e-2, 1e6, "Loose #mu track Rel Iso", f"# events ({year})"),
+    
+    Histogram("LooseMuonsSegmentMatch_logAbsDzFromLeadingTight", "", False,  True, default_norm,
+              100, -5, 3, 1e-2, 1e6, "|#Delta z(Loose #mu, Tight #mu_{1})|", f"# events ({year})"),
 
-    # Histogram("LooseMuonsVertexSegmentMatch_3Dangle", "", False, True, default_norm,
-    #           2, 0, 3.15, 1e-4, 1e8, "#mu vertex 3Dangle", f"# events ({year})"),
-    # Histogram("LooseMuonsVertexSegmentMatch_cos3Dangle", "", False, True, default_norm,
-    # 2, -1, 1, 1e-4, 1e8, "#mu vertex cos 3Dangle", f"# events ({year})"),
+    Histogram("LooseMuonsVertexSegmentMatch_3Dangle", "", False, True, default_norm,
+              2, 0, 3.15, 1e-4, 1e8, "#mu vertex 3Dangle", f"# events ({year})"),
+    Histogram("LooseMuonsVertexSegmentMatch_cos3Dangle", "", False, True, default_norm,
+    2, -1, 1, 1e-4, 1e8, "#mu vertex cos 3Dangle", f"# events ({year})"),
 
     # ----------------------------------------------------------------------------
     # Loose DSA muons
     # ----------------------------------------------------------------------------
-    # Histogram("LooseDSAMuons_pt", "", False,  True, default_norm, 20, 0, 500,
-    #           1e-2, 1e6, "loose dSA #mu p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("LooseDSAMuons_eta", "", False,  True, default_norm, 5, -
-    #           3.5, 3.5, 1e0, 1e6, "loose dSA #mu #eta", f"# events ({year})"),
-    # Histogram("LooseDSAMuons_dxy", "", False,  True, default_norm, 20, -200,
-    #           200, 1e-2, 1e6, "loose dSA #mu d_{xy} [cm]", f"# events ({year})"),
-    # Histogram("LooseDSAMuons_dz", "", False,  True, default_norm, 20, -200,
-    #           200, 1e-2, 1e6, "loose dSA #mu d_{z} [cm]", f"# events ({year})"),
+    Histogram("LooseDSAMuons_pt", "", False,  True, default_norm, 20, 0, 500,
+              1e-2, 1e6, "loose dSA #mu p_{T} [GeV]", f"# events ({year})"),
+    Histogram("LooseDSAMuons_eta", "", False,  True, default_norm, 5, -
+              3.5, 3.5, 1e0, 1e6, "loose dSA #mu #eta", f"# events ({year})"),
+    Histogram("LooseDSAMuons_dxy", "", False,  True, default_norm, 20, -200,
+              200, 1e-2, 1e6, "loose dSA #mu d_{xy} [cm]", f"# events ({year})"),
+    Histogram("LooseDSAMuons_dz", "", False,  True, default_norm, 20, -200,
+              200, 1e-2, 1e6, "loose dSA #mu d_{z} [cm]", f"# events ({year})"),
 
 
     # ----------------------------------------------------------------------------
@@ -369,6 +376,10 @@ if "JPsiDimuons" in skim[1]:
   mass_rebin = 1
   mass_min = 2.9
   mass_max = 3.3
+elif "AlpDimuons" in skim[1]:
+  mass_rebin = 5
+  mass_min = 1.0
+  mass_max = 3.0
 elif "ZDimuons" in skim[1]:
   mass_rebin = 20
   mass_min = 70.0
@@ -380,8 +391,8 @@ for collection, category in product(extraMuonVertexCollections, ("", "_PatDSA", 
   histograms += (
       Histogram("Event_n"+collection + category, "", False, True, default_norm, 1,
                 0, 5, 1e0, 1e3, "Number of #mu vertices", f"# events ({year})"),
-      Histogram(collection + category+"_invMass", "", False, False, default_norm, mass_rebin,
-                mass_min, mass_max, 0, 100, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
+      Histogram(collection + category+"_invMass", "", False, True, default_norm, mass_rebin,
+                mass_min, mass_max, 1e-3, 1e1, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
       # Histogram(collection + category+"_invMass", "", False, True, default_norm, mass_rebin,
       #           mass_min, mass_max, 1e-5, 1e6, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
       Histogram(collection + category+"_logInvMass", "", False, True, default_norm, 1, 0.45,
