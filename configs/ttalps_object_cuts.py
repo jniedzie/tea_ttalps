@@ -53,7 +53,7 @@ JPsiDimuonsCuts = {
     "maxDeltaPixelHits": [9999.0, 9999.0, 9999.0],
 }
 
-# good object definitions for JPsi CR
+# good object definitions for ALP in a narrow mass window (2 GeV)
 AlpDimuonsCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
     "maxChargeProduct": [-0.1, -0.1, -0.1],
