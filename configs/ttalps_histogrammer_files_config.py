@@ -64,9 +64,9 @@ applyScaleFactors = {
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),
-  # "JpsiInvMassSFs": (True, True),
-  "JpsiInvMassSFs": (False, False),
-  # "jec" : (False, True),
+  "JpsiInvMass": (True, True),
+  # "JpsiInvMass": (False, False),
+  "jec" : (False, False),
   # "met" : (False, True),
   # "QCDscale" : (False, True),
 }

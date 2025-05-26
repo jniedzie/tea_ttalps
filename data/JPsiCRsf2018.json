@@ -2,7 +2,7 @@
     "schema_version": 2,
     "corrections": [
         {
-            "name": "JpsiInvMassSFs",
+            "name": "JpsiInvMass",
             "description": "Scale factors for J/Psi invariant mass",
             "version": 1,
             "inputs": [
@@ -38,11 +38,11 @@
                                 },
                                 {
                                     "key": "up",
-                                    "value": 0.046667776592494326
+                                    "value": 0.9516068797040048
                                 },
                                 {
                                     "key": "down",
-                                    "value": 0.044155166918850575
+                                    "value": 0.8607839361926599
                                 }
                             ]
                         }
@@ -59,11 +59,11 @@
                                 },
                                 {
                                     "key": "up",
-                                    "value": 0.470791654529652
+                                    "value": 1.6439252690710084
                                 },
                                 {
                                     "key": "down",
-                                    "value": 0.330769485931961
+                                    "value": 0.8423641286093955
                                 }
                             ]
                         }
@@ -80,11 +80,11 @@
                                 },
                                 {
                                     "key": "up",
-                                    "value": 1.7052062594973958
+                                    "value": 3.491278231679081
                                 },
                                 {
                                     "key": "down",
-                                    "value": 0.8565439519280585
+                                    "value": 0.9295280202536268
                                 }
                             ]
                         }

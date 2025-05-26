@@ -8,9 +8,9 @@ year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 
 # PAT-PAT
+input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_invMass_vs_logDeltaSquaredIso03_Pat_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
 
 # PAT-DSA
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_dPhi_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
@@ -20,7 +20,7 @@ year = "2018"
 # DSA-DSA
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dPhi_DSA_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dEta_DSA_ABCDpred.txt"
-input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_outerDR_DSA_ABCDpred.txt"
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_outerDR_DSA_ABCDpred.txt"
 
 # Combined
 # input_path = "../limits/results/limits_combined.txt"

@@ -53,7 +53,7 @@ samples.append(
 )
 
 # CorrectioWriter input
-correction_name =  "JpsiInvMassSFs"
+correction_name =  "JpsiInvMass"
 correction_description = "Scale factors for J/Psi invariant mass"
 correction_version = 1
 correction_inputs = [

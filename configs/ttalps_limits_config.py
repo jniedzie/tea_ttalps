@@ -16,18 +16,20 @@ base_path = f"/data/dust/user/jniedzie/ttalps_cms/"
 combine_path = "/afs/desy.de/user/j/jniedzie/combine/CMSSW_14_1_0_pre4/src/"
 base_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps"
 if username == "lrygaard":
-  # base_path = f"/data/dust/user/lrygaard/ttalps_cms/"
+  base_path = f"/data/dust/user/lrygaard/ttalps_cms/"
   combine_path = "/afs/desy.de/user/l/lrygaard/Combine/CMSSW_14_1_0_pre4/src/"
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+hist_path = f"histograms_muonSFs_muonTriggerIsoMu24SFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
 # SR dimuon cuts applied
 signal_hist_path = (
-    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{hist_path}"
     f"{abcd_config.signal_skim[1]}{abcd_config.signal_skim[2]}"
 )
 
 background_hist_path = (
-    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{hist_path}"
     f"{abcd_config.background_skim[1]}{abcd_config.background_skim[2]}"
 )
 
@@ -48,7 +50,7 @@ include_shapes = True
 if do_abcd:
   include_shapes = False  # currently not supported for ABCD
 
-skip_combine = True
+skip_combine = False
 
 signal_samples = []
 
@@ -117,6 +119,9 @@ nuisances = {
     "muonReco_systup": "variation",
     "muonTriggerIsoMu24_systdown": "variation",
     "muonTriggerIsoMu24_systup": "variation",
+
+    "JpsiInvMass_down": "variation",
+    "JpsiInvMass_up": "variation",
 
     "abcd_nonClosure": "closure",
     "lumi": {
