@@ -485,6 +485,7 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "pt", 2000, 0, 1000, ""),
         (name, "eta", 500, -10, 10, ""),
         (name, "chargeProduct", 4, -2, 2, ""),
+        (name, "muonPt", 2000, 0, 1000, ""),
         (name, "leadingPt", 2000, 0, 1000, ""),
         (name, "subleadingPt", 2000, 0, 1000, ""),
         (name, "leadingEta", 500, -10, 10, ""),

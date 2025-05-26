@@ -24,8 +24,9 @@ output_skim = "skimmed_looseSemimuonic_v2"
 
 # output_skim = "skimmed_looseNoBjets_lt4jets_looseMuonPtGt8GeV_v1"
 
-# Inverted MET skim
+# Inverted/no MET skims
 # output_skim = "skimmed_looseInvertedMet_v1"
+# output_skim = "skimmed_looseNoMet_v1"
 
 output_trees_dir = ""
 output_hists_dir = ""

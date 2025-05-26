@@ -44,6 +44,8 @@ category = "_Pat"
 # category = "_PatDSA"
 # category = "_DSA"
 
+exclude_backgrounds_with_less_than = 10  # entries
+
 # binning always expressed in bin numbers, not values
 optimal_parameters = {
     # optimized on MC, pT > 3 GeV:
@@ -63,31 +65,28 @@ optimal_parameters = {
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
     # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "
     # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (21, 19), "A"),
+    ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (19, 16), "A"),
+    ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
+
+    ("_PatDSA", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (19, 16), "A"),
 
     # optimized on MC (rebin 4, μ pt > 8 GeV):
     # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (23, 2), "C"),
     # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
     # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (10, 12), "D"),
-
     # ("_Pat", "JPsiCR"): ("log3Dangle", "logDeltaIso03", (13, 15), "A"),
     # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 13), "A"),
     # ("_Pat", "JPsiCR"): ("outerDR", "logDeltaIso03", (14, 2), "A"),
-
-
     # ("_PatDSA", "SR"): ("logLxy", "outerDR", (7, 14), "A"),
-    ("_PatDSA", "SR"): ("outerDR", "logAbsPtLxyDPhi1", (17, 12), "D"),
-
-    ("_PatDSA", "JPsiCR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
-
+    # ("_PatDSA", "SR"): ("outerDR", "logAbsPtLxyDPhi1", (17, 12), "D"),
+    # ("_PatDSA", "JPsiCR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
     # ("_DSA", "SR"): ("absPtLxyDPhi2", "leadingPt", (24, 21), "D"),
     # ("_DSA", "SR"): ("leadingPt", "dEta", (4, 3), "A"),
     # ("_DSA", "SR"): ("leadingPt", "dPhi", (3, 3), "A"),
     # ("_DSA", "SR"): ("logLeadingPt", "dEta", (4, 15), "A"),
     # ("_DSA", "SR"): ("logLeadingPt", "dPhi", (3, 15), "A"),
-    ("_DSA", "SR"): ("logLxySignificance", "outerDR", (6, 14), "A"),
-
-
-    ("_DSA", "JPsiCR"): ("logLeadingPt", "dPhi", (10, 13), "A"),
+    # ("_DSA", "SR"): ("logLxySignificance", "outerDR", (6, 14), "A"),
+    # ("_DSA", "JPsiCR"): ("logLeadingPt", "dPhi", (10, 13), "A"),
 
 }
 if (category, do_region) in optimal_parameters:
@@ -215,15 +214,15 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 
 skims = {
     "SR": (
-        # "skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
-        "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        "skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        # "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "SRnoIso": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuonsNoIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     "JPsiCR": (
-        # ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        # ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     ),
     "JPsiCRwithIso": (
         ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuonsWithIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
@@ -232,11 +231,10 @@ skims = {
     "ttZCR": ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons"),
     "VVCR": ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons"),
     "QCDCR": (
-        # ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        # ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-
-        ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     ),
     "WjetsCR": ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons"),
     "bbCR": (
