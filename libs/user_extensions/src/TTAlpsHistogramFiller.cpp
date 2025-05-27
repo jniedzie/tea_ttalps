@@ -150,7 +150,8 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
   }
 }
 
-void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuon> muon, const shared_ptr<NanoMuon> leadingTightMuon, string name) {
+void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuon> muon, const shared_ptr<NanoMuon> leadingTightMuon,
+                                                     string name) {
   vector<string> variables = {
       "pt",
       "eta",
@@ -218,10 +219,10 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuon> 
   float deltaZfromTightMuon = fabs(leadingTightMuon->GetAs<float>("dz") - muon->GetAs<float>("dz"));
   histogramsHandler->Fill(name + "_absDzFromLeadingTight", deltaZfromTightMuon);
   histogramsHandler->Fill(name + "_logAbsDzFromLeadingTight", TMath::Log10(deltaZfromTightMuon));
-
 }
 
-void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuons> muons, const shared_ptr<NanoMuon> leadingTightMuon, string collectionName) {
+void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuons> muons, const shared_ptr<NanoMuon> leadingTightMuon,
+                                                     string collectionName) {
   float size = muons->size();
   histogramsHandler->Fill("Event_n" + collectionName, muons->size());
   for (auto muon : *muons) {
@@ -259,6 +260,10 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
       "displacedTrackIso04Muon1",
       "displacedTrackIso03Muon2",
       "displacedTrackIso04Muon2",
+      "displacedTrackIso03Dimuon1",
+      "displacedTrackIso04Dimuon1",
+      "displacedTrackIso03Dimuon2",
+      "displacedTrackIso04Dimuon2",
       "dcaStatus",
       "dcax",
       "dcay",
@@ -303,13 +308,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_cos3Dangle", dimuon->GetCosine3DOpeningAngle());
   histogramsHandler->Fill(name + "_nSegments", dimuon->GetTotalNumberOfSegments());
 
-  // Isolations:
-  histogramsHandler->Fill(name + "_displacedTrackIso03Dimuon1", dimuon->Get("displacedTrackIso03Dimuon1"));
-  histogramsHandler->Fill(name + "_displacedTrackIso04Dimuon1", dimuon->Get("displacedTrackIso04Dimuon1"));
-  histogramsHandler->Fill(name + "_displacedTrackIso03Dimuon2", dimuon->Get("displacedTrackIso03Dimuon2"));
-  histogramsHandler->Fill(name + "_displacedTrackIso04Dimuon2", dimuon->Get("displacedTrackIso04Dimuon2"));
-  float pfRelIso04_all1(0), pfRelIso04_all2(0), nSegments1(0), nSegments2(0);
-
   double deltaIso03 = dimuon->GetDeltaDisplacedTrackIso03();
   double deltaIso04 = dimuon->GetDeltaDisplacedTrackIso04();
   histogramsHandler->Fill(name + "_deltaIso03", deltaIso03);
@@ -321,7 +319,9 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_logDeltaSquaredIso03", TMath::Log10(pow(deltaIso03, 2)));
   histogramsHandler->Fill(name + "_logDeltaSquaredIso04", TMath::Log10(pow(deltaIso04, 2)));
 
-  if (dimuon->GetVertexCategory() == "PatDSA") {
+  float pfRelIso04_all1(0), pfRelIso04_all2(0), nSegments1(0), nSegments2(0);
+
+  if (name.find("_PatDSA") != string::npos) {
     pfRelIso04_all1 = dimuon->Muon1()->Get("pfRelIso04_all");
     nSegments2 = dimuon->Muon2()->Get("nSegments");
   } else if (dimuon->GetVertexCategory() == "DSA") {
@@ -340,6 +340,9 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   // Muons in vertex variables:
   auto leadingMuon = dimuon->GetLeadingMuon();
   auto subleadingMuon = dimuon->GetSubleadingMuon();
+  
+  histogramsHandler->Fill(name + "_muonPt", leadingMuon->GetPt());
+  histogramsHandler->Fill(name + "_muonPt", subleadingMuon->GetPt());
   histogramsHandler->Fill(name + "_leadingPt", leadingMuon->GetPt());
   histogramsHandler->Fill(name + "_subleadingPt", subleadingMuon->GetPt());
   histogramsHandler->Fill(name + "_leadingEta", leadingMuon->GetEta());
@@ -1213,7 +1216,14 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
 void TTAlpsHistogramFiller::FillABCDMothersHistograms(const shared_ptr<Event> event, bool runFakesHistograms) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  auto genMuons = event->GetCollection("GenPart");
+  shared_ptr<PhysicsObjects> genMuons;
+
+  try {
+    genMuons = event->GetCollection("GenPart");
+  } catch (const Exception &e) {
+    warn() << "Collection GenPart not found in event. ABCD mother histograms won't be filled." << endl;
+    return;
+  }
 
   string collectionName = muonVertexCollection.first;
   auto collection = event->GetCollection(collectionName);
@@ -1291,7 +1301,14 @@ void TTAlpsHistogramFiller::FillFakesHistograms(const shared_ptr<Event> event) {
 
   if (collection->size() < 1) return;
 
-  auto genMuons = event->GetCollection("GenPart");
+  shared_ptr<PhysicsObjects> genMuons;
+
+  try {
+    genMuons = event->GetCollection("GenPart");
+  } catch (const Exception &e) {
+    warn() << "Collection GenPart not found in event. Fakes histograms won't be filled." << endl;
+    return;
+  }
 
   auto tightMuons = asNanoMuons(event->GetCollection("TightMuons"));
   auto leadingTightMuon = tightMuons->at(0);

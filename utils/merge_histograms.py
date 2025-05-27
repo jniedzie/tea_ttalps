@@ -1,6 +1,5 @@
-from ttalps_samples_list import dasBackgrounds2016
-from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
-from ttalps_samples_list import dasBackgrounds2022preEE
+from ttalps_histogrammer_files_config import skim, samples
+
 import os
 import re
 import argparse
@@ -15,64 +14,12 @@ args = parser.parse_args()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-# Loose semimuonic skim
-# skim = ("skimmed_looseSemimuonic_v2", "")
-
-# SR, J/Psi CR, ttZ CR (no isolation requirement on the loose muons)
-# skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuonsNoIso", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-
-# skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuonsWithIso", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons")
-
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-
-# other CRs
-# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
-# skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "")
-# skim = ("skimmed_looseNonTT_v1_VVCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-# skim = ("skimmed_looseNoBjets_lt4jets_looseMuonPtGt5GeV_v1_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-
-# Loose semimuonic skim with Dimuon triggers for LLP trigger study
-# skim = ("skimmed_looseSemimuonicv1_LLPtrigger", "SRDimuons_TriggerStudy")
-# skim = ("skimmed_looseSemimuonic_SRmuonic_Segmentv1_NonIso_LLPtrigger", "SRDimuons_TriggerStudy")
-
-# # Inverted MET skim
-# skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
 hist_path = f"histograms_muonSFs_muonTriggerIsoMu24SFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 if skim[2] != "":
   hist_path += f"_{skim[2]}"
-
-# ------------------------------------------------------------------------------
-# Samples
-# ------------------------------------------------------------------------------
-
-# sample_paths = dasBackgrounds2016.keys()
-
-# sample_paths = dasBackgrounds2016.keys()
-
-# sample_paths = dasSamples2018.keys()
-# sample_paths = dasData2018.keys()
-sample_paths = dasBackgrounds2018.keys()
-# sample_paths = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
-# sample_paths = dasSignals2018.keys()
-# sample_paths = dasData2018_standard.keys()
-# sample_paths = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
-
-# sample_paths = dasBackgrounds2022preEE.keys()
 
 
 def extract_year(s):
@@ -92,7 +39,7 @@ def main():
 
   commands = []
 
-  for sample_path in sample_paths:
+  for sample_path in samples:
     print(f"{sample_path=}")
     input_path = f"{sample_path}/{skim[0]}/{hist_path}/*.root"
 

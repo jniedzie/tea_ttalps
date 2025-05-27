@@ -117,8 +117,8 @@ nuisances = {
     "bTaggingMedium_up_uncorrelated": "variation",
     "muonReco_systdown": "variation",
     "muonReco_systup": "variation",
-    "muonTriggerIsoMu24_systdown": "variation",
-    "muonTriggerIsoMu24_systup": "variation",
+    "muonTrigger_systdown": "variation",
+    "muonTrigger_systup": "variation",
 
     "JpsiInvMass_down": "variation",
     "JpsiInvMass_up": "variation",

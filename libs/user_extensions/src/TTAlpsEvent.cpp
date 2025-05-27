@@ -39,7 +39,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all
   // years? else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
   pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
-  map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTriggerIsoMu24");
+  map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTrigger");
 
   int maxNjets = 4;
   auto leadingJets = eventProcessor->GetLeadingObjects(event, "GoodJets", maxNjets);

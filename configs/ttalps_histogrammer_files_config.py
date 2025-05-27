@@ -43,6 +43,7 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 
 # Inverted MET skim
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # samples = dasBackgrounds2016.keys()
 
@@ -52,8 +53,6 @@ samples = dasBackgrounds2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 # samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()
-# samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
-
 # samples = dasBackgrounds2022preEE.keys()
 
 base_path = "/data/dust/user/{}/ttalps_cms"
@@ -61,7 +60,7 @@ base_path = "/data/dust/user/{}/ttalps_cms"
 applyScaleFactors = {
   # name : (apply nominal, apply variation)
   "muon": (True, True),
-  "muonTriggerIsoMu24": (True, True),
+  "muonTrigger": (True, True),
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),
