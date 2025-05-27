@@ -243,6 +243,28 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, s
   event->AddCollection(muonVertexCollectionName, finalCollection);
 }
 
+void TTAlpsObjectsManager::InsertSegmentMatchedVertexCollections(shared_ptr<Event> event) {
+  if (muonMatchingParams.size() == 0) return;
+  if ((muonVertexCollection.first.empty() || muonVertexCollection.second.empty())) return;
+
+  string goodMuonVertexCollectionName = muonVertexCollection.first;
+  goodMuonVertexCollectionName.replace(0, 4, "Good");
+
+  auto goodMuonVertexCollection = event->GetCollection(goodMuonVertexCollectionName);
+  auto goodMatchedVertexCollection = asNanoEvent(event)->GetSegmentMatchedMuonVertices(
+      goodMuonVertexCollection, 2.0f / 3.0f);
+
+  // replace "Good" with "GoodSegmentMatched" in the collection name
+  goodMuonVertexCollectionName.replace(0, 4, "GoodSegmentMatched");
+  event->AddCollection(goodMuonVertexCollectionName, goodMatchedVertexCollection);
+
+  auto bestSegmentMatchedVertexCollectionName = goodMuonVertexCollectionName;
+  bestSegmentMatchedVertexCollectionName.replace(0, 4, "Best");
+  auto bestSegmentMatchedVertexCollection = make_shared<PhysicsObjects>();
+  if (GetBestMuonVertex(goodMatchedVertexCollection,event)) bestSegmentMatchedVertexCollection->push_back(GetBestMuonVertex(goodMatchedVertexCollection, event));
+  event->AddCollection(bestSegmentMatchedVertexCollectionName, bestSegmentMatchedVertexCollection);
+}
+
 void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> event) {
   if (muonMatchingParams.size() == 0) return;
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;

@@ -133,12 +133,21 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_
 /// --------- Dimuon Vertex Collection Histograms --------- ///
 /// ------------ flag: runLLPNanoAODHistograms ------------ ///
 
-void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(const shared_ptr<Event> event) {
+void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(const shared_ptr<Event> event, bool runSegmentMatchedVertexCollections) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   string muonVertexCollectionName = muonVertexCollection.first;
   FillMuonVertexHistograms(event, muonVertexCollectionName);
   FillNminus1HistogramsForMuonVertexCollection(event);
+
+  if (runSegmentMatchedVertexCollections) {
+    string goodSegmentMatchedVertexCollectionName = muonVertexCollectionName;
+    goodSegmentMatchedVertexCollectionName.replace(0, 4, "GoodSegmentMatched");
+    FillMuonVertexHistograms(event, goodSegmentMatchedVertexCollectionName);
+    string bestSegmentMatchedVertexCollectionName = goodSegmentMatchedVertexCollectionName;
+    bestSegmentMatchedVertexCollectionName.replace(0, 4, "Best");
+    FillMuonVertexHistograms(event, bestSegmentMatchedVertexCollectionName);
+  }
 }
 
 void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuon> muon, const shared_ptr<NanoMuon> leadingTightMuon, string name) {

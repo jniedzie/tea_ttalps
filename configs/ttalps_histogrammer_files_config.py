@@ -5,15 +5,15 @@ import os
 
 max_files = -1
 
-# input_username = "lrygaard"
-input_username = "jniedzie"
+input_username = "lrygaard"
+# input_username = "jniedzie"
 
 # Loose semimuonic skim
 # skim = ("skimmed_looseSemimuonic_v2", "")
 # skim = ("skimmed_looseSemimuonic_v2", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # SR, J/Psi CR, ttZ CR (no isolation requirement on the loose muons)
-skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuonsNoIso", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -21,8 +21,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVerte
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuonsWithIso", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
-# J/Psi CR with different segment match ratio
+# SR, J/Psi CR with different segment match ratio
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
@@ -45,9 +46,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVerte
 
 # samples = dasBackgrounds2016.keys()
 
-samples = dasSamples2018.keys()
+# samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
-# samples = dasBackgrounds2018.keys()
+samples = dasBackgrounds2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 # samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()

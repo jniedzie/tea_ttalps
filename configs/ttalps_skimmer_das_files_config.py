@@ -33,7 +33,7 @@ output_hists_dir = ""
 input_directory = ""
 
 applyScaleFactors = {
-    "jec" : (True, True),
+    "jec" : (False, False),
     "pileup" : (False, False)
 }
 

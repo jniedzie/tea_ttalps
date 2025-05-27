@@ -18,6 +18,8 @@ class TTAlpsObjectsManager {
   void InsertOuterDRMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float maxDR, std::shared_ptr<NanoMuons> muonCollection = nullptr);
   void InsertProximityDRMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float maxDR, std::shared_ptr<NanoMuons> muonCollection = nullptr);
   void InsertSegmentMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float minSegmentRatio, std::shared_ptr<NanoMuons> muonCollection = nullptr);
+  void InsertSegmentMatchedVertexCollections(std::shared_ptr<Event> event);
+
   void InsertBaseLooseMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertMuonVertexCollection(std::shared_ptr<Event> event, std::shared_ptr<PhysicsObjects> vertices, std::pair<std::string, 

@@ -407,6 +407,17 @@ class TTAlpsHistogrammerConfigHelper:
         self.__insert_MuonVertexHistograms(params, collectionName2over3)
     return tuple(params)
 
+  def get_segment_matched_vertex_params(self):
+    params = []
+    for collection in self.bestMuonVertexCollections:
+      collectionName = collection.replace('Best', 'BestSegmentMatched')
+      self.__insert_MuonVertexHistograms(params, collectionName)
+
+    for collection in self.goodMuonVertexCollections:
+      collectionName = collection.replace('Good', 'GoodSegmentMatched')
+      self.__insert_MuonVertexHistograms(params, collectionName)
+    return tuple(params)
+
   def __insert_into_name(self, collection, to_insert):
     if "_" in collection:
       return collection.rsplit("_", 1)[0] + to_insert + "_" + collection.rsplit("_", 1)[1]

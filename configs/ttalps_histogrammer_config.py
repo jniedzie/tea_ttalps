@@ -47,6 +47,10 @@ runFakesHistograms = False
 # Create histograms for Best PAT-PAT dimuons -> DSA Best Dimuons due changed ratio
 runMuonMatchingRatioEffectHistograms = False
 
+# Apply Segment Matching on the GoodMuonVertexCollections after the dimuon selection
+# Histograms will be created with names "[Good/Best]SegmentMatched"+muonVertexCollectionName
+runSegmentMatchedVertexCollections = True
+
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
@@ -68,6 +72,7 @@ pileupScaleFactorsHistName = "pileup_scale_factors"
 # "ProxDR" : max Delta R (eg. 0.1)
 muonMatchingParams = {
     "Segment": 2.0 / 3.0,
+    # "Segment": 1.5,
     # "DR" : 0.1
     # "OuterDR" : 0.1
     # "ProxDR" : 0.1
@@ -148,5 +153,8 @@ if runMuonTriggerObjectsHistograms:
 
 if runMuonMatchingRatioEffectHistograms:
   histParams += helper.get_muon_matching_effect_params()
+
+if runSegmentMatchedVertexCollections:
+  histParams += helper.get_segment_matched_vertex_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()

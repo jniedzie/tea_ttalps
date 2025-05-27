@@ -22,7 +22,7 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 # skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuonsNoIso", "LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuonsWithIso", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -30,6 +30,7 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVer
 # skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
@@ -48,8 +49,8 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVer
 # # Inverted MET skim
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFsSFs"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+hist_path = f"histograms_muonSFs_muonTriggerIsoMu24SFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 if skim[2] != "":
@@ -63,9 +64,9 @@ if skim[2] != "":
 
 # sample_paths = dasBackgrounds2016.keys()
 
-sample_paths = dasSamples2018.keys()
+# sample_paths = dasSamples2018.keys()
 # sample_paths = dasData2018.keys()
-# sample_paths = dasBackgrounds2018.keys()
+sample_paths = dasBackgrounds2018.keys()
 # sample_paths = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 # sample_paths = dasSignals2018.keys()
 # sample_paths = dasData2018_standard.keys()
