@@ -27,7 +27,7 @@ class TTAlpsHistogramFiller {
 
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
-  void FillABCDHistograms(const std::shared_ptr<Event> event);
+  void FillABCDHistograms(const std::shared_ptr<Event> event, bool runSegmentMatchedVertexCollections = false);
   void FillABCDMothersHistograms(const std::shared_ptr<Event> event, bool runFakesHistograms);
   void FillFakesHistograms(const std::shared_ptr<Event> event);
 

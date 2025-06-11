@@ -252,7 +252,6 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
 
     for collection in self.bestMuonVertexCollections:
-
       for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
         for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
           if variable_1 == variable_2:
@@ -356,24 +355,35 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
-    collection = "BestPFIsoDimuonVertex"
+    collections = ("BestPFIsoDimuonVertex","BestSegmentMatchedPFIsoDimuonVertex")
 
     variables = (
-        "logLxySignificance_vs_log3Dangle",
-        "dPhi_vs_logDxyPVTraj1",
-        "logLxy_vs_log3Dangle",
-        "logAbsCollinearityAngle_vs_logPt",
-        "logPt_vs_logDxyPVTraj1",
-        "logLxy_vs_log3Dangle",
-        "logLeadingPt_vs_dPhi"
+        ("logLxySignificance", "log3Dangle"),
+        ("dPhi", "logDxyPVTraj1"),
+        ("logLxy", "log3Dangle"),
+        ("logAbsCollinearityAngle", "logPt"),
+        ("logPt", "logDxyPVTraj1"),
+        ("logLeadingPt", "dPhi"),
+        ("outerDR", "logLxy"),
+        ("outerDR", "leadingPt"),
+        ("logAbsPtLxyDPhi1", "logLeadingPt"),
+        ("absPtLxyDPhi1", "logLeadingPt"),
+        ("logAbsPtLxyDPhi1", "logLeadingPt"),
+        ("log3Dangle", "logDxyPVTraj1"),
+        ("absPtLxyDPhi2", "logDxyPVTraj1"),
+        ("invMass", "eta"),
     )
 
     SF_variables = []
-
-    for variable in variables:
-      for category in ("", "_PatDSA", "_DSA", "_Pat"):
-        name = self.__insert_into_name(collection, f"_{variable}{category}")
-        SF_variables.append(name)
+    for collection in collections:
+      for variable_pair in variables:
+        variable1 = f"{variable_pair[0]}_vs_{variable_pair[1]}"
+        variable2 = f"{variable_pair[1]}_vs_{variable_pair[0]}"
+        for category in ("", "_PatDSA", "_DSA", "_Pat"):
+          name1 = self.__insert_into_name(collection, f"_{variable1}{category}")
+          name2 = self.__insert_into_name(collection, f"_{variable2}{category}")
+          SF_variables.append(name1)
+          SF_variables.append(name2)
 
     return SF_variables
 
@@ -407,15 +417,23 @@ class TTAlpsHistogrammerConfigHelper:
         self.__insert_MuonVertexHistograms(params, collectionName2over3)
     return tuple(params)
 
-  def get_segment_matched_vertex_params(self):
+  def get_segment_matched_vertex_1Dparams(self):
     params = []
     for collection in self.bestMuonVertexCollections:
       collectionName = collection.replace('Best', 'BestSegmentMatched')
       self.__insert_MuonVertexHistograms(params, collectionName)
+    return tuple(params)
 
-    for collection in self.goodMuonVertexCollections:
-      collectionName = collection.replace('Good', 'GoodSegmentMatched')
-      self.__insert_MuonVertexHistograms(params, collectionName)
+  def get_segment_matched_vertex_2Dparams(self):
+    params = []
+    for collection in self.bestMuonVertexCollections:
+      collectionName = collection.replace('Best', 'BestSegmentMatched')
+      for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
+        for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
+          if variable_1 == variable_2:
+            continue
+          name = self.__insert_into_name(collectionName, f"_{variable_2}_vs_{variable_1}")
+          params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
     return tuple(params)
 
   def __insert_into_name(self, collection, to_insert):
@@ -560,6 +578,7 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "deltaSquaredIso04", 1000, 0, 10, ""),
         (name, "logDeltaSquaredIso03", 1000, -5, 5, ""),
         (name, "logDeltaSquaredIso04", 1000, -5, 5, ""),
+        (name, "matchedVertex", 10, 0, 10, ""),
     )
 
   def __insert_Nminus1Histograms(self, params, name):
@@ -576,6 +595,9 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
         (name, "pfRelIso1", 800, 0, 20, ""),
         (name, "pfRelIso2", 800, 0, 20, ""),
+        (name, "DeltaR", 500, 0, 10, ""),
+        (name, "OuterDeltaR", 500, 0, 10, ""),
+        (name, "ProxDeltaR", 500, 0, 10, ""),
     )
 
   # For FillGenDimuonHistograms function

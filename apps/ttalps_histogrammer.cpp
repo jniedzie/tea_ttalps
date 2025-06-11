@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
       }
     }
     if (runABCDHistograms) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event);
+      ttalpsHistogramsFiller->FillABCDHistograms(event, runSegmentMatchedVertexCollections);
     }
     if (runABCDMothersHistograms) {
       ttalpsHistogramsFiller->FillABCDMothersHistograms(event, runFakesHistograms);
