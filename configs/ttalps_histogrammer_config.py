@@ -156,6 +156,7 @@ if runMuonMatchingRatioEffectHistograms:
   histParams += helper.get_muon_matching_effect_params()
 
 if runSegmentMatchedVertexCollections:
-  histParams += helper.get_segment_matched_vertex_params()
+  histParams += helper.get_segment_matched_vertex_1Dparams()
+  histParams2D += helper.get_segment_matched_vertex_2Dparams()
 
 SFvariationVariables = helper.get_SF_variation_variables()

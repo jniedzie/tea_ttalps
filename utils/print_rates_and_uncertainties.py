@@ -92,6 +92,8 @@ nice_names = {
     "lumi": "luminosity",
     "stat_err_sig": "statistical (signal)",
     "stat_err_bkg": "statistical (background)",
+    "JpsiInvMass_up": "J/Psi SF (up)",
+    "JpsiInvMass_down": "J/Psi SF (down)",
 }
 
 

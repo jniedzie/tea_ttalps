@@ -15,9 +15,9 @@ cross_sections = get_cross_sections(year)
 # ------------------------------------------
 
 # do_region = "SR"
-# do_region = "SRnewMatching"
+do_region = "SRnewMatching"
 # do_region = "SRnoIso"
-do_region = "JPsiCR"
+# do_region = "JPsiCR"
 # do_region = "JPsiCRnewMatching"
 # do_region = "JPsiCRwithIso"
 # do_region = "ttZCR"
@@ -48,9 +48,9 @@ elif do_region == "SRnoIso":
   signal_collection = "BestDimuonVertex"
 
 # category = ""
-# category = "_Pat"
+category = "_Pat"
 # category = "_PatDSA"
-category = "_DSA"
+# category = "_DSA"
 
 exclude_backgrounds_with_less_than = 10  # entries
 
@@ -85,26 +85,21 @@ optimal_parameters = {
     ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
     ("_PatDSA", "JPsiCR"): ("logLxy", "logLeadingPt", (10, 11), "D"),
     ("_DSA", "JPsiCR"): ("logLxy", "logPt", (10, 7), "D"),
-    # optimized for no matching, pT > 3 GeV: (Lovisa)
-    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
-    # ("_PatDSA", "SR"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"),
-    # ("_DSA", "SR"): ("logLxy", "outerDR", (8, 12), "A"),
     # optimized for new matching, pT > 3 GeV: (Lovisa)
-    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
-    # ("_PatDSA", "SR"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"),
-    # ("_DSA", "SR"): ("logLxy", "outerDR", (10, 8), "A"),
+    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
+    ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"),
+    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),
     # ("_Pat", "JPsiCRnewMatching"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
     # ("_PatDSA", "JPsiCRnewMatching"): ("logLxy", "logLeadingPt", (10, 11), "D"),
     # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (10, 7), "D"),
-    # new matching with more cuts
-    # ("_Pat", "SR"): ("invMass", "eta", (18, 2), "A"),
-    # ("_PatDSA", "SR"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 15), "D"),
-    # ("_DSA", "SR"): ("logLxy", "log3Dangle", (17, 10), "A"),
     # new matching with JPsi SFs
-    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 13 points
-    ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
-    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 13 points
-    
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 13 points
+    # ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 13 points
+    # new matching with JPsi SFs and min 3 bkg entries
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
+    # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (7, 12), "A"), # 11 points
 
     # no PAT-PAT cuts
     # ("_Pat", "SR"): ("invMass", "deltaIso04", (25, 2), "A"),
@@ -257,11 +252,11 @@ base_path = "/data/dust/user/lrygaard/ttalps_cms"
 skims = {
     "SR": (
         "skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
-        # "skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_noPATcuts"
         # "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "SRnewMatching": (
         "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_JPsiSFminBkg3"
         # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAIso", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "SRnoIso": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuonsNoIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),

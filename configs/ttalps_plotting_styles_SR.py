@@ -81,12 +81,14 @@ samples_params = {
     
     "tta_mAlp-2GeV_ctau-1e-5mm": {"color": ROOT.kGreen+1, "legend_column": 0, "legend_row": 1, "legend_title": "2 GeV, 1e-5 mm"},
     "tta_mAlp-2GeV_ctau-1e1mm": {"color": ROOT.kRed+1, "legend_column": 0, "legend_row": 2, "legend_title": "2 GeV, 1e1 mm"},
-    "tta_mAlp-2GeV_ctau-1e2mm": {"color": ROOT.kBlue+1  , "legend_column": 0, "legend_row": 3, "legend_title": "2 GeV, 1e2 mm"},
-    "tta_mAlp-2GeV_ctau-1e3mm": {"color": ROOT.kRed+3  , "legend_column": 0, "legend_row": 4, "legend_title": "2 GeV, 1e3 mm"},
+    "tta_mAlp-2GeV_ctau-1e2mm": {"color": ROOT.kRed+1  , "legend_column": 0, "legend_row": 2, "legend_title": "2 GeV, 1e2 mm"},
+    "tta_mAlp-2GeV_ctau-1e3mm": {"color": ROOT.kBlue+1  , "legend_column": 0, "legend_row": 4, "legend_title": "2 GeV, 1e3 mm"},
     
     "tta_mAlp-12GeV_ctau-1e1mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 5, "legend_title": "12 GeV, 1e1 mm"},
-    "tta_mAlp-12GeV_ctau-1e2mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 6, "legend_title": "12 GeV, 1e2 mm"},
+    "tta_mAlp-12GeV_ctau-1e2mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 3, "legend_title": "12 GeV, 1e2 mm"},
     "tta_mAlp-12GeV_ctau-1e3mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 7, "legend_title": "12 GeV, 1e3 mm"},
+
+    "tta_mAlp-60GeV_ctau-1e2mm": {"color": ROOT.kRed+3, "legend_column": 0, "legend_row": 4, "legend_title": "60 GeV, 1e2 mm"},
     
     "TTALPto2Mu_MALP-2_ctau-1e2mm": {"color": ROOT.kBlue+1  , "legend_column": 1, "legend_row": 2, "legend_title": "2 GeV, 10 cm, central"},
     "TTALPto2Mu_MALP-2_ctau-1e0mm": {"color": ROOT.kBlue+1  , "legend_column": 1, "legend_row": 2, "legend_title": "2 GeV, 1 mm, central"},

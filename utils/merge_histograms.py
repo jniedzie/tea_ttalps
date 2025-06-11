@@ -15,7 +15,7 @@ args = parser.parse_args()
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-hist_path = f"histograms_muonSFs_muonTriggerIsoMu24SFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 if skim[2] != "":
@@ -96,6 +96,7 @@ def main():
     log        = ./log/$(ClusterId).log
     request_cpus = 16
     request_memory = 16000MB
+    max_materialize = 5000
     initialdir = .
     getenv = True
     queue cmd from merge_cmds.txt
