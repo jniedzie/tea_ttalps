@@ -66,9 +66,7 @@ applyScaleFactors = {
   "PUjetID": (True, True),
   "JpsiInvMass": (True, True),
   # "JpsiInvMass": (False, False),
-  "jec" : (False, False),
-  # "met" : (False, True),
-  # "QCDscale" : (False, True),
+  # "jec" : (False, False),
 }
 
 # this has to be here, otherwise the script will not work:

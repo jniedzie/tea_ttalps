@@ -133,23 +133,12 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForLooseMuons(const shared_
 /// --------- Dimuon Vertex Collection Histograms --------- ///
 /// ------------ flag: runLLPNanoAODHistograms ------------ ///
 
-void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(const shared_ptr<Event> event, bool runSegmentMatchedVertexCollections) {
+void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   string muonVertexCollectionName = muonVertexCollection.first;
   FillMuonVertexHistograms(event, muonVertexCollectionName);
   FillNminus1HistogramsForMuonVertexCollection(event);
-
-  if (runSegmentMatchedVertexCollections) {
-    string bestSegmentMatchedVertexCollectionName = muonVertexCollectionName;
-    bestSegmentMatchedVertexCollectionName.replace(0, 4, "BestSegmentMatched");
-    FillMuonVertexHistograms(event, bestSegmentMatchedVertexCollectionName);
-    auto vertexCollection = event->GetCollection(bestSegmentMatchedVertexCollectionName);
-    if (vertexCollection->size() > 0) {
-      auto dimuonVertex = asNanoDimuonVertex(vertexCollection->at(0), event);
-      histogramsHandler->Fill(bestSegmentMatchedVertexCollectionName + "_matchedVertex", dimuonVertex->Get("matchedVertex"));
-    }
-  }
 }
 
 void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuon> muon, const shared_ptr<NanoMuon> leadingTightMuon,
@@ -887,6 +876,83 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsGenMuonVertexCollectionsVariables(co
   FillRecoGenMatchedResonanceHistograms(event, muonCollection, collectionName, vertexCollection);
 
   FillMuonCollectionFromALPsNminus1Histograms(event);
+
+  FillRecoGenSingleMuonHistograms(event, vertexCollection, collectionName);
+}
+
+void TTAlpsHistogramFiller::FillRecoGenSingleMuonHistograms(const shared_ptr<Event> event, const shared_ptr<PhysicsObjects> vertexCollection,
+                                                            string collectionName) {
+  shared_ptr<PhysicsObjects> genMuons;
+  try {
+    genMuons = event->GetCollection("GenPart");
+  } catch (const Exception &e) {
+    warn() << "Collection GenPart not found in event. ABCD mother histograms won't be filled." << endl;
+    return;
+  }
+
+  if (vertexCollection->size() < 1) {
+    warn() << "Collection " << collectionName << " is empty. Reco-Gen matched single muon histograms will not be filled." << endl;
+    return;
+  }
+  auto dimuonVertex = asNanoDimuonVertex(vertexCollection->at(0), event);
+  if (!dimuonVertex) {
+    warn() << "Collection " << collectionName << " does not contain a valid dimuon vertex. Reco-Gen matched single muon histograms will not be filled." << endl;
+    return;
+  }
+  if (dimuonVertex->IsPatDimuon())
+    return; // Skip PAT dimuon vertices
+
+  string muonVertexCategory = dimuonVertex->GetVertexCategory();
+  auto muons = make_shared<NanoMuons>();
+  muons->push_back(dimuonVertex->Muon1());
+  muons->push_back(dimuonVertex->Muon2());
+  float maxDeltaR = 0.1; 
+  float delaZfromTightMuonThreshold = 0.1;
+  auto tightMuons = asNanoMuons(event->GetCollection("TightMuons"));
+  auto leadingTightMuon = tightMuons->at(0);
+
+  for (auto muon : *muons) {
+    if (!muon->IsDSA())
+      continue; // Skip PAT muons
+    string flag = "";
+    auto genMuon = muon->GetGenMuon(genMuons, maxDeltaR);
+    float genMuonDR = -1;
+    float deltaZfromTightMuon = fabs(leadingTightMuon->GetAs<float>("dz") - muon->GetAs<float>("dz"));
+    if (!genMuon) {
+      if (deltaZfromTightMuon > delaZfromTightMuonThreshold) {
+        flag = "PU";
+      }
+      else {
+        flag = "fake";
+      }
+    }
+    else {
+      flag = "real";
+      float dEta = (float)muon->Get("eta") - (float)genMuon->Get("eta");
+      float dPhi = TVector2::Phi_mpi_pi((float)muon->Get("phi") - (float)genMuon->Get("phi"));
+      genMuonDR = TMath::Sqrt(dEta * dEta + dPhi * dPhi);
+    }
+    histogramsHandler->Fill("Event_n"+ collectionName + "_" + muonVertexCategory + "_" + flag, 1);
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_nSegments", muon->Get("nSegments"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_nDTSegments", muon->Get("nDTSegments"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_nCSCSegments", muon->Get("nCSCSegments"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_trkNumPlanes", muon->Get("trkNumPlanes"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_trkNumHits", muon->Get("trkNumHits"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_trkNumDTHits", muon->Get("trkNumDTHits"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_trkNumCSCHits", muon->Get("trkNumCSCHits"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_normChi2", muon->Get("normChi2"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_pt", muon->Get("pt"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_ptErr", muon->Get("ptErr"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_phi", muon->Get("phi"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_phiErr", muon->Get("phiErr"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_eta", muon->Get("eta"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_etaErr", muon->Get("etaErr"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_outerEta", muon->Get("outerEta"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_outerPhi", muon->Get("outerPhi"));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_absDzFromLeadingTight", deltaZfromTightMuon);
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_logAbsDzFromLeadingTight", TMath::Log10(deltaZfromTightMuon));
+    histogramsHandler->Fill(collectionName + "_" + muonVertexCategory + "_" + flag + "_genMuonDR", genMuonDR);
+  }
 }
 
 void TTAlpsHistogramFiller::FillMuonCollectionFromALPsNminus1Histograms(const shared_ptr<Event> event) {
@@ -1128,94 +1194,84 @@ void TTAlpsHistogramFiller::FillDimuonCutFlows(const shared_ptr<CutFlowManager> 
 /// --------- ABCD Histograms --------- ///
 /// ----- flag: runABCDHistograms ----- ///
 
-void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bool runSegmentMatchedVertexCollections) {
+void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event) {
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
-  vector<string> collectionNames;
-  collectionNames.push_back(muonVertexCollection.first);
-  if (runSegmentMatchedVertexCollections) {
-    string segmentMatchedCollectionName = muonVertexCollection.first;
-    segmentMatchedCollectionName.replace(0, 4, "BestSegmentMatched");
-    collectionNames.push_back(segmentMatchedCollectionName);
+  string collectionName = muonVertexCollection.first;
+  shared_ptr<PhysicsObjects> collection;
+  try {
+    collection = event->GetCollection(collectionName);
+  } catch (const Exception &e) {
+    warn() << "Collection " << collectionName << " not found in event." << endl;
+    return;
   }
-    
-  for (auto collectionName : collectionNames) {
-    
-    shared_ptr<PhysicsObjects> collection;
-    try {
-      collection = event->GetCollection(collectionName);
-    } catch (const Exception &e) {
-      warn() << "Collection " << collectionName << " not found in event." << endl;
-      continue;
-    }
-    if (collection->size() < 1) continue;
+  if (collection->size() < 1) return;
 
-    for (auto vertex : *collection) {
-      auto dimuon = asNanoDimuonVertex(vertex, event);
-      auto muon1 = dimuon->Muon1();
-      auto muon2 = dimuon->Muon2();
+  for (auto vertex : *collection) {
+    auto dimuon = asNanoDimuonVertex(vertex, event);
+    auto muon1 = dimuon->Muon1();
+    auto muon2 = dimuon->Muon2();
 
-      map<string, double> variables = {
-          {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
-          {"3Dangle", dimuon->Get3DOpeningAngle()},
+    map<string, double> variables = {
+        {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
+        {"3Dangle", dimuon->Get3DOpeningAngle()},
 
-          {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
-          {"logLxySignificance", TMath::Log10(dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV())},
-          {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
-          {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
+        {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
+        {"logLxySignificance", TMath::Log10(dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV())},
+        {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
+        {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
 
-          {"outerDR", dimuon->GetOuterDeltaR()},
-          {"maxHitsInFrontOfVert", max(float(dimuon->Get("hitsInFrontOfVert1")), float(dimuon->Get("hitsInFrontOfVert2")))},
+        {"outerDR", dimuon->GetOuterDeltaR()},
+        {"maxHitsInFrontOfVert", max(float(dimuon->Get("hitsInFrontOfVert1")), float(dimuon->Get("hitsInFrontOfVert2")))},
 
-          {"absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
-          {"absPtLxyDPhi2", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
+        {"absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
+        {"absPtLxyDPhi2", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
 
-          {"logAbsPtLxyDPhi1", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)))},
-          {"logAbsPtLxyDPhi2", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)))},
+        {"logAbsPtLxyDPhi1", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)))},
+        {"logAbsPtLxyDPhi2", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)))},
 
-          {"invMass", dimuon->GetInvariantMass()},
-          {"logInvMass", log10(dimuon->GetInvariantMass())},
+        {"invMass", dimuon->GetInvariantMass()},
+        {"logInvMass", log10(dimuon->GetInvariantMass())},
 
-          {"pt", dimuon->GetDimuonPt()},
-          {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
-          {"leadingPt", dimuon->GetLeadingMuonPt()},
-          {"logLeadingPt", TMath::Log10(dimuon->GetLeadingMuonPt())},
+        {"pt", dimuon->GetDimuonPt()},
+        {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
+        {"leadingPt", dimuon->GetLeadingMuonPt()},
+        {"logLeadingPt", TMath::Log10(dimuon->GetLeadingMuonPt())},
 
-          {"eta", dimuon->GetDimuonEta()},
-          {"dEta", fabs(dimuon->GetDeltaEta())},
-          {"dPhi", fabs(dimuon->GetDeltaPhi())},
+        {"eta", dimuon->GetDimuonEta()},
+        {"dEta", fabs(dimuon->GetDeltaEta())},
+        {"dPhi", fabs(dimuon->GetDeltaPhi())},
 
-          {"nSegments", dimuon->GetTotalNumberOfSegments()},
-          {"logDisplacedTrackIso03Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon1"))},
-          {"logDisplacedTrackIso04Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon1"))},
-          {"logDisplacedTrackIso03Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon2"))},
-          {"logDisplacedTrackIso04Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon2"))},
+        {"nSegments", dimuon->GetTotalNumberOfSegments()},
+        {"logDisplacedTrackIso03Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon1"))},
+        {"logDisplacedTrackIso04Dimuon1", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon1"))},
+        {"logDisplacedTrackIso03Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso03Dimuon2"))},
+        {"logDisplacedTrackIso04Dimuon2", TMath::Log10(dimuon->Get("displacedTrackIso04Dimuon2"))},
 
-          {"logDxyPVTraj1", TMath::Log10(dimuon->Muon1()->Get("dxyPVTraj"))},
-          {"logDxyPVTraj2", TMath::Log10(dimuon->Muon2()->Get("dxyPVTraj"))},
-          {"logDxyPVTrajSig1", TMath::Log10((float)dimuon->Muon1()->Get("dxyPVTraj") / (float)dimuon->Muon1()->Get("dxyPVTrajErr"))},
-          {"logDxyPVTrajSig2", TMath::Log10((float)dimuon->Muon2()->Get("dxyPVTraj") / (float)dimuon->Muon2()->Get("dxyPVTrajErr"))},
+        {"logDxyPVTraj1", TMath::Log10(dimuon->Muon1()->Get("dxyPVTraj"))},
+        {"logDxyPVTraj2", TMath::Log10(dimuon->Muon2()->Get("dxyPVTraj"))},
+        {"logDxyPVTrajSig1", TMath::Log10((float)dimuon->Muon1()->Get("dxyPVTraj") / (float)dimuon->Muon1()->Get("dxyPVTrajErr"))},
+        {"logDxyPVTrajSig2", TMath::Log10((float)dimuon->Muon2()->Get("dxyPVTraj") / (float)dimuon->Muon2()->Get("dxyPVTrajErr"))},
 
-          {"deltaIso03", dimuon->GetDeltaDisplacedTrackIso03()},
-          {"deltaIso04", dimuon->GetDeltaDisplacedTrackIso04()},
-          {"logDeltaIso03", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso03())},
-          {"logDeltaIso04", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso04())},
-          {"deltaSquaredIso03", pow(dimuon->GetDeltaDisplacedTrackIso03(), 2)},
-          {"deltaSquaredIso04", pow(dimuon->GetDeltaDisplacedTrackIso04(), 2)},
-          {"logDeltaSquaredIso03", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso03(), 2))},
-          {"logDeltaSquaredIso04", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso04(), 2))},
-      };
+        {"deltaIso03", dimuon->GetDeltaDisplacedTrackIso03()},
+        {"deltaIso04", dimuon->GetDeltaDisplacedTrackIso04()},
+        {"logDeltaIso03", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso03())},
+        {"logDeltaIso04", TMath::Log10(dimuon->GetDeltaDisplacedTrackIso04())},
+        {"deltaSquaredIso03", pow(dimuon->GetDeltaDisplacedTrackIso03(), 2)},
+        {"deltaSquaredIso04", pow(dimuon->GetDeltaDisplacedTrackIso04(), 2)},
+        {"logDeltaSquaredIso03", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso03(), 2))},
+        {"logDeltaSquaredIso04", TMath::Log10(pow(dimuon->GetDeltaDisplacedTrackIso04(), 2))},
+    };
 
-      string category = dimuon->GetVertexCategory();
+    string category = dimuon->GetVertexCategory();
 
-      float deltaEta = dimuon->GetDeltaEta();
+    float deltaEta = dimuon->GetDeltaEta();
 
-      for (auto &[varName_1, varValue_1] : variables) {
-        for (auto &[varName_2, varValue_2] : variables) {
-          if (varName_1 == varName_2) continue;
-          histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2);
-          histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2);
-        }
+    for (auto &[varName_1, varValue_1] : variables) {
+      for (auto &[varName_2, varValue_2] : variables) {
+        if (varName_1 == varName_2) continue;
+        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1, varValue_1, varValue_2);
+        histogramsHandler->Fill(collectionName + "_" + varName_2 + "_vs_" + varName_1 + "_" + category, varValue_1, varValue_2);
       }
     }
   }

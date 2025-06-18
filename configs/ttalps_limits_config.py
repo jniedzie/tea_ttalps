@@ -20,8 +20,8 @@ if username == "lrygaard":
   combine_path = "/afs/desy.de/user/l/lrygaard/Combine/CMSSW_14_1_0_pre4/src/"
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
 # SR dimuon cuts applied
 signal_hist_path = (
     f"{hist_path}"
@@ -37,7 +37,8 @@ background_hist_path = (
 datacards_output_path = f"{base_output_path}/limits/datacards_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/plots/"
 # results_output_path = f"{base_output_path}/limits/results/"
-results_output_path = f"{base_output_path}/limits/results_newMatching/"
+results_output_path = f"{base_output_path}/limits/results_oldMatching_JPsiSFs/"
+# results_output_path = f"{base_output_path}/limits/results_newMatching/"
 # results_output_path = f"{base_output_path}/limits/results_newMatching_JPsiSFs/"
 # results_output_path = f"{base_output_path}/limits/results_newMatching_JPsiSFminBkg3/"
 

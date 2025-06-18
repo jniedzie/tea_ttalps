@@ -25,8 +25,8 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons", "")
 
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
@@ -41,8 +41,8 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNo
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_{skim[1]}_{skim[2]}"
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs_{skim[1]}_{skim[2]}"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_{skim[1]}_{skim[2]}"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs_{skim[1]}_{skim[2]}"
 if year == "2022preEE" or year == "2022postEE" or year == "2023preBPix" or year == "2023postBPix":
   hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_{skim[1]}_{skim[2]}" # no PUjetIDSFs for Run 3
 
@@ -78,8 +78,6 @@ extraMuonVertexCollections = [
   # "MaskedDimuonVerex",      # invariant mass cut only
   # "BestDimuonVertex",       # best Dimuon selection without isolation cut
   # "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
-  # "BestSegmentMatchedPFIsoDimuonVertex",  # segment matching after dimuon selection
-  "BestSegmentMatchedDimuonVertex",  # segment matching after dimuon selection
   # "BestPFIsoDimuonVertexNminus1",  # best Dimuon selection with isolation cut
 ]
 
@@ -512,6 +510,40 @@ for collection, category in product(extraMuonVertexCollections, ("", "_PatDSA", 
       #           1, 0, 2, 1e-6, 1e6, "#mu vertex charge", f"# events ({year})"),
 
   )
+  muonQualityFlags = []
+  # muonQualityFlags = ["PU", "fake", "real"] # uncomment to include plots
+  for flag in muonQualityFlags:
+    histograms += (
+        Histogram("Event_n" + collection + category + "_" + flag, "", False, True, default_norm, 1,
+                  0, 2, 1e0, 1e5, f"#mu is {flag}", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_absDzFromLeadingTight", "", True, True, default_norm, 1,
+                  1e-5, 1e3, 1e-4, 1e2, f"{flag} #mu |#DeltaZ(leading tight #mu)|", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_logAbsDzFromLeadingTight", "", False, True, default_norm, 50,
+                  -5, 3, 1e-4, 1e2, f"{flag} #mu log |#DeltaZ(leading tight #mu)|", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_genMuonDR", "", False, True, default_norm, 1,
+                  0, 0.1, 1e-4, 1e2, f"{flag} #mu #DeltaR(gen #mu)", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_normChi2", "", False, True, default_norm, 40,
+                  0, 3, 1e-4, 1e2, f"{flag} #mu #chi^{2}/ndof", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_nSegments", "", False, True, default_norm, 1,
+                  0, 20, 1e-2, 1e6, f"{flag} #mu segments", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_nDTSegments", "", False, True, default_norm, 1,
+                  0, 20, 1e-4, 1e2, f"{flag} #mu DT segments", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_nCSCSegments", "", False, True, default_norm, 1,
+                  0, 20, 1e-4, 1e2, f"{flag} #mu CSC segments", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_trkNumPlanes", "", False, True, default_norm, 1,
+                  0, 6, 1e-2, 1e6, f"{flag} #mu track planes", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_trkNumHits", "", False, True, default_norm, 1,
+                  0, 70, 1e-2, 1e6, f"{flag} #mu track hits", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_eta", "", False, True, default_norm, 10,
+                  -3, 3, 1e-4, 1e2, f"{flag} #mu #eta", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_etaErr", "", False, True, default_norm, 10,
+                  -3, 3, 1e-4, 1e2, f"{flag} #mu #sigma_#eta", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_pt", "", False, True, default_norm, 10,
+                  0, 300, 1e-3, 1e5, f"{flag} #mu p_T", f"# events ({year})"),
+        Histogram(collection + category + "_" + flag + "_ptErr", "", False, True, default_norm, 10,
+                  0, 300, 1e-3, 1e5, f"{flag} #mu #sigma p_T", f"# events ({year})"),
+
+    )
 
 for collection in genMuonVertexCollections:
   for category in ["_PatDSA", "_DSA", "_Pat"]:

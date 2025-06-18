@@ -15,7 +15,7 @@ class TTAlpsHistogramFiller {
 
   void FillDefaultVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesForLooseMuons(const std::shared_ptr<Event> event);
-  void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event, bool runSegmentMatchedVertexCollections = false);
+  void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsGenMuonVertexCollectionsVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
@@ -27,7 +27,7 @@ class TTAlpsHistogramFiller {
 
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
-  void FillABCDHistograms(const std::shared_ptr<Event> event, bool runSegmentMatchedVertexCollections = false);
+  void FillABCDHistograms(const std::shared_ptr<Event> event);
   void FillABCDMothersHistograms(const std::shared_ptr<Event> event, bool runFakesHistograms);
   void FillFakesHistograms(const std::shared_ptr<Event> event);
 
@@ -82,6 +82,7 @@ class TTAlpsHistogramFiller {
                                   std::string genMuonCollectionName, std::string looseMuonCollectionName);
   void FillRecoGenMatchedResonanceHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<NanoMuons> muonCollection,
                                              std::string collectionName, const std::shared_ptr<PhysicsObjects> vertexCollection = nullptr);
+  void FillRecoGenSingleMuonHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<PhysicsObjects> vertexCollection, std::string collectionName);
 
   // Gen-Level Dimuon Vertex Collection Histograms
   void FillMuonCollectionFromALPsNminus1Histograms(const std::shared_ptr<Event> event);

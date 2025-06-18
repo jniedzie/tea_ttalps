@@ -34,6 +34,11 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
       muonVertexCollectionInput = "";
     }
   }
+  try {
+    config.GetValue("applySegmentMatchingAfterSelections", applySegmentMatchingAfterSelections);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read applySegmentMatchingAfterSelections from config file - is needed to apply matching after dimuon selection" << endl;
+  }
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> event) {
@@ -61,7 +66,11 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> 
       continue;
     }
     if (matchingMethod == "Segment") {
-      InsertSegmentMatchedLooseMuonsCollections(event, param, looseMuons);
+      float minSegmentRatio = param;
+      if (applySegmentMatchingAfterSelections) {
+        minSegmentRatio = 1.5; // no segment matching applied here
+      }
+      InsertSegmentMatchedLooseMuonsCollections(event, minSegmentRatio, looseMuons);
       continue;
     }
   }
@@ -206,14 +215,14 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, s
     muonVertexCollectionName = muonVertexCollection.first;
     muonVertexCollectionCuts = muonVertexCollection.second;
   }
-  bool bestVertex = false;
+  bool includeBestVertex = false;
   for (auto cutName : muonVertexCollectionCuts) {
     if (cutName == "BestDimuonVertex") {
-      bestVertex = true;
+      includeBestVertex = true;
       break;
     }
   }
-  if (bestVertex)
+  if (includeBestVertex)
     muonVertexCollectionCuts.erase(std::remove(muonVertexCollectionCuts.begin(), muonVertexCollectionCuts.end(), "BestDimuonVertex"),
                                    muonVertexCollectionCuts.end());
 
@@ -231,36 +240,34 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, s
   }
 
   auto finalCollection = make_shared<PhysicsObjects>();
-  if (bestVertex) {
-    if (GetBestMuonVertex(passedVertices, event)) finalCollection->push_back(GetBestMuonVertex(passedVertices, event));
-    // If input muonVertexCollection is "Best" vertex collection we also make a good vertex collection
-    string goodMuonVertexCollectionName = muonVertexCollectionName;
-    goodMuonVertexCollectionName.replace(0, 4, "Good");
-    event->AddCollection(goodMuonVertexCollectionName, passedVertices);
-  } else
+
+  if (includeBestVertex) {
+    auto bestVertex = GetBestMuonVertex(passedVertices, event);
+    if (bestVertex) {
+
+      if (applySegmentMatchingAfterSelections) {
+        float minRatio = 2.0f / 3.0f;
+        if (muonMatchingParams.find("Segment") != muonMatchingParams.end()) {
+          minRatio = muonMatchingParams["Segment"];
+        }
+        auto bestSegmentMatchedVertex = asNanoEvent(event)->GetSegmentMatchedBestMuonVertex(
+          bestVertex, passedVertices, minRatio);
+        if (bestSegmentMatchedVertex) {
+          finalCollection->push_back(bestSegmentMatchedVertex);
+        }
+      }
+      else {
+        finalCollection->push_back(bestVertex);
+      }
+      // If input muonVertexCollection is "Best" vertex collection we also make a good vertex collection
+      string goodMuonVertexCollectionName = muonVertexCollectionName;
+      goodMuonVertexCollectionName.replace(0, 4, "Good");
+      event->AddCollection(goodMuonVertexCollectionName, passedVertices);
+    }
+  } else 
     finalCollection = passedVertices;
 
   event->AddCollection(muonVertexCollectionName, finalCollection);
-}
-
-void TTAlpsObjectsManager::InsertSegmentMatchedVertexCollections(shared_ptr<Event> event) {
-  if (muonMatchingParams.size() == 0) return;
-  if ((muonVertexCollection.first.empty() || muonVertexCollection.second.empty())) return;
-
-  string goodMuonVertexCollectionName = muonVertexCollection.first;
-  goodMuonVertexCollectionName.replace(0, 4, "Good");
-  auto goodMuonVertexCollection = event->GetCollection(goodMuonVertexCollectionName);
-  auto bestSegmentMatchedVertexCollection = make_shared<PhysicsObjects>();
-  string bestSegmentMatchedVertexCollectionName = muonVertexCollection.first;
-  bestSegmentMatchedVertexCollectionName.replace(0, 4, "BestSegmentMatched");
-
-  auto bestMuonVertexCollection = event->GetCollection(muonVertexCollection.first);
-  if (bestMuonVertexCollection->size() > 0) {
-    auto bestSegmentMatchedVertex3 = asNanoEvent(event)->GetSegmentMatchedBestMuonVertex(
-        bestMuonVertexCollection->at(0), goodMuonVertexCollection, 2.0f / 3.0f);
-    bestSegmentMatchedVertexCollection->push_back(bestSegmentMatchedVertex3);
-  }
-  event->AddCollection(bestSegmentMatchedVertexCollectionName, bestSegmentMatchedVertexCollection);
 }
 
 void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> event) {

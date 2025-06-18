@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
   bool runMuonTriggerObjectsHistograms;
   bool runABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
-  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms, runSegmentMatchedVertexCollections;
+  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms, applySegmentMatchingAfterSelections;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
   config.GetValue("runFakesHistograms", runFakesHistograms);
   config.GetValue("ignoreDimuons", ignoreDimuons);
   config.GetValue("runMuonMatchingRatioEffectHistograms", runMuonMatchingRatioEffectHistograms);
-  config.GetValue("runSegmentMatchedVertexCollections", runSegmentMatchedVertexCollections);
+  config.GetValue("applySegmentMatchingAfterSelections", applySegmentMatchingAfterSelections);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -81,9 +81,6 @@ int main(int argc, char **argv) {
       ttalpsObjectsManager->InsertMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
-    }
-    if (runSegmentMatchedVertexCollections) {
-      ttalpsObjectsManager->InsertSegmentMatchedVertexCollections(event);
     }
     map<string, float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
   
@@ -106,7 +103,7 @@ int main(int argc, char **argv) {
     if (runLLPNanoAODHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event);
       if (!ignoreDimuons) {
-        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event, runSegmentMatchedVertexCollections);
+        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event);
       }
     }
     if (runMuonTriggerObjectsHistograms) {
@@ -137,7 +134,7 @@ int main(int argc, char **argv) {
       }
     }
     if (runABCDHistograms) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event, runSegmentMatchedVertexCollections);
+      ttalpsHistogramsFiller->FillABCDHistograms(event);
     }
     if (runABCDMothersHistograms) {
       ttalpsHistogramsFiller->FillABCDMothersHistograms(event, runFakesHistograms);

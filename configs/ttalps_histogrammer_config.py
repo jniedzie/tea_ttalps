@@ -48,8 +48,7 @@ runFakesHistograms = False
 runMuonMatchingRatioEffectHistograms = False
 
 # Apply Segment Matching on the GoodMuonVertexCollections after the dimuon selection
-# Histograms will be created with names "[Good/Best]SegmentMatched"+muonVertexCollectionName
-runSegmentMatchedVertexCollections = True
+applySegmentMatchingAfterSelections = True
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
@@ -154,9 +153,5 @@ if runMuonTriggerObjectsHistograms:
 
 if runMuonMatchingRatioEffectHistograms:
   histParams += helper.get_muon_matching_effect_params()
-
-if runSegmentMatchedVertexCollections:
-  histParams += helper.get_segment_matched_vertex_1Dparams()
-  histParams2D += helper.get_segment_matched_vertex_2Dparams()
 
 SFvariationVariables = helper.get_SF_variation_variables()
