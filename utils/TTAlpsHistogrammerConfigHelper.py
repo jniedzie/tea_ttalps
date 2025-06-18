@@ -166,6 +166,12 @@ class TTAlpsHistogrammerConfigHelper:
       for name in names:
         self.__insert_MuonVertexHistograms(params, name)
 
+    # FillRecoGenSingleMuonHistograms
+    for collection in self.bestMuonVertexCollections:
+      for flag in ("PU", "fake", "real"):
+        name = collection + "_" + flag
+        self.__insert_SingleMuonQualityHistograms(params, name)
+
     return tuple(params)
 
   def get_gen_matched_params(self):
@@ -355,7 +361,7 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
-    collections = ("BestPFIsoDimuonVertex","BestSegmentMatchedPFIsoDimuonVertex")
+    collections = ("BestDimuonVertex","BestPFIsoDimuonVertex")
 
     variables = (
         ("logLxySignificance", "log3Dangle"),
@@ -415,25 +421,6 @@ class TTAlpsHistogrammerConfigHelper:
         collectionName2over3 = self.__insert_into_name(collection, "2over3")+category
         self.__insert_MuonVertexHistograms(params, collectionName)
         self.__insert_MuonVertexHistograms(params, collectionName2over3)
-    return tuple(params)
-
-  def get_segment_matched_vertex_1Dparams(self):
-    params = []
-    for collection in self.bestMuonVertexCollections:
-      collectionName = collection.replace('Best', 'BestSegmentMatched')
-      self.__insert_MuonVertexHistograms(params, collectionName)
-    return tuple(params)
-
-  def get_segment_matched_vertex_2Dparams(self):
-    params = []
-    for collection in self.bestMuonVertexCollections:
-      collectionName = collection.replace('Best', 'BestSegmentMatched')
-      for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
-        for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
-          if variable_1 == variable_2:
-            continue
-          name = self.__insert_into_name(collectionName, f"_{variable_2}_vs_{variable_1}")
-          params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
     return tuple(params)
 
   def __insert_into_name(self, collection, to_insert):
@@ -622,4 +609,30 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "absPtLxyDPhi1", 500, 0, 5, ""),
         (name, "absPtLxyDPhi2", 500, 0, 5, ""),
         (name, "logLxy", 2000, -10, 10, ""),
+    )
+
+  def __insert_SingleMuonQualityHistograms(self, params, name):
+    
+    params += (
+        ("Event", "n"+name, 50, 0, 50, ""),
+        (name, "nSegments", 100, 0, 100, ""),
+        (name, "nDTSegments", 100, 0, 100, ""),
+        (name, "nCSCSegments", 100, 0, 100, ""),
+        (name, "trkNumPlanes", 100, 0, 100, ""),
+        (name, "trkNumHits", 100, 0, 100, ""),
+        (name, "trkNumDTHits", 100, 0, 100, ""),
+        (name, "trkNumCSCHits", 100, 0, 100, ""),
+        (name, "normChi2", 50000, 0, 50, ""),
+        (name, "pt", 2000, 0, 1000, ""),
+        (name, "ptErr", 2000, 0, 1000, ""),
+        (name, "eta", 300, -3, 3, ""),
+        (name, "etaErr", 300, -3, 3, ""),
+        (name, "phi", 300, -3, 3, ""),
+        (name, "phiErr", 300, -3, 3, ""),
+        (name, "outerEta", 300, -3, 3, ""),
+        (name, "outerPhi", 300, -3, 3, ""),
+        (name, "outerPhi", 300, -3, 3, ""),
+        (name, "absDzFromLeadingTight", 10000, 0, 1000, ""),
+        (name, "logAbsDzFromLeadingTight", 10000, -5, 3, ""),
+        (name, "genMuonDR", 1000, 0, 10, ""),
     )
