@@ -56,17 +56,13 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   auto muons = GetTTAlpsEventMuons();
   map<string, float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
 
-  map<string, float> jecUnc = GetJetEnergyCorrections(event, "GoodJets", 4, 9999999, 50.0, 9999999.0);
-  map<string, float> jecUnc = GetJetEnergyCorrections(event, "GoodMediumBtaggedJets", 1, 9999999, 50.0, 9999999.0);
-
-
   // TODO: JPsi CR SFs to be defined
   map<string,float> jpsiSF = GetJpsiScaleFactors();
 
   map<string, float> scaleFactorMap;
   scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
                               muonSF["systematic"] * jpsiSF["systematic"];
-  vector<map<string, float> *> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &jpsiSF, &jecUnc};
+  vector<map<string, float> *> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &jpsiSF};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
@@ -77,8 +73,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
                              (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"]) *
                              (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"]) *
                              (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"]) *
-                             (scaleFactorMapPtr == &jpsiSF ? (*scaleFactorMapPtr)[name] : jpsiSF["systematic"]) *
-                             (scaleFactorMapPtr == &jecUnc ? (*scaleFactorMapPtr)[name] : 1.0);
+                             (scaleFactorMapPtr == &jpsiSF ? (*scaleFactorMapPtr)[name] : jpsiSF["systematic"]);
     }
   }
 
@@ -142,53 +137,6 @@ map<string, float> TTAlpsEvent::GetJpsiScaleFactors() {
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
   jpsiSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("JpsiInvMass", dimuonCategory);
   return jpsiSF;
-}
-
-map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event, string collectionName, 
-                                                        int minJets, int maxJets, float minMETpt, float maxMETpt) {
-  
-  map<string, float> jec;
-  string collectionName_noPtCut = collectionName + "_noPtCut";
-  shared_ptr<PhysicsObjects> jetCollection;
-  try {
-    jetCollection = event->GetCollection(collectionName_noPtCut);
-  } catch (Exception &e) {
-    error() << "Couldn't find collection " << collectionName_noPtCut << " for jet energy corrections." << endl;
-    return {};
-  }
-
-  map<string,vector<float>> jetPtCorrections = nanoEventProcessor->GetJetEnergyCorrections(asNanoEvent(event), collectionName_noPtCut);
-
-  std::map<std::string, ExtraCollection> extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
-  std::pair<float, float> ptCuts = extraCollectionsDescriptions[collectionName].allCuts["pt"];
-
-  for (auto &[name, jetPts] : jetPtCorrections) {
-    if (name == "systematic") continue;
-    if (jetPts.size() != jetCollection->size()) {
-      error() << "Jet energy corrections for collection " << collectionName_noPtCut << " have different size than the collection itself." << endl;
-      return {};
-    }
-
-    int nPassingJets = 0;
-    float met_pt = event->Get("MET_pt");
-    float met_phi = event->Get("MET_phi");
-    for (int i = 0; i < jetCollection->size(); i++) {
-      float newJetPt = jetPts.at(i);
-      if (newJetPt < ptCuts.first || newJetPt > ptCuts.second) continue;
-      nPassingJets++;
-      // Propagate MET
-      auto jet = asNanoJet(jetCollection->at(i));
-      auto met = nanoEventProcessor->PropagateMET(jet->GetPt(), newJetPt, jet->GetPhi(), 
-                              met_pt, met_phi);
-      met_pt = met.first;
-      met_phi = met.second;
-    }
-    jec[name] = 0.0; 
-    if (nPassingJets < minJets || nPassingJets > maxJets) continue;
-    if (met_pt < minMETpt || met_pt > maxMETpt) continue;
-    jec[name] = 1.0; 
-  }
-  return jec;
 }
 
 string TTAlpsEvent::GetTTbarEventCategory() {
