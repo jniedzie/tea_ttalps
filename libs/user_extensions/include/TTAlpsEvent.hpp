@@ -30,6 +30,9 @@ class TTAlpsEvent {
 
   std::map<std::string,float> GetJpsiScaleFactors();
 
+  std::map<std::string, float> GetJetEnergyCorrections(std::shared_ptr<Event> event, std::string collectionName, 
+    int minJets, int maxJets, float minMETpt, float maxMETpt);
+
   std::shared_ptr<PhysicsObjects> GetGenALPs();
   std::shared_ptr<MuonPair> GetGenDimuonFromALP();
   std::vector<int> GetGenMuonIndicesFromALP();
