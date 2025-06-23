@@ -19,6 +19,7 @@ luminosity = get_luminosity(year)
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "AlpDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
