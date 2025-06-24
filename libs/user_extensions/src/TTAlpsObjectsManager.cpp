@@ -250,10 +250,10 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, s
         if (muonMatchingParams.find("Segment") != muonMatchingParams.end()) {
           minRatio = muonMatchingParams["Segment"];
         }
-        auto bestSegmentMatchedVertex = asNanoEvent(event)->GetSegmentMatchedBestMuonVertex(
-          bestVertex, passedVertices, minRatio);
+        auto bestSegmentMatchedVertex = asNanoEvent(event)->GetSegmentMatchedBestDimuonVertex(
+          asNanoDimuonVertex(bestVertex,event), asNanoDimuonVertices(passedVertices,event), minRatio);
         if (bestSegmentMatchedVertex) {
-          finalCollection->push_back(bestSegmentMatchedVertex);
+          finalCollection->push_back(bestSegmentMatchedVertex->GetPhysicsObject());
         }
       }
       else {
