@@ -175,7 +175,7 @@ void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Even
     string outputName;
     if (inputCollection != "") outputName = inputCollection + "NonTrigger";
     else outputName = "LooseNonTriggerMuonsVertex" + matchingMethod + "Match";
-    event->AddCollection("LooseNonTriggerMuonsVertex" + matchingMethod + "Match", nonTriggerVertices);
+    event->AddCollection(outputName, nonTriggerVertices);
 
     auto tightMuons = event->GetCollection("TightMuons");
     auto leadingTightMuon = asTTAlpsEvent(event)->GetLeadingMuon(asNanoMuons(tightMuons));
@@ -199,7 +199,7 @@ void TTAlpsObjectsManager::InsertNonLeadingMuonVertexCollections(shared_ptr<Even
   }
 }
 
-void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, shared_ptr<PhysicsObjects> vertices, pair<string, vector<string>> muonVertexCollectionInput) {
+void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event, shared_ptr<PhysicsObjects> vertices, MuonVertexCollectionSetup muonVertexCollectionInput) {
   if (muonMatchingParams.size() == 0) return;
   if ((muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) &&
       (muonVertexCollectionInput.first.empty() || muonVertexCollectionInput.second.empty())) return;

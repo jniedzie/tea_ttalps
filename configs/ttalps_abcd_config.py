@@ -37,10 +37,7 @@ if do_region == "SR" or do_region == "bbCR" or do_region == "QCDCR" or do_region
 elif do_region == "SRnewMatching":
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
-elif do_region == "JPsiCR":
-  background_collection = "BestDimuonVertex"
-  signal_collection = "BestPFIsoDimuonVertex"
-elif do_region == "JPsiCRnewMatching":
+elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 elif do_region == "SRnoIso":
@@ -181,7 +178,7 @@ histogram = Histogram2D(
 canvas_size = 200
 
 # axes limits for the 1D projection
-if do_region == "JPsiCR" or do_region == "JPsiCRwithIso" or do_region == "JPsiCRnewMatching":
+if "JPsiCR" in do_region:
   y_max = 50
   y_max_ratio = 3
 elif do_region == "SR":
@@ -302,9 +299,14 @@ else:
 
 username = os.getenv("USER")
 output_path = (
-    f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
+    f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_"
     f"{do_region}_{background_collection}{background_skim[2]}"
 )
+if username == "lrygaard":
+    output_path = (
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
+        f"{do_region}_{background_collection}{background_skim[2]}"
+    )
 output_path += "_data" if do_data else "_mc"
 output_path += category
 
