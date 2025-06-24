@@ -2,7 +2,6 @@ from ttalps_extra_collections import get_extra_event_collections
 from golden_json_config import goldenJsons
 from ttalps_met_filters import get_met_filters
 from scale_factors_config import get_scale_factors
-from ttalps_jec_config import rhoBranchName, get_jec_era
 from ttalps_skimmer_das_files_config import applyScaleFactors, sample
 
 # year = "2016preVFP"
@@ -21,8 +20,6 @@ applyTTZLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
-sampleEra = get_jec_era(year, sample)
-sampleType = "MC" if sampleEra == "" else "DATA"
 
 triggerSelection = (
     "HLT_IsoMu24",

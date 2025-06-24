@@ -51,6 +51,7 @@ runMuonMatchingRatioEffectHistograms = False
 applySegmentMatchingAfterSelections = True
 
 weightsBranchName = "genWeight"
+rhoBranchName = "fixedGridRhoFastjetAll" # for jec unc.
 eventsTreeNames = ("Events",)
 
 specialBranchSizes = {

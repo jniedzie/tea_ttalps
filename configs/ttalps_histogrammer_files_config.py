@@ -65,8 +65,7 @@ applyScaleFactors = {
   "bTagging": (True, True),
   "PUjetID": (True, True),
   "JpsiInvMass": (True, True),
-  # "JpsiInvMass": (False, False),
-  # "jec" : (False, False),
+  "jec" : (False, True),
 }
 
 # this has to be here, otherwise the script will not work:
