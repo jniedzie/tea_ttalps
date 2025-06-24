@@ -36,12 +36,14 @@ def run_combine(config):
       f'cmssw-el7 --no-home --command-to-run \"cmsenv; '
       f'cd {config.datacards_output_path};'
   )
-  # cmssw-el7 did not work
-  # base_command = (
-  #     f'cd {config.combine_path}; '
-  #     f'cmssw-el9 --no-home --command-to-run \"cmsenv; '
-  #     f'cd {config.datacards_output_path};'
-  # )
+  # Test cmssw-el7
+  test_command = f"{base_command} echo \"\""
+  if subprocess.run(test_command, shell=True).returncode != 0:
+      base_command = (
+      f'cd {config.combine_path}; '
+      f'cmssw-el9 --no-home --command-to-run \"cmsenv; '
+      f'cd {config.datacards_output_path};'
+  )
   commands = []
   for mass in masses:
     for ctau in ctaus:
