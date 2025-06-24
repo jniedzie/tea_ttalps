@@ -61,7 +61,7 @@ applyScaleFactors = {
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),
-  "JpsiInvMass": (True, True),
+  "dimuonEff": (True, True),
   # "jec" : (False, False),
 }
 

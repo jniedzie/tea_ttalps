@@ -12,7 +12,7 @@ import importlib
 class TTAlpsPlotterConfigHelper:
   def __init__(
       self, year, base_path, skim, hist_path, data_to_include,
-      backgrounds_to_exclude, signals_to_include, legend_pos_and_size
+      signals_to_include, legend_pos_and_size
   ):
 
     if len(skim) != 4:
@@ -31,7 +31,6 @@ class TTAlpsPlotterConfigHelper:
     self.skim = skim[0]
     self.hist_path = hist_path
     self.data_to_include = data_to_include
-    self.backgrounds_to_exclude = backgrounds_to_exclude
     self.signals_to_include = signals_to_include
     self.legend_pos_and_size = legend_pos_and_size
 
@@ -56,9 +55,6 @@ class TTAlpsPlotterConfigHelper:
 
     for sample_name in dataset:
       short_name = sample_name.split("/")[-1]
-
-      if sample_type == SampleType.background and self.__exclude_background(short_name):
-        continue
 
       if sample_type == SampleType.signal and short_name not in self.signals_to_include:
         continue
@@ -140,13 +136,6 @@ class TTAlpsPlotterConfigHelper:
         return params
     error(f"No sample parameters found for sample {long_name}")
     return None
-
-  def __exclude_background(self, background_name):
-    for background_to_exclude in self.backgrounds_to_exclude:
-      if background_name in background_to_exclude:
-        return True
-
-    return False
 
   def __get_legend(self, column, row, style="f"):
     legend = Legend(

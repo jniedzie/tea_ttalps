@@ -58,8 +58,8 @@ samples.append(
 )
 
 # CorrectioWriter input
-correction_name =  "JpsiInvMass"
-correction_description = "Scale factors for J/Psi invariant mass"
+correction_name =  "dimuonEff"
+correction_description = "Scale factors for dimuon efficiency given from J/Psi invariant mass distribution"
 correction_version = 1
 correction_inputs = [
     {"name": "dimuon_category", "type": "string", "description": "Dimuon categories Pat, PatDSA or DSA"},

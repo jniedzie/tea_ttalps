@@ -135,7 +135,7 @@ map<string, float> TTAlpsEvent::GetJpsiScaleFactors() {
   if (vertex->size() > 0) dimuonCategory = asNanoDimuonVertex(vertex->at(0), event)->GetVertexCategory();
 
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
-  jpsiSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("JpsiInvMass", dimuonCategory);
+  jpsiSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("dimuonEff", dimuonCategory);
   return jpsiSF;
 }
 

@@ -311,7 +311,7 @@ output_path += "_data" if do_data else "_mc"
 output_path += category
 
 # hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
+hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
 background_hist_path = (
     f"{hist_base_path}"
     f"{background_skim[1]}{background_skim[2]}"

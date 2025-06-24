@@ -43,7 +43,7 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 # skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_{skim[1]}_{skim[2]}"
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs_{skim[1]}_{skim[2]}"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_{skim[1]}_{skim[2]}"
 if year == "2022preEE" or year == "2022postEE" or year == "2023preBPix" or year == "2023postBPix":
   hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_{skim[1]}_{skim[2]}" # no PUjetIDSFs for Run 3
 
@@ -100,13 +100,6 @@ data_to_include = [
 if not data_to_include:
   show_ratio_plots = False
 
-backgrounds_to_exclude = [
-    # "QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    # "QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    # "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    "QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-]
-
 signals_to_include = [
     # "tta_mAlp-0p35GeV_ctau-1e1mm",
 
@@ -130,7 +123,6 @@ configHelper = TTAlpsPlotterConfigHelper(
     skim,
     hist_path,
     data_to_include,
-    backgrounds_to_exclude,
     signals_to_include,
     (legend_max_x, legend_max_y, legend_width, legend_height)
 )
