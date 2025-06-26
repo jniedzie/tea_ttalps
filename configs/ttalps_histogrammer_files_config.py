@@ -1,4 +1,3 @@
-from ttalps_samples_list import dasBackgrounds2016
 from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
 from ttalps_samples_list import dasBackgrounds2022preEE
 import os
@@ -45,8 +44,6 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
-# samples = dasBackgrounds2016.keys()
-
 # samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
 samples = dasBackgrounds2018.keys()
@@ -64,8 +61,8 @@ applyScaleFactors = {
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),
-  "JpsiInvMass": (True, True),
-  "jec" : (False, True),
+  "dimuonEff": (True, True),
+  "jec" : (False, False),
 }
 
 # this has to be here, otherwise the script will not work:

@@ -565,7 +565,6 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "deltaSquaredIso04", 1000, 0, 10, ""),
         (name, "logDeltaSquaredIso03", 1000, -5, 5, ""),
         (name, "logDeltaSquaredIso04", 1000, -5, 5, ""),
-        (name, "matchedVertex", 10, 0, 10, ""),
     )
 
   def __insert_Nminus1Histograms(self, params, name):

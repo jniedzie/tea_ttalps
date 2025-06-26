@@ -8,6 +8,10 @@
 #include "TTAlpsDimuonCuts.hpp"
 #include "TTAlpsCuts.hpp"
 
+class TTAlpsObjectsManager;
+// pair< muonVertexCollectionName, muonVertexCollectionCuts >
+typedef std::pair<std::string, std::vector<std::string>> MuonVertexCollectionSetup;
+
 class TTAlpsObjectsManager {
  public:
   TTAlpsObjectsManager();
@@ -21,8 +25,8 @@ class TTAlpsObjectsManager {
 
   void InsertBaseLooseMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertMuonVertexCollection(std::shared_ptr<Event> event);
-  void InsertMuonVertexCollection(std::shared_ptr<Event> event, std::shared_ptr<PhysicsObjects> vertices, std::pair<std::string, 
-                                  std::vector<std::string>> muonVertexCollectionInput = std::pair<std::string, std::vector<std::string>>());
+  void InsertMuonVertexCollection(std::shared_ptr<Event> event, std::shared_ptr<PhysicsObjects> vertices, 
+                                  MuonVertexCollectionSetup muonVertexCollectionInput = MuonVertexCollectionSetup());
   void InsertNminus1VertexCollections(std::shared_ptr<Event> event);
   void InsertMatchedLooseMuonEfficiencyCollections(std::shared_ptr<Event> event);
   void InsertMuonTriggerCollections(std::shared_ptr<Event> event);
@@ -34,7 +38,7 @@ class TTAlpsObjectsManager {
 
   std::map<std::string, float> muonMatchingParams;
   std::map<std::string, float> dimuonVertexCuts;
-  std::pair<std::string, std::vector<std::string>> muonVertexCollection;
+  MuonVertexCollectionSetup muonVertexCollection;
   std::string muonVertexCollectionInput;
   bool applySegmentMatchingAfterSelections = false;
 

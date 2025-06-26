@@ -21,7 +21,7 @@ if username == "lrygaard":
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
 # SR dimuon cuts applied
 signal_hist_path = (
     f"{hist_path}"
@@ -124,8 +124,8 @@ nuisances = {
     "muonTrigger_systdown": "variation",
     "muonTrigger_systup": "variation",
 
-    "JpsiInvMass_down": "variation",
-    "JpsiInvMass_up": "variation",
+    "dimuonEff_down": "variation",
+    "dimuonEff_up": "variation",
 
     "abcd_nonClosure": "closure",
     "lumi": {

@@ -14,8 +14,8 @@ cross_sections = get_cross_sections(year)
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR"
-# do_region = "SRnewMatching"
+# do_region = "SR"
+do_region = "SRnewMatching"
 # do_region = "SRnoIso"
 # do_region = "JPsiCR"
 # do_region = "JPsiCRnewMatching"
@@ -37,10 +37,7 @@ if do_region == "SR" or do_region == "bbCR" or do_region == "QCDCR" or do_region
 elif do_region == "SRnewMatching":
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
-elif do_region == "JPsiCR":
-  background_collection = "BestDimuonVertex"
-  signal_collection = "BestPFIsoDimuonVertex"
-elif do_region == "JPsiCRnewMatching":
+elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 elif do_region == "SRnoIso":
@@ -90,9 +87,12 @@ optimal_parameters = {
     ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"), # 12 points
     ("_DSA", "SR"): ("logLeadingPt", "dPhi", (13, 13), "A"), # 14 points 
     # optimized for new matching, pT > 3 GeV: (Lovisa)
-    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
-    ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"),
-    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),
+    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
+    ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
+    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 11 points
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (11, 10), "D"), # 10 points
+    # ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 16), "D"), # 12 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
     # ("_Pat", "JPsiCRnewMatching"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
     # ("_PatDSA", "JPsiCRnewMatching"): ("logLxy", "logLeadingPt", (10, 11), "D"),
     # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (10, 7), "D"),
@@ -181,7 +181,7 @@ histogram = Histogram2D(
 canvas_size = 200
 
 # axes limits for the 1D projection
-if do_region == "JPsiCR" or do_region == "JPsiCRwithIso" or do_region == "JPsiCRnewMatching":
+if "JPsiCR" in do_region:
   y_max = 50
   y_max_ratio = 3
 elif do_region == "SR":
@@ -302,14 +302,20 @@ else:
 
 username = os.getenv("USER")
 output_path = (
-    f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
+    f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_"
     f"{do_region}_{background_collection}{background_skim[2]}"
 )
+if username == "lrygaard":
+    output_path = (
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
+        f"{do_region}_{background_collection}{background_skim[2]}_jecSFs"
+    )
 output_path += "_data" if do_data else "_mc"
 output_path += category
 
 # hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
+# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
+hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
 background_hist_path = (
     f"{hist_base_path}"
     f"{background_skim[1]}{background_skim[2]}"
