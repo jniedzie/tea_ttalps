@@ -368,6 +368,7 @@ class TTAlpsHistogrammerConfigHelper:
         ("dPhi", "logDxyPVTraj1"),
         ("logLxy", "log3Dangle"),
         ("logAbsCollinearityAngle", "logPt"),
+        ("logAbsCollinearityAngle", "pt"),
         ("logPt", "logDxyPVTraj1"),
         ("logLeadingPt", "dPhi"),
         ("outerDR", "logLxy"),
