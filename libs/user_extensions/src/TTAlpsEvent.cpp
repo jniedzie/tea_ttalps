@@ -167,9 +167,9 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event,
       goodBJetsSet.insert(jet.get());
   }
 
-  std::map<std::string, ExtraCollection> extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
-  std::pair<float, float> goodJetPtCuts = extraCollectionsDescriptions[goodJetCollectionName].allCuts["pt"];
-  std::pair<float, float> goodBJetPtCuts = extraCollectionsDescriptions[goodBJetCollectionName].allCuts["pt"];
+  map<string, ExtraCollection> extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
+  pair<float, float> goodJetPtCuts = extraCollectionsDescriptions[goodJetCollectionName].allCuts["pt"];
+  pair<float, float> goodBJetPtCuts = extraCollectionsDescriptions[goodBJetCollectionName].allCuts["pt"];
 
   auto &config = ConfigManager::GetInstance();
   string rhoBranchName;
@@ -179,8 +179,16 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event,
     warn() << "Rho branch not specified -- will assume standard name fixedGridRhoFastjetAll" << endl;
     rhoBranchName = "fixedGridRhoFastjetAll";
   }
-  float rho = event->Get(rhoBranchName);  
+  float rho = event->Get(rhoBranchName);
 
+  pair<float,float> goodJetCuts = GetEventCut("n"+goodJetCollectionName);
+  pair<float,float> goodBJetCuts = GetEventCut("n"+goodBJetCollectionName);
+  pair<float,float> metPtCuts = GetEventCut("MET_pt");
+  if (goodJetCuts.second == -1.0 || goodBJetCuts.second == -1.0 || metPtCuts.second == -1.0) {
+    warn() << "Failed to get all event cuts for jet energy corrections" << endl;
+    return jec;
+  }
+  
   map<string,int> nPassingGoodJets;
   map<string,int> nPassingGoodBJets;
   map<string,float> totalDeltaPx;
@@ -216,13 +224,32 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event,
   }
   for (auto &[name, nPassingJets] : nPassingGoodJets) {
     jec[name] = 0.0;
-    if (nPassingGoodJets[name] < minJets || nPassingGoodJets[name] > maxJets) continue;
-    if (nPassingGoodBJets[name] < minBJets || nPassingGoodBJets[name] > maxBJets) continue;
+    if (nPassingGoodJets[name] < goodJetCuts.first || nPassingGoodJets[name] > goodJetCuts.second) continue;
+    if (nPassingGoodBJets[name] < goodBJetCuts.first || nPassingGoodBJets[name] > goodBJetCuts.second) continue;
     float newMetPt = nanoEventProcessor->PropagateMET(asNanoEvent(event), totalDeltaPx[name], totalDeltaPy[name]);
-    if (newMetPt < minMETpt || newMetPt > maxMETpt) continue;
+    if (newMetPt < metPtCuts.first || newMetPt > metPtCuts.second) continue;
     jec[name] = 1.0;
   }
   return jec;
+}
+
+pair<float,float> TTAlpsEvent::GetEventCut(string eventVariable) {
+  vector<pair<string, pair<float, float>>> eventCuts;
+  pair<float, float> variableCuts = {-1.0, -1.0};
+  auto &config = ConfigManager::GetInstance();
+  try {
+    config.GetCuts(eventCuts);
+  } catch (const Exception &e) {
+    warn() << "eventCuts not specified -- is needed for jet energy corrections" << endl;
+    return variableCuts;
+  }
+  for (auto cut : eventCuts) {
+    if (cut.first == eventVariable) {
+      variableCuts =  cut.second;
+      break;
+    }
+  }
+  return variableCuts;
 }
 
 string TTAlpsEvent::GetTTbarEventCategory() {

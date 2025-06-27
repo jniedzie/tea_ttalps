@@ -5,6 +5,14 @@ from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
 from ttalps_histogrammer_files_config import skim, applyScaleFactors
 
+from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
+from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
+# defining eventCuts as the loose eventCuts and replacing MET pt from signal eventCuts
+eventCuts = {
+    **looseEventCuts,
+    "MET_pt": signalEventCuts["MET_pt"],
+}
+
 # year = "2016preVFP"
 year = "2018"
 # year = "2022preEE"

@@ -87,12 +87,9 @@ optimal_parameters = {
     ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"), # 12 points
     ("_DSA", "SR"): ("logLeadingPt", "dPhi", (13, 13), "A"), # 14 points 
     # optimized for new matching, pT > 3 GeV: (Lovisa)
-    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
-    ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
-    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 11 points
-    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (11, 10), "D"), # 10 points
-    # ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 16), "D"), # 12 points
-    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
+    # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 11 points
     # ("_Pat", "JPsiCRnewMatching"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
     # ("_PatDSA", "JPsiCRnewMatching"): ("logLxy", "logLeadingPt", (10, 11), "D"),
     # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (10, 7), "D"),
@@ -104,7 +101,10 @@ optimal_parameters = {
     # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
     # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
     # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (7, 12), "A"), # 11 points
-
+    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (23, 10), "D"), # 10 points
+    ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
+    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
+    
     # no PAT-PAT cuts
     # ("_Pat", "SR"): ("invMass", "deltaIso04", (25, 2), "A"),
     # ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"),
@@ -308,14 +308,14 @@ output_path = (
 if username == "lrygaard":
     output_path = (
         f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
-        f"{do_region}_{background_collection}{background_skim[2]}_jecSFs"
+        f"{do_region}_{background_collection}{background_skim[2]}_new"
     )
 output_path += "_data" if do_data else "_mc"
 output_path += category
 
 # hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
-hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
+hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
+# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
 background_hist_path = (
     f"{hist_base_path}"
     f"{background_skim[1]}{background_skim[2]}"

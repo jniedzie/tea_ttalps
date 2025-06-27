@@ -21,7 +21,9 @@ if username == "lrygaard":
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
 # SR dimuon cuts applied
 signal_hist_path = (
     f"{hist_path}"
@@ -37,10 +39,12 @@ background_hist_path = (
 datacards_output_path = f"{base_output_path}/limits/datacards_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/plots/"
 # results_output_path = f"{base_output_path}/limits/results/"
-results_output_path = f"{base_output_path}/limits/results_oldMatching_JPsiSFs/"
+# results_output_path = f"{base_output_path}/limits/results_oldMatching_JPsiSFs/"
 # results_output_path = f"{base_output_path}/limits/results_newMatching/"
 # results_output_path = f"{base_output_path}/limits/results_newMatching_JPsiSFs/"
 # results_output_path = f"{base_output_path}/limits/results_newMatching_JPsiSFminBkg3/"
+# results_output_path = f"{base_output_path}/limits/results_newMatching_dimuonEff/"
+results_output_path = f"{base_output_path}/limits/results_newMatching_dimuonEff_jec/"
 
 # If True, poisson error on empty bins (1.84) will be added to data histograms
 add_uncertainties_on_zero = False
@@ -126,6 +130,29 @@ nuisances = {
 
     "dimuonEff_down": "variation",
     "dimuonEff_up": "variation",
+
+    "jecMC_Regrouped_Absolute_down": "variation",
+    "jecMC_Regrouped_Absolute_up": "variation",
+    "jecMC_Regrouped_Absolute_2018_down": "variation",
+    "jecMC_Regrouped_Absolute_2018_up": "variation",
+    "jecMC_Regrouped_FlavorQCD_down": "variation",
+    "jecMC_Regrouped_FlavorQCD_up": "variation",
+    "jecMC_Regrouped_BBEC1_down": "variation",
+    "jecMC_Regrouped_BBEC1_up": "variation",
+    "jecMC_Regrouped_BBEC1_2018_down": "variation",
+    "jecMC_Regrouped_BBEC1_2018_up": "variation",
+    "jecMC_Regrouped_EC2_down": "variation",
+    "jecMC_Regrouped_EC2_up": "variation",
+    "jecMC_Regrouped_EC2_2018_down": "variation",
+    "jecMC_Regrouped_EC2_2018_up": "variation",
+    "jecMC_Regrouped_HF_down": "variation",
+    "jecMC_Regrouped_HF_up": "variation",
+    "jecMC_Regrouped_HF_2018_down": "variation",
+    "jecMC_Regrouped_HF_2018_up": "variation",
+    "jecMC_Regrouped_RelativeBal_down": "variation",
+    "jecMC_Regrouped_RelativeBal_up": "variation",
+    "jecMC_Regrouped_RelativeSample_2018_down": "variation",
+    "jecMC_Regrouped_RelativeSample_2018_up": "variation",
 
     "abcd_nonClosure": "closure",
     "lumi": {

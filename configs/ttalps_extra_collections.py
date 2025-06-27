@@ -60,7 +60,6 @@ commonExtraEventCollections = {
         # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
         "jetId": 6,
     },
-
 }
 
 run2extraEventCollections = {

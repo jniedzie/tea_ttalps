@@ -46,9 +46,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 
 # samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
-samples = dasBackgrounds2018.keys()
+# samples = dasBackgrounds2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
-# samples = dasSignals2018.keys()
+samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()
 # samples = dasBackgrounds2022preEE.keys()
 
@@ -62,7 +62,7 @@ applyScaleFactors = {
   "bTagging": (True, True),
   "PUjetID": (True, True),
   "dimuonEff": (True, True),
-  "jec" : (False, False),
+  "jec" : (False, True),
 }
 
 # this has to be here, otherwise the script will not work:
