@@ -36,18 +36,29 @@ def parse_combined_key(key):
 base_path = "../limits/"
 
 # old matching / new matching:
-file_path1 = "results_oldMatching_JPsiSFs"
-file_path2 = "results_newMatching_JPsiSFminBkg3"
+# file_path1 = "results_oldMatching_JPsiSFs"
+# file_path2 = "results_newMatching_JPsiSFminBkg3"
 # filename1 = "limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred"
 # filename2 = "limits_BestSegmentMatchedPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred"
 # filename1 = "limits_BestPFIsoDimuonVertex_outerDR_vs_leadingPt_PatDSA_ABCDpred"
 # filename2 = "limits_BestSegmentMatchedPFIsoDimuonVertex_absPtLxyDPhi2_vs_logDxyPVTraj1_PatDSA_ABCDpred"
 # filename1 = "limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dPhi_DSA_ABCDpred"
 # filename2 = "limits_BestSegmentMatchedPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_ABCDpred"
-filename1 = "limits_combined_oldMatching_JPsiSFs"
-filename2 = "limits_combined_newMatching_JPsiSFminBkg3"
+# filename1 = "limits_combined_oldMatching_JPsiSFs"
+# filename2 = "limits_combined_newMatching_JPsiSFminBkg3"
 
-output_path = "../limits/plots/ratios_matching_new/"
+# Without JEC / with JEC:
+file_path1 = "results_newMatching_dimuonEff_jec"
+file_path2 = "results_newMatching_dimuonEff"
+# filename1 = "limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_pt_Pat_ABCDpred"
+# filename2 = "limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_pt_Pat_ABCDpred"
+filename1 = "limits_BestPFIsoDimuonVertex_log3Dangle_vs_logDxyPVTraj1_PatDSA_ABCDpred"
+filename2 = "limits_BestPFIsoDimuonVertex_log3Dangle_vs_logDxyPVTraj1_PatDSA_ABCDpred"
+# filename1 = "limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_ABCDpred"
+# filename2 = "limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_ABCDpred"
+
+
+output_path = "../limits/plots/ratios_jec/"
 
 file1_data = parse_file(f"{base_path}/{file_path1}/{filename1}.txt")
 file2_data = parse_file(f"{base_path}/{file_path2}/{filename2}.txt")
