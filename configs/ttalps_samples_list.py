@@ -11,6 +11,7 @@ from ttalps_samples_list_2017 import dasSamples2017, dasData2017, dasBackgrounds
 
 ##################     2018    ##################
 from ttalps_samples_list_2018 import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasSignalsCentral2018, dasData2018_standard
+from ttalps_samples_list_2018 import dasSignals2018_test
 
 ##################     2022    ##################
 from ttalps_samples_list_2022 import dasSamples2022preEE, dasData2022preEE, dasBackgrounds2022preEE, dasSignals2022preEE, dasData2022_standard

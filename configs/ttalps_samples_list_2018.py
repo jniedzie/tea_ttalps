@@ -1,36 +1,36 @@
 TT_dasBackgrounds2018 = {
     "backgrounds2018/TTToSemiLeptonic": "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "backgrounds2018/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
     "backgrounds2018/TTTo2L2Nu": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    "backgrounds2018/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    "backgrounds2018/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    "backgrounds2018/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    "backgrounds2018/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2-00000000000000000000000000000000/USER",
-    "backgrounds2018/TTZH": "/TTZH_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZH": "/TTZH_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
     # ¨files on lrygaard user space - TTZToLL is overlapping with TZToLL* above
     # "backgrounds2018/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
     # "backgrounds2018/TTZToLL": "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
 }
 ST_dasBackgrounds2018 = {
-    "backgrounds2018/ST_tW_antitop": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ST_tW_antitop": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 }
 DY_dasBackgrounds2018 = {
-    "backgrounds2018/DYJetsToMuMu_M-50": "/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/DYJetsToMuMu_M-50": "/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2018 = {
-    "backgrounds2018/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
     # files on lrygaard user space - overlapping with WJetsToLNu above
     #   "backgrounds2018/W1JetsToLNu" : "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
     #   "backgrounds2018/W2JetsToLNu" : "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
@@ -38,18 +38,18 @@ V_dasBackgrounds2018 = {
     #   "backgrounds2018/W4JetsToLNu" : "/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
 }
 QCD_dasBackgrounds2018 = {
-    "backgrounds2018/QCD_Pt-15To20": "/QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-crab_QCD_Pt-15To20_LLPminiAOD-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-20To30": "/QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-30To50": "/QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-50To80": "/QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-80To120": "/QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-120To170": "/QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-LLPminiAODv1_RunIISummer20UL18RECO-106X_v11-v2-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-170To300": "/QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-300To470": "/QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-470To600": "/QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-600To800": "/QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-800To1000": "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-LLPminiAODv1_RunIISummer20UL18RECO-106X_v11-v2-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
-    "backgrounds2018/QCD_Pt-1000": "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-15To20": "/QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-crab_QCD_Pt-15To20_LLPminiAOD-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-20To30": "/QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-30To50": "/QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-50To80": "/QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-80To120": "/QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-120To170": "/QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-LLPminiAODv1_RunIISummer20UL18RECO-106X_v11-v2-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-170To300": "/QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-300To470": "/QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-470To600": "/QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-600To800": "/QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # # "backgrounds2018/QCD_Pt-800To1000": "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_lrygaard-LLPminiAODv1_RunIISummer20UL18RECO-106X_v11-v2-c15273f0b6812ff053a850f456209388-00000000000000000000000000000000/USER",
+    # "backgrounds2018/QCD_Pt-1000": "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 }
 BB_dasBackgrounds2018 = {
     # standard NanoAOD files
@@ -138,6 +138,10 @@ dasSignalsCentral2018 = {
     "signals/tta_mAlp-12GeV_ctau-1e3mm": "/TTALPto2Mu_MALP-12_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
     # "signals/tta_mAlp-30GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-30_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
     # "signals/tta_mAlp-60GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-60_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+}
+
+dasSignals2018_test = {
+    "signals/tta_mAlp-0p35GeV_ctau-1e3mm_test": "",
 }
 
 dasSignals2018 = {
