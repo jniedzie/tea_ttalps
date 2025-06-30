@@ -62,7 +62,7 @@ applyScaleFactors = {
   "bTagging": (True, True),
   "PUjetID": (True, True),
   "dimuonEff": (True, True),
-  "jec" : (False, True),
+  "jec" : (False, False),
 }
 
 # this has to be here, otherwise the script will not work:
@@ -81,4 +81,4 @@ if skim[1] != "":
   output_hists_dir += f"_{skim[1]}"
 if skim[2] != "":
   output_hists_dir += f"_{skim[2]}"
-output_hists_dir += "/"
+output_hists_dir += "_abcdTest/"

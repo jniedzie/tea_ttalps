@@ -22,6 +22,7 @@ if skim[1] != "":
 if skim[2] != "":
   hist_path += f"_{skim[2]}"
 
+hist_path += "_abcdTest"
 
 def extract_year(s):
   match = re.search(r'(20\d{2})(?!\d)', s)

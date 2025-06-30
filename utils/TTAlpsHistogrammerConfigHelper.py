@@ -34,13 +34,16 @@ class TTAlpsHistogrammerConfigHelper:
 
         "absCollinearityAngle": (100, 0, 2),
         "3Dangle": (100, 0, pi),
+        "cos3Dangle": (100, 0, 1),
 
         "logLxy": (100, -2, 3),
         "logLxySignificance": (100, -2, 2),
         "logAbsCollinearityAngle": (100, -5, 1),
         "log3Dangle": (100, -3, 1),
+        "logCos3Dangle": (100, -3, 1),
 
         "outerDR": (100, 0, 5),
+        "logOuterDR": (100, -3, 3),
         "maxHitsInFrontOfVert": (10, 0, 10),
         "absPtLxyDPhi1": (100, 0, pi),
         "absPtLxyDPhi2": (100, 0, pi),
@@ -61,25 +64,34 @@ class TTAlpsHistogrammerConfigHelper:
         "dEta": (100, 0, 3),
         "dPhi": (100, 0, 2*pi),
         "nSegments": (10, 0, 10),
-        "logDisplacedTrackIso03Dimuon1": (100, -3, 0),
-        "logDisplacedTrackIso04Dimuon1": (100, -3, 0),
-        "logDisplacedTrackIso03Dimuon2": (100, -3, 0),
-        "logDisplacedTrackIso04Dimuon2": (100, -3, 0),
+        "displacedTrackIso03Dimuon1": (100, 0, 0.01),
+        "displacedTrackIso04Dimuon1": (100, 0, 0.01),
+        "displacedTrackIso03Dimuon2": (100, 0, 0.01),
+        "displacedTrackIso04Dimuon2": (100, 0, 0.01),
+        "logDisplacedTrackIso03Dimuon1": (100, -4, 2),
+        "logDisplacedTrackIso04Dimuon1": (100, -4, 2),
+        "logDisplacedTrackIso03Dimuon2": (100, -4, 2),
+        "logDisplacedTrackIso04Dimuon2": (100, -4, 2),
 
-
-        "logDxyPVTraj1": (100, -5, 1),
-        "logDxyPVTraj2": (100, -5, 1),
-        "logDxyPVTrajSig1": (100, -3, 1),
-        "logDxyPVTrajSig2": (100, -3, 1),
+        "logDxyPVTraj1": (100, -5, 3),
+        "logDxyPVTraj2": (100, -5, 3),
+        "logDxyPVTrajSig1": (100, -3, 3),
+        "logDxyPVTrajSig2": (100, -3, 3),
 
         "deltaIso03": (100, 0, 10),
         "deltaIso04": (100, 0, 10),
-        "logDeltaIso03": (100, -5, 5),
-        "logDeltaIso04": (100, -5, 5),
+        "logDeltaIso03": (100, -9, 5),
+        "logDeltaIso04": (100, -9, 5),
         "deltaSquaredIso03": (100, 0, 10),
         "deltaSquaredIso04": (100, 0, 10),
-        "logDeltaSquaredIso03": (100, -5, 5),
-        "logDeltaSquaredIso04": (100, -5, 5),
+        "logDeltaSquaredIso03": (100, -7, 5),
+        "logDeltaSquaredIso04": (100, -7, 5),
+
+        # some extra:
+        "normChi2": (100, 0, 1),
+        "logNormChi2": (100, -7, 1),
+        "dca": (100, 0, 2),
+        "logDca": (100, -7, 1),
     }
 
   def get_default_params(self):
@@ -254,7 +266,7 @@ class TTAlpsHistogrammerConfigHelper:
 
     return tuple(params)
 
-  def get_abcd_2Dparams(self):
+  def get_abcd_2Dparams(self, runGenLevelABCD):
     params = []
 
     for collection in self.bestMuonVertexCollections:
@@ -266,6 +278,15 @@ class TTAlpsHistogrammerConfigHelper:
           name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
 
           params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+          if runGenLevelABCD:
+            names = (
+                self.__insert_into_name(collection, "FromALP"),
+                self.__insert_into_name(collection, "Resonant"),
+                self.__insert_into_name(collection, "NonResonant"),
+            )
+            for collectionName in names:
+              name = self.__insert_into_name(collectionName, f"_{variable_2}_vs_{variable_1}")
+              params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
 

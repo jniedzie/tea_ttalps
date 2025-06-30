@@ -259,7 +259,7 @@ skims = {
         # "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "SRnewMatching": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_abcdTest"
         # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_JPsiSFminBkg3"
         # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAIso", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
@@ -307,8 +307,8 @@ output_path = (
 )
 if username == "lrygaard":
     output_path = (
-        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
-        f"{do_region}_{background_collection}{background_skim[2]}_new"
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/wipPlots/results_"
+        f"{do_region}_{background_collection}{background_skim[2]}"
     )
 output_path += "_data" if do_data else "_mc"
 output_path += category
