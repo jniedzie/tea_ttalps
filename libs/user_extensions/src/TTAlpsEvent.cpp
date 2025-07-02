@@ -56,8 +56,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   auto muons = GetTTAlpsEventMuons();
   map<string, float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
 
-  // event, minGoodJets, maxGoodJets, minGoodBJets, maxGoodBJets, minMET, maxMET
-  map<string, float> jecUnc = GetJetEnergyCorrections(event, 4, 9999999, 1, 9999999, 50.0, 9999999.0);
+  map<string, float> jecUnc = GetJetEnergyCorrections(event);
 
   map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
@@ -142,13 +141,9 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
   return dimuonEffSF;
 }
 
-map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event, int minJets, int maxJets,
-                                                        int minBJets, int maxBJets, float minMETpt, float maxMETpt) {
+map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event) {
   
   map<string, float> jec;
-
-  auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
-  // scaleFactorsManager.ReadJetEnergyCorrections();
 
   string baseJetCollectionName = "Jet";
   auto baseJetCollection = event->GetCollection(baseJetCollectionName);
