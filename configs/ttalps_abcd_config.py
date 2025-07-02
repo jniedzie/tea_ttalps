@@ -14,9 +14,11 @@ cross_sections = get_cross_sections(year)
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR"
+# do_region = "SR"
+do_region = "SRnewMatching"
 # do_region = "SRnoIso"
 # do_region = "JPsiCR"
+# do_region = "JPsiCRnewMatching"
 # do_region = "JPsiCRwithIso"
 # do_region = "ttZCR"
 # do_region = "VVCR"
@@ -32,7 +34,10 @@ if do_region == "SR" or do_region == "SRnoIso":
 if do_region == "SR" or do_region == "bbCR" or do_region == "QCDCR" or do_region == "JPsiCRwithIso":
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
-elif do_region == "JPsiCR":
+elif do_region == "SRnewMatching":
+  background_collection = "BestPFIsoDimuonVertex"
+  signal_collection = "BestPFIsoDimuonVertex"
+elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 elif do_region == "SRnoIso":
@@ -40,9 +45,9 @@ elif do_region == "SRnoIso":
   signal_collection = "BestDimuonVertex"
 
 # category = ""
-category = "_Pat"
+# category = "_Pat"
 # category = "_PatDSA"
-# category = "_DSA"
+category = "_DSA"
 
 exclude_backgrounds_with_less_than = 10  # entries
 
@@ -65,10 +70,45 @@ optimal_parameters = {
     # ("_Pat", "JPsiCR"): ("logAbsCollinearityAngle", "logLeadingPt", (12, 11), "D"),
     # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDxyPVTraj1", (16, 4), "
     # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (21, 19), "A"),
-    ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (19, 16), "A"),
-    ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 13), "D"),
+    # ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (19, 16), "A"),
+    # ("_Pat", "QCDCR"): ("logAbsCollinearityAngle", "logLeadingPt", (14, 17), "D"),
 
-    ("_PatDSA", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (19, 16), "A"),
+    # ("_PatDSA", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (19, 16), "A"),
+
+    # optimized for old matching, pT > 3 GeV: (Lovisa)
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
+    # ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"),
+    # ("_DSA", "SR"): ("logLeadingPt", "dPhi", (6, 12), "A"),
+    ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
+    ("_PatDSA", "JPsiCR"): ("logLxy", "logLeadingPt", (10, 11), "D"),
+    ("_DSA", "JPsiCR"): ("logLxy", "logPt", (10, 7), "D"),
+    # old matching with JPsi SFs
+    ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 15 points
+    ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"), # 12 points
+    ("_DSA", "SR"): ("logLeadingPt", "dPhi", (13, 13), "A"), # 14 points 
+    # optimized for new matching, pT > 3 GeV: (Lovisa)
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
+    # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 11 points
+    # ("_Pat", "JPsiCRnewMatching"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
+    # ("_PatDSA", "JPsiCRnewMatching"): ("logLxy", "logLeadingPt", (10, 11), "D"),
+    # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (10, 7), "D"),
+    # new matching with JPsi SFs
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 13 points
+    # ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 13 points
+    # new matching with JPsi SFs and min 3 bkg entries
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
+    # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (7, 12), "A"), # 11 points
+    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (23, 10), "D"), # 10 points
+    ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
+    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
+    
+    # no PAT-PAT cuts
+    # ("_Pat", "SR"): ("invMass", "deltaIso04", (25, 2), "A"),
+    # ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"),
+    # ("_DSA", "SR"): ("logLeadingPt", "dPhi", (6, 12), "A"),
 
     # optimized on MC (rebin 4, μ pt > 8 GeV):
     # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (23, 2), "C"),
@@ -79,7 +119,7 @@ optimal_parameters = {
     # ("_Pat", "JPsiCR"): ("outerDR", "logDeltaIso03", (14, 2), "A"),
     # ("_PatDSA", "SR"): ("logLxy", "outerDR", (7, 14), "A"),
     # ("_PatDSA", "SR"): ("outerDR", "logAbsPtLxyDPhi1", (17, 12), "D"),
-    # ("_PatDSA", "JPsiCR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
+    # ("_PatDSA", "SR"): ("dPhi", "logDxyPVTraj1", (15, 15), "D"),
     # ("_DSA", "SR"): ("absPtLxyDPhi2", "leadingPt", (24, 21), "D"),
     # ("_DSA", "SR"): ("leadingPt", "dEta", (4, 3), "A"),
     # ("_DSA", "SR"): ("leadingPt", "dPhi", (3, 3), "A"),
@@ -100,6 +140,7 @@ else:
   abcd_point = optimal_parameters[(category, "SR")][2]
   signal_bin = optimal_parameters[(category, "SR")][3]
 
+# optimization_param = None
 optimization_param = "significance"
 # optimization_param = "error"
 # optimization_param = "closure"
@@ -140,7 +181,7 @@ histogram = Histogram2D(
 canvas_size = 200
 
 # axes limits for the 1D projection
-if do_region == "JPsiCR" or do_region == "JPsiCRwithIso":
+if "JPsiCR" in do_region:
   y_max = 50
   y_max_ratio = 3
 elif do_region == "SR":
@@ -209,13 +250,18 @@ nice_names = {
 # Samples settings
 # ------------------------------------------
 
-base_path = "/data/dust/user/jniedzie/ttalps_cms"
-# base_path = "/data/dust/user/lrygaard/ttalps_cms"
+# base_path = "/data/dust/user/jniedzie/ttalps_cms"
+base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
     "SR": (
         "skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
         # "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+    ),
+    "SRnewMatching": (
+        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_JPsiSFminBkg3"
+        # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAIso", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "SRnoIso": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuonsNoIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     "JPsiCR": (
@@ -223,6 +269,10 @@ skims = {
         ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
         # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
         # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+    ),
+    "JPsiCRnewMatching": (
+        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     ),
     "JPsiCRwithIso": (
         ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuonsWithIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
@@ -255,14 +305,22 @@ output_path = (
     f"/afs/desy.de/user/{username[0]}/{username}/tea_ttalps/abcd/results_"
     f"{do_region}_{background_collection}{background_skim[2]}"
 )
+if username == "lrygaard":
+    output_path = (
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
+        f"{do_region}_{background_collection}{background_skim[2]}_new"
+    )
 output_path += "_data" if do_data else "_mc"
 output_path += category
 
+# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
+# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
 background_hist_path = (
-    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{hist_base_path}"
     f"{background_skim[1]}{background_skim[2]}"
 )
-signal_hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{signal_skim[1]}{signal_skim[2]}"
+signal_hist_path = f"{hist_base_path}{signal_skim[1]}{signal_skim[2]}"
 
 signal_path_pattern = "signals/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"

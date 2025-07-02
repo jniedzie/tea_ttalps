@@ -1,26 +1,28 @@
-from ttalps_samples_list import dasBackgrounds2016
 from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
 from ttalps_samples_list import dasBackgrounds2022preEE
 import os
 
 max_files = -1
 
-# input_username = "lrygaard"
-input_username = "jniedzie"
+input_username = "lrygaard"
+# input_username = "jniedzie"
 
 # Loose semimuonic skim
 # skim = ("skimmed_looseSemimuonic_v2", "")
 # skim = ("skimmed_looseSemimuonic_v2", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # SR, J/Psi CR, ttZ CR (no isolation requirement on the loose muons)
-skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR", "AlpDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuonsNoIso", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "JPsiDimuonsWithIso", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR", "ZDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+
+# SR, J/Psi CR with different segment match ratio
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
@@ -42,15 +44,11 @@ skim = ("skimmed_looseSemimuonic_v2_SR", "SRDimuons", "LooseNonLeadingMuonsVerte
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
-# samples = dasBackgrounds2016.keys()
-
-samples = dasSamples2018.keys()
+# samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
 # samples = dasBackgrounds2018.keys()
-# samples = list(dasBackgrounds2018.keys()) + list(dasSignals2018.keys())
-# samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
-# samples = dasSignals2018.keys()
+samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()
 # samples = dasBackgrounds2022preEE.keys()
 
@@ -63,10 +61,8 @@ applyScaleFactors = {
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),
-  # "JpsiInvMassSFs": (True, True),
-  # "jetEnergy" : (False, True),
-  # "met" : (False, True),
-  # "QCDscale" : (False, True),
+  "dimuonEff": (True, True),
+  "jec" : (False, True),
 }
 
 # this has to be here, otherwise the script will not work:
@@ -76,7 +72,7 @@ input_directory = f"{base_path.format(input_username)}/{sample_path}/{skim[0]}/"
 output_hists_dir = f"{base_path.format(output_username)}/{sample_path}/{skim[0]}/histograms"
 
 for name, apply in applyScaleFactors.items():
-  if not apply:
+  if not apply[0] and not apply[1]:
     continue
 
   output_hists_dir += f"_{name}SFs"

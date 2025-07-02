@@ -5,6 +5,14 @@ from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
 from ttalps_histogrammer_files_config import skim, applyScaleFactors
 
+from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
+from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
+# defining eventCuts as the loose eventCuts and replacing MET pt from signal eventCuts
+eventCuts = {
+    **looseEventCuts,
+    "MET_pt": signalEventCuts["MET_pt"],
+}
+
 # year = "2016preVFP"
 year = "2018"
 # year = "2022preEE"
@@ -44,7 +52,14 @@ runABCDMothersHistograms = False
 # [MC only] Create histograms for dimuons in the fakes region vs. non-fakes region
 runFakesHistograms = False
 
+# Create histograms for Best PAT-PAT dimuons -> DSA Best Dimuons due changed ratio
+runMuonMatchingRatioEffectHistograms = False
+
+# Apply Segment Matching on the GoodMuonVertexCollections after the dimuon selection
+applySegmentMatchingAfterSelections = True
+
 weightsBranchName = "genWeight"
+rhoBranchName = "fixedGridRhoFastjetAll" # for jec unc.
 eventsTreeNames = ("Events",)
 
 specialBranchSizes = {
@@ -65,6 +80,7 @@ pileupScaleFactorsHistName = "pileup_scale_factors"
 # "ProxDR" : max Delta R (eg. 0.1)
 muonMatchingParams = {
     "Segment": 2.0 / 3.0,
+    # "Segment": 1.5,
     # "DR" : 0.1
     # "OuterDR" : 0.1
     # "ProxDR" : 0.1
@@ -89,6 +105,7 @@ muonVertexBaselineSelection = [
 dimuonSelection = skim[1]
 if dimuonSelection == "":
     dimuonSelection = None
+    ignoreDimuons = True
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "AlpDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
@@ -142,5 +159,8 @@ if runFakesHistograms:
 
 if runMuonTriggerObjectsHistograms:
   histParams += helper.get_muon_trigger_objects_params()
+
+if runMuonMatchingRatioEffectHistograms:
+  histParams += helper.get_muon_matching_effect_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()

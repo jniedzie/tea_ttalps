@@ -33,6 +33,8 @@ class TTAlpsHistogramFiller {
 
   void FillMuonTriggerObjectsHistograms(const std::shared_ptr<Event> event);
 
+  void FillMuonMatchingRatioEffectHistograms(const std::shared_ptr<Event> event);
+
  private:
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;
@@ -80,6 +82,7 @@ class TTAlpsHistogramFiller {
                                   std::string genMuonCollectionName, std::string looseMuonCollectionName);
   void FillRecoGenMatchedResonanceHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<NanoMuons> muonCollection,
                                              std::string collectionName, const std::shared_ptr<PhysicsObjects> vertexCollection = nullptr);
+  void FillRecoGenSingleMuonHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<PhysicsObjects> vertexCollection, std::string collectionName);
 
   // Gen-Level Dimuon Vertex Collection Histograms
   void FillMuonCollectionFromALPsNminus1Histograms(const std::shared_ptr<Event> event);

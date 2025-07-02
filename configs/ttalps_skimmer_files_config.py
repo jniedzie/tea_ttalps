@@ -13,8 +13,9 @@ output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Signal like skim: SR, J/Psi CR and Z CR with no isolation requirement on the loose muons
 input_skim = "skimmed_looseSemimuonic_v2_merged"
-output_skim = "skimmed_looseSemimuonic_v2_SR"
+# output_skim = "skimmed_looseSemimuonic_v2_SR"
 # output_skim = "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV"
+output_skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
 
 # tt̄ (μ+jets) CR
 # input_skim = "skimmed_looseSemimuonic_v2_merged"
@@ -51,7 +52,6 @@ output_skim = "skimmed_looseSemimuonic_v2_SR"
 # input_skim = "skimmed_looseNoMet_v1_merged"
 # output_skim = "skimmed_looseNoMet_v1_SR"
 
-
 output_trees_dir = ""
 output_hists_dir = ""
 input_directory = ""
@@ -64,9 +64,9 @@ output_trees_dir = f"{output_base_path}/{sample_path}/{output_skim}/"
 
 # samples = dasBackgrounds2016.keys()
 
-samples = dasSamples2018.keys()
+# samples = dasSamples2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
-# samples = dasSignals2018.keys()
+samples = dasSignals2018.keys()
 # samples = dasData2018.keys()
 # samples = dasData2018_standard.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())

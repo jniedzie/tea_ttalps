@@ -5,32 +5,46 @@ from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
 from ttalps_samples_list import dasSignals2018
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 import ttalps_abcd_config as abcd_config
+import os
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 
-
-base_path = "/data/dust/user/jniedzie/ttalps_cms/"
-
+username = os.getenv("USER")
+base_path = f"/data/dust/user/jniedzie/ttalps_cms/"
 combine_path = "/afs/desy.de/user/j/jniedzie/combine/CMSSW_14_1_0_pre4/src/"
+base_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps"
+if username == "lrygaard":
+  base_path = f"/data/dust/user/lrygaard/ttalps_cms/"
+  combine_path = "/afs/desy.de/user/l/lrygaard/Combine/CMSSW_14_1_0_pre4/src/"
+  base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JpsiInvMassSFs"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
 # SR dimuon cuts applied
 signal_hist_path = (
-    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{hist_path}"
     f"{abcd_config.signal_skim[1]}{abcd_config.signal_skim[2]}"
 )
 
 background_hist_path = (
-    f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+    f"{hist_path}"
     f"{abcd_config.background_skim[1]}{abcd_config.background_skim[2]}"
 )
 
-base_output_path = "/afs/desy.de/user/j/jniedzie/tea_ttalps"
 
 datacards_output_path = f"{base_output_path}/limits/datacards_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/plots/"
-results_output_path = f"{base_output_path}/limits/results/"
+# results_output_path = f"{base_output_path}/limits/results/"
+# results_output_path = f"{base_output_path}/limits/results_oldMatching_JPsiSFs/"
+# results_output_path = f"{base_output_path}/limits/results_newMatching/"
+# results_output_path = f"{base_output_path}/limits/results_newMatching_JPsiSFs/"
+# results_output_path = f"{base_output_path}/limits/results_newMatching_JPsiSFminBkg3/"
+# results_output_path = f"{base_output_path}/limits/results_newMatching_dimuonEff/"
+results_output_path = f"{base_output_path}/limits/results_newMatching_dimuonEff_jec/"
 
 # If True, poisson error on empty bins (1.84) will be added to data histograms
 add_uncertainties_on_zero = False
@@ -44,7 +58,7 @@ include_shapes = True
 if do_abcd:
   include_shapes = False  # currently not supported for ABCD
 
-skip_combine = True
+skip_combine = False
 
 signal_samples = []
 
@@ -113,6 +127,32 @@ nuisances = {
     "muonReco_systup": "variation",
     "muonTrigger_systdown": "variation",
     "muonTrigger_systup": "variation",
+
+    "dimuonEff_down": "variation",
+    "dimuonEff_up": "variation",
+
+    "jecMC_Regrouped_Absolute_down": "variation",
+    "jecMC_Regrouped_Absolute_up": "variation",
+    "jecMC_Regrouped_Absolute_2018_down": "variation",
+    "jecMC_Regrouped_Absolute_2018_up": "variation",
+    "jecMC_Regrouped_FlavorQCD_down": "variation",
+    "jecMC_Regrouped_FlavorQCD_up": "variation",
+    "jecMC_Regrouped_BBEC1_down": "variation",
+    "jecMC_Regrouped_BBEC1_up": "variation",
+    "jecMC_Regrouped_BBEC1_2018_down": "variation",
+    "jecMC_Regrouped_BBEC1_2018_up": "variation",
+    "jecMC_Regrouped_EC2_down": "variation",
+    "jecMC_Regrouped_EC2_up": "variation",
+    "jecMC_Regrouped_EC2_2018_down": "variation",
+    "jecMC_Regrouped_EC2_2018_up": "variation",
+    "jecMC_Regrouped_HF_down": "variation",
+    "jecMC_Regrouped_HF_up": "variation",
+    "jecMC_Regrouped_HF_2018_down": "variation",
+    "jecMC_Regrouped_HF_2018_up": "variation",
+    "jecMC_Regrouped_RelativeBal_down": "variation",
+    "jecMC_Regrouped_RelativeBal_up": "variation",
+    "jecMC_Regrouped_RelativeSample_2018_down": "variation",
+    "jecMC_Regrouped_RelativeSample_2018_up": "variation",
 
     "abcd_nonClosure": "closure",
     "lumi": {

@@ -56,14 +56,14 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   auto muons = GetTTAlpsEventMuons();
   map<string, float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
 
-  // TODO: JPsi CR SFs to be defined
-  // map<string,float> jpsiSF = GetJpsiScaleFactors();
-  map<string, float> jpsiSF = {{"systematic", 1.0}};
+  map<string, float> jecUnc = GetJetEnergyCorrections(event);
+
+  map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
   map<string, float> scaleFactorMap;
   scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
-                              muonSF["systematic"] * jpsiSF["systematic"];
-  vector<map<string, float> *> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &jpsiSF};
+                              muonSF["systematic"] * dimuonEffSF["systematic"];
+  vector<map<string, float> *> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &jecUnc};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
@@ -74,7 +74,8 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
                              (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"]) *
                              (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"]) *
                              (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"]) *
-                             (scaleFactorMapPtr == &jpsiSF ? (*scaleFactorMapPtr)[name] : jpsiSF["systematic"]);
+                             (scaleFactorMapPtr == &dimuonEffSF ? (*scaleFactorMapPtr)[name] : dimuonEffSF["systematic"]) *
+                             (scaleFactorMapPtr == &jecUnc ? (*scaleFactorMapPtr)[name] : jecUnc["systematic"]);
     }
   }
 
@@ -126,9 +127,9 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
   return muons;
 }
 
-map<string, float> TTAlpsEvent::GetJpsiScaleFactors() {
-  map<string, float> jpsiSF;
-  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return jpsiSF;
+map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
+  map<string, float> dimuonEffSF = {{"systematic", 1.0}};
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return dimuonEffSF;
 
   auto vertex = event->GetCollection(muonVertexCollection.first);
   // category is set to "" if no vertex is found - this is needed to set all SFs names for the first event
@@ -136,8 +137,105 @@ map<string, float> TTAlpsEvent::GetJpsiScaleFactors() {
   if (vertex->size() > 0) dimuonCategory = asNanoDimuonVertex(vertex->at(0), event)->GetVertexCategory();
 
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
-  jpsiSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("JpsiInvMassSFs", dimuonCategory);
-  return jpsiSF;
+  dimuonEffSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("dimuonEff", dimuonCategory);
+  return dimuonEffSF;
+}
+
+map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event) {
+  
+  map<string, float> jec = {{"systematic", 1.0}};
+
+  string baseJetCollectionName = "Jet";
+  auto baseJetCollection = event->GetCollection(baseJetCollectionName);
+
+  string goodJetCollectionName = "GoodJets";
+  auto goodJetCollection = event->GetCollection(goodJetCollectionName);
+  string goodBJetCollectionName = "GoodMediumBtaggedJets";
+  auto goodBJetCollection = event->GetCollection(goodBJetCollectionName);
+
+  map<string, ExtraCollection> extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
+  pair<float, float> goodJetPtCuts = extraCollectionsDescriptions[goodJetCollectionName].allCuts["pt"];
+  pair<float, float> goodBJetPtCuts = extraCollectionsDescriptions[goodBJetCollectionName].allCuts["pt"];
+
+  auto &config = ConfigManager::GetInstance();
+  string rhoBranchName;
+  try {
+    config.GetValue("rhoBranchName", rhoBranchName);
+  } catch (const Exception &e) {
+    warn() << "Rho branch not specified -- will assume standard name fixedGridRhoFastjetAll" << endl;
+    rhoBranchName = "fixedGridRhoFastjetAll";
+  }
+  float rho = event->Get(rhoBranchName);
+
+  pair<float,float> goodJetCuts = GetEventCut("n"+goodJetCollectionName);
+  pair<float,float> goodBJetCuts = GetEventCut("n"+goodBJetCollectionName);
+  pair<float,float> metPtCuts = GetEventCut("MET_pt");
+  if (goodJetCuts.second == -1.0 || goodBJetCuts.second == -1.0 || metPtCuts.second == -1.0) {
+    warn() << "Failed to get all event cuts for jet energy corrections" << endl;
+    return jec;
+  }
+  
+  map<string,int> nPassingGoodJets;
+  map<string,int> nPassingGoodBJets;
+  map<string,float> totalDeltaPx;
+  map<string,float> totalDeltaPy;
+  for (auto jet : *baseJetCollection) {
+    auto nanoJet = asNanoJet(jet);
+    map<string,float> corrections = nanoJet->GetJetEnergyCorrections(rho);
+    float pt = nanoJet->GetPt();
+
+    const bool isGoodJet = nanoJet->IsInCollection(goodJetCollection);
+    const bool isGoodBJet = nanoJet->IsInCollection(goodBJetCollection);
+    
+    for (auto &[name, correction] : corrections) {
+      float newJetPt = pt*correction;
+
+      if (nPassingGoodJets.find(name) == nPassingGoodJets.end()) {
+        nPassingGoodJets[name] = 0;
+        nPassingGoodBJets[name] = 0;
+        totalDeltaPx[name] = 0;
+        totalDeltaPy[name] = 0;
+      }
+
+      if (isGoodJet && newJetPt >= goodJetPtCuts.first && newJetPt <= goodJetPtCuts.second) {
+        nPassingGoodJets[name]++;
+      }
+      if (isGoodBJet && newJetPt >= goodBJetPtCuts.first && newJetPt <= goodBJetPtCuts.second) {
+        nPassingGoodBJets[name]++;
+      }
+      // Needed to propagate MET
+      totalDeltaPx[name] += nanoJet->GetDeltaPx(newJetPt);
+      totalDeltaPy[name] += nanoJet->GetDeltaPy(newJetPt);
+    }
+  }
+  for (auto &[name, nPassingJets] : nPassingGoodJets) {
+    jec[name] = 0.0;
+    if (nPassingGoodJets[name] < goodJetCuts.first || nPassingGoodJets[name] > goodJetCuts.second) continue;
+    if (nPassingGoodBJets[name] < goodBJetCuts.first || nPassingGoodBJets[name] > goodBJetCuts.second) continue;
+    float newMetPt = nanoEventProcessor->PropagateMET(asNanoEvent(event), totalDeltaPx[name], totalDeltaPy[name]);
+    if (newMetPt < metPtCuts.first || newMetPt > metPtCuts.second) continue;
+    jec[name] = 1.0;
+  }
+  return jec;
+}
+
+pair<float,float> TTAlpsEvent::GetEventCut(string eventVariable) {
+  vector<pair<string, pair<float, float>>> eventCuts;
+  pair<float, float> variableCuts = {-1.0, -1.0};
+  auto &config = ConfigManager::GetInstance();
+  try {
+    config.GetCuts(eventCuts);
+  } catch (const Exception &e) {
+    warn() << "eventCuts not specified -- is needed for jet energy corrections" << endl;
+    return variableCuts;
+  }
+  for (auto cut : eventCuts) {
+    if (cut.first == eventVariable) {
+      variableCuts =  cut.second;
+      break;
+    }
+  }
+  return variableCuts;
 }
 
 string TTAlpsEvent::GetTTbarEventCategory() {

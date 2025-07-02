@@ -8,24 +8,32 @@ year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 
 # PAT-PAT
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_invMass_vs_logDeltaSquaredIso03_Pat_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
+# input_path = "../limits/results_newMatching_dimuonEff_jec/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_pt_Pat_ABCDpred.txt"
+input_path = "../limits/results_newMatching_dimuonEff/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_pt_Pat_ABCDpred.txt"
 
 # PAT-DSA
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_dPhi_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_PatDSA_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_outerDR_vs_logAbsPtLxyDPhi1_PatDSA_ABCDpred.txt"
+# input_path = "../limits/results_newMatching_dimuonEff_jec/limits_BestPFIsoDimuonVertex_log3Dangle_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
+# input_path = "../limits/results_newMatching_dimuonEff/limits_BestPFIsoDimuonVertex_log3Dangle_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
 
 # DSA-DSA
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dPhi_DSA_ABCDpred.txt"
 # input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dEta_DSA_ABCDpred.txt"
-input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_outerDR_DSA_ABCDpred.txt"
+# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_outerDR_DSA_ABCDpred.txt"
+# input_path = "../limits/results_newMatching_dimuonEff_jec/limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_ABCDpred.txt"
+# input_path = "../limits/results_newMatching_dimuonEff/limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_ABCDpred.txt"
 
 # Combined
 # input_path = "../limits/results/limits_combined.txt"
 
-output_path = "../limits/plots/"
+# output_path = "../limits/plots/"
+output_path = "../limits/plots_dimuonEff/"
+# output_path = "../limits/plots_dimuonEff_jec/"
 
 luminosity = 59830.  # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 

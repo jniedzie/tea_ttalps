@@ -166,6 +166,12 @@ class TTAlpsHistogrammerConfigHelper:
       for name in names:
         self.__insert_MuonVertexHistograms(params, name)
 
+    # FillRecoGenSingleMuonHistograms
+    for collection in self.bestMuonVertexCollections:
+      for flag in ("PU", "fake", "real"):
+        name = collection + "_" + flag
+        self.__insert_SingleMuonQualityHistograms(params, name)
+
     return tuple(params)
 
   def get_gen_matched_params(self):
@@ -252,7 +258,6 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
 
     for collection in self.bestMuonVertexCollections:
-
       for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
         for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
           if variable_1 == variable_2:
@@ -356,24 +361,36 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
-    collection = "BestPFIsoDimuonVertex"
+    collections = ("BestDimuonVertex","BestPFIsoDimuonVertex")
 
     variables = (
-        "logLxySignificance_vs_log3Dangle",
-        "dPhi_vs_logDxyPVTraj1",
-        "logLxy_vs_log3Dangle",
-        "logAbsCollinearityAngle_vs_logPt",
-        "logPt_vs_logDxyPVTraj1",
-        "logLxy_vs_log3Dangle",
-        "logLeadingPt_vs_dPhi"
+        ("logLxySignificance", "log3Dangle"),
+        ("dPhi", "logDxyPVTraj1"),
+        ("logLxy", "log3Dangle"),
+        ("logAbsCollinearityAngle", "logPt"),
+        ("logAbsCollinearityAngle", "pt"),
+        ("logPt", "logDxyPVTraj1"),
+        ("logLeadingPt", "dPhi"),
+        ("outerDR", "logLxy"),
+        ("outerDR", "leadingPt"),
+        ("logAbsPtLxyDPhi1", "logLeadingPt"),
+        ("absPtLxyDPhi1", "logLeadingPt"),
+        ("logAbsPtLxyDPhi1", "logLeadingPt"),
+        ("log3Dangle", "logDxyPVTraj1"),
+        ("absPtLxyDPhi2", "logDxyPVTraj1"),
+        ("invMass", "eta"),
     )
 
     SF_variables = []
-
-    for variable in variables:
-      for category in ("", "_PatDSA", "_DSA", "_Pat"):
-        name = self.__insert_into_name(collection, f"_{variable}{category}")
-        SF_variables.append(name)
+    for collection in collections:
+      for variable_pair in variables:
+        variable1 = f"{variable_pair[0]}_vs_{variable_pair[1]}"
+        variable2 = f"{variable_pair[1]}_vs_{variable_pair[0]}"
+        for category in ("", "_PatDSA", "_DSA", "_Pat"):
+          name1 = self.__insert_into_name(collection, f"_{variable1}{category}")
+          name2 = self.__insert_into_name(collection, f"_{variable2}{category}")
+          SF_variables.append(name1)
+          SF_variables.append(name2)
 
     return SF_variables
 
@@ -395,6 +412,16 @@ class TTAlpsHistogrammerConfigHelper:
           (collection, "tightLooseMuonMatch0p1", 10, 0, 10, ""),
           (collection, "triggerMuonMatchDR", 500, 0, 10, ""),
       )
+    return tuple(params)
+
+  def get_muon_matching_effect_params(self):
+    params = []
+    for collection in self.bestMuonVertexCollections:
+      for category in ("_Pat", "_PatDSA", "_DSA"):
+        collectionName = collection+category
+        collectionName2over3 = self.__insert_into_name(collection, "2over3")+category
+        self.__insert_MuonVertexHistograms(params, collectionName)
+        self.__insert_MuonVertexHistograms(params, collectionName2over3)
     return tuple(params)
 
   def __insert_into_name(self, collection, to_insert):
@@ -555,6 +582,9 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
         (name, "pfRelIso1", 800, 0, 20, ""),
         (name, "pfRelIso2", 800, 0, 20, ""),
+        (name, "DeltaR", 500, 0, 10, ""),
+        (name, "OuterDeltaR", 500, 0, 10, ""),
+        (name, "ProxDeltaR", 500, 0, 10, ""),
     )
 
   # For FillGenDimuonHistograms function
@@ -579,4 +609,30 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "absPtLxyDPhi1", 500, 0, 5, ""),
         (name, "absPtLxyDPhi2", 500, 0, 5, ""),
         (name, "logLxy", 2000, -10, 10, ""),
+    )
+
+  def __insert_SingleMuonQualityHistograms(self, params, name):
+    
+    params += (
+        ("Event", "n"+name, 50, 0, 50, ""),
+        (name, "nSegments", 100, 0, 100, ""),
+        (name, "nDTSegments", 100, 0, 100, ""),
+        (name, "nCSCSegments", 100, 0, 100, ""),
+        (name, "trkNumPlanes", 100, 0, 100, ""),
+        (name, "trkNumHits", 100, 0, 100, ""),
+        (name, "trkNumDTHits", 100, 0, 100, ""),
+        (name, "trkNumCSCHits", 100, 0, 100, ""),
+        (name, "normChi2", 50000, 0, 50, ""),
+        (name, "pt", 2000, 0, 1000, ""),
+        (name, "ptErr", 2000, 0, 1000, ""),
+        (name, "eta", 300, -3, 3, ""),
+        (name, "etaErr", 300, -3, 3, ""),
+        (name, "phi", 300, -3, 3, ""),
+        (name, "phiErr", 300, -3, 3, ""),
+        (name, "outerEta", 300, -3, 3, ""),
+        (name, "outerPhi", 300, -3, 3, ""),
+        (name, "outerPhi", 300, -3, 3, ""),
+        (name, "absDzFromLeadingTight", 10000, 0, 1000, ""),
+        (name, "logAbsDzFromLeadingTight", 10000, -5, 3, ""),
+        (name, "genMuonDR", 1000, 0, 10, ""),
     )

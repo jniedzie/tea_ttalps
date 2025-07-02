@@ -8,6 +8,10 @@
 #include "TTAlpsDimuonCuts.hpp"
 #include "TTAlpsCuts.hpp"
 
+class TTAlpsObjectsManager;
+// pair< muonVertexCollectionName, muonVertexCollectionCuts >
+typedef std::pair<std::string, std::vector<std::string>> MuonVertexCollectionSetup;
+
 class TTAlpsObjectsManager {
  public:
   TTAlpsObjectsManager();
@@ -18,13 +22,15 @@ class TTAlpsObjectsManager {
   void InsertOuterDRMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float maxDR, std::shared_ptr<NanoMuons> muonCollection = nullptr);
   void InsertProximityDRMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float maxDR, std::shared_ptr<NanoMuons> muonCollection = nullptr);
   void InsertSegmentMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float minSegmentRatio, std::shared_ptr<NanoMuons> muonCollection = nullptr);
+
   void InsertBaseLooseMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertMuonVertexCollection(std::shared_ptr<Event> event);
-  void InsertMuonVertexCollection(std::shared_ptr<Event> event, std::shared_ptr<PhysicsObjects> vertices);
+  void InsertMuonVertexCollection(std::shared_ptr<Event> event, std::shared_ptr<PhysicsObjects> vertices, 
+                                  MuonVertexCollectionSetup muonVertexCollectionInput = MuonVertexCollectionSetup());
   void InsertNminus1VertexCollections(std::shared_ptr<Event> event);
   void InsertMatchedLooseMuonEfficiencyCollections(std::shared_ptr<Event> event);
   void InsertMuonTriggerCollections(std::shared_ptr<Event> event);
-  void InsertNonLeadingMuonVertexCollections(std::shared_ptr<Event> event);
+  void InsertNonLeadingMuonVertexCollections(std::shared_ptr<Event> event, std::string inputCollection = "");
 
  private:
 
@@ -32,8 +38,9 @@ class TTAlpsObjectsManager {
 
   std::map<std::string, float> muonMatchingParams;
   std::map<std::string, float> dimuonVertexCuts;
-  std::pair<std::string, std::vector<std::string>> muonVertexCollection;
+  MuonVertexCollectionSetup muonVertexCollection;
   std::string muonVertexCollectionInput;
+  bool applySegmentMatchingAfterSelections = false;
 
   bool IsGoodBaseMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
   std::shared_ptr<PhysicsObject> GetBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::shared_ptr<Event> event);

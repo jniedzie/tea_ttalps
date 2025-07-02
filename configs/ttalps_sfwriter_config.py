@@ -14,12 +14,17 @@ luminosity = get_luminosity(year)
 # TODO: figure out how to handle different SFs 
 # - with another config or have one config for multiple corrections
 # JPsi CR SFs
-skim = "skimmed_looseSemimuonic_v2_SR"
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_JPsiDimuons_LooseNonLeadingMuonsVertexSegmentMatch" # all SFs
+# skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}" # all SFs
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
-output_name = "../data/JPsiCRsf2018.json"
+# output_name = "../data/JPsiCRsf2018.json"
+output_name = "../data/JPsiCRsf2018_newMatching_minBkg3.json"
 
-collection = "BestDimuonVertex"
+exclude_backgrounds_with_less_than = 3  # entries
+
+# collection = "BestDimuonVertex"
+collection = "BestSegmentMatchedDimuonVertex"
 variable = "invMass"
 backgrounds = dasBackgrounds2018
 data = "collision_data2018/SingleMuon2018"
@@ -39,7 +44,7 @@ for background in backgrounds.keys():
     samples.append(
         Sample(
             name=background.split("/")[-1],
-            file_path=f"{base_path}/{background}/{skim}/{hist_path}/histograms.root",
+            file_path=f"{base_path}/{background}/{skim[0]}/{hist_path}/histograms.root",
             type=SampleType.background,
             cross_sections=cross_sections,
         )
@@ -47,14 +52,14 @@ for background in backgrounds.keys():
 samples.append(
     Sample(
         name="data",
-        file_path=f"{base_path}/{data}_{skim}_{hist_path}.root",
+        file_path=f"{base_path}/{data}_{skim[0]}_{hist_path}.root",
         type=SampleType.data,
     )
 )
 
 # CorrectioWriter input
-correction_name =  "JpsiInvMassSFs"
-correction_description = "Scale factors for J/Psi invariant mass"
+correction_name =  "dimuonEff"
+correction_description = "Scale factors for dimuon efficiency given from J/Psi invariant mass distribution"
 correction_version = 1
 correction_inputs = [
     {"name": "dimuon_category", "type": "string", "description": "Dimuon categories Pat, PatDSA or DSA"},

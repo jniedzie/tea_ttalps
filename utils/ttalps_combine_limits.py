@@ -17,8 +17,14 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # masses = ["0p35"]
 # ctaus = ["1e-5"]
 
+# card_pattern_Pat = "datacard_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
+# card_pattern_PatDSA = "datacard_BestPFIsoDimuonVertex_dPhi_vs_logDxyPVTraj1_PatDSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
+# card_pattern_DSA = "datacard_BestPFIsoDimuonVertex_logLeadingPt_vs_dPhi_DSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
+# card_pattern_Pat = "datacard_BestSegmentMatchedPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
+# card_pattern_PatDSA = "datacard_BestSegmentMatchedPFIsoDimuonVertex_absPtLxyDPhi2_vs_logDxyPVTraj1_PatDSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
+# card_pattern_DSA = "datacard_BestSegmentMatchedPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
 card_pattern_Pat = "datacard_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
-card_pattern_PatDSA = "datacard_BestPFIsoDimuonVertex_dPhi_vs_logDxyPVTraj1_PatDSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
+card_pattern_PatDSA = "datacard_BestPFIsoDimuonVertex_outerDR_vs_leadingPt_PatDSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
 card_pattern_DSA = "datacard_BestPFIsoDimuonVertex_logLeadingPt_vs_dPhi_DSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
 
 skip_cards_preparation = True
@@ -28,6 +34,14 @@ def run_combine(config):
   base_command = (
       f'cd {config.combine_path}; '
       f'cmssw-el7 --no-home --command-to-run \"cmsenv; '
+      f'cd {config.datacards_output_path};'
+  )
+  # Test cmssw-el7
+  test_command = f"{base_command} echo \"\""
+  if subprocess.run(test_command, shell=True).returncode != 0:
+      base_command = (
+      f'cd {config.combine_path}; '
+      f'cmssw-el9 --no-home --command-to-run \"cmsenv; '
       f'cd {config.datacards_output_path};'
   )
   commands = []
