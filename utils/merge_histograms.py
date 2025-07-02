@@ -1,4 +1,5 @@
-from ttalps_histogrammer_files_config import skim, samples
+# from ttalps_histogrammer_files_config import skim, samples
+from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
 
 import os
 import re
@@ -11,6 +12,10 @@ parser.add_argument("--single_thread", action="store_true", default=False, help=
 parser.add_argument("--condor", action="store_true", default=False, help="Run on condor.")
 parser.add_argument("--dry", action="store_true", default=False, help="Dry run.")
 args = parser.parse_args()
+
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCA", "LooseNonLeadingMuonsVertexSegmentMatch")
+samples = dasSignals2018.keys()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 

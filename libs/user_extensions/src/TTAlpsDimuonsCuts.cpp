@@ -53,6 +53,7 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
     {"LogLxyMinus1Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus1); }},
     {"LogLxyMinus2Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus2); }},
     {"LogLxyMinus3Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus3); }},
+    {"Chi2DCACut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChi2DCACut(v); }},
   };
 }
 
@@ -212,5 +213,16 @@ bool TTAlpsDimuonCuts::PassesBarrelDeltaEtaCut(shared_ptr<NanoDimuonVertex> dimu
   auto muon1eta = dimuonVertex->Muon1()->GetAs<float>("eta");
   auto muon2eta = dimuonVertex->Muon2()->GetAs<float>("eta");
   if(abs(muon1eta-muon2eta) > dimuonVertexCuts["maxDeltaEta"]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesChi2DCACut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  if (dimuonVertexCuts["applyChi2DCA"] == 0.0) return true;
+
+  auto logNormChi2 = TMath::Log10(float(dimuonVertex->Get("normChi2")));
+  auto logDca = TMath::Log10(float(dimuonVertex->Get("dca")));
+  float logNormChi2Min = 2 * logDca - 1.5;
+  if (logNormChi2 < logNormChi2Min) return false;
   return true;
 }

@@ -282,11 +282,15 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_LxySigma", dimuon->GetLxySigmaFromPV());
   histogramsHandler->Fill(name + "_LxySignificance", dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV());
   histogramsHandler->Fill(name + "_outerDR", dimuon->GetOuterDeltaR());
+  histogramsHandler->Fill(name + "_logOuterDR", TMath::Log10(float(dimuon->GetOuterDeltaR())));
   histogramsHandler->Fill(name + "_maxHitsInFrontOfVert",
                           max(float(dimuon->Get("hitsInFrontOfVert1")), float(dimuon->Get("hitsInFrontOfVert2"))));
   histogramsHandler->Fill(name + "_absCollinearityAngle", fabs(dimuon->GetCollinearityAngle()));
   histogramsHandler->Fill(name + "_absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)));
   histogramsHandler->Fill(name + "_absPtLxyDPhi2", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)));
+  histogramsHandler->Fill(name + "_logAbsPtLxyDPhi1", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))));
+  histogramsHandler->Fill(name + "_logAbsPtLxyDPhi2", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))));
+
   histogramsHandler->Fill(name + "_invMass", dimuon->GetInvariantMass());
   histogramsHandler->Fill(name + "_logInvMass", log10(dimuon->GetInvariantMass()));
   histogramsHandler->Fill(name + "_pt", dimuon->GetDimuonPt());
@@ -298,6 +302,9 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_3Dangle", dimuon->Get3DOpeningAngle());
   histogramsHandler->Fill(name + "_cos3Dangle", dimuon->GetCosine3DOpeningAngle());
   histogramsHandler->Fill(name + "_nSegments", dimuon->GetTotalNumberOfSegments());
+
+  histogramsHandler->Fill(name + "_logDca", TMath::Log10(float(dimuon->Get("dca"))));
+  histogramsHandler->Fill(name + "_logNormChi2", TMath::Log10(float(dimuon->Get("normChi2"))));
 
   double deltaIso03 = dimuon->GetDeltaDisplacedTrackIso03();
   double deltaIso04 = dimuon->GetDeltaDisplacedTrackIso04();
