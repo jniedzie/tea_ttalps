@@ -9,7 +9,7 @@ def parse_file(filepath):
             if ':' not in line:
                 continue
             key, value_str = line.strip().split(':')
-            values = eval(value_str.strip())  # Parse the list
+            values = ast.literal_eval(value_str.strip())  # Parse the list safely
             data[key.strip()] = [float(v) for v in values]
     return data
 
