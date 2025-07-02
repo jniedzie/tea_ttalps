@@ -32,7 +32,7 @@ class TTAlpsEvent {
 
   std::map<std::string, float> GetJetEnergyCorrections(std::shared_ptr<Event> event);
 
-  std::pair<int,int> GetEventCut(std::string eventVariable);
+  std::pair<float,float> GetEventCut(std::string eventVariable);
 
   std::shared_ptr<PhysicsObjects> GetGenALPs();
   std::shared_ptr<MuonPair> GetGenDimuonFromALP();

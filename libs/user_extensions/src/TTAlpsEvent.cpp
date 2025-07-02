@@ -143,7 +143,7 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
 
 map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event) {
   
-  map<string, float> jec;
+  map<string, float> jec = {{"systematic", 1.0}};
 
   string baseJetCollectionName = "Jet";
   auto baseJetCollection = event->GetCollection(baseJetCollectionName);
@@ -152,15 +152,6 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   auto goodJetCollection = event->GetCollection(goodJetCollectionName);
   string goodBJetCollectionName = "GoodMediumBtaggedJets";
   auto goodBJetCollection = event->GetCollection(goodBJetCollectionName);
-
-  unordered_set<PhysicsObject*> goodJetsSet;
-  for (const auto &jet : *goodJetCollection) {
-      goodJetsSet.insert(jet.get());
-  }
-  unordered_set<PhysicsObject*> goodBJetsSet;
-  for (const auto &jet : *goodBJetCollection) {
-      goodBJetsSet.insert(jet.get());
-  }
 
   map<string, ExtraCollection> extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
   pair<float, float> goodJetPtCuts = extraCollectionsDescriptions[goodJetCollectionName].allCuts["pt"];
@@ -176,10 +167,10 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   }
   float rho = event->Get(rhoBranchName);
 
-  pair<int,int> goodJetCuts = GetEventCut("n"+goodJetCollectionName);
-  pair<int,int> goodBJetCuts = GetEventCut("n"+goodBJetCollectionName);
-  pair<int,int> metPtCuts = GetEventCut("MET_pt");
-  if (goodJetCuts.second == -1 || goodBJetCuts.second == -1 || metPtCuts.second == -1) {
+  pair<float,float> goodJetCuts = GetEventCut("n"+goodJetCollectionName);
+  pair<float,float> goodBJetCuts = GetEventCut("n"+goodBJetCollectionName);
+  pair<float,float> metPtCuts = GetEventCut("MET_pt");
+  if (goodJetCuts.second == -1.0 || goodBJetCuts.second == -1.0 || metPtCuts.second == -1.0) {
     warn() << "Failed to get all event cuts for jet energy corrections" << endl;
     return jec;
   }
@@ -193,9 +184,9 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
     map<string,float> corrections = nanoJet->GetJetEnergyCorrections(rho);
     float pt = nanoJet->GetPt();
 
-    const bool isGoodJet = goodJetsSet.count(jet.get()) != 0;
-    const bool isGoodBJet = goodBJetsSet.count(jet.get()) != 0;
-
+    const bool isGoodJet = nanoJet->IsInCollection(goodJetCollection);
+    const bool isGoodBJet = nanoJet->IsInCollection(goodBJetCollection);
+    
     for (auto &[name, correction] : corrections) {
       float newJetPt = pt*correction;
 
@@ -228,9 +219,9 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   return jec;
 }
 
-pair<int,int> TTAlpsEvent::GetEventCut(string eventVariable) {
-  vector<pair<string, pair<int, int>>> eventCuts;
-  pair<int, int> variableCuts = {-1, -1};
+pair<float,float> TTAlpsEvent::GetEventCut(string eventVariable) {
+  vector<pair<string, pair<float, float>>> eventCuts;
+  pair<float, float> variableCuts = {-1.0, -1.0};
   auto &config = ConfigManager::GetInstance();
   try {
     config.GetCuts(eventCuts);
