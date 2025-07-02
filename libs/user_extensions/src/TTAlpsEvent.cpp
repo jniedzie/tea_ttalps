@@ -177,8 +177,8 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   
   map<string,int> nPassingGoodJets;
   map<string,int> nPassingGoodBJets;
-  map<string,float> totalDeltaPx;
-  map<string,float> totalDeltaPy;
+  map<string,float> totalPxDifference;
+  map<string,float> totalPyDifference;
   for (auto jet : *baseJetCollection) {
     auto nanoJet = asNanoJet(jet);
     map<string,float> corrections = nanoJet->GetJetEnergyCorrections(rho);
@@ -193,8 +193,8 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
       if (nPassingGoodJets.find(name) == nPassingGoodJets.end()) {
         nPassingGoodJets[name] = 0;
         nPassingGoodBJets[name] = 0;
-        totalDeltaPx[name] = 0;
-        totalDeltaPy[name] = 0;
+        totalPxDifference[name] = 0;
+        totalPyDifference[name] = 0;
       }
 
       if (isGoodJet && newJetPt >= goodJetPtCuts.first && newJetPt <= goodJetPtCuts.second) {
@@ -204,15 +204,15 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
         nPassingGoodBJets[name]++;
       }
       // Needed to propagate MET
-      totalDeltaPx[name] += nanoJet->GetDeltaPx(newJetPt);
-      totalDeltaPy[name] += nanoJet->GetDeltaPy(newJetPt);
+      totalPxDifference[name] += nanoJet->GetPxDifference(newJetPt);
+      totalPyDifference[name] += nanoJet->GetPyDifference(newJetPt);
     }
   }
   for (auto &[name, nPassingJets] : nPassingGoodJets) {
     jec[name] = 0.0;
     if (nPassingGoodJets[name] < goodJetCuts.first || nPassingGoodJets[name] > goodJetCuts.second) continue;
     if (nPassingGoodBJets[name] < goodBJetCuts.first || nPassingGoodBJets[name] > goodBJetCuts.second) continue;
-    float newMetPt = nanoEventProcessor->PropagateMET(asNanoEvent(event), totalDeltaPx[name], totalDeltaPy[name]);
+    float newMetPt = nanoEventProcessor->PropagateMET(asNanoEvent(event), totalPxDifference[name], totalPyDifference[name]);
     if (newMetPt < metPtCuts.first || newMetPt > metPtCuts.second) continue;
     jec[name] = 1.0;
   }
