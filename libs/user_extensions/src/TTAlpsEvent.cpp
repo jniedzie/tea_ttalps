@@ -176,10 +176,10 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   }
   float rho = event->Get(rhoBranchName);
 
-  pair<float,float> goodJetCuts = GetEventCut("n"+goodJetCollectionName);
-  pair<float,float> goodBJetCuts = GetEventCut("n"+goodBJetCollectionName);
-  pair<float,float> metPtCuts = GetEventCut("MET_pt");
-  if (goodJetCuts.second == -1.0 || goodBJetCuts.second == -1.0 || metPtCuts.second == -1.0) {
+  pair<int,int> goodJetCuts = GetEventCut("n"+goodJetCollectionName);
+  pair<int,int> goodBJetCuts = GetEventCut("n"+goodBJetCollectionName);
+  pair<int,int> metPtCuts = GetEventCut("MET_pt");
+  if (goodJetCuts.second == -1 || goodBJetCuts.second == -1 || metPtCuts.second == -1) {
     warn() << "Failed to get all event cuts for jet energy corrections" << endl;
     return jec;
   }
@@ -228,9 +228,9 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   return jec;
 }
 
-pair<float,float> TTAlpsEvent::GetEventCut(string eventVariable) {
-  vector<pair<string, pair<float, float>>> eventCuts;
-  pair<float, float> variableCuts = {-1.0, -1.0};
+pair<int,int> TTAlpsEvent::GetEventCut(string eventVariable) {
+  vector<pair<string, pair<int, int>>> eventCuts;
+  pair<int, int> variableCuts = {-1, -1};
   auto &config = ConfigManager::GetInstance();
   try {
     config.GetCuts(eventCuts);
