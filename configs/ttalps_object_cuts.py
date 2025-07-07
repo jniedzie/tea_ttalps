@@ -44,7 +44,7 @@ SRDimuonsDSAChi2DCADPhiCuts = {
     "maxCollinearityAngle": [2.0, 2.0, 2.0],
     "maxpTLxyDPhi": [9999.0, 2.9, 0.4],
     "maxPFRelIso": [0.25, 0.25, 9999.0],
-    "applyChi2DCA": [0.0, 0.0, 1.0],
+    "applyChi2DCA": [0.0, 0.0, 1.0], # apply linear cut for logNormChi2 > 2logDCA - 1.5
     # No cuts:
     "maxdisplacedTrackIso03Dimuon": [9999.0, 9999.0, 9999.0],  # used 0.025 before but now using PRFRelIso instead
     "maxDR": [9999.0, 9999.0, 9999.0],
@@ -66,7 +66,7 @@ JPsiDimuonsDSAChi2DCADPhiCuts = {
     "maxCollinearityAngle": [2.0, 2.0, 2.0],
     "maxpTLxyDPhi": [9999.0, 2.9, 0.4],
     "maxPFRelIso": [0.25, 0.25, 9999.0],
-    "applyChi2DCA": [0.0, 0.0, 1.0],
+    "applyChi2DCA": [0.0, 0.0, 1.0], # apply linear cut for logNormChi2 > 2logDCA - 1.5
     # No cuts:
     "minJpsiMass": [9999.0, 9999.0, 9999.0],
     "maxJpsiMass": [0.0, 0.0, 0.0],
