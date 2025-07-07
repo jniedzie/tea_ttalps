@@ -1,6 +1,6 @@
 from ttalps_cross_sections import get_cross_sections
 from Sample import Sample, SampleType
-from ttalps_samples_list import dasBackgrounds2018
+from ttalps_samples_list import dasBackgrounds2018, dasSignals2018
 
 
 class TTAlpsABCDConfigHelper:
@@ -27,6 +27,23 @@ class TTAlpsABCDConfigHelper:
     backgrounds = []
 
     for name in dasBackgrounds2018:
+      backgrounds.append(name.split("/")[-1])
+
+      background_samples.append(
+          Sample(
+              name=name.split("/")[-1],
+              file_path=f"{self.base_path}/{name}/{self.background_skim[0]}/{self.background_hist_path}/histograms.root",
+              type=SampleType.background,
+              cross_sections=self.cross_sections,
+          )
+      )
+    return background_samples, backgrounds
+
+  def get_signal_as_background_samples(self):
+    background_samples = []
+    backgrounds = []
+
+    for name in dasSignals2018:
       backgrounds.append(name.split("/")[-1])
 
       background_samples.append(

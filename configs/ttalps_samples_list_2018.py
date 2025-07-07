@@ -140,6 +140,10 @@ dasSignalsCentral2018 = {
     # "signals/tta_mAlp-60GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-60_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
 }
 
+dasSignals2018_test = {
+    "signals/tta_mAlp-0p35GeV_ctau-1e3mm_test": "",
+}
+
 dasSignals2018 = {
     key: value for d in (
         dasSignals2018_0p35GeV,

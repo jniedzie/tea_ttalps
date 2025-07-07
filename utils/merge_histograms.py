@@ -1,4 +1,5 @@
 from ttalps_histogrammer_files_config import skim, samples
+from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
 
 import os
 import re
@@ -12,6 +13,10 @@ parser.add_argument("--condor", action="store_true", default=False, help="Run on
 parser.add_argument("--dry", action="store_true", default=False, help="Dry run.")
 args = parser.parse_args()
 
+# comment out to use skim and samples from ttalps_histogrammer_files_config.py
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
+# samples = dasBackgrounds2018.keys()
+
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
@@ -21,7 +26,6 @@ if skim[1] != "":
   hist_path += f"_{skim[1]}"
 if skim[2] != "":
   hist_path += f"_{skim[2]}"
-
 
 def extract_year(s):
   match = re.search(r'(20\d{2})(?!\d)', s)

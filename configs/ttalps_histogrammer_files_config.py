@@ -22,7 +22,10 @@ input_username = "lrygaard"
 
 # SR, J/Psi CR with different segment match ratio
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCA", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
@@ -46,9 +49,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 
 # samples = dasSamples2018.keys()
 # samples = dasData2018.keys()
-# samples = dasBackgrounds2018.keys()
+samples = dasBackgrounds2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
-samples = dasSignals2018.keys()
+# samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()
 # samples = dasBackgrounds2022preEE.keys()
 

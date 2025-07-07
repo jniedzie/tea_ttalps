@@ -49,6 +49,8 @@ runABCDHistograms = True
 # [MC only] Create histograms with mother PIDs of dimuons entering ABCD histograms (quite heavy, turn off if not needed)
 runABCDMothersHistograms = False
 
+runGenLevelABCD = False
+
 # [MC only] Create histograms for dimuons in the fakes region vs. non-fakes region
 runFakesHistograms = False
 
@@ -108,10 +110,12 @@ if dimuonSelection == "":
     ignoreDimuons = True
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "SRDimuonsDSAChi2DCADPhi": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "Chi2DCACut", "BestDimuonVertex"]),
     "AlpDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonNoIso": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "JPsiDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "JPsiDimuonIso": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "JPsiDimuonsDSAChi2DCADPhi": ("BestDimuonVertex", muonVertexBaselineSelection + ["Chi2DCACut", "BestDimuonVertex"]),
     "ZDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
 }
 muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None
@@ -149,7 +153,7 @@ if runMuonMatchingHistograms:
 
 if runABCDHistograms:
   histParams += helper.get_abcd_1Dparams()
-  histParams2D += helper.get_abcd_2Dparams()
+  histParams2D += helper.get_abcd_2Dparams(runGenLevelABCD)
 
 if runABCDMothersHistograms:
   histParams2D += helper.get_abcd_mothers_2Dparams()
@@ -164,3 +168,4 @@ if runMuonMatchingRatioEffectHistograms:
   histParams += helper.get_muon_matching_effect_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()
+# SFvariationVariables = [] # for testing to run histogrammer faster

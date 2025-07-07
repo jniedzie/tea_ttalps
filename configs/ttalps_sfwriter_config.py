@@ -15,16 +15,15 @@ luminosity = get_luminosity(year)
 # - with another config or have one config for multiple corrections
 # JPsi CR SFs
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsDSAChi2DCADPhi", "_LooseNonLeadingMuonsVertexSegmentMatch_abcdTest")
 hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}" # all SFs
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 # output_name = "../data/JPsiCRsf2018.json"
-output_name = "../data/JPsiCRsf2018_newMatching_minBkg3.json"
+output_name = "../data/dimuonEffSFs2018_newMatching_JPsiDimuonsDSAChi2DCADPhi.json"
 
 exclude_backgrounds_with_less_than = 3  # entries
 
-# collection = "BestDimuonVertex"
-collection = "BestSegmentMatchedDimuonVertex"
+collection = "BestDimuonVertex"
 variable = "invMass"
 backgrounds = dasBackgrounds2018
 data = "collision_data2018/SingleMuon2018"

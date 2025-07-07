@@ -34,13 +34,16 @@ class TTAlpsHistogrammerConfigHelper:
 
         "absCollinearityAngle": (100, 0, 2),
         "3Dangle": (100, 0, pi),
+        "cos3Dangle": (100, 0, 1),
 
         "logLxy": (100, -2, 3),
         "logLxySignificance": (100, -2, 2),
         "logAbsCollinearityAngle": (100, -5, 1),
         "log3Dangle": (100, -3, 1),
+        "logCos3Dangle": (100, -3, 1),
 
         "outerDR": (100, 0, 5),
+        "logOuterDR": (100, -3, 3),
         "maxHitsInFrontOfVert": (10, 0, 10),
         "absPtLxyDPhi1": (100, 0, pi),
         "absPtLxyDPhi2": (100, 0, pi),
@@ -61,25 +64,34 @@ class TTAlpsHistogrammerConfigHelper:
         "dEta": (100, 0, 3),
         "dPhi": (100, 0, 2*pi),
         "nSegments": (10, 0, 10),
-        "logDisplacedTrackIso03Dimuon1": (100, -3, 0),
-        "logDisplacedTrackIso04Dimuon1": (100, -3, 0),
-        "logDisplacedTrackIso03Dimuon2": (100, -3, 0),
-        "logDisplacedTrackIso04Dimuon2": (100, -3, 0),
+        "displacedTrackIso03Dimuon1": (100, 0, 0.01),
+        "displacedTrackIso04Dimuon1": (100, 0, 0.01),
+        "displacedTrackIso03Dimuon2": (100, 0, 0.01),
+        "displacedTrackIso04Dimuon2": (100, 0, 0.01),
+        "logDisplacedTrackIso03Dimuon1": (100, -4, 2),
+        "logDisplacedTrackIso04Dimuon1": (100, -4, 2),
+        "logDisplacedTrackIso03Dimuon2": (100, -4, 2),
+        "logDisplacedTrackIso04Dimuon2": (100, -4, 2),
 
-
-        "logDxyPVTraj1": (100, -5, 1),
-        "logDxyPVTraj2": (100, -5, 1),
-        "logDxyPVTrajSig1": (100, -3, 1),
-        "logDxyPVTrajSig2": (100, -3, 1),
+        "logDxyPVTraj1": (100, -5, 3),
+        "logDxyPVTraj2": (100, -5, 3),
+        "logDxyPVTrajSig1": (100, -3, 3),
+        "logDxyPVTrajSig2": (100, -3, 3),
 
         "deltaIso03": (100, 0, 10),
         "deltaIso04": (100, 0, 10),
-        "logDeltaIso03": (100, -5, 5),
-        "logDeltaIso04": (100, -5, 5),
+        "logDeltaIso03": (100, -9, 5),
+        "logDeltaIso04": (100, -9, 5),
         "deltaSquaredIso03": (100, 0, 10),
         "deltaSquaredIso04": (100, 0, 10),
-        "logDeltaSquaredIso03": (100, -5, 5),
-        "logDeltaSquaredIso04": (100, -5, 5),
+        "logDeltaSquaredIso03": (100, -7, 5),
+        "logDeltaSquaredIso04": (100, -7, 5),
+
+        # some extra:
+        "normChi2": (100, 0, 1),
+        "logNormChi2": (100, -7, 1),
+        "dca": (100, 0, 2),
+        "logDca": (100, -4, 1),
     }
 
   def get_default_params(self):
@@ -254,7 +266,7 @@ class TTAlpsHistogrammerConfigHelper:
 
     return tuple(params)
 
-  def get_abcd_2Dparams(self):
+  def get_abcd_2Dparams(self, runGenLevelABCD):
     params = []
 
     for collection in self.bestMuonVertexCollections:
@@ -266,6 +278,15 @@ class TTAlpsHistogrammerConfigHelper:
           name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
 
           params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+          if runGenLevelABCD:
+            names = (
+                self.__insert_into_name(collection, "FromALP"),
+                self.__insert_into_name(collection, "Resonant"),
+                self.__insert_into_name(collection, "NonResonant"),
+            )
+            for collectionName in names:
+              name = self.__insert_into_name(collectionName, f"_{variable_2}_vs_{variable_1}")
+              params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
 
@@ -379,6 +400,7 @@ class TTAlpsHistogrammerConfigHelper:
         ("log3Dangle", "logDxyPVTraj1"),
         ("absPtLxyDPhi2", "logDxyPVTraj1"),
         ("invMass", "eta"),
+        ("logDxyPVTrajSig1", "invMass"),
     )
 
     SF_variables = []
@@ -491,6 +513,7 @@ class TTAlpsHistogrammerConfigHelper:
     params += (
         ("Event", "n"+name, 50, 0, 50, ""),
         (name, "normChi2", 50000, 0, 50, ""),
+        (name, "logNormChi2", 1000, -8, 2, ""),
         (name, "Lxy", 10000, 0, 1000, ""),
         (name, "logLxy", 2000, -10, 10, ""),
         (name, "LxySigma", 10000, 0, 100, ""),
@@ -498,15 +521,19 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "dR", 500, 0, 10, ""),
         (name, "proxDR", 500, 0, 10, ""),
         (name, "outerDR", 500, 0, 10, ""),
+        (name, "logOuterDR", 600, -3, 3, ""),
         (name, "dEta", 500, 0, 10, ""),
         (name, "dPhi", 500, 0, 10, ""),
         (name, "maxHitsInFrontOfVert", 100, 0, 100, ""),
         (name, "hitsInFrontOfVert1", 100, 0, 100, ""),
         (name, "hitsInFrontOfVert2", 100, 0, 100, ""),
         (name, "dca", 1000, 0, 20, ""),
+        (name, "logDca", 500, -4, 1, ""),
         (name, "absCollinearityAngle", 500, 0, 5, ""),
         (name, "absPtLxyDPhi1", 500, 0, 5, ""),
         (name, "absPtLxyDPhi2", 500, 0, 5, ""),
+        (name, "logAbsPtLxyDPhi1", 600, -5, 1, ""),
+        (name, "logAbsPtLxyDPhi2", 600, -5, 1, ""),
         (name, "invMass", 20000, 0, 200, ""),
         (name, "logInvMass", 1000, -1, 2, ""),
         (name, "pt", 2000, 0, 1000, ""),

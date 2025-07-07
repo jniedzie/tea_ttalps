@@ -27,6 +27,7 @@ do_region = "SRnewMatching"
 # do_region = "bbCR"
 
 do_data = False
+do_nonresonant_signal_as_background = False
 
 if do_region == "SR" or do_region == "SRnoIso":
   do_data = False
@@ -43,6 +44,10 @@ elif "JPsiCR" in do_region:
 elif do_region == "SRnoIso":
   background_collection = "BestDimuonVertex"
   signal_collection = "BestDimuonVertex"
+
+if do_nonresonant_signal_as_background:
+  background_collection = background_collection + "NonResonant"
+  signal_collection = signal_collection+ "FromALP"
 
 # category = ""
 # category = "_Pat"
@@ -75,28 +80,6 @@ optimal_parameters = {
 
     # ("_PatDSA", "JPsiCR"): ("logAbsPtLxyDPhi2", "logDisplacedTrackIso03Dimuon1", (19, 16), "A"),
 
-    # optimized for old matching, pT > 3 GeV: (Lovisa)
-    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"),
-    # ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"),
-    # ("_DSA", "SR"): ("logLeadingPt", "dPhi", (6, 12), "A"),
-    ("_Pat", "JPsiCR"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
-    ("_PatDSA", "JPsiCR"): ("logLxy", "logLeadingPt", (10, 11), "D"),
-    ("_DSA", "JPsiCR"): ("logLxy", "logPt", (10, 7), "D"),
-    # old matching with JPsi SFs
-    ("_Pat", "SR"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 15 points
-    ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"), # 12 points
-    ("_DSA", "SR"): ("logLeadingPt", "dPhi", (13, 13), "A"), # 14 points 
-    # optimized for new matching, pT > 3 GeV: (Lovisa)
-    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
-    # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
-    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 11 points
-    # ("_Pat", "JPsiCRnewMatching"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
-    # ("_PatDSA", "JPsiCRnewMatching"): ("logLxy", "logLeadingPt", (10, 11), "D"),
-    # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (10, 7), "D"),
-    # new matching with JPsi SFs
-    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 13 points
-    # ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
-    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"), # 13 points
     # new matching with JPsi SFs and min 3 bkg entries
     # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
     # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
@@ -105,10 +88,14 @@ optimal_parameters = {
     ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
     ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
     
-    # no PAT-PAT cuts
-    # ("_Pat", "SR"): ("invMass", "deltaIso04", (25, 2), "A"),
-    # ("_PatDSA", "SR"): ("outerDR", "leadingPt", (23, 11), "D"),
-    # ("_DSA", "SR"): ("logLeadingPt", "dPhi", (6, 12), "A"),
+    # new matching DSAChi2DCADPhi (with new dimuonEff SFs)
+    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (23, 10), "D"), # 10 points
+    ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
+    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
+    ("_Pat", "JPsiCRnewMatching"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
+    ("_PatDSA", "JPsiCRnewMatching"): ("logLxy", "logLeadingPt", (10, 11), "D"),    
+    # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (9, 7), "D"),
+    ("_DSA", "JPsiCRnewMatching"): ("logLxy", "leadingPt", (22, 7), "D"),
 
     # optimized on MC (rebin 4, μ pt > 8 GeV):
     # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (23, 2), "C"),
@@ -216,6 +203,8 @@ signal_label_position = (0.11, 0.12)
 projections_legend_position = (0.6, 0.6, 0.9, 0.9)
 
 background_color = ROOT.kBlack
+if do_nonresonant_signal_as_background:
+  background_color = ROOT.kBlue
 signal_color = ROOT.kRed
 
 abcd_line_color = ROOT.kCyan+1
@@ -259,7 +248,7 @@ skims = {
         # "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "SRnewMatching": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAChi2DCADPhi", "_LooseNonLeadingMuonsVertexSegmentMatch" #new dimuonEff SFs
         # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_JPsiSFminBkg3"
         # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAIso", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
@@ -271,8 +260,10 @@ skims = {
         # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     ),
     "JPsiCRnewMatching": (
-        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        # ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsDSAChi2DCADPhi", "_LooseNonLeadingMuonsVertexSegmentMatch"), #new dimuonEff SFs
+        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAChi2DCADPhi", "_LooseNonLeadingMuonsVertexSegmentMatch"), #new dimuonEff SFs
     ),
     "JPsiCRwithIso": (
         ("skimmed_looseSemimuonic_v2_SR", "_JPsiDimuonsWithIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
@@ -307,9 +298,14 @@ output_path = (
 )
 if username == "lrygaard":
     output_path = (
-        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
-        f"{do_region}_{background_collection}{background_skim[2]}_new"
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/wipPlots/results_"
+        f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
     )
+    if not do_nonresonant_signal_as_background:
+      output_path = (
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
+        f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
+      )
 output_path += "_data" if do_data else "_mc"
 output_path += category
 
@@ -351,7 +347,10 @@ config_helper = TTAlpsABCDConfigHelper(
     background_hist_path,
 )
 
-background_samples, backgrounds = config_helper.get_background_samples()
+if do_nonresonant_signal_as_background:
+  background_samples, backgrounds = config_helper.get_signal_as_background_samples()
+else:
+  background_samples, backgrounds = config_helper.get_background_samples()
 samples = background_samples
 background_params = config_helper.get_background_params(backgrounds)
 
