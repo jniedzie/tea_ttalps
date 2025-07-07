@@ -167,5 +167,5 @@ if runMuonTriggerObjectsHistograms:
 if runMuonMatchingRatioEffectHistograms:
   histParams += helper.get_muon_matching_effect_params()
 
-# SFvariationVariables = helper.get_SF_variation_variables()
-SFvariationVariables = []
+SFvariationVariables = helper.get_SF_variation_variables()
+# SFvariationVariables = [] # for testing to run histogrammer faster
