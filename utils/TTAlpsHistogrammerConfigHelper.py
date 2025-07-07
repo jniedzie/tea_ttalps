@@ -91,7 +91,7 @@ class TTAlpsHistogrammerConfigHelper:
         "normChi2": (100, 0, 1),
         "logNormChi2": (100, -7, 1),
         "dca": (100, 0, 2),
-        "logDca": (100, -7, 1),
+        "logDca": (100, -4, 1),
     }
 
   def get_default_params(self):
@@ -400,6 +400,7 @@ class TTAlpsHistogrammerConfigHelper:
         ("log3Dangle", "logDxyPVTraj1"),
         ("absPtLxyDPhi2", "logDxyPVTraj1"),
         ("invMass", "eta"),
+        ("logDxyPVTrajSig1", "invMass"),
     )
 
     SF_variables = []

@@ -124,7 +124,6 @@ bool TTAlpsDimuonCuts::PassesHitsInFrontOfVertexCut(shared_ptr<NanoDimuonVertex>
 
 bool TTAlpsDimuonCuts::PassesDPhiBetweenMuonpTAndLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   string category = dimuonVertex->GetVertexCategory();
-  if(category == "Pat" || category == "DSA") return true;
   auto dimuonVertexCuts = GetDimuonCategoryMap(category);
   if(abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)) > dimuonVertexCuts["maxpTLxyDPhi"]) return false;
   return true;

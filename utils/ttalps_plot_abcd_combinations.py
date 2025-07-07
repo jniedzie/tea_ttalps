@@ -27,7 +27,10 @@ variables = (
     "logDxyPVTrajSig2",
     # # Angle
     "logAbsCollinearityAngle",
+    "3Dangle",
     "log3Dangle",
+    "cos3Dangle",
+    "logCos3Dangle",
     "outerDR",
     "logOuterDR",
     "absPtLxyDPhi1",
