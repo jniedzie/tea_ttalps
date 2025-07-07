@@ -1275,7 +1275,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bo
         {"deltaIso03", dimuon->GetDeltaDisplacedTrackIso03()},
         {"deltaIso04", dimuon->GetDeltaDisplacedTrackIso04()},
         {"logDeltaIso03", dimuon->GetLogDeltaDisplacedTrackIso03()},
-        {"logDeltaIso04", dimuon->GetLogDeltaDisplacedTrackIso03()},
+        {"logDeltaIso04", dimuon->GetLogDeltaDisplacedTrackIso04()},
         {"deltaSquaredIso03", pow(dimuon->GetDeltaDisplacedTrackIso03(), 2)},
         {"deltaSquaredIso04", pow(dimuon->GetDeltaDisplacedTrackIso04(), 2)},
         {"logDeltaSquaredIso03", dimuon->GetLogDeltaSquaredDisplacedTrackIso03()},
