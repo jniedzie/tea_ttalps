@@ -12,26 +12,32 @@ max_signal_contamination = "0.20"
 do_region = "SRnewMatching"
 # do_region = "JPsiCRnewMatching"
 
+run_optimization = True
+
 # new matching with dimuonEff for min 3 bkg events
 if do_region == "SRnewMatching":
     min_signals = "10"
-    # for plotting:
-    # min_signals = "0"
-    # max_overlap = "0.8"
-    # max_error = "5.0"
-    # max_signal_contamination = "0.80"
-    # max_closure = "0.80"
+    
 
 if do_region == "JPsiCRnewMatching":
     min_signals = "5"
     # min_n_events = "10" # PAT, PATDSA category
     min_n_events = "5" # DSA category
 
+if not run_optimization:
+    # for plotting:
+    min_signals = "0"
+    max_overlap = "0.8"
+    max_error = "5.0"
+    max_signal_contamination = "0.80"
+    max_closure = "0.80"
 
 run_script = "ttalps_plot_abcd_combinations.py"
 # run_script = "abcd_plotter.py"
 config = "ttalps_abcd_config.py"
-condor = True
+condor = False
+if run_optimization:
+    condor = True
 
 command = [
     "python", run_script,
