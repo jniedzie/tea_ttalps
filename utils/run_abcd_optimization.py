@@ -33,7 +33,6 @@ if not run_optimization:
     max_closure = "0.80"
 
 run_script = "ttalps_plot_abcd_combinations.py"
-# run_script = "abcd_plotter.py"
 config = "ttalps_abcd_config.py"
 condor = False
 if run_optimization:
