@@ -1259,7 +1259,7 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bo
 
         {"nSegments", dimuon->GetTotalNumberOfSegments()},
         {"displacedTrackIso03Dimuon1", dimuon->Get("displacedTrackIso03Dimuon1")},
-        {"displacedTrackIso04Dimuon1", dimuon->Get("displacedTrackIso03Dimuon1")},
+        {"displacedTrackIso04Dimuon1", dimuon->Get("displacedTrackIso04Dimuon1")},
         {"displacedTrackIso03Dimuon2", dimuon->Get("displacedTrackIso03Dimuon2")},
         {"displacedTrackIso04Dimuon2", dimuon->Get("displacedTrackIso03Dimuon2")},
         {"logDisplacedTrackIso03Dimuon1", dimuon->GetLogDisplacedTrackIso("displacedTrackIso03Dimuon1")},
