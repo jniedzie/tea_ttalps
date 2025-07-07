@@ -14,8 +14,8 @@ parser.add_argument("--dry", action="store_true", default=False, help="Dry run."
 args = parser.parse_args()
 
 # comment out to use skim and samples from ttalps_histogrammer_files_config.py
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
-samples = dasBackgrounds2018.keys()
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
+# samples = dasBackgrounds2018.keys()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
