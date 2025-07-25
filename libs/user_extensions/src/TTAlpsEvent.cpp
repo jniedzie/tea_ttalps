@@ -35,10 +35,8 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
-  float pileupSF;
-  // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all
-  // years? else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
-  pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
+  // NOTE: nanoEventProcessor only do cutsom PU SF for 2018 right now
+  map<string, float> pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
   map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTrigger");
 
   int maxNjets = 4;
@@ -53,28 +51,32 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
     }
   }
   map<string, float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingBJets);
-  auto muons = GetTTAlpsEventMuons();
+  auto muons = GetEventMuons();
   map<string, float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
+
+  map<string, float> DSAEffSF = nanoEventProcessor->GetDSAMuonEfficiencyScaleFactors(muons);
 
   map<string, float> jecUnc = GetJetEnergyCorrections(event);
 
   map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
   map<string, float> scaleFactorMap;
-  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
-                              muonSF["systematic"] * dimuonEffSF["systematic"];
-  vector<map<string, float> *> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &jecUnc};
+  scaleFactorMap["default"] = genWeight * pileupSF["systematic"] * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
+                              muonSF["systematic"] * dimuonEffSF["systematic"] * DSAEffSF["systematic"] ;
+  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
       if (name == "systematic") continue;
 
-      scaleFactorMap[name] = genWeight * pileupSF *
+      scaleFactorMap[name] = genWeight * 
+                             (scaleFactorMapPtr == &pileupSF ? (*scaleFactorMapPtr)[name] : pileupSF["systematic"]) *
                              (scaleFactorMapPtr == &muonTriggerSF ? (*scaleFactorMapPtr)[name] : muonTriggerSF["systematic"]) *
                              (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"]) *
                              (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"]) *
                              (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"]) *
                              (scaleFactorMapPtr == &dimuonEffSF ? (*scaleFactorMapPtr)[name] : dimuonEffSF["systematic"]) *
+                             (scaleFactorMapPtr == &DSAEffSF ? (*scaleFactorMapPtr)[name] : DSAEffSF["systematic"]) *
                              (scaleFactorMapPtr == &jecUnc ? (*scaleFactorMapPtr)[name] : jecUnc["systematic"]);
     }
   }
@@ -97,6 +99,16 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetAllLooseMuons() {
   string matchingMethod = muonMatchingParams.begin()->first;
   return asNanoMuons(GetCollection("LooseMuons" + matchingMethod + "Match"));
 }
+
+shared_ptr<NanoMuons> TTAlpsEvent::GetEventMuons() {
+  if (!muonVertexCollection.first.empty() && !muonVertexCollection.second.empty()) {
+    return GetTTAlpsEventMuons();
+  }
+  // If no muon vertex collection is defined, return all loose muons
+  // This will work for ttbar CR and ttbar + 1 DSA muon CR
+  return GetAllLooseMuons();
+}
+
 
 shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
   auto allMuons = GetAllLooseMuons();

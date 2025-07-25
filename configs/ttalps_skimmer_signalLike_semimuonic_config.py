@@ -3,7 +3,7 @@ from ttalps_object_cuts import *
 
 # year = "2016preVFP"
 year = "2018"
-# year = "2022preEE"
+# year = "2022postEE"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 
@@ -25,7 +25,8 @@ eventsTreeNames = ("Events",)
 # "OuterDR" : max Delta R (eg. 0.1)
 # "ProxDR" : max Delta R (eg. 0.1)
 muonMatchingParams = {
-    "Segment": 2.0/3.0,
+    # "Segment": 2.0/3.0,
+    "Segment": 1.5,
     # "DR" : 0.1,
     # "OuterDR" : 0.1,
     # "ProxDR" : 0.1,

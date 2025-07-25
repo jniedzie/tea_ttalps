@@ -1,5 +1,6 @@
 from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
-from ttalps_samples_list import dasBackgrounds2022preEE
+from ttalps_samples_list import dasBackgrounds2018Devel, dasData2018Devel
+from ttalps_samples_list import dasBackgrounds2022postEE, dasSignals2022postEE, dasData2022postEE
 import os
 
 max_files = -1
@@ -37,6 +38,8 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCADPh
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
+# skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "")
+
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # skim = ("skimmed_looseSemimuonic_v2_LLPtrigger_SR", "SRDimuons", "")
 # skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "SRDimuons", "")
@@ -53,7 +56,7 @@ samples = dasBackgrounds2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 # samples = dasSignals2018.keys()
 # samples = dasData2018_standard.keys()
-# samples = dasBackgrounds2022preEE.keys()
+# samples = dasBackgounds2022postEE.keys()
 
 base_path = "/data/dust/user/{}/ttalps_cms"
 
@@ -64,7 +67,8 @@ applyScaleFactors = {
   "pileup": (True, True),
   "bTagging": (True, True),
   "PUjetID": (True, True),
-  "dimuonEff": (True, True),
+  "dimuonEff": (False, False),
+  "DSAEff": (True, True),
   "jec" : (False, True),
 }
 

@@ -71,8 +71,7 @@ class TTAlpsPlotterConfigHelper:
       file_path = f"{self.base_path}/{sample_name}/{self.skim}/{self.hist_path}/histograms.root"
 
       if sample_type == SampleType.data:
-        year_short = self.year[:4]
-        file_path = f"{self.base_path}/collision_data{year_short}/{sample_name}_{self.skim}_{self.hist_path}.root"
+        file_path = f"{self.base_path}/collision_data{self.year}/{sample_name}_{self.skim}_{self.hist_path}.root"
 
       info(f"Adding sample {long_name} of type {sample_type} with file path {file_path}")
 

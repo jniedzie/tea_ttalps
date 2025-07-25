@@ -15,7 +15,7 @@ class TTAlpsHistogramFiller {
 
   void FillDefaultVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesForLooseMuons(const std::shared_ptr<Event> event);
-  void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event);
+  void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event, bool runNminus1Histograms);
   void FillCustomTTAlpsGenMuonVertexCollectionsVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
@@ -28,6 +28,7 @@ class TTAlpsHistogramFiller {
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
   void FillABCDHistograms(const std::shared_ptr<Event> event, bool runGenLevelABCD = false);
+  void FillSingleMuonABCDHistograms(const std::shared_ptr<Event> event);
   void FillABCDMothersHistograms(const std::shared_ptr<Event> event, bool runFakesHistograms);
   void FillFakesHistograms(const std::shared_ptr<Event> event);
 
@@ -68,7 +69,7 @@ class TTAlpsHistogramFiller {
   void FillNminus1HistogramsForMuonVertexCollection(const std::shared_ptr<Event> event);
 
   // Nminus1 LLPnanoAOD histograms
-  void FillDimuonVertexNminus1HistogramForCut(std::string collectionName, std::string cut, std::shared_ptr<NanoDimuonVertex> dimuonVertex);
+  void FillDimuonVertexNminus1HistogramForCut(std::string collectionName, std::shared_ptr<NanoDimuonVertex> dimuonVertex);
 
   // Gen-Level histograms
   void FillGenALPsHistograms(const std::shared_ptr<Event> event);

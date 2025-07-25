@@ -279,36 +279,48 @@ void TTAlpsObjectsManager::InsertNminus1VertexCollections(shared_ptr<Event> even
 
     auto muonVertexCollectionName = muonVertexCollection.first;
     auto muonVertexCollectionCuts = muonVertexCollection.second;
-    bool bestVertex = false;
+    bool includeBestVertex = false;
     if (muonVertexCollectionCuts.back() == "BestDimuonVertex") {
-      bestVertex = true;
+      includeBestVertex = true;
       muonVertexCollectionCuts.pop_back();
     }
 
-    int nCuts = muonVertexCollectionCuts.size();
-    for (int i = 0; i < nCuts; i++) {
+    for (auto nMinus1Cut : muonVertexCollectionCuts) {
       auto passedVertices = make_shared<PhysicsObjects>();
       for (auto vertex : *vertices) {
         bool passed = true;
         auto dimuonVertex = asNanoDimuonVertex(vertex, event);
-        for (int j = 0; j < nCuts; j++) {
-          if (j == i) continue;
-          if (!ttAlpsCuts->PassesCut(dimuonVertex, muonVertexCollectionCuts[j])) {
+        for (auto cut : muonVertexCollectionCuts) {
+          if (cut == nMinus1Cut) continue;
+          if (!ttAlpsCuts->PassesCut(dimuonVertex, cut)) {
             passed = false;
             break;
           }
         }
         if (passed) passedVertices->push_back(vertex);
       }
-      string nminus1CollectionName = muonVertexCollectionName + "Nminus1" + muonVertexCollectionCuts[i];
+      string nminus1CollectionName = muonVertexCollectionName + "Nminus1" + nMinus1Cut;
       auto finalCollection = make_shared<PhysicsObjects>();
-      if (bestVertex) {
-        if (GetBestMuonVertex(passedVertices, event)) finalCollection->push_back(GetBestMuonVertex(passedVertices, event));
-        // If input muonVertexCollection is "Best" vertex collection we also make a good vertex collection
-        string goodMuonVertexCollectionName = nminus1CollectionName;
-        goodMuonVertexCollectionName.replace(0, 4, "Good");
-        event->AddCollection(goodMuonVertexCollectionName, passedVertices);
-      } else
+      if (includeBestVertex) {
+        auto bestVertex = GetBestMuonVertex(passedVertices, event);
+        if (bestVertex) {
+
+          if (applySegmentMatchingAfterSelections) {
+            float minRatio = 2.0f / 3.0f;
+            if (muonMatchingParams.find("Segment") != muonMatchingParams.end()) {
+              minRatio = muonMatchingParams["Segment"];
+            }
+            auto bestSegmentMatchedVertex = asNanoEvent(event)->GetSegmentMatchedBestDimuonVertex(
+              asNanoDimuonVertex(bestVertex,event), asNanoDimuonVertices(passedVertices,event), minRatio);
+            if (bestSegmentMatchedVertex) {
+              finalCollection->push_back(bestSegmentMatchedVertex->GetPhysicsObject());
+            }
+          }
+          else {
+            finalCollection->push_back(bestVertex);
+          }
+        }
+      } else 
         finalCollection = passedVertices;
       event->AddCollection(nminus1CollectionName, finalCollection);
     }

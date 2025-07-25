@@ -46,8 +46,8 @@ int main(int argc, char **argv) {
   bool runDefaultHistograms, runLLPTriggerHistograms;
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
   bool runMuonTriggerObjectsHistograms;
-  bool runABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
-  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms, runGenLevelABCD;
+  bool runABCDHistograms, runSingleMuonABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
+  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms, runGenLevelABCD, runNminus1Histograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -55,11 +55,13 @@ int main(int argc, char **argv) {
   config.GetValue("runGenMuonHistograms", runGenMuonHistograms);
   config.GetValue("runGenMuonVertexCollectionHistograms", runGenMuonVertexCollectionHistograms);
   config.GetValue("runABCDHistograms", runABCDHistograms);
+  config.GetValue("runSingleMuonABCDHistograms", runSingleMuonABCDHistograms);
   config.GetValue("runMuonTriggerObjectsHistograms", runMuonTriggerObjectsHistograms);
   config.GetValue("runABCDMothersHistograms", runABCDMothersHistograms);
   config.GetValue("runFakesHistograms", runFakesHistograms);
   config.GetValue("ignoreDimuons", ignoreDimuons);
   config.GetValue("runMuonMatchingRatioEffectHistograms", runMuonMatchingRatioEffectHistograms);
+  config.GetValue("runNminus1Histograms", runNminus1Histograms);
   config.GetValue("runGenLevelABCD", runGenLevelABCD);
 
   cutFlowManager->RegisterCut("initial");
@@ -79,15 +81,15 @@ int main(int argc, char **argv) {
     if (!ignoreDimuons) {
       ttalpsObjectsManager->InsertNonLeadingMuonVertexCollections(event);
       ttalpsObjectsManager->InsertMuonVertexCollection(event);
-      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
+      ttalpsObjectsManager->InsertNminus1VertexCollections(event);
     }
     map<string, float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
   
     histogramsHandler->SetEventWeights(eventWeights);
   
     cutFlowManager->SetEventWeight(eventWeights["default"]);
-    if (!ignoreDimuons) {
+    if (!ignoreDimuons && !runNminus1Histograms) {
       bool passesDimuonCuts = false;
       for (string category : categories) {
         passesDimuonCuts |= ttAlpsCuts->PassesDimuonCuts(event, cutFlowManager, category);
@@ -103,7 +105,7 @@ int main(int argc, char **argv) {
     if (runLLPNanoAODHistograms) {
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event);
       if (!ignoreDimuons) {
-        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event);
+        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event, runNminus1Histograms);
       }
     }
     if (runMuonTriggerObjectsHistograms) {
@@ -135,6 +137,9 @@ int main(int argc, char **argv) {
     }
     if (runABCDHistograms) {
       ttalpsHistogramsFiller->FillABCDHistograms(event, runGenLevelABCD);
+    }
+    if (runSingleMuonABCDHistograms) {
+      ttalpsHistogramsFiller->FillSingleMuonABCDHistograms(event);
     }
     if (runABCDMothersHistograms) {
       ttalpsHistogramsFiller->FillABCDMothersHistograms(event, runFakesHistograms);

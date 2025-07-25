@@ -44,6 +44,7 @@ samples_params = {
     "TWminustoLNu2Q"    : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
     "TbarWplustoLNu2Q"  : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
     "TBbarQ"            : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
+    "TbarBQ"            : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
 
     "TTZTo"             : {"color": cms_colors[6] , "legend_column": 2, "legend_row": 4, "legend_title": "t#bar{t}Z"              },
     "TTLL"              : {"color": cms_colors[6] , "legend_column": 2, "legend_row": 4, "legend_title": "t#bar{t}Z"              },

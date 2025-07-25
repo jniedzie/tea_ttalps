@@ -15,10 +15,10 @@ cross_sections = get_cross_sections(year)
 # ------------------------------------------
 
 # do_region = "SR"
-do_region = "SRnewMatching"
+# do_region = "SRnewMatching"
 # do_region = "SRnoIso"
 # do_region = "JPsiCR"
-# do_region = "JPsiCRnewMatching"
+do_region = "JPsiCRnewMatching"
 # do_region = "JPsiCRwithIso"
 # do_region = "ttZCR"
 # do_region = "VVCR"
@@ -54,7 +54,8 @@ if do_nonresonant_signal_as_background:
 # category = "_PatDSA"
 category = "_DSA"
 
-exclude_backgrounds_with_less_than = 10  # entries
+# exclude_backgrounds_with_less_than = 10  # entries
+exclude_backgrounds_with_less_than = 3  # entries
 
 # binning always expressed in bin numbers, not values
 optimal_parameters = {
@@ -84,18 +85,23 @@ optimal_parameters = {
     # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "logPt", (11, 10), "D"), # 12 points
     # ("_PatDSA", "SRnewMatching"): ("absPtLxyDPhi2", "logDxyPVTraj1", (13, 16), "D"), # 13 points
     # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (7, 12), "A"), # 11 points
-    ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (23, 10), "D"), # 10 points
-    ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
-    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
+    # ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (23, 10), "D"), # 10 points
+    # ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
     
     # new matching DSAChi2DCADPhi (with new dimuonEff SFs)
     ("_Pat", "SRnewMatching"): ("logAbsCollinearityAngle", "pt", (23, 10), "D"), # 10 points
     ("_PatDSA", "SRnewMatching"): ("log3Dangle", "logDxyPVTraj1", (13, 5), "D"), # 12 points
-    ("_DSA", "SRnewMatching"): ("logLxy", "outerDR", (10, 8), "A"),  # 11 points
+    # ("_DSA", "SRnewMatching"): ("logLxy", "log3Dangle", (19, 10), "A"),  # 15 points
+    ("_DSA", "SRnewMatching"): ("logLxy", "log3Dangle", (21, 16), "A"),  # 12 points 2022postEE
+    # ("_DSA", "SRnewMatching"): ("logDxyPVTrajSig2", "logInvMass", (22, 9), "A"),  # 14 points
+    # ("_DSA", "SRnewMatching"): ("logLxySignificance", "logInvMass", (10, 8), "A"),  # 12 points
     ("_Pat", "JPsiCRnewMatching"): ("logAbsPtLxyDPhi1", "logDeltaIso03", (11, 14), "A"), 
     ("_PatDSA", "JPsiCRnewMatching"): ("logLxy", "logLeadingPt", (10, 11), "D"),    
-    # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (9, 7), "D"),
-    ("_DSA", "JPsiCRnewMatching"): ("logLxy", "leadingPt", (22, 7), "D"),
+    ("_DSA", "JPsiCRnewMatching"): ("logLxy", "logPt", (9, 7), "D"),
+    # ("_DSA", "JPsiCRnewMatching"): ("logLxy", "leadingPt", (22, 7), "D"),
+
+    ("_DSA", "tt1DSACR"): ("logDxyPVTraj", "pt", (22, 7), "D"),
 
     # optimized on MC (rebin 4, μ pt > 8 GeV):
     # ("_Pat", "SR"): ("invMass", "logDeltaSquaredIso03", (23, 2), "C"),
@@ -249,7 +255,7 @@ skims = {
     ),
     "SRnewMatching": (
         "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAChi2DCADPhi", "_LooseNonLeadingMuonsVertexSegmentMatch" #new dimuonEff SFs
-        # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_JPsiSFminBkg3"
+        # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
         # "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAIso", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "SRnoIso": ("skimmed_looseSemimuonic_v2_SR", "_SRDimuonsNoIso", "_LooseNonLeadingMuonsVertexSegmentMatch"),
@@ -298,20 +304,24 @@ output_path = (
 )
 if username == "lrygaard":
     output_path = (
-        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/wipPlots/results_"
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/wipPlots/results_{year}_"
         f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
     )
     if not do_nonresonant_signal_as_background:
       output_path = (
-        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_"
+        f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_{year}_"
         f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
       )
 output_path += "_data" if do_data else "_mc"
 output_path += category
 
 # hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
-# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
+# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
+# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_DSAEffSFs_jecSFs"
+hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
+if year == "2022postEE":
+    hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_dimuonEffSFs_jecSFs"
+
 background_hist_path = (
     f"{hist_base_path}"
     f"{background_skim[1]}{background_skim[2]}"
@@ -320,6 +330,9 @@ signal_hist_path = f"{hist_base_path}{signal_skim[1]}{signal_skim[2]}"
 
 signal_path_pattern = "signals/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 background_path_pattern = "backgrounds2018/{}/{}/{}/histograms.root"
+if year == "2022postEE":
+  signal_path_pattern = "signals2022postEE/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
+  background_path_pattern = "backgrounds2022postEE/{}/{}/{}/histograms.root"
 
 data_path = f"collision_data2018/SingleMuon2018_{background_skim[0]}_{background_hist_path}.root"
 
@@ -348,9 +361,9 @@ config_helper = TTAlpsABCDConfigHelper(
 )
 
 if do_nonresonant_signal_as_background:
-  background_samples, backgrounds = config_helper.get_signal_as_background_samples()
+  background_samples, backgrounds = config_helper.get_signal_as_background_samples(year)
 else:
-  background_samples, backgrounds = config_helper.get_background_samples()
+  background_samples, backgrounds = config_helper.get_background_samples(year)
 samples = background_samples
 background_params = config_helper.get_background_params(backgrounds)
 

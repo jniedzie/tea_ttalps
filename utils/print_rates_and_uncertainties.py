@@ -2,6 +2,7 @@ import ROOT
 import argparse
 import importlib
 import os
+import math
 
 from Logger import fatal, info, error
 from limits_producer import get_datacard_file_name
@@ -137,6 +138,7 @@ def main():
   info(f"\n\nBackground Rate: {background_rate:.1f} +/- {background_err:.1f}")
 
   signal_rates = {}
+  signal_significances = {}
 
   for name, rate in rates.items():
     mass = name.split("_")[2]
@@ -159,6 +161,7 @@ def main():
     signal_err = uncertainties[name]["stat_err_sig"] * signal_rate
 
     signal_rates[(mass, ctau)] = (signal_rate, signal_err)
+    signal_significances[(mass, ctau)] = signal_rate / math.sqrt(signal_rate + background_rate)
 
   # get a list of ctaus in increasing order:
   masses = sorted(set([mass for mass, _ in signal_rates.keys()]))
@@ -177,6 +180,20 @@ def main():
       if (mass, ctau) in signal_rates:
         rate, err = signal_rates[(mass, ctau)]
         print(f"{rate:.1f} +/- {err:.1f}", end="\t")
+      else:
+        print("N/A", end="\t\t")
+
+  # print the signal significance for each mass
+  print("\n\nSignal Significances:\n")
+  print("\t\t", end="")
+  for ctau in ctaus:
+    print(f"{ctau:.0e} mm", end="\t")
+  for mass in masses:
+    print(f"\n{mass:.2f} GeV:\t", end="")
+    for ctau in ctaus:
+      if (mass, ctau) in signal_significances:
+        significance = signal_significances[(mass, ctau)]
+        print(f"{significance:.2f}", end="\t\t")
       else:
         print("N/A", end="\t\t")
 

@@ -15,7 +15,7 @@ eventCuts = {
 
 # year = "2016preVFP"
 year = "2018"
-# year = "2022preEE"
+# year = "2022postEE"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
@@ -46,6 +46,9 @@ runGenMuonVertexCollectionHistograms = False
 # Create 2D histograms for ABCD background estimation
 runABCDHistograms = True
 
+# Create 2D histograms in the same way as for ABCD, but for single muon variables
+runSingleMuonABCDHistograms = True
+
 # [MC only] Create histograms with mother PIDs of dimuons entering ABCD histograms (quite heavy, turn off if not needed)
 runABCDMothersHistograms = False
 
@@ -60,8 +63,14 @@ runMuonMatchingRatioEffectHistograms = False
 # Apply Segment Matching on the GoodMuonVertexCollections after the dimuon selection
 applySegmentMatchingAfterSelections = True
 
+# Inlude N-1 histograms - NOTE: this will ignore the dimuon selection in order to include all N-1 dimuons properly
+# Do not use for CR with dimuon selection
+runNminus1Histograms = False
+
 weightsBranchName = "genWeight"
 rhoBranchName = "fixedGridRhoFastjetAll" # for jec unc.
+if "22" in year or "23" in year:
+    rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 eventsTreeNames = ("Events",)
 
 specialBranchSizes = {
@@ -108,6 +117,9 @@ dimuonSelection = skim[1]
 if dimuonSelection == "":
     dimuonSelection = None
     ignoreDimuons = True
+elif "JPsi" in dimuonSelection or "Z" in dimuonSelection:
+  runNminus1Histograms = False
+
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonsDSAChi2DCADPhi": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "Chi2DCACut", "BestDimuonVertex"]),
@@ -129,6 +141,8 @@ if muonVertexCollectionInput == "":
 
 histParams = ()
 histParams2D = ()
+irregularHistParams = ()
+irregularHistParams2D = ()
 
 helper = TTAlpsHistogrammerConfigHelper(
     muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput)
@@ -138,6 +152,10 @@ histParams += helper.get_basic_params()
 
 if runLLPNanoAODHistograms:
   histParams += helper.get_llp_params()
+  irregularHistParams += helper.get_llp_irregular_params()
+
+if runNminus1Histograms:
+  histParams += helper.get_nminus1_params()
 
 if runGenMuonVertexCollectionHistograms:
   histParams += helper.get_gen_vertex_params()
@@ -147,6 +165,7 @@ if runGenMuonHistograms:
 
 if runLLPTriggerHistograms:
   histParams += helper.get_trigger_params()
+
 if runMuonMatchingHistograms:
   histParams += helper.get_matching_params()
   histParams2D += helper.get_2D_matching_params()
@@ -154,6 +173,10 @@ if runMuonMatchingHistograms:
 if runABCDHistograms:
   histParams += helper.get_abcd_1Dparams()
   histParams2D += helper.get_abcd_2Dparams(runGenLevelABCD)
+
+if runSingleMuonABCDHistograms:
+  histParams2D += helper.get_singleMuon_abcd_2Dparams()
+  irregularHistParams2D += helper.get_singleMuon_abcd_irregular_2Dparams()
 
 if runABCDMothersHistograms:
   histParams2D += helper.get_abcd_mothers_2Dparams()

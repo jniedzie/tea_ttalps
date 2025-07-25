@@ -25,6 +25,8 @@ class TTAlpsEvent {
   // returns all Loose (PAT and DSA) muons in the event. If matchingParams are defined it returns the collection after the first matching
   std::shared_ptr<NanoMuons> GetAllLooseMuons();
 
+  // returns GetTTAlpsEventMuons if a dimuon vertex collection is defined, otherwise returns all loose muons
+  std::shared_ptr<NanoMuons> GetEventMuons();
   // returns 2 muons from the dimuon vertex (if there is one defined in the config), and the leading remaining muon
   std::shared_ptr<NanoMuons> GetTTAlpsEventMuons();
 

@@ -16,6 +16,7 @@ input_skim = "skimmed_looseSemimuonic_v2_merged"
 # output_skim = "skimmed_looseSemimuonic_v2_SR"
 # output_skim = "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV"
 output_skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarLike1DSA"
 
 # tt̄ (μ+jets) CR
 # input_skim = "skimmed_looseSemimuonic_v2_merged"
