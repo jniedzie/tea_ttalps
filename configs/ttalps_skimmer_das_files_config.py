@@ -1,5 +1,6 @@
 from ttalps_samples_list import dasBackgrounds2016PreVFP, dasData2016PreVFP
 from ttalps_samples_list import dasBackgrounds2016PostVFP, dasData2016PostVFP
+from ttalps_samples_list import dasBackgrounds2017, dasData2017
 import os
 import subprocess
 from Logger import info
@@ -33,7 +34,7 @@ dbs_instance = "prod/phys03"
 
 dasSamples = dasBackgrounds2018
 
-# # For DAS datasets:
+# For DAS datasets:
 input_output_file_list = []
 
 for path, das_dataset in dasSamples.items():
@@ -51,5 +52,8 @@ for path, das_dataset in dasSamples.items():
 
 
 # # For local path to DAS files:
+# output_trees_dir = ""
+# output_hists_dir = ""
+# input_directory = ""
 # input_dasfiles = ""
-# input_dasfiles_and_output_trees_dirs = dirs
+# input_dasfiles_and_output_trees_dirs = [(v, f"{base_path}/{k}/{output_skim}/") for k, v in dasSamples.items()]

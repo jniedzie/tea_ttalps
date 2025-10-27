@@ -61,8 +61,6 @@ dasData2017_standard = {
 dasData2017 = {
     "collision_data2017/SingleMuon2017B": "/SingleMuon/lrygaard-LLPnanoAODv1_Run2017B-09Aug2019_UL2017-v1-00000000000000000000000000000000/USER",  # 4,803363110 fb-1
     "collision_data2017/SingleMuon2017C": "/SingleMuon/lrygaard-LLPnanoAODv1_Run2017C-09Aug2019_UL2017-v1-00000000000000000000000000000000/USER",  # 9,572666848 fb-1
-    "collision_data2017/SingleMuon2017D": "/SingleMuon/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2017D-09Aug2019_UL2017-v1-00000000000000000000000000000000/USER",
-    "collision_data2017/SingleMuon2017E": "/SingleMuon/lrygaard-LLPnanoAODv1_Run2017E-09Aug2019_UL2017-v1-00000000000000000000000000000000/USER",
     "collision_data2017/SingleMuon2017F": "/SingleMuon/lrygaard-LLPnanoAODv1_Run2017F-09Aug2019_UL2017-v1-00000000000000000000000000000000/USER",  # 13,538886094 fb-1
 }
 
@@ -103,11 +101,11 @@ dasSignals2017_60GeV = {
 }
 
 dasBackgrounds2017 = {key: value for d in (
-    TT_dasBackgrounds2017,
-    ST_dasBackgrounds2017,
-    DY_dasBackgrounds2017,
-    V_dasBackgrounds2017,
-    QCD_dasBackgrounds2017
+    # TT_dasBackgrounds2017,
+    # ST_dasBackgrounds2017,
+    # DY_dasBackgrounds2017,
+    # V_dasBackgrounds2017,
+    QCD_dasBackgrounds2017,
 ) for key, value in d.items()}
 
 dasSignals2017 = {
