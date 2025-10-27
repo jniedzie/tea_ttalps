@@ -1,5 +1,6 @@
 from ttalps_extra_collections import *
 from golden_json_config import goldenJsons
+from ttalps_triggers import get_DoubleMu_trigger
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
@@ -17,10 +18,7 @@ applySignalLikeSkimming = False
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
-triggerSelection = (
-    "HLT_DoubleL2Mu23NoVtx_2Cha",
-    "HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed",
-)
+triggerSelection = get_DoubleMu_trigger(year)
 
 eventCuts = {
     "MET_pt": (30, 9999999),

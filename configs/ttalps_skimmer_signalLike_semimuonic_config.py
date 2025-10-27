@@ -1,9 +1,7 @@
 from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 
-# year = "2016preVFP"
 year = "2018"
-# year = "2022postEE"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 

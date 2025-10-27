@@ -25,21 +25,25 @@ samples_params = {
     # Data
     # ------------------------------------------------------------------------------
 
+    "SingleMuon2016preVFP"  : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2016preVFP"  },
+    "SingleMuon2016postVFP" : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2016postVFP" },
+    "SingleMuon2017"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2017"        },
     "SingleMuon2018"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2018"        },
     "Muon2022preEE"         : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2022preEE"         },
     "Muon2022postEE"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2022postEE"        },
+    "Muon2023preBPix"       : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023preEE"         },
+    "Muon2023postBPix"      : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023postEE"        },
 
     # ------------------------------------------------------------------------------
     # Backgrounds
     # ------------------------------------------------------------------------------
     
     "TTToSemiLeptonic"  : {"color": cms_colors[0] , "legend_column": 2, "legend_row": 1, "legend_title": "t#bar{t} semi-leptonic" },
+    "TTtoLNu2Q"         : {"color": cms_colors[0] , "legend_column": 2, "legend_row": 1, "legend_title": "t#bar{t} semi-leptonic" },
 
     "TTTo2L2Nu"         : {"color": cms_colors[4] , "legend_column": 2, "legend_row": 2, "legend_title": "t#bar{t} leptonic"      },
     "TTto2L2Nu"         : {"color": cms_colors[4] , "legend_column": 2, "legend_row": 2, "legend_title": "t#bar{t} leptonic"      },
-    
-    "TTtoLNu2Q"         : {"color": cms_colors[0] , "legend_column": 2, "legend_row": 2, "legend_title": "t#bar{t} semi-leptonic" },
-    
+        
     "ST_t"              : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
     "TWminustoLNu2Q"    : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
     "TbarWplustoLNu2Q"  : {"color": cms_colors[3] , "legend_column": 2, "legend_row": 3, "legend_title": "Single top"             },
@@ -76,23 +80,33 @@ samples_params = {
     # Signals
     # ------------------------------------------------------------------------------
 
-    "tta_mAlp-0p35GeV_ctau-1e1mm": {"color": ROOT.kGreen+1, "legend_column": 0, "legend_row": 1, "legend_title": "0.35 GeV, 1e1 mm"},
+    "tta_mAlp-0p35GeV_ctau-1e0mm": {"color": ROOT.kGreen+1, "legend_column": 0, "legend_row": 1, "legend_title": "0.35 GeV, 1 mm"},
+    "tta_mAlp-0p35GeV_ctau-1e1mm": {"color": ROOT.kGreen+1, "legend_column": 0, "legend_row": 1, "legend_title": "0.35 GeV, 1 cm"},
     "tta_mAlp-0p35GeV_ctau-1e3mm": {"color": ROOT.kRed+1  , "legend_column": 0, "legend_row": 2, "legend_title": "0.35 GeV, 1e3 mm"},
     "tta_mAlp-0p35GeV_ctau-1e5mm": {"color": ROOT.kRed+3  , "legend_column": 0, "legend_row": 3, "legend_title": "0.35 GeV, 1e5 mm"},
     
-    "tta_mAlp-2GeV_ctau-1e-5mm": {"color": ROOT.kGreen+1, "legend_column": 0, "legend_row": 1, "legend_title": "2 GeV, 1e-5 mm"},
-    "tta_mAlp-2GeV_ctau-1e1mm": {"color": ROOT.kRed+1, "legend_column": 0, "legend_row": 2, "legend_title": "2 GeV, 1e1 mm"},
-    "tta_mAlp-2GeV_ctau-1e2mm": {"color": ROOT.kRed+1  , "legend_column": 0, "legend_row": 2, "legend_title": "2 GeV, 1e2 mm"},
-    "tta_mAlp-2GeV_ctau-1e3mm": {"color": ROOT.kBlue+1  , "legend_column": 0, "legend_row": 4, "legend_title": "2 GeV, 1e3 mm"},
+    "tta_mAlp-2GeV_ctau-1e-5mm": {"color": ROOT.kGreen+1, "legend_column": 0, "legend_row": 0, "legend_title": "2 GeV, 10 nm"},
+    "tta_mAlp-2GeV_ctau-1e0mm": {"color": ROOT.kGreen+3, "legend_column": 0, "legend_row": 1, "legend_title": "2 GeV, 1 mm"},
+    "tta_mAlp-2GeV_ctau-1e1mm": {"color": ROOT.kRed+1, "legend_column": 0, "legend_row": 2, "legend_title": "2 GeV, 1 cm"},
+    "tta_mAlp-2GeV_ctau-1e2mm": {"color": ROOT.kRed+3  , "legend_column": 0, "legend_row": 3, "legend_title": "2 GeV, 10 cm"},
+    "tta_mAlp-2GeV_ctau-1e3mm": {"color": ROOT.kBlue+1  , "legend_column": 0, "legend_row": 4, "legend_title": "2 GeV, 1 m"},
     
-    "tta_mAlp-12GeV_ctau-1e1mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 5, "legend_title": "12 GeV, 1e1 mm"},
-    "tta_mAlp-12GeV_ctau-1e2mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 3, "legend_title": "12 GeV, 1e2 mm"},
-    "tta_mAlp-12GeV_ctau-1e3mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 7, "legend_title": "12 GeV, 1e3 mm"},
+    "tta_mAlp-12GeV_ctau-1e0mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 3, "legend_title": "12 GeV, 1 mm"},
+    "tta_mAlp-12GeV_ctau-1e1mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 3, "legend_title": "12 GeV, 1 cm"},
+    "tta_mAlp-12GeV_ctau-1e2mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 3, "legend_title": "12 GeV, 10 cm"},
+    "tta_mAlp-12GeV_ctau-1e3mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 7, "legend_title": "12 GeV, 1 m"},
+
+    "tta_mAlp-30GeV_ctau-1e1mm": {"color": ROOT.kRed+3, "legend_column": 0, "legend_row": 4, "legend_title": "30 GeV, 1 cm"},
+    "tta_mAlp-60GeV_ctau-1e1mm": {"color": ROOT.kGreen+3, "legend_column": 0, "legend_row": 5, "legend_title": "60 GeV, 1 cm"},
 
     "tta_mAlp-60GeV_ctau-1e2mm": {"color": ROOT.kRed+3, "legend_column": 0, "legend_row": 4, "legend_title": "60 GeV, 1e2 mm"},
     
-    "TTALPto2Mu_MALP-2_ctau-1e2mm": {"color": ROOT.kBlue+1  , "legend_column": 1, "legend_row": 2, "legend_title": "2 GeV, 10 cm, central"},
-    "TTALPto2Mu_MALP-2_ctau-1e0mm": {"color": ROOT.kBlue+1  , "legend_column": 1, "legend_row": 2, "legend_title": "2 GeV, 1 mm, central"},
+    # "tta_mAlp-0p35GeV_ctau-1e1mm": {"color": ROOT.kBlue+1, "legend_column": 0, "legend_row": 1, "legend_title": "0.35 GeV, 1 cm"},
+    # "tta_mAlp-2GeV_ctau-1e1mm": {"color": ROOT.kGreen+1, "legend_column": 0, "legend_row": 2, "legend_title": "2 GeV, 1 cm"},
+    # "tta_mAlp-12GeV_ctau-1e1mm": {"color": ROOT.kRed+1, "legend_column": 0, "legend_row": 3, "legend_title": "12 GeV, 1 cm"},
+    # "tta_mAlp-2GeV_ctau-1e3mm": {"color": ROOT.kBlue+1  , "legend_column": 0, "legend_row": 4, "legend_title": "2 GeV, 1 m"},
+
+
 }
 
 

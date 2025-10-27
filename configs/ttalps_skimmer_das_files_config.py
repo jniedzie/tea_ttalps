@@ -1,6 +1,6 @@
-from ttalps_samples_list import dasBackgrounds2016
-from ttalps_samples_list import dasSamples2018, dasData2018, dasSignals2018, dasBackgrounds2018, dasData2018_standard
-from ttalps_samples_list import dasBackgrounds2022preEE
+from ttalps_samples_list import dasSamples2018, dasData2017, dasSignals2018, dasSignalsPrivate2018, dasBackgrounds2018, dasData2018_standard
+from ttalps_samples_list import dasBackgrounds2022postEE, dasBackgrounds2023preBPix, dasData2023postBPix, dasBackgrounds2023postBPix
+from ttalps_samples_list import dasSignals2023postBPix, dasSignals2017, dasData2016PreVFP, dasSignals2016PreVFP, dasSignals2016PostVFP
 import os
 
 max_files = -1
@@ -8,7 +8,6 @@ max_files = -1
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Loose semimuonic skims - unmerged directories to later merge files
-# output_skim = "skimmed_looseSemimuonicv1_unmerged"
 output_skim = "skimmed_looseSemimuonic_v2"
 
 # Loose semielectronic skims
@@ -35,15 +34,7 @@ input_directory = ""
 dbs_instance = "prod/phys03"
 # dbs_instance = "prod/global"
 
-# dasSamples = dasBackgrounds2016
-
-dasSamples = dasSamples2018
-# dasSamples = dasData2018
-# dasSamples = dasSignals2018
-# dasSamples = dasBackgrounds2018
-# dasSamples = dasData2018_standard
-
-# dasSamples = dasBackgrounds2022preEE
+dasSamples = dasBackgrounds2018
 
 dirs = [(v, f"{base_path}/{k}/{output_skim}/") for k, v in dasSamples.items()]
 

@@ -13,11 +13,27 @@ applyTTZLikeSkimming = False
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
+# For the signal like skimming all given muonMatchingParams are applied together
+# If only one matching method should be used ONLY include that one method
+# We might want to update the logic of this in the future
+# Matching methods implemented are:
+# "Segment" : max matching ratio (eg. 2.0/3.0)
+# "DR" : max Delta R (eg. 0.1)
+# "OuterDR" : max Delta R (eg. 0.1)
+# "ProxDR" : max Delta R (eg. 0.1)
+muonMatchingParams = {
+    "Segment": 2.0/3.0,
+    # "Segment": 1.5,
+    # "DR" : 0.1,
+    # "OuterDR" : 0.1,
+    # "ProxDR" : 0.1,
+}
+
 eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 1),  #  This is against TOP recommendation, but we do it to keep it the same as SR
-    "nLooseDSAMuons": (1, 1),
-    "nLoosePATMuons": (1, 1),
+    "nLooseDSAMuonsSegmentMatch": (1, 1),
+    "nLoosePATMuonsSegmentMatch": (1, 1),
     "nLooseElectrons": (0, 0),
     # "nGoodTightBtaggedJets": (2, 9999999),  # TODO: consider tight WP and/or 2 b-tags
 }
