@@ -326,6 +326,8 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
       warn() << "Couldn't fill dimuon histogram for one of the variables" << endl;
     }
   }
+  histogramsHandler->Fill(name + "_vy_vs_vx", dimuon->GetAs<float>("vx"), dimuon->GetAs<float>("vy"));
+  histogramsHandler->Fill(name + "_vy_vs_vx_trackerOnly", dimuon->GetAs<float>("vx"), dimuon->GetAs<float>("vy"));
 
   histogramsHandler->Fill(name + "_Lxy", dimuon->GetLxyFromPV());
   histogramsHandler->Fill(name + "_logLxy", log10(dimuon->GetLxyFromPV()));

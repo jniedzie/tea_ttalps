@@ -187,7 +187,7 @@ class TTAlpsHistogrammerConfigHelper:
         ("TightMuons", "subleadingPt", 2000, 0, 1000, ""),
         ("TightMuons", "eta", 300, -3, 3, ""),
         ("TightMuons", "phi", 300, -3, 3, ""),
-        
+
         ("Event", "nLooseElectrons", 50, 0, 50, ""),
         ("LooseElectrons", "pt", 2000, 0, 1000, ""),
         ("LooseElectrons", "leadingPt", 2000, 0, 1000, ""),
@@ -257,6 +257,14 @@ class TTAlpsHistogrammerConfigHelper:
         )
         for name_ in names:
           self.__insert_Nminus1Histograms2D(params, name_)
+
+    return tuple(params)
+
+  def get_llp_2d_params(self):
+    params = []
+
+    for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
+      self.__insert_MuonVertex2DHistograms(params, collection)
 
     return tuple(params)
 
@@ -547,7 +555,7 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
-    collections = ("BestDimuonVertex","BestPFIsoDimuonVertex")
+    collections = ("BestDimuonVertex", "BestPFIsoDimuonVertex")
 
     variables = (
 
@@ -776,6 +784,12 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "invMassJPsiBin_logNormChi2Cut4", 1, 2.4, 3.9, ""),
     )
 
+  def __insert_MuonVertex2DHistograms(self, params, name):
+    params += (
+        (f"{name}_vy_vs_vx", 1000, -1000, 1000, 1000, -1000, 1000, ""),
+        (f"{name}_vy_vs_vx_trackerOnly", 1000, -130, 130, 1000, -130, 130, ""),
+    )
+
   def __insert_Nminus1Histograms(self, params, name):
     params += (
         (name, "invMass", 20000, 0, 200, ""),
@@ -843,7 +857,7 @@ class TTAlpsHistogrammerConfigHelper:
     )
 
   def __insert_SingleMuonQualityHistograms(self, params, name):
-    
+
     params += (
         ("Event", "n"+name, 50, 0, 50, ""),
         (name, "nSegments", 100, 0, 100, ""),
