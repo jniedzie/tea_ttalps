@@ -47,7 +47,8 @@ int main(int argc, char **argv) {
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
   bool runMuonTriggerObjectsHistograms;
   bool runABCDHistograms, runSingleMuonABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
-  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms, runGenLevelABCD, runNminus1Histograms;
+  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms, runNminus1Histograms;
+  bool runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -62,7 +63,9 @@ int main(int argc, char **argv) {
   config.GetValue("ignoreDimuons", ignoreDimuons);
   config.GetValue("runMuonMatchingRatioEffectHistograms", runMuonMatchingRatioEffectHistograms);
   config.GetValue("runNminus1Histograms", runNminus1Histograms);
-  config.GetValue("runGenLevelABCD", runGenLevelABCD);
+  config.GetValue("runGenLevelResonancesABCD", runGenLevelResonancesABCD);
+  config.GetValue("runGenLevelMothersABCD", runGenLevelMothersABCD);
+  config.GetValue("runRevertedMatching", runRevertedMatching);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -78,11 +81,16 @@ int main(int argc, char **argv) {
     auto event = eventReader->GetEvent(iEvent);
     ttalpsObjectsManager->InsertMuonTriggerCollections(event);
     ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
+    ttalpsObjectsManager->InsertNonLeadingLooseMuonsCollections(event);
+    ttalpsObjectsManager->InsertRevertedMatchedDSAMuons(event);
     if (!ignoreDimuons) {
-      ttalpsObjectsManager->InsertNonLeadingMuonVertexCollections(event);
+      // ttalpsObjectsManager->InsertNonLeadingMuonVertexCollections(event);
       ttalpsObjectsManager->InsertMuonVertexCollection(event);
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
+      if (runRevertedMatching) {
+        ttalpsObjectsManager->InsertRevertedMatchedDSAMuonVertexCollection(event);
+      }
     }
     map<string, float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
   
@@ -103,9 +111,9 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillDefaultVariables(event);
     }
     if (runLLPNanoAODHistograms) {
-      ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event);
+      ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event, runRevertedMatching);
       if (!ignoreDimuons) {
-        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event, runNminus1Histograms);
+        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event, runNminus1Histograms, runRevertedMatching);
       }
     }
     if (runMuonTriggerObjectsHistograms) {
@@ -119,7 +127,7 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVariables(event);
     }
     if (runGenMuonVertexCollectionHistograms) {
-      ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVertexCollectionsVariables(event);
+      ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVertexCollectionsVariables(event, runNminus1Histograms);
     }
 
     if (runLLPTriggerHistograms) {
@@ -136,7 +144,7 @@ int main(int argc, char **argv) {
       }
     }
     if (runABCDHistograms) {
-      ttalpsHistogramsFiller->FillABCDHistograms(event, runGenLevelABCD);
+      ttalpsHistogramsFiller->FillABCDHistograms(event, runGenLevelResonancesABCD, runGenLevelMothersABCD);
     }
     if (runSingleMuonABCDHistograms) {
       ttalpsHistogramsFiller->FillSingleMuonABCDHistograms(event);
@@ -167,7 +175,7 @@ int main(int argc, char **argv) {
   auto &logger = Logger::GetInstance();
   logger.Print();
 
-  // info() << "\nAll done, exitting" << endl;
-  // _exit(0);
+  info() << "\nAll done, exitting" << endl;
+  _exit(0);
   return 0;
 }
