@@ -1,6 +1,5 @@
 import os
 import ROOT
-from ttalps_cross_sections import get_cross_sections
 from ttalps_luminosities import get_luminosity
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 from Histogram import Histogram2D
@@ -11,7 +10,6 @@ from HistogramNormalizer import NormalizationType
 # years = ["2022preEE","2022postEE","2023preBPix","2023postBPix"]
 years = ["2018",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
-# cross_sections = get_cross_sections(year)
 luminosity_sum = 0
 year = ""
 for year_ in years:
@@ -23,7 +21,7 @@ for year_ in years:
 # ------------------------------------------
 
 # do_region = "SR"
-# do_region = "SR_dimuonEffSFs"
+# do_region = "SR_dimuonEffSFs" # temprary tests with generated dimuon eff. SFs
 do_region = "JPsiCR"
 # do_region = "ttZCR"
 # do_region = "VVCR"
@@ -54,7 +52,6 @@ if do_nonresonant_signal_as_background:
 # category = "_PatDSA"
 category = "_DSA"
 
-exclude_backgrounds_with_less_than = 3  # entries
 exclude_backgrounds_for_years = {
   "2016preVFP": 3,
   "2016postVFP": 3,
@@ -249,13 +246,16 @@ else:
   signal_skim = skims[do_region][1]
 
 username = os.getenv("USER")
+tea_ttalps_path = "tea_ttalps"
+if username == "lrygaard":
+  tea_ttalps_path = "TTALP/tea_ttalps"
 output_path = (
-    f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_{year}/signal_resonances/results_{year}_"
+    f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/signal_resonances/results_{year}_"
     f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
 )
 if not do_nonresonant_signal_as_background:
   output_path = (
-    f"/afs/desy.de/user/{username[0]}/{username}/TTALP/tea_ttalps/abcd/results_{year}/results_{year}_"
+    f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/results_{year}_"
     f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
   )
 output_path += "_data" if do_data else "_mc"
