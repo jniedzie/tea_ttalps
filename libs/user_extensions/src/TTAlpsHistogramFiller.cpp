@@ -163,6 +163,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
   string muonVertexCollectionName = muonVertexCollection.first;
   FillMuonVertexHistograms(event, muonVertexCollectionName);
   if (runRevertedMatching) {
+    FillMuonVertexHistograms(event, muonVertexCollectionName+"_revertedMatching");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToPatDSA");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToDSA");
   }
@@ -248,9 +249,11 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<NanoMuon> 
   histogramsHandler->Fill(name + "_isPAT", isPATMuon);
   histogramsHandler->Fill(name + "_IsTight", IsTightMuon);
 
-  float deltaZfromTightMuon = fabs(leadingTightMuon->GetAs<float>("dz") - muon->GetAs<float>("dz"));
-  histogramsHandler->Fill(name + "_absDzFromLeadingTight", deltaZfromTightMuon);
-  histogramsHandler->Fill(name + "_logAbsDzFromLeadingTight", TMath::Log10(deltaZfromTightMuon));
+  if (leadingTightMuon) {
+    float deltaZfromTightMuon = fabs(leadingTightMuon->GetAs<float>("dz") - muon->GetAs<float>("dz"));
+    histogramsHandler->Fill(name + "_absDzFromLeadingTight", deltaZfromTightMuon);
+    histogramsHandler->Fill(name + "_logAbsDzFromLeadingTight", TMath::Log10(deltaZfromTightMuon));
+  }
 
   histogramsHandler->Fill(name + "_pt_irr", muon->GetAs<float>("pt"));
   histogramsHandler->Fill(name + "_absDxyPVTraj_irr", fabs(muon->GetAs<float>("dxyPVTraj")));
@@ -270,7 +273,9 @@ void TTAlpsHistogramFiller::FillLooseMuonsHistograms(const shared_ptr<Event> eve
   auto muons = asNanoMuons(event->GetCollection(collectionName));
 
   auto tightMuons = asNanoMuons(event->GetCollection("TightMuons"));
-  auto leadingTightMuon = tightMuons->at(0);
+  shared_ptr<NanoMuon> leadingTightMuon = nullptr;
+  if (tightMuons->size() > 0)
+    leadingTightMuon = tightMuons->at(0);
 
   FillLooseMuonsHistograms(muons, leadingTightMuon, collectionName);
 }

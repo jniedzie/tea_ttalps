@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVariables(event);
     }
     if (runGenMuonVertexCollectionHistograms) {
-      ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVertexCollectionsVariables(event, runNminus1Histograms);
+      ttalpsHistogramsFiller->FillCustomTTAlpsGenMuonVertexCollectionsVariables(event);
     }
 
     if (runLLPTriggerHistograms) {

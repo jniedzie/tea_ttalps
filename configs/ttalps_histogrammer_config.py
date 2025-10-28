@@ -165,6 +165,7 @@ if runGenMuonVertexCollectionHistograms:
 if runGenMuonHistograms:
   histParams += helper.get_gen_params()
   histParams += helper.get_gen_matched_params()
+  irregularHistParams += helper.get_gen_matched_irregular_params()
 
 if runLLPTriggerHistograms:
   histParams += helper.get_trigger_params()
@@ -175,7 +176,7 @@ if runMuonMatchingHistograms:
 
 if runABCDHistograms:
   histParams += helper.get_abcd_1Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD)
-  histParams2D += helper.get_abcd_2Dparams(runGenLevelResonancesABCD, runABCDMothersHistograms)
+  histParams2D += helper.get_abcd_2Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD)
 
 if runSingleMuonABCDHistograms:
   histParams2D += helper.get_singleMuon_abcd_2Dparams()

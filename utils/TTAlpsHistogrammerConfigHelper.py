@@ -31,6 +31,7 @@ class TTAlpsHistogrammerConfigHelper:
         self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}{category}")
         self.goodMuonVertexCollections.append(f"{muonVertexCollection[0].replace('Best', 'Good')}{category}")
         if runRevertedMatching:
+          self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_revertedMatching{category}")
           self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_matchedToPatDSA{category}")
           self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_matchedToDSA{category}")
       self.bestMuonVertexCollectionCuts = muonVertexCollection[1]
@@ -72,6 +73,7 @@ class TTAlpsHistogrammerConfigHelper:
         "logLeadingPt": (100, -1, 3),
 
         "eta": (100, -3, 3),
+        "logEta": (100, -3, 1),
         "dEta": (100, 0, 3),
         "logDEta": (100, -3, 1),
         "dPhi": (100, 0, 2*pi),
@@ -304,7 +306,6 @@ class TTAlpsHistogrammerConfigHelper:
       )
       for name in names:
         self.__insert_MuonHistograms(params, name)
-        self.__insert_irregular_MuonHistograms(params, name)
         params += (
             ("Event", "n"+name, 50, 0, 50, ""),
             ("Event", "n"+name+"_hmu", 50, 0, 50, ""),
@@ -316,6 +317,18 @@ class TTAlpsHistogrammerConfigHelper:
             (name, "hmu_pt", 4000, 0, 1000, ""),
         )
 
+    return tuple(params)
+
+  def get_gen_matched_irregular_params(self):
+    params = []
+    for collection in self.looseMuonCollections + self.tightMuonCollections:
+      names = (
+          self.__insert_into_name(collection, "FromALP"),
+          self.__insert_into_name(collection, "FromW"),
+      )
+      for name in names:
+        self.__insert_irregular_MuonHistograms(params, name)
+    
     return tuple(params)
 
   def get_gen_params(self):
@@ -653,7 +666,6 @@ class TTAlpsHistogrammerConfigHelper:
     )
 
   def __insert_irregular_MuonHistograms(self, params, name):
-    print(f"name: {name}")     
     params += (
       (name, "absDxyPVTraj_irr", self.absDxy_irr_bins, ""),
       (name, "pt_irr", self.pt_irr_bins, ""),

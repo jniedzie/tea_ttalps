@@ -179,7 +179,7 @@ void TTAlpsObjectsManager::InsertNonLeadingLooseMuonsCollections(shared_ptr<Even
   for (auto muon : *looseMuonsSegmentMatch) {
     if (asNanoMuon(muon)->IsDSA()) {
       // make sure DSA muon is not matched to leading thight muon
-      bool matchFound = asNanoMuon(muon)->HasPATSegmentMatch(leadingTightMuonCollection);
+      bool matchFound = asNanoMuon(muon)->HasPATSegmentMatch(leadingTightMuonCollection, event, segmentRatio);
       if (!matchFound) {
         looseNonLeadingMuonsSegmentMatch->push_back(muon);
         looseNonLeadingDSAMuonsSegmentMatch->push_back(muon);
@@ -354,7 +354,7 @@ void TTAlpsObjectsManager::InsertRevertedMatchedDSAMuonVertexCollection(shared_p
       }
     }
   }
-  event->ReplaceCollection(muonVertexCollectionName,revertedMuonVertexCollection);
+  event->AddCollection(muonVertexCollectionName+"_revertedMatching",revertedMuonVertexCollection);
   event->AddCollection(muonVertexCollectionName+"_matchedToPatDSA",matchedPATDSAMuonVertexCollection);
   event->AddCollection(muonVertexCollectionName+"_matchedToDSA",matchedPATMuonVertexCollection);
 }
