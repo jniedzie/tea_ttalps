@@ -364,34 +364,34 @@ def main():
   ctaus = sorted(set([ctau for _, ctau in signal_rates.keys()]))
   
   # print a header line with the ctaus
-  print("\n\n\t", end="")
+  info("\n\n\t", end="")
   for ctau in ctaus:
-    print(f"{ctau:.0e} mm", end="\t")
-  print()
+    info(f"{ctau:.0e} mm", end="\t")
+  info()
   
   # print the signal rates for each mass
   for mass in masses:
-    print(f"\n{mass:.2f} GeV:\t", end="")
+    info(f"\n{mass:.2f} GeV:\t", end="")
     for ctau in ctaus:
       if (mass, ctau) in signal_rates:
         rate, err = signal_rates[(mass, ctau)]
-        print(f"{rate:.2f} +/- {err:.3f}", end="\t")
+        info(f"{rate:.2f} +/- {err:.3f}", end="\t")
       else:
-        print("N/A", end="\t\t")
+        info("N/A", end="\t\t")
 
   # print the signal significance for each mass
-  print("\n\nSignal Significances:\n")
-  print("\t\t", end="")
+  info("\n\nSignal Significances:\n")
+  info("\t\t", end="")
   for ctau in ctaus:
-    print(f"{ctau:.0e} mm", end="\t")
+    info(f"{ctau:.0e} mm", end="\t")
   for mass in masses:
-    print(f"\n{mass:.2f} GeV:\t", end="")
+    info(f"\n{mass:.2f} GeV:\t", end="")
     for ctau in ctaus:
       if (mass, ctau) in signal_significances:
         significance = signal_significances[(mass, ctau)]
-        print(f"{significance:.2f}", end="\t\t")
+        info(f"{significance:.2f}", end="\t\t")
       else:
-        print("N/A", end="\t\t")
+        info("N/A", end="\t\t")
 
 
   min_uncertainty = {}
