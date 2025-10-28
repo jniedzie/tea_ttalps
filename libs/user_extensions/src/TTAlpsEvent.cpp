@@ -35,8 +35,8 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
-  // NOTE: nanoEventProcessor only do cutsom PU SF for 2018 right now
-  map<string, float> pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
+  // NOTE: nanoEventProcessor change "" to "custom" to do cutsom PU SF for 2018
+  map<string, float> pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "");
   map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTrigger");
 
   int maxNjets = 4;
@@ -113,6 +113,8 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetEventMuons() {
 shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
   auto allMuons = GetAllLooseMuons();
   auto muons = make_shared<NanoMuons>();
+  auto tightMuons = event->GetCollection("TightMuons");
+  auto leadingTightMuon = GetLeadingMuon(asNanoMuons(tightMuons));
   if (!muonVertexCollection.first.empty() && !muonVertexCollection.second.empty()) {
     shared_ptr<PhysicsObjects> vertex = nullptr;
     try {
@@ -122,20 +124,26 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
     }
     if (vertex && vertex->size() > 0) {
       auto muonVertex = asNanoDimuonVertex(vertex->at(0), event);
-      muons->push_back(muonVertex->Muon1());
-      muons->push_back(muonVertex->Muon2());
 
-      auto remainingMuons = make_shared<NanoMuons>();
-      for (auto muon : *allMuons) {
-        if (muon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject() ||
-            muon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject())
-          continue;
-        remainingMuons->push_back(muon);
+      if (leadingTightMuon) {
+        if (leadingTightMuon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject()) {
+          warn() << "Leading tight muon is already in the dimuon vertex - this should never happen!" << endl;
+        }
+        else {
+          muons->push_back(muonVertex->Muon1());
+        }
+        if (leadingTightMuon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject()) {
+          warn() << "Leading tight muon is already in the dimuon vertex - this should never happen!" << endl;
+        }
+        else {
+          muons->push_back(muonVertex->Muon2());
+        }
       }
-      allMuons = make_shared<NanoMuons>(*remainingMuons);
     }
   }
-  if (GetLeadingMuon(allMuons)) muons->push_back(GetLeadingMuon(allMuons));
+  if (leadingTightMuon) {
+    muons->push_back(leadingTightMuon);
+  }
   return muons;
 }
 

@@ -38,14 +38,22 @@ class TTAlpsPlotterConfigHelper:
     self.custom_stacks_order_reversed = False
 
   def add_samples(self, sample_type, samples):
-    if sample_type == SampleType.background and self.year == "2018":
+    if sample_type == SampleType.background and self.year == "2016preVFP":
+      dataset = dasBackgrounds2016PreVFP
+    elif sample_type == SampleType.background and self.year == "2016postVFP":
+      dataset = dasBackgrounds2016PostVFP
+    elif sample_type == SampleType.background and self.year == "2017":
+      dataset = dasBackgrounds2017
+    elif sample_type == SampleType.background and self.year == "2018":
       dataset = dasBackgrounds2018
     elif sample_type == SampleType.background and self.year == "2022preEE":
       dataset = dasBackgrounds2022preEE
     elif sample_type == SampleType.background and self.year == "2022postEE":
       dataset = dasBackgrounds2022postEE
-    elif sample_type == SampleType.background and self.year == "2023":
+    elif sample_type == SampleType.background and self.year == "2023preBPix":
       dataset = dasBackgrounds2023preBPix
+    elif sample_type == SampleType.background and self.year == "2023postBPix":
+      dataset = dasBackgrounds2023postBPix
     elif sample_type == SampleType.signal and self.year == "2018":
       dataset = dasSignals2018
     elif sample_type == SampleType.data:

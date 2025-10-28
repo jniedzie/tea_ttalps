@@ -3,39 +3,42 @@ from math import log10
 
 from TTAlpsLimitsPlotterHelper import TTAlpsLimitsPlotterHelper, BrazilGraph, SimpleGraph
 from ttalps_cross_sections import get_theory_cross_section
+from ttalps_luminosities import get_luminosity
 
-year = "2018"
+# years = ["2017","2018","2022preEE","2022postEE","2023preBPix"]
+years = ["2018",]
+# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
+
+# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
+# cross_sections = get_cross_sections(year)
+luminosity_run2 = 0
+luminosity_run3 = 0
+year = years[0]
+year_str = ""
+for year_ in years:
+  if "2016" in year_ or "2017" in year_ or "2018" in year_:
+    luminosity_run2 += get_luminosity(year_)
+  if "2022" in year_ or "2023" in year_:
+    luminosity_run3 += get_luminosity(year_)
+  year_str += year_
+
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 
 # PAT-PAT
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_invMass_vs_logDeltaSquaredIso03_Pat_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
-# input_path = "../limits/results_newMatching_dimuonEff_jec/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_pt_Pat_ABCDpred.txt"
-input_path = "../limits/results_newMatching_dimuonEff/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_pt_Pat_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
 
 # PAT-DSA
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_dPhi_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_PatDSA_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_outerDR_vs_logAbsPtLxyDPhi1_PatDSA_ABCDpred.txt"
-# input_path = "../limits/results_newMatching_dimuonEff_jec/limits_BestPFIsoDimuonVertex_log3Dangle_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
-# input_path = "../limits/results_newMatching_dimuonEff/limits_BestPFIsoDimuonVertex_log3Dangle_vs_logDxyPVTraj1_PatDSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
 
 # DSA-DSA
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dPhi_DSA_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLeadingPt_vs_dEta_DSA_ABCDpred.txt"
-# input_path = "../limits/results/limits_BestPFIsoDimuonVertex_logLxySignificance_vs_outerDR_DSA_ABCDpred.txt"
-# input_path = "../limits/results_newMatching_dimuonEff_jec/limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_ABCDpred.txt"
-# input_path = "../limits/results_newMatching_dimuonEff/limits_BestPFIsoDimuonVertex_logLxy_vs_outerDR_DSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logPt_vs_logInvMass_DSA_ABCDpred.txt"
 
 # Combined
-# input_path = "../limits/results/limits_combined.txt"
+### New dimuon selection with coll. angle < 0.5
+input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_combined.txt"
 
 # output_path = "../limits/plots/"
-output_path = "../limits/plots_dimuonEff/"
-# output_path = "../limits/plots_dimuonEff_jec/"
-
-luminosity = 59830.  # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
+output_path = "../limits/plots_newSelection_dsaSFs/"
 
 reference_coupling = 0.1  # this is the coupling we used to generate signal samples
 
@@ -43,6 +46,19 @@ reference_coupling = 0.1  # this is the coupling we used to generate signal samp
 # variable = "ctau"
 # variable = "mass_theory"  # assign lifetime according to theory and interpolate between ctau points
 variable = "2d"
+
+resonances_ranges = (
+    # (0.43, 0.49),  # K_s
+    # (0.52, 0.58),  # eta
+    # (0.73, 0.84),  # rho/omega
+    # (0.96, 1.08),  # phi
+    # (2.9, 3.3),  # J/Psi
+    # (3.5, 3.86),  # Psi(2S)
+    (2.4, 3.9),  # J/Psi + Psi(2S)
+    # (8.99, 9.87),  # Upsilon(1S)
+    # (9.61, 10.39),  # Upsilon(2S)
+    # (9.87, 10.77),  # Upsilon(3S)
+)
 
 if variable == "mass":
   x_min = 0.35
@@ -52,8 +68,8 @@ if variable == "mass":
   y_max = 1e6
 
   x_title = "m_{a} [GeV]"
-  # scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
-  scan_points = [1e-5, 1e0, 1e3]
+  scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
+  # scan_points = [1e-5, 1e0, 1e3]
 
 if variable == "ctau":
   y_min = 1e-3
@@ -61,7 +77,8 @@ if variable == "ctau":
   x_min = 1e-5
   x_max = 1e3
   x_title = "c#tau_{a} [mm]"
-  scan_points = [0.35, 1.0, 2.0, 12.0, 30.0, 60.0]
+  scan_points = [0.35, 2.0, 12.0, 30.0, 60.0]
+  resonances_ranges = ()
 
 if variable == "mass_theory":
   do_boost = True
@@ -113,6 +130,17 @@ def mask_resonances(ranges):
     box.SetLineWidth(0)
     box.DrawClone("same")
 
+def mask_resonances_2d(ranges):
+  for x_min, x_max in ranges:
+    print(f"{x_min}-{x_max}")
+    # create a white box to mask the resonances
+    box = ROOT.TBox(log10(x_min), y_min, log10(x_max), y_max)
+    box.SetFillColor(ROOT.kWhite)
+    box.SetFillStyle(1001)
+    box.SetLineColor(ROOT.kWhite)
+    box.SetLineWidth(0)
+    box.DrawClone("same")
+
 
 def draw_legend(graphs):
   legend = ROOT.TLegend(0.60, 0.60, 0.9, 0.75)
@@ -155,6 +183,7 @@ def draw_brazil_plots():
 
       for coupling in theory_points.keys():
         sigma = sigma_0p1 * (coupling/0.1)**2
+        key = mass if variable == "mass" else ctau
         theory_points[coupling].append((mass, sigma))
 
     for i, (coupling, points) in enumerate(theory_points.items()):
@@ -169,25 +198,16 @@ def draw_brazil_plots():
 
     graph.draw()
 
-    mask_resonances((
-        (0.43, 0.49),  # K_s
-        (0.52, 0.58),  # eta
-        (0.73, 0.84),  # rho/omega
-        (0.96, 1.08),  # phi
-        (2.9, 3.3),  # J/Psi
-        (3.5, 3.86),  # Psi(2S)
-        (8.99, 9.87),  # Upsilon(1S)
-        (9.61, 10.39),  # Upsilon(2S)
-        (9.87, 10.77),  # Upsilon(3S)
-    ))
+    mask_resonances(resonances_ranges)
 
     legend_params = []
-    for theory_graph in theory_graphs.values():
-      theory_graph.draw()
-      legend_params.append(theory_graph.get_graph())
+    if variable == "mass":
+      for theory_graph in theory_graphs.values():
+        theory_graph.draw()
+        legend_params.append(theory_graph.get_graph())
 
     helper.draw_cms_label()
-    helper.draw_lumi_label(luminosity)
+    helper.draw_lumi_label(luminosity_run2, luminosity_run3)
     helper.draw_signal_label(variable, scan_point)
 
     graph.draw_legend()
@@ -225,7 +245,7 @@ def draw_brazil_plot_for_theory_lifetime():
   graph.draw()
   graph.draw_legend()
   helper.draw_cms_label()
-  helper.draw_lumi_label(luminosity)
+  helper.draw_lumi_label(luminosity_run2, luminosity_run3)
 
   pion_graph.DrawClone("same")
   helper.draw_pion_label()
@@ -251,8 +271,12 @@ def draw_2d_plot():
 
   helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max)
 
+  mask_resonances_2d(resonances_ranges)
+
+  ROOT.gPad.RedrawAxis()
+
   helper.draw_cms_label()
-  helper.draw_lumi_label(luminosity)
+  helper.draw_lumi_label(luminosity_run2, luminosity_run3)
 
   canvas.Update()
   canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_2d_expected.pdf")

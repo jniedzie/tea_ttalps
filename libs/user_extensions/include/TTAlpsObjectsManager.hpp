@@ -23,6 +23,8 @@ class TTAlpsObjectsManager {
   void InsertProximityDRMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float maxDR, std::shared_ptr<NanoMuons> muonCollection = nullptr);
   void InsertSegmentMatchedLooseMuonsCollections(std::shared_ptr<Event> event, float minSegmentRatio, std::shared_ptr<NanoMuons> muonCollection = nullptr);
 
+  void InsertNonLeadingLooseMuonsCollections(std::shared_ptr<Event> event);
+
   void InsertBaseLooseMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertMuonVertexCollection(std::shared_ptr<Event> event);
   void InsertMuonVertexCollection(std::shared_ptr<Event> event, std::shared_ptr<PhysicsObjects> vertices, 
@@ -30,7 +32,12 @@ class TTAlpsObjectsManager {
   void InsertNminus1VertexCollections(std::shared_ptr<Event> event);
   void InsertMatchedLooseMuonEfficiencyCollections(std::shared_ptr<Event> event);
   void InsertMuonTriggerCollections(std::shared_ptr<Event> event);
-  void InsertNonLeadingMuonVertexCollections(std::shared_ptr<Event> event, std::string inputCollection = "");
+
+  // Get DSA and PAT muons that have been matched
+  void InsertRevertedMatchedMuons(std::shared_ptr<Event> event);
+  // Get PAT-DSA and DSA-DSA vertices matched to PAT-PAT dimuons
+  void InsertRevertedMatchedDSAMuonVertexCollection(std::shared_ptr<Event> event);
+
 
  private:
 

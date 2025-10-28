@@ -47,8 +47,8 @@ int main(int argc, char **argv) {
   bool runLLPNanoAODHistograms, runMuonMatchingHistograms, runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
   bool runMuonTriggerObjectsHistograms;
   bool runABCDHistograms, runSingleMuonABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
-  bool ignoreDimuons, runMuonMatchingRatioEffectHistograms, runNminus1Histograms;
-  bool runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching;
+  bool ignoreDimuons, runNminus1Histograms;
+  bool runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching, noWeights;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
   config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
@@ -61,11 +61,11 @@ int main(int argc, char **argv) {
   config.GetValue("runABCDMothersHistograms", runABCDMothersHistograms);
   config.GetValue("runFakesHistograms", runFakesHistograms);
   config.GetValue("ignoreDimuons", ignoreDimuons);
-  config.GetValue("runMuonMatchingRatioEffectHistograms", runMuonMatchingRatioEffectHistograms);
   config.GetValue("runNminus1Histograms", runNminus1Histograms);
   config.GetValue("runGenLevelResonancesABCD", runGenLevelResonancesABCD);
   config.GetValue("runGenLevelMothersABCD", runGenLevelMothersABCD);
   config.GetValue("runRevertedMatching", runRevertedMatching);
+  config.GetValue("noWeights", noWeights);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -82,9 +82,8 @@ int main(int argc, char **argv) {
     ttalpsObjectsManager->InsertMuonTriggerCollections(event);
     ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
     ttalpsObjectsManager->InsertNonLeadingLooseMuonsCollections(event);
-    ttalpsObjectsManager->InsertRevertedMatchedDSAMuons(event);
+    ttalpsObjectsManager->InsertRevertedMatchedMuons(event);
     if (!ignoreDimuons) {
-      // ttalpsObjectsManager->InsertNonLeadingMuonVertexCollections(event);
       ttalpsObjectsManager->InsertMuonVertexCollection(event);
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);
       ttalpsObjectsManager->InsertNminus1VertexCollections(event);
@@ -92,10 +91,12 @@ int main(int argc, char **argv) {
         ttalpsObjectsManager->InsertRevertedMatchedDSAMuonVertexCollection(event);
       }
     }
-    map<string, float> eventWeights = asTTAlpsEvent(event)->GetEventWeights();
-  
+    map<string, float> eventWeights = {{"default", 1.0}};
+    if (!noWeights) {
+      eventWeights = asTTAlpsEvent(event)->GetEventWeights();
+    }
     histogramsHandler->SetEventWeights(eventWeights);
-  
+    
     cutFlowManager->SetEventWeight(eventWeights["default"]);
     if (!ignoreDimuons && !runNminus1Histograms) {
       bool passesDimuonCuts = false;
@@ -154,10 +155,6 @@ int main(int argc, char **argv) {
     }
     if (runFakesHistograms) {
       ttalpsHistogramsFiller->FillFakesHistograms(event);
-    }
-
-    if (runMuonMatchingRatioEffectHistograms && !ignoreDimuons) {
-      ttalpsHistogramsFiller->FillMuonMatchingRatioEffectHistograms(event);
     }
   }
 

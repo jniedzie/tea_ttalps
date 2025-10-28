@@ -1,11 +1,19 @@
 from ttalps_histogrammer_files_config import skim, samples
-from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignals2018, dasData2018_standard
+from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignalsPrivate2018, dasData2018_standard, dasSignals2018
+from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasData2022preEE
+from ttalps_samples_list import dasBackgrounds2022postEE, dasSignals2022postEE, dasData2022postEE
+from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017
+from ttalps_samples_list import dasBackgrounds2016PreVFP, dasData2016PreVFP, dasSignals2016PreVFP
+from ttalps_samples_list import dasBackgrounds2016PostVFP, dasData2016PostVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasBackgrounds2023preBPix, dasSignals2023preBPix, dasData2023preBPix
+from ttalps_samples_list import dasBackgrounds2023postBPix, dasSignals2023postBPix, dasData2023postBPix
 
 import os
 import re
 import argparse
 import subprocess
-
+import time
+import uuid
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--single_thread", action="store_true", default=False, help="Use single thread.")
@@ -14,14 +22,19 @@ parser.add_argument("--dry", action="store_true", default=False, help="Dry run."
 args = parser.parse_args()
 
 # comment out to use skim and samples from ttalps_histogrammer_files_config.py
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
-# samples = dasBackgrounds2018.keys()
+
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch_genInfo_nminus1")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsNoChi2DCA", "LooseNonLeadingMuonsVertexSegmentMatch")
+
+samples = dasBackgrounds2018.keys()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
-hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs"
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
+# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
+hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
+
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 if skim[2] != "":
@@ -77,10 +90,17 @@ def main():
 
   if args.condor:
 
-    os.makedirs("scripts", exist_ok=True)
-    with open("merge_cmds.txt", "w") as f:
+    unique_id = time.strftime("%Y%m%d_%H%M%S") + "_" + str(uuid.uuid4())[:8]
+
+    scripts_dir = f"scripts_{unique_id}"
+    merge_cmds = f"merge_cmds_{unique_id}.txt"
+    submit_file = f"submit_merge_jobs_{unique_id}.sub"
+
+    os.makedirs(scripts_dir, exist_ok=True)
+    
+    with open(merge_cmds, "w") as f:
       for i, cmd in enumerate(commands):
-        script_name = f"scripts/job_{i}.sh"
+        script_name = f"{scripts_dir}/job_{i}.sh"
         with open(script_name, "w") as sf:
           sf.write("#!/bin/bash\n")
           sf.write(cmd + "\n")
@@ -88,9 +108,8 @@ def main():
         f.write(script_name + "\n")
 
     # Create the submit file
-    submit_file = "submit_merge_jobs.sub"
     with open(submit_file, "w") as f:
-      f.write('''\
+      f.write(f'''\
     universe   = vanilla
     executable = $(cmd)
     # output     = /dev/null
@@ -99,13 +118,14 @@ def main():
     output     = ./output/$(ClusterId).$(ProcId).out
     error      = ./error/$(ClusterId).$(ProcId).err
     log        = ./log/$(ClusterId).log
-    request_cpus = 16
-    request_memory = 16000MB
-    max_materialize = 5000
+    request_cpus = 4
+    request_memory = 2000MB
+    max_materialize = 7000
     initialdir = .
     getenv = True
-    queue cmd from merge_cmds.txt
+    queue cmd from {merge_cmds}
     ''')
+    print(f"Created submission files with ID: {unique_id}")
 
     # Submit the jobs
     if not args.dry:

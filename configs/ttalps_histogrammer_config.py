@@ -59,9 +59,6 @@ runABCDMothersHistograms = False
 # [MC only] Create histograms for dimuons in the fakes region vs. non-fakes region
 runFakesHistograms = False
 
-# Create histograms for Best PAT-PAT dimuons -> DSA Best Dimuons due changed ratio
-runMuonMatchingRatioEffectHistograms = False
-
 # Apply Segment Matching on the GoodMuonVertexCollections after the dimuon selection
 applySegmentMatchingAfterSelections = False
 
@@ -71,6 +68,9 @@ runNminus1Histograms = False
 
 # Revert matching such that we use DSA matched that have been matched to PAT muons
 runRevertedMatching = False
+
+# Run without applying any events weights - for producing efficiency plots with correct uncertainties
+noWeights = False
 
 weightsBranchName = "genWeight"
 rhoBranchName = "fixedGridRhoFastjetAll" # for jec unc.
@@ -189,9 +189,6 @@ if runFakesHistograms:
 
 if runMuonTriggerObjectsHistograms:
   histParams += helper.get_muon_trigger_objects_params()
-
-if runMuonMatchingRatioEffectHistograms:
-  histParams += helper.get_muon_matching_effect_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()
 # SFvariationVariables = [] # for testing to run histogrammer faster
