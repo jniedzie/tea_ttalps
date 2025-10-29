@@ -173,7 +173,7 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   string goodBJetCollectionName = "GoodMediumBtaggedJets";
   auto goodBJetCollection = event->GetCollection(goodBJetCollectionName);
 
-  map<string, ExtraCollection> extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
+  auto extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
   pair<float, float> goodJetPtCuts = extraCollectionsDescriptions[goodJetCollectionName].allCuts["pt"];
   pair<float, float> goodBJetPtCuts = extraCollectionsDescriptions[goodBJetCollectionName].allCuts["pt"];
 
