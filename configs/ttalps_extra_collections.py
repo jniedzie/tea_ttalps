@@ -22,7 +22,7 @@ commonExtraEventCollections = {
         "dxyPVTraj": (0.02, 9999999.)
     },
 
-    # Slightly displaced Loose PAT muoons, dxy based on displaced dimuon search 
+    # Slightly displaced Loose PAT muoons, dxy based on displaced dimuon search
     "LooseDSAMuons": {
         "inputCollections": ("DSAMuon",),
         "displacedID": (1, 9999999.),
@@ -31,7 +31,7 @@ commonExtraEventCollections = {
     },
 
     "LooseMuons": {
-        "inputCollections": ("LoosePATMuons","LooseDSAMuons",),
+        "inputCollections": ("LoosePATMuons", "LooseDSAMuons",),
     },
 
     # To get IsoMu24 trigger object
@@ -53,21 +53,13 @@ commonExtraEventCollections = {
     # To consider in CRs and SR
     "GoodTightBtaggedJets": {
         "inputCollections": ("GoodJets", ),
-        "pt": (30., 9999999.),
-        "eta": (-2.4, 2.4),
         "btagDeepFlavB": (0.7100, 9999999.),
-        # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
-        "jetId": 6,
     },
 
     # Used in all skims
     "GoodMediumBtaggedJets": {
         "inputCollections": ("GoodJets", ),
-        "pt": (30., 9999999.),
-        "eta": (-2.4, 2.4),
         "btagDeepFlavB": (0.2783, 9999999.),
-        # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
-        "jetId": 6,
     },
 }
 
