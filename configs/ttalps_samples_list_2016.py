@@ -136,9 +136,9 @@ dasSamples2016PreVFP = {key: value for d in (
 ##################     2016PostVFP    ##################
 
 TT_dasBackgrounds2016PostVFP = {
-    # "backgrounds2016PostVFP/TTToSemiLeptonic": "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/TTTo2L2Nu": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/TTToSemiLeptonic": "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/TTTo2L2Nu": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 
     # "backgrounds2016PostVFP/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     # "backgrounds2016PostVFP/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
