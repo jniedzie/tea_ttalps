@@ -35,10 +35,8 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
-  float pileupSF;
-  // if (year == "2018") pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom"); // TODO: do we want to use custom for all
-  // years? else pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "pileup");
-  pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "custom");
+  // NOTE: nanoEventProcessor change "" to "custom" to do cutsom PU SF for 2018
+  map<string, float> pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "");
   map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTrigger");
 
   int maxNjets = 4;
@@ -53,28 +51,32 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
     }
   }
   map<string, float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingBJets);
-  auto muons = GetTTAlpsEventMuons();
+  auto muons = GetEventMuons();
   map<string, float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
+
+  map<string, float> DSAEffSF = nanoEventProcessor->GetDSAMuonEfficiencyScaleFactors(muons);
 
   map<string, float> jecUnc = GetJetEnergyCorrections(event);
 
   map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
   map<string, float> scaleFactorMap;
-  scaleFactorMap["default"] = genWeight * pileupSF * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
-                              muonSF["systematic"] * dimuonEffSF["systematic"];
-  vector<map<string, float> *> scaleFactorMaps = {&muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &jecUnc};
+  scaleFactorMap["default"] = genWeight * pileupSF["systematic"] * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
+                              muonSF["systematic"] * dimuonEffSF["systematic"] * DSAEffSF["systematic"] ;
+  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
       if (name == "systematic") continue;
 
-      scaleFactorMap[name] = genWeight * pileupSF *
+      scaleFactorMap[name] = genWeight * 
+                             (scaleFactorMapPtr == &pileupSF ? (*scaleFactorMapPtr)[name] : pileupSF["systematic"]) *
                              (scaleFactorMapPtr == &muonTriggerSF ? (*scaleFactorMapPtr)[name] : muonTriggerSF["systematic"]) *
                              (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"]) *
                              (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"]) *
                              (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"]) *
                              (scaleFactorMapPtr == &dimuonEffSF ? (*scaleFactorMapPtr)[name] : dimuonEffSF["systematic"]) *
+                             (scaleFactorMapPtr == &DSAEffSF ? (*scaleFactorMapPtr)[name] : DSAEffSF["systematic"]) *
                              (scaleFactorMapPtr == &jecUnc ? (*scaleFactorMapPtr)[name] : jecUnc["systematic"]);
     }
   }
@@ -98,9 +100,21 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetAllLooseMuons() {
   return asNanoMuons(GetCollection("LooseMuons" + matchingMethod + "Match"));
 }
 
+shared_ptr<NanoMuons> TTAlpsEvent::GetEventMuons() {
+  if (!muonVertexCollection.first.empty() && !muonVertexCollection.second.empty()) {
+    return GetTTAlpsEventMuons();
+  }
+  // If no muon vertex collection is defined, return all loose muons
+  // This will work for ttbar CR and ttbar + 1 DSA muon CR
+  return GetAllLooseMuons();
+}
+
+
 shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
   auto allMuons = GetAllLooseMuons();
   auto muons = make_shared<NanoMuons>();
+  auto tightMuons = event->GetCollection("TightMuons");
+  auto leadingTightMuon = GetLeadingMuon(asNanoMuons(tightMuons));
   if (!muonVertexCollection.first.empty() && !muonVertexCollection.second.empty()) {
     shared_ptr<PhysicsObjects> vertex = nullptr;
     try {
@@ -110,20 +124,26 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
     }
     if (vertex && vertex->size() > 0) {
       auto muonVertex = asNanoDimuonVertex(vertex->at(0), event);
-      muons->push_back(muonVertex->Muon1());
-      muons->push_back(muonVertex->Muon2());
 
-      auto remainingMuons = make_shared<NanoMuons>();
-      for (auto muon : *allMuons) {
-        if (muon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject() ||
-            muon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject())
-          continue;
-        remainingMuons->push_back(muon);
+      if (leadingTightMuon) {
+        if (leadingTightMuon == muonVertex->Muon1()) {
+          warn() << "Leading tight muon is already in the dimuon vertex - this should never happen!" << endl;
+        }
+        else {
+          muons->push_back(muonVertex->Muon1());
+        }
+        if (leadingTightMuon == muonVertex->Muon2()) {
+          warn() << "Leading tight muon is already in the dimuon vertex - this should never happen!" << endl;
+        }
+        else {
+          muons->push_back(muonVertex->Muon2());
+        }
       }
-      allMuons = make_shared<NanoMuons>(*remainingMuons);
     }
   }
-  if (GetLeadingMuon(allMuons)) muons->push_back(GetLeadingMuon(allMuons));
+  if (leadingTightMuon) {
+    muons->push_back(leadingTightMuon);
+  }
   return muons;
 }
 
@@ -153,7 +173,7 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   string goodBJetCollectionName = "GoodMediumBtaggedJets";
   auto goodBJetCollection = event->GetCollection(goodBJetCollectionName);
 
-  map<string, ExtraCollection> extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
+  auto extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
   pair<float, float> goodJetPtCuts = extraCollectionsDescriptions[goodJetCollectionName].allCuts["pt"];
   pair<float, float> goodBJetPtCuts = extraCollectionsDescriptions[goodBJetCollectionName].allCuts["pt"];
 

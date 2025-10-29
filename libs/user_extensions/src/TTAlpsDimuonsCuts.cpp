@@ -54,6 +54,9 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
     {"LogLxyMinus2Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus2); }},
     {"LogLxyMinus3Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus3); }},
     {"Chi2DCACut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChi2DCACut(v); }},
+    {"DxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDxyCut(v); }},
+    {"MuonPtCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesMuonPtCut(v); }},
+    {"Cos3DAngleCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesCos3DAngleCut(v); }},
   };
 }
 
@@ -71,7 +74,7 @@ bool TTAlpsDimuonCuts::PassesCut(std::shared_ptr<NanoDimuonVertex> dimuonVertex,
 bool TTAlpsDimuonCuts::PassesLLPnanoAODVertexCuts(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if (!dimuonVertex->IsValid()) return false;
-  if ((float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxDCA"]) return false;
+  if ((float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxBaseDCA"]) return false;
   return true;
 }
 
@@ -125,7 +128,10 @@ bool TTAlpsDimuonCuts::PassesHitsInFrontOfVertexCut(shared_ptr<NanoDimuonVertex>
 bool TTAlpsDimuonCuts::PassesDPhiBetweenMuonpTAndLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   string category = dimuonVertex->GetVertexCategory();
   auto dimuonVertexCuts = GetDimuonCategoryMap(category);
-  if(abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)) > dimuonVertexCuts["maxpTLxyDPhi"]) return false;
+  if(fabs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)) > dimuonVertexCuts["maxpTLxyDPhi"]) return false;
+  if (dimuonVertexCuts.find("maxpTLxyDPhi2") != dimuonVertexCuts.end()) {
+    if(fabs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(2)) > dimuonVertexCuts["maxpTLxyDPhi2"]) return false;
+  }
   return true;
 }
 
@@ -159,7 +165,7 @@ bool TTAlpsDimuonCuts::PassesLogLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex
 
 bool TTAlpsDimuonCuts::PassesCollinearityAngleCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
-  if(abs(dimuonVertex->GetCollinearityAngle()) > dimuonVertexCuts["maxCollinearityAngle"]) return false;
+  if(fabs(dimuonVertex->GetCollinearityAngle()) > dimuonVertexCuts["maxCollinearityAngle"]) return false;
   return true;
 }
 
@@ -211,7 +217,7 @@ bool TTAlpsDimuonCuts::PassesBarrelDeltaEtaCut(shared_ptr<NanoDimuonVertex> dimu
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   auto muon1eta = dimuonVertex->Muon1()->GetAs<float>("eta");
   auto muon2eta = dimuonVertex->Muon2()->GetAs<float>("eta");
-  if(abs(muon1eta-muon2eta) > dimuonVertexCuts["maxDeltaEta"]) return false;
+  if(fabs(muon1eta-muon2eta) > dimuonVertexCuts["maxDeltaEta"]) return false;
   return true;
 }
 
@@ -223,5 +229,29 @@ bool TTAlpsDimuonCuts::PassesChi2DCACut(shared_ptr<NanoDimuonVertex> dimuonVerte
   auto logDca = TMath::Log10(float(dimuonVertex->Get("dca")));
   float logNormChi2Min = 2 * logDca - 1.5;
   if (logNormChi2 < logNormChi2Min) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesDxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  auto muon1dxy = fabs(dimuonVertex->Muon1()->GetAs<float>("dxyPVTraj"));
+  auto muon2dxy = fabs(dimuonVertex->Muon2()->GetAs<float>("dxyPVTraj"));
+  if (min(muon1dxy, muon2dxy) < dimuonVertexCuts["minAbsDxy"]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesMuonPtCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  auto muon1pt = dimuonVertex->Muon1()->GetPt();
+  auto muon2pt = dimuonVertex->Muon2()->GetPt();
+  if (muon1pt < dimuonVertexCuts["minMuonPt"]) return false;
+  if (muon2pt < dimuonVertexCuts["minMuonPt"]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesCos3DAngleCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  auto cos3Dangle = dimuonVertex->GetCosine3DOpeningAngle();
+  if (cos3Dangle < dimuonVertexCuts["minCos3Dangle"]) return false;
   return true;
 }

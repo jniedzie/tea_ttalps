@@ -1,5 +1,6 @@
 from ttalps_extra_collections import *
 from golden_json_config import goldenJsons
+from ttalps_triggers import get_IsoMu_trigger
 
 year = "2018"
 goldenJson = goldenJsons[year]
@@ -14,9 +15,7 @@ applyTTZLikeSkimming = False
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
-triggerSelection = (
-    "HLT_IsoMu24",
-)
+triggerSelection = get_IsoMu_trigger(year)
 
 eventCuts = {
     "MET_pt": (30, 9999999),

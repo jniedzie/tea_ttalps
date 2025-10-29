@@ -2,6 +2,7 @@ import re
 import ROOT
 import physics
 from math import pi, log10
+import array
 
 from Logger import error
 from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
@@ -189,8 +190,17 @@ class TTAlpsLimitsPlotterHelper:
     tex.SetLineWidth(2)
     tex.DrawClone()
 
-  def draw_lumi_label(self, luminosity):
-    tex = ROOT.TLatex(0.60, 0.92, f"#scale[0.8]{{pp, {luminosity/1000:.0f} fb^{{-1}} (#sqrt{{s}} = 13 TeV)}}")
+  def draw_lumi_label(self, luminosity_run2, luminosity_run3):
+    lumi_text = ""
+    lumi_text_xmin = 0.60
+    if luminosity_run2 != 0 and luminosity_run3 == 0:
+      lumi_text = f"#scale[0.8]{{{luminosity_run2/1000:.0f} fb^{{-1}} (13 TeV)}}"
+    elif luminosity_run2 == 0 and luminosity_run3 != 0:
+      lumi_text = f"#scale[0.8]{{{luminosity_run3/1000:.0f} fb^{{-1}} (13.6 TeV)}}"
+    else:
+      lumi_text = f"#scale[0.8]{{{luminosity_run2/1000:.0f} fb^{{-1}} (13 TeV), {luminosity_run3/1000:.0f} fb^{{-1}} (#sqrt{{s}} = 13.6 TeV)}}"
+      lumi_text_xmin = 0.45
+    tex = ROOT.TLatex(lumi_text_xmin, 0.92, lumi_text)
     tex.SetNDC()
     tex.SetTextFont(42)
     tex.SetTextSize(0.045)
@@ -345,8 +355,8 @@ class BrazilGraph:
     if self.show_obs:
       legend.AddEntry(self.obs_graph, "Observed", "L")
     legend.AddEntry(self.exp_graph, "Expected", "L")
-    legend.AddEntry(self.exp_graph_1sigma, "Expected #pm 1 #sigma", "F")
-    legend.AddEntry(self.exp_graph_2sigma, "Expected #pm 2 #sigma", "F")
+    legend.AddEntry(self.exp_graph_1sigma, "Expected #pm 1 s.d.", "F")
+    legend.AddEntry(self.exp_graph_2sigma, "Expected #pm 2 s.d.", "F")
     legend.DrawClone()
 
 

@@ -18,55 +18,57 @@ args = parser.parse_args()
 base_config_path = args.config
 
 variables = (
-    # # displacement
+    # displacement
     "logLxy",
     "logLxySignificance",
     "logDxyPVTraj1",
     "logDxyPVTraj2",
     "logDxyPVTrajSig1",
     "logDxyPVTrajSig2",
-    # # Angle
+    # Angle
     "logAbsCollinearityAngle",
-    "3Dangle",
+    # "3Dangle",
     "log3Dangle",
-    "cos3Dangle",
+    # "cos3Dangle",
     "logCos3Dangle",
-    "outerDR",
+    # "outerDR",
     "logOuterDR",
-    "absPtLxyDPhi1",
-    "absPtLxyDPhi2",
+    # "absPtLxyDPhi1",
+    # "absPtLxyDPhi2",
     "logAbsPtLxyDPhi1",
     "logAbsPtLxyDPhi2",
-    "pt",
+    # "pt",
     "logPt",
-    "leadingPt",
+    # "leadingPt",
     "logLeadingPt",
     "eta",
     "dEta",
-    "dPhi",
-    # # Inv mass
-    "invMass",
+    "logDEta",
+    "logDPhi",
+    # "dPhi",
+    # Inv mass
+    # "invMass",
     "logInvMass",
-    # # Vertex quality
-    "nSegments",
-    "normChi2",
+    # Vertex quality
+    # "nSegments",
+    # "normChi2",
     "logNormChi2",
-    "dca",
+    # "dca",
     "logDca",
-    "maxHitsInFrontOfVert",
-    # # Isolation
+    # "maxHitsInFrontOfVert",
+    # Isolation
     "logDisplacedTrackIso03Dimuon1",
     "logDisplacedTrackIso04Dimuon1",
     "logDisplacedTrackIso03Dimuon2",
     "logDisplacedTrackIso04Dimuon2",
-    "deltaIso03",
-    "deltaIso04",
-    "logDeltaIso03",
-    "logDeltaIso04",
-    "deltaSquaredIso03",
-    "deltaSquaredIso04",
-    "logDeltaSquaredIso03",
-    "logDeltaSquaredIso04",
+    # "deltaIso03",
+    # "deltaIso04",
+    # "logDeltaIso03",
+    # "logDeltaIso04",
+    # "deltaSquaredIso03",
+    # "deltaSquaredIso04",
+    # "logDeltaSquaredIso03",
+    # "logDeltaSquaredIso04",
 )
 
 

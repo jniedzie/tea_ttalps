@@ -1,4 +1,9 @@
 import subprocess
+import argparse
+
+parser = argparse.ArgumentParser(description="My program")
+parser.add_argument("--condor",action="store_true", help="Run on condor")
+args = parser.parse_args()
 
 # Default optimization flags:
 max_correlation = "1.0"
@@ -9,20 +14,42 @@ max_closure = "0.20"
 min_n_events = "20"
 max_signal_contamination = "0.20"
 
-do_region = "SRnewMatching"
-# do_region = "JPsiCRnewMatching"
+do_region = "SR"
+# do_region = "JPsiCR"
 
 run_optimization = True
 
-# new matching with dimuonEff for min 3 bkg events
-if do_region == "SRnewMatching":
-    min_signals = "10"
-    
+# SRDimuons updated October 2025, matching before dimuon selection, collinearity angle < 0.5
+if do_region == "SR":
+    # # # 2018 PAT-PAT all muon ctaus
+    # min_signals = "10"
+    # max_closure = "0.40"
+    # min_n_events = "15"
+    # # # 2018 PAT-DSA muons all ctaus
+    # min_signals = "5"
+    # min_signals = "7" # dimuonEff SFs
+    # max_closure = "0.40"
+    # min_n_events = "10"
+    # # # 2018 DSA-DSA muons all ctaus:
+    min_signals = "7"
+    max_closure = "0.40"
+    min_n_events = "1"
+    # min_n_events = "3" # dimuonEff SFs
 
-if do_region == "JPsiCRnewMatching":
-    min_signals = "5"
-    # min_n_events = "10" # PAT, PATDSA category
-    min_n_events = "5" # DSA category
+
+if do_region == "JPsiCR":
+    # # # 2018 PAT-PAT all muon ctaus
+    # min_signals = "10"
+    # max_closure = "0.40"
+    # min_n_events = "20"
+    # # # 2018 PAT-DSA muons all ctaus
+    # min_signals = "7"
+    # max_closure = "0.40"
+    # min_n_events = "3"
+    # # # 2018 DSA-DSA muons all ctaus:
+    min_signals = "7"
+    max_closure = "0.40"
+    min_n_events = "1"
 
 if not run_optimization:
     # for plotting:
@@ -34,9 +61,6 @@ if not run_optimization:
 
 run_script = "ttalps_plot_abcd_combinations.py"
 config = "ttalps_abcd_config.py"
-condor = False
-if run_optimization:
-    condor = True
 
 command = [
     "python", run_script,
@@ -49,7 +73,7 @@ command = [
     "--min_n_events", min_n_events,
     "--max_signal_contamination", max_signal_contamination
 ]
-if condor:
+if args.condor:
     command += ["--condor"]
 
 

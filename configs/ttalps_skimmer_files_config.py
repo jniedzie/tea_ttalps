@@ -1,12 +1,15 @@
-from ttalps_samples_list import dasBackgrounds2016
-from ttalps_samples_list import dasSamples2018, dasBackgrounds2018, dasData2018, dasSignals2018, dasData2018_standard
-from ttalps_samples_list import dasBackgrounds2022preEE
+from ttalps_samples_list import dasSamples2018, dasBackgrounds2018, dasData2018, dasSignalsPrivate2018, dasData2018_standard, dasSignals2018
+from ttalps_samples_list import dasData2022preEE, dasData2022postEE, dasSignals2022preEE
+from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017
+from ttalps_samples_list import dasBackgrounds2016PostVFP, dasData2016PostVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasBackgrounds2022postEE, dasData2023postBPix, dasSignals2023postBPix
 import os
 
 max_files = -1
 
-input_user = "jniedzie"
-# input_user = "lrygaard"
+# input_user = "jniedzie"
+input_user = "lrygaard"
+# input_user = "jalimena"
 input_base_path = f"/data/dust/user/{input_user}/ttalps_cms"
 output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
@@ -20,6 +23,11 @@ output_skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
 # tt̄ (μ+jets) CR
 # input_skim = "skimmed_looseSemimuonic_v2_merged"
 # output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_segmentMatchedDSA"
+
+# tt̄ (μ+jets) + 1 DSA Muon CR
+# input_skim = "skimmed_looseSemimuonic_v2_merged"
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarLike1DSA"
 
 # tt̄ (e+jets) CR
 # input_skim = "skimmed_looseSemielectronic_v1_merged"
@@ -65,10 +73,5 @@ output_trees_dir = f"{output_base_path}/{sample_path}/{output_skim}/"
 # samples = dasBackgrounds2016.keys()
 
 # samples = dasSamples2018.keys()
-# samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
-samples = dasSignals2018.keys()
-# samples = dasData2018.keys()
-# samples = dasData2018_standard.keys()
+samples = dasBackgrounds2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
-
-# samples = dasBackgrounds2022preEE.keys()

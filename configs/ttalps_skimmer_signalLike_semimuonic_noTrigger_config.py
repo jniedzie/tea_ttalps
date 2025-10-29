@@ -1,5 +1,6 @@
 from ttalps_extra_collections import *
 from golden_json_config import goldenJsons
+from ttalps_met_filters import get_met_filters
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
@@ -12,35 +13,22 @@ printEveryNevents = 10000
 applyLooseSkimming = True
 applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
-applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
-triggerSelection = (
-    "HLT_DoubleL2Mu23NoVtx_2Cha",
-    "HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed",
-)
 
 eventCuts = {
     "MET_pt": (30, 9999999),
+    "nTightMuons": (1, 9999999),
     "nLoosePATMuons": (1, 9999999),
+    "nLooseMuons": (3, 9999999),
+    "nLooseElectrons": (0, 0),
     "nGoodJets": (4, 9999999),
     "nGoodMediumBtaggedJets": (1, 9999999),
 }
 
-requiredFlags = (
-    "Flag_goodVertices",
-    "Flag_globalSuperTightHalo2016Filter",
-    "Flag_HBHENoiseFilter",
-    "Flag_HBHENoiseIsoFilter",
-    "Flag_EcalDeadCellTriggerPrimitiveFilter",
-    "Flag_BadPFMuonFilter",
-    "Flag_BadPFMuonDzFilter",
-    "Flag_hfNoisyHitsFilter",
-    "Flag_eeBadScFilter",
-    "Flag_ecalBadCalibFilter",
-)
+requiredFlags = get_met_filters(year)
 
 branchesToKeep = ["*"]
 branchesToRemove = []

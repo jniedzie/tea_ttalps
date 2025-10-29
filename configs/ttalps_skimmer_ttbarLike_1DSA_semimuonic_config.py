@@ -21,19 +21,19 @@ eventsTreeNames = ("Events",)
 # "DR" : max Delta R (eg. 0.1)
 # "OuterDR" : max Delta R (eg. 0.1)
 # "ProxDR" : max Delta R (eg. 0.1)
-# muonMatchingParams = {
-#     "Segment" : 2.0/3.0,
-#     # "DR" : 0.1,
-#     # "OuterDR" : 0.1,
-#     # "ProxDR" : 0.1,
-# }
+muonMatchingParams = {
+    "Segment": 2.0/3.0,
+    # "Segment": 1.5,
+    # "DR" : 0.1,
+    # "OuterDR" : 0.1,
+    # "ProxDR" : 0.1,
+}
 
 eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 1),  #  This is against TOP recommendation, but we do it to keep it the same as SR
-    # "nLooseMuonsSegmentMatch": (1, 1),
-    "nLooseDSAMuons": (0, 0),
-    "nLoosePATMuons": (1, 1),
+    "nLooseDSAMuonsSegmentMatch": (1, 1),
+    "nLoosePATMuonsSegmentMatch": (1, 1),
     "nLooseElectrons": (0, 0),
     # "nGoodTightBtaggedJets": (2, 9999999),  # TODO: consider tight WP and/or 2 b-tags
 }

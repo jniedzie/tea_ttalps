@@ -13,9 +13,7 @@ eventCuts = {
     "MET_pt": signalEventCuts["MET_pt"],
 }
 
-# year = "2016preVFP"
 year = "2018"
-# year = "2022preEE"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
@@ -44,24 +42,40 @@ runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False
 
 # Create 2D histograms for ABCD background estimation
-runABCDHistograms = True
+runABCDHistograms = False
+
+# [MC only] Create ABCD histograms for gen-level mother information - only workd with runABCDHistograms = True
+# resonances: FromALP, Resonant, NonResonant, FalseResonant
+runGenLevelResonancesABCD = False
+# mothers: particle PID based categories (takes more memory and time)
+runGenLevelMothersABCD = False
+
+# Create 2D histograms in the same way as for ABCD, but for single muon variables
+runSingleMuonABCDHistograms = False
 
 # [MC only] Create histograms with mother PIDs of dimuons entering ABCD histograms (quite heavy, turn off if not needed)
 runABCDMothersHistograms = False
 
-runGenLevelABCD = False
-
 # [MC only] Create histograms for dimuons in the fakes region vs. non-fakes region
 runFakesHistograms = False
 
-# Create histograms for Best PAT-PAT dimuons -> DSA Best Dimuons due changed ratio
-runMuonMatchingRatioEffectHistograms = False
-
 # Apply Segment Matching on the GoodMuonVertexCollections after the dimuon selection
-applySegmentMatchingAfterSelections = True
+applySegmentMatchingAfterSelections = False
+
+# Inlude N-1 histograms - NOTE: this will ignore the dimuon selection in order to include all N-1 dimuons properly
+# Do not use for CR with dimuon selection
+runNminus1Histograms = False
+
+# Revert matching such that we use DSA matched that have been matched to PAT muons
+runRevertedMatching = False
+
+# Run without applying any events weights - for producing efficiency plots with correct uncertainties
+noWeights = False
 
 weightsBranchName = "genWeight"
 rhoBranchName = "fixedGridRhoFastjetAll" # for jec unc.
+if "22" in year or "23" in year:
+    rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 eventsTreeNames = ("Events",)
 
 specialBranchSizes = {
@@ -93,11 +107,13 @@ if skim[1] == "":
 muonVertexBaselineSelection = [
     "InvariantMassCut",
     "ChargeCut",
-    "HitsInFrontOfVertexCut",
-    "DPhiBetweenMuonpTAndLxyCut",
+    # "HitsInFrontOfVertexCut",
+    # "DPhiBetweenMuonpTAndLxyCut",
     "DCACut",
     "CollinearityAngleCut",
-    "Chi2Cut"
+    "Chi2Cut",
+    "Chi2DCACut",
+    # "Cos3DAngleCut",
 ]
 
 
@@ -108,14 +124,12 @@ dimuonSelection = skim[1]
 if dimuonSelection == "":
     dimuonSelection = None
     ignoreDimuons = True
+
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
-    "SRDimuonsDSAChi2DCADPhi": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "Chi2DCACut", "BestDimuonVertex"]),
-    "AlpDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
-    "SRDimuonNoIso": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
+    "SRDimuonsNoChi2": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "JPsiDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
-    "JPsiDimuonIso": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
-    "JPsiDimuonsDSAChi2DCADPhi": ("BestDimuonVertex", muonVertexBaselineSelection + ["Chi2DCACut", "BestDimuonVertex"]),
+    "JPsiDimuonsNoChi2DCA": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "ZDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
 }
 muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None
@@ -129,31 +143,44 @@ if muonVertexCollectionInput == "":
 
 histParams = ()
 histParams2D = ()
+irregularHistParams = ()
+irregularHistParams2D = ()
 
 helper = TTAlpsHistogrammerConfigHelper(
-    muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput)
+    muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput, runRevertedMatching)
 
 defaultHistParams = helper.get_default_params()
 histParams += helper.get_basic_params()
 
 if runLLPNanoAODHistograms:
   histParams += helper.get_llp_params()
+  irregularHistParams += helper.get_llp_irregular_params()
+
+if runNminus1Histograms:
+  histParams += helper.get_nminus1_params()
+  histParams2D += helper.get_nminus1_params2D()
 
 if runGenMuonVertexCollectionHistograms:
   histParams += helper.get_gen_vertex_params()
 if runGenMuonHistograms:
   histParams += helper.get_gen_params()
   histParams += helper.get_gen_matched_params()
+  irregularHistParams += helper.get_gen_matched_irregular_params()
 
 if runLLPTriggerHistograms:
   histParams += helper.get_trigger_params()
+
 if runMuonMatchingHistograms:
   histParams += helper.get_matching_params()
   histParams2D += helper.get_2D_matching_params()
 
 if runABCDHistograms:
-  histParams += helper.get_abcd_1Dparams()
-  histParams2D += helper.get_abcd_2Dparams(runGenLevelABCD)
+  histParams += helper.get_abcd_1Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD)
+  histParams2D += helper.get_abcd_2Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD)
+
+if runSingleMuonABCDHistograms:
+  histParams2D += helper.get_singleMuon_abcd_2Dparams()
+  irregularHistParams2D += helper.get_singleMuon_abcd_irregular_2Dparams()
 
 if runABCDMothersHistograms:
   histParams2D += helper.get_abcd_mothers_2Dparams()
@@ -163,9 +190,6 @@ if runFakesHistograms:
 
 if runMuonTriggerObjectsHistograms:
   histParams += helper.get_muon_trigger_objects_params()
-
-if runMuonMatchingRatioEffectHistograms:
-  histParams += helper.get_muon_matching_effect_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()
 # SFvariationVariables = [] # for testing to run histogrammer faster
