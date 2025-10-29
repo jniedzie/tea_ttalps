@@ -61,7 +61,6 @@ output_skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
 # output_skim = "skimmed_looseNoMet_v1_SR"
 
 output_trees_dir = ""
-output_hists_dir = ""
 input_directory = ""
 
 # For local inputs:
