@@ -120,7 +120,7 @@ def main():
     log        = ./log/$(ClusterId).log
     request_cpus = 4
     request_memory = 2000MB
-    max_materialize = 7000
+    max_materialize = 5000
     initialdir = .
     getenv = True
     queue cmd from {merge_cmds}

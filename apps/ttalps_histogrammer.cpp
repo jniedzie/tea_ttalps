@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     ttalpsObjectsManager->InsertMuonTriggerCollections(event);
     ttalpsObjectsManager->InsertMatchedLooseMuonsCollections(event);
     ttalpsObjectsManager->InsertNonLeadingLooseMuonsCollections(event);
-    ttalpsObjectsManager->InsertRevertedMatchedMuons(event);
+    ttalpsObjectsManager->InsertRevertedMatchedMuonsCollections(event);
     if (!ignoreDimuons) {
       ttalpsObjectsManager->InsertMuonVertexCollection(event);
       ttalpsObjectsManager->InsertBaseLooseMuonVertexCollection(event);

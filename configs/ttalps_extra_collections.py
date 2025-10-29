@@ -17,12 +17,21 @@ commonExtraEventCollections = {
         "looseId": True,
     },
 
-    # To build PAT+DSA collection
+    "LooseDisplacedPATMuons": {
+        "inputCollections": ("LoosePATMuons",),
+        "dxyPVTraj": (0.02, 9999999.)
+    },
+
+    # Slightly displaced Loose PAT muoons, dxy based on displaced dimuon search 
     "LooseDSAMuons": {
         "inputCollections": ("DSAMuon",),
         "displacedID": (1, 9999999.),
         "pt": (3., 9999999.),
         "eta": (-2.5, 2.5),
+    },
+
+    "LooseMuons": {
+        "inputCollections": ("LoosePATMuons","LooseDSAMuons",),
     },
 
     # To get IsoMu24 trigger object
@@ -43,7 +52,7 @@ commonExtraEventCollections = {
 
     # To consider in CRs and SR
     "GoodTightBtaggedJets": {
-        "inputCollections": ("Jet", ),
+        "inputCollections": ("GoodJets", ),
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
         "btagDeepFlavB": (0.7100, 9999999.),
@@ -53,7 +62,7 @@ commonExtraEventCollections = {
 
     # Used in all skims
     "GoodMediumBtaggedJets": {
-        "inputCollections": ("Jet", ),
+        "inputCollections": ("GoodJets", ),
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
         "btagDeepFlavB": (0.2783, 9999999.),

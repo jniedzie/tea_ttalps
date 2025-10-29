@@ -126,13 +126,13 @@ shared_ptr<NanoMuons> TTAlpsEvent::GetTTAlpsEventMuons() {
       auto muonVertex = asNanoDimuonVertex(vertex->at(0), event);
 
       if (leadingTightMuon) {
-        if (leadingTightMuon->GetPhysicsObject() == muonVertex->Muon1()->GetPhysicsObject()) {
+        if (leadingTightMuon == muonVertex->Muon1()) {
           warn() << "Leading tight muon is already in the dimuon vertex - this should never happen!" << endl;
         }
         else {
           muons->push_back(muonVertex->Muon1());
         }
-        if (leadingTightMuon->GetPhysicsObject() == muonVertex->Muon2()->GetPhysicsObject()) {
+        if (leadingTightMuon == muonVertex->Muon2()) {
           warn() << "Leading tight muon is already in the dimuon vertex - this should never happen!" << endl;
         }
         else {

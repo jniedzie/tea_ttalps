@@ -34,7 +34,7 @@ class TTAlpsObjectsManager {
   void InsertMuonTriggerCollections(std::shared_ptr<Event> event);
 
   // Get DSA and PAT muons that have been matched
-  void InsertRevertedMatchedMuons(std::shared_ptr<Event> event);
+  void InsertRevertedMatchedMuonsCollections(std::shared_ptr<Event> event);
   // Get PAT-DSA and DSA-DSA vertices matched to PAT-PAT dimuons
   void InsertRevertedMatchedDSAMuonVertexCollection(std::shared_ptr<Event> event);
 

@@ -9,10 +9,9 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from Sample import Sample, SampleType
 
-year = "2023postBPix"
+# years = ["2023postBPix",]
+years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
-cross_sections = get_cross_sections(year)
-luminosity = get_luminosity(year)
 extrapolate_in_x = False
 extrapolate_in_y = False
 
@@ -28,10 +27,10 @@ backgrounds_per_year = {
     "2023preBPix": dasBackgrounds2023preBPix,
     "2023postBPix": dasBackgrounds2023postBPix,
 }
-backgrounds = backgrounds_per_year[year]
-data = f"collision_data{year}/SingleMuon{year}"
-if "2022" in year or "2023" in year:
-    data = f"collision_data{year}/Muon{year}"
+# backgrounds = backgrounds_per_year[year]
+# data = f"collision_data{year}/SingleMuon{year}"
+# if "2022" in year or "2023" in year:
+#     data = f"collision_data{year}/Muon{year}"
 
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch")
@@ -41,32 +40,46 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA"
 hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs{skim[1]}{skim[2]}" # all SFs 2018
 
 samples = []
-for background in backgrounds.keys():
+year_string = ""
+for year in years:
+    year_string += year
+    cross_sections = get_cross_sections(year)
+    luminosity = get_luminosity(year)
+
+    backgrounds = backgrounds_per_year[year]
+    for background in backgrounds.keys():
+        samples.append(
+            Sample(
+                name=background.split("/")[-1],
+                file_path=f"{base_path}/{background}/{skim[0]}/{hist_path}/histograms.root",
+                type=SampleType.background,
+                cross_sections=cross_sections,
+                luminosity=luminosity,
+                line_alpha=0,
+                line_style=1,
+                fill_alpha=0.7,
+                marker_size=0,
+                marker_style=0,
+                year=year,
+            )
+        )
+    data = f"collision_data{year}/SingleMuon{year}"
+    if "2022" in year or "2023" in year:
+        data = f"collision_data{year}/Muon{year}"
     samples.append(
         Sample(
-            name=background.split("/")[-1],
-            file_path=f"{base_path}/{background}/{skim[0]}/{hist_path}/histograms.root",
-            type=SampleType.background,
-            cross_sections=cross_sections,
-            line_alpha=0,
+            name=f"data_{year}",
+            file_path=f"{base_path}/{data}_{skim[0]}_{hist_path}.root",
+            type=SampleType.data,
             line_style=1,
-            fill_alpha=0.7,
-            marker_size=0,
-            marker_style=0,
+            line_alpha=1,
+            fill_alpha=0,
+            marker_size=0.7,
+            marker_style=20,
+            year=year,
         )
     )
-samples.append(
-    Sample(
-        name="data",
-        file_path=f"{base_path}/{data}_{skim[0]}_{hist_path}.root",
-        type=SampleType.data,
-        line_style=1,
-        line_alpha=1,
-        fill_alpha=0,
-        marker_size=0.7,
-        marker_style=20,
-    )
-)
+year = year_string
 
 histogram1D = None
 histograms1D = {}
@@ -77,15 +90,17 @@ histograms2D = {}
 # - with another config or have one config for multiple corrections
 
 ####################    JPsi CR Dimuon Efficiency SFs  (multiple 1D histograms)  ####################
-output_name = f"../data/dimuonEffSFs{year}_noChi2DCACut.json"
-exclude_backgrounds_with_less_than = 1  # entries
+exclude_backgrounds_with_less_than = 0  # entries
 # exclude_backgrounds_with_less_than = 3  # entries
 # if year == "2022postEE":
 #     exclude_backgrounds_with_less_than = 4
 
 collection = "BestDimuonVertex"
 variable = "invMassJPsiBin"
-# variable = "invMassJPsiBin_logNormChi2Cut1"
+# variable = "invMassJPsiBin_logNormChi2Cut4"
+output_name = f"../data/dimuonEffSFs{year_string}_{variable}_noChi2DCACut.json"
+# output_name = f"../data/dimuonEffSFs{year_string}_{variable}.json"
+
 for category in ("Pat", "PatDSA", "DSA"):
 # for category in ("DSA",):
     hist_name = f"{collection}_{category}_{variable}"

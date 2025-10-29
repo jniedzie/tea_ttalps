@@ -128,9 +128,9 @@ bool TTAlpsDimuonCuts::PassesHitsInFrontOfVertexCut(shared_ptr<NanoDimuonVertex>
 bool TTAlpsDimuonCuts::PassesDPhiBetweenMuonpTAndLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   string category = dimuonVertex->GetVertexCategory();
   auto dimuonVertexCuts = GetDimuonCategoryMap(category);
-  if(abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)) > dimuonVertexCuts["maxpTLxyDPhi"]) return false;
+  if(fabs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1)) > dimuonVertexCuts["maxpTLxyDPhi"]) return false;
   if (dimuonVertexCuts.find("maxpTLxyDPhi2") != dimuonVertexCuts.end()) {
-    if(abs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(2)) > dimuonVertexCuts["maxpTLxyDPhi2"]) return false;
+    if(fabs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(2)) > dimuonVertexCuts["maxpTLxyDPhi2"]) return false;
   }
   return true;
 }
@@ -165,7 +165,7 @@ bool TTAlpsDimuonCuts::PassesLogLxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex
 
 bool TTAlpsDimuonCuts::PassesCollinearityAngleCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
-  if(abs(dimuonVertex->GetCollinearityAngle()) > dimuonVertexCuts["maxCollinearityAngle"]) return false;
+  if(fabs(dimuonVertex->GetCollinearityAngle()) > dimuonVertexCuts["maxCollinearityAngle"]) return false;
   return true;
 }
 
@@ -217,7 +217,7 @@ bool TTAlpsDimuonCuts::PassesBarrelDeltaEtaCut(shared_ptr<NanoDimuonVertex> dimu
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   auto muon1eta = dimuonVertex->Muon1()->GetAs<float>("eta");
   auto muon2eta = dimuonVertex->Muon2()->GetAs<float>("eta");
-  if(abs(muon1eta-muon2eta) > dimuonVertexCuts["maxDeltaEta"]) return false;
+  if(fabs(muon1eta-muon2eta) > dimuonVertexCuts["maxDeltaEta"]) return false;
   return true;
 }
 

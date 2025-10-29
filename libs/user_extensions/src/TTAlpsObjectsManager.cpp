@@ -42,6 +42,7 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
 }
 
 void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> event) {
+  if (muonMatchingParams.empty()) return;
   auto loosePATMuons = asNanoMuons(event->GetCollection("LoosePATMuons"));
   auto looseDSAMuons = asNanoMuons(event->GetCollection("LooseDSAMuons"));
   auto looseMuons = make_shared<NanoMuons>();
@@ -50,11 +51,7 @@ void TTAlpsObjectsManager::InsertMatchedLooseMuonsCollections(shared_ptr<Event> 
   }
   for (auto muon : *looseDSAMuons) {
     looseMuons->push_back(muon);
-  }
-  event->AddCollection("LooseMuons", asPhysicsObjects(looseMuons));
-  auto looseMuonsVertex = asNanoEvent(event)->GetVerticesForMuons(looseMuons);
-  event->AddCollection("LooseMuonsVertex", looseMuonsVertex);
-  
+  }  
   for (auto &[matchingMethod, param] : muonMatchingParams) {
     if (matchingMethod == "DR") {
       InsertDRMatchedLooseMuonsCollections(event, param, looseMuons);
@@ -132,13 +129,12 @@ void TTAlpsObjectsManager::InsertNonLeadingLooseMuonsCollections(shared_ptr<Even
   auto tightMuons = event->GetCollection("TightMuons");
   auto leadingTightMuon = asTTAlpsEvent(event)->GetLeadingMuon(asNanoMuons(tightMuons));
   auto loosePATMuons = event->GetCollection("LoosePATMuons");
+  auto looseDisplacedPATMuons = event->GetCollection("LooseDisplacedPATMuons");
   auto looseDSAMuons = event->GetCollection("LooseDSAMuons");
   
   auto looseMuonsSegmentMatch = make_shared<PhysicsObjects>();
   auto looseMuonsVertexSegmentMatch = make_shared<PhysicsObjects>();
-  float segmentRatio = 1.5;
   if (muonMatchingParams.find("Segment") != muonMatchingParams.end()) {
-    segmentRatio = muonMatchingParams["Segment"];
     looseMuonsSegmentMatch = event->GetCollection("LooseMuonsSegmentMatch");
     looseMuonsVertexSegmentMatch = event->GetCollection("LooseMuonsVertexSegmentMatch");
   }
@@ -146,6 +142,7 @@ void TTAlpsObjectsManager::InsertNonLeadingLooseMuonsCollections(shared_ptr<Even
   // No leading tight muon in the event
   if (!leadingTightMuon) {
     event->AddCollection("LooseNonLeadingPATMuons", loosePATMuons);
+    event->AddCollection("LooseNonLeadingDisplacedPATMuons", looseDisplacedPATMuons);
     if (muonMatchingParams.size() != 0) {
       event->AddCollection("LooseNonLeadingMuonsSegmentMatch", looseMuonsSegmentMatch);
       event->AddCollection("LooseNonLeadingMuonsVertexSegmentMatch", looseMuonsVertexSegmentMatch);
@@ -163,6 +160,14 @@ void TTAlpsObjectsManager::InsertNonLeadingLooseMuonsCollections(shared_ptr<Even
   event->AddCollection("LooseNonLeadingPATMuons", looseNonLeadingPATMuons);
   auto looseNonLeadingPATMuonsVertex = asNanoEvent(event)->GetVerticesForMuons(asNanoMuons(looseNonLeadingPATMuons));
   event->AddCollection("LooseNonLeadingPATMuonsVertex", looseNonLeadingPATMuonsVertex);
+
+  auto looseNonLeadingDisplacedPATMuons = make_shared<PhysicsObjects>();
+  for (auto muon : *looseDisplacedPATMuons) {
+    if (muon == leadingTightMuon->GetPhysicsObject())
+      continue;
+    looseNonLeadingDisplacedPATMuons->push_back(muon);
+  }
+  event->AddCollection("LooseNonLeadingDisplacedPATMuons", looseNonLeadingDisplacedPATMuons);
   
   // only segment matched implemented for now
   if (muonMatchingParams.find("Segment") == muonMatchingParams.end()) {
@@ -171,6 +176,7 @@ void TTAlpsObjectsManager::InsertNonLeadingLooseMuonsCollections(shared_ptr<Even
     return;
   }
     
+  float segmentRatio = muonMatchingParams["Segment"];
   auto looseNonLeadingMuonsSegmentMatch = make_shared<PhysicsObjects>();
   auto looseNonLeadingPATMuonsSegmentMatch = make_shared<PhysicsObjects>();
   auto looseNonLeadingDSAMuonsSegmentMatch = make_shared<PhysicsObjects>();
@@ -230,7 +236,7 @@ void TTAlpsObjectsManager::InsertMuonVertexCollection(shared_ptr<Event> event) {
   }
 }
 
-void TTAlpsObjectsManager::InsertRevertedMatchedMuons(shared_ptr<Event> event) {
+void TTAlpsObjectsManager::InsertRevertedMatchedMuonsCollections(shared_ptr<Event> event) {
   if (muonMatchingParams.empty()) return;
 
   auto looseDSAMuons = asNanoMuons(event->GetCollection("LooseDSAMuons"));
@@ -238,15 +244,11 @@ void TTAlpsObjectsManager::InsertRevertedMatchedMuons(shared_ptr<Event> event) {
   auto looseDisplacedPATMuons = make_shared<NanoMuons>();
   try {
     loosePATMuons = asNanoMuons(event->GetCollection("LooseNonLeadingPATMuons"));
+    loosePATMuons = asNanoMuons(event->GetCollection("LooseNonLeadingDisplacedPATMuons"));
   } catch (const Exception &e) {
     info() << "Using LoosePATMuons collection for reverted PAT-DSA matching" << endl;
     loosePATMuons = asNanoMuons(event->GetCollection("LoosePATMuons"));
-  }
-  for (auto muon : *loosePATMuons) {
-    float dxy = muon->Get("dxyPVTraj");
-    if (fabs(dxy) >= 0.02) {
-      looseDisplacedPATMuons->push_back(muon);
-    }
+    looseDisplacedPATMuons = asNanoMuons(event->GetCollection("LooseDisplacedPATMuons"));
   }
   for (auto &[matchingMethod, param] : muonMatchingParams) {
     if (matchingMethod == "DR") {
