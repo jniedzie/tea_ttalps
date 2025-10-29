@@ -6,14 +6,14 @@ TT_dasBackgrounds2018 = {
     # "backgrounds2018/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
     # "backgrounds2018/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    "backgrounds2018/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    "backgrounds2018/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    "backgrounds2018/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2-00000000000000000000000000000000/USER",
-    "backgrounds2018/TTZH": "/TTZH_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2018/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTZH": "/TTZH_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2018/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
     # ¨files on lrygaard user space - TTZToLL is overlapping with TZToLL* above
     "backgrounds2018/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
@@ -64,7 +64,7 @@ dasBackgrounds2018 = {key: value for d in (
     ST_dasBackgrounds2018,
     DY_dasBackgrounds2018,
     V_dasBackgrounds2018,
-    QCD_dasBackgrounds2018
+    QCD_dasBackgrounds2018,
 ) for key, value in d.items()}
 
 dasData2018_standard = {

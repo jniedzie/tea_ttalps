@@ -155,6 +155,7 @@ histParams += helper.get_basic_params()
 if runLLPNanoAODHistograms:
   histParams += helper.get_llp_params()
   irregularHistParams += helper.get_llp_irregular_params()
+  histParams2D += helper.get_llp_2d_params()
 
 if runNminus1Histograms:
   histParams += helper.get_nminus1_params()

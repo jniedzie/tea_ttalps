@@ -2,54 +2,54 @@
 ##################     2016PreVFP    ##################
 
 TT_dasBackgrounds2016PreVFP = {
-    "backgrounds2016PreVFP/TTToSemiLeptonic": "",
-    "backgrounds2016PreVFP/TTToHadronic": "",
-    "backgrounds2016PreVFP/TTTo2L2Nu": "",
+    "backgrounds2016PreVFP/TTToSemiLeptonic": "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/TTTo2L2Nu": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
 
-    # "backgrounds2016PreVFP/TTZToLLNuNu_M-10": "",
-    # "backgrounds2016PreVFP/TTZToLL_M-1to10": "",
-    "backgrounds2016PreVFP/TTZToLL": "",
-    "backgrounds2016PreVFP/TTZToQQ": "",
+    "backgrounds2016PreVFP/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/TTZToLL": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
 
-    "backgrounds2016PreVFP/TTWJetsToLNu": "",
+    "backgrounds2016PreVFP/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
 
-    "backgrounds2016PreVFP/ttHTobb": "",
-    "backgrounds2016PreVFP/ttHToNonbb": "",
+    "backgrounds2016PreVFP/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
 
-    "backgrounds2016PreVFP/TTZZ": "",
-    "backgrounds2016PreVFP/TTZH": "",
-    "backgrounds2016PreVFP/TTTT": "",
+    "backgrounds2016PreVFP/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/TTZH": "/TTZH_TuneCP5_13TeV-madgraph-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v3-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
 }
 ST_dasBackgrounds2016PreVFP = {
-    "backgrounds2016PreVFP/ST_tW_antitop": "",
-    "backgrounds2016PreVFP/ST_t-channel_antitop": "",
-    "backgrounds2016PreVFP/ST_tW_top": "",
-    "backgrounds2016PreVFP/ST_t-channel_top": "",
+    "backgrounds2016PreVFP/ST_tW_antitop": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v3-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v3-00000000000000000000000000000000/USER",
 }
 DY_dasBackgrounds2016PreVFP = {
-    "backgrounds2016PreVFP/DYJetsToMuMu_M-50": "",
-    "backgrounds2016PreVFP/DYJetsToMuMu_M-10to50": "",
+    "backgrounds2016PreVFP/DYJetsToMuMu_M-50": "/DYJetsToMuMu_M-50_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2016PreVFP = {
-    # "backgrounds2016PreVFP/WJetsToLNu": "",
-    "backgrounds2016PreVFP/W1JetsToLNu": "",
-    "backgrounds2016PreVFP/W2JetsToLNu": "",
-    "backgrounds2016PreVFP/W3JetsToLNu": "",
-    "backgrounds2016PreVFP/W4JetsToLNu": "",
+    "backgrounds2016PreVFP/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/W1JetsToLNu": "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/W2JetsToLNu": "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/W3JetsToLNu": "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/W4JetsToLNu": "/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
 }
 QCD_dasBackgrounds2016PreVFP = {
-    "backgrounds2016PreVFP/QCD_Pt-15To20": "",
-    "backgrounds2016PreVFP/QCD_Pt-20To30": "",
-    "backgrounds2016PreVFP/QCD_Pt-30To50": "",
-    "backgrounds2016PreVFP/QCD_Pt-50To80": "",
-    "backgrounds2016PreVFP/QCD_Pt-80To120": "",
-    "backgrounds2016PreVFP/QCD_Pt-120To170": "",
-    "backgrounds2016PreVFP/QCD_Pt-170To300": "",
-    "backgrounds2016PreVFP/QCD_Pt-300To470": "",
-    "backgrounds2016PreVFP/QCD_Pt-470To600": "",
-    "backgrounds2016PreVFP/QCD_Pt-600To800": "",
-    "backgrounds2016PreVFP/QCD_Pt-800To1000": "",
-    "backgrounds2016PreVFP/QCD_Pt-1000": "",
+    "backgrounds2016PreVFP/QCD_Pt-15To20": "/QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-20To30": "/QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-30To50": "/QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-50To80": "/QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-80To120": "/QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-120To170": "/QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-170To300": "/QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-300To470": "/QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-470To600": "/QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-600To800": "/QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-800To1000": "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PreVFP/QCD_Pt-1000": "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
 }
 
 dasData2016PreVFP_standard = {
@@ -112,7 +112,7 @@ dasBackgrounds2016PreVFP = {key: value for d in (
     ST_dasBackgrounds2016PreVFP,
     DY_dasBackgrounds2016PreVFP,
     V_dasBackgrounds2016PreVFP,
-    QCD_dasBackgrounds2016PreVFP
+    QCD_dasBackgrounds2016PreVFP,
 ) for key, value in d.items()}
 
 dasSignals2016PreVFP = {
@@ -142,48 +142,48 @@ TT_dasBackgrounds2016PostVFP = {
 
     # "backgrounds2016PostVFP/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     # "backgrounds2016PostVFP/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/TTZToLL": "",
-    "backgrounds2016PostVFP/TTZToQQ": "",
+    "backgrounds2016PostVFP/TTZToLL": "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 
-    "backgrounds2016PostVFP/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 
-    "backgrounds2016PostVFP/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
 
-    "backgrounds2016PostVFP/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/TTZH": "../data/TTZH_TuneCP5_13TeV-madgraph-pythia8_2016PostVFP.txt",
-    "backgrounds2016PostVFP/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/TTZH": "../data/TTZH_TuneCP5_13TeV-madgraph-pythia8_2016PostVFP.txt",
+    # "backgrounds2016PostVFP/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
 }
 ST_dasBackgrounds2016PostVFP = {
-    "backgrounds2016PostVFP/ST_tW_antitop": "../data/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8_2016PostVFP.txt",
-    "backgrounds2016PostVFP/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/ST_tW_antitop": "../data/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8_2016PostVFP.txt",
+    # "backgrounds2016PostVFP/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    # "backgrounds2016PostVFP/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
 }
 DY_dasBackgrounds2016PostVFP = {
-    "backgrounds2016PostVFP/DYJetsToMuMu_M-50": "/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/DYJetsToMuMu_M-50": "/DYJetsToMuMu_M-50_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2016PostVFP = {
-    # "backgrounds2016PostVFP/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/W1JetsToLNu": "",
-    "backgrounds2016PostVFP/W2JetsToLNu": "",
-    "backgrounds2016PostVFP/W3JetsToLNu": "",
-    "backgrounds2016PostVFP/W4JetsToLNu": "",
+    # "backgrounds2016PostVFP/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/W1JetsToLNu": "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/W2JetsToLNu": "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/W3JetsToLNu": "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/W4JetsToLNu": "/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
 }
 QCD_dasBackgrounds2016PostVFP = {
     "backgrounds2016PostVFP/QCD_Pt-15To20": "/QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/QCD_Pt-20To30": "",
+    "backgrounds2016PostVFP/QCD_Pt-20To30": "/QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/QCD_Pt-30To50": "/QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/QCD_Pt-50To80": "/QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/QCD_Pt-80To120": "/QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/QCD_Pt-120To170": "",
+    "backgrounds2016PostVFP/QCD_Pt-120To170": "/QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/QCD_Pt-170To300": "/QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/QCD_Pt-300To470": "",
+    "backgrounds2016PostVFP/QCD_Pt-300To470": "/QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/QCD_Pt-470To600": "/QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    "backgrounds2016PostVFP/QCD_Pt-600To800": "",
-    "backgrounds2016PostVFP/QCD_Pt-800To1000": "",
-    "backgrounds2016PostVFP/QCD_Pt-1000": "",
+    "backgrounds2016PostVFP/QCD_Pt-600To800": "/QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/QCD_Pt-800To1000": "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/QCD_Pt-1000": "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 }
 
 dasData2016PostVFP = {
@@ -234,7 +234,7 @@ dasBackgrounds2016PostVFP = {key: value for d in (
     ST_dasBackgrounds2016PostVFP,
     DY_dasBackgrounds2016PostVFP,
     V_dasBackgrounds2016PostVFP,
-    QCD_dasBackgrounds2016PostVFP
+    QCD_dasBackgrounds2016PostVFP,
 ) for key, value in d.items()}
 
 dasSignals2016PostVFP = {
