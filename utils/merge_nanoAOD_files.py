@@ -1,4 +1,6 @@
-from ttalps_samples_list import dasSignals2022postEE
+from ttalps_samples_list import dasBackgrounds2016
+from ttalps_samples_list import dasSamples2018, dasSignals2018, dasData2018, dasData2018_standard, dasBackgrounds2018
+from ttalps_samples_list import dasBackgrounds2022preEE
 from Logger import warn, logger_print
 
 import argparse
@@ -24,15 +26,14 @@ skim = "skimmed_looseSemimuonic_v2"
 # skim = "skimmed_looseInvertedMet_v1"
 # skim = "skimmed_looseNoMet_v1"
 
-sample_paths = dasSignals2022postEE.keys()
 
 # sample_paths = dasSamples2018.keys()
 # sample_paths = dasSignals2018.keys()
-# sample_paths = dasBackgrounds2018.keys()
+sample_paths = dasBackgrounds2018.keys()
 # sample_paths = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 # sample_paths = dasData2018.keys()
 # sample_paths = dasData2018_standard.keys()
-
+# sample_paths = dasSignals2022postEE.keys()
 # sample_paths = dasBackgrounds2022preEE.keys()
 
 input_pattern = "*.root"

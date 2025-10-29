@@ -61,10 +61,10 @@ dasBackgrounds2018test = {
 
 dasBackgrounds2018 = {key: value for d in (
     TT_dasBackgrounds2018,
-    # ST_dasBackgrounds2018,
-    # DY_dasBackgrounds2018,
-    # V_dasBackgrounds2018,
-    # QCD_dasBackgrounds2018,
+    ST_dasBackgrounds2018,
+    DY_dasBackgrounds2018,
+    V_dasBackgrounds2018,
+    QCD_dasBackgrounds2018,
 ) for key, value in d.items()}
 
 dasData2018_standard = {

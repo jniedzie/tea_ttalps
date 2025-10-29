@@ -70,8 +70,6 @@ sample_path = ""
 input_directory = f"{input_base_path}/{sample_path}/{input_skim}"
 output_trees_dir = f"{output_base_path}/{sample_path}/{output_skim}/"
 
-samples = dasSignals2022postEE.keys()
-
 # samples = dasSamples2018.keys()
 samples = dasBackgrounds2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())

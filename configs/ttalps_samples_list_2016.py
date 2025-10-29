@@ -230,10 +230,10 @@ dasSignals2016PostVFP_60GeV = {
 }
 
 dasBackgrounds2016PostVFP = {key: value for d in (
-    # TT_dasBackgrounds2016PostVFP,
-    # ST_dasBackgrounds2016PostVFP,
-    # DY_dasBackgrounds2016PostVFP,
-    # V_dasBackgrounds2016PostVFP,
+    TT_dasBackgrounds2016PostVFP,
+    ST_dasBackgrounds2016PostVFP,
+    DY_dasBackgrounds2016PostVFP,
+    V_dasBackgrounds2016PostVFP,
     QCD_dasBackgrounds2016PostVFP,
 ) for key, value in d.items()}
 

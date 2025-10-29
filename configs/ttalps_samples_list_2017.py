@@ -101,10 +101,10 @@ dasSignals2017_60GeV = {
 }
 
 dasBackgrounds2017 = {key: value for d in (
-    # TT_dasBackgrounds2017,
-    # ST_dasBackgrounds2017,
-    # DY_dasBackgrounds2017,
-    # V_dasBackgrounds2017,
+    TT_dasBackgrounds2017,
+    ST_dasBackgrounds2017,
+    DY_dasBackgrounds2017,
+    V_dasBackgrounds2017,
     QCD_dasBackgrounds2017,
 ) for key, value in d.items()}
 
