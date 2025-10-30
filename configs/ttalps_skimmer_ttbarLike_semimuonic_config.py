@@ -16,8 +16,6 @@ eventsTreeNames = ("Events",)
 eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 1),  # This is against TOP recommendation, but we do it to keep it the same as SR
-    "nLooseDSAMuons": (0, 0),
-    "nLoosePATMuons": (1, 1),
     "nLooseElectrons": (0, 0),
 
     # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.

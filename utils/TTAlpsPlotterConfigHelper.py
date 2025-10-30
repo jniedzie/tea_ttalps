@@ -16,7 +16,7 @@ class TTAlpsPlotterConfigHelper:
   ):
 
     if len(skim) != 4:
-        error("The 'skim' list must have three elements, e.g.: (\"my_skim\", \"_histType\", \"SR\")")
+      error("The 'skim' list must have 4 elements, e.g.: (\"mySkim\", \"dimuonType\", \"_histType\", \"SR\")")
 
     region = skim[-1]
     module_name = f"ttalps_plotting_styles_{region}"

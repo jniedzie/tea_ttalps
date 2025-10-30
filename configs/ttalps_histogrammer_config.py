@@ -11,6 +11,10 @@ from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEvent
 eventCuts = {
     **looseEventCuts,
     "MET_pt": signalEventCuts["MET_pt"],
+
+    # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
+    # To measure the second number, you can use the `utils/count_hem_events.py` script.
+    "applyHEMveto": (True, 0.6294),
 }
 
 year = "2018"
@@ -73,9 +77,9 @@ runRevertedMatching = False
 noWeights = False
 
 weightsBranchName = "genWeight"
-rhoBranchName = "fixedGridRhoFastjetAll" # for jec unc.
+rhoBranchName = "fixedGridRhoFastjetAll"  # for jec unc.
 if "22" in year or "23" in year:
-    rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
+  rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 eventsTreeNames = ("Events",)
 
 specialBranchSizes = {
@@ -102,7 +106,7 @@ muonMatchingParams = {
     # "ProxDR" : 0.1
 }
 if skim[1] == "":
-    muonMatchingParams = {}
+  muonMatchingParams = {}
 
 muonVertexBaselineSelection = [
     "InvariantMassCut",
@@ -122,8 +126,8 @@ muonVertexBaselineSelection = [
 #  - to not use dimuonSelection and muonVertexCollection: set dimuonSelection to None
 dimuonSelection = skim[1]
 if dimuonSelection == "":
-    dimuonSelection = None
-    ignoreDimuons = True
+  dimuonSelection = None
+  ignoreDimuons = True
 
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
@@ -136,10 +140,10 @@ muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection
 # input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
 muonVertexCollectionInput = skim[2]
 if muonVertexCollectionInput == "":
-    if muonMatchingParams != {}:
-        muonVertexCollectionInput = "LooseMuonsVertexSegmentMatch"
-    else:
-        muonVertexCollectionInput = None
+  if muonMatchingParams != {}:
+    muonVertexCollectionInput = "LooseMuonsVertexSegmentMatch"
+  else:
+    muonVertexCollectionInput = None
 
 histParams = ()
 histParams2D = ()

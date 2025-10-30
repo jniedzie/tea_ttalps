@@ -1,4 +1,4 @@
-from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignalsPrivate2018, dasData2018_standard, dasSignals2018
+from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasData2018_standard, dasSignals2018
 from ttalps_samples_list import dasBackgrounds2018Devel, dasData2018Devel
 from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasData2022preEE
 from ttalps_samples_list import dasBackgrounds2022postEE, dasSignals2022postEE, dasData2022postEE
@@ -54,16 +54,16 @@ samples = dasBackgrounds2018.keys()
 base_path = "/data/dust/user/{}/ttalps_cms"
 
 applyScaleFactors = {
-  # name : (apply nominal, apply variation)
-  "muon": (True, True),
-  "dsamuon": (True, True),
-  "muonTrigger": (True, True),
-  "pileup": (True, True),
-  "bTagging": (True, True),
-  "PUjetID": (True, True),
-  "dimuonEff": (False, False),
-  # "DSAEff": (False, False),
-  "jec" : (False, True), 
+    # name : (apply nominal, apply variation)
+    "muon": (True, True),
+    "dsamuon": (True, True),
+    "muonTrigger": (True, True),
+    "pileup": (True, True),
+    "bTagging": (True, True),
+    "PUjetID": (True, True),
+    "dimuonEff": (False, False),
+    # "DSAEff": (False, False),
+    "jec": (False, True),
 }
 
 # this has to be here, otherwise the script will not work:
