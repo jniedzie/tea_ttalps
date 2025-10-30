@@ -20,8 +20,9 @@ eventCuts = {
     "nLoosePATMuons": (1, 1),
     "nLooseElectrons": (0, 0),
 
-    # TODO: make it possible to have event-level flags instead of always ranges
-    "applyHEMveto": (True, 0),  # only the first value matters, set it to True or False
+    # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
+    # To measure the second number, you can use the `utils/count_hem_events.py` script.
+    "applyHEMveto": (True, 0.6294),
 }
 
 specialBranchSizes = {
