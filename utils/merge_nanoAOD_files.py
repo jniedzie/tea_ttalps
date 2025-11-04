@@ -33,11 +33,8 @@ skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
 # skim = "skimmed_looseInvertedMet_v1"
 # skim = "skimmed_looseNoMet_v1"
 
-# sample_paths = dasBackgrounds2016.keys()
-
-# sample_paths = dasSamples2018.keys()
-sample_paths = dasSignals2018.keys()
-# sample_paths = dasBackgrounds2018.keys()
+# sample_paths = dasSignals2018.keys()
+sample_paths = dasBackgrounds2018.keys()
 
 input_pattern = "*.root"
 output_pattern = "output_{}.root"

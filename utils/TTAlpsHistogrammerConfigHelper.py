@@ -2,6 +2,7 @@ from itertools import product
 from math import pi
 import numpy as np
 
+
 class TTAlpsHistogrammerConfigHelper:
   def __init__(self, muonMatchingParams, muonVertexCollection, muonVertexCollectionInput, runRevertedMatching):
     self.muonMatchingParams = muonMatchingParams
@@ -15,7 +16,7 @@ class TTAlpsHistogrammerConfigHelper:
         self.looseMuonCollections.append(f"Reverted{matching}MatchedDisplaced{category}Muons")
       self.tightMuonCollections.append(f"Tight{category}Muons{matching}Match")
       self.looseMuonCollections.append(f"Loose{category}Muons{matching}Match")
-      
+
     if muonMatchingParams.__len__() == 0:
       self.looseMuonCollections.append(f"LooseDSAMuons")
       self.looseMuonCollections.append(f"LoosePATMuons")
@@ -146,11 +147,11 @@ class TTAlpsHistogrammerConfigHelper:
         "logNormChi2": (100, -7, 1),
     }
 
-    self.pt_irr_bins = [3,20,40,100,200,600]
-    self.absDxy_irr_bins = [0,10,120,700]
+    self.pt_irr_bins = [3, 20, 40, 100, 200, 600]
+    self.absDxy_irr_bins = [0, 10, 120, 700]
     self.singleMuon_ABCD_irregular_variables = {
-      "absDxyPVTraj_irr": self.absDxy_irr_bins,
-      "pt_irr": self.pt_irr_bins,
+        "absDxyPVTraj_irr": self.absDxy_irr_bins,
+        "pt_irr": self.pt_irr_bins,
     }
 
   def get_default_params(self):
@@ -187,7 +188,7 @@ class TTAlpsHistogrammerConfigHelper:
         ("TightMuons", "subleadingPt", 2000, 0, 1000, ""),
         ("TightMuons", "eta", 300, -3, 3, ""),
         ("TightMuons", "phi", 300, -3, 3, ""),
-        
+
         ("Event", "nLooseElectrons", 50, 0, 50, ""),
         ("LooseElectrons", "pt", 2000, 0, 1000, ""),
         ("LooseElectrons", "leadingPt", 2000, 0, 1000, ""),
@@ -212,7 +213,7 @@ class TTAlpsHistogrammerConfigHelper:
       self.__insert_MuonVertexHistograms(params, collection)
     for collection in self.goodMuonVertexCollections:
       params += (
-        ("Event", "n"+collection, 50, 0, 50, ""),
+          ("Event", "n"+collection, 50, 0, 50, ""),
       )
 
     return tuple(params)
@@ -257,6 +258,14 @@ class TTAlpsHistogrammerConfigHelper:
         )
         for name_ in names:
           self.__insert_Nminus1Histograms2D(params, name_)
+
+    return tuple(params)
+
+  def get_llp_2d_params(self):
+    params = []
+
+    for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
+      self.__insert_MuonVertex2DHistograms(params, collection)
 
     return tuple(params)
 
@@ -328,7 +337,7 @@ class TTAlpsHistogrammerConfigHelper:
       )
       for name in names:
         self.__insert_irregular_MuonHistograms(params, name)
-    
+
     return tuple(params)
 
   def get_gen_params(self):
@@ -384,7 +393,8 @@ class TTAlpsHistogrammerConfigHelper:
 
     all_mother_categories = []
     if runGenLevelMothersABCD:
-      mother_categories = ["other","X","Y","ALP","D","B","d","u","s","c","b","t","e","mu","tau","g","gamma","Z","W","rho","pi0","omega","K0","phi","upsilon","JPsi"]
+      mother_categories = ["other", "X", "Y", "ALP", "D", "B", "d", "u", "s", "c", "b", "t", "e",
+                           "mu", "tau", "g", "gamma", "Z", "W", "rho", "pi0", "omega", "K0", "phi", "upsilon", "JPsi"]
       for category1 in mother_categories:
         for category2 in mother_categories:
           category_name = "".join(sorted([category1, category2]))
@@ -401,22 +411,22 @@ class TTAlpsHistogrammerConfigHelper:
           params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
       for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables_subset.items():
-          for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables_subset.items():
-            for category in all_mother_categories:
-              name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}_{category}")
+        for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables_subset.items():
+          for category in all_mother_categories:
+            name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}_{category}")
+            params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
+
+          if runGenLevelResonancesABCD:
+            names = (
+                self.__insert_into_name(collection, "FromALP"),
+                self.__insert_into_name(collection, "Resonant"),
+                self.__insert_into_name(collection, "FalseResonant"),
+                self.__insert_into_name(collection, "NonResonant"),
+            )
+            for collectionName in names:
+              name = self.__insert_into_name(collectionName, f"_{variable_2}_vs_{variable_1}")
               params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
-            if runGenLevelResonancesABCD:
-              names = (
-                  self.__insert_into_name(collection, "FromALP"),
-                  self.__insert_into_name(collection, "Resonant"),
-                  self.__insert_into_name(collection, "FalseResonant"),
-                  self.__insert_into_name(collection, "NonResonant"),
-              )
-              for collectionName in names:
-                name = self.__insert_into_name(collectionName, f"_{variable_2}_vs_{variable_1}")
-                params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
-    
     return tuple(params)
 
   def get_singleMuon_abcd_2Dparams(self):
@@ -432,7 +442,7 @@ class TTAlpsHistogrammerConfigHelper:
           params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
-  
+
   def get_singleMuon_abcd_irregular_2Dparams(self):
     params = []
 
@@ -547,12 +557,12 @@ class TTAlpsHistogrammerConfigHelper:
     return tuple(params)
 
   def get_SF_variation_variables(self):
-    collections = ("BestDimuonVertex","BestPFIsoDimuonVertex")
+    collections = ("BestDimuonVertex", "BestPFIsoDimuonVertex")
 
     variables = (
 
         # SR 2018:
-        ("logLxy", "logLeadingPt"), # SR 2018
+        ("logLxy", "logLeadingPt"),  # SR 2018
         ("logDxyPVTraj1", "logLeadingPt"),
         ("logDxyPVTraj1", "logPt"),
         ("logDxyPVTraj2", "logPt"),
@@ -562,8 +572,8 @@ class TTAlpsHistogrammerConfigHelper:
         ("logAbsCollinearityAngle", "logLeadingPt"), # SR combined
         ("logAbsCollinearityAngle", "logPt"), # SR combined
 
-        ("log3Dangle", "logLeadingPt"), # 2018 DSA-DSA no chi2 vs DCA cut
-        ("logOuterDR", "logLeadingPt"), # 2018 DSA-DSA no chi2 vs DCA cut
+        ("log3Dangle", "logLeadingPt"), # 2018 DSA-DSA looser chi2 vs DCA cut
+        ("logOuterDR", "logLeadingPt"), # 2018 DSA-DSA looser chi2 vs DCA cut
         
         ("logLxy", "log3Dangle"), # SR combined, 2018
         ("logPt", "logDisplacedTrackIso03Dimuon2"), # Jpsi CR 2018
@@ -670,8 +680,8 @@ class TTAlpsHistogrammerConfigHelper:
 
   def __insert_irregular_MuonHistograms(self, params, name):
     params += (
-      (name, "absDxyPVTraj_irr", self.absDxy_irr_bins, ""),
-      (name, "pt_irr", self.pt_irr_bins, ""),
+        (name, "absDxyPVTraj_irr", self.absDxy_irr_bins, ""),
+        (name, "pt_irr", self.pt_irr_bins, ""),
     )
 
   # FillMuonVertexHistograms function
@@ -775,6 +785,12 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "absDzFromLeadingTight2", 10000, 0, 100, ""),
     )
 
+  def __insert_MuonVertex2DHistograms(self, params, name):
+    params += (
+        (f"{name}_vy_vs_vx", 1000, -1000, 1000, 1000, -1000, 1000, ""),
+        (f"{name}_vy_vs_vx_trackerOnly", 1000, -130, 130, 1000, -130, 130, ""),
+    )
+
   def __insert_Nminus1Histograms(self, params, name):
     params += (
         (name, "invMass", 20000, 0, 200, ""),
@@ -814,7 +830,7 @@ class TTAlpsHistogrammerConfigHelper:
 
   def __insert_Nminus1Histograms2D(self, params, name):
     params += (
-      (name + "_logNormChi2_vs_logDCA", 100, -4, 1, 100, -7, 1, ""),
+        (name + "_logNormChi2_vs_logDCA", 100, -4, 1, 100, -7, 1, ""),
     )
 
   # For FillGenDimuonHistograms function
@@ -842,7 +858,7 @@ class TTAlpsHistogrammerConfigHelper:
     )
 
   def __insert_SingleMuonQualityHistograms(self, params, name):
-    
+
     params += (
         ("Event", "n"+name, 50, 0, 50, ""),
         (name, "nSegments", 100, 0, 100, ""),

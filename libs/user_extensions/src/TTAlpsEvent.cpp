@@ -38,6 +38,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   // NOTE: nanoEventProcessor change "" to "custom" to do cutsom PU SF for 2018
   map<string, float> pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "");
   map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTrigger");
+  map<string, float> L1PreFiringWeight = nanoEventProcessor->GetL1PreFiringWeight(nanoEvent, "L1PreFiringWeight");
 
   int maxNjets = 4;
   auto leadingJets = eventProcessor->GetLeadingObjects(event, "GoodJets", maxNjets);
@@ -61,9 +62,9 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
   map<string, float> scaleFactorMap;
-  scaleFactorMap["default"] = genWeight * pileupSF["systematic"] * muonTriggerSF["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
+  scaleFactorMap["default"] = genWeight * pileupSF["systematic"] * muonTriggerSF["systematic"] * L1PreFiringWeight["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
                               muonSF["systematic"] * dimuonEffSF["systematic"] * DSAEffSF["systematic"] ;
-  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc};
+  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &L1PreFiringWeight, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
@@ -72,6 +73,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
       scaleFactorMap[name] = genWeight * 
                              (scaleFactorMapPtr == &pileupSF ? (*scaleFactorMapPtr)[name] : pileupSF["systematic"]) *
                              (scaleFactorMapPtr == &muonTriggerSF ? (*scaleFactorMapPtr)[name] : muonTriggerSF["systematic"]) *
+                             (scaleFactorMapPtr == &L1PreFiringWeight ? (*scaleFactorMapPtr)[name] : L1PreFiringWeight["systematic"]) *
                              (scaleFactorMapPtr == &btagSF ? (*scaleFactorMapPtr)[name] : btagSF["systematic"]) *
                              (scaleFactorMapPtr == &PUjetIDSF ? (*scaleFactorMapPtr)[name] : PUjetIDSF["systematic"]) *
                              (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"]) *

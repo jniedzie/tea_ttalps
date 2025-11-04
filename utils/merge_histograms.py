@@ -1,5 +1,5 @@
 from ttalps_histogrammer_files_config import skim, samples
-from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasSignalsPrivate2018, dasData2018_standard, dasSignals2018
+from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasData2018_standard, dasSignals2018
 from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasData2022preEE
 from ttalps_samples_list import dasBackgrounds2022postEE, dasSignals2022postEE, dasData2022postEE
 from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017
@@ -27,18 +27,22 @@ args = parser.parse_args()
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch_genInfo_nminus1")
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsNoChi2DCA", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_ttbarCR_noHemVeto", "", "")
+# skim = ("skimmed_looseSemimuonic_v2_ttbarCR_withHemVeto", "", "")
 
 samples = dasBackgrounds2018.keys()
+# samples = dasData2018.keys()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
-hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
+# hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
+hist_path = "histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
 
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 if skim[2] != "":
   hist_path += f"_{skim[2]}"
+
 
 def extract_year(s):
   match = re.search(r'(20\d{2})(?!\d)', s)
@@ -97,7 +101,7 @@ def main():
     submit_file = f"submit_merge_jobs_{unique_id}.sub"
 
     os.makedirs(scripts_dir, exist_ok=True)
-    
+
     with open(merge_cmds, "w") as f:
       for i, cmd in enumerate(commands):
         script_name = f"{scripts_dir}/job_{i}.sh"
