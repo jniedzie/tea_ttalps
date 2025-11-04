@@ -5,7 +5,6 @@ year = "2018"
 extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
-printEveryNevents = 10000
 
 applyLooseSkimming = False
 applyTTZLikeSkimming = False
@@ -18,9 +17,13 @@ eventCuts = {
     "nTightMuons": (1, 1),  # This is against TOP recommendation, but we do it to keep it the same as SR
     "nLooseMuons": (1, 1),
     "nLooseElectrons": (0, 0),
+
     # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
-    "applyHEMveto": (True, 0.6294),
+    "applyHEMveto": (False, 0.6294),
+
+    # Only the first argument matters
+    "applyJetVetoMaps": (True, None),
 }
 
 specialBranchSizes = {
