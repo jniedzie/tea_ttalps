@@ -1,8 +1,14 @@
-from ttalps_samples_list import dasSamples2018, dasBackgrounds2018, dasData2018, dasData2018_standard, dasSignals2018
-from ttalps_samples_list import dasData2022preEE, dasData2022postEE, dasSignals2022preEE
-from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017
-from ttalps_samples_list import dasBackgrounds2016PostVFP, dasData2016PostVFP, dasSignals2016PostVFP
-from ttalps_samples_list import dasBackgrounds2022postEE, dasData2023postBPix, dasSignals2023postBPix
+from ttalps_samples_list import dasData2016PreVFP, dasBackgrounds2016PreVFP, dasSignals2016PreVFP
+from ttalps_samples_list import dasData2016PostVFP, dasBackgrounds2016PostVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
+from ttalps_samples_list import dasData2018, dasBackgrounds2018, dasSignals2018
+
+from ttalps_samples_list import dasData2022preEE, dasBackgrounds2022preEE, dasSignals2022preEE
+from ttalps_samples_list import dasData2022postEE, dasBackgrounds2022postEE, dasSignals2022postEE
+
+from ttalps_samples_list import dasData2023preBPix, dasBackgrounds2023preBPix, dasSignals2023preBPix
+from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix, dasSignals2023postBPix
+
 import os
 
 max_files = -1
@@ -22,7 +28,8 @@ output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # tt̄ (μ+jets) CR
 input_skim = "skimmed_looseSemimuonic_v2_merged"
-output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_withHemVeto"
+output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_withJetVeto"
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_withHemVeto"
 # output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_noHemVeto"
 
 # tt̄ (μ+jets) + 1 DSA Muon CR

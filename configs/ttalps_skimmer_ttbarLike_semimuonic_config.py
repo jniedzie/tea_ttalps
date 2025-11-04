@@ -1,8 +1,10 @@
 from ttalps_extra_collections import get_extra_event_collections
+from scale_factors_config import get_scale_factors
 
 year = "2018"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
+scaleFactors = get_scale_factors(year)
 
 nEvents = -1
 
@@ -22,8 +24,8 @@ eventCuts = {
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
     "applyHEMveto": (False, 0.6294),
 
-    # Only the first argument matters
-    "applyJetVetoMaps": (True, None),
+    # First argument: should the veto be applied? Second argument: should histograms be saved?
+    "applyJetVetoMaps": (True, False),
 }
 
 specialBranchSizes = {
