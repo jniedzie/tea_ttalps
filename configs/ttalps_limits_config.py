@@ -29,7 +29,7 @@ if username == "lrygaard":
 
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
 # hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
-# hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
+hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
 
 # SR dimuon cuts applied
 signal_hist_path = (
@@ -46,7 +46,9 @@ background_hist_path = (
 use_combined_limits = True
 
 # extra_str = "_newSelection"
-extra_str = "_newSelection_dsaSFs"
+# extra_str = "_newSelection_dsaSFs"
+# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA2"
+extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5"
 # extra_str = "_newSelection_dsaSFs_dimuonEffSFs"
 datacards_output_path = f"{base_output_path}/limits/limits_{year_str}/datacards{extra_str}_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/limits_{year_str}/plots{extra_str}/"
@@ -113,8 +115,8 @@ nuisances = {
     "bTaggingMedium_up_correlated": "variation",
     "bTaggingMedium_up_uncorrelated": "variation",
 
-    # "dimuonEff_down": "variation",
-    # "dimuonEff_up": "variation",
+    "dimuonEff_down": "variation",
+    "dimuonEff_up": "variation",
     # "DSAEff_down": "variation",
     # "DSAEff_up": "variation",
 

@@ -1,6 +1,7 @@
-from ttalps_samples_list import dasBackgrounds2016
-from ttalps_samples_list import dasSamples2018, dasSignals2018, dasData2018, dasData2018_standard, dasBackgrounds2018
-from ttalps_samples_list import dasBackgrounds2022preEE
+from ttalps_samples_list import dasSamples2018, dasSignalsPrivate2018, dasData2018, dasData2018_standard, dasBackgrounds2018, dasSignals2018
+from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasBackgrounds2023preBPix, dasSignals2023postBPix, dasData2023postBPix
+from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017, dasSignals2016PreVFP, dasSignals2016PostVFP, dasBackgrounds2016PostVFP, dasData2016PostVFP
+from ttalps_samples_list import dasBackgrounds2018Devel, dasData2018Devel
 from Logger import warn, logger_print
 
 import argparse
@@ -8,13 +9,19 @@ import glob
 import os
 import ROOT
 
-base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
+user = "lrygaard"
+# user = "jalimena"
+input_base_path = f"/data/dust/user/{user}/ttalps_cms"
+output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Loose ttbar semimuonic skim
-skim = "skimmed_looseSemimuonic_v2"
+# skim = "skimmed_looseSemimuonic_v2"
 
 # Loose ttbar semielectronic skim
 # skim = "skimmed_looseSemielectronic_v1"
+
+skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
+
 
 # Loose non-ttbar skims, vetoing events with too many (b-)jets
 # skim = "skimmed_looseNonTT_v1"
@@ -28,14 +35,9 @@ skim = "skimmed_looseSemimuonic_v2"
 
 # sample_paths = dasBackgrounds2016.keys()
 
-sample_paths = dasSamples2018.keys()
-# sample_paths = dasSignals2018.keys()
+# sample_paths = dasSamples2018.keys()
+sample_paths = dasSignals2018.keys()
 # sample_paths = dasBackgrounds2018.keys()
-# sample_paths = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
-# sample_paths = dasData2018.keys()
-# sample_paths = dasData2018_standard.keys()
-
-# sample_paths = dasBackgrounds2022preEE.keys()
 
 input_pattern = "*.root"
 output_pattern = "output_{}.root"
@@ -83,7 +85,7 @@ def run_on_condor(commands, dry_run=False):
   with open(submit_file, "w") as f:
     f.write("universe = vanilla\n")
     f.write("getenv = True\n")  # Ensure environment variables are inherited
-    f.write("request_memory = 8 GB\n")
+    f.write("request_memory = 4 GB\n")
     f.write("+JobFlavour = \"espresso\"\n")
 
     # Logging (separate files per job)
@@ -181,8 +183,8 @@ def main():
   args = get_args()
 
   for path in sample_paths:
-    input_path = f"{base_path}/{path}/{skim}/"
-    output_path = f"{base_path}/{path}/{skim}_merged/"
+    input_path = f"{input_base_path}/{path}/{skim}/"
+    output_path = f"{output_base_path}/{path}/{skim}_merged/"
     merge_n_files(input_path, output_path, args)
 
   if args.condor:

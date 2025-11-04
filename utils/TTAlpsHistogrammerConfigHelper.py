@@ -561,6 +561,9 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("logAbsCollinearityAngle", "logLeadingPt"), # SR combined
         ("logAbsCollinearityAngle", "logPt"), # SR combined
+
+        ("log3Dangle", "logLeadingPt"), # 2018 DSA-DSA no chi2 vs DCA cut
+        ("logOuterDR", "logLeadingPt"), # 2018 DSA-DSA no chi2 vs DCA cut
         
         ("logLxy", "log3Dangle"), # SR combined, 2018
         ("logPt", "logDisplacedTrackIso03Dimuon2"), # Jpsi CR 2018
@@ -770,10 +773,6 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "logDeltaSquaredIso04", 1000, -5, 5, ""),
         (name, "absDzFromLeadingTight1", 10000, 0, 100, ""),
         (name, "absDzFromLeadingTight2", 10000, 0, 100, ""),
-        (name, "invMassJPsiBin_logNormChi2Cut1", 1, 2.4, 3.9, ""),
-        (name, "invMassJPsiBin_logNormChi2Cut2", 1, 2.4, 3.9, ""),
-        (name, "invMassJPsiBin_logNormChi2Cut3", 1, 2.4, 3.9, ""),
-        (name, "invMassJPsiBin_logNormChi2Cut4", 1, 2.4, 3.9, ""),
     )
 
   def __insert_Nminus1Histograms(self, params, name):

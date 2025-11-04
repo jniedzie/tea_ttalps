@@ -33,7 +33,7 @@ backgrounds_per_year = {
 #     data = f"collision_data{year}/Muon{year}"
 
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsDSAChi2DCA2", "_LooseNonLeadingMuonsVertexSegmentMatch")
 
 # skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "")
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}" # all SFs 2018
@@ -97,8 +97,9 @@ exclude_backgrounds_with_less_than = 0  # entries
 
 collection = "BestDimuonVertex"
 variable = "invMassJPsiBin"
-# variable = "invMassJPsiBin_logNormChi2Cut4"
-output_name = f"../data/dimuonEffSFs{year_string}_{variable}_noChi2DCACut.json"
+# variable = "invMassJPsiBin_logNormChi2_c2"
+# output_name = f"../data/dimuonEffSFs{year_string}_{variable}_DSAChi2DCA1p5.json"
+output_name = f"../data/dimuonEffSFs{year_string}_{variable}_DSAChi2DCA2.json"
 # output_name = f"../data/dimuonEffSFs{year_string}_{variable}.json"
 
 for category in ("Pat", "PatDSA", "DSA"):

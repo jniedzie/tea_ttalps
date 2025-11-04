@@ -421,21 +421,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
     histogramsHandler->Fill(name + "_absDzFromLeadingTight2", deltaZfromTightMuon2);
   }
 
-  auto logNormChi2 = TMath::Log10(dimuon->GetAs<float>("normChi2"));
-  auto logDca = TMath::Log10(dimuon->GetAs<float>("dca"));
-  float logNormChi2Min1 = 2 * logDca - 3;
-  float logNormChi2Min2 = 2 * logDca - 2.5;
-  float logNormChi2Min3 = 2 * logDca - 2;
-  float logNormChi2Min4 = 2 * logDca - 1.5;
-  if (logNormChi2 > logNormChi2Min1)
-    histogramsHandler->Fill(name + "_invMassJPsiBin_logNormChi2Cut1", dimuon->GetInvariantMass());
-  if (logNormChi2 > logNormChi2Min2)
-    histogramsHandler->Fill(name + "_invMassJPsiBin_logNormChi2Cut2", dimuon->GetInvariantMass());
-  if (logNormChi2 > logNormChi2Min3)
-    histogramsHandler->Fill(name + "_invMassJPsiBin_logNormChi2Cut3", dimuon->GetInvariantMass());
-  if (logNormChi2 > logNormChi2Min4)
-    histogramsHandler->Fill(name + "_invMassJPsiBin_logNormChi2Cut4", dimuon->GetInvariantMass());
-
 }
 
 void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> event, const shared_ptr<PhysicsObjects> vertexCollection,

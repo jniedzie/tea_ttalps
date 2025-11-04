@@ -367,7 +367,7 @@ def main():
   info("\n\n\t", end="")
   for ctau in ctaus:
     info(f"{ctau:.0e} mm", end="\t")
-  info()
+  info("", end="\n")
   
   # print the signal rates for each mass
   for mass in masses:
