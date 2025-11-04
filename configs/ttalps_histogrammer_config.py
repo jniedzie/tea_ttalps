@@ -15,6 +15,9 @@ eventCuts = {
     # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
     "applyHEMveto": (True, 0.6294),
+
+    # Only the first argument matters
+    "applyJetVetoMaps": (True, None),
 }
 
 year = "2018"
@@ -23,7 +26,6 @@ extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
 
 nEvents = -1
-printEveryNevents = 10000
 
 # Should dimuon checks be skipped? Used for tt̄ CR, where we don't have dimuons
 ignoreDimuons = False
