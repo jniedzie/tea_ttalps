@@ -64,6 +64,7 @@ applyScaleFactors = {
     "dimuonEff": (False, False),
     # "DSAEff": (False, False),
     "jec": (False, True),
+    "L1PreFiringWeight": (True, True),
 }
 
 # this has to be here, otherwise the script will not work:
