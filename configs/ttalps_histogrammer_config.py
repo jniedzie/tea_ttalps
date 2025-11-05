@@ -14,10 +14,10 @@ eventCuts = {
 
     # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
-    "applyHEMveto": (True, 0.6294),
+    "nano_applyHEMveto": (True, 0.6294),
 
     # First argument: should the veto be applied? Second argument: should histograms be saved?
-    "applyJetVetoMaps": (True, False),
+    "nano_applyJetVetoMaps": (True, False),
 }
 
 year = "2018"

@@ -9,6 +9,7 @@
 #include "TTAlpsCuts.hpp"
 #include "TTAlpsObjectsManager.hpp"
 #include "UserExtensionsHelpers.hpp"
+#include "NanoEventProcessor.hpp"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
   auto eventWriter = make_shared<EventWriter>(eventReader);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto eventProcessor = make_unique<EventProcessor>();
+  auto nanoEventProcessor = make_unique<NanoEventProcessor>();
   auto ttAlpsCuts = make_unique<TTAlpsCuts>();
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
@@ -79,7 +81,8 @@ int main(int argc, char **argv) {
       if (!ttAlpsCuts->PassesTTZLikeCuts(event, cutFlowManager)) continue;
     }
 
-    if (!eventProcessor->PassesEventCuts(event, cutFlowManager)) continue;
+    auto nanoEvent = asNanoEvent(event);
+    if (!nanoEventProcessor->PassesEventCuts(nanoEvent, cutFlowManager)) continue;
 
     eventWriter->AddCurrentEvent("Events");
   }
