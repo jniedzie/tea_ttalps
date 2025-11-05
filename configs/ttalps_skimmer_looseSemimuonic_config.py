@@ -3,9 +3,8 @@ from golden_json_config import goldenJsons
 from ttalps_met_filters import get_met_filters
 from ttalps_triggers import get_IsoMu_trigger
 from scale_factors_config import get_scale_factors
+from ttalps_skimmer_files_config import year
 
-year = "2018"
-# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 goldenJson = goldenJsons[year]
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
@@ -30,7 +29,7 @@ eventCuts = {
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
     "nano_applyHEMveto": (False, 0.6294),
 
-    # First argument: should the veto be applied? Second argument: should histograms be saved?
+    # Only the first argument matters
     "nano_applyJetVetoMaps": (True, False),
 }
 

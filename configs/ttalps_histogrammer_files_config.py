@@ -1,3 +1,5 @@
+import teaHelpers as tea
+
 from ttalps_samples_list import dasData2016PreVFP, dasBackgrounds2016PreVFP, dasSignals2016PreVFP
 from ttalps_samples_list import dasData2016PostVFP, dasBackgrounds2016PostVFP, dasSignals2016PostVFP
 from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
@@ -17,7 +19,7 @@ input_username = "lrygaard"
 # input_username = "jniedzie"
 
 # Loose semimuonic skim
-# skim = ("skimmed_looseSemimuonic_v2", "")
+# skim = ("skimmed_looseSemimuonic_v2_merged", "", "")
 # skim = ("skimmed_looseSemimuonic_v2", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # SR, J/Psi CR skim without segment match ratio
@@ -53,6 +55,8 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsNoChi2DCA",
 samples = dasBackgrounds2018.keys()
 # samples = dasSignals2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
+
+year = tea.get_year_from_samples(samples)
 
 base_path = "/data/dust/user/{}/ttalps_cms"
 

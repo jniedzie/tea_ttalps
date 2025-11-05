@@ -1,5 +1,4 @@
 nEvents = -1
-printEveryNevents = 1000
 
 runDefaultHistograms = False
 runTriggerHistograms = True

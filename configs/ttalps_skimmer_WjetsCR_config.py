@@ -1,11 +1,10 @@
-from ttalps_extra_collections import *
+from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
+from ttalps_skimmer_files_config import year
 
-year = "2018"
 extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
-printEveryNevents = 1000
 
 applyLooseSkimming = False
 applyTTZLikeSkimming = False
@@ -22,7 +21,7 @@ eventsTreeNames = ("Events",)
 # "OuterDR" : max Delta R (eg. 0.1)
 # "ProxDR" : max Delta R (eg. 0.1)
 muonMatchingParams = {
-    "Segment" : 2.0/3.0,
+    "Segment": 2.0/3.0,
     # "DR" : 0.1,
     # "OuterDR" : 0.1,
     # "ProxDR" : 0.1,
@@ -42,6 +41,6 @@ branchesToKeep = ["*"]
 branchesToRemove = []
 
 specialBranchSizes = {
-  "Proton_multiRP": "nProton_multiRP",
-  "Proton_singleRP": "nProton_singleRP",
+    "Proton_multiRP": "nProton_multiRP",
+    "Proton_singleRP": "nProton_singleRP",
 }

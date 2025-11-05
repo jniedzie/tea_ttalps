@@ -1,11 +1,9 @@
-from ttalps_extra_collections import *
+from ttalps_extra_collections import get_extra_event_collections
+from ttalps_skimmer_files_config import year
 
-year = "2018"
-# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
-printEveryNevents = 10000
 
 applyLooseSkimming = False
 applyTTZLikeSkimming = True
