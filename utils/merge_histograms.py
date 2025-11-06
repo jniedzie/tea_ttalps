@@ -21,22 +21,24 @@ parser.add_argument("--condor", action="store_true", default=False, help="Run on
 parser.add_argument("--dry", action="store_true", default=False, help="Dry run.")
 args = parser.parse_args()
 
-# comment out to use skim and samples from ttalps_histogrammer_files_config.py
+# comment out to use skim and samples from ttalps_histogrammer_files_config.pyCollapse commentComment on line L24kerstinlovisa commented on Nov 6, 2025 kerstinlovisaon Nov 6, 2025CollaboratorMore actionsPlease don't remove this, I need this to merge on other samples than what I'm running in the histogrammerReactWrite a replyResolve commentCode has comments. Press enter to view.
 
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch_genInfo_nminus1")
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsNoChi2DCA", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsNoChi2DCA", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR_noHemVeto", "", "")
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR_withHemVeto", "", "")
 
-samples = dasBackgrounds2018.keys()
+# samples = dasBackgrounds2018.keys()
 # samples = dasData2018.keys()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
-hist_path = "histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
+# hist_path = "histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
+hist_path = "histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs_L1PreFiringWeightSFs"
+# hist_path = "histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs_L1PreFiringWeightSFs_noL1weights"
 
 if skim[1] != "":
   hist_path += f"_{skim[1]}"

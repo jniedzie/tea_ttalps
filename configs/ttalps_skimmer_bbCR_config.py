@@ -1,11 +1,10 @@
-from ttalps_extra_collections import *
+from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
+from ttalps_skimmer_files_config import year
 
-year = "2018"
 extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
-printEveryNevents = 1000
 
 applyLooseSkimming = False
 applyTTZLikeSkimming = False

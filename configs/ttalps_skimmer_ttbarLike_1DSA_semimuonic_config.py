@@ -1,11 +1,9 @@
-from ttalps_extra_collections import *
+from ttalps_extra_collections import get_extra_event_collections
+from ttalps_skimmer_files_config import year
 
-year = "2018"
-# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 
 nEvents = -1
-printEveryNevents = 10000
 
 applyLooseSkimming = False
 applyTTZLikeSkimming = False
@@ -31,7 +29,7 @@ muonMatchingParams = {
 
 eventCuts = {
     "MET_pt": (50, 9999999),
-    "nTightMuons": (1, 1),  #  This is against TOP recommendation, but we do it to keep it the same as SR
+    "nTightMuons": (1, 1),  # This is against TOP recommendation, but we do it to keep it the same as SR
     "nLooseDSAMuonsSegmentMatch": (1, 1),
     "nLoosePATMuonsSegmentMatch": (1, 1),
     "nLooseElectrons": (0, 0),
@@ -42,6 +40,6 @@ branchesToKeep = ["*"]
 branchesToRemove = []
 
 specialBranchSizes = {
-  "Proton_multiRP": "nProton_multiRP",
-  "Proton_singleRP": "nProton_singleRP",
+    "Proton_multiRP": "nProton_multiRP",
+    "Proton_singleRP": "nProton_singleRP",
 }
