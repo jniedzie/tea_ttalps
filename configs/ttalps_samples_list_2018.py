@@ -156,15 +156,14 @@ dasSignalsPrivate2018 = {
     "signals2018private/tta_mAlp-60GeV_ctau-1e3mm": "/ttalps/lrygaard-LLPnanoAODv1_m-60GeV_ctau-1e3mm-00000000000000000000000000000000/USER",
 }
 
-dasSignals2018 = {
-    key: value for d in (
-        dasSignals2018_0p35GeV,
+
+dasSignals2018 = {key: value for d in (
+    dasSignals2018_0p35GeV,
         dasSignals2018_2GeV,
         dasSignals2018_12GeV,
         dasSignals2018_30GeV,
         dasSignals2018_60GeV,
-    )
-}
+) for key, value in d.items()}
 
 dasSamples2018 = {key: value for d in (
     dasBackgrounds2018,
