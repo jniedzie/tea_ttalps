@@ -1,3 +1,6 @@
+import teaHelpers as tea
+import os
+
 from ttalps_samples_list import dasData2016PreVFP, dasBackgrounds2016PreVFP, dasSignals2016PreVFP
 from ttalps_samples_list import dasData2016PostVFP, dasBackgrounds2016PostVFP, dasSignals2016PostVFP
 from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
@@ -8,8 +11,6 @@ from ttalps_samples_list import dasData2022postEE, dasBackgrounds2022postEE, das
 
 from ttalps_samples_list import dasData2023preBPix, dasBackgrounds2023preBPix, dasSignals2023preBPix
 from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix, dasSignals2023postBPix
-
-import os
 
 max_files = -1
 
@@ -28,7 +29,7 @@ output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # tt̄ (μ+jets) CR
 input_skim = "skimmed_looseSemimuonic_v2_merged"
-output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_withJetVeto"
+output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 # output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_withHemVeto"
 # output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_noHemVeto"
 
@@ -80,3 +81,5 @@ output_trees_dir = f"{output_base_path}/{sample_path}/{output_skim}/"
 samples = dasBackgrounds2018.keys()
 # samples = dasData2018.keys()
 # samples = list(dasBackgrounds2018.keys()) + list(dasData2018.keys())
+
+year = tea.get_year_from_samples(samples)

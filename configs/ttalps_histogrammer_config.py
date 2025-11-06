@@ -3,7 +3,7 @@ from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
-from ttalps_histogrammer_files_config import skim, applyScaleFactors
+from ttalps_histogrammer_files_config import skim, applyScaleFactors, year
 
 from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
 from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
@@ -16,12 +16,10 @@ eventCuts = {
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
     "nano_applyHEMveto": (True, 0.6294),
 
-    # First argument: should the veto be applied? Second argument: should histograms be saved?
+    # Only the first argument matters
     "nano_applyJetVetoMaps": (True, False),
 }
 
-year = "2018"
-# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
 

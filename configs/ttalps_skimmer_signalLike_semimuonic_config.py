@@ -1,14 +1,12 @@
 from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from scale_factors_config import get_scale_factors
+from ttalps_skimmer_files_config import year
 
-year = "2018"
-# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
 
 nEvents = -1
-printEveryNevents = 1000
 
 applyLooseSkimming = False
 applyTTZLikeSkimming = False

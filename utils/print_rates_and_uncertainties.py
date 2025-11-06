@@ -1,4 +1,3 @@
-import ROOT
 import argparse
 import importlib
 import os
@@ -63,7 +62,7 @@ def load_uncertainties(config):
             else:
               uncertainties[signal_sample.name][unc_name] = unc
 
-    else: 
+    else:
       with open(datacard_path, "r") as datacard_file:
         lines = datacard_file.readlines()
         read = False
@@ -133,6 +132,7 @@ def get_min_max_uncertainty(uncertainties):
 
   return min_uncertainty, max_uncertainty
 
+
 def get_min_max_uncertainty_over_years(uncertainties):
   min_uncertainty = {}
   max_uncertainty = {}
@@ -151,6 +151,7 @@ def get_min_max_uncertainty_over_years(uncertainties):
 
   return min_uncertainty, max_uncertainty
 
+
 def get_unc_category(unc_name):
   variation = ""
   if "systup" in unc_name or "systdown" in unc_name:
@@ -165,7 +166,7 @@ def get_unc_category(unc_name):
     base_name = unc_name.replace(variation, "")
     return base_name
   return unc_name
-  
+
 
 def get_nice_names(years):
   nice_names = {
@@ -304,8 +305,6 @@ def main():
 
   # explicitly select the first signal key, excluding "background"
   signal_name = next(key for key in uncertainties.keys() if key != "background")
-  
-  
 
   background_rate_ = rates.pop("background")
   background_rate = 1
@@ -341,7 +340,7 @@ def main():
     reference_cross_section = cross_sections[signal_name.replace("signal_", "")]
     coupling_ref = 0.1
     coupling_target = 1.0
-    signal_scale = (theory_cross_section / reference_cross_section) * (coupling_target/coupling_ref)**2 
+    signal_scale = (theory_cross_section / reference_cross_section) * (coupling_target/coupling_ref)**2
 
     signal_rate = 1
     signal_err = 1
@@ -362,7 +361,7 @@ def main():
   # get a list of ctaus in increasing order:
   masses = sorted(set([mass for mass, _ in signal_rates.keys()]))
   ctaus = sorted(set([ctau for _, ctau in signal_rates.keys()]))
-  
+
   # print a header line with the ctaus
   info("\n\n\t", end="")
   for ctau in ctaus:
@@ -392,7 +391,6 @@ def main():
         info(f"{significance:.2f}", end="\t\t")
       else:
         info("N/A", end="\t\t")
-
 
   min_uncertainty = {}
   max_uncertainty = {}
