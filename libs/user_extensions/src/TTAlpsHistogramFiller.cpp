@@ -162,6 +162,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
 
   string muonVertexCollectionName = muonVertexCollection.first;
   FillMuonVertexHistograms(event, muonVertexCollectionName);
+  FillMuonVertex2DHistograms(event, muonVertexCollectionName);
   if (runRevertedMatching) {
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_revertedMatching");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToPatDSA");
@@ -326,8 +327,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
       warn() << "Couldn't fill dimuon histogram for one of the variables" << endl;
     }
   }
-  histogramsHandler->Fill(name + "_vy_vs_vx", dimuon->GetAs<float>("vx"), dimuon->GetAs<float>("vy"));
-  histogramsHandler->Fill(name + "_vy_vs_vx_trackerOnly", dimuon->GetAs<float>("vx"), dimuon->GetAs<float>("vy"));
 
   histogramsHandler->Fill(name + "_Lxy", dimuon->GetLxyFromPV());
   histogramsHandler->Fill(name + "_logLxy", log10(dimuon->GetLxyFromPV()));
@@ -455,6 +454,25 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     FillMuonVertexHistograms(event, vertexCollection, vertexName);
   } catch (const Exception &e) {
     warn() << "Couldn't find muon vertex collection: " << vertexName << endl;
+  }
+}
+
+void TTAlpsHistogramFiller::FillMuonVertex2DHistograms(const shared_ptr<Event> event, string vertexName) {
+  auto vertexCollection = shared_ptr<PhysicsObjects>();
+  try {
+    vertexCollection = event->GetCollection(vertexName);
+  } catch (const Exception &e) {
+    warn() << "Couldn't find muon vertex collection: " << vertexName << endl;
+    return;
+  }
+  for (auto vertex : *vertexCollection) {
+    auto dimuonVertex = asNanoDimuonVertex(vertex, event);
+
+    string vertexCategory = dimuonVertex->GetVertexCategory();
+    histogramsHandler->Fill(vertexName + "_vy_vs_vx", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
+    histogramsHandler->Fill(vertexName + "_" + vertexCategory + "_vy_vs_vx", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
+    histogramsHandler->Fill(vertexName + "_vy_vs_vx_trackerOnly", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
+    histogramsHandler->Fill(vertexName + "_" + vertexCategory + "_vy_vs_vx_trackerOnly", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
   }
 }
 

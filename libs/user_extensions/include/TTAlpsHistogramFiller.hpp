@@ -63,6 +63,8 @@ class TTAlpsHistogramFiller {
   void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName);
   void FillMuonVertexHistograms(const std::shared_ptr<NanoDimuonVertex> dimuon, std::string name, const std::shared_ptr<NanoMuon> leadingTightMuon = nullptr);
 
+  void FillMuonVertex2DHistograms(const std::shared_ptr<Event> event, std::string vertexName);
+
   // Dimuon Vertex Collection Histograms
   void FillNminus1HistogramsForMuonVertexCollection(const std::shared_ptr<Event> event);
 
