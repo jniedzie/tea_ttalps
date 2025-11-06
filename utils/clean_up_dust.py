@@ -20,24 +20,24 @@ parser.add_argument("--dry", action="store_true", default=False, help="Dry run."
 args = parser.parse_args()
 
 # samples = dasBackgrounds.keys()
-samples = dasBackgrounds2017.keys()
+samples = dasSignals.keys()
 
 compare_to_jalimena = False
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 base_path_jalimena = f"/data/dust/user/jalimena/ttalps_cms"
 
-skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
-# skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
+# skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
+skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5_beforeCorrections"
 
 hist_path = "" # Optional subdirectory
-# hist_path = "/histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
+# hist_path = "/histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs_SRDimuons_LooseNonLeadingMuonsVertexSegmentMatch_genInfo"
 
 root_path = "" # Optional subdirectory
 # root_path = "/*.root"
 
-destination = "" # Optional: if destination is given directory will be moved not deleted
-# destination = f"{skim}/histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs_SRDimuons_LooseNonLeadingMuonsVertexSegmentMatch"
+# destination = "" # Optional: if destination is given directory will be moved not deleted
+destination = f"{skim}/histograms_dimuonEffSFs_SRDimuons_genInfo"
 
 
 def get_dir_size(path):
@@ -111,15 +111,16 @@ for sample in samples:
         print("to:")
         print(total_destination)
         if not args.dry:
-            # Check if both are on the same filesystem
-            same_fs = os.stat(total_path).st_dev == os.stat(total_destination.parent).st_dev
+            if total_destination.parent.exists():
+                # Check if both are on the same filesystem
+                same_fs = os.stat(total_path).st_dev == os.stat(total_destination.parent).st_dev
 
-            # If they share the same base path (except last directory) and filesystem → rename
-            same_base = total_path.parent == total_destination.parent
-            if same_fs and same_base:
-                total_path.rename(total_destination)
-            else:
-                shutil.move(total_path, destination)
+                # If they share the same base path (except last directory) and filesystem → rename
+                same_base = total_path.parent == total_destination.parent
+                if same_fs and same_base:
+                    total_path.rename(total_destination)
+                else:
+                    shutil.move(total_path, destination)
 
     elif root_path != "":
         files_to_remove = glob.glob(f"{total_path}{root_path}")

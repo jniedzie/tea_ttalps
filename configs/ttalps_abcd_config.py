@@ -5,11 +5,8 @@ from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 from Histogram import Histogram2D
 from HistogramNormalizer import NormalizationType
 
-years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
-# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix",]
-# years = ["2016preVFP","2016postVFP","2017","2018",]
-# years = ["2022preEE","2022postEE","2023preBPix","2023postBPix"]
-# years = ["2016postVFP",]
+# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
+years = ["2018",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 luminosity_sum = 0
 year = ""
@@ -23,21 +20,13 @@ for year_ in years:
 
 do_region = "SR"
 # do_region = "JPsiCR"
-# do_region = "ttZCR"
-# do_region = "VVCR"
-# do_region = "QCDCR"
-# do_region = "WjetsCR"
-# do_region = "bbCR"
 
 do_data = False
 do_nonresonant_signal_as_background = False
 do_binning_uncertainty = True
 
-if"SR" in do_region:
+if "SR" in do_region:
   do_data = False
-  background_collection = "BestPFIsoDimuonVertex"
-  signal_collection = "BestPFIsoDimuonVertex"
-elif do_region == "bbCR" or do_region == "QCDCR":
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 elif "JPsiCR" in do_region:
@@ -142,21 +131,6 @@ if "JPsiCR" in do_region:
 elif do_region == "SR":
   y_max = 30
   y_max_ratio = 10
-elif do_region == "ttZCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "VVCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "QCDCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "WjetsCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "bbCR":
-  y_max = 10
-  y_max_ratio = 10
 
 
 # you can specify colors for the signals in the projection (otherwise they will default to red)
@@ -217,19 +191,6 @@ skims = {
     "JPsiCR": (
         ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch"),
         ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-    ),
-    "ttZCR": ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons"),
-    "VVCR": ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons"),
-    "QCDCR": (
-        ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        # ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-    ),
-    "WjetsCR": ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons"),
-    "bbCR": (
-        ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     )
 }
 
@@ -260,9 +221,9 @@ output_path += category
 if optimization_param:
   output_path += "_"+optimization_param
 
-# hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
-# hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
-hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs"
+# hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs"
+# hist_base_path = f"histograms"
+hist_base_path = f"histograms_dimuonEffSFs"
 
 background_hist_path = (
     f"{hist_base_path}"

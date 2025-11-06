@@ -72,7 +72,6 @@ def run_combine(config):
             "DSA": datacard_DSA,
           }
           existing_cards = []
-          # Loop through and check existence
           for label, path in datacards.items():
             if os.path.exists(path):
               existing_cards.append(path)

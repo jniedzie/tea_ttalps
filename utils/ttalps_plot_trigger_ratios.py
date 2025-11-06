@@ -89,8 +89,8 @@ def get_overflow(hist):
     return overflow
 
 def set_overflow(hist, overflow):
-    total_events = hist.GetBinContent(variable_singleMu.GetNbinsX()) + overflow
-    hist.SetBinContent(variable_singleMu.GetNbinsX(), total_events)
+    total_events = hist.GetBinContent(hist.GetNbinsX()) + overflow
+    hist.SetBinContent(hist.GetNbinsX(), total_events)
     return hist
 
 

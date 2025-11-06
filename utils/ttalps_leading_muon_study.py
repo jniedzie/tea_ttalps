@@ -12,8 +12,8 @@ from ttalps_luminosities import get_luminosity
 year = "2018"
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch_genInfo")
-hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs_{skim[1]}_{skim[2]}"
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "withLeadingTightMuon_genInfo")
+hist_path = f"histograms_dimuonEffSFs_{skim[1]}_{skim[2]}"
 
 cross_sections = get_cross_sections(year)
 luminosity = get_luminosity(year)
@@ -35,10 +35,10 @@ for signal in dasSignals2018.keys():
         )
     )
 
-# leading_from_alp = "TightMuonsSegmentMatchFromALP_hmu_hasLeadingMuon"
-# leading_from_w = "TightMuonsSegmentMatchFromW_hmu_hasLeadingMuon"
-leading_from_alp = "TightMuonsSegmentMatchFromALP_hasLeadingMuon"
-leading_from_w = "TightMuonsSegmentMatchFromW_hasLeadingMuon"
+leading_from_alp = "TightMuonsSegmentMatchFromALP_hmu_hasLeadingMuon"
+leading_from_w = "TightMuonsSegmentMatchFromW_hmu_hasLeadingMuon"
+# leading_from_alp = "TightMuonsSegmentMatchFromALP_hasLeadingMuon"
+# leading_from_w = "TightMuonsSegmentMatchFromW_hasLeadingMuon"
 hist_from_alp = Histogram(
     name=leading_from_alp,
     title=leading_from_alp,
@@ -154,3 +154,45 @@ h2_w.Draw("COLZ TEXT")
 c_w.SetRightMargin(0.15)
 c_w.SaveAs("../plots/leading_muon_study/ratios_leading_from_w.pdf")
 
+significance_excluding_leading_muon = {}
+significance_excluding_leading_muon[0.35] = (5.38, 5.36, 1.71, 0.28, 0.01)
+significance_excluding_leading_muon[2] = (3.02, 6.67, 4.66, 1.18, 0.18)
+significance_excluding_leading_muon[12] = (1.33, 6.34, 7.87, 4.3, 0.9)
+significance_excluding_leading_muon[30] = (0.78, 5.69, 8.48, 5.92, 1.52)
+significance_excluding_leading_muon[60] = (0.49, 4.03, 7.64, 5.97, 1.69)
+significance_including_leading_muon = {}
+significance_including_leading_muon[0.35] = (13.97, 6.37, 1.02, 0.12 ,0.01)
+significance_including_leading_muon[2] = (6.27, 14.12, 4.48, 0.59 ,0.07)
+significance_including_leading_muon[12] = (3.30, 17.54, 9.29, 1.92 ,0.23)
+significance_including_leading_muon[30] = (1.84, 17.54, 10.32, 2.64 ,0.34)
+significance_including_leading_muon[60] = (0.88, 14.86, 9.50, 2.65 ,0.37)
+
+h2_sig_excluding_leading = ROOT.TH2D("sig_excluding_leading", "Signal siginificance with leading muon from ALP;m_{a} [GeV];c#tau_{a} [mm]",
+               len(masses), 0, len(masses),
+               len(cta_values), 0, len(cta_values))
+h2_sig_including_leading = ROOT.TH2D("sig_including_leading", "Signal siginificance without leading muon from ALP;m_{a} [GeV];c#tau_{a} [mm]",
+               len(masses), 0, len(masses),
+               len(cta_values), 0, len(cta_values))
+for i, m in enumerate(masses):
+    h2_sig_excluding_leading.GetXaxis().SetBinLabel(i+1, str(m))
+    h2_sig_including_leading.GetXaxis().SetBinLabel(i+1, str(m))
+for j, c in enumerate(cta_values):
+    h2_sig_excluding_leading.GetYaxis().SetBinLabel(j+1, str(c))
+    h2_sig_including_leading.GetYaxis().SetBinLabel(j+1, str(c))
+
+for i, m in enumerate(masses):
+    for j, c in enumerate(cta_values):
+        sig_excl = significance_excluding_leading_muon[m][j]
+        sig_incl = significance_including_leading_muon[m][j]
+        h2_sig_excluding_leading.SetBinContent(i+1, j+1, sig_excl)
+        h2_sig_including_leading.SetBinContent(i+1, j+1, sig_incl)
+
+c = ROOT.TCanvas("c", "c", 800, 600)
+h2_sig_excluding_leading.Draw("COLZ TEXT")
+c.SetRightMargin(0.15)
+c.SaveAs("../plots/leading_muon_study/significance_excluding_leading_muon.pdf")
+
+c = ROOT.TCanvas("c", "c", 800, 600)
+h2_sig_including_leading.Draw("COLZ TEXT")
+c.SetRightMargin(0.15)
+c.SaveAs("../plots/leading_muon_study/significance_including_leading_muon.pdf")

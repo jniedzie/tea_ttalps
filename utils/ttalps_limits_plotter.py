@@ -5,7 +5,6 @@ from TTAlpsLimitsPlotterHelper import TTAlpsLimitsPlotterHelper, BrazilGraph, Si
 from ttalps_cross_sections import get_theory_cross_section
 from ttalps_luminosities import get_luminosity
 
-# years = ["2017","2018","2022preEE","2022postEE","2023preBPix"]
 # years = ["2023postBPix",]
 years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
 
@@ -24,16 +23,13 @@ for year_ in years:
 
 
 # PAT-PAT
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_noDSAChiDCA/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
 
 # PAT-DSA
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_noDSAChiDCA/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
 
 # DSA-DSA
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logPt_vs_logInvMass_DSA_ABCDpred.txt"
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_noDSAChiDCA/limits_BestPFIsoDimuonVertex_logLxy_vs_logPt_DSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logLxy_vs_logPt_DSA_ABCDpred.txt"
 
 # Combined
 extra_str = "newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5"
@@ -109,10 +105,8 @@ if variable == "2d":
   y_min = -5
   y_max = 3
 
-  z_min = -2.2
-  z_max = 2
-  # z_min = -3.4
-  # z_max = 1.6
+  z_min = -3.4
+  z_max = 1.6
 
   x_title = "log_{10}(m_{a} [GeV])"
   y_title = "log_{10}(c#tau_{a} [mm])"
