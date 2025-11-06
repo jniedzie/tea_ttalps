@@ -82,6 +82,42 @@ dasData2018 = {
     "collision_data2018/SingleMuon2018D": "/SingleMuon/lrygaard-LLPnanoAODv1_LLPminiAODv1_Run2018D-12Nov2019_UL2018-v8-00000000000000000000000000000000/USER",
 }
 
+dasSignals2018_0p35GeV = {
+    "signals2018/tta_mAlp-0p35GeV_ctau-1e-5mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-0p35GeV_ctau-1e0mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-0p35GeV_ctau-1e1mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-0p35GeV_ctau-1e2mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-0p35GeV_ctau-1e3mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+}
+dasSignals2018_2GeV = {
+    "signals2018/tta_mAlp-2GeV_ctau-1e-5mm" : "/TTALPto2Mu_MALP-2_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-2GeV_ctau-1e0mm" : "/TTALPto2Mu_MALP-2_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-2GeV_ctau-1e1mm" : "/TTALPto2Mu_MALP-2_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-2GeV_ctau-1e2mm" : "/TTALPto2Mu_MALP-2_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-2GeV_ctau-1e3mm" : "/TTALPto2Mu_MALP-2_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+}
+dasSignals2018_12GeV = {
+    "signals2018/tta_mAlp-12GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-12_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-12GeV_ctau-1e0mm": "/TTALPto2Mu_MALP-12_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-12GeV_ctau-1e1mm": "/TTALPto2Mu_MALP-12_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-12GeV_ctau-1e2mm": "/TTALPto2Mu_MALP-12_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-12GeV_ctau-1e3mm": "/TTALPto2Mu_MALP-12_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+}
+dasSignals2018_30GeV = {
+    "signals2018/tta_mAlp-30GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-30_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-30GeV_ctau-1e0mm": "/TTALPto2Mu_MALP-30_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-30GeV_ctau-1e1mm": "/TTALPto2Mu_MALP-30_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-30GeV_ctau-1e2mm": "/TTALPto2Mu_MALP-30_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-30GeV_ctau-1e3mm": "/TTALPto2Mu_MALP-30_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+}
+dasSignals2018_60GeV = {
+    "signals2018/tta_mAlp-60GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-60_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-60GeV_ctau-1e0mm": "/TTALPto2Mu_MALP-60_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-60GeV_ctau-1e1mm": "/TTALPto2Mu_MALP-60_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-60GeV_ctau-1e2mm": "/TTALPto2Mu_MALP-60_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
+    "signals2018/tta_mAlp-60GeV_ctau-1e3mm": "/TTALPto2Mu_MALP-60_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
+}
+
 dasSignalsPrivate2018 = {
     "signals2018private/tta_mAlp-0p35GeV_ctau-1e-5mm": "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e-5mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
     "signals2018private/tta_mAlp-0p35GeV_ctau-1e0mm": "/ttalps/lrygaard-ttalps_m-0p35GeV_ctau-1e0mm_LLPnanoAODv1-00000000000000000000000000000000/USER",
@@ -121,35 +157,13 @@ dasSignalsPrivate2018 = {
 }
 
 dasSignals2018 = {
-    "signals2018/tta_mAlp-0p35GeV_ctau-1e-5mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-0p35GeV_ctau-1e0mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-0p35GeV_ctau-1e1mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-0p35GeV_ctau-1e2mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-0p35GeV_ctau-1e3mm" : "/TTALPto2Mu_MALP-0p35_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-
-    "signals2018/tta_mAlp-2GeV_ctau-1e-5mm" : "/TTALPto2Mu_MALP-2_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-2GeV_ctau-1e0mm" : "/TTALPto2Mu_MALP-2_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-2GeV_ctau-1e1mm" : "/TTALPto2Mu_MALP-2_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-2GeV_ctau-1e2mm" : "/TTALPto2Mu_MALP-2_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-2GeV_ctau-1e3mm" : "/TTALPto2Mu_MALP-2_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-
-    "signals2018/tta_mAlp-12GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-12_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-12GeV_ctau-1e0mm": "/TTALPto2Mu_MALP-12_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-12GeV_ctau-1e1mm": "/TTALPto2Mu_MALP-12_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-12GeV_ctau-1e2mm": "/TTALPto2Mu_MALP-12_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-12GeV_ctau-1e3mm": "/TTALPto2Mu_MALP-12_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-
-    "signals2018/tta_mAlp-30GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-30_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-30GeV_ctau-1e0mm": "/TTALPto2Mu_MALP-30_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-30GeV_ctau-1e1mm": "/TTALPto2Mu_MALP-30_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-30GeV_ctau-1e2mm": "/TTALPto2Mu_MALP-30_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-30GeV_ctau-1e3mm": "/TTALPto2Mu_MALP-30_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-
-    "signals2018/tta_mAlp-60GeV_ctau-1e-5mm": "/TTALPto2Mu_MALP-60_ctau-1e-5mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-60GeV_ctau-1e0mm": "/TTALPto2Mu_MALP-60_ctau-1e0mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-60GeV_ctau-1e1mm": "/TTALPto2Mu_MALP-60_ctau-1e1mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-60GeV_ctau-1e2mm": "/TTALPto2Mu_MALP-60_ctau-1e2mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v2-00000000000000000000000000000000/USER",
-    "signals2018/tta_mAlp-60GeV_ctau-1e3mm": "/TTALPto2Mu_MALP-60_ctau-1e3mm_TuneCP5_13TeV_madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
+    key: value for d in (
+        dasSignals2018_0p35GeV,
+        dasSignals2018_2GeV,
+        dasSignals2018_12GeV,
+        dasSignals2018_30GeV,
+        dasSignals2018_60GeV,
+    )
 }
 
 dasSamples2018 = {key: value for d in (

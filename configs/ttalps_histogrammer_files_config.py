@@ -28,7 +28,6 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCA2", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsNoChi2", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsDSAChi2DCA2", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")

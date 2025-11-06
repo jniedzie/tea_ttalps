@@ -22,9 +22,6 @@ for year_ in years:
 # ------------------------------------------
 
 do_region = "SR"
-# do_region = "SR_noChi2DCACut"
-# do_region = "SR_DSAChi2DCA2"
-# do_region = "SR_dimuonEffSFs" # temprary tests with generated dimuon eff. SFs
 # do_region = "JPsiCR"
 # do_region = "ttZCR"
 # do_region = "VVCR"
@@ -79,11 +76,6 @@ optimal_parameters = {
     ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
     ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 8), "C"),
     ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # displaced ctaus = 1e0-1e3
-
-    # SRDimuons 2018 updated October 2025, with log Chi2 < 2 log DCA - 2
-    ("_Pat", "SR_DSAChi2DCA2"): ("logAbsCollinearityAngle", "logPt", (11, 11), "D"),
-    ("_PatDSA", "SR_DSAChi2DCA2"): ("logDxyPVTraj1", "logLeadingPt", (13, 8), "C"),
-    ("_DSA", "SR_DSAChi2DCA2"): ("logOuterDR", "logLeadingPt", (14, 12), "D"),
 
     # JPsiDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
     ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon2", (15, 14), "A"),
@@ -220,15 +212,6 @@ base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
     "SR": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
-    ),
-    "SR_noChi2DCACut": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch"
-    ),
-    "SR_DSAChi2DCA2": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuonsDSAChi2DCA2", "_LooseNonLeadingMuonsVertexSegmentMatch"
-    ),
-    "SR_dimuonEffSFs": (
         "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
     "JPsiCR": (
