@@ -6,8 +6,6 @@ TT_dasBackgrounds2016PreVFP = {
     "backgrounds2016PreVFP/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PreVFP/TTTo2L2Nu": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
 
-    "backgrounds2016PreVFP/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
-    "backgrounds2016PreVFP/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PreVFP/TTZToLL": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PreVFP/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
 
@@ -31,7 +29,6 @@ DY_dasBackgrounds2016PreVFP = {
     "backgrounds2016PreVFP/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v2-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2016PreVFP = {
-    "backgrounds2016PreVFP/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
     "backgrounds2016PreVFP/W1JetsToLNu": "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
     "backgrounds2016PreVFP/W2JetsToLNu": "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
     "backgrounds2016PreVFP/W3JetsToLNu": "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL16RECOAPV-106X_mcRun2_asymptotic_preVFP_v8-v1-00000000000000000000000000000000/USER",
@@ -140,32 +137,29 @@ TT_dasBackgrounds2016PostVFP = {
     "backgrounds2016PostVFP/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/TTTo2L2Nu": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 
-    # "backgrounds2016PostVFP/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/TTZToLL": "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 
     "backgrounds2016PostVFP/TTWJetsToLNu": "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 
-    # "backgrounds2016PostVFP/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/ttHTobb": "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
 
-    # "backgrounds2016PostVFP/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/TTZH": "../data/TTZH_TuneCP5_13TeV-madgraph-pythia8_2016PostVFP.txt",
-    # "backgrounds2016PostVFP/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/TTZH": "../data/TTZH_TuneCP5_13TeV-madgraph-pythia8_2016PostVFP.txt",
+    "backgrounds2016PostVFP/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
 }
 ST_dasBackgrounds2016PostVFP = {
-    # "backgrounds2016PostVFP/ST_tW_antitop": "../data/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8_2016PostVFP.txt",
-    # "backgrounds2016PostVFP/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
-    # "backgrounds2016PostVFP/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/ST_tW_antitop": "../data/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8_2016PostVFP.txt",
+    "backgrounds2016PostVFP/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
+    "backgrounds2016PostVFP/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v3-00000000000000000000000000000000/USER",
 }
 DY_dasBackgrounds2016PostVFP = {
     "backgrounds2016PostVFP/DYJetsToMuMu_M-50": "/DYJetsToMuMu_M-50_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2016PostVFP = {
-    # "backgrounds2016PostVFP/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v2-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/W1JetsToLNu": "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/W2JetsToLNu": "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",
     "backgrounds2016PostVFP/W3JetsToLNu": "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL16RECO-106X_v13-v1-00000000000000000000000000000000/USER",

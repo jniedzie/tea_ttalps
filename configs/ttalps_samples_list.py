@@ -27,10 +27,10 @@ dasBackgrounds = {key: value for d in (
     dasBackgrounds2016PostVFP,
     dasBackgrounds2018,
     dasBackgrounds2017,
-    dasSamples2022preEE,
-    dasSamples2022postEE,
-    dasSamples2023preBPix,
-    dasSamples2023postBPix)
+    dasBackgrounds2022preEE,
+    dasBackgrounds2022postEE,
+    dasBackgrounds2023preBPix,
+    dasBackgrounds2023postBPix)
     for key, value in d.items()
 }
 

@@ -1,9 +1,11 @@
-from ttalps_samples_list import dasBackgrounds2022preEE, dasBackgrounds2022postEE, dasBackgrounds2017, dasData2017
 from ttalps_samples_list import dasBackgrounds2017, dasSignals2017, dasData2017
 from ttalps_samples_list import dasBackgrounds2018, dasSignals2018, dasData2018
 from ttalps_samples_list import dasBackgrounds2016PreVFP, dasData2016PreVFP, dasSignals2016PreVFP
 from ttalps_samples_list import dasBackgrounds2016PostVFP, dasData2016PostVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasBackgrounds2022preEE, dasData2022preEE, dasSignals2022preEE
+from ttalps_samples_list import dasBackgrounds2022postEE, dasData2022postEE, dasSignals2022postEE
 from ttalps_samples_list import dasBackgrounds2023postBPix, dasData2023postBPix, dasSignals2023postBPix
+from ttalps_samples_list import dasBackgrounds2023preBPix, dasData2023preBPix, dasSignals2023preBPix
 from ttalps_samples_list import dasBackgrounds, dasSignals, dasData
 
 from Logger import error, info
@@ -11,6 +13,7 @@ import os
 import shutil
 import argparse
 import glob
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--dry", action="store_true", default=False, help="Dry run.")
@@ -24,7 +27,8 @@ compare_to_jalimena = False
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 base_path_jalimena = f"/data/dust/user/jalimena/ttalps_cms"
 
-# skim = "skimmed_looseSemimuonic_v2"
+skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
+# skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
 
 hist_path = "" # Optional subdirectory
 # hist_path = "/histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs"
@@ -74,52 +78,57 @@ for sample in samples:
 
     info(f"Removing: {total_path} - size: {size/(1024*1024):.2f} MB")
 
+    root_files = glob.glob(f"{total_path}/*.root")
 
-    if args.dry:
-        root_files = glob.glob(f"{total_path}/*.root")
-        info(f"Files in lrygaard directory: {len(root_files)}")
+    if compare_to_jalimena:
         root_files_jalimena = glob.glob(f"{total_path_jalimena}/*.root")
-        if compare_to_jalimena:
-            info(f"Files in jalimena directory: {len(root_files_jalimena)}")
-            if (len(root_files) != len(root_files_jalimena)):
-                error(f"not the same number of files in {total_path_jalimena}")
-    else:
-        root_files = glob.glob(f"{total_path}/*.root")
-        root_files_jalimena = glob.glob(f"{total_path_jalimena}/*.root")
-        if compare_to_jalimena:
-            if (len(root_files_jalimena) != 0 and len(root_files) == len(root_files_jalimena)):
-                info(f"the same number of files in {total_path_jalimena}")
-                if root_path != "":
-                    files_to_remove = glob.glob(f"{total_path}{root_path}")
-                    for file in files_to_remove:
-                        jalimena_file = file.replace(base_path, base_path_jalimena)
-                        jalimena_file = glob.glob(jalimena_file)
-                        info(f"Removing file: {file}")
-                        # check if the file exists in jalimena's directory
-                        if len(jalimena_file) == 0:
-                            error(f"File does not exist in jalimena's directory: {jalimena_file}")
-                        else:
-                            info(f"File exists in jalimena's directory: {jalimena_file}")
+        if (len(root_files_jalimena) != 0 and len(root_files) == len(root_files_jalimena)):
+            info(f"the same number of files in {total_path_jalimena}")
+            if root_path != "":
+                files_to_remove = glob.glob(f"{total_path}{root_path}")
+                for file in files_to_remove:
+                    jalimena_file = file.replace(base_path, base_path_jalimena)
+                    jalimena_file = glob.glob(jalimena_file)
+                    info(f"Removing file: {file}")
+                    # check if the file exists in jalimena's directory
+                    if len(jalimena_file) == 0:
+                        error(f"File does not exist in jalimena's directory: {jalimena_file}")
+                    else:
+                        info(f"File exists in jalimena's directory: {jalimena_file}")
+                        if not args.dry:
                             os.remove(file)
-                else:
-                    shutil.rmtree(total_path)
             else:
-                error(f"not the same number of files in {total_path_jalimena}")
+                if not args.dry:
+                    shutil.rmtree(total_path)
         else:
-            if destination != "":
-                total_destination = f"{base_path}/{sample}/{destination}"
-                print(f"moving:")
-                print(total_path)
-                print("to:")
-                print(total_destination)
-                shutil.move(total_path, destination)
-            else:
-                if root_path != "":
-                    files_to_remove = glob.glob(f"{total_path}{root_path}")
-                    for file in files_to_remove:
-                        info(f"Removing file: {file}")
-                        os.remove(file)
-                else:
-                    shutil.rmtree(total_path)
+            error(f"not the same number of files in {total_path_jalimena}")
 
-info(f"Total size removed: {total_size/(1024*1024*1024):.2f} GB")
+    elif destination != "":
+        total_destination = Path(base_path) / sample / destination
+        total_path = Path(total_path)
+        print(f"moving:")
+        print(total_path)
+        print("to:")
+        print(total_destination)
+        if not args.dry:
+            # Check if both are on the same filesystem
+            same_fs = os.stat(total_path).st_dev == os.stat(total_destination.parent).st_dev
+
+            # If they share the same base path (except last directory) and filesystem → rename
+            same_base = total_path.parent == total_destination.parent
+            if same_fs and same_base:
+                total_path.rename(total_destination)
+            else:
+                shutil.move(total_path, destination)
+
+    elif root_path != "":
+        files_to_remove = glob.glob(f"{total_path}{root_path}")
+        for file in files_to_remove:
+            info(f"Removing file: {file}")
+            if not args.dry:
+                os.remove(file)
+    else:
+        if not args.dry:
+            shutil.rmtree(total_path)
+
+info(f"Total size removed/moved: {total_size/(1024*1024*1024):.2f} GB")

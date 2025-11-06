@@ -3,8 +3,6 @@ TT_dasBackgrounds2017 = {
     "backgrounds2017/TTToHadronic": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v2-00000000000000000000000000000000/USER",
     "backgrounds2017/TTTo2L2Nu": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v2-00000000000000000000000000000000/USER",
 
-    # "backgrounds2017/TTZToLLNuNu_M-10": "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v2-00000000000000000000000000000000/USER",
-    # "backgrounds2017/TTZToLL_M-1to10": "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v2-00000000000000000000000000000000/USER",
     "backgrounds2017/TTZToLL": "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v3-00000000000000000000000000000000/USER",
     "backgrounds2017/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v3-00000000000000000000000000000000/USER",
 
@@ -28,7 +26,6 @@ DY_dasBackgrounds2017 = {
     "backgrounds2017/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/jniedzie-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v2-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2017 = {
-    # "backgrounds2017/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v1-00000000000000000000000000000000/USER",
     "backgrounds2017/W1JetsToLNu": "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v1-00000000000000000000000000000000/USER",
     "backgrounds2017/W2JetsToLNu": "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v1-00000000000000000000000000000000/USER",
     "backgrounds2017/W3JetsToLNu": "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL17RECO-106X_v6-v1-00000000000000000000000000000000/USER",

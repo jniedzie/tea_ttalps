@@ -27,7 +27,6 @@ DY_dasBackgrounds2018 = {
     "backgrounds2018/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2018 = {
-    # "backgrounds2018/WJetsToLNu": "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
     # files on lrygaard user space - overlapping with WJetsToLNu above
     "backgrounds2018/W1JetsToLNu": "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
     "backgrounds2018/W2JetsToLNu": "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
