@@ -1,6 +1,7 @@
 import ROOT
 import math
 import re
+import os
 from ttalps_samples_list import dasSignals2018
 from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
@@ -34,8 +35,10 @@ for signal in dasSignals2018.keys():
         )
     )
 
-leading_from_alp = "TightMuonsSegmentMatchFromALP_hmu_hasLeadingMuon"
-leading_from_w = "TightMuonsSegmentMatchFromW_hmu_hasLeadingMuon"
+# leading_from_alp = "TightMuonsSegmentMatchFromALP_hmu_hasLeadingMuon"
+# leading_from_w = "TightMuonsSegmentMatchFromW_hmu_hasLeadingMuon"
+leading_from_alp = "TightMuonsSegmentMatchFromALP_hasLeadingMuon"
+leading_from_w = "TightMuonsSegmentMatchFromW_hasLeadingMuon"
 hist_from_alp = Histogram(
     name=leading_from_alp,
     title=leading_from_alp,
@@ -46,6 +49,35 @@ hist_from_w = Histogram(
     title=leading_from_w,
     norm_type=NormalizationType.to_lumi,
 )
+
+def get_ratio_and_uncertainties(hist):
+    n_leading = hist.GetBinContent(2)
+    n_leading_err = hist.GetBinError(2)
+    n_nonleading = hist.GetBinContent(1)
+    n_nonleading_err = hist.GetBinError(1)
+    n_tot = n_leading + n_nonleading
+    r = n_leading / n_tot
+
+    sigma_r = math.sqrt(
+        ((n_nonleading / n_tot**2)**2) * n_leading_err**2 +
+        ((n_leading / n_tot**2)**2) * n_nonleading_err**2
+    )
+
+    if (n_leading_err > 0 or n_nonleading_err > 0):
+        # Effective total counts (accounts for weights)
+        n_eff = (n_tot)**2 / (n_leading_err**2 + n_nonleading_err**2) if (n_leading_err**2 + n_nonleading_err**2) > 0 else 0
+        k_eff = r * n_eff
+
+        if n_eff > 0:
+            low = ROOT.TEfficiency.ClopperPearson(int(round(n_eff)), int(round(k_eff)), 0.683, False)
+            high = ROOT.TEfficiency.ClopperPearson(int(round(n_eff)), int(round(k_eff)), 0.683, True)
+            err_low = r - low
+            err_high = high - r
+        else:
+            err_low = err_high = sigma_r
+    else:
+        err_low = err_high = sigma_r
+    return r, err_low, err_high
 
 ratios_leading_from_alp = {}
 ratios_leading_from_w = {}
@@ -70,33 +102,22 @@ for sample in samples:
     hist_from_alp.hist.Scale(scale)
     hist_from_w.hist.Scale(scale)
 
-    n_from_alp_with_leading_muon = hist_from_alp.hist.GetBinContent(2)
-    n_from_alp_without_leading_muon = hist_from_alp.hist.GetBinContent(1)
-    n_from_alp_tot = hist_from_alp.hist.GetBinContent(1) + hist_from_alp.hist.GetBinContent(2)
-    r_from_alp_with_leading_muon = n_from_alp_with_leading_muon / n_from_alp_tot
-    r_from_alp_with_leading_muon_unc = math.sqrt(n_from_alp_with_leading_muon*n_from_alp_without_leading_muon/(n_from_alp_tot**3))
-    print(f"Ratio leading tight muon from ALP: {r_from_alp_with_leading_muon:.3f} +- {r_from_alp_with_leading_muon_unc:.3f}")
+    r_alp, r_low_alp, r_high_alp = get_ratio_and_uncertainties(hist_from_alp.hist)    
+    r_w, r_low_w, r_high_w = get_ratio_and_uncertainties(hist_from_w.hist)    
+    
+    print(f"Ratio leading tight muon from ALP: {r_alp:.3f} + {r_high_alp:.3f} - {r_low_alp:.3f}")
+    print(f"Ratio leading tight muon from W: {r_w:.3f} + {r_high_w:.3f} - {r_low_w:.3f}")
 
-    n_from_w_with_leading_muon = hist_from_w.hist.GetBinContent(2)
-    n_from_w_without_leading_muon = hist_from_w.hist.GetBinContent(1)
-    n_from_w_tot = hist_from_w.hist.GetBinContent(1) + hist_from_w.hist.GetBinContent(2)
-    r_from_w_with_leading_muon = n_from_w_with_leading_muon / n_from_w_tot
-    r_from_w_with_leading_muon_unc = math.sqrt(n_from_w_with_leading_muon*n_from_w_without_leading_muon/(n_from_w_tot**3))
-    print(f"Ratio leading tight muon from W: {r_from_w_with_leading_muon:.3f} +- {r_from_w_with_leading_muon_unc:.3f}")
-
-    print(f"n_from_alp_tot: {n_from_alp_tot:.2f} - n_from_w_tot: {n_from_w_tot:.2f}")
-    print(f"n_from_alp_with_leading_muon: {n_from_alp_with_leading_muon:.2f} - n_from_w_with_leading_muon: {n_from_w_with_leading_muon:.2f}")
-
-    ratios_leading_from_alp[(mass,ctau)] = r_from_alp_with_leading_muon
-    ratios_leading_from_w[(mass,ctau)] = r_from_w_with_leading_muon
+    ratios_leading_from_alp[(mass,ctau)] = r_alp
+    ratios_leading_from_w[(mass,ctau)] = r_w
 
 
 masses = sorted(set(m for m, c in ratios_leading_from_alp.keys()))
 cta_values = sorted(set(c for m, c in ratios_leading_from_alp.keys()))
-h2 = ROOT.TH2D("ratios_leading_from_alp", ";m_{a} [GeV];c#tau [mm]",
+h2 = ROOT.TH2D("ratios_leading_from_alp", "Fraction of events with leading muon from ALP;m_{a} [GeV];c#tau_{a} [mm]",
                len(masses), 0, len(masses),
                len(cta_values), 0, len(cta_values))
-h2_w = ROOT.TH2D("ratios_leading_from_w", ";m_{a} [GeV];c#tau [mm]",
+h2_w = ROOT.TH2D("ratios_leading_from_w", "Fraction of events with leading muon from W;m_{a} [GeV];c#tau_{a} [mm]",
                len(masses), 0, len(masses),
                len(cta_values), 0, len(cta_values))
 for i, m in enumerate(masses):
@@ -106,7 +127,6 @@ for j, c in enumerate(cta_values):
     h2.GetYaxis().SetBinLabel(j+1, str(c))
     h2_w.GetYaxis().SetBinLabel(j+1, str(c))
 
-# ✅ Loop directly over the map
 for (mass, ctau), ratio in ratios_leading_from_alp.items():
     ix = masses.index(mass) + 1
     iy = cta_values.index(ctau) + 1
@@ -121,14 +141,16 @@ ROOT.gStyle.SetPaintTextFormat(".3f")
 h2.SetMinimum(0)
 h2_w.SetMinimum(0)
 
+if not os.path.exists("../plots/leading_muon_study"):
+    os.makedirs("../plots/leading_muon_study")
+
 c = ROOT.TCanvas("c", "c", 800, 600)
 h2.Draw("COLZ TEXT")
 c.SetRightMargin(0.15)
-c.SaveAs("../ratios_leading_from_alp.pdf")
+c.SaveAs("../plots/leading_muon_study/ratios_leading_from_alp.pdf")
 
 c_w = ROOT.TCanvas("c_w", "c_w", 800, 600)
 h2_w.Draw("COLZ TEXT")
 c_w.SetRightMargin(0.15)
-c_w.SaveAs("../ratios_leading_from_w.pdf")
-
+c_w.SaveAs("../plots/leading_muon_study/ratios_leading_from_w.pdf")
 
