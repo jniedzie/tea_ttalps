@@ -3,8 +3,8 @@ from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018,
 from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasData2022preEE
 from ttalps_samples_list import dasBackgrounds2022postEE, dasSignals2022postEE, dasData2022postEE
 from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017
-from ttalps_samples_list import dasBackgrounds2016PreVFP, dasData2016PreVFP, dasSignals2016PreVFP
-from ttalps_samples_list import dasBackgrounds2016PostVFP, dasData2016PostVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasBackgrounds2016preVFP, dasData2016preVFP, dasSignals2016preVFP
+from ttalps_samples_list import dasBackgrounds2016postVFP, dasData2016postVFP, dasSignals2016postVFP
 from ttalps_samples_list import dasBackgrounds2023preBPix, dasSignals2023preBPix, dasData2023preBPix
 from ttalps_samples_list import dasBackgrounds2023postBPix, dasSignals2023postBPix, dasData2023postBPix
 

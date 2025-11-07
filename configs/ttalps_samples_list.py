@@ -3,8 +3,8 @@
 
 ##################     2016    ##################
 
-from ttalps_samples_list_2016 import dasSamples2016PreVFP, dasData2016PreVFP, dasBackgrounds2016PreVFP, dasSignals2016PreVFP, dasData2016_standard
-from ttalps_samples_list_2016 import dasSamples2016PostVFP, dasData2016PostVFP, dasBackgrounds2016PostVFP, dasSignals2016PostVFP
+from ttalps_samples_list_2016 import dasSamples2016preVFP, dasData2016preVFP, dasBackgrounds2016preVFP, dasSignals2016preVFP, dasData2016_standard
+from ttalps_samples_list_2016 import dasSamples2016postVFP, dasData2016postVFP, dasBackgrounds2016postVFP, dasSignals2016postVFP
 
 ##################     2017    ##################
 from ttalps_samples_list_2017 import dasSamples2017, dasData2017, dasBackgrounds2017, dasSignals2017, dasData2017_standard
@@ -23,8 +23,8 @@ from ttalps_samples_list_2023 import dasSamples2023postBPix, dasData2023postBPix
 
 ##################     All years    ##################
 dasBackgrounds = {key: value for d in (
-    dasBackgrounds2016PreVFP,
-    dasBackgrounds2016PostVFP,
+    dasBackgrounds2016preVFP,
+    dasBackgrounds2016postVFP,
     dasBackgrounds2018,
     dasBackgrounds2017,
     dasBackgrounds2022preEE,
@@ -35,8 +35,8 @@ dasBackgrounds = {key: value for d in (
 }
 
 dasSignals = {key: value for d in (
-    dasSignals2016PreVFP,
-    dasSignals2016PostVFP,
+    dasSignals2016preVFP,
+    dasSignals2016postVFP,
     dasSignals2018,
     dasSignals2017,
     dasSignals2022preEE,
@@ -47,8 +47,8 @@ dasSignals = {key: value for d in (
 }
 
 dasData = {key: value for d in (
-    dasData2016PreVFP,
-    dasData2016PostVFP,
+    dasData2016preVFP,
+    dasData2016postVFP,
     dasData2018,
     dasData2017,
     dasData2022preEE,

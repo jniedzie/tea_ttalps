@@ -2,7 +2,7 @@ import numpy as np
 
 from ttalps_luminosities import get_luminosity
 from ttalps_cross_sections import get_cross_sections
-from ttalps_samples_list import dasBackgrounds2018,dasBackgrounds2017,dasBackgrounds2016PreVFP,dasBackgrounds2016PostVFP
+from ttalps_samples_list import dasBackgrounds2018,dasBackgrounds2017,dasBackgrounds2016preVFP,dasBackgrounds2016postVFP
 from ttalps_samples_list import dasBackgrounds2022postEE,dasBackgrounds2022preEE,dasBackgrounds2023preBPix,dasBackgrounds2023postBPix
 
 from Histogram import Histogram, Histogram2D
@@ -17,17 +17,6 @@ extrapolate_in_y = False
 
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-backgrounds_per_year = {
-    "2016preVFP": dasBackgrounds2016PreVFP,
-    "2016postVFP": dasBackgrounds2016PostVFP,
-    "2017": dasBackgrounds2017,
-    "2018": dasBackgrounds2018,
-    "2022preEE": dasBackgrounds2022preEE,
-    "2022postEE": dasBackgrounds2022postEE,
-    "2023preBPix": dasBackgrounds2023preBPix,
-    "2023postBPix": dasBackgrounds2023postBPix,
-}
-
 skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 
 hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs_L1PreFiringWeightSFs{skim[1]}{skim[2]}" # all SFs 2018
@@ -39,7 +28,7 @@ for year in years:
     cross_sections = get_cross_sections(year)
     luminosity = get_luminosity(year)
 
-    backgrounds = backgrounds_per_year[year]
+    backgrounds = globals()[f"dasBackgrounds{self.year}"]
     for background in backgrounds.keys():
         samples.append(
             Sample(
