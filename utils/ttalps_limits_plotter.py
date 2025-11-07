@@ -5,9 +5,8 @@ from TTAlpsLimitsPlotterHelper import TTAlpsLimitsPlotterHelper, BrazilGraph, Si
 from ttalps_cross_sections import get_theory_cross_section
 from ttalps_luminosities import get_luminosity
 
-# years = ["2017","2018","2022preEE","2022postEE","2023preBPix"]
-years = ["2018",]
-# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
+# years = ["2023postBPix",]
+years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
 
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 # cross_sections = get_cross_sections(year)
@@ -22,25 +21,28 @@ for year_ in years:
     luminosity_run3 += get_luminosity(year_)
   year_str += year_
 
-# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 
 # PAT-PAT
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
 
 # PAT-DSA
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
 
 # DSA-DSA
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_BestPFIsoDimuonVertex_logPt_vs_logInvMass_DSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logLxy_vs_logPt_DSA_ABCDpred.txt"
 
 # Combined
-### New dimuon selection with coll. angle < 0.5
-input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs/limits_combined.txt"
+extra_str = "newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5"
+# extra_str = "newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA2"
+
+input_path = f"../limits/limits_{year_str}/results_{extra_str}/limits_combined.txt"
 
 # output_path = "../limits/plots/"
-output_path = "../limits/plots_newSelection_dsaSFs/"
+output_path = f"../limits/limits_{year_str}/plots_{extra_str}/"
 
 reference_coupling = 0.1  # this is the coupling we used to generate signal samples
+
+expected_limits = True
 
 # variable = "mass"
 # variable = "ctau"
@@ -103,8 +105,8 @@ if variable == "2d":
   y_min = -5
   y_max = 3
 
-  z_min = -2.2
-  z_max = 2
+  z_min = -3.4
+  z_max = 1.6
 
   x_title = "log_{10}(m_{a} [GeV])"
   y_title = "log_{10}(c#tau_{a} [mm])"
@@ -258,15 +260,17 @@ def draw_2d_plot():
 
   # scale = cross_sections[name]  # TODO: implement cross section limits
   scale = reference_coupling
-  helper.get_2d_graph(expected=False)
+  helper.get_2d_graph(expected=expected_limits)
 
-  canvas = ROOT.TCanvas("canvas_2d_expected", "", 800, 600)
+  plot_name = "2d_expected" if expected_limits else "2d_observed"
+
+  canvas = ROOT.TCanvas(f"canvas_{plot_name}", "", 800, 600)
   canvas.cd()
   # canvas.SetLogx()
   # canvas.SetLogy()
   # canvas.SetLogz()
   ROOT.gPad.SetLeftMargin(0.15)
-  ROOT.gPad.SetBottomMargin(0.15)
+  ROOT.gPad.SetBottomMargin(0.15) 
   ROOT.gPad.SetRightMargin(0.15)
 
   helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max)
@@ -279,7 +283,7 @@ def draw_2d_plot():
   helper.draw_lumi_label(luminosity_run2, luminosity_run3)
 
   canvas.Update()
-  canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_2d_expected.pdf")
+  canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_{plot_name}.pdf")
 
 
 def main():

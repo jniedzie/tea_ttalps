@@ -123,19 +123,19 @@ cross_sectionsRun2 = {
     "tta_mAlp-12GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(12.0),
     "tta_mAlp-12GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(12.0),
     "tta_mAlp-12GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(12.0),
-    "tta_mAlp-12GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(12.0),
+    "tta_mAlp-12GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(12.0),
 
     "tta_mAlp-30GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(30.0),
     "tta_mAlp-30GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(30.0),
     "tta_mAlp-30GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(30.0),
     "tta_mAlp-30GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(30.0),
-    "tta_mAlp-30GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(30.0),
+    "tta_mAlp-30GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(30.0),
 
     "tta_mAlp-60GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(60.0),
     "tta_mAlp-60GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(60.0),
     "tta_mAlp-60GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(60.0),
     "tta_mAlp-60GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(60.0),
-    "tta_mAlp-60GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(60.0),
+    "tta_mAlp-60GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(60.0),
 
     "tta_mAlp-70GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(70.0),
 }

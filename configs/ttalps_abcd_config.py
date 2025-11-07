@@ -6,8 +6,6 @@ from Histogram import Histogram2D
 from HistogramNormalizer import NormalizationType
 
 # years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
-# years = ["2016preVFP","2016postVFP","2017","2018",]
-# years = ["2022preEE","2022postEE","2023preBPix","2023postBPix"]
 years = ["2018",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 luminosity_sum = 0
@@ -20,23 +18,15 @@ for year_ in years:
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-# do_region = "SR"
-# do_region = "SR_dimuonEffSFs" # temprary tests with generated dimuon eff. SFs
-do_region = "JPsiCR"
-# do_region = "ttZCR"
-# do_region = "VVCR"
-# do_region = "QCDCR"
-# do_region = "WjetsCR"
-# do_region = "bbCR"
+do_region = "SR"
+# do_region = "JPsiCR"
 
 do_data = False
 do_nonresonant_signal_as_background = False
 do_binning_uncertainty = True
 
-if do_region == "SR" or do_region == "SR_dimuonEffSFs":
+if "SR" in do_region:
   do_data = False
-
-if do_region == "SR" or do_region == "SR_dimuonEffSFs" or do_region == "bbCR" or do_region == "QCDCR":
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 elif "JPsiCR" in do_region:
@@ -48,9 +38,9 @@ if do_nonresonant_signal_as_background:
   signal_collection = signal_collection+ "FromALP"
 
 # category = ""
-# category = "_Pat"
+category = "_Pat"
 # category = "_PatDSA"
-category = "_DSA"
+# category = "_DSA"
 
 exclude_backgrounds_for_years = {
   "2016preVFP": 3,
@@ -65,21 +55,18 @@ exclude_backgrounds_for_years = {
 
 # binning always expressed in bin numbers, not values
 optimal_parameters = {
-    # SRDimuons updated October 2025, matching before dimuon selection, collinearity angle < 0.5
+    # SRDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
+    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
+    # ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (12, 9), "C"),
+    # ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # displaced ctaus = 1e0-1e3
+
+    # SRDimuons all years updated October 2025, matching before dimuon selection, collinearity angle < 0.5
+    # with log Chi2 < 2 log DCA - 1.5
     ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    # ("_Pat", "SR"): ("logDxyPVTraj2", "logPt", (11, 12), "C"),
-    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (12, 9), "C"),
+    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 8), "C"),
     ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # displaced ctaus = 1e0-1e3
 
-    # SRDimuons updated October 2025 with dimuonEff SFs applied
-    # ("_Pat", "SR_dimuonEffSFs"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    ("_Pat", "SR_dimuonEffSFs"): ("logAbsCollinearityAngle", "logPt", (11, 12), "D"),
-    ("_PatDSA", "SR_dimuonEffSFs"): ("logDxyPVTraj1", "logLeadingPt", (12, 9), "C"),
-    ("_DSA", "SR_dimuonEffSFs"): ("logPt", "logInvMass", (15, 15), "C"), 
-    # ("_DSA", "SR_dimuonEffSFs"): ("logPt", "logDEta", (17, 16), "C"), 
-
-
-    # JPsiDimuons updated October 2025, matching before dimuon selection, collinearity angle < 0.5
+    # JPsiDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
     ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon2", (15, 14), "A"),
     ("_PatDSA", "JPsiCR"): ("logDxyPVTraj1", "logPt", (10, 11), "C"), 
     # ("_DSA", "JPsiCR"): ("logLeadingPt", "logNormChi2", (13, 15), "C"),
@@ -144,21 +131,6 @@ if "JPsiCR" in do_region:
 elif do_region == "SR":
   y_max = 30
   y_max_ratio = 10
-elif do_region == "ttZCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "VVCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "QCDCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "WjetsCR":
-  y_max = 10
-  y_max_ratio = 10
-elif do_region == "bbCR":
-  y_max = 10
-  y_max_ratio = 10
 
 
 # you can specify colors for the signals in the projection (otherwise they will default to red)
@@ -216,25 +188,9 @@ skims = {
     "SR": (
         "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
     ),
-    "SR_dimuonEffSFs": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
-    ),
     "JPsiCR": (
         ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch"),
         ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-    ),
-    "ttZCR": ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons"),
-    "VVCR": ("skimmed_looseNonTT_v1_QCDCR", "_SRDimuons"),
-    "QCDCR": (
-        ("skimmed_looseNoBjets_lt4jets_v1_merged", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        # ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        # ("skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-    ),
-    "WjetsCR": ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "_SRDimuons"),
-    "bbCR": (
-        ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     )
 }
 
@@ -250,23 +206,24 @@ tea_ttalps_path = "tea_ttalps"
 if username == "lrygaard":
   tea_ttalps_path = "TTALP/tea_ttalps"
 output_path = (
-    f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/signal_resonances/results_{year}_"
-    f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
+  f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/results_"
+  f"{do_region}_{background_collection}{background_skim[1]}"
 )
-if not do_nonresonant_signal_as_background:
+if do_nonresonant_signal_as_background:
   output_path = (
-    f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/results_{year}_"
-    f"{do_region}_{background_collection}{background_skim[1]}{background_skim[2]}"
+    f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/signal_resonances/results_{year}_"
+    f"{do_region}{background_skim[1]}"
   )
+  
 output_path += "_data" if do_data else "_mc"
 output_path += category
 
 if optimization_param:
   output_path += "_"+optimization_param
 
-# hist_base_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
-hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs"
-# hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
+# hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs"
+# hist_base_path = f"histograms"
+hist_base_path = f"histograms_dimuonEffSFs"
 
 background_hist_path = (
     f"{hist_base_path}"

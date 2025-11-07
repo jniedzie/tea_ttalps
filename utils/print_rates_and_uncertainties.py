@@ -63,6 +63,7 @@ def load_uncertainties(config):
               uncertainties[signal_sample.name][unc_name] = unc
 
     else:
+      # print(f"Reading combined datacard: {datacard_path}")
       with open(datacard_path, "r") as datacard_file:
         lines = datacard_file.readlines()
         read = False
@@ -337,7 +338,7 @@ def main():
     ctau = float(ctau)
 
     theory_cross_section = config.get_theory_cross_section(mass)
-    reference_cross_section = cross_sections[signal_name.replace("signal_", "")]
+    reference_cross_section = cross_sections[name.replace("signal_", "")]
     coupling_ref = 0.1
     coupling_target = 1.0
     signal_scale = (theory_cross_section / reference_cross_section) * (coupling_target/coupling_ref)**2
@@ -346,12 +347,12 @@ def main():
     signal_err = 1
     if not config.use_combined_limits:
       signal_rate = signal_scale * rate
-      signal_err = uncertainties[signal_name]["stat_err_sig"] * signal_rate
+      signal_err = uncertainties[name]["stat_err_sig"] * signal_rate
     else:
       signal_rate = sum(signal_scale * r for r in rate)
       signal_err2 = 0
       for i, r in enumerate(rate):
-        stat_err = uncertainties[signal_name]["stat_err_sig"][i] * signal_scale * r
+        stat_err = uncertainties[name]["stat_err_sig"][i] * signal_scale * r
         signal_err2 = stat_err**2
       signal_err = math.sqrt(signal_err2)
 
@@ -366,7 +367,7 @@ def main():
   info("\n\n\t", end="")
   for ctau in ctaus:
     info(f"{ctau:.0e} mm", end="\t")
-  info()
+  info("")
 
   # print the signal rates for each mass
   for mass in masses:

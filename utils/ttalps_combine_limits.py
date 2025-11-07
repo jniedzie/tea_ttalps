@@ -4,7 +4,7 @@ import os
 import subprocess
 
 from limits_producer import run_commands_with_condor, run_commands_in_parallel
-from Logger import fatal, info, error, logger_print
+from Logger import fatal, info, error, logger_print, warn
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, default="", help="Path to the config file.")
@@ -49,6 +49,9 @@ def run_combine(config):
       f'cmssw-el9 --no-home --command-to-run \"cmsenv; '
       f'cd {config.datacards_output_path};'
   )
+  if not os.path.exists(config.datacards_output_path):
+    os.makedirs(config.datacards_output_path)
+  
   commands = []
   for mass in masses:
     for ctau in ctaus:
@@ -63,7 +66,19 @@ def run_combine(config):
           datacard_PatDSA = config.datacards_output_path + "/" + card_pattern_PatDSA.format(mass, ctau)
           datacard_DSA = config.datacards_output_path + "/" + card_pattern_DSA.format(mass, ctau)
 
-          combine_cards_command = f"combineCards.py {datacard_Pat} {datacard_PatDSA} {datacard_DSA} > {combined_card_path}"
+          datacards = {
+            "Pat": datacard_Pat,
+            "PatDSA": datacard_PatDSA,
+            "DSA": datacard_DSA,
+          }
+          existing_cards = []
+          for label, path in datacards.items():
+            if os.path.exists(path):
+              existing_cards.append(path)
+            else:
+              warn(f"Datacard for {label} not found at {path} — skipping.")
+
+          combine_cards_command = f"combineCards.py {' '.join(existing_cards)} > {combined_card_path}"
           combine_cards_command = f'{base_command} {combine_cards_command}\"'
 
           os.system(combine_cards_command)
@@ -80,7 +95,11 @@ def run_combine(config):
             for year in years:
               datacard_output_path = config.datacards_output_path.replace(year_str, year)
               datacard = datacard_output_path + "/" + card_pattern.format(mass, ctau)
-              datacards += datacard+" "
+              if os.path.exists(datacard):
+                datacards += datacard+" "
+              else:
+                warn(f"Datacard {datacard} not found — skipping.")
+
             combine_cards_command = f"combineCards.py {datacards} > {combined_card_path}"
             combine_cards_command = f'{base_command} {combine_cards_command}\"'
 

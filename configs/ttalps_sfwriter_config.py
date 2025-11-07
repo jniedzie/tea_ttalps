@@ -9,7 +9,7 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from Sample import Sample, SampleType
 
-# years = ["2023postBPix",]
+# years = ["2022postEE",]
 years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extrapolate_in_x = False
@@ -27,17 +27,10 @@ backgrounds_per_year = {
     "2023preBPix": dasBackgrounds2023preBPix,
     "2023postBPix": dasBackgrounds2023postBPix,
 }
-# backgrounds = backgrounds_per_year[year]
-# data = f"collision_data{year}/SingleMuon{year}"
-# if "2022" in year or "2023" in year:
-#     data = f"collision_data{year}/Muon{year}"
 
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
 
-# skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "")
-# hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs{skim[1]}{skim[2]}" # all SFs 2018
-hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs{skim[1]}{skim[2]}" # all SFs 2018
+hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs_L1PreFiringWeightSFs{skim[1]}{skim[2]}" # all SFs 2018
 
 samples = []
 year_string = ""
@@ -97,9 +90,7 @@ exclude_backgrounds_with_less_than = 0  # entries
 
 collection = "BestDimuonVertex"
 variable = "invMassJPsiBin"
-# variable = "invMassJPsiBin_logNormChi2Cut4"
-output_name = f"../data/dimuonEffSFs{year_string}_{variable}_noChi2DCACut.json"
-# output_name = f"../data/dimuonEffSFs{year_string}_{variable}.json"
+output_name = f"../data/dimuonEffSFs{year_string}_{variable}_DSAChi2DCA1p5.json"
 
 for category in ("Pat", "PatDSA", "DSA"):
 # for category in ("DSA",):

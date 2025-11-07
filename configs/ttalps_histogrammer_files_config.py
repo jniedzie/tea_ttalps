@@ -24,10 +24,10 @@ input_username = "lrygaard"
 
 # SR, J/Psi CR skim without segment match ratio
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCA2", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsNoChi2", "LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsNoChi2DCA", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
@@ -44,7 +44,7 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuonsNoChi2DCA",
 # skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
-# skim = ("skimmed_looseSemimuonic_v2_notrigger_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_noTrigger", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # Inverted MET skim
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -68,7 +68,7 @@ applyScaleFactors = {
     "pileup": (True, True),
     "bTagging": (True, True),
     "PUjetID": (True, True),
-    "dimuonEff": (False, False),
+    "dimuonEff": (True, True),
     # "DSAEff": (False, False),
     "jec": (False, True),
     "L1PreFiringWeight": (True, True),

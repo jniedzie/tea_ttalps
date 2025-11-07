@@ -93,7 +93,7 @@ signal_samples = {
 
 
 for signal_sample in signal_samples.keys():
-    filename=f"/data/dust/user/lrygaard/ttalps_cms/signals/{signal_sample}/skimmed_looseSemimuonic_v2_SR/histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_SRDimuons/histograms.root"
+    filename=f"/data/dust/user/lrygaard/ttalps_cms/signals2018/{signal_sample}/skimmed_looseSemimuonic_v2_SR_segmentMatch1p5/histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_DSAEffSFs_jecSFs_SRDimuonsDSAChi2DCADPhi_LooseNonLeadingMuonsVertexSegmentMatch/histograms.root"
 
     file = ROOT.TFile.Open(filename)
 
