@@ -26,7 +26,7 @@ DY_dasBackgrounds2023preBPix = {
 }
 V_dasBackgrounds2023preBPix = {
     # WtoLNu-2Jets has really high negative weights
-    # "backgrounds2023preBPix/WtoLNu-2Jets": "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v15-v2-00000000000000000000000000000000/USER",
+    "backgrounds2023preBPix/WtoLNu-2Jets": "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v15-v2-00000000000000000000000000000000/USER",
     "backgrounds2023preBPix/WtoLNu-4Jets": "/WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v3-00000000000000000000000000000000/USER",
 }
 QCD_dasBackgrounds2023preBPix = {
@@ -149,7 +149,7 @@ DY_dasBackgrounds2023postBPix = {
 }
 V_dasBackgrounds2023postBPix = {
     # WtoLNu-2Jets has really high negative weights
-    # "backgrounds2023postBPix/WtoLNu-2Jets": "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jniedzie-LLPnanoAODv1_Run3Summer23BPixDRPremix-130X_mcRun3_2023_realistic_postBPix_v6-v2-00000000000000000000000000000000/USER",
+    "backgrounds2023postBPix/WtoLNu-2Jets": "/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/jniedzie-LLPnanoAODv1_Run3Summer23BPixDRPremix-130X_mcRun3_2023_realistic_postBPix_v6-v2-00000000000000000000000000000000/USER",
     "backgrounds2023postBPix/WtoLNu-4Jets": "/WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8/jniedzie-LLPnanoAODv1_Run3Summer23BPixDRPremix-130X_mcRun3_2023_realistic_postBPix_v2-v3-00000000000000000000000000000000/USER",
 }
 QCD_dasBackgrounds2023postBPix = {
