@@ -177,7 +177,7 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
 
   auto extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
   auto goodJetsPtCutsIt = extraCollectionsDescriptions[goodJetCollectionName].allCuts.find("pt");
-  auto goodBJetsPtCutsIt = extraCollectionsDescriptions[goodJetCollectionName].allCuts.find("pt");
+  auto goodBJetsPtCutsIt = extraCollectionsDescriptions[goodBJetCollectionName].allCuts.find("pt");
   pair<float, float> goodJetPtCuts;
   pair<float, float> goodBJetPtCuts;
   if (goodJetsPtCutsIt != extraCollectionsDescriptions[goodJetCollectionName].allCuts.end()) {
@@ -186,7 +186,7 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
     error() << "Good jet pt cuts not defined - it is needed for jet energy corrections" << endl;
     return jec;
   }
-  if (goodBJetsPtCutsIt != extraCollectionsDescriptions[goodJetCollectionName].allCuts.end()) {
+  if (goodBJetsPtCutsIt != extraCollectionsDescriptions[goodBJetCollectionName].allCuts.end()) {
     goodBJetPtCuts = goodBJetsPtCutsIt->second;
   } else{
     goodBJetPtCuts = goodJetPtCuts;
