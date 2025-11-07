@@ -1,5 +1,5 @@
-from ttalps_samples_list import dasBackgrounds2016PreVFP, dasData2016PreVFP
-from ttalps_samples_list import dasBackgrounds2016PostVFP, dasData2016PostVFP
+from ttalps_samples_list import dasBackgrounds2016preVFP, dasData2016preVFP
+from ttalps_samples_list import dasBackgrounds2016postVFP, dasData2016postVFP
 from ttalps_samples_list import dasBackgrounds2017, dasData2017
 import os
 import subprocess

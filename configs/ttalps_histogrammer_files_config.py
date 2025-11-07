@@ -1,7 +1,7 @@
 import teaHelpers as tea
 
-from ttalps_samples_list import dasData2016PreVFP, dasBackgrounds2016PreVFP, dasSignals2016PreVFP
-from ttalps_samples_list import dasData2016PostVFP, dasBackgrounds2016PostVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasData2016preVFP, dasBackgrounds2016preVFP, dasSignals2016preVFP
+from ttalps_samples_list import dasData2016postVFP, dasBackgrounds2016postVFP, dasSignals2016postVFP
 from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
 from ttalps_samples_list import dasData2018, dasBackgrounds2018, dasSignals2018
 
@@ -46,6 +46,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # skim = ("skimmed_looseSemimuonic_v2_SR_noTrigger", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
+# For leading tight muon study: do not use NonLeadingMuons:
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseMuonsVertexSegmentMatch")
+
 # Inverted MET skim
 # skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -80,16 +83,15 @@ output_username = os.environ["USER"]
 input_directory = f"{base_path.format(input_username)}/{sample_path}/{skim[0]}/"
 output_hists_dir = f"{base_path.format(output_username)}/{sample_path}/{skim[0]}/histograms"
 
-for name, apply in applyScaleFactors.items():
-  if not apply[0] and not apply[1]:
-    continue
-
-  output_hists_dir += f"_{name}SFs"
+if "dimuonEff" in applyScaleFactors:
+  if applyScaleFactors["dimuonEff"][0] or applyScaleFactors["dimuonEff"][1]:
+    output_hists_dir += "_dimuonEffSFs"
 
 if skim[1] != "":
   output_hists_dir += f"_{skim[1]}"
-if skim[2] != "":
-  output_hists_dir += f"_{skim[2]}"
+
 output_hists_dir += "/"
+# output_hists_dir += "_ABCD/"
+# output_hists_dir += "_withLeadingTightMuon_genInfo/"
 # output_hists_dir += "_genInfo_nminus1/"
 # output_hists_dir += "_revertedMatching/"

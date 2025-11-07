@@ -3,8 +3,8 @@ from ttalps_luminosities import get_luminosity
 from Sample import Sample, SampleType
 from ttalps_samples_list import dasBackgrounds2018,dasSignals2018
 from ttalps_samples_list import dasBackgrounds2017,dasSignals2017
-from ttalps_samples_list import dasBackgrounds2016PreVFP,dasSignals2016PreVFP
-from ttalps_samples_list import dasBackgrounds2016PostVFP,dasSignals2016PostVFP
+from ttalps_samples_list import dasBackgrounds2016preVFP,dasSignals2016preVFP
+from ttalps_samples_list import dasBackgrounds2016postVFP,dasSignals2016postVFP
 from ttalps_samples_list import dasBackgrounds2022preEE,dasSignals2022preEE
 from ttalps_samples_list import dasBackgrounds2022postEE,dasSignals2022postEE
 from ttalps_samples_list import dasBackgrounds2023preBPix,dasSignals2023preBPix
@@ -24,24 +24,7 @@ class TTAlpsABCDConfigHelper:
 
     background_input = {}
     for year in self.years:
-      if year == "2016preVFP":
-        background_input[year] = dasBackgrounds2016PreVFP
-      elif year == "2016postVFP":
-        background_input[year] = dasBackgrounds2016PostVFP
-      elif year == "2017":
-        background_input[year] = dasBackgrounds2017
-      elif year == "2018":
-        background_input[year] = dasBackgrounds2018
-      elif year == "2022postEE":
-        background_input[year] = dasBackgrounds2022postEE
-      elif year == "2022preEE":
-        background_input[year] = dasBackgrounds2022preEE
-      elif year == "2023preBPix":
-        background_input[year] = dasBackgrounds2023preBPix
-      elif year == "2023postBPix":
-        background_input[year] = dasBackgrounds2023postBPix
-      else:
-        raise ValueError(f"Year {year} is not supported")
+      background_input[year] = globals()[f"dasBackgrounds{year}"]
 
     for year, dasBackgrounds in background_input.items():
       cross_sections = get_cross_sections(year)
@@ -68,25 +51,8 @@ class TTAlpsABCDConfigHelper:
 
     signal_input = {}
     for year in self.years:
-      if year == "2016preVFP":
-        signal_input[year] = dasSignals2016PreVFP
-      elif year == "2016postVFP":
-        signal_input[year] = dasSignals2016PostVFP
-      elif year == "2017":
-        signal_input[year] = dasSignals2017
-      elif year == "2018":
-        signal_input[year] = dasSignals2018
-      elif year == "2022postEE":
-        signal_input[year] = dasSignals2022postEE
-      elif year == "2022preEE":
-        signal_input[year] = dasSignals2022preEE
-      elif year == "2023preBPix":
-        signal_input[year] = dasSignals2023preBPix
-      elif year == "2023postBPix":
-        signal_input[year] = dasSignals2023postBPix
-      else:
-        raise ValueError(f"Year {year} is not supported")
-
+      signal_input[year] = globals()[f"dasSignals{year}"]
+      
     for year, dasSignals in signal_input.items():
       cross_sections = get_cross_sections(year)
       luminosity = get_luminosity(year)
@@ -112,24 +78,7 @@ class TTAlpsABCDConfigHelper:
 
     signal_inputs = {}
     for year in self.years:
-      if year == "2016preVFP":
-        signal_inputs[year] = dasSignals2016PreVFP
-      elif year == "2016postVFP":
-        signal_inputs[year] = dasSignals2016PostVFP
-      elif year == "2017":
-        signal_inputs[year] = dasSignals2017
-      elif year == "2018":
-        signal_inputs[year] = dasSignals2018
-      elif year == "2022postEE":
-        signal_inputs[year] = dasSignals2022postEE
-      elif year == "2022preEE":
-        signal_inputs[year] = dasSignals2022preEE
-      elif year == "2023preBPix":
-        signal_inputs[year] = dasSignals2023preBPix
-      elif year == "2023postBPix":
-        signal_inputs[year] = dasSignals2023postBPix
-      else:
-        raise ValueError(f"Year {year} is not supported")
+      signal_inputs[year] = globals()[f"dasSignals{self.year}"]
     
     for year, signal_input in signal_inputs.items():
       for name in signal_input:
