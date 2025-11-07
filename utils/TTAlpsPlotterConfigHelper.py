@@ -54,8 +54,24 @@ class TTAlpsPlotterConfigHelper:
       dataset = dasBackgrounds2023preBPix
     elif sample_type == SampleType.background and self.year == "2023postBPix":
       dataset = dasBackgrounds2023postBPix
+
+    elif sample_type == SampleType.signal and self.year == "2016preVFP":
+      dataset = dasSignals2016PreVFP
+    elif sample_type == SampleType.signal and self.year == "2016postVFP":
+      dataset = dasSignals2016PostVFP
+    elif sample_type == SampleType.signal and self.year == "2017":
+      dataset = dasSignals2017
     elif sample_type == SampleType.signal and self.year == "2018":
       dataset = dasSignals2018
+    elif sample_type == SampleType.signal and self.year == "2022preEE":
+      dataset = dasSignals2022preEE
+    elif sample_type == SampleType.signal and self.year == "2022postEE":
+      dataset = dasSignals2022postEE
+    elif sample_type == SampleType.signal and self.year == "2023preBPix":
+      dataset = dasSignals2023preBPix
+    elif sample_type == SampleType.signal and self.year == "2023postBPix":
+      dataset = dasSignals2023postBPix
+    
     elif sample_type == SampleType.data:
       dataset = self.data_to_include
     else:

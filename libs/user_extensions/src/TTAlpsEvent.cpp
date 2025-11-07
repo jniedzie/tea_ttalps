@@ -176,8 +176,21 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   auto goodBJetCollection = event->GetCollection(goodBJetCollectionName);
 
   auto extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
-  pair<float, float> goodJetPtCuts = extraCollectionsDescriptions[goodJetCollectionName].allCuts["pt"];
-  pair<float, float> goodBJetPtCuts = extraCollectionsDescriptions[goodBJetCollectionName].allCuts["pt"];
+  auto goodJetsPtCutsIt = extraCollectionsDescriptions[goodJetCollectionName].allCuts.find("pt");
+  auto goodBJetsPtCutsIt = extraCollectionsDescriptions[goodJetCollectionName].allCuts.find("pt");
+  pair<float, float> goodJetPtCuts;
+  pair<float, float> goodBJetPtCuts;
+  if (goodJetsPtCutsIt != extraCollectionsDescriptions[goodJetCollectionName].allCuts.end()) {
+    goodJetPtCuts = goodJetsPtCutsIt->second;
+  } else {
+    error() << "Good jet pt cuts not defined - it is needed for jet energy corrections" << endl;
+    return jec;
+  }
+  if (goodBJetsPtCutsIt != extraCollectionsDescriptions[goodJetCollectionName].allCuts.end()) {
+    goodBJetPtCuts = goodBJetsPtCutsIt->second;
+  } else{
+    goodBJetPtCuts = goodJetPtCuts;
+  }
 
   auto &config = ConfigManager::GetInstance();
   string rhoBranchName;
