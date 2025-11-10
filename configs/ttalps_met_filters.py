@@ -1,35 +1,36 @@
 
 met_filters_run2_base = {
-  "Flag_goodVertices",
-  "Flag_globalSuperTightHalo2016Filter",
-  "Flag_HBHENoiseFilter",
-  "Flag_HBHENoiseIsoFilter",
-  "Flag_BadPFMuonFilter",
-  "Flag_BadPFMuonDzFilter",
-  "Flag_hfNoisyHitsFilter",
-  "Flag_eeBadScFilter",
+    "Flag_goodVertices",
+    "Flag_globalSuperTightHalo2016Filter",
+    "Flag_HBHENoiseFilter",
+    "Flag_HBHENoiseIsoFilter",
+    "Flag_BadPFMuonFilter",
+    "Flag_BadPFMuonDzFilter",
+    "Flag_hfNoisyHitsFilter",
+    "Flag_eeBadScFilter",
 }
 
 met_filters_2017_2018 = {
-  "Flag_EcalDeadCellTriggerPrimitiveFilter",
-  "Flag_ecalBadCalibFilter",
+    "Flag_EcalDeadCellTriggerPrimitiveFilter",
+    "Flag_ecalBadCalibFilter",
 }
 
 met_filters_2016 = {
-  "EcalDeadCellTriggerPrimitiveFilter",
+    "EcalDeadCellTriggerPrimitiveFilter",
 }
 
 # Filters given for preompt-reco Run 3 data and MC, not rereco yet:
 met_filters_run3_base = {
-  "Flag_goodVertices",
-  "Flag_globalSuperTightHalo2016Filter",
-  "Flag_BadPFMuonFilter",
-  "Flag_BadPFMuonDzFilter",
-  "Flag_hfNoisyHitsFilter",
-  "Flag_eeBadScFilter",
-  "Flag_EcalDeadCellTriggerPrimitiveFilter",
-  "Flag_ecalBadCalibFilter",
+    "Flag_goodVertices",
+    "Flag_globalSuperTightHalo2016Filter",
+    "Flag_BadPFMuonFilter",
+    "Flag_BadPFMuonDzFilter",
+    "Flag_hfNoisyHitsFilter",
+    "Flag_eeBadScFilter",
+    "Flag_EcalDeadCellTriggerPrimitiveFilter",
+    "Flag_ecalBadCalibFilter",
 }
+
 
 def get_met_filters(year):
   if year == "2016preVFP" or year == "2016postVFP":
