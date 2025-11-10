@@ -36,6 +36,7 @@ runPileupHistograms = False
 #  - muonMatchingParams loose muons
 #  - muonMatchingParams loose muon vertex
 #  - extra muon vertex collections
+#  - tracker maps
 runLLPNanoAODHistograms = True
 
 # Histograms for Muon Trigger Objects

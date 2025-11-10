@@ -1,6 +1,16 @@
-from ttalps_samples_list import dasBackgrounds2016preVFP, dasData2016preVFP
-from ttalps_samples_list import dasBackgrounds2016postVFP, dasData2016postVFP
-from ttalps_samples_list import dasBackgrounds2017, dasData2017
+from ttalps_samples_list import dasData2016preVFP, dasBackgrounds2016preVFP, dasSignals2016PreVFP
+from ttalps_samples_list import dasData2016postVFP, dasBackgrounds2016postVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
+from ttalps_samples_list import dasData2018, dasBackgrounds2018, dasSignals2018
+
+from ttalps_samples_list import dasData2022preEE, dasBackgrounds2022preEE, dasSignals2022preEE
+from ttalps_samples_list import dasData2022postEE, dasBackgrounds2022postEE, dasSignals2022postEE
+
+from ttalps_samples_list import dasData2023preBPix, dasBackgrounds2023preBPix, dasSignals2023preBPix
+from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix, dasSignals2023postBPix
+
+import teaHelpers as tea
+
 import os
 import subprocess
 from Logger import info
@@ -33,6 +43,7 @@ dbs_instance = "prod/phys03"
 # dbs_instance = "prod/global"
 
 dasSamples = dasBackgrounds2018
+year = tea.get_year_from_samples(dasSamples)
 
 # For DAS datasets:
 input_output_file_list = []
