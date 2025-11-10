@@ -2,8 +2,8 @@ import ROOT
 from Logger import info, error, logger_print
 
 years = [
-    ["2016preVFP", "2016PreVFP"],
-    ["2016postVFP", "2016PostVFP"],
+    ["2016preVFP", "2016preVFP"],
+    ["2016postVFP", "2016postVFP"],
     ["2017", "2017"],
     ["2018", "2018"],
     ["2022preEE", "2022preEE"],

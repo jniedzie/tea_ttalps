@@ -1,7 +1,7 @@
-##################     2022PreEE    ##################
+##################     2022preEE    ##################
 
 TT_dasBackgrounds2022preEE = {
-    "backgrounds2022preEE/TTtoLNu2Q": "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022PreEE.txt",
+    "backgrounds2022preEE/TTtoLNu2Q": "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022preEE.txt",
     "backgrounds2022preEE/TTto4Q": "/TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
     "backgrounds2022preEE/TTto2L2Nu": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
 
@@ -116,10 +116,10 @@ dasSamples2022preEE = {key: value for d in (
     for key, value in d.items()
 }
 
-##################     2022PostEE    ##################
+##################     2022postEE    ##################
 
 TT_dasBackgrounds2022postEE = {
-    "backgrounds2022postEE/TTtoLNu2Q": "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022PostEE.txt",
+    "backgrounds2022postEE/TTtoLNu2Q": "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022postEE.txt",
     "backgrounds2022postEE/TTto4Q": "/TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v3-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/TTto2L2Nu": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
 
