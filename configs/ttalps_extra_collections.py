@@ -108,7 +108,6 @@ b_tag_tight_WPs = {
 
 
 def get_extra_event_collections(year):
-  collections = None
 
   if year == "2016preVFP" or year == "2016postVFP" or year == "2017" or year == "2018":
     collections = {**commonExtraEventCollections, **run2extraEventCollections}
