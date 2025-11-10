@@ -53,13 +53,13 @@ commonExtraEventCollections = {
     # To consider in CRs and SR
     "GoodTightBtaggedJets": {
         "inputCollections": ("GoodJets", ),
-        "btagDeepFlavB": (0.7100, 9999999.),
+        "btagDeepFlavB": (None, None),  # will be set per year in get_extra_event_collections
     },
 
     # Used in all skims
     "GoodMediumBtaggedJets": {
         "inputCollections": ("GoodJets", ),
-        "btagDeepFlavB": (0.2783, 9999999.),
+        "btagDeepFlavB": (None, None),  # will be set per year in get_extra_event_collections
     },
 }
 
@@ -83,11 +83,40 @@ run3extraEventCollections = {
     },
 }
 
+# medium WPs based on https://btv-wiki.docs.cern.ch/ScaleFactors
+b_tag_medium_WPs = {
+    "2016preVFP": 0.2598,
+    "2016postVFP": 0.2489,
+    "2017": 0.3040,
+    "2018": 0.2783,
+    "2022preEE": 0.3086,
+    "2022postEE": 0.3196,
+    "2023preBPix": 0.2431,
+    "2023postBPix": 0.2435,
+}
+
+b_tag_tight_WPs = {
+    "2016preVFP": 0.6502,
+    "2016postVFP": 0.6377,
+    "2017": 0.7476,
+    "2018": 0.7100,
+    "2022preEE": 0.7183,
+    "2022postEE": 0.7300,
+    "2023preBPix": 0.6553,
+    "2023postBPix": 0.6563,
+}
+
 
 def get_extra_event_collections(year):
+
   if year == "2016preVFP" or year == "2016postVFP" or year == "2017" or year == "2018":
-    return {**commonExtraEventCollections, **run2extraEventCollections}
+    collections = {**commonExtraEventCollections, **run2extraEventCollections}
   elif year == "2022preEE" or year == "2022postEE" or year == "2023preBPix" or year == "2023postBPix":
-    return {**commonExtraEventCollections, **run3extraEventCollections}
+    collections = {**commonExtraEventCollections, **run3extraEventCollections}
   else:
     raise ValueError(f"Year {year} not supported.")
+
+  collections["GoodMediumBtaggedJets"]["btagDeepFlavB"] = (b_tag_medium_WPs[year], 9999999.)
+  collections["GoodTightBtaggedJets"]["btagDeepFlavB"] = (b_tag_tight_WPs[year], 9999999.)
+
+  return collections

@@ -1,40 +1,70 @@
 import ROOT
-from Logger import info
+from Logger import info, error, logger_print
 
-skim_SR = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5",
-           "SRDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
+years = [
+    ["2016preVFP", "2016PreVFP"],
+    ["2016postVFP", "2016PostVFP"],
+    ["2017", "2017"],
+    ["2018", "2018"],
+    ["2022preEE", "2022preEE"],
+    ["2022postEE", "2022postEE"],
+    ["2023preBPix", "2023preBPix"],
+    ["2023postBPix", "2023postBPix"],
+]
 
-skim_CR = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5",
-           "JPsiDimuonsDSAChi2DCADPhi", "LooseNonLeadingMuonsVertexSegmentMatch")
+hist_path = "histograms"
+skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "ABCD")
 
-hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs"
 
-base_path = "/data/dust/user/jniedzie/ttalps_cms"
+def get_paths_for_year(year):
+  muon_name = "SingleMuon"
+  semi_name = "TTToSemiLeptonic"
+  lept_name = "TTTo2L2Nu"
+  if "22" in year[0] or "23" in year[0]:
+    muon_name = "Muon"
+    semi_name = "TTtoLNu2Q"
+    lept_name = "TTto2L2Nu"
 
-paths = {
-    "J/#Psi CR, tt (semi.)": f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim_CR[0]}/{hist_path}_{skim_CR[1]}_{skim_CR[2]}/histograms.root",
-    "J/#Psi CR, tt (lept.)": f"{base_path}/backgrounds2018/TTTo2L2Nu/{skim_CR[0]}/{hist_path}_{skim_CR[1]}_{skim_CR[2]}/histograms.root",
-    "J/#Psi CR, data": f"{base_path}/collision_data2018/SingleMuon2018_{skim_CR[0]}_{hist_path}_{skim_CR[1]}_{skim_CR[2]}.root",
-    "SR, tt (semi.)": f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim_SR[0]}/{hist_path}_{skim_SR[1]}_{skim_SR[2]}/histograms.root",
-}
+  paths = {
+      # data
+      "J/#Psi CR, data":        f"/data/dust/user/lrygaard/ttalps_cms/collision_data{year[0]}/{muon_name}{year[0]}_{skim[0]}_{hist_path}_{skim[1]}_{skim[2]}.root",
+      # backgrounds CR
+      "J/#Psi CR, tt (semi.)":  f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
+      "J/#Psi CR, tt (lept.)":  f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{lept_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
+      # backgrounds SR
+      "SR, tt (semi.)":         f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
+      # "tt CR, data":         f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
+  }
+  return paths
 
-rebin2D = 5
 
-# category = ""
-# category = "_Pat"
-# category = "_PatDSA"
-category = "_DSA"
+rebin2D = 1
+
+categories = ["_Pat", "_PatDSA", "_DSA"]
 
 
 # suffix = ""
 suffix = "_trackerOnly"
 
-hist_name = {
-    "J/#Psi CR, tt (semi.)": f"BestDimuonVertex{category}_vy_vs_vx{suffix}",
-    "J/#Psi CR, tt (lept.)": f"BestDimuonVertex{category}_vy_vs_vx{suffix}",
-    "J/#Psi CR, data": f"BestDimuonVertex{category}_vy_vs_vx{suffix}",
-    "SR, tt (semi.)": f"BestPFIsoDimuonVertex{category}_vy_vs_vx{suffix}",
-}
+
+def prepare_hist(hist):
+  hist.Rebin2D(rebin2D, rebin2D)
+  hist.SetMarkerStyle(20)
+  hist.SetMarkerSize(1.0)
+  hist.SetMarkerColor(ROOT.kBlack)
+  hist.SetLineColor(ROOT.kViolet)
+  hist.SetFillColorAlpha(ROOT.kViolet, 1.0)
+  
+  hist.GetXaxis().SetTitle("x [cm]")
+  hist.GetYaxis().SetTitle("y [cm]")
+  hist.GetXaxis().SetTitleSize(0.05)
+  hist.GetYaxis().SetTitleSize(0.05)
+  hist.GetXaxis().SetTitleOffset(1.2)
+  hist.GetYaxis().SetTitleOffset(1.5)
+  hist.GetXaxis().SetLabelSize(0.05)
+  hist.GetYaxis().SetLabelSize(0.05)
+  hist.GetXaxis().SetLabelOffset(0.015)
+  hist.GetYaxis().SetLabelOffset(0.015)
 
 
 def main():
@@ -44,29 +74,52 @@ def main():
   files = {}
   hists = {}
 
-  canvas = ROOT.TCanvas("canvas", "canvas", 2000, 500)
-  canvas.Divide(4, 1)
+  for year in years:
+    canvas = ROOT.TCanvas("canvas", "canvas", 2000, 2000)
+    canvas.Divide(4, 3)
 
-  for i, (name, path) in enumerate(paths.items()):
-    info(f"Opening file: {path}")
+    for i_category, category in enumerate(categories):
+      info("=================================")
+      info(f"\nProcessing category: {category}")
+      info("=================================")
 
-    files[name] = ROOT.TFile.Open(path)
-    hists[name] = files[name].Get(hist_name[name])
+      hist_name = f"BestDimuonVertex{category}_vy_vs_vx{suffix}"
 
-    hists[name].Rebin2D(rebin2D, rebin2D)
-    hists[name].GetXaxis().SetTitle("x [cm]")
-    hists[name].GetYaxis().SetTitle("y [cm]")
+      for i_sample, (name, path) in enumerate(get_paths_for_year(year).items()):
+        info(f"\nProcessing sample {name}: {path}")
 
-    canvas.cd(i + 1)
-    ROOT.gPad.SetLeftMargin(0.15)
-    ROOT.gPad.SetRightMargin(0.15)
-    ROOT.gPad.SetLogz()
+        try:
+          files[name] = ROOT.TFile.Open(path)
+        except OSError:
+          error(f"Could not open file: {path}")
+          continue
 
-    hists[name].SetTitle(name)
-    hists[name].DrawNormalized("COLZ")
+        hists[name] = files[name].Get(hist_name)
 
-  canvas.Update()
-  canvas.SaveAs(f"../plots/material_maps{category}{suffix}.pdf")
+        if hists[name] is None or type(hists[name]) == ROOT.TObject:
+          error(f"Histogram {hist_name} not found in file {path}")
+          continue
+
+        if hists[name].GetSumOfWeights() == 0:
+          error(f"Histogram {hist_name} in file {path} has sum of weights = 0")
+          continue
+
+        prepare_hist(hists[name])
+
+        i = i_category * 4 + i_sample
+        canvas.cd(i + 1)
+        ROOT.gPad.SetLeftMargin(0.15)
+        ROOT.gPad.SetRightMargin(0.15)
+        ROOT.gPad.SetBottomMargin(0.15)
+        ROOT.gPad.SetLogz()
+
+        hists[name].SetTitle(f"{category.replace('_', '')}, {name}")
+        hists[name].DrawNormalized("BOX")
+
+    canvas.Update()
+    canvas.SaveAs(f"../plots/material_maps{suffix}_{year[0]}.pdf")
+
+  logger_print()
 
 
 if __name__ == "__main__":
