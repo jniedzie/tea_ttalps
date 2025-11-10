@@ -1,6 +1,6 @@
 from ttalps_samples_list import dasSamples2018, dasSignalsPrivate2018, dasData2018, dasData2018_standard, dasBackgrounds2018, dasSignals2018
 from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasBackgrounds2023preBPix, dasSignals2023postBPix, dasData2023postBPix
-from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017, dasSignals2016PreVFP, dasSignals2016PostVFP, dasBackgrounds2016PostVFP, dasData2016PostVFP
+from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017, dasSignals2016preVFP, dasSignals2016postVFP, dasBackgrounds2016postVFP, dasData2016postVFP
 from ttalps_samples_list import dasBackgrounds2018Devel, dasData2018Devel
 from Logger import warn, logger_print
 

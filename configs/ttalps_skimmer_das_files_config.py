@@ -1,5 +1,5 @@
-from ttalps_samples_list import dasData2016preVFP, dasBackgrounds2016preVFP, dasSignals2016PreVFP
-from ttalps_samples_list import dasData2016postVFP, dasBackgrounds2016postVFP, dasSignals2016PostVFP
+from ttalps_samples_list import dasData2016preVFP, dasBackgrounds2016preVFP, dasSignals2016preVFP
+from ttalps_samples_list import dasData2016postVFP, dasBackgrounds2016postVFP, dasSignals2016postVFP
 from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
 from ttalps_samples_list import dasData2018, dasBackgrounds2018, dasSignals2018
 
