@@ -20,7 +20,7 @@ max_files = -1
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Loose semimuonic skims - unmerged directories to later merge files
-output_skim = "skimmed_looseSemimuonic_v2"
+output_skim = "skimmed_looseSemimuonic_v3"
 
 # Loose semielectronic skims
 # output_skim = "skimmed_looseSemielectronic_v1"
@@ -42,8 +42,8 @@ output_skim = "skimmed_looseSemimuonic_v2"
 dbs_instance = "prod/phys03"
 # dbs_instance = "prod/global"
 
-dasSamples = dasBackgrounds2018
-year = tea.get_year_from_samples(dasSamples)
+dasSamples = dasData2016preVFP
+year = tea.get_year_from_samples(dasSamples.keys())
 
 # For DAS datasets:
 input_output_file_list = []
