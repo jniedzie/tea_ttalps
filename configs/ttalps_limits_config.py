@@ -7,13 +7,11 @@ from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 import ttalps_abcd_config as abcd_config
 import os
 
-# years = ["2017","2018","2022preEE","2022postEE"]
 years = abcd_config.years
 year = years[0]
 year_str = ""
 for year_ in years:
   year_str += year_
-# options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 category = abcd_config.category
 lumi_uncertainty = get_luminosity_uncertainty_default(year)
@@ -28,6 +26,7 @@ if username == "lrygaard":
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
 hist_path = f"histograms_dimuonEffSFs"
+# hist_path = f"histograms"
 
 # SR dimuon cuts applied
 signal_hist_path = (
@@ -43,7 +42,8 @@ background_hist_path = (
 # to print rates and uncertainty:
 use_combined_limits = True
 
-extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5"
+# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5_v2"
+# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5_dimuonEffs2"
 # extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA2"
 # extra_str = "_withLeadingTightMuon"
 datacards_output_path = f"{base_output_path}/limits/limits_{year_str}/datacards{extra_str}_{abcd_config.do_region}/"
@@ -111,10 +111,8 @@ nuisances = {
     "bTaggingMedium_up_correlated": "variation",
     "bTaggingMedium_up_uncorrelated": "variation",
 
-    "dimuonEff_down": "variation",
-    "dimuonEff_up": "variation",
-    # "DSAEff_down": "variation",
-    # "DSAEff_up": "variation",
+    "L1PreFiringWeight_Dn": "variation",
+    "L1PreFiringWeight_Up": "variation",
 
     # "abcd_nonClosure": "closure",
     "abcd_unc": "abcd",
@@ -123,6 +121,10 @@ nuisances = {
         "bkg": lumi_uncertainty,
     }
 }
+
+if "dimuonEff" in hist_path:
+  nuisances["dimuonEff_down"] = "variation"
+  nuisances["dimuonEff_up"] = "variation"
 
 if abcd_config.category != "_DSA":
   nuisances["muonIDLoose_systdown"] = "variation"

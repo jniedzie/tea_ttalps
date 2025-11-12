@@ -78,7 +78,7 @@ class TTAlpsABCDConfigHelper:
 
     signal_inputs = {}
     for year in self.years:
-      signal_inputs[year] = globals()[f"dasSignals{self.year}"]
+      signal_inputs[year] = globals()[f"dasSignals{year}"]
     
     for year, signal_input in signal_inputs.items():
       for name in signal_input:

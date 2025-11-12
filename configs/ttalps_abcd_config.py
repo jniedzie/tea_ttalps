@@ -18,7 +18,8 @@ for year_ in years:
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR"
+# do_region = "SR"
+do_region = "SR_collinearyAngle_plot"
 # do_region = "JPsiCR"
 
 do_data = False
@@ -29,6 +30,9 @@ if "SR" in do_region:
   do_data = False
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
+  if do_region == "SR_collinearyAngle_plot":
+    background_collection = "BestPFIsoDimuonVertexNminus1CollinearityAngleCut"
+    signal_collection = "BestPFIsoDimuonVertexNminus1CollinearityAngleCut"
 elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
@@ -60,11 +64,12 @@ optimal_parameters = {
     # ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (12, 9), "C"),
     # ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # displaced ctaus = 1e0-1e3
 
-    # SRDimuons all years updated October 2025, matching before dimuon selection, collinearity angle < 0.5
-    # with log Chi2 < 2 log DCA - 1.5
+    # SRDimuons all years updated November 2025, matching before dimuon selection, collinearity angle < 0.5
+    # with log Chi2 < 2 log DCA - 1.5, corrections applied
+    ("", "SR"): ("", "", (1, 1), ""), # dummy to print rates for combined categories
     ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 8), "C"),
-    ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # displaced ctaus = 1e0-1e3
+    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 8), "C"), # before corrections
+    ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # before corrections
 
     # JPsiDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
     ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon2", (15, 14), "A"),
@@ -72,6 +77,10 @@ optimal_parameters = {
     # ("_DSA", "JPsiCR"): ("logLeadingPt", "logNormChi2", (13, 15), "C"),
     ("_DSA", "JPsiCR"): ("logNormChi2", "logDca", (50, 50), "A"),
 
+    # To produce N-1 plots of collinearity angle vs. dPhi between muon1 and Lxy vector
+    ("_Pat", "SR_collinearyAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+    ("_PatDSA", "SR_collinearyAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+    ("_DSA", "SR_collinearyAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
 }
 if (category, do_region) in optimal_parameters:
   variable_1 = optimal_parameters[(category, do_region)][0]
@@ -88,6 +97,9 @@ else:
 optimization_param = "significance"
 # optimization_param = "error"
 # optimization_param = "closure"
+
+if do_region == "SR_collinearyAngle_plot":
+  optimization_param = None
 
 common_signals_optimization = True
 
@@ -111,8 +123,12 @@ standard_rebin = 1
 # (closure, error, min_n_events, significance, contamination)
 rebin_2D = 4
 
+hist_name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}"
+if do_region == "SR_collinearyAngle_plot":
+  hist_name=f"{background_collection}{category}_{variable_1}_vs_{variable_2}"
+print(f"2D histogram name: {hist_name}")
 histogram = Histogram2D(
-    name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}",
+    name=hist_name,
     norm_type=NormalizationType.to_lumi,
     x_rebin=rebin_2D,
     y_rebin=rebin_2D,
@@ -186,7 +202,10 @@ base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
     "SR": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"
+        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_ABCD"
+    ),
+    "SR_collinearyAngle_plot": (
+        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_nminus1"
     ),
     "JPsiCR": (
         ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch"),
@@ -230,10 +249,6 @@ background_hist_path = (
     f"{background_skim[1]}{background_skim[2]}"
 )
 signal_hist_path = f"{hist_base_path}{signal_skim[1]}{signal_skim[2]}"
-
-if do_nonresonant_signal_as_background:
-  background_hist_path += "_genInfo_nminus1"
-  signal_hist_path += "_genInfo_nminus1"
 
 signal_path_pattern = "signals{}/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 
