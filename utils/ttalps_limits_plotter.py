@@ -105,8 +105,11 @@ if variable == "2d":
   y_min = -5
   y_max = 3
 
-  z_min = -3.4
-  z_max = 1.6
+  z_min = -2.2
+  z_max = 2
+  if len(years) > 1:
+    z_min = -3.4
+    z_max = 1.6
 
   x_title = "log_{10}(m_{a} [GeV])"
   y_title = "log_{10}(c#tau_{a} [mm])"

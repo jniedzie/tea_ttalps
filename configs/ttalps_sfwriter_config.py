@@ -17,9 +17,9 @@ extrapolate_in_y = False
 
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "")
 
-hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs_L1PreFiringWeightSFs{skim[1]}{skim[2]}" # all SFs 2018
+hist_path = f"histograms{skim[1]}{skim[2]}" # all SFs 2018
 
 samples = []
 year_string = ""
@@ -28,7 +28,7 @@ for year in years:
     cross_sections = get_cross_sections(year)
     luminosity = get_luminosity(year)
 
-    backgrounds = globals()[f"dasBackgrounds{self.year}"]
+    backgrounds = globals()[f"dasBackgrounds{year}"]
     for background in backgrounds.keys():
         samples.append(
             Sample(

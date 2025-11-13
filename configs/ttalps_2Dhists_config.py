@@ -15,11 +15,10 @@ for year_ in years:
   year += year_
 
 # ------------------------------------------
-# ABCD calculation and optimization settings
+# 2D plotting settings
 # ------------------------------------------
 
-do_region = "SR"
-# do_region = "JPsiCR"
+do_region = "SR_collinearityAngle_plot"
 
 do_data = False
 do_nonresonant_signal_as_background = False
@@ -29,6 +28,9 @@ if "SR" in do_region:
   do_data = False
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
+  if do_region == "SR_collinearityAngle_plot":
+    background_collection = "BestPFIsoDimuonVertexNminus1CollinearityAngleCut"
+    signal_collection = "BestPFIsoDimuonVertexNminus1CollinearityAngleCut"
 elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
@@ -55,24 +57,10 @@ exclude_backgrounds_for_years = {
 
 # binning always expressed in bin numbers, not values
 optimal_parameters = {
-    # SRDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
-    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    # ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (12, 9), "C"),
-    # ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # displaced ctaus = 1e0-1e3
-
-    # SRDimuons all years updated November 2025, matching before dimuon selection, collinearity angle < 0.5
-    # with log Chi2 < 2 log DCA - 1.5, corrections applied
-    ("", "SR"): ("", "", (1, 1), ""), # dummy to print rates for combined categories
-    ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 8), "C"), # before corrections
-    ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # before corrections
-
-    # JPsiDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
-    ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon2", (15, 14), "A"),
-    ("_PatDSA", "JPsiCR"): ("logDxyPVTraj1", "logPt", (10, 11), "C"), 
-    # ("_DSA", "JPsiCR"): ("logLeadingPt", "logNormChi2", (13, 15), "C"),
-    ("_DSA", "JPsiCR"): ("logNormChi2", "logDca", (50, 50), "A"),
-
+    # To produce N-1 plots of collinearity angle vs. dPhi between muon1 and Lxy vector
+    ("_Pat", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+    ("_PatDSA", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+    ("_DSA", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
 }
 if (category, do_region) in optimal_parameters:
   variable_1 = optimal_parameters[(category, do_region)][0]
@@ -85,12 +73,8 @@ else:
   abcd_point = optimal_parameters[(category, "SR")][2]
   signal_bin = optimal_parameters[(category, "SR")][3]
 
-# optimization_param = None
-optimization_param = "significance"
-# optimization_param = "error"
-# optimization_param = "closure"
-
-common_signals_optimization = True
+optimization_param = None
+common_signals_optimization = False
 
 # ------------------------------------------
 # Rebinning and projection settings
@@ -99,7 +83,6 @@ common_signals_optimization = True
 # you can specify custom binning for the 1D projection
 custom_rebin = True
 custom_projections_binning = [0, 0.5, 0.9, 1.5, 2.0]
-# custom_projections_binning = [0, 0.6, 1.5, 2.0]
 
 # you can also use smart rebinning for the 1D projection, which will keep the relative error below a certain threshold
 smart_rebin = False
@@ -114,6 +97,9 @@ rebin_2D = 4
 
 background_hist_name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}"
 signal_hist_name=f"{signal_collection}_{variable_1}_vs_{variable_2}{category}"
+if do_region == "SR_collinearityAngle_plot":
+  background_hist_name=f"{background_collection}{category}_{variable_1}_vs_{variable_2}"
+  signal_hist_name=f"{background_collection}{category}_{variable_1}_vs_{variable_2}"
 histogram = Histogram2D(
     name=background_hist_name,
     norm_type=NormalizationType.to_lumi,
@@ -134,7 +120,6 @@ if "JPsiCR" in do_region:
 elif do_region == "SR":
   y_max = 30
   y_max_ratio = 10
-
 
 # you can specify colors for the signals in the projection (otherwise they will default to red)
 signal_colors = {
@@ -169,15 +154,12 @@ nice_names = {
     "Lxy": "L_{xy} (cm)",
     "LxySignificance": "L_{xy} significance",
     "absCollinearityAngle": "|#theta_{coll}|",
+    "absPtLxyDPhi1": "|#Delta#phi(p_{T}^{#mu1}, L_{xy})|",
     "3Dangle": "#alpha_{3D}",
     "logLxy": "log_{10}[L_{xy} (cm)]",
     "logLxySignificance": "log_{10}[L_{xy} significance]",
     "logAbsCollinearityAngle": "log_{10}[|#theta_{coll}|]",
     "log3Dangle": "log_{10}[#alpha_{3D}]",
-    "LogLxy": "log_{10}[L_{xy} (cm)]",
-    "LogLxySignificance": "log_{10}[L_{xy} significance]",
-    "LogAbsCollinearityAngle": "log_{10}[|#theta_{coll}|]",
-    "Log3Dangle": "log_{10}[#alpha_{3D}]",
 }
 
 # ------------------------------------------
@@ -188,13 +170,9 @@ nice_names = {
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
-    "SR": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_ABCD"
+    "SR_collinearityAngle_plot": (
+        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_nminus1"
     ),
-    "JPsiCR": (
-        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-    )
 }
 
 if isinstance(skims[do_region][0], str):
@@ -208,13 +186,16 @@ username = os.getenv("USER")
 tea_ttalps_path = "tea_ttalps"
 if username == "lrygaard":
   tea_ttalps_path = "TTALP/tea_ttalps"
+base_afs_path = f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}"
+if not os.path.exists(f"{base_afs_path}/plots/2Dhists"):
+  os.makedirs(f"{base_afs_path}/plots/2Dhists")
 output_path = (
-  f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/results_"
+  f"{base_afs_path}/plots/2Dhists/results_{year}/results_"
   f"{do_region}_{background_collection}{background_skim[1]}"
 )
 if do_nonresonant_signal_as_background:
   output_path = (
-    f"/afs/desy.de/user/{username[0]}/{username}/{tea_ttalps_path}/abcd/results_{year}/signal_resonances/results_{year}_"
+    f"{base_afs_path}/plots/2Dhists/results_{year}/signal_resonances/results_{year}_"
     f"{do_region}{background_skim[1]}"
   )
   
@@ -224,8 +205,6 @@ output_path += category
 if optimization_param:
   output_path += "_"+optimization_param
 
-# hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs"
-# hist_base_path = f"histograms"
 hist_base_path = f"histograms_dimuonEffSFs"
 
 background_hist_path = (
@@ -250,11 +229,6 @@ data_paths = {
 # signal points for which to run ABCD analysis
 masses = ["0p35", "2", "12", "30", "60"]
 ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
-
-# DSA-DSA displaced muons
-# ctaus = ["1e0", "1e1", "1e2", "1e3"]
-# PAT-PAT prompt muons
-# ctaus = ["1e-5", "1e0", "1e1"]
 
 config_helper = TTAlpsABCDConfigHelper(
     years,

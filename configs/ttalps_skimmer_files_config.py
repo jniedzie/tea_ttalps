@@ -22,14 +22,12 @@ output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 
 # Signal like skim: SR, J/Psi CR and Z CR with no isolation requirement on the loose muons
-# input_skim = "skimmed_looseSemimuonic_v2_merged"
-# output_skim = "skimmed_looseSemimuonic_v2_SR"
-# output_skim = "skimmed_looseSemimuonic_v2_SR_looseMuonPtGt8GeV"
-# output_skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
+input_skim = "skimmed_looseSemimuonic_v3_merged"
+output_skim = "skimmed_looseSemimuonic_v3_SR"
 
 # tt̄ (μ+jets) CR
-input_skim = "skimmed_looseSemimuonic_v2_merged"
-output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
+# input_skim = "skimmed_looseSemimuonic_v2_merged"
+# output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 # output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_withHemVeto"
 # output_skim = "skimmed_looseSemimuonic_v2_ttbarCR_noHemVeto"
 
@@ -41,32 +39,9 @@ output_skim = "skimmed_looseSemimuonic_v2_ttbarCR"
 # input_skim = "skimmed_looseSemielectronic_v1_merged"
 # output_skim = "skimmed_looseSemielectronic_v1_ttbarCR"
 
-# VV CR
-# input_skim = "skimmed_looseNonTT_v1_merged"
-# output_skim = "skimmed_looseNonTT_v1_VVCR"
-
-# QCD CR
-# input_skim = "skimmed_looseNoBjets_lt4jets_v1_merged"
-# output_skim = "skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV"
-
-# W+jets CR
-# input_skim = "skimmed_loose_lt3bjets_lt4jets_v1_merged"
-# output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR"
-
-# bb CR
-# input_skim = "skimmed_loose_lt3bjets_lt4jets_v1_merged"
-# output_skim = "skimmed_loose_lt3bjets_lt4jets_v1_bbCR"
-
 # Skims with no triggers for LLP trigger study
 # input_skim = "skimmed_looseSemimuonic_v2_notrigger_merged"
 # output_skim = "skimmed_looseSemimuonic_v2_notrigger_SR"
-
-# Inverted MET skims
-# input_skim = "skimmed_looseInvertedMet_v1_merged"
-# output_skim = "skimmed_looseInvertedMet_v1_SR"
-
-# input_skim = "skimmed_looseNoMet_v1_merged"
-# output_skim = "skimmed_looseNoMet_v1_SR"
 
 output_trees_dir = ""
 input_directory = ""

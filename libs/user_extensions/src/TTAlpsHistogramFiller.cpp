@@ -161,16 +161,17 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
   if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
 
   string muonVertexCollectionName = muonVertexCollection.first;
+  string goodMuonVertexCollectionName = muonVertexCollectionName;
+  goodMuonVertexCollectionName.replace(0, 4, "Good");
   FillMuonVertexHistograms(event, muonVertexCollectionName);
   FillMuonVertex2DHistograms(event, muonVertexCollectionName);
+  FillMuonVertex2DHistograms(event, goodMuonVertexCollectionName);
   if (runRevertedMatching) {
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_revertedMatching");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToPatDSA");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToDSA");
   }
   if (runNminus1Histograms) FillNminus1HistogramsForMuonVertexCollection(event);
-  string goodMuonVertexCollectionName = muonVertexCollectionName;
-  goodMuonVertexCollectionName.replace(0, 4, "Good");
   auto goodVertexCollection = event->GetCollection(goodMuonVertexCollectionName);
   map<string, int> count = {{"", 0}, {"PatDSA", 0}, {"Pat", 0}, {"DSA", 0}};
   for (auto vertex : *goodVertexCollection) {
@@ -566,6 +567,19 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
     float logNormChi2 = TMath::Log10(dimuonVertex->GetAs<float>("normChi2"));
     float logDca = TMath::Log10(dimuonVertex->GetAs<float>("dca"));
     histogramsHandler->Fill(collectionName + "_logNormChi2_vs_logDCA", logDca, logNormChi2);
+  }
+
+  if (collectionName.find("Collinearity") != std::string::npos) {
+    float absDPhi1 = fabs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(1));
+    float absDPhi2 = fabs(dimuonVertex->GetDPhiBetweenMuonpTAndLxy(2));
+    float absCollinearityAngle = fabs(dimuonVertex->GetCollinearityAngle());
+    histogramsHandler->Fill(collectionName + "_absPtLxyDPhi1_vs_absCollinearityAngle", absCollinearityAngle, absDPhi1);
+    histogramsHandler->Fill(collectionName + "_absPtLxyDPhi2_vs_absCollinearityAngle", absCollinearityAngle, absDPhi2);
+    float logDPhi1 = TMath::Log10(absDPhi1);
+    float logDPhi2 = TMath::Log10(absDPhi2);
+    float logCollinearityAngle = TMath::Log10(absCollinearityAngle);
+    histogramsHandler->Fill(collectionName + "_logPtLxyDPhi1_vs_logCollinearityAngle", logCollinearityAngle, logDPhi1);
+    histogramsHandler->Fill(collectionName + "_logPtLxyDPhi2_vs_logCollinearityAngle", logCollinearityAngle, logDPhi2);
   }
 }
 

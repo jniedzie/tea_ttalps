@@ -9,15 +9,14 @@ TT_dasBackgrounds2018 = {
     "backgrounds2018/ttHToNonbb": "/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
     "backgrounds2018/TTZZ": "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2-00000000000000000000000000000000/USER",
-    "backgrounds2018/TTZH": "/TTZH_TuneCP5_13TeV-madgraph-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    "backgrounds2018/TTZH": "../data/TTZH_TuneCP5_13TeV-madgraph-pythia8_2018.txt",
     "backgrounds2018/TTTT": "/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 
-    # ¨files on lrygaard user space - TTZToLL is overlapping with TZToLL* above
     "backgrounds2018/TTZToQQ": "/TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
     "backgrounds2018/TTZToLL": "/TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v3-00000000000000000000000000000000/USER",
 }
 ST_dasBackgrounds2018 = {
-    "backgrounds2018/ST_tW_antitop": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
+    "backgrounds2018/ST_tW_antitop": "../data/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8_2018.txt",
     "backgrounds2018/ST_t-channel_antitop": "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
     "backgrounds2018/ST_tW_top": "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
     "backgrounds2018/ST_t-channel_top": "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
@@ -27,7 +26,6 @@ DY_dasBackgrounds2018 = {
     "backgrounds2018/DYJetsToMuMu_M-10to50": "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/lrygaard-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2018 = {
-    # files on lrygaard user space - overlapping with WJetsToLNu above
     "backgrounds2018/W1JetsToLNu": "/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
     "backgrounds2018/W2JetsToLNu": "/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
     "backgrounds2018/W3JetsToLNu": "/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_RunIISummer20UL18RECO-106X_v11-v1-00000000000000000000000000000000/USER",
@@ -159,10 +157,10 @@ dasSignalsPrivate2018 = {
 
 dasSignals2018 = {key: value for d in (
     dasSignals2018_0p35GeV,
-        dasSignals2018_2GeV,
-        dasSignals2018_12GeV,
-        dasSignals2018_30GeV,
-        dasSignals2018_60GeV,
+    dasSignals2018_2GeV,
+    dasSignals2018_12GeV,
+    dasSignals2018_30GeV,
+    dasSignals2018_60GeV,
 ) for key, value in d.items()}
 
 dasSamples2018 = {key: value for d in (

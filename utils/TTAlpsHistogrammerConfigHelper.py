@@ -264,7 +264,7 @@ class TTAlpsHistogrammerConfigHelper:
   def get_llp_2d_params(self):
     params = []
 
-    for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
+    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:
       self.__insert_MuonVertex2DHistograms(params, collection)
 
     return tuple(params)
@@ -831,6 +831,10 @@ class TTAlpsHistogrammerConfigHelper:
   def __insert_Nminus1Histograms2D(self, params, name):
     params += (
         (name + "_logNormChi2_vs_logDCA", 100, -4, 1, 100, -7, 1, ""),
+        (name + "_absPtLxyDPhi1_vs_absCollinearityAngle", 100, 0, 4, 100, 0, pi, ""),
+        (name + "_absPtLxyDPhi2_vs_absCollinearityAngle", 100, 0, 4, 100, 0, pi, ""),
+        (name + "_logPtLxyDPhi1_vs_logCollinearityAngle", 160, -7, 1, 100, -5, 1, ""),
+        (name + "_logPtLxyDPhi2_vs_logCollinearityAngle", 160, -7, 1, 100, -5, 1, ""),
     )
 
   # For FillGenDimuonHistograms function
