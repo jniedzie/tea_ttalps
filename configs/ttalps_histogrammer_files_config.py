@@ -41,7 +41,7 @@ skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVer
 
 # samples = dasSamples2018.keys()
 # samples = dasData2017.keys()
-samples = dasBackgrounds2018.keys()
+samples = dasData2016preVFP.keys()
 
 year = tea.get_year_from_samples(samples)
 
@@ -55,7 +55,7 @@ applyScaleFactors = {
     "pileup": (True, True),
     "bTagging": (True, True),
     "PUjetID": (True, True),
-    "dimuonEff": (False, False),
+    "dimuonEff": (True, True),
     # "DSAEff": (False, False),
     "jec": (False, True),
     "L1PreFiringWeight": (True, True),
