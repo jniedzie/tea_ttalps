@@ -25,13 +25,11 @@ TTAlpsObjectsManager::TTAlpsObjectsManager() {
     warn()
         << "Couldn't read muonVertexCollectionInput from config file - using first defined muonMatchingParams vertex collection as default"
         << endl;
-    try {
-      string matchingMethod = muonMatchingParams.begin()->first;
-
-      muonVertexCollectionInput = "LooseMuonsVertex" + matchingMethod + "Match";
-    } catch (const std::bad_alloc &e) {
-      warn() << "Couldn't read muonMatchingParams from config file - no muon matching methods will be applied to muon collections" << endl;
+    if (muonMatchingParams.empty()) {
       muonVertexCollectionInput = "";
+    } else {
+      string matchingMethod = muonMatchingParams.begin()->first;
+      muonVertexCollectionInput = "LooseMuonsVertex" + matchingMethod + "Match";
     }
   }
   try {
