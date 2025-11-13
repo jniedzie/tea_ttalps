@@ -23,25 +23,15 @@ input_username = "lrygaard"
 # skim = ("skimmed_looseSemimuonic_v2", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # SR, J/Psi CR skim without segment match ratio
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCA2", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsNoChi2", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
 # skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "")
 # skim = ("skimmed_looseSemimuonic_v2_ttbarCR_withJetVeto", "", "")
-
-# skim = ("skimmed_looseNonTT_v1_VVCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-# skim = ("skimmed_looseNoBjets_lt4jets_looseMuonPtGt5GeV_v1_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_looseMuonPtGt8GeV", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")  # QCD CR
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-
-# skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # skim = ("skimmed_looseSemimuonic_v2_SR_noTrigger", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -49,15 +39,9 @@ skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonL
 # For leading tight muon study: do not use NonLeadingMuons:
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseMuonsVertexSegmentMatch")
 
-# Inverted MET skim
-# skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-# skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
-
 # samples = dasSamples2018.keys()
-# samples = dasData2018.keys()
+# samples = dasData2017.keys()
 samples = dasBackgrounds2018.keys()
-# samples = dasSignals2018.keys()
-# samples = list(dasBackgrounds2018.keys()) + list(dasData2018_standard.keys())
 
 year = tea.get_year_from_samples(samples)
 
@@ -71,7 +55,7 @@ applyScaleFactors = {
     "pileup": (True, True),
     "bTagging": (True, True),
     "PUjetID": (True, True),
-    "dimuonEff": (True, True),
+    "dimuonEff": (False, False),
     # "DSAEff": (False, False),
     "jec": (False, True),
     "L1PreFiringWeight": (True, True),
@@ -92,6 +76,7 @@ if skim[1] != "":
 
 output_hists_dir += "/"
 # output_hists_dir += "_ABCD/"
+# output_hists_dir += "_nminus1/"
+# output_hists_dir += "_genInfo/"
 # output_hists_dir += "_withLeadingTightMuon_genInfo/"
-# output_hists_dir += "_genInfo_nminus1/"
 # output_hists_dir += "_revertedMatching/"

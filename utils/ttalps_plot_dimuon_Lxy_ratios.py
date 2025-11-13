@@ -24,11 +24,11 @@ filename=f"/data/dust/user/lrygaard/ttalps_cms/signals2018/{signal[0]}/{skim}/{h
 file = ROOT.TFile.Open(filename)
 
 # Retrieve histograms from the file
-dimmuonCollection = "BestPFIsoDimuonVertex"
-Lxy_DSA = file.Get(dimmuonCollection+"_DSA_Lxy")
-Lxy_Pat = file.Get(dimmuonCollection+"_Pat_Lxy")
-Lxy_PatDSA = file.Get(dimmuonCollection+"_PatDSA_Lxy")
-Lxy_tot = file.Get(dimmuonCollection+"_Lxy")
+dimuonCollection = "BestPFIsoDimuonVertex"
+Lxy_DSA = file.Get(dimuonCollection+"_DSA_Lxy")
+Lxy_Pat = file.Get(dimuonCollection+"_Pat_Lxy")
+Lxy_PatDSA = file.Get(dimuonCollection+"_PatDSA_Lxy")
+Lxy_tot = file.Get(dimuonCollection+"_Lxy")
 
 include_overflow = False
 

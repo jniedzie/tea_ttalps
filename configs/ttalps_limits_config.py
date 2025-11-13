@@ -26,7 +26,6 @@ if username == "lrygaard":
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
 hist_path = f"histograms_dimuonEffSFs"
-# hist_path = f"histograms"
 
 # SR dimuon cuts applied
 signal_hist_path = (
@@ -42,9 +41,7 @@ background_hist_path = (
 # to print rates and uncertainty:
 use_combined_limits = True
 
-# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5_v2"
-# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5_dimuonEffs2"
-# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA2"
+# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5"
 # extra_str = "_withLeadingTightMuon"
 datacards_output_path = f"{base_output_path}/limits/limits_{year_str}/datacards{extra_str}_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/limits_{year_str}/plots{extra_str}/"

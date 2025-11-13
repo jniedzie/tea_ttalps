@@ -19,7 +19,7 @@ for year_ in years:
 # ------------------------------------------
 
 # do_region = "SR"
-do_region = "SR_collinearyAngle_plot"
+do_region = "SR_collinearityAngle_plot"
 # do_region = "JPsiCR"
 
 do_data = False
@@ -30,7 +30,7 @@ if "SR" in do_region:
   do_data = False
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
-  if do_region == "SR_collinearyAngle_plot":
+  if do_region == "SR_collinearityAngle_plot":
     background_collection = "BestPFIsoDimuonVertexNminus1CollinearityAngleCut"
     signal_collection = "BestPFIsoDimuonVertexNminus1CollinearityAngleCut"
 elif "JPsiCR" in do_region:
@@ -78,9 +78,9 @@ optimal_parameters = {
     ("_DSA", "JPsiCR"): ("logNormChi2", "logDca", (50, 50), "A"),
 
     # To produce N-1 plots of collinearity angle vs. dPhi between muon1 and Lxy vector
-    ("_Pat", "SR_collinearyAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
-    ("_PatDSA", "SR_collinearyAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
-    ("_DSA", "SR_collinearyAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+    ("_Pat", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+    ("_PatDSA", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+    ("_DSA", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
 }
 if (category, do_region) in optimal_parameters:
   variable_1 = optimal_parameters[(category, do_region)][0]
@@ -98,7 +98,7 @@ optimization_param = "significance"
 # optimization_param = "error"
 # optimization_param = "closure"
 
-if do_region == "SR_collinearyAngle_plot":
+if do_region == "SR_collinearityAngle_plot":
   optimization_param = None
 
 common_signals_optimization = True
@@ -123,12 +123,13 @@ standard_rebin = 1
 # (closure, error, min_n_events, significance, contamination)
 rebin_2D = 4
 
-hist_name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}"
-if do_region == "SR_collinearyAngle_plot":
-  hist_name=f"{background_collection}{category}_{variable_1}_vs_{variable_2}"
-print(f"2D histogram name: {hist_name}")
+background_hist_name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}"
+signal_hist_name=f"{signal_collection}_{variable_1}_vs_{variable_2}{category}"
+if do_region == "SR_collinearityAngle_plot":
+  background_hist_name=f"{background_collection}{category}_{variable_1}_vs_{variable_2}"
+  signal_hist_name=f"{background_collection}{category}_{variable_1}_vs_{variable_2}"
 histogram = Histogram2D(
-    name=hist_name,
+    name=background_hist_name,
     norm_type=NormalizationType.to_lumi,
     x_rebin=rebin_2D,
     y_rebin=rebin_2D,
@@ -204,7 +205,7 @@ skims = {
     "SR": (
         "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_ABCD"
     ),
-    "SR_collinearyAngle_plot": (
+    "SR_collinearityAngle_plot": (
         "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_nminus1"
     ),
     "JPsiCR": (

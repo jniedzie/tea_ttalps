@@ -5,8 +5,6 @@ from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
 from ttalps_histogrammer_files_config import skim, applyScaleFactors, year
 
-print(f"Running ttalps histogrammer with settings for year: {year}")
-
 from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
 from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
 # defining eventCuts as the loose eventCuts and replacing MET pt from signal eventCuts
