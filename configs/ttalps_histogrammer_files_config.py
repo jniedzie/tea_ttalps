@@ -55,19 +55,18 @@ applyScaleFactors = {
     "bTagging": (True, True),
     "PUjetID": (True, True),
     "dimuonEff": (True, True),
-    # "DSAEff": (False, False),
     "jec": (False, True),
     "L1PreFiringWeight": (True, True),
 }
 
 hist_path = "histograms"
 
-# if "dimuonEff" in applyScaleFactors:
-#   if applyScaleFactors["dimuonEff"][0] or applyScaleFactors["dimuonEff"][1]:
-#     hist_path += "_dimuonEffSFs"
-
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
+
+if "dimuonEff" in applyScaleFactors:
+  if applyScaleFactors["dimuonEff"][0] is False:
+    hist_path += "_noDimuonEffSFs"
 
 # hist_path += "_ABCD/"
 # hist_path += "_withLeadingTightMuon_genInfo/"
