@@ -1,12 +1,14 @@
-from ttalps_histogrammer_files_config import skim, samples
-from ttalps_samples_list import dasSamples2018, dasData2018, dasBackgrounds2018, dasData2018_standard, dasSignals2018
-from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasData2022preEE
-from ttalps_samples_list import dasBackgrounds2022postEE, dasSignals2022postEE, dasData2022postEE
-from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017
-from ttalps_samples_list import dasBackgrounds2016preVFP, dasData2016preVFP, dasSignals2016preVFP
-from ttalps_samples_list import dasBackgrounds2016postVFP, dasData2016postVFP, dasSignals2016postVFP
-from ttalps_samples_list import dasBackgrounds2023preBPix, dasSignals2023preBPix, dasData2023preBPix
-from ttalps_samples_list import dasBackgrounds2023postBPix, dasSignals2023postBPix, dasData2023postBPix
+from ttalps_histogrammer_files_config import skim, samples, hist_path
+from ttalps_samples_list import dasData2016preVFP, dasBackgrounds2016preVFP, dasSignals2016preVFP
+from ttalps_samples_list import dasData2016postVFP, dasBackgrounds2016postVFP, dasSignals2016postVFP
+from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
+from ttalps_samples_list import dasData2018, dasBackgrounds2018, dasSignals2018
+
+from ttalps_samples_list import dasData2022preEE, dasBackgrounds2022preEE, dasSignals2022preEE
+from ttalps_samples_list import dasData2022postEE, dasBackgrounds2022postEE, dasSignals2022postEE
+
+from ttalps_samples_list import dasData2023preBPix, dasBackgrounds2023preBPix, dasSignals2023preBPix
+from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix, dasSignals2023postBPix
 
 import os
 import re
@@ -23,14 +25,14 @@ args = parser.parse_args()
 
 # comment out to use skim and samples from ttalps_histogrammer_files_config.pyCollapse commentComment on line L24kerstinlovisa commented on Nov 6, 2025 kerstinlovisaon Nov 6, 2025CollaboratorMore actionsPlease don't remove this, I need this to merge on other samples than what I'm running in the histogrammerReactWrite a replyResolve commentCode has comments. Press enter to view.
 
-skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "nminus1")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "ABCD")
 
-samples = dasBackgrounds2018.keys()
+# samples = dasBackgrounds2018.keys()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-hist_path = "histograms"
+# hist_path = "histograms"
 # hist_path = "histograms_noDimuonEffSFs"
 
 if skim[1] != "":

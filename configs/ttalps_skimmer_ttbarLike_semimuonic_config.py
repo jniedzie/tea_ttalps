@@ -13,18 +13,15 @@ applyTTZLikeSkimming = False
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
 
+muonMatchingParams = {"Segment": 2.0/3.0}
+
 eventCuts = {
     "MET_pt": (50, 9999999),
     "nTightMuons": (1, 1),  # This is against TOP recommendation, but we do it to keep it the same as SR
-    "nLooseMuons": (1, 1),
+    "nLoosePATMuons": (1, 1),
+    # "nLooseDSAMuons": (0, 0),
+    "nLooseDSAMuonsSegmentMatch": (0, 0),
     "nLooseElectrons": (0, 0),
-
-    # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
-    # To measure the second number, you can use the `utils/count_hem_events.py` script.
-    "nano_applyHEMveto": (True, 0.6294),
-
-    # Only the first argument matters
-    "nano_applyJetVetoMaps": (True, False),
 }
 
 specialBranchSizes = {
