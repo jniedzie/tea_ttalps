@@ -13,25 +13,22 @@ from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix,
 import os
 
 max_files = -1
-
-input_username = "lrygaard"
-# input_username = "jalimena"
-# input_username = "jniedzie"
+samples = dasSignals2017.keys()
 
 # Loose semimuonic skim
 # skim = ("skimmed_looseSemimuonic_v2_merged", "", "")
 # skim = ("skimmed_looseSemimuonic_v2", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # SR, J/Psi CR skim without segment match ratio
-skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
-# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
-# skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "")
-# skim = ("skimmed_looseSemimuonic_v2_ttbarCR_withJetVeto", "", "")
+skim = ("skimmed_looseSemimuonic_v3_ttbarCR", "", "")
+# skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "")
+
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
 # skim = ("skimmed_looseSemimuonic_v2_SR_noTrigger", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -39,12 +36,14 @@ skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVer
 # For leading tight muon study: do not use NonLeadingMuons:
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseMuonsVertexSegmentMatch")
 
-# samples = dasSamples2018.keys()
-# samples = dasData2017.keys()
-samples = dasData2016preVFP.keys()
+if "ttbarCR" in skim[0]:
+  input_username = "jniedzie"
+elif "merged" in skim[0]:
+  input_username = "jalimena"
+else:
+  input_username = "lrygaard"
 
 year = tea.get_year_from_samples(samples)
-
 base_path = "/data/dust/user/{}/ttalps_cms"
 
 applyScaleFactors = {
@@ -61,22 +60,23 @@ applyScaleFactors = {
     "L1PreFiringWeight": (True, True),
 }
 
+hist_path = "histograms"
+
+# if "dimuonEff" in applyScaleFactors:
+#   if applyScaleFactors["dimuonEff"][0] or applyScaleFactors["dimuonEff"][1]:
+#     hist_path += "_dimuonEffSFs"
+
+if skim[1] != "":
+  hist_path += f"_{skim[1]}"
+
+# hist_path += "_ABCD/"
+# hist_path += "_withLeadingTightMuon_genInfo/"
+# hist_path += "_genInfo_nminus1/"
+# hist_path += "_revertedMatching/"
+
 # this has to be here, otherwise the script will not work:
 sample_path = ""
 output_username = os.environ["USER"]
 input_directory = f"{base_path.format(input_username)}/{sample_path}/{skim[0]}/"
-output_hists_dir = f"{base_path.format(output_username)}/{sample_path}/{skim[0]}/histograms"
 
-if "dimuonEff" in applyScaleFactors:
-  if applyScaleFactors["dimuonEff"][0] or applyScaleFactors["dimuonEff"][1]:
-    output_hists_dir += "_dimuonEffSFs"
-
-if skim[1] != "":
-  output_hists_dir += f"_{skim[1]}"
-
-output_hists_dir += "/"
-# output_hists_dir += "_ABCD/"
-# output_hists_dir += "_nminus1/"
-# output_hists_dir += "_genInfo/"
-# output_hists_dir += "_withLeadingTightMuon_genInfo/"
-# output_hists_dir += "_revertedMatching/"
+output_hists_dir = f"{base_path.format(output_username)}/{sample_path}/{skim[0]}/{hist_path}/"

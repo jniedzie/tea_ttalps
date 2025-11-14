@@ -10,8 +10,7 @@ from TTAlpsPlotterConfigHelper import TTAlpsPlotterConfigHelper
 from ttalps_cross_sections import get_cross_sections
 from ttalps_luminosities import get_luminosity
 
-year = "2018"
-# year = "2016preVFP"
+year = "2017"
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 cross_sections = get_cross_sections(year)
 luminosity = get_luminosity(year)
@@ -22,29 +21,18 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch_genInfo_nminus1", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5",
-        "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5",
+#         "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch", "SR")
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuons", "_LooseNonLeadingPATMuonsVertex_revertedMatching", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons", "")
-
 # skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "", "SR")
 
-# skim = ("skimmed_looseSemimuonic_v2_ttbarCR", "", "")
-# skim = ("skimmed_looseSemielectronic_v1_ttbarCR", "", "ttCR_electron")
+skim = ("skimmed_looseSemimuonic_v3_ttbarCR", "", "", "ttCR")
 
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
-# skim = ("skimmed_looseNonTT_v1_QCDCR", "SRDimuons", "SR")  # this is in fact VV CR
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_QCDCR", "SRDimuons", "SR")
-# skim = ("skimmed_looseNoBjets_lt4jets_v1_merged", "JPsiDimuons", "SR")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_WjetsCR", "SRDimuons", "SR")
-# skim = ("skimmed_loose_lt3bjets_lt4jets_v1_bbCR", "SRDimuons", "SR")
-
-# skim = ("skimmed_looseInvertedMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
-# skim = ("skimmed_looseNoMet_v1_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch", "SR")
-
+hist_path = "histograms"
 # hist_path = f"histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs{skim[1]}{skim[2]}"
-hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs{skim[1]}{skim[2]}"
+# hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_jecSFs{skim[1]}{skim[2]}"
 # hist_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs{skim[1]}{skim[2]}"
 
 output_formats = ["pdf"]
@@ -85,17 +73,14 @@ if not plot_background:
       f"{hist_path.replace('histograms_', '').replace('histograms', '')}_noBkg/"
   )
 
-data_to_include = [
-    f"SingleMuon{year}",
-    # "EGamma2018",
-]
+year_number = "".join(filter(str.isdigit, year))
+if "2022" in year or "2023" in year:
+  data_to_include = [f"Muon{year_number}"]
+else:
+  data_to_include = [f"SingleMuon{year_number}"]
+
 if not data_to_include:
   show_ratio_plots = False
-if data_to_include:
-  if "2022" in year or "2023" in year:
-    data_to_include = [
-        f"Muon{year}",
-    ]
 
 signals_to_include = [
     # "tta_mAlp-0p35GeV_ctau-1e1mm",
@@ -163,38 +148,38 @@ histograms = (
     # ----------------------------------------------------------------------------
     # Event variables
     # ----------------------------------------------------------------------------
-    Histogram("cutFlow", "", False,  True, default_norm, 1, 0, 12, 1e1, 1e15, "Selection", "Number of events"),
+    Histogram("cutFlow", "", False,  True, default_norm, 1, 0, 20, 1e1, 1e15, "Selection", "Number of events"),
     Histogram("Event_normCheck", "", False,  True, default_norm, 1,
               0, 1, 1e-2, 1e7, "norm check", f"# events ({year})"),
     Histogram("Event_isData", "", False,  True, default_norm, 1, 0,
               2, 1e-8, 1e7, "Is Data Event", f"# events ({year})"),
     Histogram("Event_MET_pt", "", False,  True, default_norm, 10, 0,
               800, 1e-8, 1e9, "MET p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("Event_nTightMuons", "", False,  True, default_norm, 1, 0,
-    #           10, 1e1, 1e9, "Number of tight #mu", f"# events ({year})"),
+    Histogram("Event_nTightMuons", "", False,  True, default_norm, 1, 0,
+              10, 1e1, 1e9, "Number of tight #mu", f"# events ({year})"),
     # Histogram("Event_nLoosePATMuons", "", False,  True, default_norm, 1,
     #           0, 10, 1e1, 1e9, "Number of loose #mu", f"# events ({year})"),
     # Histogram("Event_nLooseDSAMuons", "", False,  True, default_norm, 1, 0,
     #           10, 1e1, 1e9, "Number of loose dSA #mu", f"# events ({year})"),
     # Histogram("Event_nLooseElectrons", "", False,  True, default_norm, 1, 0,
     #           10, 1e1, 1e9, "Number of loose electrons", f"# events ({year})"),
-    # Histogram("Event_nGoodJets", "", False,  True, default_norm, 1, 2,
-    #           16, 1e-2, 1e10, "Number of good jets", f"# events ({year})"),
-    # Histogram("Event_nGoodMediumBtaggedJets", "", False,  True, default_norm,
-    #           1, 0, 20, 1e0, 1e9, "Number of good b-jets", f"# events ({year})"),
+    Histogram("Event_nGoodJets", "", False,  True, default_norm, 1, 2,
+              16, 1e-2, 1e10, "Number of good jets", f"# events ({year})"),
+    Histogram("Event_nGoodMediumBtaggedJets", "", False,  True, default_norm,
+              1, 0, 20, 1e0, 1e9, "Number of good b-jets", f"# events ({year})"),
     # ----------------------------------------------------------------------------
     # Tight muons
     # ----------------------------------------------------------------------------
-    # Histogram("TightMuons_pt", "", False,  True, default_norm, 50, 0,
-    #           1000, 1e-6, 1e8, "tight #mu p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("TightMuons_leadingPt", "", False,  True, default_norm, 50, 0, 1000,
-    #           1e-5, 1e5, "leading tight #mu p_{T} [GeV]", f"# events ({year})"),
+    Histogram("TightMuons_pt", "", False,  True, default_norm, 50, 0,
+              1000, 1e-6, 1e8, "tight #mu p_{T} [GeV]", f"# events ({year})"),
+    Histogram("TightMuons_leadingPt", "", False,  True, default_norm, 50, 0, 1000,
+              1e-5, 1e5, "leading tight #mu p_{T} [GeV]", f"# events ({year})"),
     # Histogram("TightMuons_subleadingPt", "", False,  True, default_norm, 50, 0, 1000,
     #           1e-5, 1e4, "all subleading tight #mu p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("TightMuons_eta", "", False,  True, default_norm, 10, -
-    #           3.0, 5.0, 1e-3, 1e6, "tight #mu #eta", f"# events ({year})"),
-    # Histogram("TightMuons_dxy", "", False,  True, default_norm, 2, -0.5,
-    #           0.5, 1e-2, 1e10, "tight #mu d_{xy} [cm]", f"# events ({year})"),
+    Histogram("TightMuons_eta", "", False,  True, default_norm, 10, -
+              3.0, 5.0, 1e-3, 1e6, "tight #mu #eta", f"# events ({year})"),
+    Histogram("TightMuons_dxy", "", False,  True, default_norm, 2, -0.5,
+              0.5, 1e-2, 1e10, "tight #mu d_{xy} [cm]", f"# events ({year})"),
     # Histogram("TightMuons_dz", "", False,  True, default_norm, 2, -1,
     #           1, 1e-2, 1e8, "tight #mu d_{z} [cm]", f"# events ({year})"),
     # Histogram("TightMuons_pfRelIso04_all", "", False,  True, default_norm, 1, 0.0,
@@ -311,10 +296,10 @@ histograms = (
     # ----------------------------------------------------------------------------
     # Good jets
     # ----------------------------------------------------------------------------
-    # Histogram("GoodJets_pt", "", False,  True, default_norm, 10, 0, 1300,
-    #           1e-3, 1e6, "good jet p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("GoodJets_eta", "", False,  True, default_norm, 10, -
-    #           3, 5.0, 1e-3, 1e6, "good jet #eta", f"# events ({year})"),
+    Histogram("GoodJets_pt", "", False,  True, default_norm, 10, 0, 1300,
+              1e-3, 1e6, "good jet p_{T} [GeV]", f"# events ({year})"),
+    Histogram("GoodJets_eta", "", False,  True, default_norm, 10, -
+              3, 5.0, 1e-3, 1e6, "good jet #eta", f"# events ({year})"),
     # Histogram("GoodJets_btagDeepB", "", False,  True, default_norm, 10, 0,
     #           1.5, 2e0, 1e8, "good jet deepCSV score", f"# events ({year})"),
     # Histogram("GoodJets_btagDeepFlavB", "", False,  True, default_norm, 10,
@@ -325,10 +310,10 @@ histograms = (
     # ----------------------------------------------------------------------------
     # Good b-jets
     # ----------------------------------------------------------------------------
-    # Histogram("GoodMediumBtaggedJets_pt", "", False,  True, default_norm, 20,
-    #           0, 2000, 1e-3, 1e6, "good b-jet p_{T} [GeV]", f"# events ({year})"),
-    # Histogram("GoodMediumBtaggedJets_eta", "", False,  True, default_norm,
-    #           5, -3.5, 3.5, 1e-3, 1e6, "good b-jet #eta", f"# events ({year})"),
+    Histogram("GoodMediumBtaggedJets_pt", "", False,  True, default_norm, 20,
+              0, 2000, 1e-3, 1e6, "good b-jet p_{T} [GeV]", f"# events ({year})"),
+    Histogram("GoodMediumBtaggedJets_eta", "", False,  True, default_norm,
+              5, -3.5, 3.5, 1e-3, 1e6, "good b-jet #eta", f"# events ({year})"),
     # Histogram("GoodMediumBtaggedJets_btagDeepB", "", False,  True, default_norm,
     #           10, -1, 1, 1e0, 1e8, "good b-jet deepCSV score", f"# events ({year})"),
     # Histogram("GoodMediumBtaggedJets_btagDeepFlavB", "", False,  True, default_norm,
@@ -423,12 +408,12 @@ norm_one = NormalizationType.to_one
 
 for collection, category in product(extraMuonVertexCollections, ("", "_PatDSA", "_DSA", "_Pat")):
   histograms += (
-      Histogram("Event_n"+collection + category, "", False, True, default_norm, 1,
-                0, 5, 1e-2, 1e6, "Number of #mu vertices", f"# events ({year})"),
-      Histogram("dimuonCutFlow_"+collection + category, "", False,  True,
-                default_norm, 1, 0, 10, 1e-2, 1e9, "Selection", "Number of events"),
-      Histogram(collection + category+"_invMass", "", False, False, default_norm, mass_rebin,
-                mass_min, mass_max, 0, 5, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
+      # Histogram("Event_n"+collection + category, "", False, True, default_norm, 1,
+      #           0, 5, 1e-2, 1e6, "Number of #mu vertices", f"# events ({year})"),
+      # Histogram("dimuonCutFlow_"+collection + category, "", False,  True,
+      #           default_norm, 1, 0, 10, 1e-2, 1e9, "Selection", "Number of events"),
+      # Histogram(collection + category+"_invMass", "", False, False, default_norm, mass_rebin,
+      #           mass_min, mass_max, 0, 5, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
       # Histogram(collection + category+"_invMassJPsiBin", "", False, False, default_norm, 1,
       #           2.2, 4.0, 0, 30, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
       # Histogram(collection + category+"_logInvMass", "", False, True, default_norm, 15, -0.7,
@@ -520,35 +505,35 @@ for collection, category in product(extraMuonVertexCollections, ("", "_PatDSA", 
   )
   muonQualityFlags = []
   # muonQualityFlags = ["PU", "fake", "real"] # uncomment to include plots
-  for flag in muonQualityFlags:
-    histograms += (
-        Histogram("Event_n" + collection + category + "_" + flag, "", False, True, default_norm, 1,
-                  0, 2, 1e0, 1e5, f"#mu is {flag}", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_absDzFromLeadingTight", "", True, True, default_norm, 1,
-                  1e-5, 1e3, 1e-4, 1e2, f"{flag} #mu |#DeltaZ(leading tight #mu)|", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_logAbsDzFromLeadingTight", "", False, True, default_norm, 50,
-                  -5, 3, 1e-4, 1e2, f"{flag} #mu log |#DeltaZ(leading tight #mu)|", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_genMuonDR", "", False, True, default_norm, 1,
-                  0, 0.1, 1e-4, 1e2, f"{flag} #mu #DeltaR(gen #mu)", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_normChi2", "", False, True, default_norm, 40,
-                  0, 3, 1e-4, 1e2, f"{flag} #mu #chi^{2}/ndof", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_nSegments", "", False, True, default_norm, 1,
-                  0, 20, 1e-2, 1e6, f"{flag} #mu segments", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_nDTSegments", "", False, True, default_norm, 1,
-                  0, 20, 1e-4, 1e2, f"{flag} #mu DT segments", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_nCSCSegments", "", False, True, default_norm, 1,
-                  0, 20, 1e-4, 1e2, f"{flag} #mu CSC segments", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_trkNumPlanes", "", False, True, default_norm, 1,
-                  0, 6, 1e-2, 1e6, f"{flag} #mu track planes", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_trkNumHits", "", False, True, default_norm, 1,
-                  0, 70, 1e-2, 1e6, f"{flag} #mu track hits", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_eta", "", False, True, default_norm, 10,
-                  -3, 3, 1e-4, 1e2, f"{flag} #mu #eta", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_etaErr", "", False, True, default_norm, 10,
-                  -3, 3, 1e-4, 1e2, f"{flag} #mu #sigma_#eta", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_pt", "", False, True, default_norm, 10,
-                  0, 300, 1e-3, 1e5, f"{flag} #mu p_T", f"# events ({year})"),
-        Histogram(collection + category + "_" + flag + "_ptErr", "", False, True, default_norm, 10,
-                  0, 300, 1e-3, 1e5, f"{flag} #mu #sigma p_T", f"# events ({year})"),
+  # for flag in muonQualityFlags:
+  #   histograms += (
+  #       Histogram("Event_n" + collection + category + "_" + flag, "", False, True, default_norm, 1,
+  #                 0, 2, 1e0, 1e5, f"#mu is {flag}", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_absDzFromLeadingTight", "", True, True, default_norm, 1,
+  #                 1e-5, 1e3, 1e-4, 1e2, f"{flag} #mu |#DeltaZ(leading tight #mu)|", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_logAbsDzFromLeadingTight", "", False, True, default_norm, 50,
+  #                 -5, 3, 1e-4, 1e2, f"{flag} #mu log |#DeltaZ(leading tight #mu)|", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_genMuonDR", "", False, True, default_norm, 1,
+  #                 0, 0.1, 1e-4, 1e2, f"{flag} #mu #DeltaR(gen #mu)", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_normChi2", "", False, True, default_norm, 40,
+  #                 0, 3, 1e-4, 1e2, f"{flag} #mu #chi^{2}/ndof", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_nSegments", "", False, True, default_norm, 1,
+  #                 0, 20, 1e-2, 1e6, f"{flag} #mu segments", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_nDTSegments", "", False, True, default_norm, 1,
+  #                 0, 20, 1e-4, 1e2, f"{flag} #mu DT segments", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_nCSCSegments", "", False, True, default_norm, 1,
+  #                 0, 20, 1e-4, 1e2, f"{flag} #mu CSC segments", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_trkNumPlanes", "", False, True, default_norm, 1,
+  #                 0, 6, 1e-2, 1e6, f"{flag} #mu track planes", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_trkNumHits", "", False, True, default_norm, 1,
+  #                 0, 70, 1e-2, 1e6, f"{flag} #mu track hits", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_eta", "", False, True, default_norm, 10,
+  #                 -3, 3, 1e-4, 1e2, f"{flag} #mu #eta", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_etaErr", "", False, True, default_norm, 10,
+  #                 -3, 3, 1e-4, 1e2, f"{flag} #mu #sigma_#eta", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_pt", "", False, True, default_norm, 10,
+  #                 0, 300, 1e-3, 1e5, f"{flag} #mu p_T", f"# events ({year})"),
+  #       Histogram(collection + category + "_" + flag + "_ptErr", "", False, True, default_norm, 10,
+  #                 0, 300, 1e-3, 1e5, f"{flag} #mu #sigma p_T", f"# events ({year})"),
 
-    )
+  #   )
