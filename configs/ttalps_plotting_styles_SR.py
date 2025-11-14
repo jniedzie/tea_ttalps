@@ -24,15 +24,8 @@ samples_params = {
     # ------------------------------------------------------------------------------
     # Data
     # ------------------------------------------------------------------------------
-
-    "SingleMuon2016preVFP"  : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2016preVFP"  },
-    "SingleMuon2016postVFP" : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2016postVFP" },
-    "SingleMuon2017"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2017"        },
-    "SingleMuon2018"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2018"        },
-    "Muon2022preEE"         : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2022preEE"         },
-    "Muon2022postEE"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2022postEE"        },
-    "Muon2023preBPix"       : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023preEE"         },
-    "Muon2023postBPix"      : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023postEE"        },
+    "SingleMuon"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon {}"         },
+    "Muon"              : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon {}"               },
 
     # ------------------------------------------------------------------------------
     # Backgrounds

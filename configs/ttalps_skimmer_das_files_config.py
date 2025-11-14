@@ -13,7 +13,7 @@ import teaHelpers as tea
 
 import os
 import subprocess
-from Logger import info
+from Logger import info, error
 
 max_files = -1
 
@@ -25,10 +25,12 @@ output_skim = "skimmed_looseSemimuonic_v3"
 dbs_instance = "prod/phys03"
 # dbs_instance = "prod/global"
 
-dasSamples = dasData2016preVFP
+dasSamples = dasData2018
 year = tea.get_year_from_samples(dasSamples.keys())
 
 # For DAS datasets:
+
+
 def get_input_output_file_lists():
   input_output_file_lists = []
 
@@ -37,10 +39,13 @@ def get_input_output_file_lists():
     info(f"Running command: {command}")
     das_files = subprocess.check_output(command, shell=True, text=True).strip().split('\n')
 
+    if das_files == ['']:
+      error(f"No files found for dataset {das_dataset}, skipping...")
+      continue
+
     input_output_file_list = []
 
     for input_path in das_files:
-
       input_file_name = input_path.split('/')[-1].split('.')[0]
       input_part = input_path.split('/')[-2]
       input_date_tag = input_path.split('/')[-3]

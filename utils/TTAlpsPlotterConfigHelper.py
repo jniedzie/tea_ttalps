@@ -43,7 +43,7 @@ class TTAlpsPlotterConfigHelper:
 
     elif sample_type == SampleType.signal:
       dataset = globals()[f"dasSignals{self.year}"]
-    
+
     elif sample_type == SampleType.data:
       dataset = self.data_to_include
     else:
@@ -71,6 +71,11 @@ class TTAlpsPlotterConfigHelper:
 
       info(f"Adding sample {long_name} of type {sample_type} with file path {file_path}")
 
+      legend_description = params["legend_title"]
+
+      if "{}" in legend_description:
+        legend_description = legend_description.format(self.year)
+
       samples.append(
           Sample(
               name=long_name,
@@ -85,7 +90,7 @@ class TTAlpsPlotterConfigHelper:
               marker_color=params["color"],
               fill_color=params["color"],
               line_color=params["color"],
-              legend_description=params["legend_title"],
+              legend_description=legend_description,
               custom_legend=self.__get_legend(
                   params["legend_column"],
                   params["legend_row"],

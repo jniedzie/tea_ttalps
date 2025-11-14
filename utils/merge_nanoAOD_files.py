@@ -1,7 +1,14 @@
-from ttalps_samples_list import dasSamples2018, dasSignalsPrivate2018, dasData2018, dasData2018_standard, dasBackgrounds2018, dasSignals2018
-from ttalps_samples_list import dasBackgrounds2022preEE, dasSignals2022preEE, dasBackgrounds2023preBPix, dasSignals2023postBPix, dasData2023postBPix
-from ttalps_samples_list import dasBackgrounds2017, dasData2017, dasSignals2017, dasSignals2016preVFP, dasSignals2016postVFP, dasBackgrounds2016postVFP, dasData2016postVFP
-from ttalps_samples_list import dasBackgrounds2018Devel, dasData2018Devel
+from ttalps_samples_list import dasData2016preVFP, dasBackgrounds2016preVFP, dasSignals2016preVFP
+from ttalps_samples_list import dasData2016postVFP, dasBackgrounds2016postVFP, dasSignals2016postVFP
+from ttalps_samples_list import dasData2017, dasBackgrounds2017, dasSignals2017
+from ttalps_samples_list import dasData2018, dasBackgrounds2018, dasSignals2018
+
+from ttalps_samples_list import dasData2022preEE, dasBackgrounds2022preEE, dasSignals2022preEE
+from ttalps_samples_list import dasData2022postEE, dasBackgrounds2022postEE, dasSignals2022postEE
+
+from ttalps_samples_list import dasData2023preBPix, dasBackgrounds2023preBPix, dasSignals2023preBPix
+from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix, dasSignals2023postBPix
+
 from Logger import warn, logger_print
 
 import argparse
@@ -9,32 +16,19 @@ import glob
 import os
 import ROOT
 
-user = "lrygaard"
-# user = "jalimena"
-input_base_path = f"/data/dust/user/{user}/ttalps_cms"
-output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
+sample_paths = dasData2018.keys()
 
 # Loose ttbar semimuonic skim
-# skim = "skimmed_looseSemimuonic_v2"
+skim = "skimmed_looseSemimuonic_v3"
 
-# Loose ttbar semielectronic skim
-# skim = "skimmed_looseSemielectronic_v1"
+# Signal region without trigger
+# skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
 
-skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
-
-
-# Loose non-ttbar skims, vetoing events with too many (b-)jets
-# skim = "skimmed_looseNonTT_v1"
-# skim = "skimmed_looseNoBjets_lt4jets_v1"
-# skim = "skimmed_loose_lt3bjets_lt4jets_v1"
-# skim = "skimmed_looseNoBjets_lt4jets_looseMuonPtGt8GeV_v1"
-
-# Inverted/no MET skims
-# skim = "skimmed_looseInvertedMet_v1"
-# skim = "skimmed_looseNoMet_v1"
-
-# sample_paths = dasSignals2018.keys()
-sample_paths = dasBackgrounds2018.keys()
+# user = "lrygaard"
+# user = "jalimena"
+user = "jniedzie"
+input_base_path = f"/data/dust/user/{user}/ttalps_cms"
+output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 input_pattern = "*.root"
 output_pattern = "output_{}.root"
