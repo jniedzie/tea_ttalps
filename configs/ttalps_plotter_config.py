@@ -73,11 +73,14 @@ if not plot_background:
       f"{hist_path.replace('histograms_', '').replace('histograms', '')}_noBkg/"
   )
 
-year_number = "".join(filter(str.isdigit, year))
-if "2022" in year or "2023" in year:
-  data_to_include = [f"Muon{year_number}"]
-else:
-  data_to_include = [f"SingleMuon{year_number}"]
+data_to_include = None
+
+if skim[3] != "SR":
+  year_number = "".join(filter(str.isdigit, year))
+  if "2022" in year or "2023" in year:
+    data_to_include = [f"Muon{year_number}"]
+  else:
+    data_to_include = [f"SingleMuon{year_number}"]
 
 if not data_to_include:
   show_ratio_plots = False
