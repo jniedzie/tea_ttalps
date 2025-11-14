@@ -25,8 +25,8 @@ samples_params = {
     # Data
     # ------------------------------------------------------------------------------
 
-    "SingleMuon"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2018"        },
-    "MuonC"             : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon era C 2023"        },
+    "SingleMuon"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon {}"         },
+    "Muon"              : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon {}"               },
 
     # ------------------------------------------------------------------------------
     # Backgrounds
