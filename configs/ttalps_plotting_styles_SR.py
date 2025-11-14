@@ -31,8 +31,8 @@ samples_params = {
     "SingleMuon2018"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "SingleMuon 2018"        },
     "Muon2022preEE"         : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2022preEE"         },
     "Muon2022postEE"        : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2022postEE"        },
-    "Muon2023preBPix"       : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023preEE"         },
-    "Muon2023postBPix"      : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023postEE"        },
+    "Muon2023preBPix"       : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023preBPix"         },
+    "Muon2023postBPix"      : {"color": ROOT.kBlack    , "legend_column": 2, "legend_row": 0, "legend_title": "Muon 2023postBPix"        },
 
     # ------------------------------------------------------------------------------
     # Backgrounds

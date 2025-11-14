@@ -106,8 +106,6 @@ muonMatchingParams = {
     # "OuterDR" : 0.1
     # "ProxDR" : 0.1
 }
-if skim[1] == "":
-  muonMatchingParams = {}
 
 muonVertexBaselineSelection = [
     "InvariantMassCut",

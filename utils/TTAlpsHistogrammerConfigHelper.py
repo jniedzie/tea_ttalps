@@ -113,7 +113,9 @@ class TTAlpsHistogrammerConfigHelper:
     self.ABCD_variables_subset = {
         "logAbsCollinearityAngle": (100, -7, 1),
         "logLeadingPt": (100, -1, 3),
-        "logDxyPVTrajSig1": (100, -3, 3),
+        "logDxyPVTraj1": (100, -5, 3),
+        "logPt": (100, -1, 3),
+        "logInvMass": (100, -1, 2),
         "outerDR": (100, 0, 5),
         "logLxy": (100, -2, 3),
         "log3Dangle": (100, -3, 1),

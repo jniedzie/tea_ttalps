@@ -1374,7 +1374,9 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bo
     map<string, double> variables_subset = {
         {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
         {"logLeadingPt", TMath::Log10(dimuon->GetLeadingMuonPt())},
-        {"logDxyPVTrajSig1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj") / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr")))},
+        {"logDxyPVTraj1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")))},
+        {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
+        {"logInvMass", log10(dimuon->GetInvariantMass())},
         {"outerDR", dimuon->GetOuterDeltaR()},
         {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
         {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
