@@ -30,6 +30,6 @@ def get_DoubleMu_trigger(year):
 
 def get_Ele_Tight_trigger(year):
   if year != "2018":
-    error(f"Ele WO Tight trigger only implemented for 2018. No trigger given for year {year}")
+    error(f"Ele WP Tight trigger only implemented for 2018. No trigger given for year {year}")
     return
   return Ele32_WPTight
