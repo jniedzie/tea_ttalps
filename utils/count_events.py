@@ -59,7 +59,7 @@ def count_events_and_size_in_files(directory):
 
 if __name__ == "__main__":
   if len(sys.argv) != 2:
-    print("Usage: python count_events_and_size.py /path/to/your/directory")
+    print("Usage: python count_events.py /path/to/your/directory")
     sys.exit(1)
 
   directory_path = sys.argv[1]
