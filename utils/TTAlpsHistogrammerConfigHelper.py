@@ -390,7 +390,7 @@ class TTAlpsHistogrammerConfigHelper:
     if runGenLevelMothersABCD:
       mother_categories = ["other", "X", "Y", "ALP", "D", "B", "d", "u", "s", "c", "b", "t", "e",
                            "mu", "tau", "g", "gamma", "Z", "W", "rho", "pi0", "omega", "K0", "phi", "upsilon", "JPsi"]
-      mother_categories = ["other", "X", "Y", "ALP", "D", "B", "q", "l","tau", "g", "gamma", "Z", 
+      mother_categories = ["other", "X", "Y", "ALP", "D", "B", "q", "l", "tau", "g", "gamma", "Z", 
                             "W", "lightMeson", "JPsi"]
       for category1 in mother_categories:
         for category2 in mother_categories:
