@@ -17,7 +17,7 @@ extrapolate_in_y = False
 
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "")
+skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs")
 
 hist_path = f"histograms{skim[1]}{skim[2]}" # all SFs 2018
 
@@ -79,7 +79,7 @@ exclude_backgrounds_with_less_than = 0  # entries
 
 collection = "BestDimuonVertex"
 variable = "invMassJPsiBin"
-output_name = f"../data/dimuonEffSFs{year_string}_{variable}_DSAChi2DCA1p5.json"
+output_name = f"../data/dimuonEffSFs{year_string}_{variable}_v3.json"
 
 for category in ("Pat", "PatDSA", "DSA"):
 # for category in ("DSA",):

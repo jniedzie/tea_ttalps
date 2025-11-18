@@ -43,14 +43,14 @@ category = "_Pat"
 # category = "_DSA"
 
 exclude_backgrounds_for_years = {
-  "2016preVFP": 3,
-  "2016postVFP": 3,
-  "2017": 3,
-  "2018": 3,
-  "2022preEE": 3,
-  "2022postEE": 4,
-  "2023preBPix": 3,
-  "2023postBPix": 3,
+  "2016preVFP": -1,
+  "2016postVFP": -1,
+  "2017": -1,
+  "2018": -1,
+  "2022preEE": -1,
+  "2022postEE": -1,
+  "2023preBPix": -1,
+  "2023postBPix": -1,
 }
 
 # binning always expressed in bin numbers, not values
@@ -166,18 +166,14 @@ ratio_y_title = " Pred / True   "
 
 # you can specify custom names for the variables to be displayed in the plots
 nice_names = {
-    "Lxy": "L_{xy} (cm)",
-    "LxySignificance": "L_{xy} significance",
-    "absCollinearityAngle": "|#theta_{coll}|",
-    "3Dangle": "#alpha_{3D}",
-    "logLxy": "log_{10}[L_{xy} (cm)]",
-    "logLxySignificance": "log_{10}[L_{xy} significance]",
     "logAbsCollinearityAngle": "log_{10}[|#theta_{coll}|]",
-    "log3Dangle": "log_{10}[#alpha_{3D}]",
-    "LogLxy": "log_{10}[L_{xy} (cm)]",
-    "LogLxySignificance": "log_{10}[L_{xy} significance]",
-    "LogAbsCollinearityAngle": "log_{10}[|#theta_{coll}|]",
-    "Log3Dangle": "log_{10}[#alpha_{3D}]",
+    "logLeadingPt": "log_{10} Leading p_{T} [GeV]",
+    "logDxyPVTraj1": "log_{10} d_{xy}^{#mu1}",
+    "logInvMass": "log_{10} m_{#mu#mu} [GeV]",
+    "logPt": "log_{10} p_{T} [GeV]",
+    "absCollinearityAngle": "|#theta_{coll}|",
+    "logNormChi2": "log_{10} #chi^{2} / ndof",
+    "logDca": "log_{10} DCA [cm]",
 }
 
 # ------------------------------------------
@@ -189,11 +185,11 @@ base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
     "SR": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_ABCD"
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD"
     ),
     "JPsiCR": (
-        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_JPsiDimuonsNoChi2DCA", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
     )
 }
 

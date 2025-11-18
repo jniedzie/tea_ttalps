@@ -117,16 +117,9 @@ class TTAlpsHistogrammerConfigHelper:
         "logPt": (100, -1, 3),
         "logInvMass": (100, -1, 2),
         "outerDR": (100, 0, 5),
-        "logLxy": (100, -2, 3),
-        "log3Dangle": (100, -3, 1),
-        "logAbsPtLxyDPhi1": (100, -5, 1),
-        "logAbsPtLxyDPhi2": (100, -5, 1),
         "absPtLxyDPhi1": (100, 0, pi),
-        "absPtLxyDPhi2": (100, 0, pi),
         "absCollinearityAngle": (100, 0, 4),
-        "normChi2": (100, 0, 1),
         "logNormChi2": (100, -7, 1),
-        "dca": (100, 0, 2),
         "logDca": (100, -4, 1),
     }
 
@@ -397,6 +390,8 @@ class TTAlpsHistogrammerConfigHelper:
     if runGenLevelMothersABCD:
       mother_categories = ["other", "X", "Y", "ALP", "D", "B", "d", "u", "s", "c", "b", "t", "e",
                            "mu", "tau", "g", "gamma", "Z", "W", "rho", "pi0", "omega", "K0", "phi", "upsilon", "JPsi"]
+      mother_categories = ["other", "X", "Y", "ALP", "D", "B", "q", "l","tau", "g", "gamma", "Z", 
+                            "W", "lightMeson", "JPsi"]
       for category1 in mother_categories:
         for category2 in mother_categories:
           category_name = "".join(sorted([category1, category2]))

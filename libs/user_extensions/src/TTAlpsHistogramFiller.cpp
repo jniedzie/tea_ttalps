@@ -1378,16 +1378,9 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bo
         {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
         {"logInvMass", log10(dimuon->GetInvariantMass())},
         {"outerDR", dimuon->GetOuterDeltaR()},
-        {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
-        {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
-        {"logAbsPtLxyDPhi1", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)))},
-        {"logAbsPtLxyDPhi2", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)))},
         {"absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
-        {"absPtLxyDPhi2", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
         {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
-        {"normChi2", dimuon->GetAs<float>("normChi2")},
         {"logNormChi2", TMath::Log10(dimuon->GetAs<float>("normChi2"))},
-        {"dca", dimuon->GetAs<float>("dca")},
         {"logDca", TMath::Log10(dimuon->GetAs<float>("dca"))},
       };
 

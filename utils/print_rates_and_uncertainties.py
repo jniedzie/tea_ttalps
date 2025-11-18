@@ -159,6 +159,8 @@ def get_unc_category(unc_name):
     variation = "_systup" if "systup" in unc_name else "_systdown"
   elif "up" in unc_name or "down" in unc_name:
     variation = "_up" if "up" in unc_name else "_down"
+  elif "Up" in unc_name or "Dn" in unc_name:
+    variation = "_Up" if "Up" in unc_name else "_Dn"
   if "jecMC" in unc_name:
     return "JEC"
   if "bTaggingMedium" in unc_name:
@@ -271,6 +273,7 @@ def get_nice_names(years):
       "JEC_up": "JEC (up)",
       "JEC_down": "JEC (down)",
       "JEC": "JEC",
+      "L1PreFiringWeight": "L1 Pre-firing",
       "DSAEff": "DSA Muon efficiency SF",
       "dimuonEff": "Dimuon efficiency SF",
       "dimuonEffRev": "Dimuon efficiency SF",
@@ -296,6 +299,18 @@ def get_nice_names(years):
     nice_names[f"jecMC_Regrouped_RelativeSample_{year}_up"] = f"JEC Regrouped_RelativeSample_{year} SF (up)"
   return nice_names
 
+def significance_and_error(S, B, sigma_S, sigma_B, cov_SB=0.0):
+  if S + B <= 0:
+    return 0.0, 0.0
+  Z = S / math.sqrt(S + B)
+  denom = (S + B)**1.5  # (S+B)^(3/2)
+  dZ_dS = (B + 0.5*S) / denom
+  dZ_dB = -0.5 * S / denom
+
+  varZ = (dZ_dS**2) * (sigma_S**2) + (dZ_dB**2) * (sigma_B**2) \
+          + 2.0 * dZ_dS * dZ_dB * cov_SB
+  sigma_Z = math.sqrt(max(varZ, 0.0))
+  return Z, sigma_Z
 
 def main():
   config = importlib.import_module(args.config.replace(".py", "").replace("/", "."))
@@ -357,7 +372,9 @@ def main():
       signal_err = math.sqrt(signal_err2)
 
     signal_rates[(mass, ctau)] = (signal_rate, signal_err)
-    signal_significances[(mass, ctau)] = signal_rate / math.sqrt(signal_rate + background_rate)
+    signal_significance1 = signal_rate / math.sqrt(signal_rate + background_rate)
+    significance, significance_err = significance_and_error(signal_rate, background_rate, signal_err, background_err)
+    signal_significances[(mass, ctau)] = (significance, significance_err)
 
   # get a list of ctaus in increasing order:
   masses = sorted(set([mass for mass, _ in signal_rates.keys()]))
@@ -388,8 +405,8 @@ def main():
     info(f"\n{mass:.2f} GeV:\t", end="")
     for ctau in ctaus:
       if (mass, ctau) in signal_significances:
-        significance = signal_significances[(mass, ctau)]
-        info(f"{significance:.2f}", end="\t\t")
+        significance, err = signal_significances[(mass, ctau)]
+        info(f"{significance:.2f} +/- {err:.3f}", end="\t")
       else:
         info("N/A", end="\t\t")
 
