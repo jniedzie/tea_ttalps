@@ -220,9 +220,7 @@ output_path += category
 if optimization_param:
   output_path += "_"+optimization_param
 
-# hist_base_path = f"histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs"
-# hist_base_path = f"histograms"
-hist_base_path = f"histograms_dimuonEffSFs"
+hist_base_path = f"histograms"
 
 background_hist_path = (
     f"{hist_base_path}"
