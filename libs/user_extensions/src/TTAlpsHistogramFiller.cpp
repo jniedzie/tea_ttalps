@@ -170,6 +170,9 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_revertedMatching");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToPatDSA");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToDSA");
+    FillMuonVertex2DHistograms(event, muonVertexCollectionName+"_revertedMatching");
+    FillMuonVertex2DHistograms(event, muonVertexCollectionName+"_matchedToPatDSA");
+    FillMuonVertex2DHistograms(event, muonVertexCollectionName+"_matchedToDSA");
   }
   if (runNminus1Histograms) FillNminus1HistogramsForMuonVertexCollection(event);
   auto goodVertexCollection = event->GetCollection(goodMuonVertexCollectionName);
