@@ -64,7 +64,7 @@ hist_path = "histograms"
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 
-if "dimuonEff" in applyScaleFactors:
+if "dimuonEff" in applyScaleFactors and "ttbarCR" not in skim[0]:
   if applyScaleFactors["dimuonEff"][0] is False:
     hist_path += "_noDimuonEffSFs"
 

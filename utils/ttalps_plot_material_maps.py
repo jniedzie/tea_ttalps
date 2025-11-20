@@ -12,8 +12,16 @@ years = [
     ["2023postBPix", "2023postBPix"],
 ]
 
-hist_path = "histograms"
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "ABCD")
+hist_path_JPsi = "histograms_JPsiDimuons_ABCD"
+hist_path_SR = "histograms_SRDimuons_ABCD"
+# skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "JPsiDimuons", "ABCD")
+skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+
+collection_CR = "BestDimuonVertex"
+collection_SR = "BestPFIsoDimuonVertex"
+
+# collection_CR = "GoodDimuonVertex"
+# collection_SR = "GoodPFIsoDimuonVertex"
 
 
 def get_paths_for_year(year):
@@ -27,13 +35,29 @@ def get_paths_for_year(year):
 
   paths = {
       # data
-      "J/#Psi CR, data":        f"/data/dust/user/lrygaard/ttalps_cms/collision_data{year[0]}/{muon_name}{year[0]}_{skim[0]}_{hist_path}_{skim[1]}_{skim[2]}.root",
+      "J/#Psi CR, data": (
+          f"/data/dust/user/lrygaard/ttalps_cms/collision_data{year[0]}/{muon_name}{year[0]}_{skim[0]}_{hist_path_JPsi}.root",
+          collection_CR,
+      ),
+      # "tt CR, data": (
+      #     f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path}/histograms.root",
+      #     collection_CR,
+      # ),
       # backgrounds CR
-      "J/#Psi CR, tt (semi.)":  f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
-      "J/#Psi CR, tt (lept.)":  f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{lept_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
+      "J/#Psi CR, tt (semi.)": (
+          f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path_JPsi}/histograms.root",
+          collection_CR,
+      ),
+      # "J/#Psi CR, tt (lept.)": (
+      #   f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{lept_name}/{skim[0]}/{hist_path}/histograms.root",
+      #   collection_CR,
+      # ),
       # backgrounds SR
-      "SR, tt (semi.)":         f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
-      # "tt CR, data":         f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path}_{skim[1]}_{skim[2]}/histograms.root",
+      "SR, tt (semi.)": (
+          f"/data/dust/user/lrygaard/ttalps_cms/backgrounds{year[1]}/{semi_name}/{skim[0]}/{hist_path_SR}/histograms.root",
+          collection_SR,
+      ),
+
   }
   return paths
 
@@ -54,7 +78,7 @@ def prepare_hist(hist):
   hist.SetMarkerColor(ROOT.kBlack)
   hist.SetLineColor(ROOT.kViolet)
   hist.SetFillColorAlpha(ROOT.kViolet, 1.0)
-  
+
   hist.GetXaxis().SetTitle("x [cm]")
   hist.GetYaxis().SetTitle("y [cm]")
   hist.GetXaxis().SetTitleSize(0.05)
@@ -74,18 +98,21 @@ def main():
   files = {}
   hists = {}
 
+  n_rows = 3
+  n_columns = len(categories)
+
   for year in years:
     canvas = ROOT.TCanvas("canvas", "canvas", 2000, 2000)
-    canvas.Divide(4, 3)
+    canvas.Divide(n_columns, n_rows)
 
     for i_category, category in enumerate(categories):
       info("=================================")
       info(f"\nProcessing category: {category}")
       info("=================================")
 
-      hist_name = f"BestDimuonVertex{category}_vy_vs_vx{suffix}"
+      for i_sample, (name, (path, collection)) in enumerate(get_paths_for_year(year).items()):
 
-      for i_sample, (name, path) in enumerate(get_paths_for_year(year).items()):
+        hist_name = f"{collection}{category}_vy_vs_vx{suffix}"
         info(f"\nProcessing sample {name}: {path}")
 
         try:
@@ -106,7 +133,7 @@ def main():
 
         prepare_hist(hists[name])
 
-        i = i_category * 4 + i_sample
+        i = i_category * n_columns + i_sample
         canvas.cd(i + 1)
         ROOT.gPad.SetLeftMargin(0.15)
         ROOT.gPad.SetRightMargin(0.15)
