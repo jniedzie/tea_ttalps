@@ -1,7 +1,7 @@
 ##################     2022preEE    ##################
 
 TT_dasBackgrounds2022preEE = {
-    "backgrounds2022preEE/TTtoLNu2Q": "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022preEE.txt",
+    "backgrounds2022preEE/TTtoLNu2Q": "/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22DRPremix-124X_mcRun3_2022_realistic_v12-v5-00000000000000000000000000000000/USER",
     "backgrounds2022preEE/TTto4Q": "/TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
     "backgrounds2022preEE/TTto2L2Nu": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22DRPremix-124X_v12-v4-00000000000000000000000000000000/USER",
 
@@ -119,9 +119,9 @@ dasSamples2022preEE = {key: value for d in (
 ##################     2022postEE    ##################
 
 TT_dasBackgrounds2022postEE = {
-    "backgrounds2022postEE/TTtoLNu2Q": "../data/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8_2022postEE.txt",
+    "backgrounds2022postEE/TTtoLNu2Q": "/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v2-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/TTto4Q": "/TTto4Q_TuneCP5Up_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v3-00000000000000000000000000000000/USER",
-    "backgrounds2022postEE/TTto2L2Nu": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
+    "backgrounds2022postEE/TTto2L2Nu": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v2-00000000000000000000000000000000/USER",
 
     "backgrounds2022postEE/TTLL_MLL-4to50": "/TTLL_MLL-4to50_TuneCP5_13p6TeV_amcatnlo-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/TTLL_MLL-50": "/TTLL_MLL-50_TuneCP5_13p6TeV_amcatnlo-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
@@ -130,11 +130,10 @@ TT_dasBackgrounds2022postEE = {
     "backgrounds2022postEE/TTHtoNon2B": "/TTHtoNon2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v2-00000000000000000000000000000000/USER",
 
     "backgrounds2022postEE/TTZZ": "/TTZZ_TuneCP5_13p6TeV_madgraph-madspin-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v1-00000000000000000000000000000000/USER",
-    "backgrounds2022postEE/TTZH": "/TTZZ_TuneCP5_13p6TeV_madgraph-madspin-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v1-00000000000000000000000000000000/USER",
+    "backgrounds2022postEE/TTZH": "/TTZH_TuneCP5_13p6TeV_madgraph-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v3-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/TTTT": "/TTTT_TuneCP5_13p6TeV_amcatnlo-pythia8/jalimena-LLPnanoAODv1_LLPminiAOD-00000000000000000000000000000000/USER",
 }
 ST_dasBackgrounds2022postEE = {
-    # Loose skim for TWminustoLNu2Q on lrygaard
     "backgrounds2022postEE/TWminustoLNu2Q": "/TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/TbarWplustoLNu2Q": "/TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
     "backgrounds2022postEE/TBbarQ_t-channel": "/TBbarQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/jalimena-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v4-00000000000000000000000000000000/USER",
@@ -142,7 +141,7 @@ ST_dasBackgrounds2022postEE = {
 }
 DY_dasBackgrounds2022postEE = {
     # No events after skims
-    # "backgrounds2022postEE/DYJetsToLL_M-50": "/DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_postEE_v1-v2-00000000000000000000000000000000/USER",
+    "backgrounds2022postEE/DYJetsToLL_M-50": "/DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8/lrygaard-LLPnanoAODv1_Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v2-00000000000000000000000000000000/USER",
 }
 V_dasBackgrounds2022postEE = {
     # WtoLNu-2Jets has really high negative weights

@@ -170,6 +170,9 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesForMuonVertexCollections(co
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_revertedMatching");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToPatDSA");
     FillMuonVertexHistograms(event, muonVertexCollectionName+"_matchedToDSA");
+    FillMuonVertex2DHistograms(event, muonVertexCollectionName+"_revertedMatching");
+    FillMuonVertex2DHistograms(event, muonVertexCollectionName+"_matchedToPatDSA");
+    FillMuonVertex2DHistograms(event, muonVertexCollectionName+"_matchedToDSA");
   }
   if (runNminus1Histograms) FillNminus1HistogramsForMuonVertexCollection(event);
   auto goodVertexCollection = event->GetCollection(goodMuonVertexCollectionName);
@@ -1374,18 +1377,13 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bo
     map<string, double> variables_subset = {
         {"logAbsCollinearityAngle", TMath::Log10(dimuon->GetCollinearityAngle())},
         {"logLeadingPt", TMath::Log10(dimuon->GetLeadingMuonPt())},
-        {"logDxyPVTrajSig1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj") / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr")))},
+        {"logDxyPVTraj1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")))},
+        {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
+        {"logInvMass", log10(dimuon->GetInvariantMass())},
         {"outerDR", dimuon->GetOuterDeltaR()},
-        {"logLxy", TMath::Log10(dimuon->GetLxyFromPV())},
-        {"log3Dangle", TMath::Log10(dimuon->Get3DOpeningAngle())},
-        {"logAbsPtLxyDPhi1", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)))},
-        {"logAbsPtLxyDPhi2", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)))},
         {"absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
-        {"absPtLxyDPhi2", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2))},
         {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
-        {"normChi2", dimuon->GetAs<float>("normChi2")},
         {"logNormChi2", TMath::Log10(dimuon->GetAs<float>("normChi2"))},
-        {"dca", dimuon->GetAs<float>("dca")},
         {"logDca", TMath::Log10(dimuon->GetAs<float>("dca"))},
       };
 

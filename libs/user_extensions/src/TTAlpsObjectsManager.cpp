@@ -311,8 +311,6 @@ void TTAlpsObjectsManager::InsertRevertedMatchedDSAMuonVertexCollection(shared_p
 
   auto looseDSAMuons = asNanoMuons(event->GetCollection("LooseDSAMuons"));
 
-  if (muonVertexCollection->size() < 1) return;
-
   for (auto vertex : *muonVertexCollection) {
     auto nanoVertex = asNanoDimuonVertex(vertex,event);
     if (nanoVertex->IsPatDSADimuon() || nanoVertex->IsDSADimuon()) {
