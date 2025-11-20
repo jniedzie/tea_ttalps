@@ -103,7 +103,7 @@ def main():
 
   for year in years:
     canvas = ROOT.TCanvas("canvas", "canvas", 2000, 2000)
-    canvas.Divide(n_rows, n_columns)
+    canvas.Divide(n_columns, n_rows)
 
     for i_category, category in enumerate(categories):
       info("=================================")
