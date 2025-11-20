@@ -133,7 +133,7 @@ def main():
 
         prepare_hist(hists[name])
 
-        i = i_category * n_rows + i_sample
+        i = i_category * n_columns + i_sample
         canvas.cd(i + 1)
         ROOT.gPad.SetLeftMargin(0.15)
         ROOT.gPad.SetRightMargin(0.15)
