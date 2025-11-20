@@ -145,6 +145,7 @@ cross_sectionsRun3 = {
     "Muon2022postEE": 1.0,
     "Muon2023preBPix": 1.0,
     "Muon2023postBPix": 1.0,
+    "Muon12023": 1.0,
 
     "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8": 405.8099,
     "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8": 98.0963,
