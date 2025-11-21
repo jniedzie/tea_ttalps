@@ -190,6 +190,7 @@ if runABCDMothersHistograms:
 
 if runFakesHistograms:
   histParams += helper.get_fakes_params()
+  irregularHistParams += helper.get_fakes_irregular_params()
 
 if runMuonTriggerObjectsHistograms:
   histParams += helper.get_muon_trigger_objects_params()
