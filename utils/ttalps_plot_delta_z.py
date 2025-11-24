@@ -1,5 +1,6 @@
 from Logger import info, warn, error, fatal, logger_print
 
+import os
 from array import array
 import ROOT
 
@@ -7,14 +8,23 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 hist_base_name = "histograms"
 skim = ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_fakes")
 
-year = "2016preVFP"
+# year = "2016preVFP"
+# year = "2016postVFP"
+# year = "2017"
+# year = "2018"
+# year = "2022preEE"
+# year = "2022postEE"
+# year = "2023preBPix"
+year = "2023postBPix"
+
+ttsemi_name = "TTToSemiLeptonic" if "22" not in year and "23" not in year else "TTtoLNu2Q"
 
 # for signal
 signal_process = f"signals{year}/tta_mAlp-12GeV_ctau-1e3mm"
 input_path_signal = f"{base_path}/{signal_process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 
 # for background
-background_process = f"backgrounds{year}/TTToSemiLeptonic"
+background_process = f"backgrounds{year}/{ttsemi_name}"
 input_path_background = f"{base_path}/{background_process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 
 canvas_divide = (2, 2)
@@ -149,7 +159,7 @@ def main():
       if hist_nonFakes.Integral() > 0 and hist_fakes.Integral() > 0:
         hist_nonFakes.Scale(1 / hist_nonFakes.Integral())
         hist_fakes.Scale(1 / hist_fakes.Integral())
-    else:
+    elif n_events > 0:
       hist_nonFakes.Scale(1 / n_events)
       hist_fakes.Scale(1 / n_events)
 
@@ -195,17 +205,20 @@ def main():
     hist_signal_fakes.Draw("samehiste")
 
     hist_signal_nonFakes.GetXaxis().SetRangeUser(-5, 3)
-    hist_signal_nonFakes.GetYaxis().SetRangeUser(0, 0.8)
+    hist_signal_nonFakes.GetYaxis().SetRangeUser(0, 0.9)
 
     legend.Draw()
   except OSError:
     error(f"File {input_path_signal} not found or corrupted.")
   
+  
+  os.makedirs("../plots/delta_z/", exist_ok=True)
+  
   canvas.Update()
-  canvas.SaveAs(f"../plots/delta_z_vs_PU_{year}.pdf")
+  canvas.SaveAs(f"../plots/delta_z/delta_z_vs_PU_{year}.pdf")
 
   canvas_reproduce.Update()
-  canvas_reproduce.SaveAs(f"../plots/delta_z_vs_PU_reproduce_{year}.pdf")
+  canvas_reproduce.SaveAs(f"../plots/delta_z/delta_z_vs_PU_reproduce_{year}.pdf")
 
   logger_print()
 
