@@ -12,7 +12,7 @@ import importlib
 class TTAlpsPlotterConfigHelper:
   def __init__(
       self, year, base_path, skim, hist_path, data_to_include,
-      signals_to_include, legend_pos_and_size
+      signals_to_include, legend_pos_and_size, legend_text_size
   ):
 
     if len(skim) != 4:
@@ -33,6 +33,7 @@ class TTAlpsPlotterConfigHelper:
     self.data_to_include = data_to_include
     self.signals_to_include = signals_to_include
     self.legend_pos_and_size = legend_pos_and_size
+    self.legend_text_size = legend_text_size
 
     self.custom_stacks_order = []
     self.custom_stacks_order_reversed = False
@@ -139,11 +140,12 @@ class TTAlpsPlotterConfigHelper:
 
   def __get_legend(self, column, row, style="f"):
     legend = Legend(
-        self.legend_pos_and_size[0]-(column+1)*self.legend_pos_and_size[2],
-        self.legend_pos_and_size[1]-(row+1)*self.legend_pos_and_size[3],
-        self.legend_pos_and_size[0]-(column)*self.legend_pos_and_size[2],
-        self.legend_pos_and_size[1]-(row)*self.legend_pos_and_size[3],
-        style
+        x1=self.legend_pos_and_size[0]-(column+1)*self.legend_pos_and_size[2],
+        y1=self.legend_pos_and_size[1]-(row+1)*self.legend_pos_and_size[3],
+        x2=self.legend_pos_and_size[0]-(column)*self.legend_pos_and_size[2],
+        y2=self.legend_pos_and_size[1]-(row)*self.legend_pos_and_size[3],
+        options=style,
+        text_size=self.legend_text_size,
     )
 
     return legend

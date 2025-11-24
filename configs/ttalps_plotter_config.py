@@ -95,6 +95,7 @@ legend_max_x = 0.82 if show_ratio_plots else 0.75
 legend_max_y = 0.89
 legend_width = 0.17 if show_ratio_plots else 0.15
 legend_height = 0.045 if show_ratio_plots else 0.035
+legend_text_size = 20
 
 configHelper = TTAlpsPlotterConfigHelper(
     year,
@@ -103,7 +104,8 @@ configHelper = TTAlpsPlotterConfigHelper(
     hist_path,
     data_to_include,
     signals_to_include,
-    (legend_max_x, legend_max_y, legend_width, legend_height)
+    (legend_max_x, legend_max_y, legend_width, legend_height),
+    legend_text_size=legend_text_size,
 )
 
 samples = []
