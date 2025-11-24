@@ -7,12 +7,14 @@ base_path = "/data/dust/user/jniedzie/ttalps_cms"
 hist_base_name = "histograms"
 skim = ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_fakes")
 
+year = "2016preVFP"
+
 # for signal
-signal_process = "signals2018/tta_mAlp-12GeV_ctau-1e3mm"
+signal_process = f"signals{year}/tta_mAlp-12GeV_ctau-1e3mm"
 input_path_signal = f"{base_path}/{signal_process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 
 # for background
-background_process = "backgrounds2018/TTToSemiLeptonic"
+background_process = f"backgrounds{year}/TTToSemiLeptonic"
 input_path_background = f"{base_path}/{background_process}/{skim[0]}/{hist_base_name}{skim[1]}{skim[2]}/histograms.root"
 
 canvas_divide = (2, 2)
@@ -174,34 +176,36 @@ def main():
       hist_fakes.Draw("samehiste")
       legend.Draw()
 
-  file_signal = ROOT.TFile(input_path_signal)
+  try:
+    file_signal = ROOT.TFile(input_path_signal)
+    hist_signal_nonFakes = file_signal.Get(f"{collection_name}_nonFakes_logAbsDzFromLeadingTight")
+    hist_signal_fakes = file_signal.Get(f"{collection_name}_fakes_logAbsDzFromLeadingTight")
 
-  hist_signal_nonFakes = file_signal.Get(f"{collection_name}_nonFakes_logAbsDzFromLeadingTight")
-  hist_signal_fakes = file_signal.Get(f"{collection_name}_fakes_logAbsDzFromLeadingTight")
+    canvas_reproduce.cd(1)
+    prepare_pad()
+    prepare_hist(hist_signal_nonFakes, ROOT.kBlue, 600)
+    prepare_hist(hist_signal_fakes, ROOT.kRed, 600)
 
-  canvas_reproduce.cd(1)
-  prepare_pad()
-  prepare_hist(hist_signal_nonFakes, ROOT.kBlue, 600)
-  prepare_hist(hist_signal_fakes, ROOT.kRed, 600)
+    hist_signal_nonFakes.SetTitle("Signal: 12 GeV, 1 m")
+    hist_signal_nonFakes.GetXaxis().SetTitle("log #left|#Delta z_{muon, leading tight muon}#right| [cm]")
+    hist_signal_nonFakes.Scale(1 / hist_signal_nonFakes.Integral())
+    hist_signal_fakes.Scale(1 / hist_signal_fakes.Integral())
 
-  hist_signal_nonFakes.SetTitle("Signal: 12 GeV, 1 m")
-  hist_signal_nonFakes.GetXaxis().SetTitle("log #left|#Delta z_{muon, leading tight muon}#right| [cm]")
-  hist_signal_nonFakes.Scale(1 / hist_signal_nonFakes.Integral())
-  hist_signal_fakes.Scale(1 / hist_signal_fakes.Integral())
+    hist_signal_nonFakes.Draw("histe")
+    hist_signal_fakes.Draw("samehiste")
 
-  hist_signal_nonFakes.Draw("histe")
-  hist_signal_fakes.Draw("samehiste")
+    hist_signal_nonFakes.GetXaxis().SetRangeUser(-5, 3)
+    hist_signal_nonFakes.GetYaxis().SetRangeUser(0, 0.8)
 
-  hist_signal_nonFakes.GetXaxis().SetRangeUser(-5, 3)
-  hist_signal_nonFakes.GetYaxis().SetRangeUser(0, 0.7)
-
-  legend.Draw()
-
+    legend.Draw()
+  except OSError:
+    error(f"File {input_path_signal} not found or corrupted.")
+  
   canvas.Update()
-  canvas.SaveAs("../plots/delta_z_vs_PU.pdf")
+  canvas.SaveAs(f"../plots/delta_z_vs_PU_{year}.pdf")
 
   canvas_reproduce.Update()
-  canvas_reproduce.SaveAs("../plots/delta_z_vs_PU_reproduce.pdf")
+  canvas_reproduce.SaveAs(f"../plots/delta_z_vs_PU_reproduce_{year}.pdf")
 
   logger_print()
 
