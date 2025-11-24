@@ -210,10 +210,9 @@ def main():
     legend.Draw()
   except OSError:
     error(f"File {input_path_signal} not found or corrupted.")
-  
-  
+
   os.makedirs("../plots/delta_z/", exist_ok=True)
-  
+
   canvas.Update()
   canvas.SaveAs(f"../plots/delta_z/delta_z_vs_PU_{year}.pdf")
 
