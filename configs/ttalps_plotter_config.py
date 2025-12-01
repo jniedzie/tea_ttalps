@@ -95,6 +95,7 @@ legend_max_x = 0.82 if show_ratio_plots else 0.75
 legend_max_y = 0.89
 legend_width = 0.17 if show_ratio_plots else 0.15
 legend_height = 0.045 if show_ratio_plots else 0.035
+legend_text_size = 20
 
 configHelper = TTAlpsPlotterConfigHelper(
     year,
@@ -103,7 +104,8 @@ configHelper = TTAlpsPlotterConfigHelper(
     hist_path,
     data_to_include,
     signals_to_include,
-    (legend_max_x, legend_max_y, legend_width, legend_height)
+    (legend_max_x, legend_max_y, legend_width, legend_height),
+    legend_text_size=legend_text_size,
 )
 
 samples = []
@@ -288,9 +290,9 @@ histograms = (
     # Good jets
     # ----------------------------------------------------------------------------
     Histogram("GoodJets_pt", "", False,  True, default_norm, 10, 0, 1300,
-              1e-3, 1e6, "good jet p_{T} [GeV]", f"# events ({year})"),
+              1e-3, 1e8, "good jet p_{T} [GeV]", f"# events ({year})"),
     Histogram("GoodJets_eta", "", False,  True, default_norm, 10, -
-              3, 5.0, 1e-3, 1e6, "good jet #eta", f"# events ({year})"),
+              3, 5.0, 1e-3, 1e10, "good jet #eta", f"# events ({year})"),
     # Histogram("GoodJets_btagDeepB", "", False,  True, default_norm, 10, 0,
     #           1.5, 2e0, 1e8, "good jet deepCSV score", f"# events ({year})"),
     # Histogram("GoodJets_btagDeepFlavB", "", False,  True, default_norm, 10,
@@ -302,9 +304,9 @@ histograms = (
     # Good b-jets
     # ----------------------------------------------------------------------------
     Histogram("GoodMediumBtaggedJets_pt", "", False,  True, default_norm, 20,
-              0, 2000, 1e-3, 1e6, "good b-jet p_{T} [GeV]", f"# events ({year})"),
+              0, 2000, 1e-3, 1e8, "good b-jet p_{T} [GeV]", f"# events ({year})"),
     Histogram("GoodMediumBtaggedJets_eta", "", False,  True, default_norm,
-              5, -3.5, 3.5, 1e-3, 1e6, "good b-jet #eta", f"# events ({year})"),
+              5, -3.5, 3.5, 1e-3, 1e8, "good b-jet #eta", f"# events ({year})"),
     # Histogram("GoodMediumBtaggedJets_btagDeepB", "", False,  True, default_norm,
     #           10, -1, 1, 1e0, 1e8, "good b-jet deepCSV score", f"# events ({year})"),
     # Histogram("GoodMediumBtaggedJets_btagDeepFlavB", "", False,  True, default_norm,
