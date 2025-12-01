@@ -23,6 +23,16 @@ hist_path = f"histograms{skim[1]}{skim[2]}" # all SFs 2018
 
 samples = []
 year_string = ""
+years_simple = {
+    "2016preVFP" : "2016",
+    "2016postVFP" : "2016",
+    "2017" : "2017",
+    "2018" : "2018",
+    "2022preEE" : "2022",
+    "2022postEE" : "2022",
+    "2023preBPix" : "2023",
+    "2023postBPix" : "2023",
+}
 for year in years:
     year_string += year
     cross_sections = get_cross_sections(year)
@@ -45,9 +55,12 @@ for year in years:
                 year=year,
             )
         )
-    data = f"collision_data{year}/SingleMuon{year}"
-    if "2022" in year or "2023" in year:
-        data = f"collision_data{year}/Muon{year}"
+    year_simple = years_simple[year]
+    data = f"collision_data{year}/SingleMuon{year_simple}"
+    if "2022" in year:
+        data = f"collision_data{year}/Muon{year_simple}"
+    if "2023" in year:
+        data = f"collision_data{year}/Muon1{year_simple}"
     samples.append(
         Sample(
             name=f"data_{year}",

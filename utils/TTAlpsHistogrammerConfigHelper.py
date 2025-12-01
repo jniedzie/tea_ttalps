@@ -91,8 +91,8 @@ class TTAlpsHistogrammerConfigHelper:
 
         "logDxyPVTraj1": (100, -5, 3),
         "logDxyPVTraj2": (100, -5, 3),
-        "logDxyPVTrajSig1": (100, -3, 3),
-        "logDxyPVTrajSig2": (100, -3, 3),
+        "logDxyPVTrajSig1": (100, -3, 4),
+        "logDxyPVTrajSig2": (100, -3, 4),
 
         "deltaIso03": (100, 0, 10),
         "deltaIso04": (100, 0, 10),
@@ -105,7 +105,7 @@ class TTAlpsHistogrammerConfigHelper:
 
         # some extra:
         "normChi2": (100, 0, 1),
-        "logNormChi2": (100, -7, 1),
+        "logNormChi2": (100, -7, 2),
         "dca": (100, 0, 2),
         "logDca": (100, -4, 1),
     }
@@ -116,10 +116,12 @@ class TTAlpsHistogrammerConfigHelper:
         "logDxyPVTraj1": (100, -5, 3),
         "logPt": (100, -1, 3),
         "logInvMass": (100, -1, 2),
-        "outerDR": (100, 0, 5),
+        "logOuterDR": (100, -3, 3),
+        "logDxyPVTrajSig1": (100, -3, 4),
+        "logDxyPVTrajSig2": (100, -3, 4),
         "absPtLxyDPhi1": (100, 0, pi),
         "absCollinearityAngle": (100, 0, 4),
-        "logNormChi2": (100, -7, 1),
+        "logNormChi2": (100, -7, 2),
         "logDca": (100, -4, 1),
     }
 
@@ -823,6 +825,8 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "SS_leadingPt", 2000, 0, 1000, ""),
         (name, "OS_Lxy", 10000, 0, 1000, ""),
         (name, "SS_Lxy", 10000, 0, 1000, ""),
+        (name, "absCollinearityAngle_lt2", 500, 0, 5, ""),
+        (name, "absCollinearityAngle_gt2", 500, 0, 5, ""),
     )
 
   def __insert_Nminus1Histograms2D(self, params, name):

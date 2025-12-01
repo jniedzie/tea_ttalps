@@ -27,13 +27,16 @@ args = parser.parse_args()
 
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "ABCD")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "genInfo")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "nminus1")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsNoChi2", "genInfo")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsMuonPt5", "ABCD")
 
 # samples = dasBackgrounds2018.keys()
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-# hist_path = "histograms"
-# hist_path = "histograms_noDimuonEffSFs"
+hist_path = "histograms"
 
 if skim[1] != "":
   hist_path += f"_{skim[1]}"

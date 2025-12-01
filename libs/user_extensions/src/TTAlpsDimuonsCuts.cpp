@@ -120,8 +120,8 @@ bool TTAlpsDimuonCuts::PassesHitsInFrontOfVertexCut(shared_ptr<NanoDimuonVertex>
   string category = dimuonVertex->GetVertexCategory();
   if(category == "DSA") return true;
   auto dimuonVertexCuts = GetDimuonCategoryMap(category);
-  float maxHits = max((float)dimuonVertex->Get("hitsInFrontOfVert1"),(float)dimuonVertex->Get("hitsInFrontOfVert2"));
-  if(maxHits > dimuonVertexCuts["maxHitsInFrontOfVertex"]) return false;
+  float sumHits = (float)dimuonVertex->Get("hitsInFrontOfVert1") + (float)dimuonVertex->Get("hitsInFrontOfVert2");
+  if(sumHits > dimuonVertexCuts["maxHitsInFrontOfVertex"]) return false;
   return true;
 }
 

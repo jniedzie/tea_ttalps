@@ -17,13 +17,14 @@ luminosity = get_luminosity(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
-skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "", "SR")
+skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD", "SR")
 
 # skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons", "")
 # skim = ("skimmed_looseSemimuonic_v3_ttbarCR", "", "", "ttCR")
 
 hist_path = f"histograms{skim[1]}{skim[2]}"
-# hist_path = f"histograms_noDimuonEffSFs{skim[1]}{skim[2]}"
 
 output_formats = ["pdf"]
 
@@ -48,11 +49,11 @@ extraText = "Preliminary"
 # extraText = "Private Work"
 
 extraMuonVertexCollections = [
-    # "BestDimuonVertex",       # best Dimuon selection without isolation cut
+    "BestDimuonVertex",       # best Dimuon selection without isolation cut
     # "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
     # "GoodPFIsoDimuonVertex",  # all Good Dimuons with isolation cut
-    # "LooseNonLeadingMuonsVertexSegmentMatch",  # All dimuon vertices before selection
-    # "BestPFIsoDimuonVertexNminus1PFRelIsolationCut",
+    # "BestDimuonVertex_revertedMatching",
+    # "BestDimuonVertexNminus1InvariantMassCut",
 ]
 
 plot_background = True
@@ -64,7 +65,7 @@ if not plot_background:
 
 data_to_include = []
 
-if skim[3] != "SR":
+if not "SR" in skim[1]:
   year_number = "".join(filter(str.isdigit, year))
   if "2022" in year or "2023" in year:
     data_to_include = [f"Muon{year_number}"]
@@ -75,19 +76,17 @@ if len(data_to_include) == 0:
   show_ratio_plots = False
 
 signals_to_include = [
-    # "tta_mAlp-0p35GeV_ctau-1e1mm",
+    # "tta_mAlp-0p35GeV_ctau-1e2mm",
+    # "tta_mAlp-2GeV_ctau-1e2mm",
+    # "tta_mAlp-12GeV_ctau-1e2mm",
+    # "tta_mAlp-30GeV_ctau-1e2mm",
+    # "tta_mAlp-60GeV_ctau-1e2mm",
 
-    # # "tta_mAlp-2GeV_ctau-1e-5mm",
+    # "tta_mAlp-2GeV_ctau-1e-5mm",
     # # "tta_mAlp-2GeV_ctau-1e0mm",
     # "tta_mAlp-2GeV_ctau-1e1mm",
     # # "tta_mAlp-2GeV_ctau-1e2mm",
-    # # "tta_mAlp-2GeV_ctau-1e3mm",
-
-    # "tta_mAlp-12GeV_ctau-1e1mm",
-    # # "tta_mAlp-12GeV_ctau-1e0mm",
-
-    # "tta_mAlp-30GeV_ctau-1e1mm",
-    # "tta_mAlp-60GeV_ctau-1e1mm",
+    # "tta_mAlp-2GeV_ctau-1e3mm",
 
 ]
 
@@ -126,6 +125,7 @@ plotting_options = {
 
 default_norm = NormalizationType.to_lumi
 # default_norm = NormalizationType.to_background
+# default_norm = NormalizationType.to_one
 # default_norm = NormalizationType.to_data
 # default_norm = NormalizationType.none
 
@@ -371,26 +371,43 @@ mass_max   = {c: 5.0 for c in categories}
 mass_y_max = {c: 200 for c in categories}
 
 if "JPsiDimuons" in skim[1]:
-  # mass_rebin["_DSA"] = 10
-  # mass_min["_DSA"]   = 2.3
-  # mass_max["_DSA"]   = 4.0
-  # mass_y_max["_DSA"] = 4
   mass_rebin["_DSA"] = 10
-  mass_min["_DSA"]   = 1
-  mass_max["_DSA"]   = 5.0
-  mass_y_max["_DSA"] = 50
-  # mass_rebin["_PatDSA"] = 4
-  # mass_min["_PatDSA"]   = 2.6
-  # mass_max["_PatDSA"]   = 3.8
-  # mass_y_max["_PatDSA"] = 6
-  mass_rebin["_PatDSA"] = 5
-  mass_min["_PatDSA"]   = 2.5
-  mass_max["_PatDSA"]   = 3.9
-  mass_y_max["_PatDSA"] = 70
+  mass_min["_DSA"]   = 2.1
+  mass_max["_DSA"]   = 4.2
+  mass_rebin["_PatDSA"] = 4
+  mass_min["_PatDSA"]   = 2.6
+  mass_max["_PatDSA"]   = 3.8
   mass_rebin["_Pat"] = 1
   mass_min["_Pat"]   = 2.9
   mass_max["_Pat"]   = 3.3
-  mass_y_max["_Pat"] = 200
+  if year == "2016preVFP" or "2016postVFP":
+    mass_y_max["_DSA"] = 7
+    mass_y_max["_PatDSA"] = 7
+    mass_y_max["_Pat"] = 70
+  if year == "2017":
+    mass_y_max["_DSA"] = 7
+    mass_y_max["_PatDSA"] = 15
+    mass_y_max["_Pat"] = 200
+  if year == "2018":
+    mass_y_max["_DSA"] = 10
+    mass_y_max["_PatDSA"] = 15
+    mass_y_max["_Pat"] = 250
+  if year == "2022preEE":
+    mass_y_max["_DSA"] = 4
+    mass_y_max["_PatDSA"] = 7
+    mass_y_max["_Pat"] = 40
+  if year == "2022postEE":
+    mass_y_max["_DSA"] = 7
+    mass_y_max["_PatDSA"] = 10
+    mass_y_max["_Pat"] = 100
+  if year == "2023preBPix":
+    mass_y_max["_DSA"] = 7
+    mass_y_max["_PatDSA"] = 10
+    mass_y_max["_Pat"] = 120
+  if year == "2023postBPix":
+    mass_y_max["_DSA"] = 4
+    mass_y_max["_PatDSA"] = 7
+    mass_y_max["_Pat"] = 70
 
 norm_one = NormalizationType.to_one
 

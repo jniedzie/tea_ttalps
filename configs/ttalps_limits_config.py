@@ -25,7 +25,7 @@ if username == "lrygaard":
   combine_path = "/afs/desy.de/user/l/lrygaard/Combine/CMSSW_14_1_0_pre4/src/"
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
-hist_path = f"histograms_dimuonEffSFs"
+hist_path = f"histograms"
 
 # SR dimuon cuts applied
 signal_hist_path = (
@@ -41,12 +41,11 @@ background_hist_path = (
 # to print rates and uncertainty:
 use_combined_limits = True
 
-# extra_str = "_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5"
-# extra_str = "_withLeadingTightMuon"
+extra_str = ""
 datacards_output_path = f"{base_output_path}/limits/limits_{year_str}/datacards{extra_str}_{abcd_config.do_region}/"
 plots_output_path = f"{base_output_path}/limits/limits_{year_str}/plots{extra_str}/"
 
-results_output_path = f"{base_output_path}/limits/limits_{year_str}/results{extra_str}/"
+results_output_path = f"{base_output_path}/limits/limits_{year_str}/results{extra_str}_{abcd_config.do_region}/"
 
 # If True, poisson error on empty bins (1.84) will be added to data histograms
 add_uncertainties_on_zero = False
@@ -100,6 +99,17 @@ else:
   signal_bin = abcd_config.signal_bin
   exclude_backgrounds_for_years = abcd_config.exclude_backgrounds_for_years
 
+jec_year = year
+if "2016" in year:
+  jec_year = "2016"
+if year == "2022preEE":
+  jec_year = "2022"
+if year == "2022postEE":
+  jec_year = "2022EE"
+if year == "2023preBPix":
+  jec_year = "2023"
+if year == "2023postBPix":
+  jec_year = "2023BPix"
 
 # List nuisance parameters (they will only be added for processes for which they were listed)
 nuisances = {
@@ -108,8 +118,14 @@ nuisances = {
     "bTaggingMedium_up_correlated": "variation",
     "bTaggingMedium_up_uncorrelated": "variation",
 
-    "L1PreFiringWeight_Dn": "variation",
-    "L1PreFiringWeight_Up": "variation",
+    "muonIDTight_systdown": "variation",
+    "muonIDTight_systup": "variation",
+
+    "muonTrigger_systdown": "variation",
+    "muonTrigger_systup": "variation",
+
+    "pileup_up": "variation",
+    "pileup_down": "variation",
 
     # "abcd_nonClosure": "closure",
     "abcd_unc": "abcd",
@@ -117,9 +133,32 @@ nuisances = {
         "signal": lumi_uncertainty,
         "bkg": lumi_uncertainty,
     }
+
+    "jecMC_Regrouped_Absolute_down": "variation",
+    "jecMC_Regrouped_Absolute_up": "variation",
+    f"jecMC_Regrouped_Absolute_{jec_year}_down": "variation",
+    f"jecMC_Regrouped_Absolute_{jec_year}_up": "variation",
+    "jecMC_Regrouped_FlavorQCD_down": "variation",
+    "jecMC_Regrouped_FlavorQCD_up": "variation",
+    "jecMC_Regrouped_BBEC1_down": "variation",
+    "jecMC_Regrouped_BBEC1_up": "variation",
+    f"jecMC_Regrouped_BBEC1_{jec_year}_down": "variation",
+    f"jecMC_Regrouped_BBEC1_{jec_year}_up": "variation",
+    "jecMC_Regrouped_EC2_down": "variation",
+    "jecMC_Regrouped_EC2_up": "variation",
+    f"jecMC_Regrouped_EC2_{jec_year}_down": "variation",
+    f"jecMC_Regrouped_EC2_{jec_year}_up": "variation",
+    "jecMC_Regrouped_HF_down": "variation",
+    "jecMC_Regrouped_HF_up": "variation",
+    f"jecMC_Regrouped_HF_{jec_year}_down": "variation",
+    f"jecMC_Regrouped_HF_{jec_year}_up": "variation",
+    "jecMC_Regrouped_RelativeBal_down": "variation",
+    "jecMC_Regrouped_RelativeBal_up": "variation",
+    f"jecMC_Regrouped_RelativeSample_{jec_year}_down": "variation",
+    f"jecMC_Regrouped_RelativeSample_{jec_year}_up": "variation",
 }
 
-if "dimuonEff" in hist_path:
+if not "noDimuonEff" in hist_path:
   nuisances["dimuonEff_down"] = "variation"
   nuisances["dimuonEff_up"] = "variation"
 
@@ -133,91 +172,11 @@ if abcd_config.category != "_Pat":
   nuisances["dsamuonReco_cosmic_down"] = "variation"
   nuisances["dsamuonReco_cosmic_up"] = "variation"
 
+# muon reco and PU jet ID only available for run 2 as of now
 if "2016" in year_str or "2017" in year_str or "2018" in year_str:
-  jec_year = year
-  if "2016" in year:
-    jec_year = "2016"
   nuisances["muonReco_systdown"] = "variation"
   nuisances["muonReco_systup"] = "variation"
-  nuisances["muonTrigger_systdown"] = "variation"
-  nuisances["muonTrigger_systup"] = "variation"
   nuisances["PUjetIDtight_down"] = "variation"
   nuisances["PUjetIDtight_up"] = "variation"
-  nuisances["jecMC_Regrouped_Absolute_down"] = "variation"
-  nuisances["jecMC_Regrouped_Absolute_up"] = "variation"
-  nuisances[f"jecMC_Regrouped_Absolute_{jec_year}_down"] = "variation"
-  nuisances[f"jecMC_Regrouped_Absolute_{jec_year}_up"] = "variation"
-  nuisances["jecMC_Regrouped_FlavorQCD_down"] = "variation"
-  nuisances["jecMC_Regrouped_FlavorQCD_up"] = "variation"
-  nuisances["jecMC_Regrouped_BBEC1_down"] = "variation"
-  nuisances["jecMC_Regrouped_BBEC1_up"] = "variation"
-  nuisances[f"jecMC_Regrouped_BBEC1_{jec_year}_down"] = "variation"
-  nuisances[f"jecMC_Regrouped_BBEC1_{jec_year}_up"] = "variation"
-  nuisances["jecMC_Regrouped_EC2_down"] = "variation"
-  nuisances["jecMC_Regrouped_EC2_up"] = "variation"
-  nuisances[f"jecMC_Regrouped_EC2_{jec_year}_down"] = "variation"
-  nuisances[f"jecMC_Regrouped_EC2_{jec_year}_up"] = "variation"
-  nuisances["jecMC_Regrouped_HF_down"] = "variation"
-  nuisances["jecMC_Regrouped_HF_up"] = "variation"
-  nuisances[f"jecMC_Regrouped_HF_{jec_year}_down"] = "variation"
-  nuisances[f"jecMC_Regrouped_HF_{jec_year}_up"] = "variation"
-  nuisances["jecMC_Regrouped_RelativeBal_down"] = "variation"
-  nuisances["jecMC_Regrouped_RelativeBal_up"] = "variation"
-  nuisances[f"jecMC_Regrouped_RelativeSample_{jec_year}_down"] = "variation"
-  nuisances[f"jecMC_Regrouped_RelativeSample_{jec_year}_up"] = "variation"
-
-if "2022" in year_str or "2023" in year_str:
-  nuisances["jecMC_AbsoluteMPFBias_up"] = "variation"
-  nuisances["jecMC_AbsoluteMPFBias_down"] = "variation"
-  nuisances["jecMC_AbsoluteScale_up"] = "variation"
-  nuisances["jecMC_AbsoluteScale_down"] = "variation"
-  nuisances["jecMC_AbsoluteStat_up"] = "variation"
-  nuisances["jecMC_AbsoluteStat_down"] = "variation"
-  nuisances["jecMC_FlavorQCD_up"] = "variation"
-  nuisances["jecMC_FlavorQCD_down"] = "variation"
-  nuisances["jecMC_Fragmentation_up"] = "variation"
-  nuisances["jecMC_Fragmentation_down"] = "variation"
-  nuisances["jecMC_PileUpDataMC_up"] = "variation"
-  nuisances["jecMC_PileUpDataMC_down"] = "variation"
-  nuisances["jecMC_PileUpPtBB_up"] = "variation"
-  nuisances["jecMC_PileUpPtBB_down"] = "variation"
-  nuisances["jecMC_PileUpPtEC1_up"] = "variation"
-  nuisances["jecMC_PileUpPtEC1_down"] = "variation"
-  nuisances["jecMC_PileUpPtEC2_up"] = "variation"
-  nuisances["jecMC_PileUpPtEC2_down"] = "variation"
-  nuisances["jecMC_PileUpPtHF_up"] = "variation"
-  nuisances["jecMC_PileUpPtHF_down"] = "variation"
-  nuisances["jecMC_PileUpPtRef_up"] = "variation"
-  nuisances["jecMC_PileUpPtRef_down"] = "variation"
-  nuisances["jecMC_RelativeFSR_up"] = "variation"
-  nuisances["jecMC_RelativeFSR_down"] = "variation"
-  nuisances["jecMC_RelativeJEREC1_up"] = "variation"
-  nuisances["jecMC_RelativeJEREC1_down"] = "variation"
-  nuisances["jecMC_RelativeJEREC2_up"] = "variation"
-  nuisances["jecMC_RelativeJEREC2_down"] = "variation"
-  nuisances["jecMC_RelativeJERHF_up"] = "variation"
-  nuisances["jecMC_RelativeJERHF_down"] = "variation"
-  nuisances["jecMC_RelativePtBB_up"] = "variation"
-  nuisances["jecMC_RelativePtBB_down"] = "variation"
-  nuisances["jecMC_RelativePtEC1_up"] = "variation"
-  nuisances["jecMC_RelativePtEC1_down"] = "variation"
-  nuisances["jecMC_RelativePtEC2_up"] = "variation"
-  nuisances["jecMC_RelativePtEC2_down"] = "variation"
-  nuisances["jecMC_RelativePtHF_up"] = "variation"
-  nuisances["jecMC_RelativePtHF_down"] = "variation"
-  nuisances["jecMC_RelativeBal_up"] = "variation"
-  nuisances["jecMC_RelativeBal_down"] = "variation"
-  nuisances["jecMC_RelativeSample_up"] = "variation"
-  nuisances["jecMC_RelativeSample_down"] = "variation"
-  nuisances["jecMC_RelativeStatEC_up"] = "variation"
-  nuisances["jecMC_RelativeStatEC_down"] = "variation"
-  nuisances["jecMC_RelativeStatFSR_up"] = "variation"
-  nuisances["jecMC_RelativeStatFSR_down"] = "variation"
-  nuisances["jecMC_RelativeStatHF_up"] = "variation"
-  nuisances["jecMC_RelativeStatHF_down"] = "variation"
-  nuisances["jecMC_SinglePionECAL_up"] = "variation"
-  nuisances["jecMC_SinglePionECAL_down"] = "variation"
-  nuisances["jecMC_SinglePionHCAL_up"] = "variation"
-  nuisances["jecMC_SinglePionHCAL_down"] = "variation"
-  nuisances["jecMC_TimePtEta_up"] = "variation"
-  nuisances["jecMC_TimePtEta_down"] = "variation"
+  nuisances["L1PreFiringWeight_Dn"] = "variation"
+  nuisances["L1PreFiringWeight_Up"] = "variation"
