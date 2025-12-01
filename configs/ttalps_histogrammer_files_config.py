@@ -63,7 +63,7 @@ hist_path = "histograms"
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 
-if "dimuonEff" in applyScaleFactors:
+if "dimuonEff" in applyScaleFactors and "ttbarCR" not in skim[0]:
   if applyScaleFactors["dimuonEff"][0] is False:
     hist_path += "_noDimuonEffSFs"
 
@@ -72,6 +72,7 @@ if "dimuonEff" in applyScaleFactors:
 # hist_path += "_withLeadingTightMuon_genInfo/"
 # hist_path += "_genInfo/"
 # hist_path += "_revertedMatching_nminus1/"
+# hist_path += "_fakes/"
 
 # this has to be here, otherwise the script will not work:
 sample_path = ""

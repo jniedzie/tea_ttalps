@@ -23,6 +23,8 @@ parser.add_argument("--condor", action="store_true", default=False, help="Run on
 parser.add_argument("--dry", action="store_true", default=False, help="Dry run.")
 args = parser.parse_args()
 
+base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
+
 # comment out to use skim and samples from ttalps_histogrammer_files_config.pyCollapse commentComment on line L24kerstinlovisa commented on Nov 6, 2025 kerstinlovisaon Nov 6, 2025CollaboratorMore actionsPlease don't remove this, I need this to merge on other samples than what I'm running in the histogrammerReactWrite a replyResolve commentCode has comments. Press enter to view.
 
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "")
@@ -34,14 +36,14 @@ args = parser.parse_args()
 
 # samples = dasBackgrounds2018.keys()
 
-base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
+# base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-hist_path = "histograms"
+# hist_path = "histograms"
 
-if skim[1] != "":
-  hist_path += f"_{skim[1]}"
-if skim[2] != "":
-  hist_path += f"_{skim[2]}"
+# if skim[1] != "":
+#   hist_path += f"_{skim[1]}"
+# if skim[2] != "":
+#   hist_path += f"_{skim[2]}"
 
 
 def extract_year(s):
@@ -96,9 +98,9 @@ def main():
 
     unique_id = time.strftime("%Y%m%d_%H%M%S") + "_" + str(uuid.uuid4())[:8]
 
-    scripts_dir = f"scripts_{unique_id}"
-    merge_cmds = f"merge_cmds_{unique_id}.txt"
-    submit_file = f"submit_merge_jobs_{unique_id}.sub"
+    scripts_dir = f"tmp/scripts_{unique_id}"
+    merge_cmds = f"tmp/merge_cmds_{unique_id}.txt"
+    submit_file = f"tmp/submit_merge_jobs_{unique_id}.sub"
 
     os.makedirs(scripts_dir, exist_ok=True)
 
@@ -123,7 +125,7 @@ def main():
     error      = ./error/$(ClusterId).$(ProcId).err
     log        = ./log/$(ClusterId).log
     request_cpus = 4
-    request_memory = 2000MB
+    request_memory = 8000MB
     max_materialize = 5000
     initialdir = .
     getenv = True

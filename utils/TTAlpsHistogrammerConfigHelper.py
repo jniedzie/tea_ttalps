@@ -501,6 +501,15 @@ class TTAlpsHistogrammerConfigHelper:
 
     return tuple(params)
 
+  def get_fakes_irregular_params(self):
+    params = []
+
+    for collection in self.looseMuonCollections:
+      for type in ["_fakes", "_nonFakes"]:
+        self.__insert_irregular_MuonHistograms(params, collection + type)
+
+    return tuple(params)
+
   def get_matching_params(self):
     params = []
 
