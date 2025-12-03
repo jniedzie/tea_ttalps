@@ -1,4 +1,3 @@
-import glob
 import ROOT
 import copy
 import math
