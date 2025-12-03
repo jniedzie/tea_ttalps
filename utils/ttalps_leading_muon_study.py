@@ -189,7 +189,7 @@ for i, m in enumerate(masses):
         sig_incl = significance_including_leading_muon[m][j]
         h2_sig_excluding_leading.SetBinContent(i+1, j+1, sig_excl)
         h2_sig_including_leading.SetBinContent(i+1, j+1, sig_incl)
-        h2_sig_excluding_over_including_leading.SetBinContent(i+1, j+1, sig_excl/sig_incl)
+        h2_sig_excluding_over_including_leading.SetBinContent(i+1, j+1, sig_excl/sig_incl if sig_incl != 0 else 0)
 
 c1 = ROOT.TCanvas("c1", "c1", 800, 600)
 h2_sig_excluding_leading.Draw("COLZ TEXT")
