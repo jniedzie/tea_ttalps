@@ -1,4 +1,3 @@
-import os
 import glob
 import ROOT
 import copy
