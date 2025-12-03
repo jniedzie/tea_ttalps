@@ -1,5 +1,4 @@
 import ROOT
-import copy
 import math
 from ABCDPlotter import ABCDPlotter
 from ABCDHelper import ABCDHelper
