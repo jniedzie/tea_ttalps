@@ -388,7 +388,7 @@ if "JPsiDimuons" in skim[1]:
   mass_rebin["_Pat"] = 1
   mass_min["_Pat"]   = 2.9
   mass_max["_Pat"]   = 3.3
-  if year == "2016preVFP" or "2016postVFP":
+  if year == "2016preVFP" or year == "2016postVFP":
     mass_y_max["_DSA"] = 7
     mass_y_max["_PatDSA"] = 7
     mass_y_max["_Pat"] = 70
