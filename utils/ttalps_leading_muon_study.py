@@ -167,13 +167,13 @@ significance_including_leading_muon[12] = (2.74, 15.47, 8.36, 5.93, 2.96)
 significance_including_leading_muon[30] = (1.54, 15.42, 9.02, 5.83, 5.09)
 significance_including_leading_muon[60] = (0.73, 12.88, 8.16, 4.24, 4.38)
 
-h2_sig_excluding_leading = ROOT.TH2D("sig_excluding_leading", "Signal siginificance without leading muon;m_{a} [GeV];c#tau_{a} [mm]; S / #sqrt{S+B}",
+h2_sig_excluding_leading = ROOT.TH2D("sig_excluding_leading", "Signal significance without leading muon;m_{a} [GeV];c#tau_{a} [mm]; S / #sqrt{S+B}",
                len(masses), 0, len(masses),
                len(cta_values), 0, len(cta_values))
-h2_sig_including_leading = ROOT.TH2D("sig_including_leading", "Signal siginificance with leading muon;m_{a} [GeV];c#tau_{a} [mm]; S / #sqrt{S+B}",
+h2_sig_including_leading = ROOT.TH2D("sig_including_leading", "Signal significance with leading muon;m_{a} [GeV];c#tau_{a} [mm]; S / #sqrt{S+B}",
                len(masses), 0, len(masses),
                len(cta_values), 0, len(cta_values))
-h2_sig_excluding_over_including_leading = ROOT.TH2D("sig_excluding_over_including_leading", "Signal siginificance ratio of excluding / including leading tight muon;m_{a} [GeV];c#tau_{a} [mm]; Ratio",
+h2_sig_excluding_over_including_leading = ROOT.TH2D("sig_excluding_over_including_leading", "Signal significance ratio of excluding / including leading tight muon;m_{a} [GeV];c#tau_{a} [mm]; Ratio",
                len(masses), 0, len(masses),
                len(cta_values), 0, len(cta_values))
 for i, m in enumerate(masses):

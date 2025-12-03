@@ -220,7 +220,7 @@ output_path += category
 if optimization_param:
   output_path += "_"+optimization_param
 
-hist_base_path = f"histograms"
+hist_base_path = "histograms"
 
 background_hist_path = (
     f"{hist_base_path}"

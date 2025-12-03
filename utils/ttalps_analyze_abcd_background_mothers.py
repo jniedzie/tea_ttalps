@@ -19,6 +19,8 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "genInfo")
 hist_path = "histograms"
 
+output_dir = "../plots/backgroundMothers2018"
+
 backgrounds = dasBackgrounds2018.keys()
 
 # category = ""
@@ -503,8 +505,8 @@ def main():
   first_hist.SetTitle(f"Background sources for {category_str} dimuons")
   legend.Draw()
   canvas.Update()
-  canvas.SaveAs(f"../plots/backgroundMothers2018_2/background_sources{category}.pdf")
-  info(f"Saved background sources to ../plots/backgroundMothers2018_2/background_sources{category}.pdf")
+  canvas.SaveAs(f"{output_dir}/background_sources{category}.pdf")
+  info(f"Saved background sources to {output_dir}/background_sources{category}.pdf")
 
   print_events_per_category(n_events_per_category)
 
@@ -528,8 +530,8 @@ def main():
   first_hist.SetTitle(f"Background resonances for {category_str} dimuons")
   legend2.Draw()
   canvas2.Update()
-  canvas2.SaveAs(f"../plots/backgroundMothers2018_2/background_resonances{category}.pdf")
-  info(f"Saved background resonances to ../plots/backgroundMothers2018_2/background_resonances{category}.pdf")
+  canvas2.SaveAs(f"{output_dir}/background_resonances{category}.pdf")
+  info(f"Saved background resonances to {output_dir}/background_resonances{category}.pdf")
 
   print_events_per_category(n_events_per_resonance)
 
@@ -555,8 +557,8 @@ def main():
     first_hist.SetTitle(f"Background resonances mother IDs for {category_str} dimuons")
     legend3.Draw()
     canvas3.Update()
-    canvas3.SaveAs(f"../plots/backgroundMothers2018_2/background_resonances_motherIDs{category}.pdf")
-    info(f"Saved background resonances to ../plots/backgroundMothers2018_2/background_resonances_motherIDs{category}.pdf")
+    canvas3.SaveAs(f"{output_dir}/background_resonances_motherIDs{category}.pdf")
+    info(f"Saved background resonances to {output_dir}/background_resonances_motherIDs{category}.pdf")
 
 
 if __name__ == "__main__":

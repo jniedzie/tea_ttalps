@@ -25,7 +25,7 @@ if username == "lrygaard":
   combine_path = "/afs/desy.de/user/l/lrygaard/Combine/CMSSW_14_1_0_pre4/src/"
   base_output_path = "/afs/desy.de/user/l/lrygaard/TTALP/tea_ttalps"
 
-hist_path = f"histograms"
+hist_path = "histograms"
 
 # SR dimuon cuts applied
 signal_hist_path = (
@@ -99,17 +99,17 @@ else:
   signal_bin = abcd_config.signal_bin
   exclude_backgrounds_for_years = abcd_config.exclude_backgrounds_for_years
 
-jec_year = year
-if "2016" in year:
-  jec_year = "2016"
-if year == "2022preEE":
-  jec_year = "2022"
-if year == "2022postEE":
-  jec_year = "2022EE"
-if year == "2023preBPix":
-  jec_year = "2023"
-if year == "2023postBPix":
-  jec_year = "2023BPix"
+jec_years = {
+  "2016preVFP": "2016", 
+  "2016postVFP": "2016", 
+  "2017": "2017",
+  "2018": "2018",
+  "2022preEE": "2022",
+  "2022postEE": "2022EE",
+  "2023preBPix": "2023",
+  "2023postBPix": "2023BPix",
+}
+jec_year = jec_years[year]
 
 # List nuisance parameters (they will only be added for processes for which they were listed)
 nuisances = {

@@ -1,3 +1,5 @@
+import copy
+
 # good object definitions for SR
 SRDimuonsCuts = {
     # For different dimuon categories in order: PAT-PAT,PAT-DSA,DSA-DSA
@@ -29,12 +31,12 @@ SRDimuonsCuts = {
 }
 
 # For N-2 plots
-SRDimuonsNoChi2Cuts = SRDimuonsCuts
+SRDimuonsNoChi2Cuts = copy.deepcopy(SRDimuonsCuts)
 SRDimuonsNoChi2Cuts["maxChi2"] = [9999.0, 9999.0, 9999.0]
 SRDimuonsNoChi2Cuts["applyChi2DCA"] = [0.0, 0.0, 0.0]
 
 # With cut on hits in front of vertex - for comparisons
-SRDimuonsHitsInFrontOfVertexCuts = SRDimuonsCuts
+SRDimuonsHitsInFrontOfVertexCuts = copy.deepcopy(SRDimuonsCuts)
 SRDimuonsHitsInFrontOfVertexCuts["maxHitsInFrontOfVertex"] = [3.0, 6.0, 9999.0]
 
 
@@ -65,6 +67,6 @@ JPsiDimuonsCuts = {
     "maxDeltaPixelHits": [9999.0, 9999.0, 9999.0],
 }
 
-JPsiDimuonsNoChi2Cuts = JPsiDimuonsCuts
+JPsiDimuonsNoChi2Cuts = copy.deepcopy(JPsiDimuonsCuts)
 JPsiDimuonsNoChi2Cuts["maxChi2"] = [9999.0, 9999.0, 9999.0]
 JPsiDimuonsNoChi2Cuts["applyChi2DCA"] = [0.0, 0.0, 0.0]
