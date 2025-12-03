@@ -37,7 +37,7 @@ elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
   if do_region == "JPsiCR_chi2vsDCA_plot":
-    # I accidentaly names the J/Psi dimuons BestPFIso..
+    # I accidentally names the J/Psi dimuons BestPFIso..
     background_collection = "BestPFIsoDimuonVertex" 
 
 
