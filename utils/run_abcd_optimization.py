@@ -52,9 +52,7 @@ if not run_optimization:
     min_n_events = "0"
     max_closure = "1.0"
 
-run_script = "abcd_plotter.py"
-if run_optimization:
-    run_script = "ttalps_plot_abcd_combinations.py"
+run_script = "ttalps_plot_abcd_combinations.py" if run_optimization else "abcd_plotter.py"
 config = "ttalps_abcd_config.py"
 
 command = [
