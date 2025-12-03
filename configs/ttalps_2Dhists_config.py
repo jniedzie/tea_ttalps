@@ -19,6 +19,8 @@ for year_ in years:
 # ------------------------------------------
 
 do_region = "SR_collinearityAngle_plot"
+# do_region = "SR_chi2vsDCA_plot"
+# do_region = "JPsiCR_chi2vsDCA_plot"
 
 do_data = False
 do_nonresonant_signal_as_background = False
@@ -34,15 +36,19 @@ if "SR" in do_region:
 elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
+  if do_region == "JPsiCR_chi2vsDCA_plot":
+    # I accidentally names the J/Psi dimuons BestPFIso..
+    background_collection = "BestPFIsoDimuonVertex" 
+
 
 if do_nonresonant_signal_as_background:
   background_collection = background_collection + "NonResonant"
   signal_collection = signal_collection+ "FromALP"
 
 # category = ""
-category = "_Pat"
+# category = "_Pat"
 # category = "_PatDSA"
-# category = "_DSA"
+category = "_DSA"
 
 exclude_backgrounds_for_years = {
   "2016preVFP": 3,
@@ -61,6 +67,13 @@ optimal_parameters = {
     ("_Pat", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
     ("_PatDSA", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
     ("_DSA", "SR_collinearityAngle_plot"): ("absPtLxyDPhi1", "absCollinearityAngle", (30, 30), "A"),
+
+    ("_Pat", "SR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
+    ("_PatDSA", "SR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
+    ("_DSA", "SR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
+    ("_Pat", "JPsiCR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
+    ("_PatDSA", "JPsiCR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
+    ("_DSA", "JPsiCR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
 }
 if (category, do_region) in optimal_parameters:
   variable_1 = optimal_parameters[(category, do_region)][0]
@@ -151,15 +164,10 @@ ratio_y_title = " Pred / True   "
 
 # you can specify custom names for the variables to be displayed in the plots
 nice_names = {
-    "Lxy": "L_{xy} (cm)",
-    "LxySignificance": "L_{xy} significance",
-    "absCollinearityAngle": "|#theta_{coll}|",
+    "absCollinearityAngle": "|#Delta#Phi_{coll}|",
     "absPtLxyDPhi1": "|#Delta#phi(p_{T}^{#mu1}, L_{xy})|",
-    "3Dangle": "#alpha_{3D}",
-    "logLxy": "log_{10}[L_{xy} (cm)]",
-    "logLxySignificance": "log_{10}[L_{xy} significance]",
-    "logAbsCollinearityAngle": "log_{10}[|#theta_{coll}|]",
-    "log3Dangle": "log_{10}[#alpha_{3D}]",
+    "logNormChi2": "log_{10} #chi^{2} / ndof",
+    "logDca": "log_{10}[DCA [cm]]",
 }
 
 # ------------------------------------------
@@ -171,7 +179,14 @@ base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
     "SR_collinearityAngle_plot": (
-        "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "_SRDimuons", "_nminus1"
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_nminus1"
+    ),
+    "SR_chi2vsDCA_plot": (
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuonsNoChi2", "_genInfo"
+    ),
+    "JPsiCR_chi2vsDCA_plot": (
+      ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsNoChi2", "_ABCD"),
+      ("skimmed_looseSemimuonic_v3_SR", "_SRDimuonsNoChi2", "_genInfo"),
     ),
 }
 
@@ -205,7 +220,7 @@ output_path += category
 if optimization_param:
   output_path += "_"+optimization_param
 
-hist_base_path = f"histograms_dimuonEffSFs"
+hist_base_path = "histograms"
 
 background_hist_path = (
     f"{hist_base_path}"
@@ -229,6 +244,9 @@ data_paths = {
 # signal points for which to run ABCD analysis
 masses = ["0p35", "2", "12", "30", "60"]
 ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
+
+# used by ttalps_get_signal_events
+signal_cross_section = 0.01
 
 config_helper = TTAlpsABCDConfigHelper(
     years,

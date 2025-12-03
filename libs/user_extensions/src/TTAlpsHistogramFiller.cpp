@@ -512,6 +512,8 @@ void TTAlpsHistogramFiller::FillNminus1HistogramsForMuonVertexCollection(const s
     FillDimuonVertexNminus1HistogramForCut(nminus1CollectionName, dimuonVertex);
     auto category = dimuonVertex->GetVertexCategory();
     FillDimuonVertexNminus1HistogramForCut(nminus1CollectionName+"_"+category, dimuonVertex);
+    if (nanoEventProcessor->IsDataEvent(asNanoEvent(event)))
+      continue;
     auto genMuonCollection = event->GetCollection("GenPart");
     string resonanceCategory = dimuonVertex->GetGenMotherResonanceCategory(genMuonCollection,event);
     FillDimuonVertexNminus1HistogramForCut(nminus1CollectionName + resonanceCategory + "_" + category, dimuonVertex);
@@ -583,6 +585,12 @@ void TTAlpsHistogramFiller::FillDimuonVertexNminus1HistogramForCut(string collec
     float logCollinearityAngle = TMath::Log10(absCollinearityAngle);
     histogramsHandler->Fill(collectionName + "_logPtLxyDPhi1_vs_logCollinearityAngle", logCollinearityAngle, logDPhi1);
     histogramsHandler->Fill(collectionName + "_logPtLxyDPhi2_vs_logCollinearityAngle", logCollinearityAngle, logDPhi2);
+    if (absCollinearityAngle <= 2) {
+      histogramsHandler->Fill(collectionName + "_absCollinearityAngle_lt2", absCollinearityAngle);
+    }
+    if (absCollinearityAngle > 2) {
+      histogramsHandler->Fill(collectionName + "_absCollinearityAngle_gt2", absCollinearityAngle);
+    }
   }
 }
 
@@ -1380,7 +1388,9 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bo
         {"logDxyPVTraj1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")))},
         {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
         {"logInvMass", log10(dimuon->GetInvariantMass())},
-        {"outerDR", dimuon->GetOuterDeltaR()},
+        {"logDxyPVTrajSig1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj") / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr")))},
+        {"logDxyPVTrajSig2", TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj") / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr")))},
+        {"logOuterDR", TMath::Log10(dimuon->GetOuterDeltaR())},
         {"absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))},
         {"absCollinearityAngle", dimuon->GetCollinearityAngle()},
         {"logNormChi2", TMath::Log10(dimuon->GetAs<float>("normChi2"))},

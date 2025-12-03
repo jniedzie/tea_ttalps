@@ -16,13 +16,12 @@ luminosity = get_luminosity(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
-skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuonsDSAChi2DCADPhi",
-        "LooseNonLeadingMuonsVertexSegmentMatch_genABCD")
-hist_path = "histograms_muonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_DSAEffSFs_jecSFs"
+skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "genInfo")
+hist_path = "histograms"
 
+output_dir = "../plots/backgroundMothers2018"
 
 backgrounds = dasBackgrounds2018.keys()
-# backgrounds = ["backgrounds2018/QCD_Pt-1000"]
 
 # category = ""
 category = "_Pat"
@@ -49,18 +48,21 @@ rebin_hist = {
 }
 
 resonant_categories = ["FromALP", "Resonant", "NonResonant"]
-mother_categories = ["X", "W", "tau", "B", "D", "d", "u", "s", "c", "b", "t", "e", "mu",
-                     "g", "gamma", "Z", "rho", "pi0", "omega", "K0", "phi", "upsilon", "JPsi", "other"]
+# mother_categories = ["X", "W", "tau", "B", "D", "d", "u", "s", "c", "b", "t", "e", "mu",
+                    #  "g", "gamma", "Z", "rho", "pi0", "omega", "K0", "phi", "upsilon", "JPsi", "other"]
+mother_categories = ["X", "W", "tau", "B", "D", "q", "l", "g", "gamma", "Z", "lightMeson", "JPsi", "other"]
 
 colors = [ROOT.kGreen+2, ROOT.kRed, ROOT.kOrange+1, ROOT.kMagenta+1, ROOT.kPink+1, ROOT.kCyan+1, ROOT.kViolet+1, ROOT.kTeal+1,
           ROOT.kYellow+1, ROOT.kAzure+1, ROOT.kGreen+3, ROOT.kMagenta+3, ROOT.kRed+3, ROOT.kOrange+3, ROOT.kBlue+3, ROOT.kBlue-3, ROOT.kBlack]
 mother_naming = {
-    ("other", "e", "mu", "g", "gamma", "d", "u", "s", "c", "b", "t"): "Other",
+    # ("other", "e", "mu", "g", "gamma", "d", "u", "s", "c", "b", "t"): "Other",
+    ("other", "q", "l", "g",): "Other",
+    ("gamma",): "Photons",
     ("Z",): "Z",
     ("X",): "Pileup",
     ("B", "D",): "B/D mesons",
     ("W", "tau",): "SS NonResonant",
-    ("pi0", "rho", "omega", "K0", "phi", "upsilon", "JPsi"): "Light flavoured mesons",
+    ("lightMeson", "JPsi"): "Light flavoured mesons",
     # ("NonResonant","W","tau"): ("NonResonant",ROOT.kBlue+3),
     # ("NonResonantX",): ("NonResonant Pileup",ROOT.kOrange+1),
     # ("pi0",): ("#pi_{0}",ROOT.kCyan+1),
@@ -81,15 +83,14 @@ mother_naming = {
 legend_settings_Pat = {
     ("B/D mesonsB/D mesons",): ("B/D + B/D", ROOT.kAzure+1),
     # ("SS NonResonantZ",): ("SS NonResonant + Z", ROOT.kPink+1),
-    ("PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ"): ("Pileup + Pileup/X", ROOT.kGreen+1),
-    ("SS NonResonantSS NonResonant",): ("W/#tau + W/#tau", ROOT.kOrange+1),
+    ("PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ", "PileupPhotons"): ("Pileup + Pileup/X", ROOT.kGreen+1),
     ("B/D mesonsSS NonResonant",): ("B/D + W/#tau", ROOT.kBlue+1),
-    ("OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ",): ("W/#tau + X", ROOT.kPink+1),
+    ("OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ", "SS NonResonantSS NonResonant",): ("W/#tau + W/#tau/X", ROOT.kPink+1),
     # (,): ("B/D + X", ROOT.kBlue+1),
     # ("B/D mesonsSS NonResonant",): ("SS NonResonant + B/D meson", ROOT.kMagenta+1),
     ("OtherOther", "Light flavoured mesonsLight flavoured mesons", "Light flavoured mesonsOther", "B/D mesonsOther", "B/D mesonsLight flavoured mesons", "B/D mesonsZ",
-     "ZZ", "Light flavoured mesonsZ", "OtherZ"): ("Other", ROOT.kRed),
-
+     "ZZ", "Light flavoured mesonsZ", "OtherZ", "OtherPhotons", "B/D mesonsPhotons", "Light flavoured mesonsPhotons", ): ("Other", ROOT.kRed),
+    ("PhotonsPhotons", ): ("#gamma + #gamma", ROOT.kMagenta),
 }
 # PAT-DSA
 legend_settings_PatDSA = {
@@ -126,9 +127,9 @@ if category == "_DSA":
   legend_settings = legend_settings_DSA
 
 legend_positions = {
-    "_Pat": (0.12, 0.12, 0.4, 0.35),
-    "_PatDSA": (0.6, 0.12, 0.89, 0.35),
-    "_DSA": (0.12, 0.12, 0.35, 0.35),
+    "_Pat": (0.2, 0.68, 0.40, 0.89),
+    "_PatDSA": (0.57, 0.75, 0.89, 0.89),
+    "_DSA": (0.2, 0.12, 0.4, 0.25),
 }
 
 resonance_colors = {
@@ -139,13 +140,16 @@ resonance_colors = {
 
 abcd_variables = {
     "_Pat": ("logAbsCollinearityAngle", "logLeadingPt"),
-    "_PatDSA": ("logDxyPVTrajSig1", "outerDR"),
-    "_DSA": ("logLxy", "log3Dangle"),
+    "_PatDSA": ("logDxyPVTraj1", "logLeadingPt"),
+    "_DSA": ("logPt", "logInvMass"),
 }
 variable_to_str = {
     "logLeadingPt": "log leading p_{T} [GeV]",
+    "logPt": "log p_{T} [GeV]",
     "logAbsCollinearityAngle": "log |#Delta#Phi_{coll}|",
     "logDxyPVTrajSig1": "log d_{xy}^{#mu1} / #sigma_{dxy}^{#mu1}",
+    "logDxyPVTraj1": "log d_{xy}^{#mu1} [cm]",
+    "logInvMass": "log m_{#mu#mu} [GeV]",
     "outerDR": "outer #DeltaR",
     "log3Dangle": "log 3D angle",
     "logLxy": "log L_{xy} [cm]",
@@ -307,17 +311,17 @@ def main():
                         [1], legend_positions[category][2], legend_positions[category][3])
   legend.SetBorderSize(0)
   legend.SetFillStyle(0)
-  legend.SetTextSize(0.03)
+  legend.SetTextSize(0.022)
   legend2 = ROOT.TLegend(legend_positions[category][0], legend_positions[category]
                          [1], legend_positions[category][2], legend_positions[category][3])
   legend2.SetBorderSize(0)
   legend2.SetFillStyle(0)
-  legend2.SetTextSize(0.03)
+  legend2.SetTextSize(0.022)
   legend3 = ROOT.TLegend(legend_positions[category][0], legend_positions[category]
                          [1], legend_positions[category][2], legend_positions[category][3])
   legend3.SetBorderSize(0)
   legend3.SetFillStyle(0)
-  legend3.SetTextSize(0.03)
+  legend3.SetTextSize(0.022)
 
   background_histograms = {}
   resonance_histograms = {}
@@ -367,6 +371,14 @@ def main():
         hist.hist.Rebin2D(hist.x_rebin, hist.y_rebin)
         hist.hist.Scale(sample.cross_section * luminosity / sample.initial_weight_sum)
 
+        if category == "_Pat":
+          flipped_hist = flip_hist_horizontally(hist.hist)
+          flipped_hist = flip_hist_vertically(flipped_hist)
+          hist.hist = flipped_hist
+        if category == "_PatDSA" or category == "_DSA":
+          flipped_hist = flip_hist_horizontally(hist.hist)
+          hist.hist = flipped_hist
+
         hist.hist.SetFillStyle(1001)
         color = get_color(category_name)
         hist.hist.SetFillColorAlpha(color, 0.4)
@@ -406,10 +418,13 @@ def main():
       hist.hist.Rebin2D(hist.x_rebin, hist.y_rebin)
       hist.hist.Scale(sample.cross_section * luminosity / sample.initial_weight_sum)
 
-      # if category == "_Pat":
-      #   flipped_hist = flip_hist_horizontally(hist.hist)
-      #   flipped_hist = flip_hist_vertically(flipped_hist)
-      #   hist.hist = flipped_hist
+      if category == "_Pat":
+        flipped_hist = flip_hist_horizontally(hist.hist)
+        flipped_hist = flip_hist_vertically(flipped_hist)
+        hist.hist = flipped_hist
+      if category == "_PatDSA" or category == "_DSA":
+        flipped_hist = flip_hist_horizontally(hist.hist)
+        hist.hist = flipped_hist
 
       hist.hist.SetFillStyle(1001)
       color = resonance_colors[resonance]
@@ -461,7 +476,13 @@ def main():
   merged_histograms = merge_histograms(background_histograms, n_events_per_category_sorted)
 
   legend = setup_legend(legend, merged_histograms, n_events_per_category_sorted)
-  canvas = ROOT.TCanvas("canvas", "Background Sources", 800, 600)
+  x_prefix = "-"
+  y_prefix = ""
+  if category == "_Pat":
+    y_prefix = "-"
+
+  canvas = ROOT.TCanvas("canvas", "Background Sources", 800, 800)
+  canvas.SetLeftMargin(0.15)
   # draw 2D stack as box
   histograms_iter = iter(n_events_per_category_sorted.items())
   first_name, first_n_events = next(histograms_iter)
@@ -474,14 +495,18 @@ def main():
     hist = merged_histograms[name]
     hist.Draw("BOX SAME")
   first_hist.SetStats(0)
-  first_hist.GetXaxis().SetTitle(variable_to_str[abcd_variable[1]])
-  first_hist.GetYaxis().SetTitle(variable_to_str[abcd_variable[0]])
-  category_str = category.replace("_", " ").strip()
+  first_hist.GetXaxis().SetTitle(x_prefix+variable_to_str[abcd_variable[1]])
+  first_hist.GetYaxis().SetTitle(y_prefix+variable_to_str[abcd_variable[0]])
+  category_str = "PAT-PAT"
+  if category == "_PatDSA":
+    category_str = "PAT-DSA"
+  if category == "_DSA":
+    category_str = "DSA-DSA"
   first_hist.SetTitle(f"Background sources for {category_str} dimuons")
   legend.Draw()
   canvas.Update()
-  canvas.SaveAs(f"../plots/backgroundMothers2018/background_sources{category}.png")
-  info(f"Saved background sources to ../plots/backgroundMothers2018/background_sources{category}.png")
+  canvas.SaveAs(f"{output_dir}/background_sources{category}.pdf")
+  info(f"Saved background sources to {output_dir}/background_sources{category}.pdf")
 
   print_events_per_category(n_events_per_category)
 
@@ -490,7 +515,8 @@ def main():
   merged_resonance_histograms = merge_histograms(resonance_histograms, n_events_per_resonance_sorted)
 
   legend2 = setup_resonance_legend(legend2, merged_resonance_histograms, n_events_per_resonance_sorted)
-  canvas2 = ROOT.TCanvas("canvas2", "Background Resonances", 800, 600)
+  canvas2 = ROOT.TCanvas("canvas2", "Background Resonances", 800, 800)
+  canvas2.SetLeftMargin(0.15)
   histograms_iter = iter(n_events_per_resonance_sorted.items())
   first_name, first_n_events = next(histograms_iter)
   first_hist = merged_resonance_histograms[first_name]
@@ -499,13 +525,13 @@ def main():
     hist = merged_resonance_histograms[name]
     hist.Draw("BOX SAME")
   first_hist.SetStats(0)
-  first_hist.GetXaxis().SetTitle(variable_to_str[abcd_variable[1]])
-  first_hist.GetYaxis().SetTitle(variable_to_str[abcd_variable[0]])
+  first_hist.GetXaxis().SetTitle(x_prefix+variable_to_str[abcd_variable[1]])
+  first_hist.GetYaxis().SetTitle(y_prefix+variable_to_str[abcd_variable[0]])
   first_hist.SetTitle(f"Background resonances for {category_str} dimuons")
   legend2.Draw()
   canvas2.Update()
-  canvas2.SaveAs(f"../plots/backgroundMothers2018/background_resonances{category}.png")
-  info(f"Saved background resonances to ../plots/backgroundMothers2018/background_resonances{category}.png")
+  canvas2.SaveAs(f"{output_dir}/background_resonances{category}.pdf")
+  info(f"Saved background resonances to {output_dir}/background_resonances{category}.pdf")
 
   print_events_per_category(n_events_per_resonance)
 
@@ -531,8 +557,8 @@ def main():
     first_hist.SetTitle(f"Background resonances mother IDs for {category_str} dimuons")
     legend3.Draw()
     canvas3.Update()
-    canvas3.SaveAs(f"../plots/backgroundMothers2018/background_resonances_motherIDs{category}.png")
-    info(f"Saved background resonances to ../plots/backgroundMothers2018/background_resonances_motherIDs{category}.png")
+    canvas3.SaveAs(f"{output_dir}/background_resonances_motherIDs{category}.pdf")
+    info(f"Saved background resonances to {output_dir}/background_resonances_motherIDs{category}.pdf")
 
 
 if __name__ == "__main__":

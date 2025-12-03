@@ -45,9 +45,12 @@ for year in years:
                 year=year,
             )
         )
-    data = f"collision_data{year}/SingleMuon{year}"
-    if "2022" in year or "2023" in year:
-        data = f"collision_data{year}/Muon{year}"
+    year_simple = "".join(filter(str.isdigit, year))
+    data = f"collision_data{year}/SingleMuon{year_simple}"
+    if "2022" in year:
+        data = f"collision_data{year}/Muon{year_simple}"
+    if "2023" in year:
+        data = f"collision_data{year}/Muon1{year_simple}"
     samples.append(
         Sample(
             name=f"data_{year}",

@@ -64,15 +64,13 @@ optimal_parameters = {
     # with log Chi2 < 2 log DCA - 1.5, corrections applied
     ("", "SR"): ("", "", (1, 1), ""), # dummy to print rates for combined categories
     ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 8), "C"), # before corrections
-    ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # before corrections
+    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 9), "C"), 
+    ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), 
 
     # JPsiDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
-    ("_Pat", "JPsiCR"): ("logLeadingPt", "logDisplacedTrackIso03Dimuon2", (15, 14), "A"),
-    ("_PatDSA", "JPsiCR"): ("logDxyPVTraj1", "logPt", (10, 11), "C"), 
-    # ("_DSA", "JPsiCR"): ("logLeadingPt", "logNormChi2", (13, 15), "C"),
-    ("_DSA", "JPsiCR"): ("logNormChi2", "logDca", (50, 50), "A"),
-
+    ("_Pat", "JPsiCR"): ("logDxyPVTrajSig1", "logLeadingPt", (11, 18), "C"),
+    ("_PatDSA", "JPsiCR"): ("logDxyPVTraj1", "logLeadingPt", (11, 11), "C"), 
+    ("_DSA", "JPsiCR"): ("logDxyPVTrajSig2", "logOuterDR", (17, 13), "C"),
 }
 if (category, do_region) in optimal_parameters:
   variable_1 = optimal_parameters[(category, do_region)][0]
@@ -166,14 +164,17 @@ ratio_y_title = " Pred / True   "
 
 # you can specify custom names for the variables to be displayed in the plots
 nice_names = {
-    "logAbsCollinearityAngle": "log_{10}[|#theta_{coll}|]",
+    "logAbsCollinearityAngle": "log_{10}[|#Delta#Phi_{coll}|]",
     "logLeadingPt": "log_{10} Leading p_{T} [GeV]",
     "logDxyPVTraj1": "log_{10} d_{xy}^{#mu1}",
     "logInvMass": "log_{10} m_{#mu#mu} [GeV]",
     "logPt": "log_{10} p_{T} [GeV]",
-    "absCollinearityAngle": "|#theta_{coll}|",
+    "absCollinearityAngle": "|#Delta#Phi_{coll}|",
     "logNormChi2": "log_{10} #chi^{2} / ndof",
     "logDca": "log_{10} DCA [cm]",
+    "logDxyPVTrajSig1": "log_{10} d_{xy}^{#mu 1} / #sigma_{dxy}^{#mu 1}",
+    "logDxyPVTrajSig2": "log_{10} d_{xy}^{#mu 2} / #sigma_{dxy}^{#mu 2}",
+    "logOuterDR": "log_{10} Outer #Delta R",
 }
 
 # ------------------------------------------
@@ -188,8 +189,8 @@ skims = {
         "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD"
     ),
     "JPsiCR": (
-        ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
-        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_LooseNonLeadingMuonsVertexSegmentMatch"),
+        ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_ABCD"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD"),
     )
 }
 
@@ -231,14 +232,14 @@ signal_hist_path = f"{hist_base_path}{signal_skim[1]}{signal_skim[2]}"
 signal_path_pattern = "signals{}/tta_mAlp-{}GeV_ctau-{}mm/{}/{}/histograms.root"
 
 data_paths = {
-  "2016preVFP": f"collision_data2016preVFP/SingleMuon2016preVFP_{background_skim[0]}_{background_hist_path}.root",
-  "2016postVFP": f"collision_data2016postVFP/SingleMuon2016postVFP_{background_skim[0]}_{background_hist_path}.root",
+  "2016preVFP": f"collision_data2016preVFP/SingleMuon2016_{background_skim[0]}_{background_hist_path}.root",
+  "2016postVFP": f"collision_data2016postVFP/SingleMuon2016_{background_skim[0]}_{background_hist_path}.root",
   "2017": f"collision_data2017/SingleMuon2017_{background_skim[0]}_{background_hist_path}.root",
   "2018": f"collision_data2018/SingleMuon2018_{background_skim[0]}_{background_hist_path}.root",
-  "2022preEE": f"collision_data2022preEE/Muon2022preEE_{background_skim[0]}_{background_hist_path}.root",
-  "2022postEE": f"collision_data2022postEE/Muon2022postEE_{background_skim[0]}_{background_hist_path}.root",
-  "2023preBPix": f"collision_data2023preBPix/Muon2023preBPix_{background_skim[0]}_{background_hist_path}.root",
-  "2023postBPix": f"collision_data2023postBPix/Muon2023postBPix_{background_skim[0]}_{background_hist_path}.root",
+  "2022preEE": f"collision_data2022preEE/Muon2022_{background_skim[0]}_{background_hist_path}.root",
+  "2022postEE": f"collision_data2022postEE/Muon2022_{background_skim[0]}_{background_hist_path}.root",
+  "2023preBPix": f"collision_data2023preBPix/Muon2023_{background_skim[0]}_{background_hist_path}.root",
+  "2023postBPix": f"collision_data2023postBPix/Muon2023_{background_skim[0]}_{background_hist_path}.root",
 }
 
 # signal points for which to run ABCD analysis
@@ -249,6 +250,9 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # ctaus = ["1e0", "1e1", "1e2", "1e3"]
 # PAT-PAT prompt muons
 # ctaus = ["1e-5", "1e0", "1e1"]
+
+# used by ttalps_get_signal_events
+signal_cross_section = 0.01
 
 config_helper = TTAlpsABCDConfigHelper(
     years,

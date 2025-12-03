@@ -35,10 +35,10 @@ for signal in dasSignals2018.keys():
         )
     )
 
-leading_from_alp = "TightMuonsSegmentMatchFromALP_hmu_hasLeadingMuon"
-leading_from_w = "TightMuonsSegmentMatchFromW_hmu_hasLeadingMuon"
-# leading_from_alp = "TightMuonsSegmentMatchFromALP_hasLeadingMuon"
-# leading_from_w = "TightMuonsSegmentMatchFromW_hasLeadingMuon"
+# leading_from_alp = "TightMuonsSegmentMatchFromALP_hmu_hasLeadingMuon"
+# leading_from_w = "TightMuonsSegmentMatchFromW_hmu_hasLeadingMuon"
+leading_from_alp = "TightMuonsSegmentMatchFromALP_hasLeadingMuon"
+leading_from_w = "TightMuonsSegmentMatchFromW_hasLeadingMuon"
 hist_from_alp = Histogram(
     name=leading_from_alp,
     title=leading_from_alp,
@@ -155,22 +155,25 @@ c_w.SetRightMargin(0.15)
 c_w.SaveAs("../plots/leading_muon_study/ratios_leading_from_w.pdf")
 
 significance_excluding_leading_muon = {}
-significance_excluding_leading_muon[0.35] = (5.38, 5.36, 1.71, 0.28, 0.01)
-significance_excluding_leading_muon[2] = (3.02, 6.67, 4.66, 1.18, 0.18)
-significance_excluding_leading_muon[12] = (1.33, 6.34, 7.87, 4.3, 0.9)
-significance_excluding_leading_muon[30] = (0.78, 5.69, 8.48, 5.92, 1.52)
-significance_excluding_leading_muon[60] = (0.49, 4.03, 7.64, 5.97, 1.69)
+significance_excluding_leading_muon[0.35] = (4.1, 5.63, 4.37, 1.21, 0.22)
+significance_excluding_leading_muon[2] = (2.05, 5.64, 6.18, 4.97, 1.35)
+significance_excluding_leading_muon[12] = (0.96, 5.25, 7.61, 12.68, 8.76)
+significance_excluding_leading_muon[30] = (0.67, 2.97, 7.58, 12.28, 12.45)
+significance_excluding_leading_muon[60] = (0.33, 2.97, 6.43, 9.47, 11.30)
 significance_including_leading_muon = {}
-significance_including_leading_muon[0.35] = (13.97, 6.37, 1.02, 0.12 ,0.01)
-significance_including_leading_muon[2] = (6.27, 14.12, 4.48, 0.59 ,0.07)
-significance_including_leading_muon[12] = (3.30, 17.54, 9.29, 1.92 ,0.23)
-significance_including_leading_muon[30] = (1.84, 17.54, 10.32, 2.64 ,0.34)
-significance_including_leading_muon[60] = (0.88, 14.86, 9.50, 2.65 ,0.37)
+significance_including_leading_muon[0.35] = (12.39, 6.11, 1.73, 0.31, 0.05)
+significance_including_leading_muon[2] = (5.22, 12.53, 4.65, 1.62, 0.31)
+significance_including_leading_muon[12] = (2.74, 15.47, 8.36, 5.93, 2.96)
+significance_including_leading_muon[30] = (1.54, 15.42, 9.02, 5.83, 5.09)
+significance_including_leading_muon[60] = (0.73, 12.88, 8.16, 4.24, 4.38)
 
-h2_sig_excluding_leading = ROOT.TH2D("sig_excluding_leading", "Signal siginificance with leading muon from ALP;m_{a} [GeV];c#tau_{a} [mm]",
+h2_sig_excluding_leading = ROOT.TH2D("sig_excluding_leading", "Signal significance without leading muon;m_{a} [GeV];c#tau_{a} [mm]; S / #sqrt{S+B}",
                len(masses), 0, len(masses),
                len(cta_values), 0, len(cta_values))
-h2_sig_including_leading = ROOT.TH2D("sig_including_leading", "Signal siginificance without leading muon from ALP;m_{a} [GeV];c#tau_{a} [mm]",
+h2_sig_including_leading = ROOT.TH2D("sig_including_leading", "Signal significance with leading muon;m_{a} [GeV];c#tau_{a} [mm]; S / #sqrt{S+B}",
+               len(masses), 0, len(masses),
+               len(cta_values), 0, len(cta_values))
+h2_sig_excluding_over_including_leading = ROOT.TH2D("sig_excluding_over_including_leading", "Signal significance ratio of excluding / including leading tight muon;m_{a} [GeV];c#tau_{a} [mm]; Ratio",
                len(masses), 0, len(masses),
                len(cta_values), 0, len(cta_values))
 for i, m in enumerate(masses):
@@ -186,13 +189,19 @@ for i, m in enumerate(masses):
         sig_incl = significance_including_leading_muon[m][j]
         h2_sig_excluding_leading.SetBinContent(i+1, j+1, sig_excl)
         h2_sig_including_leading.SetBinContent(i+1, j+1, sig_incl)
+        h2_sig_excluding_over_including_leading.SetBinContent(i+1, j+1, sig_excl/sig_incl if sig_incl != 0 else 0)
 
-c = ROOT.TCanvas("c", "c", 800, 600)
+c1 = ROOT.TCanvas("c1", "c1", 800, 600)
 h2_sig_excluding_leading.Draw("COLZ TEXT")
-c.SetRightMargin(0.15)
-c.SaveAs("../plots/leading_muon_study/significance_excluding_leading_muon.pdf")
+c1.SetRightMargin(0.15)
+c1.SaveAs("../plots/leading_muon_study/significance_excluding_leading_muon.pdf")
 
-c = ROOT.TCanvas("c", "c", 800, 600)
+c2 = ROOT.TCanvas("c2", "c2", 800, 600)
 h2_sig_including_leading.Draw("COLZ TEXT")
-c.SetRightMargin(0.15)
-c.SaveAs("../plots/leading_muon_study/significance_including_leading_muon.pdf")
+c2.SetRightMargin(0.15)
+c2.SaveAs("../plots/leading_muon_study/significance_including_leading_muon.pdf")
+
+c3 = ROOT.TCanvas("c3", "c3", 800, 600)
+h2_sig_excluding_over_including_leading.Draw("COLZ TEXT")
+c3.SetRightMargin(0.15)
+c3.SaveAs("../plots/leading_muon_study/significance_excluding_over_including_leading_muon.pdf")

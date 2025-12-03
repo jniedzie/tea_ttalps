@@ -196,4 +196,5 @@ if runMuonTriggerObjectsHistograms:
   histParams += helper.get_muon_trigger_objects_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()
-# SFvariationVariables = [] # for testing to run histogrammer faster
+if runGenLevelResonancesABCD or runABCDMothersHistograms or runNminus1Histograms or runRevertedMatching:
+  SFvariationVariables = [] # to run histogrammer faster and take up less dust space

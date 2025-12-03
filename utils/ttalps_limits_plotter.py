@@ -1,5 +1,6 @@
 import ROOT
 from math import log10
+import os
 
 from TTAlpsLimitsPlotterHelper import TTAlpsLimitsPlotterHelper, BrazilGraph, SimpleGraph
 from ttalps_cross_sections import get_theory_cross_section
@@ -21,24 +22,25 @@ for year_ in years:
     luminosity_run3 += get_luminosity(year_)
   year_str += year_
 
+# extra_str = ""
+extra_str = "_SR"
 
 # PAT-PAT
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
 
 # PAT-DSA
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
 
 # DSA-DSA
-# input_path = f"../limits/limits_{year_str}/results_newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5/limits_BestPFIsoDimuonVertex_logLxy_vs_logPt_DSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logPt_vs_logInvMass_DSA_ABCDpred.txt"
 
 # Combined
-extra_str = "newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA1p5"
-# extra_str = "newSelection_dsaSFs_dimuonEffSFs_DSAChi2DCA2"
+input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined.txt"
 
-input_path = f"../limits/limits_{year_str}/results_{extra_str}/limits_combined.txt"
+output_path = f"../limits/limits_{year_str}/plots{extra_str}/"
 
-# output_path = "../limits/plots/"
-output_path = f"../limits/limits_{year_str}/plots_{extra_str}/"
+if not os.path.exists(output_path):
+  os.makedirs(output_path)
 
 reference_coupling = 0.1  # this is the coupling we used to generate signal samples
 
@@ -68,6 +70,9 @@ if variable == "mass":
 
   y_min = 1e-2
   y_max = 1e6
+  if len(years) > 1:
+    y_min = 1e-4
+    y_max = 1e5
 
   x_title = "m_{a} [GeV]"
   scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]

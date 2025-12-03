@@ -105,13 +105,20 @@ def load_uncertainties(config):
             unc_category = get_unc_category(unc_name)
 
             if unc_name == "stat_err":
-              uncertainties[signal_sample.name][unc_category+"_sig"] = signal_values
-              uncertainties[signal_sample.name][unc_category+"_bkg"] = background_values
+              if not unc_category+"_sig" in uncertainties[signal_sample.name]:
+                uncertainties[signal_sample.name][unc_category+"_sig"] = []
+                uncertainties[signal_sample.name][unc_category+"_bkg"] = []
+              uncertainties[signal_sample.name][unc_category+"_sig"].extend(signal_values)
+              uncertainties[signal_sample.name][unc_category+"_bkg"].extend(background_values)
             elif len(background_values) > 0:
-              uncertainties[signal_sample.name][unc_category] = signal_values
-              uncertainties[signal_sample.name][unc_category] = background_values
+              if not unc_category in uncertainties[signal_sample.name]:
+                uncertainties[signal_sample.name][unc_category] = []
+              uncertainties[signal_sample.name][unc_category].extend(signal_values)
+              uncertainties[signal_sample.name][unc_category].extend(background_values)
             else:
-              uncertainties[signal_sample.name][unc_category] = signal_values
+              if not unc_category in uncertainties[signal_sample.name]:
+                uncertainties[signal_sample.name][unc_category] = []
+              uncertainties[signal_sample.name][unc_category].extend(signal_values)
 
   return rates, uncertainties
 
@@ -125,7 +132,9 @@ def get_min_max_uncertainty(uncertainties):
     for unc_name, unc_value in unc_dict.items():
       if unc_name not in uncertainties_per_type:
         uncertainties_per_type[unc_name] = []
-      uncertainties_per_type[unc_name].append(unc_value)
+      for v in unc_value:
+        if v != 0.0:
+          uncertainties_per_type[unc_name].append(v)
 
   for unc_name, unc_values in uncertainties_per_type.items():
     min_uncertainty[unc_name] = min(unc_values)
@@ -144,7 +153,8 @@ def get_min_max_uncertainty_over_years(uncertainties):
       if unc_name not in uncertainties_per_type:
         uncertainties_per_type[unc_name] = []
       for v in unc_list:
-        uncertainties_per_type[unc_name].append(v)
+        if v != 0.0:
+          uncertainties_per_type[unc_name].append(v)
 
   for unc_name, unc_values in uncertainties_per_type.items():
     min_uncertainty[unc_name] = min(unc_values)
@@ -158,7 +168,7 @@ def get_unc_category(unc_name):
   if "systup" in unc_name or "systdown" in unc_name:
     variation = "_systup" if "systup" in unc_name else "_systdown"
   elif "up" in unc_name or "down" in unc_name:
-    variation = "_up" if "up" in unc_name else "_down"
+    variation = "_up" if "_up" in unc_name else "_down"
   elif "Up" in unc_name or "Dn" in unc_name:
     variation = "_Up" if "Up" in unc_name else "_Dn"
   if "jecMC" in unc_name:
@@ -181,8 +191,12 @@ def get_nice_names(years):
       "bTaggingMedium_down_uncorrelated": "b-tagging down (correlated)",
       "bTaggingMedium_up_correlated": "b-tagging up (uncorrelated)",
       "bTaggingMedium_up_uncorrelated": "b-tagging up (correlated)",
-      "muonIDLoose_systdown": "muon ID (down)",
-      "muonIDLoose_systup": "muon ID (up)",
+      "pileup_up": "PU (up)",
+      "pileup_down": "PU (down)",
+      "muonIDLoose_systdown": "muon loose ID (down)",
+      "muonIDLoose_systup": "muon loose ID (up)",
+      "muonIDTight_systdown": "muon tight ID (down)",
+      "muonIDTight_systup": "muon tight ID (up)",
       "muonReco_systdown": "muon reco (down)",
       "muonReco_systup": "muon reco (up)",
       "dsamuonID_syst": "DSA muon ID",
@@ -279,9 +293,11 @@ def get_nice_names(years):
       "dimuonEffRev": "Dimuon efficiency SF",
       "muonTrigger": "IsoMu trigger",
       "muonReco": "muon reco",
-      "muonIDLoose": "muon ID",
+      "muonIDLoose": "muon loose ID",
+      "muonIDTight": "muon tight ID",
       "PUjetIDtight": "PU jet ID",
       "bTaggingMedium": "b-tagging",
+      "pileup": "PU",
   }
   for year_ in years:
     year = year_
@@ -320,7 +336,12 @@ def main():
   rates, uncertainties = load_uncertainties(config)
 
   # explicitly select the first signal key, excluding "background"
-  signal_name = next(key for key in uncertainties.keys() if key != "background")
+  signal_name = next(
+    key for key, val in uncertainties.items()
+    if key != "background"
+    and "stat_err_bkg" in val
+    and val["stat_err_bkg"]
+  )
 
   background_rate_ = rates.pop("background")
   background_rate = 1

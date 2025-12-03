@@ -4,7 +4,7 @@ import physics
 from math import pi, log10
 import array
 
-from Logger import error
+from Logger import error, warn
 from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
 
 
@@ -34,7 +34,10 @@ class TTAlpsLimitsPlotterHelper:
           mass_str, ctau_str, values_str = match.groups()
           mass = float(mass_str.replace('p', '.'))
           ctau = float(ctau_str)
-          values = list(map(float, values_str.replace("'", "").split(', ')))
+          if values_str != "":
+            values = list(map(float, values_str.replace("'", "").split(', ')))
+          else:
+            values = []
           self.data[(mass, ctau)] = values
 
   def get_ctau_label(self, ctau):
@@ -124,11 +127,16 @@ class TTAlpsLimitsPlotterHelper:
     self.graph_2d_exp.SetMarkerSize(0.5)
 
     for (m, ct), values in self.data.items():
+      if len(values) < 3:
+        point = -1e9
+        warn(f"Point ({m}, {ct}) is set to nan")
+      else:
+        point = log10(self.get_scale(m, ct) * values[3 if expected else 0])
       self.graph_2d_exp.SetPoint(
           self.graph_2d_exp.GetN(),
           log10(m),
           log10(ct),
-          log10(self.get_scale(m, ct) * values[3 if expected else 0])
+          point
       )
 
     return self.graph_2d_exp
@@ -198,8 +206,8 @@ class TTAlpsLimitsPlotterHelper:
     elif luminosity_run2 == 0 and luminosity_run3 != 0:
       lumi_text = f"#scale[0.8]{{{luminosity_run3/1000:.0f} fb^{{-1}} (13.6 TeV)}}"
     else:
-      lumi_text = f"#scale[0.8]{{{luminosity_run2/1000:.0f} fb^{{-1}} (13 TeV), {luminosity_run3/1000:.0f} fb^{{-1}} (#sqrt{{s}} = 13.6 TeV)}}"
-      lumi_text_xmin = 0.45
+      lumi_text = f"#scale[0.8]{{{luminosity_run2/1000:.0f} fb^{{-1}} (13 TeV), {luminosity_run3/1000:.0f} fb^{{-1}} (13.6 TeV)}}"
+      lumi_text_xmin = 0.48
     tex = ROOT.TLatex(lumi_text_xmin, 0.92, lumi_text)
     tex.SetNDC()
     tex.SetTextFont(42)

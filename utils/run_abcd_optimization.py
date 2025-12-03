@@ -21,58 +21,38 @@ run_optimization = True
 
 # SRDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
 if do_region == "SR":
-    ######### 2018 #########
-    # # # 2018 PAT-PAT all muon ctaus
+    ######### All years #########   
+    # # # PAT-PAT all muon ctaus
+    # min_signals = "13"
+    # min_n_events = "39"
+    # # # PAT-DSA: ABCD 
+    # min_signals = "15"
+    # min_n_events = "30"
+    # # # DSA-DSA: ABCD
+    # min_signals = "7"
+    # min_n_events = "10"
+
+if do_region == "JPsiCR":
+    ######### All years MC #########
+    # # PAT-PAT
+    min_signals = "7"
+    max_closure = "0.40"
+    min_n_events = "300"
+    # # # 2018 PAT-DSA 
     # min_signals = "10"
     # max_closure = "0.40"
     # min_n_events = "15"
-    # # # 2018 PAT-DSA muons all ctaus
+    # # # 2018 DSA-DSA
     # min_signals = "5"
-    # min_signals = "7" # dimuonEff SFs
-    # max_closure = "0.40"
-    # min_n_events = "10"
-    # # # 2018 DSA-DSA muons all ctaus:
-    # min_signals = "7"
-    # # min_signals = "10" # no Chi2vsDCA cut
-    # max_closure = "0.40"
-    # # min_n_events = "1" 
-    # min_n_events = "1" # dimuon SFs
-    # # min_n_events = "10" # no Chi2vsDCA cut
-    ######### All years #########
-    # # # PAT-PAT all muon ctaus: ABCD = 229 events
-    # min_signals = "13"
-    # min_n_events = "30"
-    # # # PAT-DSA: ABCD = 157 events
-    # min_signals = "15"
-    # min_n_events = "20"
-    # # # DSA-DSA: ABCD = 41 events
-    min_signals = "7"
-    min_n_events = "5"
-
-if do_region == "JPsiCR":
-    ######### 2018 #########
-    # # # 2018 PAT-PAT all muon ctaus
-    # min_signals = "10"
-    # max_closure = "0.40"
-    # min_n_events = "20"
-    # # # 2018 PAT-DSA muons all ctaus
-    # min_signals = "7"
-    # max_closure = "0.40"
+    # max_closure = "1.0"
     # min_n_events = "3"
-    # # # 2018 DSA-DSA muons all ctaus:
-    min_signals = "7"
-    max_closure = "0.40"
-    min_n_events = "1"
 
 if not run_optimization:
-    # for plotting:
     min_signals = "0"
-    max_overlap = "0.8"
-    max_error = "5.0"
-    max_signal_contamination = "0.80"
-    max_closure = "0.80"
+    min_n_events = "0"
+    max_closure = "1.0"
 
-run_script = "ttalps_plot_abcd_combinations.py"
+run_script = "ttalps_plot_abcd_combinations.py" if run_optimization else "abcd_plotter.py"
 config = "ttalps_abcd_config.py"
 
 command = [
