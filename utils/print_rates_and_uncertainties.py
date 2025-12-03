@@ -132,8 +132,9 @@ def get_min_max_uncertainty(uncertainties):
     for unc_name, unc_value in unc_dict.items():
       if unc_name not in uncertainties_per_type:
         uncertainties_per_type[unc_name] = []
-      if unc_value != 0.0:
-        uncertainties_per_type[unc_name].append(unc_value)
+      for v in unc_value:
+        if v != 0.0:
+          uncertainties_per_type[unc_name].append(v)
 
   for unc_name, unc_values in uncertainties_per_type.items():
     min_uncertainty[unc_name] = min(unc_values)
