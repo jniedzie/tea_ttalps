@@ -1,7 +1,7 @@
 import re
 import ROOT
 import physics
-from math import pi, log10
+from math import pi, log10, floor, ceil
 import array
 
 from Logger import error, warn
@@ -141,11 +141,34 @@ class TTAlpsLimitsPlotterHelper:
 
     return self.graph_2d_exp
 
-  def draw_2d_graph(self, x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max):
+  def draw_2d_graph(self, x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis=False):
     self.graph_2d_exp.SetNpx(500)
     self.graph_2d_exp.SetNpy(500)
 
-    self.graph_2d_exp.DrawClone("COLZ")
+    self.graph_2d_exp.Draw("COLZ")
+
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetTitle(x_title)
+    self.graph_2d_exp.GetHistogram().GetYaxis().SetTitle(y_title)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetTitle(z_title)
+
+    log_x_min = ROOT.TMath.Log10(x_min)
+    log_x_max = ROOT.TMath.Log10(x_max)
+    log_y_min = ROOT.TMath.Log10(y_min)
+    log_y_max = ROOT.TMath.Log10(y_max)
+
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
+    self.graph_2d_exp.GetHistogram().GetYaxis().SetRangeUser(y_min, y_max)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
+
+    if custom_axis:
+      self.graph_2d_exp.GetHistogram().GetXaxis().SetLabelSize(0)
+      self.graph_2d_exp.GetHistogram().GetYaxis().SetLabelSize(0)
+      self.graph_2d_exp.GetHistogram().GetXaxis().SetTickLength(0)
+      self.graph_2d_exp.GetHistogram().GetYaxis().SetTickLength(0)
+      self.graph_2d_exp.GetHistogram().GetZaxis().SetTickLength(0)
+      self.graph_2d_exp.GetHistogram().GetYaxis().SetTitleOffset(1.3)
+      self.graph_2d_exp.GetHistogram().GetZaxis().SetTitleOffset(1.3)
 
     # work in progress:
     # sigma_theory_0p1 = get_theory_cross_section(mass)
@@ -157,16 +180,6 @@ class TTAlpsLimitsPlotterHelper:
     # contour_0p2 = self.graph_2d_exp.GetHistogram().Clone("contour")
     # contour_0p2.SetContour(1)  # We need 2 levels: below and above 1.0
     # contour_0p2.SetContourLevel(0, log10(0.2))
-
-    self.graph_2d_exp.GetHistogram().GetXaxis().SetTitle(x_title)
-    self.graph_2d_exp.GetHistogram().GetYaxis().SetTitle(y_title)
-    self.graph_2d_exp.GetHistogram().GetZaxis().SetTitle(z_title)
-
-    self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
-    self.graph_2d_exp.GetHistogram().GetYaxis().SetRangeUser(y_min, y_max)
-    self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
-
-    self.graph_2d_exp.GetHistogram().DrawClone("COLZ")
 
     # work in progress:
     # Overlay the contour line
