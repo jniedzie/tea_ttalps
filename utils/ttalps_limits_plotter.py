@@ -1,5 +1,5 @@
 import ROOT
-from math import log10
+from math import log10, floor, ceil
 import os
 
 from TTAlpsLimitsPlotterHelper import TTAlpsLimitsPlotterHelper, BrazilGraph, SimpleGraph
@@ -35,9 +35,9 @@ extra_str = "_SR"
 # input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logPt_vs_logInvMass_DSA_ABCDpred.txt"
 
 # Combined
-input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined.txt"
+input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_DSA.txt"
 
-output_path = f"../limits/limits_{year_str}/plots{extra_str}/"
+output_path = f"../limits/limits_{year_str}/plots{extra_str}_test/"
 
 if not os.path.exists(output_path):
   os.makedirs(output_path)
@@ -50,6 +50,8 @@ expected_limits = True
 # variable = "ctau"
 # variable = "mass_theory"  # assign lifetime according to theory and interpolate between ctau points
 variable = "2d"
+
+custom_axis = True
 
 resonances_ranges = (
     # (0.43, 0.49),  # K_s
@@ -118,10 +120,15 @@ if variable == "2d":
 
   x_title = "log_{10}(m_{a} [GeV])"
   y_title = "log_{10}(c#tau_{a} [mm])"
+  z_title = "log_{10}(95% CL lower limit on #sigma [pb])"
+
   # z_title = "log_{10}(95% CL lower limit on signal strength r)"
+  if custom_axis:
+    x_title = "m_{a} [GeV]"
+    y_title = "c#tau_{a} [mm]"
+    z_title = "95% CL lower limit on #sigma [pb]"
 
   # cross-section limit
-  z_title = "log_{10}(95% CL lower limit on #sigma [pb])"
 
   scan_points = [0.35, 1.0, 2.0, 12.0, 30.0, 60.0]
 
@@ -151,6 +158,150 @@ def mask_resonances_2d(ranges):
     box.SetLineWidth(0)
     box.DrawClone("same")
 
+def make_line(x1, y1, x2, y2, ndc=False, width=1, color=ROOT.kBlack):
+  line = ROOT.TLine(x1, y1, x2, y2)
+  if ndc:
+      line.SetNDC(True)
+  line.SetLineColor(color)
+  line.SetLineWidth(width)
+  line.DrawClone("same")
+  return line
+
+def make_text(x, y, text, align=22, size=0.04, ndc=False):
+  t = ROOT.TLatex(x, y, text)
+  if ndc:
+      t.SetNDC(True)
+  t.SetTextFont(42)
+  t.SetTextAlign(align)
+  t.SetTextSize(size)
+  t.DrawClone("same")
+  return t
+
+def draw_axis_ticks_and_labels(axis, tick_values, label_values):
+  logs = [log10(v) for v in tick_values]
+  log_labels = [log10(v) for v in label_values]
+  texts = []
+  lines = []
+
+  tick_long=0.3 if axis == "x" else 0.07
+  tick_short=0.2 if axis == "x" else 0.04
+  label_offset=0.2 if axis == "x" else 0.03
+
+  # axis line
+  if axis == "x":
+    lines.append(make_line(x_min, y_min, x_max, y_min))
+    lines.append(make_line(x_min, y_max, x_max, y_max))
+  else:
+    lines.append(make_line(x_min, y_min, x_min, y_max))
+    lines.append(make_line(x_max, y_min, x_max, y_max))
+  
+  # tick marks
+  for logv, linear_v in zip(logs, tick_values):
+    height = tick_long if linear_v in label_values else tick_short
+    if axis == "x":
+        lines.append(make_line(logv, y_min, logv, y_min + height))
+        lines.append(make_line(logv, y_max - height, logv, y_max))
+    else:
+        lines.append(make_line(x_min, logv, x_min + height, logv))
+        lines.append(make_line(x_max - height, logv, x_max, logv))
+
+  # axis labels
+  for logv, linear_v in zip(log_labels, label_values):
+    if axis == "x":
+      texts.append(make_text(logv, y_min - label_offset, f"{linear_v:g}", align=22))
+    else:
+      if logv == 0:
+        label = "1"
+      elif linear_v == 10:
+        label = "10"
+      else:
+        exponent = int(logv)
+        label = f"10^{{{exponent}}}"
+      texts.append(make_text(x_min - 0.03, logv, label, align=32))
+
+  return lines, texts
+  
+def draw_custom_x_log_labels():
+  # option 1
+  # tick_values = [0.35, 2, 12, 30, 60]
+  # label_values = [0.35, 2, 12, 30, 60]
+  # option 2
+  tick_values = (
+    [i/10 for i in range(4, 11)] +
+    list(range(2, 11)) +
+    list(range(20, 61, 10))
+  )
+  label_values = [1.0, 10,]
+
+  return draw_axis_ticks_and_labels("x", tick_values, label_values)
+
+def draw_custom_y_log_labels():
+  # option 1
+  tick_values = []
+  for denom in [100000, 10000, 1000, 100, 10]:
+    tick_values += [i/denom for i in range(2, 11)]
+  for nom in [1, 10, 100]:
+    tick_values += [i*nom for i in range(2, 11)]
+  
+  label_values = [10**n for n in range(y_min, y_max+1)]
+
+  return draw_axis_ticks_and_labels("y", tick_values, label_values)
+
+def draw_custom_z_log_labels():
+
+  palette = helper.graph_2d_exp.GetHistogram().GetListOfFunctions().FindObject("palette")
+  palette.SetLabelSize(0)
+
+  x1, x2 = palette.GetX1NDC(), palette.GetX2NDC()
+  y1, y2 = palette.GetY1NDC(), palette.GetY2NDC()
+  ndc_height = y2 - y1
+
+  tick_min = int(floor(z_min))
+  tick_max = int(ceil(z_max))
+  label_exponents = [i for i in range(tick_min+1, tick_max)]
+  label_values = [10**e for e in label_exponents]
+
+  tick_values = []
+  for ticks in range(tick_min, tick_max):
+    base = 10 ** ticks
+    for m in range(1, 10):
+      v = m * base
+      logv = log10(v)
+      if z_min <= logv <= z_max:
+        tick_values.append((logv, v))
+  tick_values.sort(key=lambda t: t[0])
+  
+  tick_long = 0.018
+  tick_short = 0.013
+  lines = []
+  for logv, v in tick_values:
+    z_ndc = y1 + (logv - z_min) / (z_max - z_min) * ndc_height
+    tick_len = tick_long if abs(log10(v) - round(log10(v))) < 1e-8 else tick_short
+    line = ROOT.TLine(x2 - tick_len, z_ndc, x2, z_ndc)
+    line.SetNDC(True)
+    line.SetLineColor(ROOT.kBlack)
+    line.SetLineWidth(1)
+    line.DrawClone("same")
+    lines.append(line)
+
+  for exp in label_exponents:
+    z_ndc = y1 +  (exp - z_min) / (z_max - z_min) * ndc_height
+    if exp == 0:
+      txt = "1"
+    elif exp == 1:
+      txt = "10"
+    else:
+      txt = f"10^{{{exp}}}"
+
+    text = ROOT.TLatex()
+    text.SetNDC(True)
+    text.SetTextFont(42)
+    text.SetTextSize(0.04)
+    text.SetTextAlign(12)
+    text.DrawLatex(x2*1.005, z_ndc, txt)
+  
+  ROOT.gPad.Modified()
+  ROOT.gPad.Update()
 
 def draw_legend(graphs):
   legend = ROOT.TLegend(0.60, 0.60, 0.9, 0.75)
@@ -281,16 +432,24 @@ def draw_2d_plot():
   ROOT.gPad.SetBottomMargin(0.15) 
   ROOT.gPad.SetRightMargin(0.15)
 
-  helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max)
+  helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis)
 
   mask_resonances_2d(resonances_ranges)
 
   ROOT.gPad.RedrawAxis()
 
+  if custom_axis:
+    draw_custom_x_log_labels()
+    draw_custom_y_log_labels()
+    
   helper.draw_cms_label()
   helper.draw_lumi_label(luminosity_run2, luminosity_run3)
 
   canvas.Update()
+
+  if custom_axis:
+    draw_custom_z_log_labels()
+
   canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_{plot_name}.pdf")
 
 
