@@ -14,7 +14,7 @@ mkdir tea_ttalps
 cd tea_ttalps
 git clone --recursive git@github.com:jniedzie/tea_ttalps.git
 ```
-- build, assuming you already have a conda environment for tea (if not, visit the [tea website](https://jniedzie.github.io/tea/docs/home/) for more details):
+- build, assuming you already have a conda environment for tea (if not, visit the [tea website](https://jniedzie.github.io/tea/docs/prerequisites/) for more details):
 ```bash
 conda activate tea
 source tea/build.sh
