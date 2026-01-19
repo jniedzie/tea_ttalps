@@ -42,10 +42,22 @@ r_max = {
     "_DSA": 180,
 }
 
+pt_max = {
+    "_Pat": 200,
+    "_PatDSA": 200,
+    "_DSA": 200,
+}
+
 rebin1D = {
     "_Pat": 2,
     "_PatDSA": 60,
     "_DSA": 100,
+}
+
+rebin1D_pt = {
+    "_Pat": 10,
+    "_PatDSA": 10,
+    "_DSA": 10,
 }
 
 rebin2D = 1
@@ -141,11 +153,11 @@ def prepare_2d_hist(hist):
   hist.GetYaxis().SetLabelOffset(0.015)
 
 
-def prepare_1d_hist(hist):
+def prepare_1d_hist(hist, pt=False):
   hist.SetLineColor(ROOT.kViolet)
 
-  hist.GetXaxis().SetTitle("r [cm]")
-  hist.GetYaxis().SetTitle("dN/dr")
+  hist.GetXaxis().SetTitle("p_{T} (GeV)" if pt else "r [cm]")
+  hist.GetYaxis().SetTitle("dN/p_{T}" if pt else "dN/dr")
   hist.GetXaxis().SetTitleSize(0.05)
   hist.GetYaxis().SetTitleSize(0.05)
   hist.GetXaxis().SetTitleOffset(1.2)
@@ -203,6 +215,7 @@ def main():
   files = {}
   hists = {}
   hists_r = {}
+  hists_pt = {}
 
   categories = ["_Pat", "_PatDSA", "_DSA"]
 
@@ -216,6 +229,9 @@ def main():
     canvas_r = ROOT.TCanvas("canvas_r", "canvas_r", 2000, 2000)
     canvas_r.Divide(n_columns, n_rows)
 
+    canvas_pt = ROOT.TCanvas("canvas_pt", "canvas_pt", 2000, 2000)
+    canvas_pt.Divide(n_columns, n_rows)
+
     for i_category, category in enumerate(categories):
       info("=================================")
       info(f"\nProcessing category: {category}")
@@ -226,6 +242,7 @@ def main():
         unique_name = f"{year}_{category}_{name.replace(' ', '_')}"
 
         hist_name = f"{collection}{category}_vy_vs_vx{suffix}"
+        hist_name_pt = f"{collection}{category}_pt"
         info(f"\nProcessing sample {name}: {path}")
 
         try:
@@ -235,6 +252,9 @@ def main():
           continue
 
         hists[name] = files[name].Get(hist_name)
+        hists_pt[unique_name] = files[name].Get(hist_name_pt)
+
+        info(f"Retrieving pt histogram: {hist_name_pt}, {unique_name}")
 
         if hists[name] is None or type(hists[name]) == ROOT.TObject:
           error(f"Histogram {hist_name} not found in file {path}")
@@ -280,6 +300,16 @@ def main():
         pipe_line.SetLineStyle(ROOT.kDotted)
         pipe_line.DrawClone("same")
 
+        canvas_pt.cd(i + 1)
+        prepare_pad()
+        ROOT.gPad.SetLogy()
+        hists_pt[unique_name].SetTitle(f"{category.replace('_', '')}, {name}")
+        prepare_1d_hist(hists_pt[unique_name], pt=True)
+        hists_pt[unique_name].Rebin(rebin1D_pt[category])
+        hists_pt[unique_name].GetXaxis().SetRangeUser(0, pt_max[category])
+        hists_pt[unique_name].DrawNormalized()
+        
+
     legend = ROOT.TLegend(0.5, 0.7, 0.85, 0.9)
     line_tracker = ROOT.TLine(0, 0, 0, 0)
     line_tracker.SetLineColor(ROOT.kBlue)
@@ -297,6 +327,9 @@ def main():
 
     canvas_r.Update()
     canvas_r.SaveAs(f"../plots/material_maps_r{suffix}_{year}.pdf")
+
+    canvas_pt.Update()
+    canvas_pt.SaveAs(f"../plots/material_maps_pt_{year}.pdf")
 
   logger_print()
 
