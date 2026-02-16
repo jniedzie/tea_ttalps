@@ -38,6 +38,8 @@ class TTAlpsObjectsManager {
   // Get PAT-DSA and DSA-DSA vertices matched to PAT-PAT dimuons
   void InsertRevertedMatchedDSAMuonVertexCollection(std::shared_ptr<Event> event);
 
+  std::shared_ptr<PhysicsObject> GetBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::string bestVertexCut, std::shared_ptr<Event> event);
+
 
  private:
 
@@ -50,7 +52,6 @@ class TTAlpsObjectsManager {
   bool applySegmentMatchingAfterSelections = false;
 
   bool IsGoodBaseMuonVertex(const std::shared_ptr<PhysicsObject> vertex, std::shared_ptr<Event> event);
-  std::shared_ptr<PhysicsObject> GetBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::shared_ptr<Event> event);
   std::shared_ptr<PhysicsObject> GetSecondBestMuonVertex(const std::shared_ptr<PhysicsObjects> vertices, std::shared_ptr<Event> event);
 
 };

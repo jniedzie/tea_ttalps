@@ -38,6 +38,7 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
     {"ChargeCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChargeCut(v); }},
     {"DisplacedIsolationCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDisplacedIsolationCut(v); }},
     {"PFRelIsolationCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesPFRelIsolationCut(v); }},
+    {"DisplacedTrackIsolationCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDisplacedTrackIsolationCut(v); }},
     {"HitsInFrontOfVertexCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesHitsInFrontOfVertexCut(v); }},
     {"DPhiBetweenMuonpTAndLxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDPhiBetweenMuonpTAndLxyCut(v); }},
     {"DCACut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDCACut(v); }},
@@ -93,6 +94,7 @@ bool TTAlpsDimuonCuts::PassesInvariantMassCut(shared_ptr<NanoDimuonVertex> dimuo
 bool TTAlpsDimuonCuts::PassesChargeCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if(dimuonVertex->GetDimuonChargeProduct() > dimuonVertexCuts["maxChargeProduct"]) return false;
+  if(dimuonVertex->GetDimuonChargeProduct() < dimuonVertexCuts["minChargeProduct"]) return false;
   return true;
 }
 
@@ -113,6 +115,14 @@ bool TTAlpsDimuonCuts::PassesPFRelIsolationCut(shared_ptr<NanoDimuonVertex> dimu
   if((float)dimuonVertex->Muon1()->Get("pfRelIso04_all") > dimuonVertexCuts["maxPFRelIso"]) return false;
   if(category == "PatDSA") return true;
   if((float)dimuonVertex->Muon2()->Get("pfRelIso04_all") > dimuonVertexCuts["maxPFRelIso"]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesDisplacedTrackIsolationCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  string category = dimuonVertex->GetVertexCategory();
+  auto dimuonVertexCuts = GetDimuonCategoryMap(category);
+  if((float)dimuonVertex->Get("displacedTrackIso04Dimuon1") > dimuonVertexCuts["maxDisplTrkIso"]) return false;
+  if((float)dimuonVertex->Get("displacedTrackIso04Dimuon2") > dimuonVertexCuts["maxDisplTrkIso"]) return false;
   return true;
 }
 
@@ -202,6 +212,7 @@ bool TTAlpsDimuonCuts::PassesDeltaRCut(shared_ptr<NanoDimuonVertex> dimuonVertex
   if(category == "PatDSA") deltaR = dimuonVertex->Get("dRprox");
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if(deltaR > dimuonVertexCuts["maxDR"]) return false;
+  if(deltaR < dimuonVertexCuts["minDR"]) return false;
   return true;
 }
 

@@ -4,22 +4,23 @@ import numpy as np
 
 
 class TTAlpsHistogrammerConfigHelper:
-  def __init__(self, muonMatchingParams, muonVertexCollection, muonVertexCollectionInput, runRevertedMatching):
+  def __init__(self, muonMatchingParams, muonVertexCollection, muonVertexCollectionInput, runRevertedMatching, runLooseMuonsHistograms, runExtraDimuonCuts):
     self.muonMatchingParams = muonMatchingParams
 
     self.looseMuonCollections = []
     self.tightMuonCollections = []
 
-    for category, matching in product(("", "DSA", "PAT"), muonMatchingParams):
-      if runRevertedMatching:
-        self.looseMuonCollections.append(f"Reverted{matching}Matched{category}Muons")
-        self.looseMuonCollections.append(f"Reverted{matching}MatchedDisplaced{category}Muons")
-      self.tightMuonCollections.append(f"Tight{category}Muons{matching}Match")
-      self.looseMuonCollections.append(f"Loose{category}Muons{matching}Match")
+    if runLooseMuonsHistograms:
+      for category, matching in product(("", "DSA", "PAT"), muonMatchingParams):
+        if runRevertedMatching:
+          self.looseMuonCollections.append(f"Reverted{matching}Matched{category}Muons")
+          self.looseMuonCollections.append(f"Reverted{matching}MatchedDisplaced{category}Muons")
+        self.tightMuonCollections.append(f"Tight{category}Muons{matching}Match")
+        self.looseMuonCollections.append(f"Loose{category}Muons{matching}Match")
 
-    if muonMatchingParams.__len__() == 0:
-      self.looseMuonCollections.append(f"LooseDSAMuons")
-      self.looseMuonCollections.append(f"LoosePATMuons")
+      if muonMatchingParams.__len__() == 0:
+        self.looseMuonCollections.append(f"LooseDSAMuons")
+        self.looseMuonCollections.append(f"LoosePATMuons")
 
     self.bestMuonVertexCollections = []
     self.goodMuonVertexCollections = []
@@ -30,21 +31,22 @@ class TTAlpsHistogrammerConfigHelper:
     if muonVertexCollection is not None:
       for category in ("", "_PatDSA", "_DSA", "_Pat"):
         self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}{category}")
-        self.goodMuonVertexCollections.append(f"{muonVertexCollection[0].replace('Best', 'Good')}{category}")
         if runRevertedMatching:
           self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_revertedMatching{category}")
-          self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_matchedToPatDSA{category}")
-          self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_matchedToDSA{category}")
+          # self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_matchedToPatDSA{category}")
+          # self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_matchedToDSA{category}")
+        self.goodMuonVertexCollections.append(f"{muonVertexCollection[0].replace('Best', 'Good')}{category}")
       self.bestMuonVertexCollectionCuts = muonVertexCollection[1]
 
     self.looseMuonVertexCollections = []
-    for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
-      self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
-      self.looseMuonVertexCollections.append(f"{muonVertexCollectionInput}{category}")
+    if runLooseMuonsHistograms:
+      for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
+        self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
+        self.looseMuonVertexCollections.append(f"{muonVertexCollectionInput}{category}")
 
     self.ABCD_variables = {
 
-        "absCollinearityAngle": (100, 0, 4),
+        # "absCollinearityAngle": (100, 0, 4),
         "3Dangle": (100, 0, pi),
         "cos3Dangle": (100, 0, 1),
 
@@ -58,39 +60,41 @@ class TTAlpsHistogrammerConfigHelper:
         "outerDR": (100, 0, 5),
         "logOuterDR": (100, -3, 3),
         "maxHitsInFrontOfVert": (10, 0, 10),
-        "absPtLxyDPhi1": (100, 0, pi),
-        "absPtLxyDPhi2": (100, 0, pi),
+        # "absPtLxyDPhi1": (100, 0, pi),
+        # "absPtLxyDPhi2": (100, 0, pi),
 
         "logAbsPtLxyDPhi1": (100, -5, 1),
         "logAbsPtLxyDPhi2": (100, -5, 1),
 
-        "invMass": (100, 0, 100),
+        # "invMass": (100, 0, 100),
         "logInvMass": (100, -1, 2),
 
-        "pt": (100, 0, 200),
-        "leadingPt": (100, 0, 400),
+        # "pt": (100, 0, 200),
+        # "leadingPt": (100, 0, 400),
 
-        "logPt": (100, -1, 3),
-        "logLeadingPt": (100, -1, 3),
+        "logPt": (125, -1, 4),
+        "logLeadingPt": (125, -1, 4),
 
         "eta": (100, -3, 3),
+        "absEta": (100, 0, 3),
+        "logAbsEta": (100, -3, 1),
         "logEta": (100, -3, 1),
-        "dEta": (100, 0, 3),
+        # "dEta": (100, 0, 3),
         "logDEta": (100, -3, 1),
-        "dPhi": (100, 0, 2*pi),
+        # "dPhi": (100, 0, 2*pi),
         "logDPhi": (100, -3, 1),
         "nSegments": (10, 0, 10),
         "displacedTrackIso03Dimuon1": (100, 0, 0.01),
         "displacedTrackIso04Dimuon1": (100, 0, 0.01),
         "displacedTrackIso03Dimuon2": (100, 0, 0.01),
         "displacedTrackIso04Dimuon2": (100, 0, 0.01),
-        "logDisplacedTrackIso03Dimuon1": (100, -4, 2),
-        "logDisplacedTrackIso04Dimuon1": (100, -4, 2),
-        "logDisplacedTrackIso03Dimuon2": (100, -4, 2),
-        "logDisplacedTrackIso04Dimuon2": (100, -4, 2),
+        "logDisplacedTrackIso03Dimuon1": (100, -4, 3),
+        "logDisplacedTrackIso04Dimuon1": (100, -4, 3),
+        "logDisplacedTrackIso03Dimuon2": (100, -4, 3),
+        "logDisplacedTrackIso04Dimuon2": (100, -4, 3),
 
-        "logDxyPVTraj1": (100, -5, 3),
-        "logDxyPVTraj2": (100, -5, 3),
+        "logDxyPVTraj1": (100, -6, 3),
+        "logDxyPVTraj2": (100, -6, 3),
         "logDxyPVTrajSig1": (100, -3, 4),
         "logDxyPVTrajSig2": (100, -3, 4),
 
@@ -105,22 +109,20 @@ class TTAlpsHistogrammerConfigHelper:
 
         # some extra:
         "normChi2": (100, 0, 1),
-        "logNormChi2": (100, -7, 2),
-        "dca": (100, 0, 2),
-        "logDca": (100, -4, 1),
+        "logNormChi2": (100, -8, 2),
+        # "dca": (100, 0, 2),
+        "logDca": (140, -6, 1),
     }
 
     self.ABCD_variables_subset = {
-        "logAbsCollinearityAngle": (100, -7, 1),
-        "logLeadingPt": (100, -1, 3),
+        "logAbsCollinearityAngle": (160, -7, 1),
+        "logLeadingPt": (125, -1, 4),
         "logDxyPVTraj1": (100, -5, 3),
-        "logPt": (100, -1, 3),
+        "logPt": (125, -1, 4),
         "logInvMass": (100, -1, 2),
         "logOuterDR": (100, -3, 3),
         "logDxyPVTrajSig1": (100, -3, 4),
         "logDxyPVTrajSig2": (100, -3, 4),
-        "absPtLxyDPhi1": (100, 0, pi),
-        "absCollinearityAngle": (100, 0, 4),
         "logNormChi2": (100, -7, 2),
         "logDca": (100, -4, 1),
     }
@@ -144,12 +146,36 @@ class TTAlpsHistogrammerConfigHelper:
         "logNormChi2": (100, -7, 1),
     }
 
-    self.pt_irr_bins = [3, 20, 40, 100, 200, 600]
-    self.absDxy_irr_bins = [0, 10, 120, 700]
+    self.pt_irr_bins = [3, 30, 60, 1000]
     self.singleMuon_ABCD_irregular_variables = {
-        "absDxyPVTraj_irr": self.absDxy_irr_bins,
         "pt_irr": self.pt_irr_bins,
     }
+    self.ABCD_irregular_variables = self.singleMuon_ABCD_irregular_variables
+    self.resonance_cuts = ["",]
+    if runExtraDimuonCuts:
+      self.resonance_cuts = [
+        "",
+        "_logDRlt-1_logDxySig2gt0",
+        "_logDRlt-0p8_logDxySig2gt0p2",
+        "_logDRlt-1p2_logDxySig2gt-0p2",
+        "_logDRgt-1_logDxySig2lt0",
+        "_logDRgt-1p5_logDxySig2lt0p5",
+        "_logDRgt-2_logDxySig2lt1",
+        "_logDRgt-1p2_logDxySig2lt-0p2",
+        "_logDRlt-0p5_logDxySig2lt-0p2",
+        "_logDRgt-1_logDxySig2gt0",
+        "_logDRgt-2_logDxySig2gt0",
+        "_logDxySig1gt0p2_logDxySig2gt0p2",
+        "_logDxySig1gt0p1_logDxySig2gt0p1",
+        "_logDxySig1gt0_logDxySig2gt0",
+        "_logDxySig1gt-0p1_logDxySig2gt-0p1",
+        "_logDxySig1lt0p1_logDxySig2lt0p1",
+        "_logPtlt1p2",
+        "_logPtlt1p1",
+        "_logPtlt1p0",
+        "_logPtgt1p2",
+        "_logPtgt1p4",
+      ]
 
   def get_default_params(self):
     return (
@@ -208,17 +234,40 @@ class TTAlpsHistogrammerConfigHelper:
 
     for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
       self.__insert_MuonVertexHistograms(params, collection)
-    for collection in self.goodMuonVertexCollections:
-      params += (
-          ("Event", "n"+collection, 50, 0, 50, ""),
-      )
 
     return tuple(params)
 
-  def get_llp_irregular_params(self):
+  def get_llp_irregular_params(self, runRevertedMatching, runGenLevelResonancesABCD, runFakesHistograms):
     params = []
     for collection in self.looseMuonCollections:
       self.__insert_irregular_MuonHistograms(params, collection)
+
+    for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
+      self.__insert_irregular_MuonVertexHistograms(params, collection)
+      if runRevertedMatching and "revertedMatching" not in collection:
+        continue
+      
+      if runGenLevelResonancesABCD:
+        names = (
+          self.__insert_into_name_at_index(collection, "FromALP", 1),
+          self.__insert_into_name_at_index(collection, "ResonancesNotFromALP", 1),
+          self.__insert_into_name_at_index(collection, "NonresonancesNotFromALP", 1),
+        )
+        for name in names:
+          self.__insert_irregular_MuonVertexHistograms(params, name)
+      
+      if runFakesHistograms:
+        for type in ["_fakes", "_nonFakes"]:
+          self.__insert_irregular_MuonVertexHistograms(params, collection + type)
+      
+      for collection in self.looseMuonVertexCollections:
+        names = (
+            self.__insert_into_name(collection, "FromALP"),
+            self.__insert_into_name(collection, "ResonancesNotFromALP"),
+            self.__insert_into_name(collection, "NonresonancesNotFromALP"),
+        )
+        for name in names:
+          self.__insert_irregular_MuonVertexHistograms(params, name)
 
     return tuple(params)
 
@@ -261,26 +310,21 @@ class TTAlpsHistogrammerConfigHelper:
   def get_llp_2d_params(self):
     params = []
 
-    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:
+    for collection in self.bestMuonVertexCollections:
       self.__insert_MuonVertex2DHistograms(params, collection)
 
     return tuple(params)
 
-  def get_gen_vertex_params(self):
+  def get_gen_vertex_params(self, runRevertedMatching):
     params = []
-
-    for collection in self.bestMuonVertexCollections + self.goodMuonVertexCollections:
-
-      for cut in self.bestMuonVertexCollectionCuts:
-        name = self.__insert_into_name(collection, "FromALPNminus1")
-        self.__insert_Nminus1Histograms(params, name)
-
-    for collection in self.looseMuonVertexCollections + self.bestMuonVertexCollections:
-
+    for collection in self.bestMuonVertexCollections:
+      if runRevertedMatching and "revertedMatching" not in collection:
+        continue
+      
       names = (
-          self.__insert_into_name(collection, "FromALP"),
-          self.__insert_into_name(collection, "ResonancesNotFromALP"),
-          self.__insert_into_name(collection, "NonresonancesNotFromALP"),
+        self.__insert_into_name_at_index(collection, "FromALP", 1),
+        self.__insert_into_name_at_index(collection, "ResonancesNotFromALP", 1),
+        self.__insert_into_name_at_index(collection, "NonresonancesNotFromALP", 1),
       )
       for name in names:
         self.__insert_MuonVertexHistograms(params, name)
@@ -347,6 +391,7 @@ class TTAlpsHistogrammerConfigHelper:
         ("GenALP", "mass", 10000, 0, 100, ""),
         ("GenALP", "eta", 300, -3, 3, ""),
         ("GenALP", "phi", 300, -3, 3, ""),
+        ("GenALP", "boost", 4000, 0, 1000)
     )
 
     for name in ["GenDimuonFromALP", "GenDimuonResonancesNotFromALP", "GenDimuonsNonresonancesNotFromALP", "GenMuonFromW"]:
@@ -385,7 +430,7 @@ class TTAlpsHistogrammerConfigHelper:
 
     return tuple(params)
 
-  def get_abcd_2Dparams(self, runGenLevelResonancesABCD, runGenLevelMothersABCD):
+  def get_abcd_2Dparams(self, runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching):
     params = []
 
     all_mother_categories = []
@@ -399,31 +444,39 @@ class TTAlpsHistogrammerConfigHelper:
           category_name = "".join(sorted([category1, category2]))
           all_mother_categories.append(category_name)
 
+    index = 1
+    if runRevertedMatching:
+      index = 2
     for collection in self.bestMuonVertexCollections:
+      if runRevertedMatching and "revertedMatching" not in collection:
+        continue
+      
       for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables.items():
         for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables.items():
           if variable_1 == variable_2:
             continue
-
-          name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
+          name = self.__insert_into_name_at_index(collection, f"_{variable_2}_vs_{variable_1}", index)
 
           params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
       for variable_1, (nBins_1, xMin_1, xMax_1) in self.ABCD_variables_subset.items():
         for variable_2, (nBins_2, xMin_2, xMax_2) in self.ABCD_variables_subset.items():
+          if variable_1 == variable_2:
+            continue
           for category in all_mother_categories:
-            name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}_{category}")
+            name = self.__insert_into_name_at_index(collection, f"_{variable_2}_vs_{variable_1}_{category}", index)
             params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
           if runGenLevelResonancesABCD:
             names = (
-                self.__insert_into_name(collection, "FromALP"),
-                self.__insert_into_name(collection, "Resonant"),
-                self.__insert_into_name(collection, "FalseResonant"),
-                self.__insert_into_name(collection, "NonResonant"),
+                self.__insert_into_name_at_index(collection, "FromALP", 1),
+                self.__insert_into_name_at_index(collection, "Resonant", 1),
+                self.__insert_into_name_at_index(collection, "FalseResonant", 1),
+                self.__insert_into_name_at_index(collection, "NonResonant", 1),
             )
             for collectionName in names:
-              name = self.__insert_into_name(collectionName, f"_{variable_2}_vs_{variable_1}")
+              name = self.__insert_into_name_at_index(collectionName, f"_{variable_2}_vs_{variable_1}", index)
+              
               params.append((name, nBins_1, xMin_1, xMax_1, nBins_2, xMin_2, xMax_2, ""))
 
     return tuple(params)
@@ -453,6 +506,57 @@ class TTAlpsHistogrammerConfigHelper:
 
           name = self.__insert_into_name(collection, f"_{variable_2}_vs_{variable_1}")
           params.append((name, binEdges1, binEdges2, ""))
+
+    return tuple(params)
+
+  def get_abcd_irregular_2Dparams(self, runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching):
+    params = []
+
+    all_mother_categories = []
+    if runGenLevelMothersABCD:
+      mother_categories = ["other", "X", "Y", "ALP", "D", "B", "d", "u", "s", "c", "b", "t", "e",
+                           "mu", "tau", "g", "gamma", "Z", "W", "rho", "pi0", "omega", "K0", "phi", "upsilon", "JPsi"]
+      mother_categories = ["other", "X", "Y", "ALP", "D", "B", "q", "l", "tau", "g", "gamma", "Z", 
+                            "W", "lightMeson", "JPsi"]
+      for category1 in mother_categories:
+        for category2 in mother_categories:
+          category_name = "".join(sorted([category1, category2]))
+          all_mother_categories.append(category_name)
+
+    index = 1
+    if runRevertedMatching:
+      index = 2
+    for collection in self.bestMuonVertexCollections:
+      if runRevertedMatching and "revertedMatching" not in collection:
+        continue
+      for cut_name in self.resonance_cuts:
+        for variable_1, binEdges1 in self.ABCD_irregular_variables.items():
+          for variable_2, binEdges2 in self.ABCD_irregular_variables.items():
+            if variable_1 == variable_2:
+              continue
+            
+            name = self.__insert_into_name_at_index(collection, f"_{variable_2}_vs_{variable_1}{cut_name}",index)
+
+            params.append((name, binEdges1, binEdges2, ""))
+
+      for cut_name in self.resonance_cuts:
+        for variable_1, binEdges1 in self.ABCD_irregular_variables.items():
+          for variable_2, binEdges2 in self.ABCD_irregular_variables.items():
+            for category in all_mother_categories:
+              name = self.__insert_into_name_at_index(collection, f"_{variable_2}_vs_{variable_1}{cut_name}_{category}", index)
+              params.append((name, binEdges1, binEdges2, ""))
+
+            if runGenLevelResonancesABCD:
+              names = (
+                self.__insert_into_name_at_index(collection, "FromALP", 1),
+                self.__insert_into_name_at_index(collection, "Resonant", 1),
+                self.__insert_into_name_at_index(collection, "FalseResonant", 1),
+                self.__insert_into_name_at_index(collection, "NonResonant", 1),
+              )
+              for collectionName in names:
+                name = self.__insert_into_name_at_index(collectionName, f"_{variable_2}_vs_{variable_1}", index)
+                params.append((name, binEdges1, binEdges2, ""))
+
 
     return tuple(params)
 
@@ -570,22 +674,26 @@ class TTAlpsHistogrammerConfigHelper:
     variables = (
 
         # SR 2018:
-        ("logLxy", "logLeadingPt"),  # SR 2018
         ("logDxyPVTraj1", "logLeadingPt"),
         ("logDxyPVTraj1", "logPt"),
         ("logDxyPVTraj2", "logPt"),
-        ("logPt", "logInvMass"),
-        ("logPt", "logDEta"),
 
         ("logAbsCollinearityAngle", "logLeadingPt"), # SR combined
         ("logAbsCollinearityAngle", "logPt"), # SR combined
-
-        ("log3Dangle", "logLeadingPt"), # 2018 DSA-DSA looser chi2 vs DCA cut
-        ("logOuterDR", "logLeadingPt"), # 2018 DSA-DSA looser chi2 vs DCA cut
         
-        ("logLxy", "log3Dangle"), # SR combined, 2018
         ("logPt", "logDisplacedTrackIso03Dimuon2"), # Jpsi CR 2018
         ("logLxy", "logPt"), # Jpsi CR 2018
+        
+        ("logLxySignificance", "logLeadingPt"), # ANv2 extras
+
+        ("logAbsCollinearityAngle", "logDca"), 
+        ("logAbsCollinearityAngle", "logNormChi2"), 
+
+        # SR ANv2
+        ("logAbsCollinearityAngle", "logDisplacedTrackIso04Dimuon2"),
+        ("logDxyPVTraj1", "logAbsCollinearityAngle"),
+        ("logDxyPVTraj2", "logAbsCollinearityAngle"),
+        ("logPt", "logInvMass"),
     )
 
     SF_variables = []
@@ -624,6 +732,18 @@ class TTAlpsHistogrammerConfigHelper:
   def __insert_into_name(self, collection, to_insert):
     if "_" in collection:
       return collection.rsplit("_", 1)[0] + to_insert + "_" + collection.rsplit("_", 1)[1]
+
+    return collection + to_insert
+
+  def __insert_into_name_at_index(self, collection, to_insert, index):
+    if "_" in collection:
+      parts = collection.split("_")
+      index = max(0, min(index, len(parts)))
+      if index > 0:
+          parts[index - 1] += to_insert
+      else:
+          parts.insert(0, to_insert)
+      return "_".join(parts)
 
     return collection + to_insert
 
@@ -688,9 +808,14 @@ class TTAlpsHistogrammerConfigHelper:
 
   def __insert_irregular_MuonHistograms(self, params, name):
     params += (
-        (name, "absDxyPVTraj_irr", self.absDxy_irr_bins, ""),
         (name, "pt_irr", self.pt_irr_bins, ""),
     )
+  
+  def __insert_irregular_MuonVertexHistograms(self, params, name):
+    for cut_name in self.resonance_cuts:
+      params += (
+        (name, "pt_irr"+cut_name, self.pt_irr_bins, ""),
+      )
 
   # FillMuonVertexHistograms function
   def __insert_MuonVertexHistograms(self, params, name):
@@ -744,12 +869,18 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "absDxyPVTraj2", 50000, 0, 1000, ""),
         (name, "dxyPVTrajSig1", 1000, 0, 1000, ""),
         (name, "dxyPVTrajSig2", 1000, 0, 1000, ""),
-        (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
-        (name, "displacedTrackIso04Dimuon1", 800, 0, 20, ""),
-        (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
-        (name, "displacedTrackIso04Dimuon2", 800, 0, 20, ""),
-        (name, "pfRelIso04all1", 800, 0, 20, ""),
-        (name, "pfRelIso04all2", 800, 0, 20, ""),
+        (name, "displacedTrackIso03Dimuon1", 800, 0, 5, ""),
+        (name, "displacedTrackIso04Dimuon1", 800, 0, 5, ""),
+        (name, "displacedTrackIso03Dimuon2", 800, 0, 5, ""),
+        (name, "displacedTrackIso04Dimuon2", 800, 0, 5, ""),
+        (name, "logDisplacedTrackIso03Dimuon1", 700, -4, 3, ""),
+        (name, "logDisplacedTrackIso04Dimuon1", 700, -4, 3, ""),
+        (name, "logDisplacedTrackIso03Dimuon2", 700, -4, 3, ""),
+        (name, "logDisplacedTrackIso04Dimuon2", 700, -4, 3, ""),
+        (name, "pfRelIso04all1", 800, 0, 5, ""),
+        (name, "pfRelIso04all2", 800, 0, 5, ""),
+        (name, "logPfRelIso04all1", 800, -4, 3, ""),
+        (name, "logPfRelIso04all2", 800, -4, 3, ""),
         (name, "3Dangle", 2000, -10, 10, ""),
         (name, "cos3Dangle", 400, -2, 2, ""),
         (name, "nSegments", 50, 0, 50, ""),
@@ -814,12 +945,13 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "dca", 1000, 0, 20, ""),
         (name, "absCollinearityAngle", 500, 0, 5, ""),
         (name, "normChi2", 50000, 0, 50, ""),
-        (name, "displacedTrackIso03Dimuon1", 800, 0, 20, ""),
-        (name, "displacedTrackIso03Dimuon2", 800, 0, 20, ""),
+        (name, "displacedTrackIso04Dimuon1", 800, 0, 20, ""),
+        (name, "displacedTrackIso04Dimuon2", 800, 0, 20, ""),
         (name, "pfRelIso1", 800, 0, 20, ""),
         (name, "pfRelIso2", 800, 0, 20, ""),
         (name, "dR", 500, 0, 10, ""),
         (name, "outerDR", 500, 0, 10, ""),
+        (name, "dRprox", 500, 0, 10, ""),
         (name, "Lxy", 10000, 0, 1000, ""),
         (name, "LxySigma", 5000, 0, 500, ""),
         (name, "vxy", 10000, 0, 1000, ""),
@@ -834,6 +966,8 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "SS_leadingPt", 2000, 0, 1000, ""),
         (name, "OS_Lxy", 10000, 0, 1000, ""),
         (name, "SS_Lxy", 10000, 0, 1000, ""),
+        (name, "OS_dRprox", 500, 0, 10, ""),
+        (name, "SS_dRprox", 500, 0, 10, ""),
         (name, "absCollinearityAngle_lt2", 500, 0, 5, ""),
         (name, "absCollinearityAngle_gt2", 500, 0, 5, ""),
     )
@@ -859,6 +993,12 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "index1", 100, 0, 100, ""),
         (name, "index2", 100, 0, 100, ""),
         (name, "index3", 100, 0, 100, ""),
+        (name, "pt", 2000, 0, 1000, ""),
+        (name, "pt1", 2000, 0, 1000, ""),
+        (name, "pt2", 2000, 0, 1000, ""),
+        (name, "eta", 500, -10, 10, ""),
+        (name, "eta1", 500, -10, 10, ""),
+        (name, "eta2", 500, -10, 10, ""),
         (name, "Lxy", 50000, 0, 5000, ""),
         (name, "Lxyz", 50000, 0, 5000, ""),
         (name, "properLxy", 50000, 0, 5000, ""),

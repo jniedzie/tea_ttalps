@@ -46,7 +46,6 @@ void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, s
   auto vertexCuts = muonVertexCollection.second;
   if(dimuonCategory != "") collectionName = collectionName + "_" + dimuonCategory;
   for (auto cutName : vertexCuts) {
-    if(cutName == "BestDimuonVertex") continue;
     cutFlowManager->RegisterCut(cutName, collectionName);
   }
 }
@@ -89,7 +88,7 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
   }
 
   for(auto cutName : vertexCuts) {
-    if(cutName == "BestDimuonVertex") continue;
+    if (cutName.find("BestDimuonVertex") != std::string::npos) continue;
     auto goodDimuons = make_shared<PhysicsObjects>();
     for (auto dimuon : *baseDimuons) {
       if(ttAlpsDimuonCuts->PassesCut(asNanoDimuonVertex(dimuon, event), cutName)) {
@@ -105,6 +104,31 @@ bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutF
   }
   return true;
 }
+
+void TTAlpsCuts::UpdateBestDimuonCut(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) return;
+
+  string collectionName = muonVertexCollection.first;
+  auto vertexCuts = muonVertexCollection.second;
+
+  // check that BestDimuonVertex is in the cuts
+  string bestDimuonVertexCut = "";
+  for (auto cutName : vertexCuts) {
+    if (cutName.find("BestDimuonVertex") != std::string::npos) {
+      bestDimuonVertexCut = cutName;
+      break;
+    }
+  }
+  if(bestDimuonVertexCut == "") return;
+  
+  auto bestDimuon = event->GetCollection(collectionName);
+  if (!bestDimuon) return;
+  if (bestDimuon->size() < 1) return;
+  string bestCategory = asNanoDimuonVertex(bestDimuon->at(0),event)->GetVertexCategory();
+  cutFlowManager->UpdateCutFlow(bestDimuonVertexCut, collectionName+"_"+bestCategory);
+  cutFlowManager->UpdateCutFlow(bestDimuonVertexCut, collectionName);
+}
+
 
 bool TTAlpsCuts::PassesSingleMuonTrigger(const shared_ptr<Event> event) {
   string triggerName = "HLT_IsoMu24";
