@@ -145,7 +145,6 @@ class TTAlpsPlotterConfigHelper:
         x2=self.legend_pos_and_size[0]-(column)*self.legend_pos_and_size[2],
         y2=self.legend_pos_and_size[1]-(row)*self.legend_pos_and_size[3],
         options=style,
-        text_size=self.legend_text_size,
     )
 
     return legend
