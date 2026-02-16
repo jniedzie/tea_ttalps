@@ -12,20 +12,12 @@ The notes for the analysis can be found in [CodiMD](https://codimd.web.cern.ch/s
 ```bash
 mkdir tea_ttalps
 cd tea_ttalps
-git clone git@github.com:jniedzie/tea_ttalps.git .
+git clone --recursive git@github.com:jniedzie/tea_ttalps.git
 ```
-
-- Register tea as a submodule and update it to the latest version:
-```bash
-git rm tea
-git submodule add git@github.com:jniedzie/tea.git tea
-./tea/update.sh
-```
-
-- build, assuming you already have a conda environment for tea (if not, visit [code documentation](https://github.com/jniedzie/tea_ttalps/wiki) or [tea website](cern.ch/tea) for more details):
+- build, assuming you already have a conda environment for tea (if not, visit the [tea website](https://jniedzie.github.io/tea/docs/prerequisites/) for more details):
 ```bash
 conda activate tea
-./tea/build.sh
+source tea/build.sh
 ```
 
 Now you can run apps from the `bin` directory.

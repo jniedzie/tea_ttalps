@@ -408,6 +408,12 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<NanoDimuon
   histogramsHandler->Fill(name + "_logPfRelIso04all1", logPfRelIso04_all1);
   histogramsHandler->Fill(name + "_logPfRelIso04all2", logPfRelIso04_all2);
 
+  float vx = dimuon->GetAs<float>("vx");
+  float vy = dimuon->GetAs<float>("vy");
+  float r = sqrt(vx * vx + vy * vy);
+  histogramsHandler->Fill(name + "_r", r);
+  histogramsHandler->Fill(name + "_r_trackerOnly", r);
+  
   // Muons in vertex variables:
   auto leadingMuon = dimuon->GetLeadingMuon();
   auto subleadingMuon = dimuon->GetSubleadingMuon();
@@ -526,12 +532,13 @@ void TTAlpsHistogramFiller::FillMuonVertex2DHistograms(const shared_ptr<Event> e
   }
   for (auto vertex : *vertexCollection) {
     auto dimuonVertex = asNanoDimuonVertex(vertex, event);
-
+    float vx = dimuonVertex->GetAs<float>("vx");
+    float vy = dimuonVertex->GetAs<float>("vy");
     string vertexCategory = dimuonVertex->GetVertexCategory();
-    histogramsHandler->Fill(vertexName + "_vy_vs_vx", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
-    histogramsHandler->Fill(vertexName + "_" + vertexCategory + "_vy_vs_vx", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
-    histogramsHandler->Fill(vertexName + "_vy_vs_vx_trackerOnly", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
-    histogramsHandler->Fill(vertexName + "_" + vertexCategory + "_vy_vs_vx_trackerOnly", dimuonVertex->GetAs<float>("vx"), dimuonVertex->GetAs<float>("vy"));
+    histogramsHandler->Fill(vertexName + "_vy_vs_vx", vx, vy);
+    histogramsHandler->Fill(vertexName + "_" + vertexCategory + "_vy_vs_vx", vx, vy);
+    histogramsHandler->Fill(vertexName + "_vy_vs_vx_trackerOnly", vx, vy);
+    histogramsHandler->Fill(vertexName + "_" + vertexCategory + "_vy_vs_vx_trackerOnly", vx, vy);
   }
 }
 
