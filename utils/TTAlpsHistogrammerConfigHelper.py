@@ -791,6 +791,8 @@ class TTAlpsHistogrammerConfigHelper:
         (name, "logDeltaSquaredIso04", 1000, -5, 5, ""),
         (name, "absDzFromLeadingTight1", 10000, 0, 100, ""),
         (name, "absDzFromLeadingTight2", 10000, 0, 100, ""),
+        (name, "r", 1000, 0, 1000, ""),
+        (name, "r_trackerOnly", 1000, 0, 130, ""),
     )
 
   def __insert_MuonVertex2DHistograms(self, params, name):

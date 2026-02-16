@@ -2,14 +2,14 @@ import ROOT
 from Logger import info, error, logger_print
 
 years = [
-    "2016preVFP",
-    "2016postVFP",
-    "2017",
+    # "2016preVFP",
+    # "2016postVFP",
+    # "2017",
     "2018",
-    "2022preEE",
-    "2022postEE",
-    "2023preBPix",
-    "2023postBPix",
+    # "2022preEE",
+    # "2022postEE",
+    # "2023preBPix",
+    # "2023postBPix",
 ]
 
 
@@ -20,9 +20,9 @@ dimuon_type = "Best"
 
 
 hist_paths = {
-    "_Pat": "ABCD",
-    "_PatDSA": "noMatching",
-    "_DSA": "noMatching",
+    "_Pat": "",
+    "_PatDSA": "_noMatching",
+    "_DSA": "_noMatching",
 
     # this has a bit more entries for J/Ψ CR, but less for SR and requires running more histograms
     # It's also going to be less consistent. We decided to stick to noMatching for now.
@@ -31,10 +31,13 @@ hist_paths = {
 }
 
 user_per_category = {
-    "_Pat": "lrygaard",
+    "_Pat": "jniedzie",
     "_PatDSA": "jniedzie",
     "_DSA": "jniedzie",
 }
+
+suffix = ""
+# suffix = "_trackerOnly"
 
 r_max = {
     "_Pat": 5,
@@ -48,11 +51,18 @@ pt_max = {
     "_DSA": 200,
 }
 
-rebin1D = {
-    "_Pat": 2,
-    "_PatDSA": 60,
-    "_DSA": 100,
-}
+if suffix == "_trackerOnly":
+  rebin1D = {
+      "_Pat": 2,
+      "_PatDSA": 40,
+      "_DSA": 40,
+  }
+else:
+  rebin1D = {
+      "_Pat": 1,
+      "_PatDSA": 10,
+      "_DSA": 10,
+  }
 
 rebin1D_pt = {
     "_Pat": 10,
@@ -85,8 +95,7 @@ tracker_layers = [
     108.0,  # TOB Layer 6
 ]
 
-# suffix = ""
-suffix = "_trackerOnly"
+
 
 
 def get_paths(year, category):
@@ -108,7 +117,7 @@ def get_paths(year, category):
       "J/#Psi CR, data": (
           (
               f"/data/dust/user/{user}/ttalps_cms/collision_data{year}/"
-              f"{muon_name}{merged_year}_{skim}_histograms_JPsiDimuons_{hist_paths[category]}.root"
+              f"{muon_name}{merged_year}_{skim}_histograms_JPsiDimuons{hist_paths[category]}.root"
           ),
           f"{dimuon_type}DimuonVertex{dimuon_type_suffix}",
       ),
@@ -116,7 +125,7 @@ def get_paths(year, category):
       "J/#Psi CR, tt (semi.)": (
           (
               f"/data/dust/user/{user}/ttalps_cms/backgrounds{year}/"
-              f"{semi_name}/{skim}/histograms_JPsiDimuons_{hist_paths[category]}/histograms.root"
+              f"{semi_name}/{skim}/histograms_JPsiDimuons{hist_paths[category]}/histograms.root"
           ),
           f"{dimuon_type}DimuonVertex{dimuon_type_suffix}",
       ),
@@ -124,7 +133,7 @@ def get_paths(year, category):
       "SR, tt (semi.)": (
           (
               f"/data/dust/user/{user}/ttalps_cms/backgrounds{year}/"
-              f"{semi_name}/{skim}/histograms_SRDimuons_{hist_paths[category]}/histograms.root"
+              f"{semi_name}/{skim}/histograms_SRDimuons{hist_paths[category]}/histograms.root"
           ),
           f"{dimuon_type}PFIsoDimuonVertex{dimuon_type_suffix}",
       ),
@@ -242,6 +251,7 @@ def main():
         unique_name = f"{year}_{category}_{name.replace(' ', '_')}"
 
         hist_name = f"{collection}{category}_vy_vs_vx{suffix}"
+        hist_name_r = f"{collection}{category}_r{suffix}"
         hist_name_pt = f"{collection}{category}_pt"
         info(f"\nProcessing sample {name}: {path}")
 
@@ -252,12 +262,17 @@ def main():
           continue
 
         hists[name] = files[name].Get(hist_name)
+        hists_r[unique_name] = files[name].Get(hist_name_r)
         hists_pt[unique_name] = files[name].Get(hist_name_pt)
 
         info(f"Retrieving pt histogram: {hist_name_pt}, {unique_name}")
 
         if hists[name] is None or type(hists[name]) == ROOT.TObject:
           error(f"Histogram {hist_name} not found in file {path}")
+          continue
+
+        if hists_r[unique_name] is None or type(hists_r[unique_name]) == ROOT.TObject:
+          error(f"Histogram {hist_name_r} not found in file {path}")
           continue
 
         if hists[name].GetSumOfWeights() == 0:
@@ -279,23 +294,27 @@ def main():
         prepare_pad()
         ROOT.gPad.SetLogy()
 
-        hists_r[unique_name] = get_r_histogram(hists[name])
+        # hists_r[unique_name] = get_r_histogram(hists[name])
         prepare_1d_hist(hists_r[unique_name])
         hists_r[unique_name].SetTitle(f"{category.replace('_', '')}, {name}")
         hists_r[unique_name].Rebin(rebin1D[category])
-
-        hists_r[unique_name].Draw()
         hists_r[unique_name].GetXaxis().SetRangeUser(0, r_max[category])
+        h_norm = hists_r[unique_name].DrawNormalized()
+        h_norm.GetYaxis().SetRangeUser(1e-4, 1e0)
+        ROOT.gPad.Modified()
+        ROOT.gPad.Update()
+        
+        
 
         for layer in tracker_layers:
-          line = ROOT.TLine(layer, 0, layer, hists_r[unique_name].GetMaximum()*1.1)
+          line = ROOT.TLine(layer, 0, layer, 1e-1)
           line.SetLineColor(ROOT.kBlue)
           line.SetLineStyle(ROOT.kDashed)
           line.DrawClone("same")
 
         pipe_radius = 2.23
 
-        pipe_line = ROOT.TLine(pipe_radius, 0, pipe_radius, hists_r[unique_name].GetMaximum()*1.1)
+        pipe_line = ROOT.TLine(pipe_radius, 0, pipe_radius, 1e-5)
         pipe_line.SetLineColor(ROOT.kGreen+2)
         pipe_line.SetLineStyle(ROOT.kDotted)
         pipe_line.DrawClone("same")
@@ -308,7 +327,6 @@ def main():
         hists_pt[unique_name].Rebin(rebin1D_pt[category])
         hists_pt[unique_name].GetXaxis().SetRangeUser(0, pt_max[category])
         hists_pt[unique_name].DrawNormalized()
-        
 
     legend = ROOT.TLegend(0.5, 0.7, 0.85, 0.9)
     line_tracker = ROOT.TLine(0, 0, 0, 0)
