@@ -94,7 +94,7 @@ bool TTAlpsDimuonCuts::PassesInvariantMassCut(shared_ptr<NanoDimuonVertex> dimuo
 bool TTAlpsDimuonCuts::PassesChargeCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if(dimuonVertex->GetDimuonChargeProduct() > dimuonVertexCuts["maxChargeProduct"]) return false;
-  if(dimuonVertex->GetDimuonChargeProduct() < dimuonVertexCuts["minChargeProduct"]) return false;
+  if(dimuonVertex->GetDimuonChargeProduct() <= dimuonVertexCuts["minChargeProduct"]) return false;
   return true;
 }
 

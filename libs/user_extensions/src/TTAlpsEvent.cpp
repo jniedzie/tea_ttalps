@@ -57,7 +57,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
 
   map<string, float> DSAEffSF = nanoEventProcessor->GetDSAMuonEfficiencyScaleFactors(muons);
 
-  auto [jecUnc, metUnc] = GetJetEnergyCorrections(event);
+  auto [jecUnc, metUnc] = GetJetMETEnergyScaleUncertainties(event);
 
   map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
@@ -197,7 +197,7 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
   return dimuonEffSF;
 }
 
-tuple<map<string, float>,map<string, float>> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event) {
+tuple<map<string, float>,map<string, float>> TTAlpsEvent::GetJetMETEnergyScaleUncertainties(shared_ptr<Event> event) {
   
   map<string, float> jec = {{"systematic", 1.0}};
   map<string, float> met = {{"systematic", 1.0}};

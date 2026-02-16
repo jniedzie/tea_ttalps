@@ -163,7 +163,7 @@ def get_min_max_uncertainty_over_years(uncertainties):
 
   return min_uncertainty, max_uncertainty
 
-def get_68pct_uncertainty_range(uncertainties):
+def get_68percert_uncertainty_range(uncertainties):
     low_68 = {}
     high_68 = {}
     mean = {}
@@ -495,7 +495,8 @@ def main():
     ctau = ctau.replace("mm", "").replace("ctau-", "")
     ctau = float(ctau)
 
-    theory_cross_section = config.get_theory_cross_section(mass)
+    warn(f"theory_cross_section given for Run 2 now.")
+    theory_cross_section = config.get_theory_cross_section(mass, "Run2")
     reference_cross_section = cross_sections[name.replace("signal_", "")]
     coupling_ref = 0.1
     coupling_target = 1.0
@@ -557,29 +558,29 @@ def main():
   max_uncertainty = {}
   if not config.use_combined_limits:
     min_uncertainty, max_uncertainty = get_min_max_uncertainty(uncertainties)
-    min_68pct_uncertainty, max_68pct_uncertainty, mean_uncertainty = get_68pct_uncertainty_range(uncertainties)
+    min_68percert_uncertainty, max_68percert_uncertainty, mean_uncertainty = get_68percert_uncertainty_range(uncertainties)
   else:
     min_uncertainty, max_uncertainty = get_min_max_uncertainty(uncertainties)
-    min_68pct_uncertainty, max_68pct_uncertainty, mean_uncertainty = get_68pct_uncertainty_range(uncertainties)
+    min_68percert_uncertainty, max_68percert_uncertainty, mean_uncertainty = get_68percert_uncertainty_range(uncertainties)
 
   info("\n\nMin/Max Uncertainties:\n")
   merged_uncertainties = {key: (min_uncertainty[key], max_uncertainty[key]) for key in min_uncertainty.keys()}
-  merged_68pct_uncertainties = {key: (min_68pct_uncertainty[key], max_68pct_uncertainty[key], mean_uncertainty[key]) for key in min_68pct_uncertainty.keys()}
+  merged_68percert_uncertainties = {key: (min_68percert_uncertainty[key], max_68percert_uncertainty[key], mean_uncertainty[key]) for key in min_68percert_uncertainty.keys()}
 
   # sort merged uncertainties by the average of min and max (keep it as a dictionary)
   sorted_uncertainties = {k: v for k, v in sorted(
       merged_uncertainties.items(), key=lambda item: (item[1][0] + item[1][1]) / 2, reverse=True)}
-  sorted_68pct_uncertainties = {k: v for k, v in sorted(
-      merged_68pct_uncertainties.items(), key=lambda item: (item[1][0] + item[1][1]) / 2, reverse=True)}
+  sorted_68percert_uncertainties = {k: v for k, v in sorted(
+      merged_68percert_uncertainties.items(), key=lambda item: (item[1][0] + item[1][1]) / 2, reverse=True)}
 
   nice_names = get_nice_names(config.years)
-  max_len = max(len(nice_names[unc_name]) for unc_name in sorted_68pct_uncertainties)
+  max_len = max(len(nice_names[unc_name]) for unc_name in sorted_68percert_uncertainties)
   for unc_name, (min_val, max_val) in sorted_uncertainties.items():
     info(f"{nice_names[unc_name]:<{max_len}}  {min_val:.>7.4f}. {max_val:.>7.4f}".replace(".", ","))
 
-  info("\n\nMin/Max/Mean Uncertainties in 68pct in %:\n")
+  info("\n\nMin/Max/Mean Uncertainties in 68percert in %:\n")
   
-  for unc_name, (min_val, max_val, mean_val) in sorted_68pct_uncertainties.items():
+  for unc_name, (min_val, max_val, mean_val) in sorted_68percert_uncertainties.items():
     info(f"{nice_names[unc_name]:<{max_len}}  "
           f"{min_val*100:.1f}  {max_val*100:.1f}  {mean_val*100:.1f}".replace(".", ","))
 

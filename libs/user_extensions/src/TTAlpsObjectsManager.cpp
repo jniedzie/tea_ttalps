@@ -319,12 +319,21 @@ void TTAlpsObjectsManager::InsertRevertedMatchedDSAMuonVertexCollection(shared_p
   auto segmentRatio = muonMatchingParams["Segment"];
   
   string muonVertexCollectionName = muonVertexCollection.first;
+  vector<string> muonVertexCollectionCuts = muonVertexCollection.second;
   auto muonVertexCollection = event->GetCollection(muonVertexCollectionName);
   auto revertedMuonVertexCollection = make_shared<PhysicsObjects>();
   auto matchedPATMuonVertexCollection = make_shared<PhysicsObjects>();
   auto matchedPATDSAMuonVertexCollection = make_shared<PhysicsObjects>();
 
   auto looseDSAMuons = asNanoMuons(event->GetCollection("LooseDSAMuons"));
+
+  string bestVertexCut = "BestDimuonVertex";
+  for (auto cutName : muonVertexCollectionCuts) {
+    if (cutName.find("BestDimuonVertex") != std::string::npos) {
+      bestVertexCut = cutName;
+      break;
+    }
+  }
 
   for (auto vertex : *muonVertexCollection) {
     auto nanoVertex = asNanoDimuonVertex(vertex,event);
@@ -352,7 +361,7 @@ void TTAlpsObjectsManager::InsertRevertedMatchedDSAMuonVertexCollection(shared_p
         continue;
       }
       auto matchedPATDSAMuonsVertices = asNanoEvent(event)->GetVerticesForMuons(matchedPATDSAMuons);
-      auto bestMatchedPATDSAMuonsVertex = GetBestMuonVertex(matchedPATDSAMuonsVertices, "BestDimuonVertex", event);
+      auto bestMatchedPATDSAMuonsVertex = GetBestMuonVertex(matchedPATDSAMuonsVertices, bestVertexCut, event);
       if (bestMatchedPATDSAMuonsVertex) {
         revertedMuonVertexCollection->push_back(bestMatchedPATDSAMuonsVertex);
         matchedPATDSAMuonVertexCollection->push_back(vertex);
@@ -360,7 +369,7 @@ void TTAlpsObjectsManager::InsertRevertedMatchedDSAMuonVertexCollection(shared_p
       // DSA-DSA dimuon
     } else if (matchedDSAMuons->size() > 1) {
       auto matchedDSAMuonsVertices = asNanoEvent(event)->GetVerticesForMuons(matchedDSAMuons);
-      auto bestMatchedDSAMuonsVertex = GetBestMuonVertex(matchedDSAMuonsVertices, "BestDimuonVertex", event);
+      auto bestMatchedDSAMuonsVertex = GetBestMuonVertex(matchedDSAMuonsVertices, bestVertexCut, event);
       if (bestMatchedDSAMuonsVertex) {
         if (ttAlpsCuts->PassesCut(asNanoDimuonVertex(bestMatchedDSAMuonsVertex,event), "InvariantMassCut")) {
           revertedMuonVertexCollection->push_back(bestMatchedDSAMuonsVertex);

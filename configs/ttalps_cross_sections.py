@@ -23,11 +23,11 @@ def get_theory_cross_section(mass, year = None):
       60.0: 0.00304,  
   }
   if year == None:
-    warn("No year specified for theory cross section - assuming Run 2!")
+    error(f"Unknown year {year} for theory cross section")
+    return
+  if "2016" in year or "2017" in year or "2018" in year or "Run2" in year:
     return cross_section_for_mass_Run2[mass]
-  if "2016" in year or "2017" in year or "2018" in year:
-    return cross_section_for_mass_Run2[mass]
-  if "2022" in year or "2023" in year:
+  if "2022" in year or "2023" in year or "Run3" in year:
     return cross_section_for_mass_Run3[mass]
   error(f"Unknown year {year} for theory cross section")
 
@@ -113,49 +113,44 @@ cross_sectionsRun2 = {
     "SingleMuon2018": 1.0,
     "EGamma2018": 1.0,
 
-    "tta_mAlp-0p35GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "2018"),
-    "tta_mAlp-0p35GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(0.35, "2018"),
-    "tta_mAlp-0p35GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(0.35, "2018"),
-    "tta_mAlp-0p35GeV_ctau-1e2mm": 10*signal_xsec_scale * get_theory_cross_section(0.35, "2018"),
-    "tta_mAlp-0p35GeV_ctau-1e3mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "2018"),
-    "tta_mAlp-0p35GeV_ctau-1e5mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "2018"),
-    "tta_mAlp-0p35GeV_ctau-1e7mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "2018"),
+    "tta_mAlp-0p35GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
+    "tta_mAlp-0p35GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
+    "tta_mAlp-0p35GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
+    "tta_mAlp-0p35GeV_ctau-1e2mm": 10*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
+    "tta_mAlp-0p35GeV_ctau-1e3mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
+    "tta_mAlp-0p35GeV_ctau-1e5mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
+    "tta_mAlp-0p35GeV_ctau-1e7mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
 
-    "tta_mAlp-1GeV_ctau-1e-5mm": 10*signal_xsec_scale * get_theory_cross_section(1.0, "2018"),
-    "tta_mAlp-1GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(1.0, "2018"),
-    "tta_mAlp-1GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(1.0, "2018"),
-    "tta_mAlp-1GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(1.0, "2018"),
-    "tta_mAlp-1GeV_ctau-1e3mm": 100 * signal_xsec_scale * get_theory_cross_section(1.0, "2018"),
-    "tta_mAlp-1GeV_ctau-1e5mm": 100 * signal_xsec_scale * get_theory_cross_section(1.0, "2018"),
+    "tta_mAlp-1GeV_ctau-1e-5mm": 10*signal_xsec_scale * get_theory_cross_section(1.0, "Run2"),
+    "tta_mAlp-1GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(1.0, "Run2"),
+    "tta_mAlp-1GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(1.0, "Run2"),
+    "tta_mAlp-1GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(1.0, "Run2"),
+    "tta_mAlp-1GeV_ctau-1e3mm": 100 * signal_xsec_scale * get_theory_cross_section(1.0, "Run2"),
+    "tta_mAlp-1GeV_ctau-1e5mm": 100 * signal_xsec_scale * get_theory_cross_section(1.0, "Run2"),
 
-    "tta_mAlp-2GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(2.0, "2018"),
-    "tta_mAlp-2GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(2.0, "2018"),
-    "tta_mAlp-2GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(2.0, "2018"),
-    "tta_mAlp-2GeV_ctau-1e2mm": 10*signal_xsec_scale * get_theory_cross_section(2.0, "2018"),
-    "tta_mAlp-2GeV_ctau-1e3mm": 100 * signal_xsec_scale * get_theory_cross_section(2.0, "2018"),
+    "tta_mAlp-2GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(2.0, "Run2"),
+    "tta_mAlp-2GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(2.0, "Run2"),
+    "tta_mAlp-2GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(2.0, "Run2"),
+    "tta_mAlp-2GeV_ctau-1e2mm": 10*signal_xsec_scale * get_theory_cross_section(2.0, "Run2"),
+    "tta_mAlp-2GeV_ctau-1e3mm": 100 * signal_xsec_scale * get_theory_cross_section(2.0, "Run2"),
 
-    # "tta_mAlp-12GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(12.0, "2018"),
-    "tta_mAlp-12GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(12.0, "2018"),
-    "tta_mAlp-12GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(12.0, "2018"),
-    "tta_mAlp-12GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(12.0, "2018"),
-    "tta_mAlp-12GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(12.0, "2018"),
-    "tta_mAlp-12GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(12.0, "2018"),
+    "tta_mAlp-12GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(12.0, "Run2"),
+    "tta_mAlp-12GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(12.0, "Run2"),
+    "tta_mAlp-12GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(12.0, "Run2"),
+    "tta_mAlp-12GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(12.0, "Run2"),
+    "tta_mAlp-12GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(12.0, "Run2"),
 
-    # "tta_mAlp-30GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(30.0, "2018"),
-    "tta_mAlp-30GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(30.0, "2018"),
-    "tta_mAlp-30GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(30.0, "2018"),
-    "tta_mAlp-30GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(30.0, "2018"),
-    "tta_mAlp-30GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(30.0, "2018"),
-    "tta_mAlp-30GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(30.0, "2018"),
+    "tta_mAlp-30GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(30.0, "Run2"),
+    "tta_mAlp-30GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(30.0, "Run2"),
+    "tta_mAlp-30GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(30.0, "Run2"),
+    "tta_mAlp-30GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(30.0, "Run2"),
+    "tta_mAlp-30GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(30.0, "Run2"),
 
-    # "tta_mAlp-60GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(60.0, "2018"),
-    "tta_mAlp-60GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(60.0, "2018"),
-    "tta_mAlp-60GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(60.0, "2018"),
-    "tta_mAlp-60GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(60.0, "2018"),
-    "tta_mAlp-60GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(60.0, "2018"),
-    "tta_mAlp-60GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(60.0, "2018"),
-
-    # "tta_mAlp-70GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(70.0, "2018"),
+    "tta_mAlp-60GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(60.0, "Run2"),
+    "tta_mAlp-60GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(60.0, "Run2"),
+    "tta_mAlp-60GeV_ctau-1e1mm": 10*signal_xsec_scale * get_theory_cross_section(60.0, "Run2"),
+    "tta_mAlp-60GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(60.0, "Run2"),
+    "tta_mAlp-60GeV_ctau-1e3mm": signal_xsec_scale * get_theory_cross_section(60.0, "Run2"),
 }
 
 cross_sectionsRun3 = {
@@ -198,37 +193,37 @@ cross_sectionsRun3 = {
     "QCD_PT-800To1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 3.913,
     "QCD_PT-1000_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8": 1.323,
 
-    "tta_mAlp-0p35GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(0.35, "2022"),
-    "tta_mAlp-0p35GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(0.35, "2022"),
-    "tta_mAlp-0p35GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(0.35, "2022"),
-    "tta_mAlp-0p35GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(0.35, "2022"),
-    "tta_mAlp-0p35GeV_ctau-1e3mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "2022"),
-    "tta_mAlp-0p35GeV_ctau-1e5mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "2022"),
-    "tta_mAlp-0p35GeV_ctau-1e7mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "2022"),
+    "tta_mAlp-0p35GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(0.35, "Run3"),
+    "tta_mAlp-0p35GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(0.35, "Run3"),
+    "tta_mAlp-0p35GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(0.35, "Run3"),
+    "tta_mAlp-0p35GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(0.35, "Run3"),
+    "tta_mAlp-0p35GeV_ctau-1e3mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run3"),
+    "tta_mAlp-0p35GeV_ctau-1e5mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run3"),
+    "tta_mAlp-0p35GeV_ctau-1e7mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run3"),
 
-    "tta_mAlp-2GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(2.0, "2022"),
-    "tta_mAlp-2GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(2.0, "2022"),
-    "tta_mAlp-2GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(2.0, "2022"),
-    "tta_mAlp-2GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(2.0, "2022"),
-    "tta_mAlp-2GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(2.0, "2022"),
+    "tta_mAlp-2GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(2.0, "Run3"),
+    "tta_mAlp-2GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(2.0, "Run3"),
+    "tta_mAlp-2GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(2.0, "Run3"),
+    "tta_mAlp-2GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(2.0, "Run3"),
+    "tta_mAlp-2GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(2.0, "Run3"),
 
-    "tta_mAlp-12GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(12.0, "2022"),
-    "tta_mAlp-12GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(12.0, "2022"),
-    "tta_mAlp-12GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(12.0, "2022"),
-    "tta_mAlp-12GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(12.0, "2022"),
-    "tta_mAlp-12GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(12.0, "2022"),
+    "tta_mAlp-12GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(12.0, "Run3"),
+    "tta_mAlp-12GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(12.0, "Run3"),
+    "tta_mAlp-12GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(12.0, "Run3"),
+    "tta_mAlp-12GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(12.0, "Run3"),
+    "tta_mAlp-12GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(12.0, "Run3"),
 
-    "tta_mAlp-30GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(30.0, "2022"),
-    "tta_mAlp-30GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(30.0, "2022"),
-    "tta_mAlp-30GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(30.0, "2022"),
-    "tta_mAlp-30GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(30.0, "2022"),
-    "tta_mAlp-30GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(30.0, "2022"),
+    "tta_mAlp-30GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(30.0, "Run3"),
+    "tta_mAlp-30GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(30.0, "Run3"),
+    "tta_mAlp-30GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(30.0, "Run3"),
+    "tta_mAlp-30GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(30.0, "Run3"),
+    "tta_mAlp-30GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(30.0, "Run3"),
 
-    "tta_mAlp-60GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(60.0, "2022"),
-    "tta_mAlp-60GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(60.0, "2022"),
-    "tta_mAlp-60GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(60.0, "2022"),
-    "tta_mAlp-60GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(60.0, "2022"),
-    "tta_mAlp-60GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(60.0, "2022"),
+    "tta_mAlp-60GeV_ctau-1e-5mm": signal_xsec_scale * get_theory_cross_section(60.0, "Run3"),
+    "tta_mAlp-60GeV_ctau-1e0mm": signal_xsec_scale * get_theory_cross_section(60.0, "Run3"),
+    "tta_mAlp-60GeV_ctau-1e1mm": signal_xsec_scale * get_theory_cross_section(60.0, "Run3"),
+    "tta_mAlp-60GeV_ctau-1e2mm": signal_xsec_scale * get_theory_cross_section(60.0, "Run3"),
+    "tta_mAlp-60GeV_ctau-1e3mm": 10 * signal_xsec_scale * get_theory_cross_section(60.0, "Run3"),
 }
 
 

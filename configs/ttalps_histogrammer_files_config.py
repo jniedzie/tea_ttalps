@@ -70,7 +70,7 @@ applyScaleFactors = {
 if "SRDimuons" not in skim[1]:
   for name in applyScaleFactors: 
     sfs = applyScaleFactors[name]
-    applyScaleFactors[name] = (sfs[0], False)
+    applyScaleFactors[name][1] = False
 
 hist_path = "histograms"
 
