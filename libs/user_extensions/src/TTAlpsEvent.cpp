@@ -57,14 +57,14 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
 
   map<string, float> DSAEffSF = nanoEventProcessor->GetDSAMuonEfficiencyScaleFactors(muons);
 
-  map<string, float> jecUnc = GetJetEnergyCorrections(event);
+  auto [jecUnc, metUnc] = GetJetEnergyCorrections(event);
 
   map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
   map<string, float> scaleFactorMap;
   scaleFactorMap["default"] = genWeight * pileupSF["systematic"] * muonTriggerSF["systematic"] * L1PreFiringWeight["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
                               muonSF["systematic"] * dimuonEffSF["systematic"] * DSAEffSF["systematic"] ;
-  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &L1PreFiringWeight, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc};
+  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &L1PreFiringWeight, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc, &metUnc};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
@@ -79,7 +79,8 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
                              (scaleFactorMapPtr == &muonSF ? (*scaleFactorMapPtr)[name] : muonSF["systematic"]) *
                              (scaleFactorMapPtr == &dimuonEffSF ? (*scaleFactorMapPtr)[name] : dimuonEffSF["systematic"]) *
                              (scaleFactorMapPtr == &DSAEffSF ? (*scaleFactorMapPtr)[name] : DSAEffSF["systematic"]) *
-                             (scaleFactorMapPtr == &jecUnc ? (*scaleFactorMapPtr)[name] : jecUnc["systematic"]);
+                             (scaleFactorMapPtr == &jecUnc ? (*scaleFactorMapPtr)[name] : jecUnc["systematic"]) *
+                             (scaleFactorMapPtr == &metUnc ? (*scaleFactorMapPtr)[name] : metUnc["systematic"]);
     }
   }
 
@@ -156,16 +157,50 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
   auto vertex = event->GetCollection(muonVertexCollection.first);
   // category is set to "" if no vertex is found - this is needed to set all SFs names for the first event
   string dimuonCategory = "";
-  if (vertex->size() > 0) dimuonCategory = asNanoDimuonVertex(vertex->at(0), event)->GetVertexCategory();
+  if (vertex->size() > 0) dimuonCategory = "_" + asNanoDimuonVertex(vertex->at(0), event)->GetVertexCategory();
 
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
-  dimuonEffSF = scaleFactorsManager.GetCustomScaleFactorsForCategory("dimuonEff", dimuonCategory);
+
+  // Get empty SFs to initiate all possible variation names for the HistogamHandlers
+  vector<variant<int, double, string>> args_;
+  args_.push_back(5.0);
+  map<string, float> dimuonEffSF_ = scaleFactorsManager.GetDimuonScaleFactors("dimuonEff_Pat", args_);
+  for (auto& [name, weight] : dimuonEffSF_) {
+    dimuonEffSF[name] = 1.0;
+    if (auto pos = name.find("_Pat"); pos != std::string::npos) {
+      string name_ = name;
+      name_.replace(pos, 4, "_PatDSA");
+      dimuonEffSF[name_] = 1.0;
+      name_ = name;
+      name_.replace(pos, 4, "_DSA");
+      dimuonEffSF[name_] = 1.0;
+    }
+  }
+  vector<variant<int, double, string>> args;
+  if (dimuonCategory != "") {
+    auto dimuonVertex = asNanoDimuonVertex(vertex->at(0), event);
+    if (dimuonVertex->IsPatDSADimuon()) {
+      auto genMuonCollection = event->GetCollection("GenPart");
+      string resonanceCategory = dimuonVertex->GetGenMotherResonanceCategory(genMuonCollection, event);
+      float resonance = 0.0;
+      if (resonanceCategory == "FromALP" || resonanceCategory == "Resonant")
+        resonance = 1.0;
+      args.push_back(resonance);
+    }
+
+    args.push_back(dimuonVertex->GetDimuonPt());
+  }
+  dimuonEffSF_ = scaleFactorsManager.GetDimuonScaleFactors("dimuonEff"+dimuonCategory, args);
+  for (auto& [name, weight] : dimuonEffSF_) {
+    dimuonEffSF[name] = weight;
+  }
   return dimuonEffSF;
 }
 
-map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event) {
+tuple<map<string, float>,map<string, float>> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event) {
   
   map<string, float> jec = {{"systematic", 1.0}};
+  map<string, float> met = {{"systematic", 1.0}};
 
   string baseJetCollectionName = "Jet";
   auto baseJetCollection = event->GetCollection(baseJetCollectionName);
@@ -184,7 +219,7 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
     goodJetPtCuts = goodJetsPtCutsIt->second;
   } else {
     error() << "Good jet pt cuts not defined - it is needed for jet energy corrections" << endl;
-    return jec;
+    return make_tuple(jec, met);
   }
   if (goodBJetsPtCutsIt != extraCollectionsDescriptions[goodBJetCollectionName].allCuts.end()) {
     goodBJetPtCuts = goodBJetsPtCutsIt->second;
@@ -207,7 +242,7 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
   pair<float,float> metPtCuts = GetEventCut("MET_pt");
   if (goodJetCuts.second == -1.0 || goodBJetCuts.second == -1.0 || metPtCuts.second == -1.0) {
     warn() << "Failed to get all event cuts for jet energy corrections" << endl;
-    return jec;
+    return make_tuple(jec, met);
   }
   
   map<string,int> nPassingGoodJets;
@@ -247,11 +282,20 @@ map<string, float> TTAlpsEvent::GetJetEnergyCorrections(shared_ptr<Event> event)
     jec[name] = 0.0;
     if (nPassingGoodJets[name] < goodJetCuts.first || nPassingGoodJets[name] > goodJetCuts.second) continue;
     if (nPassingGoodBJets[name] < goodBJetCuts.first || nPassingGoodBJets[name] > goodBJetCuts.second) continue;
-    float newMetPt = nanoEventProcessor->PropagateMET(asNanoEvent(event), totalPxDifference[name], totalPyDifference[name]);
-    if (newMetPt < metPtCuts.first || newMetPt > metPtCuts.second) continue;
     jec[name] = 1.0;
   }
-  return jec;
+  for (auto &[name, pxDifference] : totalPxDifference) {
+    string met_name = name;
+    size_t pos = met_name.find("jec");
+    if (pos != std::string::npos) {
+      met_name.replace(pos, 3, "met"); 
+    }
+    met[met_name] = 0.0;
+    float newMetPt = nanoEventProcessor->PropagateMET(asNanoEvent(event), totalPxDifference[name], totalPyDifference[name]);
+    if (newMetPt < metPtCuts.first || newMetPt > metPtCuts.second) continue;
+    met[met_name] = 1.0;
+  }
+  return make_tuple(jec, met);
 }
 
 pair<float,float> TTAlpsEvent::GetEventCut(string eventVariable) {

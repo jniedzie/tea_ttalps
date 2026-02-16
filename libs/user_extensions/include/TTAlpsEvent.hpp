@@ -32,7 +32,7 @@ class TTAlpsEvent {
 
   std::map<std::string,float> GetDimuonEfficiencyScaleFactors();
 
-  std::map<std::string, float> GetJetEnergyCorrections(std::shared_ptr<Event> event);
+  std::tuple<std::map<std::string, float>,std::map<std::string, float>> GetJetEnergyCorrections(std::shared_ptr<Event> event);
 
   std::pair<float,float> GetEventCut(std::string eventVariable);
 

@@ -5,8 +5,8 @@ from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 from Histogram import Histogram2D
 from HistogramNormalizer import NormalizationType
 
-# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
-years = ["2018",]
+years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
+# years = ["2018",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 luminosity_sum = 0
 year = ""
@@ -18,8 +18,12 @@ for year_ in years:
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR"
-# do_region = "JPsiCR"
+do_region = "SR_ANv2"
+# do_region = "SRDPhiBetweenMuonpTAndLxy"
+# do_region = "SRHitsInFrontOfVertex"
+# do_region = "JPsiCR_ANv2"
+# do_region = "JPsiCR_Sbins_ANv2"
+# do_region = "SSCR"
 
 do_data = False
 do_nonresonant_signal_as_background = False
@@ -31,6 +35,9 @@ if "SR" in do_region:
   signal_collection = "BestPFIsoDimuonVertex"
 elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
+  signal_collection = "BestPFIsoDimuonVertex"
+elif "SS" in do_region:
+  background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 
 if do_nonresonant_signal_as_background:
@@ -55,22 +62,32 @@ exclude_backgrounds_for_years = {
 
 # binning always expressed in bin numbers, not values
 optimal_parameters = {
-    # SRDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
-    # ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    # ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (12, 9), "C"),
-    # ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), # displaced ctaus = 1e0-1e3
 
-    # SRDimuons all years updated November 2025, matching before dimuon selection, collinearity angle < 0.5
-    # with log Chi2 < 2 log DCA - 1.5, corrections applied
-    ("", "SR"): ("", "", (1, 1), ""), # dummy to print rates for combined categories
-    ("_Pat", "SR"): ("logAbsCollinearityAngle", "logLeadingPt", (11, 14), "D"),
-    ("_PatDSA", "SR"): ("logDxyPVTraj1", "logLeadingPt", (13, 9), "C"), 
-    ("_DSA", "SR"): ("logPt", "logInvMass", (15, 15), "C"), 
+    ("", "SR_ANv2"): ("", "", (1, 1), ""), # dummy to print rates for combined categories
+    ("_Pat", "SR_ANv2"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "SR_ANv2"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv2"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
 
-    # JPsiDimuons 2018 updated October 2025, matching before dimuon selection, collinearity angle < 0.5
-    ("_Pat", "JPsiCR"): ("logDxyPVTrajSig1", "logLeadingPt", (11, 18), "C"),
-    ("_PatDSA", "JPsiCR"): ("logDxyPVTraj1", "logLeadingPt", (11, 11), "C"), 
-    ("_DSA", "JPsiCR"): ("logDxyPVTrajSig2", "logOuterDR", (17, 13), "C"),
+    ("_Pat", "SRDPhiBetweenMuonpTAndLxy"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "SRDPhiBetweenMuonpTAndLxy"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SRDPhiBetweenMuonpTAndLxy"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+    
+    ("_Pat", "SRHitsInFrontOfVertex"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "SRHitsInFrontOfVertex"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SRHitsInFrontOfVertex"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "JPsiCR_Sbins_ANv2"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "JPsiCR_Sbins_ANv2"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "JPsiCR_Sbins_ANv2"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SSCR"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "SSCR"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SSCR"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    # ("_Pat", "JPsiCR_ANv2"): ("logAbsCollinearityAngle", "logDisplacedTrackIso04Dimuon2", (17, 12), "B"),
+    ("_Pat", "JPsiCR_ANv2"): ("logAbsCollinearityAngle", "logDisplacedTrackIso03Dimuon2", (16, 14), "B"),
+    ("_PatDSA", "JPsiCR_ANv2"): ("logDxyPVTraj1", "logDca", (21, 13), "A"), 
+    ("_DSA", "JPsiCR_ANv2"): ("logLxySignificance","logAbsCollinearityAngle", (38, 12), "A"),
 }
 if (category, do_region) in optimal_parameters:
   variable_1 = optimal_parameters[(category, do_region)][0]
@@ -142,7 +159,7 @@ signal_colors = {
     ("12", "1e2"): ROOT.kViolet,
 }
 
-signal_label_position = (0.11, 0.12)
+signal_label_position = (0.13, 0.16)
 projections_legend_position = (0.6, 0.6, 0.9, 0.9)
 
 background_color = ROOT.kBlack
@@ -166,7 +183,7 @@ ratio_y_title = " Pred / True   "
 nice_names = {
     "logAbsCollinearityAngle": "log_{10}[|#Delta#Phi_{coll}|]",
     "logLeadingPt": "log_{10} Leading p_{T} [GeV]",
-    "logDxyPVTraj1": "log_{10} d_{xy}^{#mu1}",
+    "logDxyPVTraj1": "log_{10} d_{xy}^{#mu1} [cm]",
     "logInvMass": "log_{10} m_{#mu#mu} [GeV]",
     "logPt": "log_{10} p_{T} [GeV]",
     "absCollinearityAngle": "|#Delta#Phi_{coll}|",
@@ -174,7 +191,10 @@ nice_names = {
     "logDca": "log_{10} DCA [cm]",
     "logDxyPVTrajSig1": "log_{10} d_{xy}^{#mu 1} / #sigma_{dxy}^{#mu 1}",
     "logDxyPVTrajSig2": "log_{10} d_{xy}^{#mu 2} / #sigma_{dxy}^{#mu 2}",
+    "logLxySignificance": "log_{10} L_{xy} / #sigma_{Lxy}",
     "logOuterDR": "log_{10} Outer #Delta R",
+    "logDisplacedTrackIso04Dimuon2": "log_{10} [Iso_{Dipl.Track}^{#mu2}(0.4)]",
+    "logDisplacedTrackIso03Dimuon2": "log_{10} [Iso_{Dipl.Track}^{#mu2}(0.3)]",
 }
 
 # ------------------------------------------
@@ -185,14 +205,40 @@ nice_names = {
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
 skims = {
-    "SR": (
-        "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD"
+    "SR_ANv2": (
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"
     ),
-    "JPsiCR": (
-        ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_ABCD"),
-        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD"),
+    "SRDPhiBetweenMuonpTAndLxy": (
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuonsDPhiBetweenMuonpTAndLxy", "_ABCD_ANv2"
+    ),
+    "SRHitsInFrontOfVertex": (
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuonsHitsInFrontOfVertex", "_ABCD_ANv2"
+    ),
+    "JPsiCR_ANv2": (
+        ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_ABCD_ANv2"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
+    ),
+    "JPsiCR_Sbins_ANv2": (
+        ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_ABCD_ANv2"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
+    ),
+    "SSCR": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SSDimuons", "_ABCD_ANv2"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
     )
 }
+
+if "JPsiCR" in do_region and category == "_PatDSA":
+  skims[do_region] = (
+    ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsPatDSA", "_noMatching_ABCD_ANv2"),
+    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
+  )
+if "JPsiCR" in do_region and category == "_DSA":
+  skims[do_region] = (
+    ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_revertedMatching_ABCD_ANv2"),
+    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
+  )
+  background_collection = "BestDimuonVertex_revertedMatching"
 
 if isinstance(skims[do_region][0], str):
   background_skim = skims[do_region]
@@ -238,8 +284,8 @@ data_paths = {
   "2018": f"collision_data2018/SingleMuon2018_{background_skim[0]}_{background_hist_path}.root",
   "2022preEE": f"collision_data2022preEE/Muon2022_{background_skim[0]}_{background_hist_path}.root",
   "2022postEE": f"collision_data2022postEE/Muon2022_{background_skim[0]}_{background_hist_path}.root",
-  "2023preBPix": f"collision_data2023preBPix/Muon2023_{background_skim[0]}_{background_hist_path}.root",
-  "2023postBPix": f"collision_data2023postBPix/Muon2023_{background_skim[0]}_{background_hist_path}.root",
+  "2023preBPix": f"collision_data2023preBPix/Muon12023_{background_skim[0]}_{background_hist_path}.root",
+  "2023postBPix": f"collision_data2023postBPix/Muon12023_{background_skim[0]}_{background_hist_path}.root",
 }
 
 # signal points for which to run ABCD analysis
@@ -251,8 +297,9 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # PAT-PAT prompt muons
 # ctaus = ["1e-5", "1e0", "1e1"]
 
-# used by ttalps_get_signal_events
+# used by ttalps_get_signal_events, uses theory cross section if set to -1
 signal_cross_section = 0.01
+# signal_cross_section = -1
 
 config_helper = TTAlpsABCDConfigHelper(
     years,
@@ -273,3 +320,5 @@ z_params = {
     "error": ("|True - Pred|/#sqrt{#Delta Pred^{2} + #Delta True^{2}}", 0, 5, False),
     "min_n_events": ("min(A, B, C, D)", 0, 100, True)
 }
+
+grid_line = None

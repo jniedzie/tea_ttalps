@@ -9,15 +9,17 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from Sample import Sample, SampleType
 
-# years = ["2022postEE",]
-years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
+years = ["2018",]
+# years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extrapolate_in_x = False
 extrapolate_in_y = False
 
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs")
+skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_ABCD")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsPatDSA", "_noDimuonEffSFs_noMatching_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_revertedMatching_ABCD", "SR")
 
 hist_path = f"histograms{skim[1]}{skim[2]}" # all SFs 2018
 
@@ -75,42 +77,82 @@ histograms2D = {}
 # - with another config or have one config for multiple corrections
 
 ####################    JPsi CR Dimuon Efficiency SFs  (multiple 1D histograms)  ####################
+# exclude_backgrounds_with_less_than = 0  # entries
+
+# collection = "BestDimuonVertex"
+# # collection = "BestDimuonVertex_revertedMatching"
+# variable = "eta_irr2"
+# # variable = "eta_irr2_logDxySig1gt0p2_logDxySig2gt0p2"
+# # variable = "eta_irr2_logDxySig1gt0p1_logDxySig2gt0p1"
+# # variable = "eta_irr2_logDxySig1gt0_logDxySig2gt0"
+# # variable = "eta_irr2_logDxySig1gt-0p1_logDxySig2gt-0p1"
+# # variable = "eta_irr2_logDxySig1lt0p1_logDxySig2lt0p1"
+
+# # output_name = f"../data/dimuonEffSFs{year_string}_{variable}_v3_revertedMatching.json"
+# # output_name = f"../data/dimuonEffSFs{year_string}_{variable}_v3_noMatching.json"
+# output_name = f"../data/dimuonEffSFs{year_string}_{variable}_v3.json"
+
+# # for category in ("Pat", "PatDSA", "DSA"):
+# for category in ("Pat",):
+#     hist_name = f"{collection}_{category}_{variable}"
+#     print(f"{hist_name=}")
+#     # hist_name = f"Event_n{collection}_{category}"
+#     histograms1D[category] = Histogram(
+#         name=hist_name,
+#         title=hist_name,
+#         norm_type=NormalizationType.to_lumi,
+#     )
+
+# # CorrectioWriter input
+# correction_name =  "dimuonEff"
+# correction_description = "Scale factors for dimuon efficiency given from J/Psi invariant mass distribution"
+# correction_version = 1
+# correction_inputs = [
+#     {"name": "dimuon_category", "type": "string", "description": "Dimuon categories Pat, PatDSA or DSA"},
+#     {"name": "scale_factors", "type": "string", "description": "Choose nominal scale factor or one of the uncertainties"}
+# ]
+# correction_output = {"name": "weight", "type": "real", "description": "Output scale factor (nominal) or uncertainty"}
+# correction_edges = [
+#     # ["Pat", "PatDSA", "DSA"],
+#     ["Pat",],
+#     ["nominal", "up", "down"]
+# ]
+# correction_flow = "error"
+
+####################    tt+1DSA Muon Efficiency SFs (one 1D histogram)  ####################
 exclude_backgrounds_with_less_than = 0  # entries
-# exclude_backgrounds_with_less_than = 3  # entries
-# if year == "2022postEE":
-#     exclude_backgrounds_with_less_than = 4
 
 collection = "BestDimuonVertex"
-variable = "invMassJPsiBin"
-output_name = f"../data/dimuonEffSFs{year_string}_{variable}_v3.json"
+# collection = "BestDimuonVertex_revertedMatching"
+variable_bins = []
+variable = "Pat_pt_irr"
+hist_name = f"{collection}_{variable}"
+histogram1D = Histogram(
+    name=hist_name,
+    title=hist_name,
+    norm_type=NormalizationType.to_lumi,
+)
 
-for category in ("Pat", "PatDSA", "DSA"):
-# for category in ("DSA",):
-    hist_name = f"{collection}_{category}_{variable}"
-    # hist_name = f"Event_n{collection}_{category}"
-    histograms1D[category] = Histogram(
-        name=hist_name,
-        title=hist_name,
-        norm_type=NormalizationType.to_lumi,
-    )
+output_name = f"../data/dimuonEffSFs_ANv2/dimuonEffSFs{year_string}_{variable}_v3.json"
+
+edge = "inf"
 
 # CorrectioWriter input
-correction_name =  "dimuonEff"
-correction_description = "Scale factors for dimuon efficiency given from J/Psi invariant mass distribution"
+correction_name =  "dimuonEff_Pat_pt"
+correction_description = "Scale factors for PAT-PAT dimuon efficiency given from ttbar + J/Psi CR dimuon pt distribution"
 correction_version = 1
 correction_inputs = [
-    {"name": "dimuon_category", "type": "string", "description": "Dimuon categories Pat, PatDSA or DSA"},
+    {"name": variable, "type": "real", "description": "Dimuon pt of the PAT-PAT dimuon candidate"},
     {"name": "scale_factors", "type": "string", "description": "Choose nominal scale factor or one of the uncertainties"}
 ]
 correction_output = {"name": "weight", "type": "real", "description": "Output scale factor (nominal) or uncertainty"}
 correction_edges = [
-    ["Pat", "PatDSA", "DSA"],
+    variable_bins,
     ["nominal", "up", "down"]
 ]
 correction_flow = "error"
 
-####################    tt+1DSA Muon Efficiency SFs (one 1D histogram)  ####################
-# output_name = f"../data/DSAEffSFs{year}_ttbarLike1DSA_segmentMatchedDSA_pt.json"
+####################    JPsi CR Dimuon Efficiency SFs (one 2D histogram)   ####################
 # exclude_backgrounds_with_less_than = 0  # entries
 
 # collection = "LooseDSAMuonsSegmentMatch"
@@ -168,6 +210,9 @@ correction_flow = "error"
 #     x_rebin = 1,
 #     y_rebin = 1,
 # )
+
+# outer_edge = 120.0 
+# inner_edge = 3.0
 
 # # CorrectioWriter input
 # correction_name =  "DSAEff"
