@@ -1,3 +1,6 @@
 [submodule "tea"]
 	path = tea
 	url = git@github.com:jniedzie/tea.git
+[submodule "datacards"]
+	path = datacards
+	url = ssh://git@gitlab.cern.ch:7999/cms-analysis/exo/EXO-25-022/datacards.git

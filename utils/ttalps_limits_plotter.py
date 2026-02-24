@@ -6,8 +6,8 @@ from TTAlpsLimitsPlotterHelper import TTAlpsLimitsPlotterHelper, BrazilGraph, Si
 from ttalps_cross_sections import get_theory_cross_section
 from ttalps_luminosities import get_luminosity
 
-# years = ["2023postBPix",]
-years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
+years = ["2018",]
+# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
 
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 # cross_sections = get_cross_sections(year)
@@ -23,21 +23,24 @@ for year_ in years:
   year_str += year_
 
 # extra_str = ""
-extra_str = "_SR"
+extra_str = "_SR_ANv2"
+# extra_str = "_SRDPhiBetweenMuonpTAndLxy"
+# extra_str = "_SRHitsInFrontOfVertex"
 
 # PAT-PAT
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
 
 # PAT-DSA
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logLeadingPt_PatDSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logAbsCollinearityAngle_PatDSA_ABCDpred.txt"
 
 # DSA-DSA
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logPt_vs_logInvMass_DSA_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_DSA_ABCDpred.txt"
 
 # Combined
-input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_DSA.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_Pat.txt"
+input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined.txt"
 
-output_path = f"../limits/limits_{year_str}/plots{extra_str}_test/"
+output_path = f"../limits/limits_{year_str}/plots{extra_str}/"
 
 if not os.path.exists(output_path):
   os.makedirs(output_path)
@@ -71,10 +74,10 @@ if variable == "mass":
   x_max = 60.0
 
   y_min = 1e-2
-  y_max = 1e6
+  y_max = 1e8
   if len(years) > 1:
     y_min = 1e-4
-    y_max = 1e5
+    y_max = 1e8
 
   x_title = "m_{a} [GeV]"
   scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
@@ -113,10 +116,10 @@ if variable == "2d":
   y_max = 3
 
   z_min = -2.2
-  z_max = 2
+  z_max = 4.2
   if len(years) > 1:
-    z_min = -3.4
-    z_max = 1.6
+    z_min = -2.4
+    z_max = 4.2
 
   x_title = "log_{10}(m_{a} [GeV])"
   y_title = "log_{10}(c#tau_{a} [mm])"
@@ -304,7 +307,7 @@ def draw_custom_z_log_labels():
   ROOT.gPad.Update()
 
 def draw_legend(graphs):
-  legend = ROOT.TLegend(0.60, 0.60, 0.9, 0.75)
+  legend = ROOT.TLegend(0.53, 0.60, 0.8, 0.75)
   legend.SetBorderSize(0)
   legend.SetFillStyle(0)
   legend.SetTextFont(42)
@@ -340,7 +343,7 @@ def draw_brazil_plots():
       scale = helper.get_scale(mass, ctau)
       graph.set_point(i, x_value, r_value, scale)
 
-      sigma_0p1 = get_theory_cross_section(mass)
+      sigma_0p1 = get_theory_cross_section(mass, "2018")
 
       for coupling in theory_points.keys():
         sigma = sigma_0p1 * (coupling/0.1)**2
@@ -348,7 +351,7 @@ def draw_brazil_plots():
         theory_points[coupling].append((mass, sigma))
 
     for i, (coupling, points) in enumerate(theory_points.items()):
-      theory_graphs[coupling] = SimpleGraph(points, f"Theory, g_{{#Psi}} = {coupling}", colors[i])
+      theory_graphs[coupling] = SimpleGraph(points, f"Theory 13 TeV, g_{{#Psi}} = {coupling}", colors[i])
 
     canvas = ROOT.TCanvas(f"canvas_{scan_point}", "", 800, 600)
     canvas.cd()
@@ -368,7 +371,7 @@ def draw_brazil_plots():
         legend_params.append(theory_graph.get_graph())
 
     helper.draw_cms_label()
-    helper.draw_lumi_label(luminosity_run2, luminosity_run3)
+    helper.draw_lumi_label(luminosity_run2, luminosity_run3, variable)
     helper.draw_signal_label(variable, scan_point)
 
     graph.draw_legend()
@@ -433,6 +436,7 @@ def draw_2d_plot():
   ROOT.gPad.SetRightMargin(0.15)
 
   helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis)
+  helper.draw_missing_points()
 
   mask_resonances_2d(resonances_ranges)
 

@@ -32,12 +32,14 @@ runDefaultHistograms = True
 runLLPTriggerHistograms = False
 runPileupHistograms = False
 
-# LLPNanoAODHistograms:
+# runLooseMuonsHistograms:
 #  - muonMatchingParams loose muons
 #  - muonMatchingParams loose muon vertex
-#  - extra muon vertex collections
+runLooseMuonsHistograms = False
+# runDimuonVertexCollectionHistograms:
+#  - Best Dimuon Vertex collections
 #  - tracker maps
-runLLPNanoAODHistograms = True
+runDimuonVertexCollectionHistograms = True
 
 # Histograms for Muon Trigger Objects
 runMuonTriggerObjectsHistograms = False
@@ -74,8 +76,8 @@ runNminus1Histograms = False
 # Revert matching such that we use DSA matched that have been matched to PAT muons
 runRevertedMatching = False
 
-# Run without applying any events weights - for producing efficiency plots with correct uncertainties
-noWeights = False
+# Applying extra dimuon cuts (resonance_cuts) for to change fraction of resonances
+runExtraDimuonCuts = False
 
 weightsBranchName = "genWeight"
 rhoBranchName = "fixedGridRhoFastjetAll"  # for jec unc.
@@ -109,16 +111,13 @@ muonMatchingParams = {
 
 muonVertexBaselineSelection = [
     "InvariantMassCut",
+    "DeltaRCut",
     "ChargeCut",
-    # "HitsInFrontOfVertexCut",
-    # "DPhiBetweenMuonpTAndLxyCut",
     "DCACut",
     "CollinearityAngleCut",
     "Chi2Cut",
     "Chi2DCACut",
-    # "Cos3DAngleCut",
 ]
-
 
 # dimuonSelection and muonVertexCollection:
 #  - uncomment the dimuonSelection you want to use and the muonVertexCollection will be given automatically
@@ -131,8 +130,12 @@ if dimuonSelection == "":
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonsNoChi2": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "SRDimuonsNoPATIso": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "SRDimuonsDPhiBetweenMuonpTAndLxy": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["DPhiBetweenMuonpTAndLxyCut", "PFRelIsolationCut", "BestDimuonVertex"]),
+    "SRDimuonsHitsInFrontOfVertex": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["HitsInFrontOfVertexCut", "PFRelIsolationCut", "BestDimuonVertex"]),
     "JPsiDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
-    "ZDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
+    "JPsiDimuonsPatDSA": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertexPatDSA"]),
+    "SSDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
 }
 muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None
 # input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
@@ -148,15 +151,19 @@ histParams2D = ()
 irregularHistParams = ()
 irregularHistParams2D = ()
 
+if runSingleMuonABCDHistograms:
+  runLooseMuonsHistograms = True  # to define the loose muon collection
+
 helper = TTAlpsHistogrammerConfigHelper(
-    muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput, runRevertedMatching)
+    muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput, 
+    runRevertedMatching, runLooseMuonsHistograms, runExtraDimuonCuts)
 
 defaultHistParams = helper.get_default_params()
 histParams += helper.get_basic_params()
 
-if runLLPNanoAODHistograms:
+if runLooseMuonsHistograms or runDimuonVertexCollectionHistograms:
   histParams += helper.get_llp_params()
-  irregularHistParams += helper.get_llp_irregular_params()
+  irregularHistParams += helper.get_llp_irregular_params(runRevertedMatching, runGenLevelResonancesABCD, runFakesHistograms)
   histParams2D += helper.get_llp_2d_params()
 
 if runNminus1Histograms:
@@ -164,7 +171,7 @@ if runNminus1Histograms:
   histParams2D += helper.get_nminus1_params2D()
 
 if runGenMuonVertexCollectionHistograms:
-  histParams += helper.get_gen_vertex_params()
+  histParams += helper.get_gen_vertex_params(runRevertedMatching)
 if runGenMuonHistograms:
   histParams += helper.get_gen_params()
   histParams += helper.get_gen_matched_params()
@@ -179,7 +186,8 @@ if runMuonMatchingHistograms:
 
 if runABCDHistograms:
   histParams += helper.get_abcd_1Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD)
-  histParams2D += helper.get_abcd_2Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD)
+  histParams2D += helper.get_abcd_2Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching)
+  irregularHistParams2D += helper.get_abcd_irregular_2Dparams(runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching)
 
 if runSingleMuonABCDHistograms:
   histParams2D += helper.get_singleMuon_abcd_2Dparams()
@@ -196,5 +204,5 @@ if runMuonTriggerObjectsHistograms:
   histParams += helper.get_muon_trigger_objects_params()
 
 SFvariationVariables = helper.get_SF_variation_variables()
-if runGenLevelResonancesABCD or runABCDMothersHistograms or runNminus1Histograms or runRevertedMatching:
+if runNminus1Histograms or runRevertedMatching:
   SFvariationVariables = [] # to run histogrammer faster and take up less dust space

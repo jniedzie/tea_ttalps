@@ -121,6 +121,9 @@ nuisances = {
     "muonIDTight_systdown": "variation",
     "muonIDTight_systup": "variation",
 
+    "muonIsoTight_systup": "variation",
+    "muonIsoTight_systdown": "variation",
+
     "muonTrigger_systdown": "variation",
     "muonTrigger_systup": "variation",
 
@@ -132,7 +135,7 @@ nuisances = {
     "lumi": {
         "signal": lumi_uncertainty,
         "bkg": lumi_uncertainty,
-    }
+    },
 
     "jecMC_Regrouped_Absolute_down": "variation",
     "jecMC_Regrouped_Absolute_up": "variation",
@@ -156,15 +159,44 @@ nuisances = {
     "jecMC_Regrouped_RelativeBal_up": "variation",
     f"jecMC_Regrouped_RelativeSample_{jec_year}_down": "variation",
     f"jecMC_Regrouped_RelativeSample_{jec_year}_up": "variation",
+
+    "metMC_Regrouped_Absolute_down": "variation",
+    "metMC_Regrouped_Absolute_up": "variation",
+    f"metMC_Regrouped_Absolute_{jec_year}_down": "variation",
+    f"metMC_Regrouped_Absolute_{jec_year}_up": "variation",
+    "metMC_Regrouped_FlavorQCD_down": "variation",
+    "metMC_Regrouped_FlavorQCD_up": "variation",
+    "metMC_Regrouped_BBEC1_down": "variation",
+    "metMC_Regrouped_BBEC1_up": "variation",
+    f"metMC_Regrouped_BBEC1_{jec_year}_down": "variation",
+    f"metMC_Regrouped_BBEC1_{jec_year}_up": "variation",
+    "metMC_Regrouped_EC2_down": "variation",
+    "metMC_Regrouped_EC2_up": "variation",
+    f"metMC_Regrouped_EC2_{jec_year}_down": "variation",
+    f"metMC_Regrouped_EC2_{jec_year}_up": "variation",
+    "metMC_Regrouped_HF_down": "variation",
+    "metMC_Regrouped_HF_up": "variation",
+    f"metMC_Regrouped_HF_{jec_year}_down": "variation",
+    f"metMC_Regrouped_HF_{jec_year}_up": "variation",
+    "metMC_Regrouped_RelativeBal_down": "variation",
+    "metMC_Regrouped_RelativeBal_up": "variation",
+    f"metMC_Regrouped_RelativeSample_{jec_year}_down": "variation",
+    f"metMC_Regrouped_RelativeSample_{jec_year}_up": "variation",
 }
 
 if not "noDimuonEff" in hist_path:
-  nuisances["dimuonEff_down"] = "variation"
-  nuisances["dimuonEff_up"] = "variation"
+  nuisances["dimuonEff_Patdown"] = "variation"
+  nuisances["dimuonEff_Patup"] = "variation"
+  nuisances["dimuonEff_PatDSAdown"] = "variation"
+  nuisances["dimuonEff_PatDSAup"] = "variation"
+  nuisances["dimuonEff_DSAdown"] = "variation"
+  nuisances["dimuonEff_DSAup"] = "variation"
 
 if abcd_config.category != "_DSA":
   nuisances["muonIDLoose_systdown"] = "variation"
   nuisances["muonIDLoose_systup"] = "variation"
+  nuisances["muonIsoLoose_systdown"] = "variation"
+  nuisances["muonIsoLoose_systup"] = "variation"
 
 if abcd_config.category != "_Pat":
   nuisances["dsamuonID_down_syst"] = "variation"
