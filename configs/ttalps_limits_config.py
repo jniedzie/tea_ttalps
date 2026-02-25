@@ -111,104 +111,117 @@ jec_years = {
 }
 jec_year = jec_years[year]
 
+lumi_years = {
+  "2016preVFP": "2016",
+  "2016postVFP": "2016",
+  "2017": "2017",
+  "2018": "2018",
+  "2022preEE": "13p6TeV_2022",
+  "2022postEE": "13p6TeV_2022",
+  "2023preBPix": "13p6TeV_2023",
+  "2023postBPix": "13p6TeV_2023",
+}
+lumi_year = lumi_years[year]
+
 # List nuisance parameters (they will only be added for processes for which they were listed)
 nuisances = {
-    "bTaggingMedium_down_correlated": "variation",
-    "bTaggingMedium_down_uncorrelated": "variation",
-    "bTaggingMedium_up_correlated": "variation",
-    "bTaggingMedium_up_uncorrelated": "variation",
+    "bTaggingMedium_down_correlated": ("variation", "CMS_btag"),
+    "bTaggingMedium_down_uncorrelated": ("variation", f"CMS_eff_b_{year}"),
+    "bTaggingMedium_up_correlated": ("variation", "CMS_btag"),
+    "bTaggingMedium_up_uncorrelated": ("variation", f"CMS_eff_b_{year}"),
 
-    "muonIDTight_systdown": "variation",
-    "muonIDTight_systup": "variation",
+    "muonIDTight_systdown": ("variation", "CMS_eff_m_id_syst_tight"),
+    "muonIDTight_systup": ("variation", "CMS_eff_m_id_syst_tight"),
 
-    "muonIsoTight_systup": "variation",
-    "muonIsoTight_systdown": "variation",
+    "muonIsoTight_systup": ("variation", "CMS_eff_m_iso_syst_tight"),
+    "muonIsoTight_systdown": ("variation", "CMS_eff_m_iso_syst_tight"),
+    "muonTrigger_systdown": ("variation", "CMS_eff_m_trigger_syst"),
+    "muonTrigger_systup": ("variation", "CMS_eff_m_trigger_syst"),
 
-    "muonTrigger_systdown": "variation",
-    "muonTrigger_systup": "variation",
+    "pileup_up": ("variation", "CMS_pileup"),
+    "pileup_down": ("variation", "CMS_pileup"),
 
-    "pileup_up": "variation",
-    "pileup_down": "variation",
-
-    # "abcd_nonClosure": "closure",
-    "abcd_unc": "abcd",
-    "lumi": {
-        "signal": lumi_uncertainty,
-        "bkg": lumi_uncertainty,
+    "abcd_unc": ("abcd", "CMS_EXO25022_abcd"),
+    f"lumi_{lumi_year}": {
+        "signal": [lumi_uncertainty, f"lumi_{lumi_year}"],
+        "bkg": [lumi_uncertainty, f"lumi_background_{lumi_year}"],
     },
 
-    "jecMC_Regrouped_Absolute_down": "variation",
-    "jecMC_Regrouped_Absolute_up": "variation",
-    f"jecMC_Regrouped_Absolute_{jec_year}_down": "variation",
-    f"jecMC_Regrouped_Absolute_{jec_year}_up": "variation",
-    "jecMC_Regrouped_FlavorQCD_down": "variation",
-    "jecMC_Regrouped_FlavorQCD_up": "variation",
-    "jecMC_Regrouped_BBEC1_down": "variation",
-    "jecMC_Regrouped_BBEC1_up": "variation",
-    f"jecMC_Regrouped_BBEC1_{jec_year}_down": "variation",
-    f"jecMC_Regrouped_BBEC1_{jec_year}_up": "variation",
-    "jecMC_Regrouped_EC2_down": "variation",
-    "jecMC_Regrouped_EC2_up": "variation",
-    f"jecMC_Regrouped_EC2_{jec_year}_down": "variation",
-    f"jecMC_Regrouped_EC2_{jec_year}_up": "variation",
-    "jecMC_Regrouped_HF_down": "variation",
-    "jecMC_Regrouped_HF_up": "variation",
-    f"jecMC_Regrouped_HF_{jec_year}_down": "variation",
-    f"jecMC_Regrouped_HF_{jec_year}_up": "variation",
-    "jecMC_Regrouped_RelativeBal_down": "variation",
-    "jecMC_Regrouped_RelativeBal_up": "variation",
-    f"jecMC_Regrouped_RelativeSample_{jec_year}_down": "variation",
-    f"jecMC_Regrouped_RelativeSample_{jec_year}_up": "variation",
+    "jecMC_Regrouped_Absolute_down": ("variation", "CMS_scale_j_Absolute"),
+    "jecMC_Regrouped_Absolute_up": ("variation", "CMS_scale_j_Absolute"),
+    f"jecMC_Regrouped_Absolute_{jec_year}_down": ("variation", f"CMS_scale_j_Absolute_{jec_year}"),
+    f"jecMC_Regrouped_Absolute_{jec_year}_up": ("variation", f"CMS_scale_j_Absolute_{jec_year}"),
+    "jecMC_Regrouped_FlavorQCD_down": ("variation", "CMS_scale_j_FlavorQCD"),
+    "jecMC_Regrouped_FlavorQCD_up": ("variation", "CMS_scale_j_FlavorQCD"),
+    "jecMC_Regrouped_BBEC1_down": ("variation", "CMS_scale_j_BBEC1"),
+    "jecMC_Regrouped_BBEC1_up": ("variation", "CMS_scale_j_BBEC1"),
+    f"jecMC_Regrouped_BBEC1_{jec_year}_down": ("variation", f"CMS_scale_j_BBEC1_{jec_year}"),
+    f"jecMC_Regrouped_BBEC1_{jec_year}_up": ("variation", f"CMS_scale_j_BBEC1_{jec_year}"),
+    "jecMC_Regrouped_EC2_down": ("variation", "CMS_scale_j_EC2"),
+    "jecMC_Regrouped_EC2_up": ("variation", "CMS_scale_j_EC2"),
+    f"jecMC_Regrouped_EC2_{jec_year}_down": ("variation", f"CMS_scale_j_EC2_{jec_year}"),
+    f"jecMC_Regrouped_EC2_{jec_year}_up": ("variation", f"CMS_scale_j_EC2_{jec_year}"),
+    "jecMC_Regrouped_HF_down": ("variation", "CMS_scale_j_HF"),
+    "jecMC_Regrouped_HF_up": ("variation", "CMS_scale_j_HF"),
+    f"jecMC_Regrouped_HF_{jec_year}_down": ("variation", f"CMS_scale_j_HF_{jec_year}"),
+    f"jecMC_Regrouped_HF_{jec_year}_up": ("variation", f"CMS_scale_j_HF_{jec_year}"),
+    "jecMC_Regrouped_RelativeBal_down": ("variation", "CMS_scale_j_RelativeBal"),
+    "jecMC_Regrouped_RelativeBal_up": ("variation", "CMS_scale_j_RelativeBal"),
+    f"jecMC_Regrouped_RelativeSample_{jec_year}_down": ("variation", f"CMS_scale_j_RelativeSample_{jec_year}"),
+    f"jecMC_Regrouped_RelativeSample_{jec_year}_up": ("variation", f"CMS_scale_j_RelativeSample_{jec_year}"),
 
-    "metMC_Regrouped_Absolute_down": "variation",
-    "metMC_Regrouped_Absolute_up": "variation",
-    f"metMC_Regrouped_Absolute_{jec_year}_down": "variation",
-    f"metMC_Regrouped_Absolute_{jec_year}_up": "variation",
-    "metMC_Regrouped_FlavorQCD_down": "variation",
-    "metMC_Regrouped_FlavorQCD_up": "variation",
-    "metMC_Regrouped_BBEC1_down": "variation",
-    "metMC_Regrouped_BBEC1_up": "variation",
-    f"metMC_Regrouped_BBEC1_{jec_year}_down": "variation",
-    f"metMC_Regrouped_BBEC1_{jec_year}_up": "variation",
-    "metMC_Regrouped_EC2_down": "variation",
-    "metMC_Regrouped_EC2_up": "variation",
-    f"metMC_Regrouped_EC2_{jec_year}_down": "variation",
-    f"metMC_Regrouped_EC2_{jec_year}_up": "variation",
-    "metMC_Regrouped_HF_down": "variation",
-    "metMC_Regrouped_HF_up": "variation",
-    f"metMC_Regrouped_HF_{jec_year}_down": "variation",
-    f"metMC_Regrouped_HF_{jec_year}_up": "variation",
-    "metMC_Regrouped_RelativeBal_down": "variation",
-    "metMC_Regrouped_RelativeBal_up": "variation",
-    f"metMC_Regrouped_RelativeSample_{jec_year}_down": "variation",
-    f"metMC_Regrouped_RelativeSample_{jec_year}_up": "variation",
+    "metMC_Regrouped_Absolute_down": ("variation", "CMS_scale_met_Absolute"),
+    "metMC_Regrouped_Absolute_up": ("variation", "CMS_scale_met_Absolute"),
+    f"metMC_Regrouped_Absolute_{jec_year}_down": ("variation", f"CMS_scale_met_Absolute_{jec_year}"),
+    f"metMC_Regrouped_Absolute_{jec_year}_up": ("variation", f"CMS_scale_met_Absolute_{jec_year}"),
+    "metMC_Regrouped_FlavorQCD_down": ("variation", "CMS_scale_met_FlavorQCD"),
+    "metMC_Regrouped_FlavorQCD_up": ("variation", "CMS_scale_met_FlavorQCD"),
+    "metMC_Regrouped_BBEC1_down": ("variation", "CMS_scale_met_BBEC1"),
+    "metMC_Regrouped_BBEC1_up": ("variation", "CMS_scale_met_BBEC1"),
+    f"metMC_Regrouped_BBEC1_{jec_year}_down": ("variation", f"CMS_scale_met_BBEC1_{jec_year}"),
+    f"metMC_Regrouped_BBEC1_{jec_year}_up": ("variation", f"CMS_scale_met_BBEC1_{jec_year}"),
+    "metMC_Regrouped_EC2_down": ("variation", "CMS_scale_met_EC2"),
+    "metMC_Regrouped_EC2_up": ("variation", "CMS_scale_met_EC2"),
+    f"metMC_Regrouped_EC2_{jec_year}_down": ("variation", f"CMS_scale_met_EC2_{jec_year}"),
+    f"metMC_Regrouped_EC2_{jec_year}_up": ("variation", f"CMS_scale_met_EC2_{jec_year}"),
+    "metMC_Regrouped_HF_down": ("variation", "CMS_scale_met_HF"),
+    "metMC_Regrouped_HF_up": ("variation", "CMS_scale_met_HF"),
+    f"metMC_Regrouped_HF_{jec_year}_down": ("variation", f"CMS_scale_met_HF_{jec_year}"),
+    f"metMC_Regrouped_HF_{jec_year}_up": ("variation", f"CMS_scale_met_HF_{jec_year}"),
+    "metMC_Regrouped_RelativeBal_down": ("variation", "CMS_scale_met_RelativeBal"),
+    "metMC_Regrouped_RelativeBal_up": ("variation", "CMS_scale_met_RelativeBal"),
+    f"metMC_Regrouped_RelativeSample_{jec_year}_down": ("variation", f"CMS_scale_met_RelativeSample_{jec_year}"),
+    f"metMC_Regrouped_RelativeSample_{jec_year}_up": ("variation", f"CMS_scale_met_RelativeSample_{jec_year}"),
 }
 
 if not "noDimuonEff" in hist_path:
-  nuisances["dimuonEff_Patdown"] = "variation"
-  nuisances["dimuonEff_Patup"] = "variation"
-  nuisances["dimuonEff_PatDSAdown"] = "variation"
-  nuisances["dimuonEff_PatDSAup"] = "variation"
-  nuisances["dimuonEff_DSAdown"] = "variation"
-  nuisances["dimuonEff_DSAup"] = "variation"
+  nuisances["dimuonEff_Patdown"] = ("variation", "CMS_EXO25022_dimuonSFs_Pat")
+  nuisances["dimuonEff_Patup"] = ("variation", "CMS_EXO25022_dimuonSFs_Pat")
+  nuisances["dimuonEff_PatDSAdown"] = ("variation", "CMS_EXO25022_dimuonSFs_PatDSA")
+  nuisances["dimuonEff_PatDSAup"] = ("variation", "CMS_EXO25022_dimuonSFs_PatDSA")
+  nuisances["dimuonEff_DSAdown"] = ("variation", "CMS_EXO25022_dimuonSFs_DSA")
+  nuisances["dimuonEff_DSAup"] = ("variation", "CMS_EXO25022_dimuonSFs_DSA")
 
 if abcd_config.category != "_DSA":
-  nuisances["muonIDLoose_systdown"] = "variation"
-  nuisances["muonIDLoose_systup"] = "variation"
-  nuisances["muonIsoLoose_systdown"] = "variation"
-  nuisances["muonIsoLoose_systup"] = "variation"
+  nuisances["muonIDLoose_systdown"] = ("variation", "CMS_eff_m_id_syst_loose")
+  nuisances["muonIDLoose_systup"] = ("variation", "CMS_eff_m_id_syst_loose")
+  nuisances["muonIsoLoose_systdown"] = ("variation", "CMS_eff_m_iso_syst_loose")
+  nuisances["muonIsoLoose_systup"] = ("variation", "CMS_eff_m_iso_syst_loose")
 
 if abcd_config.category != "_Pat":
-  nuisances["dsamuonID_down_syst"] = "variation"
-  nuisances["dsamuonID_up_syst"] = "variation"
-  nuisances["dsamuonReco_cosmic_down"] = "variation"
-  nuisances["dsamuonReco_cosmic_up"] = "variation"
+  nuisances["dsamuonID_down_syst"] = ("variation", "CMS_eff_m_id_syst_dsa")
+  nuisances["dsamuonID_up_syst"] = ("variation", "CMS_eff_m_id_syst_dsa")
+  nuisances["dsamuonReco_cosmic_down"] = ("variation", "CMS_eff_m_reco_syst_dsa")
+  nuisances["dsamuonReco_cosmic_up"] = ("variation", "CMS_eff_m_reco_syst_dsa")
 
 # muon reco and PU jet ID only available for run 2 as of now
 if "2016" in year_str or "2017" in year_str or "2018" in year_str:
-  nuisances["muonReco_systdown"] = "variation"
-  nuisances["muonReco_systup"] = "variation"
-  nuisances["PUjetIDtight_down"] = "variation"
-  nuisances["PUjetIDtight_up"] = "variation"
-  nuisances["L1PreFiringWeight_Dn"] = "variation"
-  nuisances["L1PreFiringWeight_Up"] = "variation"
+  nuisances["muonReco_systdown"] = ("variation", "CMS_eff_m_reco_syst")
+  nuisances["muonReco_systup"] = ("variation", "CMS_eff_m_reco_syst")
+  nuisances["PUjetIDtight_down"] = ("variation", f"CMS_eff_j_PUJetID_eff_{year}")
+  nuisances["PUjetIDtight_up"] = ("variation", f"CMS_eff_j_PUJetID_eff_{year}")
+  nuisances["L1PreFiringWeight_Dn"] = ("variation", "CMS_l1_muon_prefiring")
+  nuisances["L1PreFiringWeight_Up"] = ("variation", "CMS_l1_muon_prefiring")
+
+# variations where we take the maximum of up/down variation as symmetrized uncertainty
+symmetric_variations = ["CMS_scale_j", "CMS_scale_met"]

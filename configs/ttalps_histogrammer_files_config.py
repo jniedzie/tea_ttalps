@@ -63,6 +63,7 @@ applyScaleFactors = {
     "dimuonEff_PatDSA": (True, True),
     "dimuonEff_DSA": (True, True),
     "jec": (False, True),
+    "jer": (True, True),
     "L1PreFiringWeight": (True, True),
 }
 
