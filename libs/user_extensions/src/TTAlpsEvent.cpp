@@ -37,6 +37,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
 
   // NOTE: nanoEventProcessor change "" to "custom" to do cutsom PU SF for 2018
   map<string, float> pileupSF = nanoEventProcessor->GetPileupScaleFactor(nanoEvent, "");
+
   map<string, float> muonTriggerSF = nanoEventProcessor->GetMuonTriggerScaleFactors(nanoEvent, "muonTrigger");
   map<string, float> L1PreFiringWeight = nanoEventProcessor->GetL1PreFiringWeight(nanoEvent, "L1PreFiringWeight");
 
@@ -54,19 +55,26 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   map<string, float> btagSF = nanoEventProcessor->GetMediumBTaggingScaleFactors(leadingBJets);
   auto muons = GetEventMuons();
   map<string, float> muonSF = nanoEventProcessor->GetMuonScaleFactors(muons);
-
+  
   map<string, float> DSAEffSF = nanoEventProcessor->GetDSAMuonEfficiencyScaleFactors(muons);
 
-  auto [jecUnc, metUnc] = GetJetMETEnergyScaleUncertainties(event);
+  pair<float,float> goodJetCuts = GetEventCut("nGoodJets");
+  pair<float,float> goodBJetCuts = GetEventCut("nGoodMediumBtaggedJets");
+  pair<float,float> metPtCuts = GetEventCut("MET_pt");
+  auto [jecUnc, metJecUnc] = nanoEventProcessor->GetJetMETEnergyScaleUncertainties(nanoEvent, "Jet", "GoodJets", "GoodMediumBtaggedJets", goodJetCuts, goodBJetCuts, metPtCuts);
+
+  nanoEventProcessor->ApplyJetEnergyResolution(nanoEvent);
+  auto [jerUnc, metJerUnc] = nanoEventProcessor->GetJetMETEnergyResolutionUncertainties(nanoEvent, "Jet", "GoodJets", "GoodMediumBtaggedJets", goodJetCuts, goodBJetCuts, metPtCuts);
 
   map<string,float> dimuonEffSF = GetDimuonEfficiencyScaleFactors();
 
   map<string, float> scaleFactorMap;
   scaleFactorMap["default"] = genWeight * pileupSF["systematic"] * muonTriggerSF["systematic"] * L1PreFiringWeight["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
                               muonSF["systematic"] * dimuonEffSF["systematic"] * DSAEffSF["systematic"] ;
-  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &L1PreFiringWeight, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc, &metUnc};
+  vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &L1PreFiringWeight, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc, &jerUnc, &metJecUnc, &metJerUnc};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
+    CheckUpDownVariations(*scaleFactorMapPtr);
     for (auto &[name, weight] : *scaleFactorMapPtr) {
       if (name == "systematic") continue;
 
@@ -80,12 +88,119 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
                              (scaleFactorMapPtr == &dimuonEffSF ? (*scaleFactorMapPtr)[name] : dimuonEffSF["systematic"]) *
                              (scaleFactorMapPtr == &DSAEffSF ? (*scaleFactorMapPtr)[name] : DSAEffSF["systematic"]) *
                              (scaleFactorMapPtr == &jecUnc ? (*scaleFactorMapPtr)[name] : jecUnc["systematic"]) *
-                             (scaleFactorMapPtr == &metUnc ? (*scaleFactorMapPtr)[name] : metUnc["systematic"]);
+                             (scaleFactorMapPtr == &jerUnc ? (*scaleFactorMapPtr)[name] : jerUnc["systematic"]) *
+                             (scaleFactorMapPtr == &metJecUnc ? (*scaleFactorMapPtr)[name] : metJecUnc["systematic"]) *
+                             (scaleFactorMapPtr == &metJerUnc ? (*scaleFactorMapPtr)[name] : metJerUnc["systematic"]);
+    }
+  }
+  
+  return scaleFactorMap;
+}
+
+
+void TTAlpsEvent::CheckUpDownVariations(map<string, float>& scaleFactorMap) {
+  float systematicWeight = scaleFactorMap["systematic"];
+  map<string,Variation> variations;
+
+  for (const auto& [name, weight] : scaleFactorMap) {
+    if (name == "systematic") continue;
+
+    bool isUp = name.find("_up") != string::npos || 
+                name.find("systup") != string::npos || 
+                name.find("Patup") != string::npos || 
+                name.find("DSAup") != string::npos || 
+                name.find("Up") != string::npos;
+
+    bool isDown = name.find("down") != string::npos || 
+                  name.find("Down") != string::npos || 
+                  name.find("Dn") != string::npos;
+    
+    if (!isUp && !isDown) {
+      cout << "---- SF not up or down: " << name << endl;
+      continue;
+    }
+
+    string baseName = name;
+    auto removeDirection = [&](const std::string& token) {
+      size_t pos = baseName.rfind(token);
+      if (pos != std::string::npos)
+      {
+        if (pos + token.size() == baseName.size() || 
+          baseName[pos + token.size()] == '_')
+        {
+          baseName.erase(pos, token.size());
+          return true;
+        }
+      }
+      return false;
+    };
+    if (isUp){
+      removeDirection("up") ||
+      removeDirection("Up");
+    }
+    if (isDown) {
+      removeDirection("down") ||
+      removeDirection("Down") ||
+      removeDirection("Dn");
+    }
+
+    auto& var = variations[baseName];
+    if (isUp) {
+      var.upName = name;
+      var.upWeight = weight;
+    } else if (isDown) {
+      var.downName = name;
+      var.downWeight = weight;
     }
   }
 
-  return scaleFactorMap;
+  for (auto& [baseName, var] : variations) {
+
+    if (var.upName.empty() || var.downName.empty()) {
+      warn() << "Missing up or down variation for " << baseName << " -- skipping consistency check for this variation." << endl;
+      continue;
+    }
+
+    if (var.upWeight == 1.0 && var.downWeight == 1.0)
+      continue;
+
+    if (var.upWeight >= systematicWeight && var.downWeight <= systematicWeight) {
+       continue;
+    }
+
+    if (var.upWeight <= systematicWeight && var.downWeight >= systematicWeight) {
+      // flip up and down in scaleFactorMap
+      string name_ = baseName;
+      if (baseName.find("jec") != string::npos) {
+        name_ = "jec";
+      } else if (baseName.find("jer") != string::npos) {
+        name_ = "jer";
+      } else if (baseName.find("met") != string::npos) {
+        name_ = "met";
+      }
+      warn() << "Flipping up and down variations for " << name_ << endl;
+      scaleFactorMap[var.upName] = var.downWeight;
+      scaleFactorMap[var.downName] = var.upWeight;
+      continue;
+    }
+
+    if (var.upWeight < var.downWeight) {
+      string name_ = baseName;
+      if (baseName.find("jec") != string::npos) {
+        name_ = "jec";
+      } else if (baseName.find("jer") != string::npos) {
+        name_ = "jer";
+      } else if (baseName.find("met") != string::npos) {
+        name_ = "met";
+      }
+      warn() << "Flipping up and down variations for " << name_ << endl;
+      scaleFactorMap[var.upName] = var.downWeight;
+      scaleFactorMap[var.downName] = var.upWeight;
+      continue;
+    }
+  }
 }
+
 
 shared_ptr<NanoMuons> TTAlpsEvent::GetAllLooseMuons() {
   auto allMuons = make_shared<NanoMuons>();
@@ -166,14 +281,14 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
   args_.push_back(5.0);
   map<string, float> dimuonEffSF_ = scaleFactorsManager.GetDimuonScaleFactors("dimuonEff_Pat", args_);
   for (auto& [name, weight] : dimuonEffSF_) {
-    dimuonEffSF[name] = 1.0;
+    dimuonEffSF[name] = -1.0;
     if (auto pos = name.find("_Pat"); pos != std::string::npos) {
       string name_ = name;
       name_.replace(pos, 4, "_PatDSA");
-      dimuonEffSF[name_] = 1.0;
+      dimuonEffSF[name_] = -1.0;
       name_ = name;
       name_.replace(pos, 4, "_DSA");
-      dimuonEffSF[name_] = 1.0;
+      dimuonEffSF[name_] = -1.0;
     }
   }
   vector<variant<int, double, string>> args;
@@ -191,111 +306,16 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
     args.push_back(dimuonVertex->GetDimuonPt());
   }
   dimuonEffSF_ = scaleFactorsManager.GetDimuonScaleFactors("dimuonEff"+dimuonCategory, args);
+  float systematic = dimuonEffSF_["systematic"];
   for (auto& [name, weight] : dimuonEffSF_) {
     dimuonEffSF[name] = weight;
   }
+  for (auto& [name, weight] : dimuonEffSF) {
+    if (weight < 0) {
+      dimuonEffSF[name] = systematic;
+    }
+  }
   return dimuonEffSF;
-}
-
-tuple<map<string, float>,map<string, float>> TTAlpsEvent::GetJetMETEnergyScaleUncertainties(shared_ptr<Event> event) {
-  
-  map<string, float> jec = {{"systematic", 1.0}};
-  map<string, float> met = {{"systematic", 1.0}};
-
-  string baseJetCollectionName = "Jet";
-  auto baseJetCollection = event->GetCollection(baseJetCollectionName);
-
-  string goodJetCollectionName = "GoodJets";
-  auto goodJetCollection = event->GetCollection(goodJetCollectionName);
-  string goodBJetCollectionName = "GoodMediumBtaggedJets";
-  auto goodBJetCollection = event->GetCollection(goodBJetCollectionName);
-
-  auto extraCollectionsDescriptions = event->GetExtraCollectionsDescriptions();
-  auto goodJetsPtCutsIt = extraCollectionsDescriptions[goodJetCollectionName].allCuts.find("pt");
-  auto goodBJetsPtCutsIt = extraCollectionsDescriptions[goodBJetCollectionName].allCuts.find("pt");
-  pair<float, float> goodJetPtCuts;
-  pair<float, float> goodBJetPtCuts;
-  if (goodJetsPtCutsIt != extraCollectionsDescriptions[goodJetCollectionName].allCuts.end()) {
-    goodJetPtCuts = goodJetsPtCutsIt->second;
-  } else {
-    error() << "Good jet pt cuts not defined - it is needed for jet energy corrections" << endl;
-    return make_tuple(jec, met);
-  }
-  if (goodBJetsPtCutsIt != extraCollectionsDescriptions[goodBJetCollectionName].allCuts.end()) {
-    goodBJetPtCuts = goodBJetsPtCutsIt->second;
-  } else{
-    goodBJetPtCuts = goodJetPtCuts;
-  }
-
-  auto &config = ConfigManager::GetInstance();
-  string rhoBranchName;
-  try {
-    config.GetValue("rhoBranchName", rhoBranchName);
-  } catch (const Exception &e) {
-    warn() << "Rho branch not specified -- will assume standard name fixedGridRhoFastjetAll" << endl;
-    rhoBranchName = "fixedGridRhoFastjetAll";
-  }
-  float rho = event->Get(rhoBranchName);
-
-  pair<float,float> goodJetCuts = GetEventCut("n"+goodJetCollectionName);
-  pair<float,float> goodBJetCuts = GetEventCut("n"+goodBJetCollectionName);
-  pair<float,float> metPtCuts = GetEventCut("MET_pt");
-  if (goodJetCuts.second == -1.0 || goodBJetCuts.second == -1.0 || metPtCuts.second == -1.0) {
-    warn() << "Failed to get all event cuts for jet energy corrections" << endl;
-    return make_tuple(jec, met);
-  }
-  
-  map<string,int> nPassingGoodJets;
-  map<string,int> nPassingGoodBJets;
-  map<string,float> totalPxDifference;
-  map<string,float> totalPyDifference;
-  for (auto jet : *baseJetCollection) {
-    auto nanoJet = asNanoJet(jet);
-    map<string,float> corrections = nanoJet->GetJetEnergyCorrections(rho);
-    float pt = nanoJet->GetPt();
-
-    const bool isGoodJet = nanoJet->IsInCollection(goodJetCollection);
-    const bool isGoodBJet = nanoJet->IsInCollection(goodBJetCollection);
-    
-    for (auto &[name, correction] : corrections) {
-      float newJetPt = pt*correction;
-
-      if (nPassingGoodJets.find(name) == nPassingGoodJets.end()) {
-        nPassingGoodJets[name] = 0;
-        nPassingGoodBJets[name] = 0;
-        totalPxDifference[name] = 0;
-        totalPyDifference[name] = 0;
-      }
-
-      if (isGoodJet && newJetPt >= goodJetPtCuts.first && newJetPt <= goodJetPtCuts.second) {
-        nPassingGoodJets[name]++;
-      }
-      if (isGoodBJet && newJetPt >= goodBJetPtCuts.first && newJetPt <= goodBJetPtCuts.second) {
-        nPassingGoodBJets[name]++;
-      }
-      // Needed to propagate MET
-      totalPxDifference[name] += nanoJet->GetPxDifference(newJetPt);
-      totalPyDifference[name] += nanoJet->GetPyDifference(newJetPt);
-    }
-  }
-  for (auto &[name, nPassingJets] : nPassingGoodJets) {
-    jec[name] = 0.0;
-    if (nPassingGoodJets[name] < goodJetCuts.first || nPassingGoodJets[name] > goodJetCuts.second) continue;
-    if (nPassingGoodBJets[name] < goodBJetCuts.first || nPassingGoodBJets[name] > goodBJetCuts.second) continue;
-    jec[name] = 1.0;
-  }
-  for (auto &[name, pxDifference] : totalPxDifference) {
-    string met_name = name;
-    size_t pos = met_name.find("jec");
-    if (pos != std::string::npos) {
-      met_name.replace(pos, 3, "met"); 
-    }
-    met[met_name] = 0.0;
-    float newMetPt = nanoEventProcessor->PropagateMET(asNanoEvent(event), totalPxDifference[name], totalPyDifference[name]);
-    if (newMetPt < metPtCuts.first || newMetPt > metPtCuts.second) continue;
-    met[met_name] = 1.0;
-  }
-  return make_tuple(jec, met);
 }
 
 pair<float,float> TTAlpsEvent::GetEventCut(string eventVariable) {

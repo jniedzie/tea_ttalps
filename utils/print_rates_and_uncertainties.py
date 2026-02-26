@@ -4,7 +4,7 @@ import os
 import math
 import numpy as np
 
-from Logger import fatal, info, error
+from Logger import fatal, info, error, warn
 from limits_producer import get_datacard_file_name
 
 parser = argparse.ArgumentParser()
@@ -99,9 +99,23 @@ def load_uncertainties(config):
               value = values[i+2]
               if value != "-":
                 if process == "signal":
-                  signal_values.append(float(value)-1)
+                  if "/" in value:
+                    kappa_down, kappa_up = map(float, value.split("/"))
+                    delta_down = abs(1 - kappa_down)
+                    delta_up = abs(kappa_up - 1)
+                    signal_values.append(delta_down)
+                    signal_values.append(delta_up)
+                  else:
+                    signal_values.append(float(value)-1)
                 elif process == "bkg":
-                  background_values.append(float(value)-1)
+                  if "/" in value:
+                    kappa_down, kappa_up = map(float, value.split("/"))
+                    delta_down = abs(1 - kappa_down)
+                    delta_up = abs(kappa_up - 1)
+                    background_values.append(delta_down)
+                    background_values.append(delta_up)
+                  else:
+                    background_values.append(float(value)-1)
 
             unc_category = get_unc_category(unc_name)
 
@@ -195,221 +209,50 @@ def get_unc_category(unc_name):
     variation = "_up" if "_up" in unc_name else "_down"
   elif "Up" in unc_name or "Dn" in unc_name:
     variation = "_Up" if "Up" in unc_name else "_Dn"
-  if "jecMC" in unc_name:
+  if "jecMC" in unc_name or "CMS_scale_j" in unc_name:
     return "JEC"
-  if "metMC" in unc_name:
+  if "metMC" in unc_name or "CMS_scale_met" in unc_name:
     return "MET"
-  if "dimuonEff" in unc_name:
-    return "dimuonEff"
-  if "bTaggingMedium" in unc_name:
+  if "bTaggingMedium" in unc_name or "CMS_btag" in unc_name or "CMS_eff_b" in unc_name:
     return "bTaggingMedium"
   if variation != "" and variation in unc_name:
     base_name = unc_name.replace(variation, "")
     return base_name
   return unc_name
 
-
 def get_nice_names(years):
   nice_names = {
-      "PUjetIDtight_down": "PU jet ID (down)",
-      "PUjetIDtight_up": "PU jet ID (up)",
-      "bTaggingMedium_up": "b-tagging (up)",
-      "bTaggingMedium_down": "b-tagging (down)",
-      "bTaggingMedium_down_correlated": "b-tagging down (uncorrelated)",
-      "bTaggingMedium_down_uncorrelated": "b-tagging down (correlated)",
-      "bTaggingMedium_up_correlated": "b-tagging up (uncorrelated)",
-      "bTaggingMedium_up_uncorrelated": "b-tagging up (correlated)",
-      "pileup_up": "PU (up)",
-      "pileup_down": "PU (down)",
-      "muonIDLoose_systdown": "muon loose ID (down)",
-      "muonIDLoose_systup": "muon loose ID (up)",
-      "muonIDTight_systdown": "muon tight ID (down)",
-      "muonIDTight_systup": "muon tight ID (up)",
-      "muonIsoLoose_systdown": "muon loose Iso (down)",
-      "muonIsoLoose_systup": "muon loose Iso (up)",
-      "muonIsoTight_systdown": "muon tight Iso (down)",
-      "muonIsoTight_systup": "muon tight Iso (up)",
-      "muonReco_systdown": "muon reco (down)",
-      "muonReco_systup": "muon reco (up)",
-      "dsamuonID_syst": "DSA muon ID",
-      "dsamuonReco_cosmic": "DSA muon reco",
-      "muonTrigger_systdown": "IsoMu trigger (down)",
-      "muonTrigger_systup": "IsoMu trigger (up)",
       "abcd_nonClosure": "ABCD non-closure",
-      "abcd_unc": "ABCD uncertainty",
-      "abcd_unc_bkg": "ABCD uncertainty",
-      "abcd_unc_sig": "ABCD uncertainty (signal)",
+      "CMS_EXO25022_abcd": "ABCD uncertainty",
+      "CMS_EXO25022_abcd_bkg": "ABCD uncertainty",
+      "CMS_EXO25022_abcd_sig": "ABCD uncertainty (signal)",
       "lumi": "luminosity",
       "lumi_sig": "luminosity",
       "lumi_bkg": "luminosity",
       "stat_err_sig": "statistical (signal)",
       "stat_err_bkg": "statistical (background)",
-      "dimuonEff_up": "Dimuon efficiency SF (up)",
-      "dimuonEff_down": "Dimuon efficiency SF (down)",
-      "dimuonEff_Patup": "PAT-PAT Dimuon efficiency SF (up)",
-      "dimuonEff_Patdown": "PAT-PAT Dimuon efficiency SF (down)",
-      "dimuonEff_PatDSAup": "PAT-DSA Dimuon efficiency SF (up)",
-      "dimuonEff_PatDSAdown": "PAT-DSA Dimuon efficiency SF (down)",
-      "dimuonEff_DSAup": "DSA-DSA Dimuon efficiency SF (up)",
-      "dimuonEff_DSAdown": "DSA-DSA Dimuon efficiency SF (down)",
-      "dimuonRevEff_up": "Dimuon efficiency SF (up)",
-      "dimuonRevEff_down": "Dimuon efficiency SF (down)",
-      "DSAEff_up": "DSA Muon efficiency SF (up)",
-      "DSAEff_down": "DSA Muon efficiency SF (down)",
-      "jecMC_Regrouped_Absolute_down": "JEC Regrouped_Absolute SF (down)",
-      "jecMC_Regrouped_Absolute_up": "JEC Regrouped_Absolute SF (up)",
-      "jecMC_Regrouped_FlavorQCD_down": "JEC Regrouped_FlavorQCD SF (down)",
-      "jecMC_Regrouped_FlavorQCD_up": "JEC Regrouped_FlavorQCD SF (up)",
-      "jecMC_Regrouped_BBEC1_down": "JEC Regrouped_BBEC1 SF (down)",
-      "jecMC_Regrouped_BBEC1_up": "JEC Regrouped_BBEC1 SF (up)",
-      "jecMC_Regrouped_EC2_down": "JEC Regrouped_EC2 SF (down)",
-      "jecMC_Regrouped_EC2_up": "JEC Regrouped_EC2 SF (up)",
-      "jecMC_Regrouped_HF_down": "JEC Regrouped_HF SF (down)",
-      "jecMC_Regrouped_HF_up": "JEC Regrouped_HF SF (up)",
-      "jecMC_Regrouped_RelativeBal_down": "JEC Regrouped_RelativeBal SF (down)",
-      "jecMC_Regrouped_RelativeBal_up": "JEC Regrouped_RelativeBal SF (up)",
-      "jecMC_AbsoluteMPFBias_up": "JEC AbsoluteMPFBias (up)",
-      "jecMC_AbsoluteMPFBias_down": "JEC AbsoluteMPFBias (down)",
-      "jecMC_AbsoluteScale_up": "JEC AbsoluteScale (up)",
-      "jecMC_AbsoluteScale_down": "JEC AbsoluteScale (down)",
-      "jecMC_AbsoluteStat_up": "JEC AbsoluteStat (up)",
-      "jecMC_AbsoluteStat_down": "JEC AbsoluteStat (down)",
-      "jecMC_FlavorQCD_up": "JEC FlavorQCD (up)",
-      "jecMC_FlavorQCD_down": "JEC FlavorQCD (down)",
-      "jecMC_Fragmentation_up": "JEC Fragmentation (up)",
-      "jecMC_Fragmentation_down": "JEC Fragmentation (down)",
-      "jecMC_PileUpDataMC_up": "JEC PileUpDataMC (up)",
-      "jecMC_PileUpDataMC_down": "JEC PileUpDataMC (down)",
-      "jecMC_PileUpPtBB_up": "JEC PileUpPtBB (up)",
-      "jecMC_PileUpPtBB_down": "JEC PileUpPtBB (down)",
-      "jecMC_PileUpPtEC1_up": "JEC PileUpPtEC1 (up)",
-      "jecMC_PileUpPtEC1_down": "JEC PileUpPtEC1 (down)",
-      "jecMC_PileUpPtEC2_up": "JEC PileUpPtEC2 (up)",
-      "jecMC_PileUpPtEC2_down": "JEC PileUpPtEC2 (down)",
-      "jecMC_PileUpPtHF_up": "JEC PileUpPtHF (up)",
-      "jecMC_PileUpPtHF_down": "JEC PileUpPtHF (down)",
-      "jecMC_PileUpPtRef_up": "JEC PileUpPtRef (up)",
-      "jecMC_PileUpPtRef_down": "JEC PileUpPtRef (down)",
-      "jecMC_RelativeFSR_up": "JEC RelativeFSR (up)",
-      "jecMC_RelativeFSR_down": "JEC RelativeFSR (down)",
-      "jecMC_RelativeJEREC1_up": "JEC RelativeJEREC1 (up)",
-      "jecMC_RelativeJEREC1_down": "JEC RelativeJEREC1 (down)",
-      "jecMC_RelativeJEREC2_up": "JEC RelativeJEREC2 (up)",
-      "jecMC_RelativeJEREC2_down": "JEC RelativeJEREC2 (down)",
-      "jecMC_RelativeJERHF_up": "JEC RelativeJERHF (up)",
-      "jecMC_RelativeJERHF_down": "JEC RelativeJERHF (down)",
-      "jecMC_RelativePtBB_up": "JEC RelativePtBB (up)",
-      "jecMC_RelativePtBB_down": "JEC RelativePtBB (down)",
-      "jecMC_RelativePtEC1_up": "JEC RelativePtEC1 (up)",
-      "jecMC_RelativePtEC1_down": "JEC RelativePtEC1 (down)",
-      "jecMC_RelativePtEC2_up": "JEC RelativePtEC2 (up)",
-      "jecMC_RelativePtEC2_down": "JEC RelativePtEC2 (down)",
-      "jecMC_RelativePtHF_up": "JEC RelativePtHF (up)",
-      "jecMC_RelativePtHF_down": "JEC RelativePtHF (down)",
-      "jecMC_RelativeBal_up": "JEC RelativeBal (up)",
-      "jecMC_RelativeBal_down": "JEC RelativeBal (down)",
-      "jecMC_RelativeSample_up": "JEC RelativeSample (up)",
-      "jecMC_RelativeSample_down": "JEC RelativeSample (down)",
-      "jecMC_RelativeStatEC_up": "JEC RelativeStatEC (up)",
-      "jecMC_RelativeStatEC_down": "JEC RelativeStatEC (down)",
-      "jecMC_RelativeStatFSR_up": "JEC RelativeStatFSR (up)",
-      "jecMC_RelativeStatFSR_down": "JEC RelativeStatFSR (down)",
-      "jecMC_RelativeStatHF_up": "JEC RelativeStatHF (up)",
-      "jecMC_RelativeStatHF_down": "JEC RelativeStatHF (down)",
-      "jecMC_SinglePionECAL_up": "JEC SinglePionECAL (up)",
-      "jecMC_SinglePionECAL_down": "JEC SinglePionECAL (down)",
-      "jecMC_SinglePionHCAL_up": "JEC SinglePionHCAL (up)",
-      "jecMC_SinglePionHCAL_down": "JEC SinglePionHCAL (down)",
-      "jecMC_TimePtEta_up": "JEC TimePtEta (up)",
-      "jecMC_TimePtEta_down": "JEC TimePtEta (down)",
-      "metMC_Regrouped_Absolute_down": "MET Regrouped_Absolute SF (down)",
-      "metMC_Regrouped_Absolute_up": "MET Regrouped_Absolute SF (up)",
-      "metMC_Regrouped_FlavorQCD_down": "MET Regrouped_FlavorQCD SF (down)",
-      "metMC_Regrouped_FlavorQCD_up": "MET Regrouped_FlavorQCD SF (up)",
-      "metMC_Regrouped_BBEC1_down": "MET Regrouped_BBEC1 SF (down)",
-      "metMC_Regrouped_BBEC1_up": "MET Regrouped_BBEC1 SF (up)",
-      "metMC_Regrouped_EC2_down": "MET Regrouped_EC2 SF (down)",
-      "metMC_Regrouped_EC2_up": "MET Regrouped_EC2 SF (up)",
-      "metMC_Regrouped_HF_down": "MET Regrouped_HF SF (down)",
-      "metMC_Regrouped_HF_up": "MET Regrouped_HF SF (up)",
-      "metMC_Regrouped_RelativeBal_down": "MET Regrouped_RelativeBal SF (down)",
-      "metMC_Regrouped_RelativeBal_up": "MET Regrouped_RelativeBal SF (up)",
-      "metMC_AbsoluteMPFBias_up": "MET AbsoluteMPFBias (up)",
-      "metMC_AbsoluteMPFBias_down": "MET AbsoluteMPFBias (down)",
-      "metMC_AbsoluteScale_up": "MET AbsoluteScale (up)",
-      "metMC_AbsoluteScale_down": "MET AbsoluteScale (down)",
-      "metMC_AbsoluteStat_up": "MET AbsoluteStat (up)",
-      "metMC_AbsoluteStat_down": "MET AbsoluteStat (down)",
-      "metMC_FlavorQCD_up": "MET FlavorQCD (up)",
-      "metMC_FlavorQCD_down": "MET FlavorQCD (down)",
-      "metMC_Fragmentation_up": "MET Fragmentation (up)",
-      "metMC_Fragmentation_down": "MET Fragmentation (down)",
-      "metMC_PileUpDataMC_up": "MET PileUpDataMC (up)",
-      "metMC_PileUpDataMC_down": "MET PileUpDataMC (down)",
-      "metMC_PileUpPtBB_up": "MET PileUpPtBB (up)",
-      "metMC_PileUpPtBB_down": "MET PileUpPtBB (down)",
-      "metMC_PileUpPtEC1_up": "MET PileUpPtEC1 (up)",
-      "metMC_PileUpPtEC1_down": "MET PileUpPtEC1 (down)",
-      "metMC_PileUpPtEC2_up": "MET PileUpPtEC2 (up)",
-      "metMC_PileUpPtEC2_down": "MET PileUpPtEC2 (down)",
-      "metMC_PileUpPtHF_up": "MET PileUpPtHF (up)",
-      "metMC_PileUpPtHF_down": "MET PileUpPtHF (down)",
-      "metMC_PileUpPtRef_up": "MET PileUpPtRef (up)",
-      "metMC_PileUpPtRef_down": "MET PileUpPtRef (down)",
-      "metMC_RelativeFSR_up": "MET RelativeFSR (up)",
-      "metMC_RelativeFSR_down": "MET RelativeFSR (down)",
-      "metMC_RelativeJEREC1_up": "MET RelativeJEREC1 (up)",
-      "metMC_RelativeJEREC1_down": "MET RelativeJEREC1 (down)",
-      "metMC_RelativeJEREC2_up": "MET RelativeJEREC2 (up)",
-      "metMC_RelativeJEREC2_down": "MET RelativeJEREC2 (down)",
-      "metMC_RelativeJERHF_up": "MET RelativeJERHF (up)",
-      "metMC_RelativeJERHF_down": "MET RelativeJERHF (down)",
-      "metMC_RelativePtBB_up": "MET RelativePtBB (up)",
-      "metMC_RelativePtBB_down": "MET RelativePtBB (down)",
-      "metMC_RelativePtEC1_up": "MET RelativePtEC1 (up)",
-      "metMC_RelativePtEC1_down": "MET RelativePtEC1 (down)",
-      "metMC_RelativePtEC2_up": "MET RelativePtEC2 (up)",
-      "metMC_RelativePtEC2_down": "MET RelativePtEC2 (down)",
-      "metMC_RelativePtHF_up": "MET RelativePtHF (up)",
-      "metMC_RelativePtHF_down": "MET RelativePtHF (down)",
-      "metMC_RelativeBal_up": "MET RelativeBal (up)",
-      "metMC_RelativeBal_down": "MET RelativeBal (down)",
-      "metMC_RelativeSample_up": "MET RelativeSample (up)",
-      "metMC_RelativeSample_down": "MET RelativeSample (down)",
-      "metMC_RelativeStatEC_up": "MET RelativeStatEC (up)",
-      "metMC_RelativeStatEC_down": "MET RelativeStatEC (down)",
-      "metMC_RelativeStatFSR_up": "MET RelativeStatFSR (up)",
-      "metMC_RelativeStatFSR_down": "MET RelativeStatFSR (down)",
-      "metMC_RelativeStatHF_up": "MET RelativeStatHF (up)",
-      "metMC_RelativeStatHF_down": "MET RelativeStatHF (down)",
-      "metMC_SinglePionECAL_up": "MET SinglePionECAL (up)",
-      "metMC_SinglePionECAL_down": "MET SinglePionECAL (down)",
-      "metMC_SinglePionHCAL_up": "MET SinglePionHCAL (up)",
-      "metMC_SinglePionHCAL_down": "MET SinglePionHCAL (down)",
-      "metMC_TimePtEta_up": "MET TimePtEta (up)",
-      "metMC_TimePtEta_down": "MET TimePtEta (down)",
-      "JEC_up": "JEC (up)",
-      "JEC_down": "JEC (down)",
       "JEC": "JEC",
-      "MET_up": "MET (up)",
-      "MET_down": "MET (down)",
       "MET": "MET",
-      "L1PreFiringWeight": "L1 Pre-firing",
-      "DSAEff": "DSA Muon efficiency SF",
-      "dimuonEff": "Dimuon efficiency SF",
-      "dimuonEff_Pat": "PAT-PAT Dimuon efficiency SF",
-      "dimuonEff_PatDSA": "PAT-DSA Dimuon efficiency SF",
-      "dimuonEff_DSA": "DSA-DSA Dimuon efficiency SF",
-      "dimuonEffRev": "Dimuon efficiency SF",
-      "muonTrigger": "IsoMu trigger",
-      "muonReco": "muon reco",
-      "muonIDLoose": "muon loose ID",
-      "muonIDTight": "muon tight ID",
-      "muonIsoLoose": "muon loose Iso",
-      "muonIsoTight": "muon tight Iso",
-      "PUjetIDtight": "PU jet ID",
+      "CMS_l1_muon_prefiring": "L1 Pre-firing",
+      "CMS_EXO25022_dimuonSFs_Pat_syst": "PAT-PAT Dimuon efficiency SF",
+      "CMS_EXO25022_dimuonSFs_PatDSA_syst": "PAT-DSA Dimuon efficiency SF",
+      "CMS_EXO25022_dimuonSFs_DSA_syst": "DSA-DSA Dimuon efficiency SF",
+      # "dimuonSFs": "Dimuon efficiency SF",
+      "dimuonSFs_Pat": "PAT-PAT Dimuon efficiency SF",
+      "dimuonSFs_PatDSA": "PAT-DSA Dimuon efficiency SF",
+      "dimuonSFs_DSA": "DSA-DSA Dimuon efficiency SF",
+      "CMS_eff_m_trigger_syst": "IsoMu trigger",
+      "CMS_eff_m_reco_syst": "muon reco",
+      "CMS_eff_m_reco_syst_dsa": "DSA muon reco",
+      "CMS_eff_m_id_syst_loose": "muon loose ID",
+      "CMS_eff_m_id_syst_tight": "muon tight ID",
+      "CMS_eff_m_iso_syst_loose": "muon loose Iso",
+      "CMS_eff_m_iso_syst_tight": "muon tight Iso",
+      "CMS_eff_m_id_syst_dsa": "DSA muon ID",
+      "CMS_eff_j_PUJetID_eff": "PU jet ID",
+      "CMS_btag": "b-tagging",
       "bTaggingMedium": "b-tagging",
-      "pileup": "PU",
+      "CMS_pileup": "PU",
   }
   for year_ in years:
     year = year_
@@ -435,6 +278,13 @@ def get_nice_names(years):
     nice_names[f"metMC_Regrouped_HF_{year}_up"] = f"MET Regrouped_HF_{year} SF (up)"
     nice_names[f"metMC_Regrouped_RelativeSample_{year}_down"] = f"MET Regrouped_RelativeSample_{year} SF (down)"
     nice_names[f"metMC_Regrouped_RelativeSample_{year}_up"] = f"MET Regrouped_RelativeSample_{year} SF (up)"
+    if year_ in ["2022preEE", "2022postEE"]:
+      year = "13p6TeV_2022"
+    if year_ in ["2023preBPix", "2023postBPix"]:
+      year = "13p6TeV_2023"
+    nice_names[f"lumi_{year}"] = f"luminosity"
+    nice_names[f"CMS_eff_j_PUJetID_eff_{year_}"] = f"PU jet ID efficiency"
+    
   return nice_names
 
 def significance_and_error(S, B, sigma_S, sigma_B, cov_SB=0.0):

@@ -32,8 +32,6 @@ class TTAlpsEvent {
 
   std::map<std::string,float> GetDimuonEfficiencyScaleFactors();
 
-  std::tuple<std::map<std::string, float>,std::map<std::string, float>> GetJetMETEnergyScaleUncertainties(std::shared_ptr<Event> event);
-
   std::pair<float,float> GetEventCut(std::string eventVariable);
 
   std::shared_ptr<PhysicsObjects> GetGenALPs();
@@ -85,6 +83,7 @@ class TTAlpsEvent {
   bool IsGoodMuonFromALP(int muonIndex);
   bool IsGoodMuonNotFromALP(int muonIndex);
   bool IsGoodMuonFromMotherWithParticleID(int genMuonIndex, int motherParticleID);
+  void CheckUpDownVariations(std::map<std::string, float>& scaleFactorMap);
 };
 
 struct FinalState {
@@ -134,5 +133,13 @@ struct FinalState {
     return name;
   }
 };
+
+struct Variation {
+    std::string upName;
+    float upWeight = 0.f;
+    std::string downName;
+    float downWeight = 0.f;
+};
+
 
 #endif /* TTAlpsEvent_hpp */

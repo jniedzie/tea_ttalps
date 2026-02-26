@@ -81,6 +81,7 @@ runExtraDimuonCuts = False
 
 weightsBranchName = "genWeight"
 rhoBranchName = "fixedGridRhoFastjetAll"  # for jec unc.
+eventIDBranchName = "event"  # for jer
 if "22" in year or "23" in year:
   rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 eventsTreeNames = ("Events",)
