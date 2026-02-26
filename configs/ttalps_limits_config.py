@@ -143,8 +143,8 @@ nuisances = {
 
     "abcd_unc": ("abcd", "CMS_EXO25022_abcd"),
     f"lumi_{lumi_year}": {
-        "signal": [lumi_uncertainty, f"lumi_{lumi_year}"],
-        "bkg": [lumi_uncertainty, f"lumi_background_{lumi_year}"],
+        "signal": [lumi_uncertainty],
+        "bkg": [lumi_uncertainty],
     },
 
     "jecMC_Regrouped_Absolute_down": ("variation", "CMS_scale_j_Absolute"),

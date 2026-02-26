@@ -181,6 +181,7 @@ class TTAlpsHistogrammerConfigHelper:
     return (
         #  collection             variable               bins    xmin    xmax    dir
         ("Event", "MET_pt", 1000, 0, 1000, ""),
+        ("Event", "MET_pt_smeared", 1000, 0, 1000, ""),
         ("Event", "PV_npvs", 300, 0, 300, ""),
         ("Event", "PV_npvsGood", 300, 0, 300, ""),
         ("Event", "PV_x", 2000, -100, 100, ""),
@@ -190,11 +191,17 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("Event", "nGoodJets", 20, 0, 20, ""),
         ("GoodJets", "pt", 1000, 0, 1000, ""),
+        ("GoodJets", "pt_smeared", 1000, 0, 1000, ""),
+        ("GoodJets", "pt_smeared_down", 1000, 0, 1000, ""),
+        ("GoodJets", "pt_smeared_up", 1000, 0, 1000, ""),
         ("GoodJets", "leadingPt", 1000, 0, 1000, ""),
         ("GoodJets", "subleadingPt", 1000, 0, 1000, ""),
         ("GoodJets", "eta", 300, -3, 3, ""),
         ("GoodJets", "phi", 300, -3, 3, ""),
         ("GoodJets", "mass", 1000, 0, 1000, ""),
+        ("GoodJets", "mass_smeared", 1000, 0, 1000, ""),
+        ("GoodJets", "mass_smeared_up", 1000, 0, 1000, ""),
+        ("GoodJets", "mass_smeared_down", 1000, 0, 1000, ""),
 
         ("Event", "nGoodMediumBtaggedJets", 20, 0, 20, ""),
         ("GoodMediumBtaggedJets", "pt", 1000, 0, 1000, ""),
