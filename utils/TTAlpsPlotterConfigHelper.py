@@ -1,5 +1,6 @@
 from ttalps_samples_list import *
 from ttalps_cross_sections import get_cross_sections
+from ttalps_luminosities import get_luminosity
 
 from Logger import error, info
 from Sample import Sample, SampleType
@@ -11,7 +12,7 @@ import importlib
 
 class TTAlpsPlotterConfigHelper:
   def __init__(
-      self, year, base_path, skim, hist_path, data_to_include,
+      self, years, base_path, skim, hist_path, data_to_include,
       signals_to_include, legend_pos_and_size, legend_text_size
   ):
 
@@ -25,8 +26,8 @@ class TTAlpsPlotterConfigHelper:
     self.samples_params = getattr(module, "samples_params")
     self.samples_styles = getattr(module, "samples_styles")
 
-    self.year = year
-    self.cross_sections = get_cross_sections(year)
+    self.years = years
+    # self.cross_sections = get_cross_sections(year)
     self.base_path = base_path
     self.skim = skim[0]
     self.hist_path = hist_path
@@ -39,66 +40,111 @@ class TTAlpsPlotterConfigHelper:
     self.custom_stacks_order_reversed = False
 
   def add_samples(self, sample_type, samples):
-    if sample_type == SampleType.background:
-      dataset = globals()[f"dasBackgrounds{self.year}"]
 
-    elif sample_type == SampleType.signal:
-      dataset = globals()[f"dasSignals{self.year}"]
-
-    elif sample_type == SampleType.data:
+    if sample_type == SampleType.data:
       dataset = self.data_to_include
-    else:
-      error(f"Unknown combination of sample: {sample_type} and year {self.year}")
+      year_str = ""
+      for year in self.years:
+        year_str += year
 
-    for sample_name in dataset:
-      short_name = sample_name.split("/")[-1]
+      cross_sections = get_cross_sections(self.years[0])
+      for sample_name in dataset:
+        short_name = sample_name.split("/")[-1]
+        params = self.__get_params_for_sample(short_name)
+        if params is None:
+          continue
+        
+        legend_description = params["legend_title"]
+        if "{}" in legend_description:
+          legend_description = legend_description.format(year)
+        
+        file_path = f"{self.base_path}/collision_data{year_str}/{sample_name}_{self.skim}_{self.hist_path}.root"
+        info(f"Adding sample {short_name} of type {sample_type} with file path {file_path}")
+    
+        samples.append(
+            Sample(
+                name=short_name,
+                file_path=file_path,
+                type=sample_type,
+                cross_sections=cross_sections,
+                line_alpha=self.samples_styles[sample_type]["line_alpha"],
+                line_style=self.samples_styles[sample_type]["line_style"],
+                fill_alpha=self.samples_styles[sample_type]["fill_alpha"],
+                marker_size=self.samples_styles[sample_type]["marker_size"],
+                marker_style=self.samples_styles[sample_type]["marker_style"],
+                marker_color=params["color"],
+                fill_color=params["color"],
+                line_color=params["color"],
+                legend_description=legend_description,
+                custom_legend=self.__get_legend(
+                    params["legend_column"],
+                    params["legend_row"],
+                    self.samples_styles[sample_type]["legend_style"]
+                ),
+            )
+        )
+      return
 
-      if sample_type == SampleType.signal and short_name not in self.signals_to_include:
-        continue
+    for year in self.years:
+      lumi = get_luminosity(year)
+      cross_sections = get_cross_sections(year)
+      if sample_type == SampleType.background:
+        dataset = globals()[f"dasBackgrounds{year}"]
 
-      long_name = self.__get_long_name(short_name)
+      elif sample_type == SampleType.signal:
+        dataset = globals()[f"dasSignals{year}"]
 
-      if sample_type == SampleType.data:
-        long_name = short_name
+      for sample_name in dataset:
+        short_name = sample_name.split("/")[-1]
 
-      params = self.__get_params_for_sample(long_name)
-      if params is None:
-        continue
+        if sample_type == SampleType.signal and short_name not in self.signals_to_include:
+          continue
 
-      file_path = f"{self.base_path}/{sample_name}/{self.skim}/{self.hist_path}/histograms.root"
+        long_name = self.__get_long_name(short_name, cross_sections)
 
-      if sample_type == SampleType.data:
-        file_path = f"{self.base_path}/collision_data{self.year}/{sample_name}_{self.skim}_{self.hist_path}.root"
+        if sample_type == SampleType.data:
+          long_name = short_name
 
-      info(f"Adding sample {long_name} of type {sample_type} with file path {file_path}")
+        params = self.__get_params_for_sample(long_name)
+        if params is None:
+          continue
 
-      legend_description = params["legend_title"]
+        file_path = f"{self.base_path}/{sample_name}/{self.skim}/{self.hist_path}/histograms.root"
 
-      if "{}" in legend_description:
-        legend_description = legend_description.format(self.year)
+        if sample_type == SampleType.data:
+          file_path = f"{self.base_path}/collision_data{year}/{sample_name}_{self.skim}_{self.hist_path}.root"
 
-      samples.append(
-          Sample(
-              name=long_name,
-              file_path=file_path,
-              type=sample_type,
-              cross_sections=self.cross_sections,
-              line_alpha=self.samples_styles[sample_type]["line_alpha"],
-              line_style=self.samples_styles[sample_type]["line_style"],
-              fill_alpha=self.samples_styles[sample_type]["fill_alpha"],
-              marker_size=self.samples_styles[sample_type]["marker_size"],
-              marker_style=self.samples_styles[sample_type]["marker_style"],
-              marker_color=params["color"],
-              fill_color=params["color"],
-              line_color=params["color"],
-              legend_description=legend_description,
-              custom_legend=self.__get_legend(
-                  params["legend_column"],
-                  params["legend_row"],
-                  self.samples_styles[sample_type]["legend_style"]
-              ),
-          )
-      )
+        info(f"Adding sample {long_name} of type {sample_type} with file path {file_path}")
+
+        legend_description = params["legend_title"]
+
+        if "{}" in legend_description:
+          legend_description = legend_description.format(year)
+
+        samples.append(
+            Sample(
+                name=f"{long_name}_{year}",
+                file_path=file_path,
+                type=sample_type,
+                cross_sections=cross_sections,
+                luminosity=lumi,
+                line_alpha=self.samples_styles[sample_type]["line_alpha"],
+                line_style=self.samples_styles[sample_type]["line_style"],
+                fill_alpha=self.samples_styles[sample_type]["fill_alpha"],
+                marker_size=self.samples_styles[sample_type]["marker_size"],
+                marker_style=self.samples_styles[sample_type]["marker_style"],
+                marker_color=params["color"],
+                fill_color=params["color"],
+                line_color=params["color"],
+                legend_description=legend_description,
+                custom_legend=self.__get_legend(
+                    params["legend_column"],
+                    params["legend_row"],
+                    self.samples_styles[sample_type]["legend_style"]
+                ),
+                year=year,
+            )
+        )
 
   def get_custom_stacks_order(self, samples):
 
@@ -121,10 +167,10 @@ class TTAlpsPlotterConfigHelper:
     custom_stacks_order.reverse()
     return custom_stacks_order
 
-  def __get_long_name(self, short_name):
+  def __get_long_name(self, short_name, cross_sections):
     long_name = None
 
-    for sample_name in self.cross_sections.keys():
+    for sample_name in cross_sections.keys():
       if short_name in sample_name:
         long_name = sample_name
         break

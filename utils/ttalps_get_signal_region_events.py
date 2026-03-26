@@ -6,6 +6,8 @@ import importlib
 import argparse
 from Logger import info
 
+import os
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, default="", help="Path to the config file.")
 parser.add_argument("--theory", type=bool, default=False, help="Whether to use theory cross sections.")
@@ -90,6 +92,10 @@ def main():
     abcdPlotter = ABCDPlotter(config, args)
     abcdHelper = ABCDHelper(config, args)
 
+    output_path = f"../plots/n_events/{config.do_region}_{config.year}"
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
     bkg_a, bkg_b, bkg_c, bkg_d, _, _, _, _ = abcdHelper.get_abcd(abcdPlotter.background_hist, config.abcd_point)
     prediction, prediction_err = abcdHelper.get_prediction(bkg_b, bkg_c, bkg_d, bkg_b**0.5, bkg_c**0.5, bkg_d**0.5)
 
@@ -117,7 +123,7 @@ def main():
                 signal_yields_tot[(mass,ctau)] += (a+b+c+d) * scale
                 signal_yields_unc2[(mass,ctau)] += (a**0.5 * scale) ** 2
                 signal_yields_tot_unc2[(mass,ctau)] += ((a+b+c+d)**0.5 * scale) ** 2
-                # info(f"{mass}, {ctau}, {year}: {a * scale:.3f} +/- {a**0.5 * scale:.3f}")
+                info(f"{mass}, {ctau}, {year}: {signal.GetEntries()}, {a}, {scale}, {a * scale:.3f} +/- {a**0.5 * scale:.3f}")
     
     h2 = ROOT.TH2D("n_signal_events", ";m_{a} [GeV];c#tau_{a} [mm]",
                len(config.masses), 0, len(config.masses),
@@ -163,6 +169,8 @@ def main():
 
     print_region_a_limits(config, signal)
 
+    h2.SaveAs(f"../signal_lxy_uncertainty/input_root_files/n_signal_events{config.category}_{config.year}_{config.do_region}.root")
+
     ROOT.gStyle.SetOptStat(0)
     # ROOT.gStyle.SetPaintTextFormat(".3f")
 
@@ -190,7 +198,7 @@ def main():
             latex.DrawLatex(x, y, txt)
     
     c1.SetRightMargin(0.15)
-    c1.SaveAs(f"../plots/n_events/n_signal_events{config.category}_{config.year}.pdf")
+    c1.SaveAs(f"{output_path}/n_signal_events{config.category}_{config.year}.pdf")
 
     c2 = ROOT.TCanvas("c2", "c2", 800, 600)
     # h2_tot.Draw("COLZ TEXT")
@@ -209,7 +217,7 @@ def main():
             latex.DrawLatex(x, y, txt)
 
     c2.SetRightMargin(0.15)
-    c2.SaveAs(f"../plots/n_events/n_signal_events_tot{config.category}_{config.year}.pdf")
+    c2.SaveAs(f"{output_path}/n_signal_events_tot{config.category}_{config.year}.pdf")
 
     c3 = ROOT.TCanvas("c3", "c3", 800, 600)
     h2_eff.Draw("COLZ")
@@ -225,7 +233,7 @@ def main():
             y = h2_eff.GetYaxis().GetBinCenter(iy)
             latex.DrawLatex(x, y, txt)
     c3.SetRightMargin(0.15)
-    c3.SaveAs(f"../plots/n_events/n_signal_events_eff{config.category}_{config.year}.pdf")
+    c3.SaveAs(f"{output_path}/n_signal_events_eff{config.category}_{config.year}.pdf")
 
     info(f"Background: ")
     info(f"True background in A: {bkg_a:.2f} +/- {bkg_a**0.5:.2f}")

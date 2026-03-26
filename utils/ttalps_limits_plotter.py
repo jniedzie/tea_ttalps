@@ -23,7 +23,7 @@ for year_ in years:
   year_str += year_
 
 # extra_str = ""
-extra_str = "_SR_ANv2"
+extra_str = "_SR_ANv3"
 # extra_str = "_SRDPhiBetweenMuonpTAndLxy"
 # extra_str = "_SRHitsInFrontOfVertex"
 
@@ -37,10 +37,11 @@ extra_str = "_SR_ANv2"
 # input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_DSA_ABCDpred.txt"
 
 # Combined
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_Pat.txt"
+input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_Pat.txt"
 input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined.txt"
 
-output_path = f"../limits/limits_{year_str}/plots{extra_str}/"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/signal_injection_minus/limits_combined.txt"
+# output_path = f"../limits/limits_{year_str}/plots{extra_str}/signal_injection_minus/"
 
 if not os.path.exists(output_path):
   os.makedirs(output_path)
@@ -73,7 +74,7 @@ if variable == "mass":
   x_min = 0.35
   x_max = 60.0
 
-  y_min = 1e-2
+  y_min = 1e-3
   y_max = 1e8
   if len(years) > 1:
     y_min = 1e-4
@@ -307,7 +308,7 @@ def draw_custom_z_log_labels():
   ROOT.gPad.Update()
 
 def draw_legend(graphs):
-  legend = ROOT.TLegend(0.53, 0.60, 0.8, 0.75)
+  legend = ROOT.TLegend(0.53, 0.65, 0.8, 0.81)
   legend.SetBorderSize(0)
   legend.SetFillStyle(0)
   legend.SetTextFont(42)
@@ -324,12 +325,12 @@ def draw_brazil_plots():
     graph = BrazilGraph(input_path, year, x_title, y_title, x_min, x_max, y_min, y_max)
 
     theory_points = {
-        # 0.1: [],
+        0.1: [],
         1.0: [],
         # 10.0: [],
     }
     theory_graphs = {}
-    colors = (ROOT.kRed, ROOT.kOrange+1, ROOT.kBlue)
+    colors = (ROOT.kRed, ROOT.kBlue, ROOT.kOrange+1)
 
     limits = helper.get_limits_for_point(variable, scan_point)
 
@@ -436,7 +437,7 @@ def draw_2d_plot():
   ROOT.gPad.SetRightMargin(0.15)
 
   helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis)
-  helper.draw_missing_points()
+  helper.draw_missing_points(custom_axis)
 
   mask_resonances_2d(resonances_ranges)
 

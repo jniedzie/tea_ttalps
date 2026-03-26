@@ -64,6 +64,7 @@ def load_uncertainties(config):
               uncertainties[signal_sample.name][unc_name] = unc
 
     else:
+      skip_card = False
       # print(f"Reading combined datacard: {datacard_path}")
       with open(datacard_path, "r") as datacard_file:
         lines = datacard_file.readlines()
@@ -75,6 +76,16 @@ def load_uncertainties(config):
             read = True
             values = line.split()
             processes = lines[i - 2].split()
+
+            for process, rate in zip(processes[1:], values[1:]):
+              if process == "signal" and float(rate) < 1e-9:
+                skip_card = True
+                break
+            
+            if skip_card:
+              warn(f"Datacard {datacard_path} has not signal events - skipping")
+              break
+
             for process, rate in zip(processes[1:], values[1:]):
               if process == "bkg" and get_bkg_rate:
                 if "background" not in rates:
@@ -148,8 +159,8 @@ def get_min_max_uncertainty(uncertainties):
       if unc_name not in uncertainties_per_type:
         uncertainties_per_type[unc_name] = []
       for v in unc_value:
-        if v != 0.0:
-          uncertainties_per_type[unc_name].append(v)
+        # if v != 0.0:
+        uncertainties_per_type[unc_name].append(v)
 
   for unc_name, unc_values in uncertainties_per_type.items():
     min_uncertainty[unc_name] = min(unc_values)
@@ -189,8 +200,8 @@ def get_68percert_uncertainty_range(uncertainties):
             if unc_name not in uncertainties_per_type:
                 uncertainties_per_type[unc_name] = []
             for v in unc_value:
-                if v != 0.0:
-                    uncertainties_per_type[unc_name].append(v)
+                # if v != 0.0:
+                uncertainties_per_type[unc_name].append(v)
 
     for unc_name, unc_values in uncertainties_per_type.items():
         values = np.array(unc_values)
@@ -209,12 +220,20 @@ def get_unc_category(unc_name):
     variation = "_up" if "_up" in unc_name else "_down"
   elif "Up" in unc_name or "Dn" in unc_name:
     variation = "_Up" if "Up" in unc_name else "_Dn"
-  if "jecMC" in unc_name or "CMS_scale_j" in unc_name:
-    return "JEC"
-  if "metMC" in unc_name or "CMS_scale_met" in unc_name:
-    return "MET"
+  if "CMS_scale_j" in unc_name:
+    return "JEC_scale"
+  if "CMS_res_j" in unc_name:
+    return "JEC_res"
+  if "CMS_scale_met_unclustered_energy" in unc_name:
+    return "met_unclustered_energy"
+  if "CMS_scale_met" in unc_name:
+    return "CMS_scale_met"
   if "bTaggingMedium" in unc_name or "CMS_btag" in unc_name or "CMS_eff_b" in unc_name:
     return "bTaggingMedium"
+  if "lumi" in unc_name:
+    return "lumi"
+  if "CMS_eff_j_PUJetID" in unc_name:
+    return "PUJetID"
   if variation != "" and variation in unc_name:
     base_name = unc_name.replace(variation, "")
     return base_name
@@ -226,17 +245,23 @@ def get_nice_names(years):
       "CMS_EXO25022_abcd": "ABCD uncertainty",
       "CMS_EXO25022_abcd_bkg": "ABCD uncertainty",
       "CMS_EXO25022_abcd_sig": "ABCD uncertainty (signal)",
+      "CMS_EXO25022_lxy": "Lxy uncertainty",
+      "CMS_EXO25022_lxy_bkg": "Lxy uncertainty",
+      "CMS_EXO25022_lxy_sig": "Lxy uncertainty (signal)",
       "lumi": "luminosity",
       "lumi_sig": "luminosity",
       "lumi_bkg": "luminosity",
-      "stat_err_sig": "statistical (signal)",
-      "stat_err_bkg": "statistical (background)",
-      "JEC": "JEC",
+      "stat_err_signal": "statistical (signal)",
+      "stat_err_bck": "statistical (background)",
+      "JEC_scale": "JEC scale",
+      "JEC_res": "JEC resolution",
       "MET": "MET",
+      "CMS_scale_met" : "MET JES uncertainty",
+      "CMS_res_met" : "MET JER uncertainty",
       "CMS_l1_muon_prefiring": "L1 Pre-firing",
-      "CMS_EXO25022_dimuonSFs_Pat_syst": "PAT-PAT Dimuon efficiency SF",
-      "CMS_EXO25022_dimuonSFs_PatDSA_syst": "PAT-DSA Dimuon efficiency SF",
-      "CMS_EXO25022_dimuonSFs_DSA_syst": "DSA-DSA Dimuon efficiency SF",
+      "CMS_EXO25022_dimuonSFs_Pat": "PAT-PAT Dimuon efficiency SF",
+      "CMS_EXO25022_dimuonSFs_PatDSA": "PAT-DSA Dimuon efficiency SF",
+      "CMS_EXO25022_dimuonSFs_DSA": "DSA-DSA Dimuon efficiency SF",
       # "dimuonSFs": "Dimuon efficiency SF",
       "dimuonSFs_Pat": "PAT-PAT Dimuon efficiency SF",
       "dimuonSFs_PatDSA": "PAT-DSA Dimuon efficiency SF",
@@ -253,11 +278,21 @@ def get_nice_names(years):
       "CMS_btag": "b-tagging",
       "bTaggingMedium": "b-tagging",
       "CMS_pileup": "PU",
+      "PUJetID": "PU jet ID efficiency",
+      "met_unclustered_energy": "MET unclustered energy",
   }
   for year_ in years:
     year = year_
     if year_ in ["2016preVFP", "2016postVFP"]:
-      year = "2016"
+      year = "2016"    
+    if year_ == "2022preEE":
+      year = "2022"
+    if year_ == "2022postEE":
+      year = "2022EE"
+    if year_ == "2023preBPix":
+      year = "2023"
+    if year_ == "2023postBPix":
+      year = "2023BPix"
     nice_names[f"jecMC_Regrouped_Absolute_{year}_down"] = f"JEC Regrouped_Absolute_{year} SF (down)"
     nice_names[f"jecMC_Regrouped_Absolute_{year}_up"] = f"JEC Regrouped_Absolute_{year} SF (up)"
     nice_names[f"jecMC_Regrouped_BBEC1_{year}_down"] = f"JEC Regrouped_BBEC1_{year} SF (down)"
@@ -278,6 +313,7 @@ def get_nice_names(years):
     nice_names[f"metMC_Regrouped_HF_{year}_up"] = f"MET Regrouped_HF_{year} SF (up)"
     nice_names[f"metMC_Regrouped_RelativeSample_{year}_down"] = f"MET Regrouped_RelativeSample_{year} SF (down)"
     nice_names[f"metMC_Regrouped_RelativeSample_{year}_up"] = f"MET Regrouped_RelativeSample_{year} SF (up)"
+    nice_names[f"CMS_scale_met_unclustered_energy_{year}"] = f"MET unclustered energy"
     if year_ in ["2022preEE", "2022postEE"]:
       year = "13p6TeV_2022"
     if year_ in ["2023preBPix", "2023postBPix"]:
@@ -311,8 +347,8 @@ def main():
   signal_name = next(
     key for key, val in uncertainties.items()
     if key != "background"
-    and "stat_err_bkg" in val
-    and val["stat_err_bkg"]
+    and "stat_err_bck" in val
+    and val["stat_err_bck"]
   )
 
   background_rate_ = rates.pop("background")
@@ -320,12 +356,12 @@ def main():
   background_err = 1
   if not config.use_combined_limits:
     background_rate = background_rate_[signal_name]
-    background_err = uncertainties[signal_name]["stat_err_bkg"] * background_rate
+    background_err = uncertainties[signal_name]["stat_err_bck"] * background_rate
   else:
     background_rate = sum(r for r in background_rate_)
     background_err2 = 0
     for i, r in enumerate(background_rate_):
-      stat_err = uncertainties[signal_name]["stat_err_bkg"][i] * r
+      stat_err = uncertainties[signal_name]["stat_err_bck"][i] * r
       background_err2 += stat_err**2
     background_err = math.sqrt(background_err2)
 
@@ -356,12 +392,12 @@ def main():
     signal_err = 1
     if not config.use_combined_limits:
       signal_rate = signal_scale * rate
-      signal_err = uncertainties[name]["stat_err_sig"] * signal_rate
+      signal_err = uncertainties[name]["stat_err_signal"] * signal_rate
     else:
       signal_rate = sum(signal_scale * r for r in rate)
       signal_err2 = 0
       for i, r in enumerate(rate):
-        stat_err = uncertainties[name]["stat_err_sig"][i] * signal_scale * r
+        stat_err = uncertainties[name]["stat_err_signal"][i] * signal_scale * r
         signal_err2 = stat_err**2
       signal_err = math.sqrt(signal_err2)
 

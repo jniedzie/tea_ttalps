@@ -40,6 +40,27 @@ correlated_luminosity_uncertainties = {
     }
 }
 
+luminosity_uncertainties = {
+  "2016": {
+    "lumi_13TeV_1516_l" : 1.0118,
+    "lumi_13TeV_151617_l": 1.0004,
+    "lumi_13TeV_15161718_l": 1.0035,
+  },
+  "2017": {
+    "lumi_13TeV_151617_l": 1.0055,
+    "lumi_13TeV_15161718_l": 1.0061,
+  },
+  "2018": {
+    "lumi_13TeV_15161718_l": 1.0084,
+  },
+  "2022": {
+    "lumi_1": 1.0138,
+  },
+  "2023": {
+    "lumi_1": 1.0017,
+    "lumi_2": 1.0127,
+  }
+}
 
 def get_luminosity(year):
   if year in luminosities and luminosities[year] != 0:
@@ -56,6 +77,18 @@ def get_luminosity_uncertainty_default(year):
     error(f"Default luminosity uncertainty for year {year} is not defined. Luminosity uncertainty set to 1.")
     return 1.
 
+def get_luminosity_uncertainty(year):
+  if year in luminosity_uncertainties and luminosity_uncertainties[year] != 0:
+    return luminosity_uncertainties[year]
+  elif year == "2016preVFP" or year == "2016postVFP":
+    return luminosity_uncertainties["2016"]
+  elif year == "2022preEE" or year == "2022postEE":
+    return luminosity_uncertainties["2022"]
+  elif year == "2023preBPix" or year == "2023postBPix":
+    return luminosity_uncertainties["2023"]
+  else:
+    error(f"Luminosity uncertainty for year {year} is not defined. Luminosity uncertainty set to 1.")
+    return 1.
 
 def get_luminosity_uncertainty_uncorrelated(year):
   if year in uncorrelated_luminosity_uncertainties and uncorrelated_luminosity_uncertainties[year] != 0:

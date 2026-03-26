@@ -118,6 +118,57 @@ class TTAlpsLimitsPlotterHelper:
 
     return scale
 
+  def get_nan_invalid_points(self):
+    masses = sorted(set(m for (m, ct) in self.data.keys()))
+    ctaus = sorted(set(ct for (m, ct) in self.data.keys()))
+    nan_points = []
+
+    nan_corner_point = (-1,-1)
+    nan_corner_mass_idx = -1
+    nan_corner_ctau_idx = -1
+    if (masses[len(masses)-1],ctaus[0]) in self.missing_points:
+      nan_corner_point = (masses[len(masses)-1], ctaus[0])
+      nan_corner_mass_idx = len(masses)-1
+      nan_corner_ctau_idx = 0
+
+    if (masses[0],ctaus[0]) in self.missing_points:
+      nan_points.append((masses[0], ctaus[0]))
+
+    for (m1, ct1) in self.missing_points:
+      mass_neighbour = False
+      ctau_neighbour = False
+      m_idx1 = masses.index(m1)
+      ct_idx1 = ctaus.index(ct1)
+      if (m1, ct1) == nan_corner_point:
+        nan_points.append((m1, ct1))
+        continue
+      if m1 == nan_corner_point[0] and abs(ct_idx1 - nan_corner_ctau_idx) == 1:
+        nan_points.append((m1, ct1))
+        continue
+      if ct1 == nan_corner_point[1] and abs(m_idx1 - nan_corner_mass_idx) == 1:
+          nan_points.append((m1, ct1))
+          continue
+      
+      for (m2, ct2) in self.missing_points:
+        if (m1, ct1) == (m2, ct2):
+          continue
+        if (m2, ct2) in nan_points:
+          continue
+        m_idx2 = masses.index(m2)
+        ct_idx2 = ctaus.index(ct2)
+        if m1 == m2 and abs(ct_idx1 - ct_idx2) == 1:
+            ctau_neighbour == True
+        if ct1 == ct2 and abs(m_idx1 - m_idx2) == 1:
+            mass_neighbour == True
+      
+      if mass_neighbour and ctau_neighbour:
+        nan_points.append((m1, ct1))
+
+    print(f"nan_points:")
+    for (m,ct) in nan_points:
+      print(f"{m=}, {ct}")
+    return nan_points
+
   def get_2d_graph(self, expected=False):
     self.graph_2d_exp = ROOT.TGraph2D()
     self.graph_2d_exp.SetTitle("")
@@ -129,16 +180,27 @@ class TTAlpsLimitsPlotterHelper:
     all_points = [log10(self.get_scale(m, ct) * values[3 if expected else 0])
                   for (m, ct), values in self.data.items() if len(values) >= 3]
     worst_point = max(all_points)
-    placeholder = worst_point + 0.5
+    placeholder = worst_point + 100
 
     for (m, ct), values in self.data.items():
       if len(values) < 3:
-          point = placeholder
-          warn(f"Point ({m}, {ct}) is missing, using placeholder {point}")
+          warn(f"Point ({m}, {ct}) is missing - skipping")
           self.missing_points.append((m, ct))
+          continue
       else:
           point = log10(self.get_scale(m, ct) * values[3 if expected else 0])
 
+      self.graph_2d_exp.SetPoint(
+          self.graph_2d_exp.GetN(),
+          log10(m),
+          log10(ct),
+          point
+      )
+      print(f"Mass {m}, ctau: {ct}: {pow(10,point):.5f}")
+    
+    nan_points = self.get_nan_invalid_points()
+    for (m, ct) in nan_points:
+      point = float('nan')
       self.graph_2d_exp.SetPoint(
           self.graph_2d_exp.GetN(),
           log10(m),
@@ -177,6 +239,12 @@ class TTAlpsLimitsPlotterHelper:
       self.graph_2d_exp.GetHistogram().GetYaxis().SetTitleOffset(1.3)
       self.graph_2d_exp.GetHistogram().GetZaxis().SetTitleOffset(1.3)
 
+    # Change the underflow color to gray
+    gray_color = ROOT.TColor.GetColor(0.65, 0.65, 0.65)
+    n_colors = ROOT.gStyle.GetNumberOfColors()
+    colors = array.array('i', [ROOT.gStyle.GetColorPalette(i) for i in range(n_colors)])
+    ROOT.gROOT.GetColor(colors[0]).SetRGB(0.65, 0.65, 0.65)
+
     # work in progress:
     # sigma_theory_0p1 = get_theory_cross_section(mass)
 
@@ -200,19 +268,26 @@ class TTAlpsLimitsPlotterHelper:
     # contour.DrawClone("CONT3 SAME")
     # contour_0p2.DrawClone("CONT3 SAME")
 
-  def draw_missing_points(self):
+  def draw_missing_points(self, custom_axis=False):
     if len(self.missing_points) == 0:
       return
 
-    missing_graph = ROOT.TGraph(len(self.missing_points))
+    # Draw red X over missing points
+    self.missing_graph = ROOT.TGraph(len(self.missing_points))
     for i, (m, ct) in enumerate(self.missing_points):
-      missing_graph.SetPoint(i, log10(m), log10(ct))
+      self.missing_graph.SetPoint(i, log10(m), log10(ct))
 
-    missing_graph.SetMarkerColor(ROOT.kRed)
-    missing_graph.SetMarkerSize(1.5)
-    missing_graph.SetMarkerStyle(5)
+    self.missing_graph.SetMarkerColor(ROOT.kRed)
+    self.missing_graph.SetMarkerStyle(70)
+    self.missing_graph.SetMarkerSize(3.0)
 
-    missing_graph.DrawClone("P SAME")
+    self.missing_graph.Draw("P SAME")
+    if custom_axis:
+      self.missing_graph.GetXaxis().SetLabelSize(0)
+      self.missing_graph.GetYaxis().SetLabelSize(0)
+      self.missing_graph.GetXaxis().SetTickLength(0)
+      self.missing_graph.GetYaxis().SetTickLength(0)
+
 
   def draw_pion_label(self):
     tex = ROOT.TLatex(0.60, 0.80, "tt+a, a #rightarrow #pi's")

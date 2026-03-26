@@ -13,7 +13,7 @@ from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix,
 import os
 
 max_files = -1
-samples = dasSignals2018.keys()
+samples = dasBackgrounds2018.keys()
 
 # Loose semimuonic skim
 # skim = ("skimmed_looseSemimuonic_v3_merged", "", "")
@@ -23,6 +23,9 @@ samples = dasSignals2018.keys()
 skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsHitsInFrontOfVertex", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsDPhiBetweenMuonpTAndLxy", "LooseNonLeadingMuonsVertexSegmentMatch")
+
+# skim = ("skimmed_looseSemimuonic_v3_SR_noBTag", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v3_SR_noBTag_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SSDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -64,30 +67,36 @@ applyScaleFactors = {
     "dimuonEff_DSA": (True, True),
     "jec": (False, True),
     "jer": (True, True),
+    "metUnclEnergy": (False, True),
+    "metXYcorrection": (True, False),
     "L1PreFiringWeight": (True, True),
 }
 
 # We don't need the SF variations for uncertainties in CRs
 if "SRDimuons" not in skim[1]:
   for name in applyScaleFactors: 
-    sfs = applyScaleFactors[name]
-    applyScaleFactors[name][1] = False
+    nominal, _ = applyScaleFactors[name]
+    applyScaleFactors[name] = (nominal, False)
 
 hist_path = "histograms"
 
 if skim[1] != "":
   hist_path += f"_{skim[1]}"
 
-if "dimuonEff" in applyScaleFactors and "ttbarCR" not in skim[0]:
+if "ttbarCR" not in skim[0]:
   if applyScaleFactors["dimuonEff_Pat"][0] is False and \
     applyScaleFactors["dimuonEff_PatDSA"][0] is False and \
     applyScaleFactors["dimuonEff_DSA"][0] is False:
     hist_path += "_noDimuonEffSFs"
 
-hist_path += "_ABCD_ANv2"
-# hist_path += "_nminus1/"
-# hist_path += "_noMatching_ABCD_ANv2"
-# hist_path += "_revertedMatching_ABCD_ANv2"
+# hist_path += "_ANv3"
+# hist_path += "_jetMaps_ANv3"
+hist_path += "_ABCD_ANv3"
+# hist_path += "_maxLxyCut_ABCD_ANv3"
+# hist_path += "_genInfo_ABCD_ANv3"
+# hist_path += "_nminus1_ANv3/"
+# hist_path += "_noMatching_ABCD_ANv3"
+# hist_path += "_revertedMatching_ABCD_ANv3"
 # hist_path += "_fakes/"
 # hist_path += "_noMatching/"
 

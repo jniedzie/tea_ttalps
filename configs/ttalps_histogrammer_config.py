@@ -3,7 +3,7 @@ from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
-from ttalps_histogrammer_files_config import skim, applyScaleFactors, year
+from ttalps_histogrammer_files_config import skim, applyScaleFactors, year, sample_path
 
 from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
 from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
@@ -23,6 +23,11 @@ eventCuts = {
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
 
+# Dataset names for jet tagging efficiencies
+datasetName = sample_path.split("/")[-1]
+if "tta" in datasetName:
+  datasetName = "tta"
+
 nEvents = -1
 
 # Should dimuon checks be skipped? Used for tt̄ CR, where we don't have dimuons
@@ -31,6 +36,10 @@ ignoreDimuons = False
 runDefaultHistograms = True
 runLLPTriggerHistograms = False
 runPileupHistograms = False
+runMETxyHistograms = True
+
+# Jet hadron flavours 2D plots for tagging efficiency
+runJetEfficiencyMaps = False
 
 # runLooseMuonsHistograms:
 #  - muonMatchingParams loose muons
@@ -40,6 +49,7 @@ runLooseMuonsHistograms = False
 #  - Best Dimuon Vertex collections
 #  - tracker maps
 runDimuonVertexCollectionHistograms = True
+runGenLevelResonances1D = False
 
 # Histograms for Muon Trigger Objects
 runMuonTriggerObjectsHistograms = False
@@ -110,6 +120,13 @@ muonMatchingParams = {
     # "ProxDR" : 0.1
 }
 
+# Max Lxy cuts in cm
+# maxLxyCuts = {
+#   "Pat": 6,
+#   "PatDSA": 300,
+#   "DSA": 300,
+# }
+
 muonVertexBaselineSelection = [
     "InvariantMassCut",
     "DeltaRCut",
@@ -162,9 +179,12 @@ helper = TTAlpsHistogrammerConfigHelper(
 defaultHistParams = helper.get_default_params()
 histParams += helper.get_basic_params()
 
+if runJetEfficiencyMaps:
+  irregularHistParams2D += helper.get_jet_2d_irregular_params()
+
 if runLooseMuonsHistograms or runDimuonVertexCollectionHistograms:
   histParams += helper.get_llp_params()
-  irregularHistParams += helper.get_llp_irregular_params(runRevertedMatching, runGenLevelResonancesABCD, runFakesHistograms)
+  irregularHistParams += helper.get_llp_irregular_params(runRevertedMatching, runGenLevelResonances1D, runFakesHistograms)
   histParams2D += helper.get_llp_2d_params()
 
 if runNminus1Histograms:
@@ -177,6 +197,10 @@ if runGenMuonHistograms:
   histParams += helper.get_gen_params()
   histParams += helper.get_gen_matched_params()
   irregularHistParams += helper.get_gen_matched_irregular_params()
+
+if runMETxyHistograms:
+  histParams += helper.get_met_xy_params()
+  histParams2D += helper.get_met_xy_2D_params()
 
 if runLLPTriggerHistograms:
   histParams += helper.get_trigger_params()

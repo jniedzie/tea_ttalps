@@ -20,12 +20,13 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "genInfo")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "ABCD_genInfo_ANv2")
-skim = ("skimmed_looseSemimuonic_v3_SR", "SSDimuons", "genInfo_v3")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "genInfo_ABCD_ANv3")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SSDimuons", "genInfo_ABCD_ANv3")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "genInfo_v3")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "noDimuonEffSFs_revertedMatching_ABCD", "SR")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "noDimuonEffSFs_revertedMatching_ABCD", "SR")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuonsPatDSA", "noDimuonEffSFs_noMatching_ABCD")
+# # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "noDimuonEffSFs_revertedMatching_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuonsPatDSA", "noDimuonEffSFs_noMatching_ABCD_ANv3")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "noDimuonEffSFs_ABCD")
+skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "noDimuonEffSFs_ABCD_ANv3")
 # skim = ("skimmed_3muCR_merged", "JPsiDimuons", "noDimuonEffSFs_ABCD")
 hist_path = "histograms"
 
@@ -44,14 +45,15 @@ if not os.path.exists(output_dir):
 backgrounds = globals()[f"dasBackgrounds{year}"].keys()
 dimuon_collection = "BestDimuonVertex"
 # dimuon_collection = "BestPFIsoDimuonVertex"
+if signals: 
+    backgrounds = dasSignals2018.keys()
 if signals or "SRDimuons" in skim[1] or "SSDimuons" in skim[1]:
-  backgrounds = dasSignals2018.keys()
-  dimuon_collection = "BestPFIsoDimuonVertex"
+    dimuon_collection = "BestPFIsoDimuonVertex"
 
 
 # category = ""
-category = "_Pat"
-# category = "_PatDSA"
+# category = "_Pat"
+category = "_PatDSA"
 # category = "_DSA"
 
 do_mother_ids = False
@@ -70,33 +72,45 @@ for background in backgrounds:
 flip_hists = {
   # category: (flip_horizontally, flip_vertically)
     "_Pat": (True,True),
+    # "_Pat": (False,False),
     "_PatDSA": (False,False),
     "_DSA": (True,True),
+    # "_DSA": (False,False),
 }
 
 flip_hist = flip_hists[category]
 
 rebin_hist = {
     "_Pat": (20, 20),
-    "_PatDSA": (20, 20),
+    # "_Pat": (5, 5),
+    "_PatDSA": (1, 1),
+    # "_PatDSA": (20, 20),
+    # "_PatDSA": (5, 5),
     "_DSA": (20, 20),
+    # "_DSA": (5, 5),
     "": (4, 4),
 }
+
+# norm = NormalizationType.toLuminosity
+norm = NormalizationType.to_one
 
 resonant_categories = ["FromALP", "Resonant", "NonResonant"]
 # mother_categories = ["X", "W", "tau", "B", "D", "d", "u", "s", "c", "b", "t", "e", "mu",
                     #  "g", "gamma", "Z", "rho", "pi0", "omega", "K0", "phi", "upsilon", "JPsi", "other"]
-mother_categories = ["X", "W", "tau", "B", "D", "q", "l", "g", "gamma", "Z", "lightMeson", "JPsi", "other"]
+mother_categories = ["X", "Y", "W", "tau", "B", "D", "q", "l", "g", "gamma", "Z", "lightMeson", "JPsi", "other"]
+if signals:
+    mother_categories = ["ALP", "X", "Y", "W", "tau", "B", "D", "q", "l", "g", "gamma", "Z", "lightMeson", "JPsi", "other"]
 # mother_categories = []
 
 colors = [ROOT.kGreen+2, ROOT.kRed, ROOT.kOrange+1, ROOT.kMagenta+1, ROOT.kPink+1, ROOT.kCyan+1, ROOT.kViolet+1, ROOT.kTeal+1,
           ROOT.kYellow+1, ROOT.kAzure+1, ROOT.kGreen+3, ROOT.kMagenta+3, ROOT.kRed+3, ROOT.kOrange+3, ROOT.kBlue+3, ROOT.kBlue-3, ROOT.kBlack]
 mother_naming = {
     # ("other", "e", "mu", "g", "gamma", "d", "u", "s", "c", "b", "t"): "Other",
+    ("ALP",): "ALP",
     ("other", "q", "l", "g",): "Other",
     ("gamma",): "Photons",
     ("Z",): "Z",
-    ("X",): "Pileup",
+    ("X","Y",): "Pileup",
     ("B", "D",): "B/D mesons",
     ("W", "tau",): "SS NonResonant",
     ("lightMeson", "JPsi"): "Light flavoured mesons",
@@ -119,41 +133,66 @@ mother_naming = {
 # PAT-DSA
 legend_settings_Pat = {
     ("B/D mesonsB/D mesons",): ("B/D meson + B/D meson", ROOT.kAzure+1),
-    # ("SS NonResonantZ",): ("SS NonResonant + Z", ROOT.kPink+1),
-    ("PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ", "PileupPhotons"): ("Pileup + Pileup/X", ROOT.kGreen+1),
+    ("PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ", "PhotonsPileup"): ("Pileup + Pileup/X", ROOT.kGreen+1),
     ("B/D mesonsSS NonResonant",): ("B/D meson + W/#tau", ROOT.kBlue+1),
     ("OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ", "SS NonResonantSS NonResonant",): ("W/#tau + W/#tau/X", ROOT.kPink+1),
-    # (,): ("B/D + X", ROOT.kBlue+1),
-    # ("B/D mesonsSS NonResonant",): ("SS NonResonant + B/D meson", ROOT.kMagenta+1),
-    ("OtherOther", "Light flavoured mesonsLight flavoured mesons", "Light flavoured mesonsOther", "B/D mesonsOther", "B/D mesonsLight flavoured mesons", "B/D mesonsZ",
-     "ZZ", "Light flavoured mesonsZ", "OtherZ", "OtherPhotons", "B/D mesonsPhotons", "Light flavoured mesonsPhotons", ): ("Other", ROOT.kRed),
+    ("B/D mesonsOther", "B/D mesonsLight flavoured mesons", "B/D mesonsZ", "ZZ", "Light flavoured mesonsZ", "OtherZ", "OtherPhotons", "B/D mesonsPhotons", "Light flavoured mesonsPhotons",
+     "PhotonsSS NonResonant", "PhotonsZ", "OtherOther", "Light flavoured mesonsOther", "Light flavoured mesonsLight flavoured mesons", ): ("Other", ROOT.kRed),
     ("PhotonsPhotons", ): ("#gamma + #gamma", ROOT.kMagenta),
 }
+if signals:
+    legend_settings_Pat = {
+        ("OtherOther", "Light flavoured mesonsLight flavoured mesons", "Light flavoured mesonsOther", "B/D mesonsOther", "B/D mesonsLight flavoured mesons", "B/D mesonsZ",
+         "ZZ", "Light flavoured mesonsZ", "OtherZ", "OtherPhotons", "B/D mesonsPhotons", "Light flavoured mesonsPhotons", "PhotonsPhotons", 
+         "B/D mesonsB/D mesons", "B/D mesonsSS NonResonant","PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ", "PhotonsPileup",
+         "ALPOther", "ALPPhotons", "ALPZ", "ALPPileup", "ALPLight flavoured mesons", "ALPB/D mesons",
+         "PhotonsSS NonResonant", "PhotonsZ",
+         "OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ", "SS NonResonantSS NonResonant",): ("Other", ROOT.kRed),
+        ("ALPALP", ): ("ALP + ALP", ROOT.kMagenta+1),
+        ("ALPSS NonResonant",): ("ALP + W/#tau", ROOT.kAzure+1),
+    }
 # PAT-DSA
 legend_settings_PatDSA = {
     ("B/D mesonsB/D mesons",): ("B/D meson + B/D meson", ROOT.kAzure+1),
-    # ("B/D mesonsPileup",): ("B/D meson + Pileup", ROOT.kRed+3),
-    # ("PileupSS NonResonant",): ("SS NonResonant + Pileup", ROOT.kYellow+1),
     ("SS NonResonantSS NonResonant",): ("W/#tau + W/#tau", ROOT.kOrange+1),
     ("B/D mesonsSS NonResonant",): ("B/D meson + W/#tau", ROOT.kBlue+1),
-    # (,): ("W/#tau + X", ROOT.kMagenta+1),
-    # (): ("B/D + X", ROOT.kBlue+1),
     ("PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ"): ("Pileup + Pileup/X", ROOT.kGreen+1),
     ("OtherOther", "OtherPileup", "Light flavoured mesonsLight flavoured mesons", "OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ",
-     "Light flavoured mesonsOther", "ZZ", "B/D mesonsZ", "Light flavoured mesonsZ", "OtherZ", "B/D mesonsOther", "B/D mesonsLight flavoured mesons",): ("Other", ROOT.kRed),
+     "Light flavoured mesonsOther", "ZZ", "B/D mesonsZ", "Light flavoured mesonsZ", "OtherZ", "B/D mesonsOther", "B/D mesonsLight flavoured mesons", "ALPOther", "ALPPhotons", "ALPZ", "ALPLight flavoured mesons", ): ("Other", ROOT.kRed),
 }
+if signals:
+    legend_settings_PatDSA = {
+        ("B/D mesonsSS NonResonant",): ("B/D meson + W/#tau", ROOT.kBlue+1),
+        ("PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ", "PhotonsPileup"): ("Pileup + Pileup/X", ROOT.kGreen+1),
+        ("OtherOther", "Light flavoured mesonsLight flavoured mesons", "OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ",
+         "Light flavoured mesonsOther", "ZZ", "B/D mesonsZ", "Light flavoured mesonsZ", "OtherZ", "B/D mesonsOther", "B/D mesonsLight flavoured mesons", 
+         "SS NonResonantSS NonResonant", "B/D mesonsB/D mesons", "ALPOther", "ALPPhotons", "ALPZ", "ALPLight flavoured mesons", 
+         "PhotonsSS NonResonant", "B/D mesonsPhotons", "OtherPhotons", "PhotonsPhotons", "PhotonsZ", "Light flavoured mesonsPhotons", ): ("Other", ROOT.kRed),
+        ("ALPALP", ): ("ALP + ALP", ROOT.kMagenta+1),
+        ("ALPB/D mesons",): ("ALP + B/D meson", ROOT.kPink+1),
+        ("ALPPileup",): ("ALP + Pileup", ROOT.kAzure+1),
+        ("ALPSS NonResonant",): ("ALP + W/#tau", ROOT.kOrange+2),
+    }
 legend_settings_DSA = {
     ("B/D mesonsB/D mesons",): ("B/D meson + B/D meson", ROOT.kAzure+1),
-    # ("SS NonResonantZ",): ("SS NonResonant + Z", ROOT.kPink+1),
     ("PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ", "PhotonsPileup"): ("Pileup + Pileup/X", ROOT.kGreen+1),
     ("B/D mesonsSS NonResonant",): ("B/D meson + W/#tau", ROOT.kBlue+1),
     ("OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ", "SS NonResonantSS NonResonant", "PhotonsSS NonResonant",): ("W/#tau + W/#tau/X", ROOT.kPink+1),
-    # (,): ("B/D + X", ROOT.kBlue+1),
-    # ("B/D mesonsSS NonResonant",): ("SS NonResonant + B/D meson", ROOT.kMagenta+1),
     ("OtherOther", "Light flavoured mesonsLight flavoured mesons", "Light flavoured mesonsOther", "B/D mesonsOther", "B/D mesonsLight flavoured mesons", "B/D mesonsZ",
      "ZZ", "Light flavoured mesonsZ", "OtherZ", "OtherPhotons", "B/D mesonsPhotons", "Light flavoured mesonsPhotons", ): ("Other", ROOT.kRed),
     ("PhotonsPhotons", "PhotonsZ"): ("#gamma + #gamma/X", ROOT.kMagenta),
 }
+if signals:
+    legend_settings_DSA = {
+        ("OtherSS NonResonant", "Light flavoured mesonsSS NonResonant", "SS NonResonantZ", "SS NonResonantSS NonResonant", "PhotonsSS NonResonant",): ("W/#tau + W/#tau/X", ROOT.kPink+1),
+        ("OtherOther", "Light flavoured mesonsLight flavoured mesons", "Light flavoured mesonsOther", "B/D mesonsOther", "B/D mesonsLight flavoured mesons", "B/D mesonsZ",
+        "ZZ", "Light flavoured mesonsZ", "OtherZ", "OtherPhotons", "B/D mesonsPhotons", "Light flavoured mesonsPhotons", 
+        "B/D mesonsB/D mesons","B/D mesonsSS NonResonant", "PileupPileup", "PileupSS NonResonant", "B/D mesonsPileup", "OtherPileup", "Light flavoured mesonsPileup", "PileupZ", "PhotonsPileup",
+        "ALPOther", "ALPPhotons", "ALPZ", "ALPSS NonResonant","ALPLight flavoured mesons", "ALPB/D mesons",): ("Other", ROOT.kRed),
+        ("PhotonsPhotons", "PhotonsZ"): ("#gamma + #gamma/X", ROOT.kMagenta),
+        ("ALPALP", ): ("ALP + ALP", ROOT.kMagenta+1),
+        ("ALPPileup", ): ("ALP + Pileup", ROOT.kAzure+1),
+    }
 legend_settings = legend_settings_Pat
 if category == "_PatDSA":
   legend_settings = legend_settings_PatDSA
@@ -161,9 +200,12 @@ if category == "_DSA":
   legend_settings = legend_settings_DSA
 
 legend_positions = {
-    "_Pat": (0.2, 0.68, 0.45, 0.89),
+    # "_Pat": (0.2, 0.68, 0.45, 0.89),
+    "_Pat": (0.55, 0.75, 0.89, 0.89),
+    # "_PatDSA": (0.2, 0.72, 0.45, 0.89),
     "_PatDSA": (0.2, 0.68, 0.45, 0.89),
-    "_DSA": (0.2, 0.68, 0.45, 0.89),
+    # "_DSA": (0.2, 0.72, 0.45, 0.89),
+    "_DSA": (0.55, 0.75, 0.89, 0.89),
     "": (0.2, 0.68, 0.45, 0.89),
 }
 
@@ -176,8 +218,12 @@ resonance_colors = {
 
 abcd_variables = {
     "_Pat": ("logAbsCollinearityAngle", "logPt"),
-    "_PatDSA": ("logDxyPVTraj1", "logAbsCollinearityAngle"),
+    # "_Pat": ("logPt", "logPt"),
+    "_PatDSA": ("pt_irr", "logAbsCollinearityAngle"),
+    # "_PatDSA": ("logDxyPVTraj1", "logAbsCollinearityAngle"),
+    # "_PatDSA": ("logOuterDR", "logDxyPVTrajSig2"),
     "_DSA": ("logAbsCollinearityAngle", "logPt"),
+    # "_DSA": ("logDxyPVTrajSig1", "logDxyPVTrajSig2"),
 }
 variable_to_str = {
     "logLeadingPt": "log leading p_{T} [GeV]",
@@ -197,6 +243,8 @@ variable_to_str = {
     "absCollinearityAngle": "absCollinearityAngle",
 }
 abcd_variable = abcd_variables[category]
+
+projection_x = False
 
 
 def get_color(category_name):
@@ -254,11 +302,12 @@ def setup_legend(legend, merged_histograms, n_events_per_category):
       hist = merged_histograms[mother_category]
       legend.AddEntry(hist, text, "f")
       legend_entries.append(mother_category)
-  faction_of_events = n_events_per_category["Other"] / n_tot * 100 if n_tot > 0 else 0
-  if n_events_per_category["Other"] > 0:
-    text = f"Other ({faction_of_events:.2f}%)"
-  if "Other" not in legend_entries:
-    legend.AddEntry(merged_histograms["Other"], text, "f")
+  if "Other" in n_events_per_category:
+    if n_events_per_category["Other"] > 0:
+      faction_of_events = n_events_per_category["Other"] / n_tot * 100 if n_tot > 0 else 0
+      text = f"Other ({faction_of_events:.2f}%)"
+      if "Other" not in legend_entries:
+        legend.AddEntry(merged_histograms["Other"], text, "F")
   return legend
 
 
@@ -425,9 +474,27 @@ def main():
           # warn(f"{hist_name} has no entries")
           continue
 
+        if (cut_on_y != None):
+          ybin_cut = hist.hist.GetYaxis().FindBin(cut_on_y)
+          for ix in range(1, hist.hist.GetNbinsX() + 1):
+            for iy in range(1, ybin_cut):
+            # for iy in range(ybin_cut, hist.hist.GetNbinsY() + 1):
+              hist.hist.SetBinContent(ix, iy, 0.0)
+              hist.hist.SetBinError(ix, iy, 0.0)
+        if (cut_on_x != None):
+          xbin_cut = hist.hist.GetXaxis().FindBin(cut_on_x)
+          # for ix in range(xbin_cut, hist.hist.GetNbinsX() + 1):
+          for ix in range(1, xbin_cut):
+            for iy in range(1, hist.hist.GetNbinsY() + 1):
+              hist.hist.SetBinContent(ix, iy, 0.0)
+              hist.hist.SetBinError(ix, iy, 0.0)
+
         # hist.setup()
         hist.hist.Rebin2D(hist.x_rebin, hist.y_rebin)
-        hist.hist.Scale(sample.cross_section * luminosity / sample.initial_weight_sum)
+        cross_section = sample.cross_section
+        if signals:
+          cross_section = 0.01
+        hist.hist.Scale(cross_section * luminosity / sample.initial_weight_sum)
 
         if flip_hist[0]:  # flip horizontally
           flipped_hist = flip_hist_horizontally(hist.hist)
@@ -439,6 +506,7 @@ def main():
         hist.hist.SetFillStyle(1001)
         color = get_color(category_name)
         hist.hist.SetFillColorAlpha(color, 0.4)
+        hist.hist.SetMarkerColorAlpha(color, 0.4)
         hist.hist.SetLineColorAlpha(color, 0)
 
         cloned_hist = hist.hist.Clone()
@@ -491,7 +559,10 @@ def main():
       
       
       hist.hist.Rebin2D(hist.x_rebin, hist.y_rebin)
-      hist.hist.Scale(sample.cross_section * luminosity / sample.initial_weight_sum)
+      cross_section = sample.cross_section
+      if signals:
+        cross_section = 0.01
+      hist.hist.Scale(cross_section * luminosity / sample.initial_weight_sum)
 
       if flip_hist[0]:  # flip horizontally
         flipped_hist = flip_hist_horizontally(hist.hist)
@@ -570,7 +641,10 @@ def main():
 
     legend = setup_legend(legend, merged_histograms, n_events_per_category_sorted)
 
-    canvas = ROOT.TCanvas("canvas", "Background Sources", 800, 800)
+    title = "Background Sources"
+    if signals:
+      title = "Signal Sources"
+    canvas = ROOT.TCanvas("canvas", title, 800, 800)
     canvas.SetLeftMargin(0.15)
     # draw 2D stack as box
     histograms_iter = iter(n_events_per_category_sorted.items())
@@ -591,7 +665,7 @@ def main():
     first_hist.GetYaxis().SetTitle(y_prefix+abcd_variable0_str)
     first_hist.GetXaxis().SetTitle(x_prefix+abcd_variable1_str)
     
-    first_hist.SetTitle(f"Background sources for {category_str} dimuons")
+    first_hist.SetTitle(f"{title} for {category_str} dimuons")
     legend.Draw()
     canvas.Update()
     canvas.SaveAs(f"{output_dir}/background_sources{category}.pdf")
@@ -603,15 +677,26 @@ def main():
   n_events_per_resonance_sorted = dict(sorted(n_events_per_resonance.items(), key=lambda item: item[1], reverse=True))
   merged_resonance_histograms = merge_histograms(resonance_histograms, n_events_per_resonance_sorted)
 
+  if norm == NormalizationType.to_one:
+    for hist in merged_resonance_histograms.values():
+      hist.Scale(1.0 / hist.Integral(0, hist.GetNbinsX()+1, 0, hist.GetNbinsY()+1))
+
   legend2 = setup_resonance_legend(legend2, merged_resonance_histograms, n_events_per_resonance_sorted)
-  canvas2 = ROOT.TCanvas("canvas2", "Background Resonances", 800, 800)
+  title = "Background Resonances"
+  if signals:
+    title = "Signal Resonances"
+  canvas2 = ROOT.TCanvas("canvas2", title, 800, 800)
   canvas2.SetLeftMargin(0.15)
   histograms_iter = iter(n_events_per_resonance_sorted.items())
   first_name, first_n_events = next(histograms_iter)
   first_hist = merged_resonance_histograms[first_name]
+  # first_hist.GetXaxis().SetRangeUser(-3, 2)
+  # first_hist.GetYaxis().SetRangeUser(-3, 2)
   first_hist.Draw("BOX")
   for name, n_events in histograms_iter:
     hist = merged_resonance_histograms[name]
+    # hist.GetXaxis().SetRangeUser(-3, 2)
+    # hist.GetYaxis().SetRangeUser(-3, 2)
     hist.Draw("BOX SAME")
   first_hist.SetStats(0)
 
@@ -624,7 +709,7 @@ def main():
 
   first_hist.GetYaxis().SetTitle(y_prefix+abcd_variable0_str)
   first_hist.GetXaxis().SetTitle(x_prefix+abcd_variable1_str)
-  first_hist.SetTitle(f"Background resonances for {category_str} dimuons")
+  first_hist.SetTitle(f"{title} for {category_str} dimuons")
   legend2.Draw()
   canvas2.Update()
   if not signals:
@@ -632,6 +717,30 @@ def main():
     info(f"Saved background resonances to {output_dir}/background_resonances{category}.pdf")
 
   print_events_per_category(n_events_per_resonance)
+
+  if projection_x:
+    canvas_proj_x = ROOT.TCanvas("canvas_proj_x", "Projection X", 800, 800)
+    legend_proj_x = ROOT.TLegend(legend_positions[category][0], legend_positions[category]
+                         [1], legend_positions[category][2], legend_positions[category][3])
+    legend_proj_x.SetBorderSize(0)
+    legend_proj_x.SetFillStyle(0)
+    legend_proj_x.SetTextSize(0.022)
+    legend_proj_x = setup_resonance_legend(legend_proj_x, merged_resonance_histograms, n_events_per_resonance_sorted)
+    for name, hist in merged_resonance_histograms.items():
+      proj_x = hist.ProjectionX(f"{hist.GetName()}_projX", 0, hist.GetNbinsY()+1)
+      proj_x.SetTitle(f"Background resonances for {category_str} dimuons")
+      proj_x.GetXaxis().SetTitle(x_prefix+abcd_variable1_str)
+      proj_x.GetYaxis().SetTitle("Fraction of Events")
+      proj_x.SetLineColorAlpha(hist.GetLineColor(), 1)
+      proj_x.SetFillColorAlpha(hist.GetFillColor(), 0.4)
+      proj_x.SetFillStyle(1001)
+      proj_x.SetStats(0)
+      proj_x.Draw("hist SAME")
+    canvas_proj_x.SetLeftMargin(0.15)
+    legend_proj_x.Draw()
+    canvas_proj_x.Update()
+    canvas_proj_x.SaveAs(f"{output_dir}/background_resonances_projectionX{category}.pdf")
+    info(f"Saved background resonances projection on X to {output_dir}/background_resonances_projectionX{category}.pdf")
 
   if signals:
     h2_resonant = ROOT.TH2D("", "", 5, 0, 5, 5, 0, 5)

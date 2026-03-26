@@ -9,17 +9,18 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from Sample import Sample, SampleType
 
-years = ["2018",]
-# years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
+# years = ["2016postVFP",]
+years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extrapolate_in_x = False
 extrapolate_in_y = False
 
 base_path = "/data/dust/user/lrygaard/ttalps_cms"
 
-skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_ABCD")
+skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_ABCD_ANv3")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsPatDSA", "_noDimuonEffSFs_noMatching_ABCD", "SR")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_revertedMatching_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_revertedMatching_ABCD_ANv3", "SR")
 
 hist_path = f"histograms{skim[1]}{skim[2]}" # all SFs 2018
 
@@ -133,7 +134,7 @@ histogram1D = Histogram(
     norm_type=NormalizationType.to_lumi,
 )
 
-output_name = f"../data/dimuonEffSFs_ANv2/dimuonEffSFs{year_string}_{variable}_v3.json"
+output_name = f"../data/dimuonEffSFs_ANv3/dimuonEffSFs{year_string}_{variable}_v3.json"
 
 edge = "inf"
 

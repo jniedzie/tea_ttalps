@@ -52,9 +52,9 @@ cross_sectionsRun2 = {
     "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8": 820.7,
     "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8": 385.5,
 
-    "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8":  0.2439,  # 0.28136
-    "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8": 0.05324,
-    # "TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8": 0.07468,
+    # "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8":  0.2439,  # 0.28136
+    # "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8": 0.05324,
+    "TTZToLL_TuneCP5_13TeV_amcatnlo-pythia8": 0.07468,
     "TTZToQQ_TuneCP5_13TeV_amcatnlo-pythia8": 0.5104,  # 0.5297
     "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8": 5.407,  # 0.5407,
 

@@ -18,7 +18,8 @@ for year_ in years:
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR_ANv2"
+do_region = "SR_ANv3"
+# do_region = "SR_maxLxy_ANv3"
 # do_region = "SRDPhiBetweenMuonpTAndLxy"
 # do_region = "SRHitsInFrontOfVertex"
 # do_region = "JPsiCR_ANv2"
@@ -67,6 +68,14 @@ optimal_parameters = {
     ("_Pat", "SR_ANv2"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
     ("_PatDSA", "SR_ANv2"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
     ("_DSA", "SR_ANv2"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_ANv3"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "SR_ANv3"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv3"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_maxLxy_ANv3"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "SR_maxLxy_ANv3"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_maxLxy_ANv3"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
 
     ("_Pat", "SRDPhiBetweenMuonpTAndLxy"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
     ("_PatDSA", "SRDPhiBetweenMuonpTAndLxy"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
@@ -208,6 +217,13 @@ skims = {
     "SR_ANv2": (
         "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"
     ),
+    "SR_ANv3": (
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv3"
+    ),
+    "SR_maxLxy_ANv3": (
+        # "skimmed_looseSemimuonic_v3_SR", "_SRDimuonsMaxLxy", "_ABCD_ANv3"
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_maxLxyCut_ABCD_ANv3"
+    ),
     "SRDPhiBetweenMuonpTAndLxy": (
         "skimmed_looseSemimuonic_v3_SR", "_SRDimuonsDPhiBetweenMuonpTAndLxy", "_ABCD_ANv2"
     ),
@@ -223,9 +239,9 @@ skims = {
         ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
     ),
     "SSCR": (
-        ("skimmed_looseSemimuonic_v3_SR", "_SSDimuons", "_ABCD_ANv2"),
-        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
-    )
+        ("skimmed_looseSemimuonic_v3_SR", "_SSDimuons", "_ABCD_ANv3"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv3"),
+    ),
 }
 
 if "JPsiCR" in do_region and category == "_PatDSA":
@@ -296,6 +312,8 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # ctaus = ["1e0", "1e1", "1e2", "1e3"]
 # PAT-PAT prompt muons
 # ctaus = ["1e-5", "1e0", "1e1"]
+
+run_signal_injection = False
 
 # used by ttalps_get_signal_events, uses theory cross section if set to -1
 signal_cross_section = 0.01

@@ -27,6 +27,8 @@ class TTAlpsCuts {
   void SaveDimuonCutFlows(std::shared_ptr<CutFlowManager> cutFlowManager);
   void UpdateBestDimuonCut(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
 
+  bool PassesDimuonMaxLxyCut(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+
   bool PassesSingleMuonTrigger(const std::shared_ptr<Event> event);
   bool PassesDoubleMuonTrigger(const std::shared_ptr<Event> event);
 
@@ -54,6 +56,7 @@ class TTAlpsCuts {
  private:
   std::unique_ptr<EventProcessor> eventProcessor;
   std::map<std::string, float> muonMatchingParams;
+  std::map<std::string, float> maxLxyCuts;
   std::pair<std::string, std::vector<std::string>> muonVertexCollection;
 
   std::vector<std::string> triggerWarningsPrinted;

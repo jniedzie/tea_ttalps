@@ -175,8 +175,11 @@ void TTAlpsObjectsManager::InsertNonLeadingLooseMuonsCollections(shared_ptr<Even
   auto leadingTightMuonCollection = make_shared<NanoMuons>();
   leadingTightMuonCollection->push_back(leadingTightMuon);
   float segmentRatio = 2.0/3.0;
+  float maxProxDR = 0.2;
   for (auto muon : *looseDSAMuons) {
     bool matchFound = asNanoMuon(muon)->HasPATSegmentMatch(leadingTightMuonCollection, event, segmentRatio);
+    if (matchFound) continue;
+    matchFound = asNanoMuon(muon)->HasPATProximityDRMatch(leadingTightMuon, event, maxProxDR);
     if (matchFound) continue;
     looseMuons->push_back(muon);
   }

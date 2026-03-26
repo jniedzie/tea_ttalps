@@ -2,7 +2,7 @@ from Sample import Sample, SampleType
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from ttalps_cross_sections import get_cross_sections, get_theory_cross_section
-from ttalps_luminosities import get_luminosity_uncertainty_default
+from ttalps_luminosities import get_luminosity_uncertainty_default, get_luminosity_uncertainty
 from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 import ttalps_abcd_config as abcd_config
 import os
@@ -15,6 +15,7 @@ for year_ in years:
 cross_sections = get_cross_sections(year)
 category = abcd_config.category
 lumi_uncertainty = get_luminosity_uncertainty_default(year)
+lumi_uncertainty_dict = get_luminosity_uncertainty(year)
 
 username = os.getenv("USER")
 base_path = f"/data/dust/user/jniedzie/ttalps_cms/"
@@ -40,6 +41,8 @@ background_hist_path = (
 
 # to print rates and uncertainty:
 use_combined_limits = True
+
+run_signal_injection = abcd_config.run_signal_injection
 
 extra_str = ""
 datacards_output_path = f"{base_output_path}/limits/limits_{year_str}/datacards{extra_str}_{abcd_config.do_region}/"
@@ -142,10 +145,8 @@ nuisances = {
     "pileup_down": ("variation", "CMS_pileup"),
 
     "abcd_unc": ("abcd", "CMS_EXO25022_abcd"),
-    f"lumi_{lumi_year}": {
-        "signal": [lumi_uncertainty],
-        "bkg": [lumi_uncertainty],
-    },
+
+    "lxy_unc": ("lxy", "CMS_EXO25022_lxy"),
 
     "jecMC_Regrouped_Absolute_down": ("variation", "CMS_scale_j_Absolute"),
     "jecMC_Regrouped_Absolute_up": ("variation", "CMS_scale_j_Absolute"),
@@ -192,7 +193,21 @@ nuisances = {
     "metMC_Regrouped_RelativeBal_up": ("variation", "CMS_scale_met_RelativeBal"),
     f"metMC_Regrouped_RelativeSample_{jec_year}_down": ("variation", f"CMS_scale_met_RelativeSample_{jec_year}"),
     f"metMC_Regrouped_RelativeSample_{jec_year}_up": ("variation", f"CMS_scale_met_RelativeSample_{jec_year}"),
+
+    "jer_up": ("variation", f"CMS_res_j"),
+    "jer_down": ("variation", f"CMS_res_j"),
+    "met_jer_up": ("variation", f"CMS_res_met"),
+    "met_jer_down": ("variation", f"CMS_res_met"),
+
+    "MET_unclusteredEnergy_up": ("variation", f"CMS_scale_met_unclustered_energy_{jec_year}"),
+    "MET_unclusteredEnergy_down": ("variation", f"CMS_scale_met_unclustered_energy_{jec_year}"),
 }
+
+for name, unc in lumi_uncertainty_dict.items():
+  nuisances[name] = {
+    "signal": [unc],
+    "bkg": [unc],
+  }
 
 if not "noDimuonEff" in hist_path:
   nuisances["dimuonEff_Patdown"] = ("variation", "CMS_EXO25022_dimuonSFs_Pat")
@@ -224,4 +239,4 @@ if "2016" in year_str or "2017" in year_str or "2018" in year_str:
   nuisances["L1PreFiringWeight_Up"] = ("variation", "CMS_l1_muon_prefiring")
 
 # variations where we take the maximum of up/down variation as symmetrized uncertainty
-symmetric_variations = ["CMS_scale_j", "CMS_scale_met"]
+symmetric_variations = ["CMS_scale_j", "CMS_scale_met", "CMS_res_j", "CMS_res_met"]

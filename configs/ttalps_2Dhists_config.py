@@ -21,9 +21,12 @@ for year_ in years:
 # do_region = "SR_collinearityAngle_plot"
 # do_region = "SR_chi2vsDCA_plot"
 # do_region = "JPsiCR_chi2vsDCA_plot"
-do_region = "JPsiCR_ptvseta_plot"
+# do_region = "JPsiCR_ptvseta_plot"
+do_region = "JPsiCR_ptvs3dangle_Pat_plot"
+# do_region = "JPsiCR_ptvs3dangle_PatDSA_plot"
+# do_region = "JPsiCR_ptvs3dangle_DSA_plot"
 
-do_data = False
+do_data = True
 do_nonresonant_signal_as_background = False
 do_binning_uncertainty = True
 
@@ -40,7 +43,7 @@ elif "JPsiCR" in do_region:
   if do_region == "JPsiCR_chi2vsDCA_plot":
     # I accidentally names the J/Psi dimuons BestPFIso..
     background_collection = "BestPFIsoDimuonVertex" 
-  if do_region == "JPsiCR_ptvseta_plot":
+  if do_region == "JPsiCR_ptvseta_plot" or do_region == "JPsiCR_ptvs3dangle_DSA_plot":
     background_collection = "BestDimuonVertex_revertedMatching" 
     signal_collection = "BestDimuonVertex_revertedMatching"
 
@@ -51,8 +54,15 @@ if do_nonresonant_signal_as_background:
 
 # category = ""
 # category = "_Pat"
-# category = "_PatDSA"
-category = "_DSA"
+category = "_PatDSA"
+# category = "_DSA"
+
+if do_region == "JPsiCR_ptvs3dangle_Pat_plot":
+  category = "_Pat"
+if do_region == "JPsiCR_ptvs3dangle_PatDSA_plot":
+  category = "_PatDSA"
+if do_region == "JPsiCR_ptvs3dangle_DSA_plot":
+  category = "_DSA"
 
 exclude_backgrounds_for_years = {
   "2016preVFP": -1,
@@ -80,6 +90,10 @@ optimal_parameters = {
     ("_DSA", "JPsiCR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
 
     ("_DSA", "JPsiCR_ptvseta_plot"): ("pt_irr", "eta_irr", (50, 50), "A"),
+
+    ("_Pat", "JPsiCR_ptvs3dangle_Pat_plot"): ("logPt", "log3Dangle", (100, 100), "A"),
+    ("_PatDSA", "JPsiCR_ptvs3dangle_PatDSA_plot"): ("logPt", "log3Dangle", (100, 100), "A"),
+    ("_DSA", "JPsiCR_ptvs3dangle_DSA_plot"): ("logPt", "log3Dangle", (100, 100), "A"),
     
 }
 if (category, do_region) in optimal_parameters:
@@ -113,7 +127,7 @@ standard_rebin = 1
 
 # rebinning factor for the 2D histograms of signals and backgrounds and optimization histograms
 # (closure, error, min_n_events, significance, contamination)
-rebin_2D = 1
+rebin_2D = 4
 
 background_hist_name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}"
 signal_hist_name=f"{signal_collection}_{variable_1}_vs_{variable_2}{category}"
@@ -197,6 +211,15 @@ skims = {
     ),
     "JPsiCR_ptvseta_plot": (
       "skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_revertedMatching_ABCD"
+    ),
+    "JPsiCR_ptvs3dangle_DSA_plot": (
+      "skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_revertedMatching_ABCD"
+    ),
+    "JPsiCR_ptvs3dangle_PatDSA_plot": (
+      "skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsPatDSA", "_noDimuonEffSFs_noMatching_ABCD"
+    ),
+    "JPsiCR_ptvs3dangle_Pat_plot": (
+      "skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_ABCD"
     ),
 }
 

@@ -22,6 +22,9 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 # Loose semimuonic
 output_skim = "skimmed_looseSemimuonic_v3"
 
+# No b-tagging for jet efficiency
+# output_skim = "skimmed_looseSemimuonic_v3_SR_noBTag"
+
 dbs_instance = "prod/phys03"
 # dbs_instance = "prod/global"
 

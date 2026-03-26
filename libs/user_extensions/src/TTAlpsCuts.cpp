@@ -23,6 +23,11 @@ TTAlpsCuts::TTAlpsCuts(){
   } catch (const Exception &e) {
     warn() << "Couldn't read muonVertexCollection from config file - no muon vertex collection cuts can be made" << endl;
   }
+  try {
+    config.GetMap("maxLxyCuts", maxLxyCuts);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read maxLxyCuts from config file - no maxLxy cuts will be applied to event" << endl;
+  }
 }
 
 void TTAlpsCuts::RegisterSignalLikeCuts(shared_ptr<CutFlowManager> cutFlowManager) {
@@ -48,6 +53,7 @@ void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, s
   for (auto cutName : vertexCuts) {
     cutFlowManager->RegisterCut(cutName, collectionName);
   }
+  cutFlowManager->RegisterCut("maxLxy", collectionName);
 }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
@@ -129,6 +135,28 @@ void TTAlpsCuts::UpdateBestDimuonCut(const shared_ptr<Event> event, shared_ptr<C
   cutFlowManager->UpdateCutFlow(bestDimuonVertexCut, collectionName);
 }
 
+bool TTAlpsCuts::PassesDimuonMaxLxyCut(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) 
+    return true; 
+
+  string collectionName = muonVertexCollection.first;
+  auto bestDimuon = event->GetCollection(collectionName);
+  if (!bestDimuon) return false;
+  if (bestDimuon->size() < 1) return false;
+  auto nanoDimuon = asNanoDimuonVertex(bestDimuon->at(0), event);
+  string category = nanoDimuon->GetVertexCategory();
+
+  if (maxLxyCuts.empty() || maxLxyCuts.find(category) == maxLxyCuts.end()) {
+    cutFlowManager->UpdateCutFlow("maxLxy", collectionName+"_"+category);
+    cutFlowManager->UpdateCutFlow("maxLxy", collectionName);
+    return true;
+  }
+  if(nanoDimuon->GetLxyFromPV() > maxLxyCuts[category]) return false;
+
+  cutFlowManager->UpdateCutFlow("maxLxy", collectionName+"_"+category);
+  cutFlowManager->UpdateCutFlow("maxLxy", collectionName);
+  return true;
+}
 
 bool TTAlpsCuts::PassesSingleMuonTrigger(const shared_ptr<Event> event) {
   string triggerName = "HLT_IsoMu24";

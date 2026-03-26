@@ -27,9 +27,21 @@ card_pattern_Pat = "combined_datacard_{}_{}_Pat.txt"
 card_pattern_PatDSA = "combined_datacard_{}_{}_PatDSA.txt"
 card_pattern_DSA = "combined_datacard_{}_{}_DSA.txt"
 
+# card_pattern_Pat = "combined_datacard_{}_{}_Pat_signal_injection.txt"
+# card_pattern_PatDSA = "combined_datacard_{}_{}_PatDSA_signal_injection.txt"
+# card_pattern_DSA = "combined_datacard_{}_{}_DSA_signal_injection.txt"
+
 combine_dimuon_categories = True
 skip_cards_preparation = False
 
+def has_signal(datacard_path):
+  with open(datacard_path, "r") as f:
+      for line in f:
+          if line.startswith("rate"):
+              parts = line.split()
+              signal_rate = float(parts[1])
+              return signal_rate > 0 and signal_rate > 1e-90  # threshold
+  return False
 
 def run_combine(config):
   
@@ -56,9 +68,12 @@ def run_combine(config):
   for mass in masses:
     for ctau in ctaus:
 
-      combined_card_path = f"{config.datacards_output_path}/combined_datacard_{mass}_{ctau}.txt"
+      combined_card_path = f"{config.datacards_output_path}/combined_datacard_{mass}_{ctau}"
       if not combine_dimuon_categories:
-        combined_card_path = f"{config.datacards_output_path}/combined_datacard_{mass}_{ctau}{config.category}.txt"
+        combined_card_path += config.category
+      if hasattr(config, "run_signal_injection") and config.run_signal_injection:
+        combined_card_path += "signal_injection"
+      combined_card_path += ".txt"
 
       if not skip_cards_preparation:
         if combine_dimuon_categories:
@@ -74,7 +89,10 @@ def run_combine(config):
           existing_cards = []
           for label, path in datacards.items():
             if os.path.exists(path):
-              existing_cards.append(path)
+              if has_signal(path):
+                existing_cards.append(path)
+              else:
+                warn(f"Datacard for {label} at {path} has no signal — skipping.")
             else:
               warn(f"Datacard for {label} not found at {path} — skipping.")
 
@@ -96,10 +114,15 @@ def run_combine(config):
               datacard_output_path = config.datacards_output_path.replace(year_str, year)
               datacard = datacard_output_path + "/" + card_pattern.format(mass, ctau)
               if os.path.exists(datacard):
-                datacards += datacard+" "
+                if has_signal(datacard):
+                  datacards += datacard+" "
+                else: 
+                  warn(f"Datacard {datacard} has no signal — skipping.")
               else:
                 warn(f"Datacard {datacard} not found — skipping.")
 
+            if datacards == "":
+              continue
             combine_cards_command = f"combineCards.py {datacards} > {combined_card_path}"
             combine_cards_command = f'{base_command} {combine_cards_command}\"'
 
@@ -150,10 +173,17 @@ def save_limits(config, combine_dimuon_categories):
     file_path = f"limits_combined{config.category}.txt"
   info(f"Saving limits to {file_path}")
 
-  if not os.path.exists(os.path.dirname(config.results_output_path)):
-    os.makedirs(os.path.dirname(config.results_output_path))
+  output_path = config.results_output_path
+  if hasattr(config, "run_signal_injection") and config.run_signal_injection:
+    output_path += "signal_injection/"
+  print(f"output_path: {output_path}")
 
-  with open(f"{config.results_output_path}/{file_path}", "w") as limits_file:
+  os.makedirs(output_path, exist_ok=True)
+
+  if not os.path.exists(os.path.dirname(output_path)):
+    os.makedirs(os.path.dirname(output_path))
+
+  with open(f"{output_path}/{file_path}", "w") as limits_file:
     for signal_name, limits in limits_per_process.items():
       limits_file.write(f"{signal_name}: {limits}\n")
       info(f"{signal_name}: {limits}")
