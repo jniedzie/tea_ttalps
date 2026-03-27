@@ -20,12 +20,12 @@ max_files = -1
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # Loose semimuonic
-output_skim = "skimmed_looseSemimuonic_v3"
+output_skim = "skimmed_3muCR"
 
 dbs_instance = "prod/phys03"
 # dbs_instance = "prod/global"
 
-dasSamples = dasData2018
+dasSamples = dasBackgrounds2017
 year = tea.get_year_from_samples(dasSamples.keys())
 
 # For DAS datasets:

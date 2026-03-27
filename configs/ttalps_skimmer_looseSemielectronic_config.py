@@ -2,10 +2,12 @@ from ttalps_extra_collections import get_extra_event_collections
 from golden_json_config import goldenJsons
 from ttalps_met_filters import get_met_filters
 from ttalps_triggers import get_Ele_Tight_trigger
-from ttalps_skimmer_files_config import year
+from scale_factors_config import get_scale_factors
+from ttalps_skimmer_das_files_config import year
 
 goldenJson = goldenJsons[year]
 extraEventCollections = get_extra_event_collections(year)
+scaleFactors = get_scale_factors(year)
 
 nEvents = -1
 

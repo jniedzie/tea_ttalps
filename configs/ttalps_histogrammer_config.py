@@ -6,6 +6,7 @@ from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 from ttalps_histogrammer_files_config import skim, applyScaleFactors, year
 
 from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
+from ttalps_skimmer_3muCR_config import eventCuts as cr3muEventCuts
 from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
 # defining eventCuts as the loose eventCuts and replacing MET pt from signal eventCuts
 eventCuts = {
@@ -19,6 +20,14 @@ eventCuts = {
     # Only the first argument matters
     "nano_applyJetVetoMaps": (True, False),
 }
+
+if "3muCR" in skim[0]:
+  eventCuts = {
+      **cr3muEventCuts,
+      "MET_pt": (0, 9999999),
+      "nGoodJets": (0, 9999999),
+      "nGoodMediumBtaggedJets": (0, 9999999),
+  }
 
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
@@ -47,13 +56,13 @@ runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False
 
 # Create 2D histograms for ABCD background estimation
-runABCDHistograms = False
+runABCDHistograms = True
 
 # [MC only] Create ABCD histograms for gen-level mother information - only workd with runABCDHistograms = True
 # resonances: FromALP, Resonant, NonResonant, FalseResonant
-runGenLevelResonancesABCD = False
+runGenLevelResonancesABCD = True
 # mothers: particle PID based categories (takes more memory and time)
-runGenLevelMothersABCD = False
+runGenLevelMothersABCD = True
 
 # Create 2D histograms in the same way as for ABCD, but for single muon variables
 runSingleMuonABCDHistograms = False
