@@ -18,9 +18,10 @@ for year_ in years:
 # 2D plotting settings
 # ------------------------------------------
 
-do_region = "SR_collinearityAngle_plot"
+# do_region = "SR_collinearityAngle_plot"
 # do_region = "SR_chi2vsDCA_plot"
 # do_region = "JPsiCR_chi2vsDCA_plot"
+do_region = "JPsiCR_ptvseta_plot"
 
 do_data = False
 do_nonresonant_signal_as_background = False
@@ -39,6 +40,9 @@ elif "JPsiCR" in do_region:
   if do_region == "JPsiCR_chi2vsDCA_plot":
     # I accidentally names the J/Psi dimuons BestPFIso..
     background_collection = "BestPFIsoDimuonVertex" 
+  if do_region == "JPsiCR_ptvseta_plot":
+    background_collection = "BestDimuonVertex_revertedMatching" 
+    signal_collection = "BestDimuonVertex_revertedMatching"
 
 
 if do_nonresonant_signal_as_background:
@@ -51,14 +55,14 @@ if do_nonresonant_signal_as_background:
 category = "_DSA"
 
 exclude_backgrounds_for_years = {
-  "2016preVFP": 3,
-  "2016postVFP": 3,
-  "2017": 3,
-  "2018": 3,
-  "2022preEE": 3,
-  "2022postEE": 4,
-  "2023preBPix": 3,
-  "2023postBPix": 3,
+  "2016preVFP": -1,
+  "2016postVFP": -1,
+  "2017": -1,
+  "2018": -1,
+  "2022preEE": -1,
+  "2022postEE": -1,
+  "2023preBPix": -1,
+  "2023postBPix": -1,
 }
 
 # binning always expressed in bin numbers, not values
@@ -74,6 +78,9 @@ optimal_parameters = {
     ("_Pat", "JPsiCR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
     ("_PatDSA", "JPsiCR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
     ("_DSA", "JPsiCR_chi2vsDCA_plot"): ("logNormChi2", "logDca", (50, 50), "A"),
+
+    ("_DSA", "JPsiCR_ptvseta_plot"): ("pt_irr", "eta_irr", (50, 50), "A"),
+    
 }
 if (category, do_region) in optimal_parameters:
   variable_1 = optimal_parameters[(category, do_region)][0]
@@ -106,7 +113,7 @@ standard_rebin = 1
 
 # rebinning factor for the 2D histograms of signals and backgrounds and optimization histograms
 # (closure, error, min_n_events, significance, contamination)
-rebin_2D = 4
+rebin_2D = 1
 
 background_hist_name=f"{background_collection}_{variable_1}_vs_{variable_2}{category}"
 signal_hist_name=f"{signal_collection}_{variable_1}_vs_{variable_2}{category}"
@@ -188,6 +195,9 @@ skims = {
       ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsNoChi2", "_ABCD"),
       ("skimmed_looseSemimuonic_v3_SR", "_SRDimuonsNoChi2", "_genInfo"),
     ),
+    "JPsiCR_ptvseta_plot": (
+      "skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_revertedMatching_ABCD"
+    ),
 }
 
 if isinstance(skims[do_region][0], str):
@@ -267,3 +277,12 @@ z_params = {
     "error": ("|True - Pred|/#sqrt{#Delta Pred^{2} + #Delta True^{2}}", 0, 5, False),
     "min_n_events": ("min(A, B, C, D)", 0, 100, True)
 }
+
+
+grid_line = None
+if do_region == "SR_chi2vsDCA_plot":
+  y_min = -7.0
+  y_max = 1.0
+  x_min = (y_min + 1.5)/ 2.0
+  x_max = (y_max + 1.5)/ 2.0
+  grid_line = (x_min, x_max, y_min, y_max)

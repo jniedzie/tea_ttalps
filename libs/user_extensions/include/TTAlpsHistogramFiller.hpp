@@ -16,7 +16,7 @@ class TTAlpsHistogramFiller {
   void FillDefaultVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesForLooseMuons(const std::shared_ptr<Event> event, bool runRevertedMatching);
   void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event, bool runNminus1Histograms, bool runRevertedMatching);
-  void FillCustomTTAlpsGenMuonVertexCollectionsVariables(const std::shared_ptr<Event> event);
+  void FillCustomTTAlpsGenMuonVertexCollectionsVariables(const std::shared_ptr<Event> event, bool runRevertedMatching);
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
 
@@ -27,7 +27,7 @@ class TTAlpsHistogramFiller {
 
   void FillTriggerStudyHistograms(const std::shared_ptr<Event> event, std::string triggerName);
 
-  void FillABCDHistograms(const std::shared_ptr<Event> event, bool runGenLevelResonancesABCD = false, bool runGenLevelMothersABCD = false);
+  void FillABCDHistograms(const std::shared_ptr<Event> event, bool runGenLevelResonancesABCD = false, bool runGenLevelMothersABCD = false, bool runRevertedMatching = false);
   void FillSingleMuonABCDHistograms(const std::shared_ptr<Event> event);
   void FillABCDMothersHistograms(const std::shared_ptr<Event> event, bool runFakesHistograms);
   void FillFakesHistograms(const std::shared_ptr<Event> event);
@@ -46,6 +46,7 @@ class TTAlpsHistogramFiller {
 
   std::pair<std::string, std::vector<std::string>> muonVertexCollection;
   std::string muonVertexCollectionInput;
+  bool runExtraDimuonCuts;
 
   std::string year;
 

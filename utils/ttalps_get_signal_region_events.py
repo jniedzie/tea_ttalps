@@ -8,6 +8,7 @@ from Logger import info
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, default="", help="Path to the config file.")
+parser.add_argument("--theory", type=bool, default=False, help="Whether to use theory cross sections.")
 args = parser.parse_args()
 
 
@@ -66,6 +67,13 @@ def format_value_unc(val, unc):
         unc_rounded = round(unc, nd)
     return f"{val_rounded:.{nd}f} #pm {unc_rounded:.{nd}f}"
 
+def extract_mass(s):
+    m = re.search(r"mAlp-([0-9]+(?:p[0-9]+)?)(?=GeV)", s)
+    if not m:
+        return None
+    mass_str = m.group(1)
+    return float(mass_str.replace("p", "."))
+
 ctaus_dict = {
     "1e-5": "1 nm",
     "1e0": "1 mm",
@@ -86,7 +94,9 @@ def main():
     prediction, prediction_err = abcdHelper.get_prediction(bkg_b, bkg_c, bkg_d, bkg_b**0.5, bkg_c**0.5, bkg_d**0.5)
 
     signal_yields = {}
+    signal_yields_tot = {}
     signal_yields_unc2 = {}
+    signal_yields_tot_unc2 = {}
     all_years = config.years
     for year in all_years:
         config.years = [year,]
@@ -100,12 +110,22 @@ def main():
                 a, b, c, d, _, _, _, _ = abcdHelper.get_abcd(signal, config.abcd_point)
                 if (mass, ctau) not in signal_yields:
                     signal_yields[(mass,ctau)] = 0
+                    signal_yields_tot[(mass,ctau)] = 0
                     signal_yields_unc2[(mass,ctau)] = 0
+                    signal_yields_tot_unc2[(mass,ctau)] = 0
                 signal_yields[(mass,ctau)] += a * scale
+                signal_yields_tot[(mass,ctau)] += (a+b+c+d) * scale
                 signal_yields_unc2[(mass,ctau)] += (a**0.5 * scale) ** 2
-                info(f"{mass}, {ctau}, {year}: {a * scale:.3f} +/- {a**0.5 * scale:.3f}")
+                signal_yields_tot_unc2[(mass,ctau)] += ((a+b+c+d)**0.5 * scale) ** 2
+                # info(f"{mass}, {ctau}, {year}: {a * scale:.3f} +/- {a**0.5 * scale:.3f}")
     
     h2 = ROOT.TH2D("n_signal_events", ";m_{a} [GeV];c#tau_{a} [mm]",
+               len(config.masses), 0, len(config.masses),
+               len(config.ctaus), 0, len(config.ctaus))
+    h2_tot = ROOT.TH2D("n_signal_events_tot", ";m_{a} [GeV];c#tau_{a} [mm]",
+               len(config.masses), 0, len(config.masses),
+               len(config.ctaus), 0, len(config.ctaus))
+    h2_eff = ROOT.TH2D("n_signal_events_eff", ";m_{a} [GeV];c#tau_{a} [mm]",
                len(config.masses), 0, len(config.masses),
                len(config.ctaus), 0, len(config.ctaus))
     title = ""
@@ -116,20 +136,31 @@ def main():
     if config.category == "_DSA":
         title = "DSA-DSA"
     h2.SetTitle(title)
+    h2_tot.SetTitle(title)
+    h2_eff.SetTitle(title)
     for i, m in enumerate(config.masses):
         mass = float(m.replace("p", "."))
         h2.GetXaxis().SetBinLabel(i+1, str(mass))
+        h2_tot.GetXaxis().SetBinLabel(i+1, str(mass))
+        h2_eff.GetXaxis().SetBinLabel(i+1, str(mass))
     for j, c in enumerate(config.ctaus):
         ctau = ctaus_dict[c]
         h2.GetYaxis().SetBinLabel(j+1, str(ctau))
+        h2_tot.GetYaxis().SetBinLabel(j+1, str(ctau))
+        h2_eff.GetYaxis().SetBinLabel(j+1, str(ctau))
     for mass in config.masses:
         for ctau in config.ctaus:
             ix = config.masses.index(mass) + 1
             iy = config.ctaus.index(ctau) + 1
             h2.SetBinContent(ix, iy, signal_yields[(mass,ctau)])
             h2.SetBinError(ix, iy, signal_yields_unc2[(mass,ctau)]**0.5)
+            h2_tot.SetBinContent(ix, iy, signal_yields_tot[(mass,ctau)])
+            h2_tot.SetBinError(ix, iy, signal_yields_tot_unc2[(mass,ctau)]**0.5)
+            h2_eff.SetBinContent(ix, iy, signal_yields[(mass,ctau)] / signal_yields_tot[(mass,ctau)] if signal_yields_tot[(mass,ctau)] > 0 else 0)
+            h2_eff.SetBinError(ix, iy, 0)  # ignoring uncertainty on efficiency for now
             info(f"{mass}, {ctau}: {signal_yields[(mass,ctau)]:.4f} +/- {signal_yields_unc2[(mass,ctau)] ** 0.5:.4f}")
-    
+            info(f"\tTotal: {signal_yields_tot[(mass,ctau)]:.4f} +/- {signal_yields_tot_unc2[(mass,ctau)] ** 0.5:.4f}")
+
     print_region_a_limits(config, signal)
 
     ROOT.gStyle.SetOptStat(0)
@@ -151,6 +182,8 @@ def main():
         for iy in range(1, h2.GetNbinsY()+1):
             val = h2.GetBinContent(ix, iy)
             unc = h2.GetBinError(ix, iy)
+            if val == 0:
+                continue
             txt = format_value_unc(val, unc)
             x = h2.GetXaxis().GetBinCenter(ix)
             y = h2.GetYaxis().GetBinCenter(iy)
@@ -158,6 +191,41 @@ def main():
     
     c1.SetRightMargin(0.15)
     c1.SaveAs(f"../plots/n_events/n_signal_events{config.category}_{config.year}.pdf")
+
+    c2 = ROOT.TCanvas("c2", "c2", 800, 600)
+    # h2_tot.Draw("COLZ TEXT")
+    h2_tot.Draw("COLZ")
+    h2_tot.GetXaxis().SetLabelSize(0.04)
+    h2_tot.GetYaxis().SetLabelSize(0.04)
+    h2_tot.GetZaxis().SetTitle("Number of events")
+
+    for ix in range(1, h2_tot.GetNbinsX()+1):
+        for iy in range(1, h2_tot.GetNbinsY()+1):
+            val = h2_tot.GetBinContent(ix, iy)
+            unc = h2_tot.GetBinError(ix, iy)
+            txt = format_value_unc(val, unc)
+            x = h2_tot.GetXaxis().GetBinCenter(ix)
+            y = h2_tot.GetYaxis().GetBinCenter(iy)
+            latex.DrawLatex(x, y, txt)
+
+    c2.SetRightMargin(0.15)
+    c2.SaveAs(f"../plots/n_events/n_signal_events_tot{config.category}_{config.year}.pdf")
+
+    c3 = ROOT.TCanvas("c3", "c3", 800, 600)
+    h2_eff.Draw("COLZ")
+    h2_eff.GetXaxis().SetLabelSize(0.04)
+    h2_eff.GetYaxis().SetLabelSize(0.04)
+    h2_eff.GetZaxis().SetTitle("Selection efficiency")
+    h2_eff.GetZaxis().SetRangeUser(0,1)
+    for ix in range(1, h2_eff.GetNbinsX()+1):
+        for iy in range(1, h2_eff.GetNbinsY()+1):
+            val = h2_eff.GetBinContent(ix, iy)
+            txt = f"{val:.2f}"
+            x = h2_eff.GetXaxis().GetBinCenter(ix)
+            y = h2_eff.GetYaxis().GetBinCenter(iy)
+            latex.DrawLatex(x, y, txt)
+    c3.SetRightMargin(0.15)
+    c3.SaveAs(f"../plots/n_events/n_signal_events_eff{config.category}_{config.year}.pdf")
 
     info(f"Background: ")
     info(f"True background in A: {bkg_a:.2f} +/- {bkg_a**0.5:.2f}")

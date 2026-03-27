@@ -2,8 +2,9 @@ import argparse
 import importlib
 import os
 import math
+import numpy as np
 
-from Logger import fatal, info, error
+from Logger import fatal, info, error, warn
 from limits_producer import get_datacard_file_name
 
 parser = argparse.ArgumentParser()
@@ -98,9 +99,23 @@ def load_uncertainties(config):
               value = values[i+2]
               if value != "-":
                 if process == "signal":
-                  signal_values.append(float(value)-1)
+                  if "/" in value:
+                    kappa_down, kappa_up = map(float, value.split("/"))
+                    delta_down = abs(1 - kappa_down)
+                    delta_up = abs(kappa_up - 1)
+                    signal_values.append(delta_down)
+                    signal_values.append(delta_up)
+                  else:
+                    signal_values.append(float(value)-1)
                 elif process == "bkg":
-                  background_values.append(float(value)-1)
+                  if "/" in value:
+                    kappa_down, kappa_up = map(float, value.split("/"))
+                    delta_down = abs(1 - kappa_down)
+                    delta_up = abs(kappa_up - 1)
+                    background_values.append(delta_down)
+                    background_values.append(delta_up)
+                  else:
+                    background_values.append(float(value)-1)
 
             unc_category = get_unc_category(unc_name)
 
@@ -162,6 +177,29 @@ def get_min_max_uncertainty_over_years(uncertainties):
 
   return min_uncertainty, max_uncertainty
 
+def get_68percert_uncertainty_range(uncertainties):
+    low_68 = {}
+    high_68 = {}
+    mean = {}
+
+    uncertainties_per_type = {}
+
+    for signal_name, unc_dict in uncertainties.items():
+        for unc_name, unc_value in unc_dict.items():
+            if unc_name not in uncertainties_per_type:
+                uncertainties_per_type[unc_name] = []
+            for v in unc_value:
+                if v != 0.0:
+                    uncertainties_per_type[unc_name].append(v)
+
+    for unc_name, unc_values in uncertainties_per_type.items():
+        values = np.array(unc_values)
+        low, high = np.percentile(values, [16, 84])
+        low_68[unc_name] = low
+        high_68[unc_name] = high
+        mean[unc_name] = np.mean(values)
+
+    return low_68, high_68, mean
 
 def get_unc_category(unc_name):
   variation = ""
@@ -171,133 +209,50 @@ def get_unc_category(unc_name):
     variation = "_up" if "_up" in unc_name else "_down"
   elif "Up" in unc_name or "Dn" in unc_name:
     variation = "_Up" if "Up" in unc_name else "_Dn"
-  if "jecMC" in unc_name:
+  if "jecMC" in unc_name or "CMS_scale_j" in unc_name:
     return "JEC"
-  if "bTaggingMedium" in unc_name:
+  if "metMC" in unc_name or "CMS_scale_met" in unc_name:
+    return "MET"
+  if "bTaggingMedium" in unc_name or "CMS_btag" in unc_name or "CMS_eff_b" in unc_name:
     return "bTaggingMedium"
   if variation != "" and variation in unc_name:
     base_name = unc_name.replace(variation, "")
     return base_name
   return unc_name
 
-
 def get_nice_names(years):
   nice_names = {
-      "PUjetIDtight_down": "PU jet ID (down)",
-      "PUjetIDtight_up": "PU jet ID (up)",
-      "bTaggingMedium_up": "b-tagging (up)",
-      "bTaggingMedium_down": "b-tagging (down)",
-      "bTaggingMedium_down_correlated": "b-tagging down (uncorrelated)",
-      "bTaggingMedium_down_uncorrelated": "b-tagging down (correlated)",
-      "bTaggingMedium_up_correlated": "b-tagging up (uncorrelated)",
-      "bTaggingMedium_up_uncorrelated": "b-tagging up (correlated)",
-      "pileup_up": "PU (up)",
-      "pileup_down": "PU (down)",
-      "muonIDLoose_systdown": "muon loose ID (down)",
-      "muonIDLoose_systup": "muon loose ID (up)",
-      "muonIDTight_systdown": "muon tight ID (down)",
-      "muonIDTight_systup": "muon tight ID (up)",
-      "muonReco_systdown": "muon reco (down)",
-      "muonReco_systup": "muon reco (up)",
-      "dsamuonID_syst": "DSA muon ID",
-      "dsamuonReco_cosmic": "DSA muon reco",
-      "muonTrigger_systdown": "IsoMu trigger (down)",
-      "muonTrigger_systup": "IsoMu trigger (up)",
       "abcd_nonClosure": "ABCD non-closure",
-      "abcd_unc": "ABCD uncertainty",
-      "abcd_unc_bkg": "ABCD uncertainty",
-      "abcd_unc_sig": "ABCD uncertainty (signal)",
+      "CMS_EXO25022_abcd": "ABCD uncertainty",
+      "CMS_EXO25022_abcd_bkg": "ABCD uncertainty",
+      "CMS_EXO25022_abcd_sig": "ABCD uncertainty (signal)",
       "lumi": "luminosity",
       "lumi_sig": "luminosity",
       "lumi_bkg": "luminosity",
       "stat_err_sig": "statistical (signal)",
       "stat_err_bkg": "statistical (background)",
-      "dimuonEff_up": "Dimuon efficiency SF (up)",
-      "dimuonEff_down": "Dimuon efficiency SF (down)",
-      "dimuonRevEff_up": "Dimuon efficiency SF (up)",
-      "dimuonRevEff_down": "Dimuon efficiency SF (down)",
-      "DSAEff_up": "DSA Muon efficiency SF (up)",
-      "DSAEff_down": "DSA Muon efficiency SF (down)",
-      "jecMC_Regrouped_Absolute_down": "JEC Regrouped_Absolute SF (down)",
-      "jecMC_Regrouped_Absolute_up": "JEC Regrouped_Absolute SF (up)",
-      "jecMC_Regrouped_FlavorQCD_down": "JEC Regrouped_FlavorQCD SF (down)",
-      "jecMC_Regrouped_FlavorQCD_up": "JEC Regrouped_FlavorQCD SF (up)",
-      "jecMC_Regrouped_BBEC1_down": "JEC Regrouped_BBEC1 SF (down)",
-      "jecMC_Regrouped_BBEC1_up": "JEC Regrouped_BBEC1 SF (up)",
-      "jecMC_Regrouped_EC2_down": "JEC Regrouped_EC2 SF (down)",
-      "jecMC_Regrouped_EC2_up": "JEC Regrouped_EC2 SF (up)",
-      "jecMC_Regrouped_HF_down": "JEC Regrouped_HF SF (down)",
-      "jecMC_Regrouped_HF_up": "JEC Regrouped_HF SF (up)",
-      "jecMC_Regrouped_RelativeBal_down": "JEC Regrouped_RelativeBal SF (down)",
-      "jecMC_Regrouped_RelativeBal_up": "JEC Regrouped_RelativeBal SF (up)",
-      "jecMC_AbsoluteMPFBias_up": "JEC AbsoluteMPFBias (up)",
-      "jecMC_AbsoluteMPFBias_down": "JEC AbsoluteMPFBias (down)",
-      "jecMC_AbsoluteScale_up": "JEC AbsoluteScale (up)",
-      "jecMC_AbsoluteScale_down": "JEC AbsoluteScale (down)",
-      "jecMC_AbsoluteStat_up": "JEC AbsoluteStat (up)",
-      "jecMC_AbsoluteStat_down": "JEC AbsoluteStat (down)",
-      "jecMC_FlavorQCD_up": "JEC FlavorQCD (up)",
-      "jecMC_FlavorQCD_down": "JEC FlavorQCD (down)",
-      "jecMC_Fragmentation_up": "JEC Fragmentation (up)",
-      "jecMC_Fragmentation_down": "JEC Fragmentation (down)",
-      "jecMC_PileUpDataMC_up": "JEC PileUpDataMC (up)",
-      "jecMC_PileUpDataMC_down": "JEC PileUpDataMC (down)",
-      "jecMC_PileUpPtBB_up": "JEC PileUpPtBB (up)",
-      "jecMC_PileUpPtBB_down": "JEC PileUpPtBB (down)",
-      "jecMC_PileUpPtEC1_up": "JEC PileUpPtEC1 (up)",
-      "jecMC_PileUpPtEC1_down": "JEC PileUpPtEC1 (down)",
-      "jecMC_PileUpPtEC2_up": "JEC PileUpPtEC2 (up)",
-      "jecMC_PileUpPtEC2_down": "JEC PileUpPtEC2 (down)",
-      "jecMC_PileUpPtHF_up": "JEC PileUpPtHF (up)",
-      "jecMC_PileUpPtHF_down": "JEC PileUpPtHF (down)",
-      "jecMC_PileUpPtRef_up": "JEC PileUpPtRef (up)",
-      "jecMC_PileUpPtRef_down": "JEC PileUpPtRef (down)",
-      "jecMC_RelativeFSR_up": "JEC RelativeFSR (up)",
-      "jecMC_RelativeFSR_down": "JEC RelativeFSR (down)",
-      "jecMC_RelativeJEREC1_up": "JEC RelativeJEREC1 (up)",
-      "jecMC_RelativeJEREC1_down": "JEC RelativeJEREC1 (down)",
-      "jecMC_RelativeJEREC2_up": "JEC RelativeJEREC2 (up)",
-      "jecMC_RelativeJEREC2_down": "JEC RelativeJEREC2 (down)",
-      "jecMC_RelativeJERHF_up": "JEC RelativeJERHF (up)",
-      "jecMC_RelativeJERHF_down": "JEC RelativeJERHF (down)",
-      "jecMC_RelativePtBB_up": "JEC RelativePtBB (up)",
-      "jecMC_RelativePtBB_down": "JEC RelativePtBB (down)",
-      "jecMC_RelativePtEC1_up": "JEC RelativePtEC1 (up)",
-      "jecMC_RelativePtEC1_down": "JEC RelativePtEC1 (down)",
-      "jecMC_RelativePtEC2_up": "JEC RelativePtEC2 (up)",
-      "jecMC_RelativePtEC2_down": "JEC RelativePtEC2 (down)",
-      "jecMC_RelativePtHF_up": "JEC RelativePtHF (up)",
-      "jecMC_RelativePtHF_down": "JEC RelativePtHF (down)",
-      "jecMC_RelativeBal_up": "JEC RelativeBal (up)",
-      "jecMC_RelativeBal_down": "JEC RelativeBal (down)",
-      "jecMC_RelativeSample_up": "JEC RelativeSample (up)",
-      "jecMC_RelativeSample_down": "JEC RelativeSample (down)",
-      "jecMC_RelativeStatEC_up": "JEC RelativeStatEC (up)",
-      "jecMC_RelativeStatEC_down": "JEC RelativeStatEC (down)",
-      "jecMC_RelativeStatFSR_up": "JEC RelativeStatFSR (up)",
-      "jecMC_RelativeStatFSR_down": "JEC RelativeStatFSR (down)",
-      "jecMC_RelativeStatHF_up": "JEC RelativeStatHF (up)",
-      "jecMC_RelativeStatHF_down": "JEC RelativeStatHF (down)",
-      "jecMC_SinglePionECAL_up": "JEC SinglePionECAL (up)",
-      "jecMC_SinglePionECAL_down": "JEC SinglePionECAL (down)",
-      "jecMC_SinglePionHCAL_up": "JEC SinglePionHCAL (up)",
-      "jecMC_SinglePionHCAL_down": "JEC SinglePionHCAL (down)",
-      "jecMC_TimePtEta_up": "JEC TimePtEta (up)",
-      "jecMC_TimePtEta_down": "JEC TimePtEta (down)",
-      "JEC_up": "JEC (up)",
-      "JEC_down": "JEC (down)",
       "JEC": "JEC",
-      "L1PreFiringWeight": "L1 Pre-firing",
-      "DSAEff": "DSA Muon efficiency SF",
-      "dimuonEff": "Dimuon efficiency SF",
-      "dimuonEffRev": "Dimuon efficiency SF",
-      "muonTrigger": "IsoMu trigger",
-      "muonReco": "muon reco",
-      "muonIDLoose": "muon loose ID",
-      "muonIDTight": "muon tight ID",
-      "PUjetIDtight": "PU jet ID",
+      "MET": "MET",
+      "CMS_l1_muon_prefiring": "L1 Pre-firing",
+      "CMS_EXO25022_dimuonSFs_Pat_syst": "PAT-PAT Dimuon efficiency SF",
+      "CMS_EXO25022_dimuonSFs_PatDSA_syst": "PAT-DSA Dimuon efficiency SF",
+      "CMS_EXO25022_dimuonSFs_DSA_syst": "DSA-DSA Dimuon efficiency SF",
+      # "dimuonSFs": "Dimuon efficiency SF",
+      "dimuonSFs_Pat": "PAT-PAT Dimuon efficiency SF",
+      "dimuonSFs_PatDSA": "PAT-DSA Dimuon efficiency SF",
+      "dimuonSFs_DSA": "DSA-DSA Dimuon efficiency SF",
+      "CMS_eff_m_trigger_syst": "IsoMu trigger",
+      "CMS_eff_m_reco_syst": "muon reco",
+      "CMS_eff_m_reco_syst_dsa": "DSA muon reco",
+      "CMS_eff_m_id_syst_loose": "muon loose ID",
+      "CMS_eff_m_id_syst_tight": "muon tight ID",
+      "CMS_eff_m_iso_syst_loose": "muon loose Iso",
+      "CMS_eff_m_iso_syst_tight": "muon tight Iso",
+      "CMS_eff_m_id_syst_dsa": "DSA muon ID",
+      "CMS_eff_j_PUJetID_eff": "PU jet ID",
+      "CMS_btag": "b-tagging",
       "bTaggingMedium": "b-tagging",
-      "pileup": "PU",
+      "CMS_pileup": "PU",
   }
   for year_ in years:
     year = year_
@@ -313,6 +268,23 @@ def get_nice_names(years):
     nice_names[f"jecMC_Regrouped_HF_{year}_up"] = f"JEC Regrouped_HF_{year} SF (up)"
     nice_names[f"jecMC_Regrouped_RelativeSample_{year}_down"] = f"JEC Regrouped_RelativeSample_{year} SF (down)"
     nice_names[f"jecMC_Regrouped_RelativeSample_{year}_up"] = f"JEC Regrouped_RelativeSample_{year} SF (up)"
+    nice_names[f"metMC_Regrouped_Absolute_{year}_down"] = f"MET Regrouped_Absolute_{year} SF (down)"
+    nice_names[f"metMC_Regrouped_Absolute_{year}_up"] = f"MET Regrouped_Absolute_{year} SF (up)"
+    nice_names[f"metMC_Regrouped_BBEC1_{year}_down"] = f"MET Regrouped_BBEC1_{year} SF (down)"
+    nice_names[f"metMC_Regrouped_BBEC1_{year}_up"] = f"MET Regrouped_BBEC1_{year} SF (up)"
+    nice_names[f"metMC_Regrouped_EC2_{year}_down"] = f"MET Regrouped_EC2_{year} SF (down)"
+    nice_names[f"metMC_Regrouped_EC2_{year}_up"] = f"MET Regrouped_EC2_{year} SF (up)"
+    nice_names[f"metMC_Regrouped_HF_{year}_down"] = f"MET Regrouped_HF_{year} SF (down)"
+    nice_names[f"metMC_Regrouped_HF_{year}_up"] = f"MET Regrouped_HF_{year} SF (up)"
+    nice_names[f"metMC_Regrouped_RelativeSample_{year}_down"] = f"MET Regrouped_RelativeSample_{year} SF (down)"
+    nice_names[f"metMC_Regrouped_RelativeSample_{year}_up"] = f"MET Regrouped_RelativeSample_{year} SF (up)"
+    if year_ in ["2022preEE", "2022postEE"]:
+      year = "13p6TeV_2022"
+    if year_ in ["2023preBPix", "2023postBPix"]:
+      year = "13p6TeV_2023"
+    nice_names[f"lumi_{year}"] = f"luminosity"
+    nice_names[f"CMS_eff_j_PUJetID_eff_{year_}"] = f"PU jet ID efficiency"
+    
   return nice_names
 
 def significance_and_error(S, B, sigma_S, sigma_B, cov_SB=0.0):
@@ -373,7 +345,8 @@ def main():
     ctau = ctau.replace("mm", "").replace("ctau-", "")
     ctau = float(ctau)
 
-    theory_cross_section = config.get_theory_cross_section(mass)
+    warn(f"theory_cross_section given for Run 2 now.")
+    theory_cross_section = config.get_theory_cross_section(mass, "Run2")
     reference_cross_section = cross_sections[name.replace("signal_", "")]
     coupling_ref = 0.1
     coupling_target = 1.0
@@ -435,20 +408,31 @@ def main():
   max_uncertainty = {}
   if not config.use_combined_limits:
     min_uncertainty, max_uncertainty = get_min_max_uncertainty(uncertainties)
+    min_68percert_uncertainty, max_68percert_uncertainty, mean_uncertainty = get_68percert_uncertainty_range(uncertainties)
   else:
-    min_uncertainty, max_uncertainty = get_min_max_uncertainty_over_years(uncertainties)
+    min_uncertainty, max_uncertainty = get_min_max_uncertainty(uncertainties)
+    min_68percert_uncertainty, max_68percert_uncertainty, mean_uncertainty = get_68percert_uncertainty_range(uncertainties)
 
   info("\n\nMin/Max Uncertainties:\n")
   merged_uncertainties = {key: (min_uncertainty[key], max_uncertainty[key]) for key in min_uncertainty.keys()}
+  merged_68percert_uncertainties = {key: (min_68percert_uncertainty[key], max_68percert_uncertainty[key], mean_uncertainty[key]) for key in min_68percert_uncertainty.keys()}
 
   # sort merged uncertainties by the average of min and max (keep it as a dictionary)
   sorted_uncertainties = {k: v for k, v in sorted(
       merged_uncertainties.items(), key=lambda item: (item[1][0] + item[1][1]) / 2, reverse=True)}
+  sorted_68percert_uncertainties = {k: v for k, v in sorted(
+      merged_68percert_uncertainties.items(), key=lambda item: (item[1][0] + item[1][1]) / 2, reverse=True)}
 
   nice_names = get_nice_names(config.years)
-  for unc_name, (min, max) in sorted_uncertainties.items():
-    info(f"{nice_names[unc_name]}\t{min:.4f}\t{max:.4f}".replace(".", ","))
+  max_len = max(len(nice_names[unc_name]) for unc_name in sorted_68percert_uncertainties)
+  for unc_name, (min_val, max_val) in sorted_uncertainties.items():
+    info(f"{nice_names[unc_name]:<{max_len}}  {min_val:.>7.4f}. {max_val:.>7.4f}".replace(".", ","))
 
+  info("\n\nMin/Max/Mean Uncertainties in 68percert in %:\n")
+  
+  for unc_name, (min_val, max_val, mean_val) in sorted_68percert_uncertainties.items():
+    info(f"{nice_names[unc_name]:<{max_len}}  "
+          f"{min_val*100:.1f}  {max_val*100:.1f}  {mean_val*100:.1f}".replace(".", ","))
 
 if __name__ == "__main__":
   main()

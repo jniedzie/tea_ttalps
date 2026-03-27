@@ -6,24 +6,11 @@
 
 using namespace std;
 
-void CheckArgs(int argc, char **argv) {
-  if (argc != 2 && argc != 4) {
-    fatal() << "Usage: " << argv[0] << " config_path"<<endl;
-    fatal() << "or"<<endl;
-    fatal() << argv[0] << " config_path input_path output_path"<<endl;
-    exit(1);
-  }
-}
-
 int main(int argc, char **argv) {
-  CheckArgs(argc, argv);
-  ConfigManager::Initialize(argv[1]);
-
-  if(argc == 4){
-    auto &config = ConfigManager::GetInstance();
-    config.SetInputPath(argv[2]);
-    config.SetTreesOutputPath(argv[3]);
-  }
+  vector<string> requiredArgs = {"config"};
+  vector<string> optionalArgs = {"input_path", "output_trees_path"};
+  auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
+  ConfigManager::Initialize(args);
 
   auto eventReader = make_shared<EventReader>();
 

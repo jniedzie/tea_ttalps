@@ -17,11 +17,17 @@ luminosity = get_luminosity(year)
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms/"
 
-skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs", "SR")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_ABCD", "SR")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD", "SR")
 
-# skim = ("skimmed_looseSemimuonic_v2_SR", "_ZDimuons", "")
+skim = ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_nminus1", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_noDimuonEffSFs_revertedMatching_ABCD", "SR")
+
+# skim = ("skimmed_3muCR_merged", "_JPsiDimuons", "_noDimuonEffSFs_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_revertedMatching_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsPatDSA", "_noDimuonEffSFs_noMatching_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_noDimuonEffSFs_ABCD", "SR")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "_SSDimuons", "_ABCD_v3", "SR")
+
 # skim = ("skimmed_looseSemimuonic_v3_ttbarCR", "", "", "ttCR")
 
 hist_path = f"histograms{skim[1]}{skim[2]}"
@@ -39,21 +45,20 @@ lumi_label_value = luminosity
 canvas_size = (800, 600)
 canvas_size_2Dhists = (800, 800)
 show_ratio_plots = True
-ratio_limits = (0.0, 3.0)
+ratio_limits = (0.0, 2.0)
 
 # only plot backgrounds with N_entries > bkgRawEventsThreshold
-bkgRawEventsThreshold = -1 
+bkgRawEventsThreshold = -1
 
 show_cms_labels = True
 extraText = "Preliminary"
 # extraText = "Private Work"
 
 extraMuonVertexCollections = [
-    "BestDimuonVertex",       # best Dimuon selection without isolation cut
-    # "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
-    # "GoodPFIsoDimuonVertex",  # all Good Dimuons with isolation cut
+    # "BestDimuonVertex",       # best Dimuon selection without isolation cut
+    "BestPFIsoDimuonVertex",  # best Dimuon selection with isolation cut
+    # "BestPFIsoDimuonVertex_revertedMatching",
     # "BestDimuonVertex_revertedMatching",
-    # "BestDimuonVertexNminus1InvariantMassCut",
 ]
 
 plot_background = True
@@ -67,7 +72,9 @@ data_to_include = []
 
 if not "SR" in skim[1]:
   year_number = "".join(filter(str.isdigit, year))
-  if "2022" in year or "2023" in year:
+  if "2022" in year:
+    data_to_include = [f"Muon{year_number}"]
+  elif "2023" in year:
     data_to_include = [f"Muon1{year_number}"]
   else:
     data_to_include = [f"SingleMuon{year_number}"]
@@ -76,24 +83,11 @@ if len(data_to_include) == 0:
   show_ratio_plots = False
 
 signals_to_include = [
-    # "tta_mAlp-0p35GeV_ctau-1e2mm",
-    # "tta_mAlp-2GeV_ctau-1e2mm",
-    # "tta_mAlp-12GeV_ctau-1e2mm",
-    # "tta_mAlp-30GeV_ctau-1e2mm",
-    # "tta_mAlp-60GeV_ctau-1e2mm",
-
-    # "tta_mAlp-2GeV_ctau-1e-5mm",
-    # "tta_mAlp-2GeV_ctau-1e0mm",
-    # "tta_mAlp-2GeV_ctau-1e1mm",
-    # "tta_mAlp-2GeV_ctau-1e2mm",
-    # "tta_mAlp-2GeV_ctau-1e3mm",
-
-    # "tta_mAlp-12GeV_ctau-1e1mm",
-    # "tta_mAlp-12GeV_ctau-1e0mm",
-
-    # "tta_mAlp-30GeV_ctau-1e1mm",
-    # "tta_mAlp-60GeV_ctau-1e1mm",
-
+    "tta_mAlp-0p35GeV_ctau-1e1mm",
+    "tta_mAlp-2GeV_ctau-1e1mm",
+    "tta_mAlp-12GeV_ctau-1e1mm",
+    "tta_mAlp-30GeV_ctau-1e1mm",
+    "tta_mAlp-60GeV_ctau-1e1mm",
 ]
 
 legend_max_x = 0.82 if show_ratio_plots else 0.75
@@ -366,6 +360,15 @@ histograms = (
     # Histogram("LeadingMuonTriggerObject_tightLooseMuonMatch0p1", "", False, True, default_norm,
     #           1, 0, 2, 1e-5, 1e10, "min #Delta R (Muon trigger, tight muons) < 0.1", f"# events ({year})"),
 
+    # ----------------------------------------------------------------------------
+    # Gen ALP
+    # ----------------------------------------------------------------------------
+    # Histogram("GenALP_pt", "", False,  True, NormalizationType.to_one, 40,
+    #           0, 300, 1e-3, 1e0, "ALP p_{T} [GeV]", f"# events ({year})"),
+    # Histogram("GenALP_boost", "", False,  True, NormalizationType.to_one, 50,
+    #           0, 500, 1e-3, 1e1, "ALP boost [GeV]", f"# events ({year})"),
+    # Histogram("GenALP_eta", "", False,  True, NormalizationType.to_one,
+    #           10, -3.5, 3.5, 1e-3, 1e1, "ALP #eta", f"# events ({year})"),
 )
 
 # ----------------------------------------------------------------------------
@@ -373,10 +376,11 @@ histograms = (
 # ----------------------------------------------------------------------------
 
 categories = ("", "_PatDSA", "_DSA", "_Pat")
+# categories = ("_DSA",)
 mass_rebin = {c: 5   for c in categories}
 mass_min   = {c: 2.0 for c in categories}
 mass_max   = {c: 5.0 for c in categories}
-mass_y_max = {c: 200 for c in categories}
+mass_y_max = {c: 4000 for c in categories}
 
 if "JPsiDimuons" in skim[1]:
   mass_rebin["_DSA"] = 10
@@ -389,32 +393,35 @@ if "JPsiDimuons" in skim[1]:
   mass_min["_Pat"]   = 2.9
   mass_max["_Pat"]   = 3.3
   if year == "2016preVFP" or year == "2016postVFP":
-    mass_y_max["_DSA"] = 7
-    mass_y_max["_PatDSA"] = 7
+    mass_y_max["_DSA"] = 20
+    mass_y_max["_PatDSA"] = 30
     mass_y_max["_Pat"] = 70
+  if year == "2016postVFP":
+    mass_y_max["_DSA"] = 25
+    mass_y_max["_PatDSA"] = 40
   if year == "2017":
-    mass_y_max["_DSA"] = 7
-    mass_y_max["_PatDSA"] = 15
+    mass_y_max["_DSA"] = 40
+    mass_y_max["_PatDSA"] = 110
     mass_y_max["_Pat"] = 200
   if year == "2018":
-    mass_y_max["_DSA"] = 10
-    mass_y_max["_PatDSA"] = 15
+    mass_y_max["_DSA"] = 70
+    mass_y_max["_PatDSA"] = 200
     mass_y_max["_Pat"] = 250
   if year == "2022preEE":
-    mass_y_max["_DSA"] = 4
-    mass_y_max["_PatDSA"] = 7
+    mass_y_max["_DSA"] = 20
+    mass_y_max["_PatDSA"] = 20
     mass_y_max["_Pat"] = 40
   if year == "2022postEE":
-    mass_y_max["_DSA"] = 7
-    mass_y_max["_PatDSA"] = 10
+    mass_y_max["_DSA"] = 20
+    mass_y_max["_PatDSA"] = 60
     mass_y_max["_Pat"] = 100
   if year == "2023preBPix":
-    mass_y_max["_DSA"] = 7
-    mass_y_max["_PatDSA"] = 10
+    mass_y_max["_DSA"] = 20
+    mass_y_max["_PatDSA"] = 40
     mass_y_max["_Pat"] = 120
   if year == "2023postBPix":
-    mass_y_max["_DSA"] = 4
-    mass_y_max["_PatDSA"] = 7
+    mass_y_max["_DSA"] = 15
+    mass_y_max["_PatDSA"] = 50
     mass_y_max["_Pat"] = 70
 
 norm_one = NormalizationType.to_one
@@ -424,77 +431,90 @@ for collection, category in product(extraMuonVertexCollections, categories):
       Histogram("Event_n"+collection + category, "", False, True, default_norm, 1,
                 0, 30, 1e-4, 1e1, "Number of #mu vertices", f"# events ({year})"),
       Histogram("dimuonCutFlow_"+collection + category, "", False,  True,
-                default_norm, 1, 0, 10, 1e-2, 1e9, "Selection", "Number of events"),
-      Histogram(collection + category+"_invMass", "", False, False, default_norm, mass_rebin[category],
-                mass_min[category], mass_max[category], 0, mass_y_max[category], "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
+                default_norm, 1, 0, 10, 1e-2, 1e3, "Selection", "Number of events"),
+      # Histogram(collection + category+"_invMass", "", False, False, default_norm, mass_rebin[category],
+      #           mass_min[category], mass_max[category], 0, mass_y_max[category], "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
       # Histogram(collection + category+"_invMassJPsiBin", "", False, False, default_norm,
-      #           1, 2.2, 4.0, 0, 30, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
-      # Histogram(collection + category+"_logInvMass", "", False, True, default_norm, 15, -0.7, 1.9,
-      #           1e-2, 1e5, "Dimuon vertex log_{10}(M_{#mu #mu} [GeV])", f"# events ({year})"),
-      # Histogram(collection + category+"_eta", "", False, True, default_norm, 5, -
-      #           3.5, 3.5, 1e-2, 1e6, "Dimuon vertex #eta", f"# events ({year})"),
-      # Histogram(collection + category+"_pt", "", False, True, default_norm, 20, 0,
-      #           500, 1e-2, 1e5, "#mu vertex p_{T} [GeV]", f"# events ({year})"),
-      # # Histogram(collection + category+"_muonPt", "", False, True, default_norm, 20, 0, 500, 1e-2, 1e5, "Dimuon vertex #mu p_{T} [GeV]", f"# events ({year})"),
+      #           1, 2.2, 4.0, 0, 500, "#mu vertex M_{#mu #mu} [GeV]", f"# events ({year})"),
+      # # Histogram(collection + category+"_logInvMass", "", False, True, default_norm, 15, -0.7, 1.9,
+      # #           1e-2, 1e5, "Dimuon vertex log_{10}(M_{#mu #mu} [GeV])", f"# events ({year})"),
+      # Histogram(collection + category+"_eta", "", False, True, default_norm, 40,
+      #           -3.5, 4, 1e-3, 1e7, "Dimuon vertex #eta", f"# events ({year})"),
+      # Histogram(collection + category+"_pt", "", False, True, norm_one, 20, 0,
+      #           350, 1e-3, 1e0, "#mu vertex p_{T} [GeV]", f"# events ({year})"),
+      # Histogram(collection + category+"_pt_irr", "", False, True, default_norm, 1, 0,
+      #           120, 1e-3, 1e7, "#mu vertex p_{T} [GeV]", f"# events ({year})"),
       # Histogram(collection + category+"_muonPtErr", "", False, True, default_norm, 2, 0,
       #           50, 1e-2, 1e5, "Dimuon vertex #mu #sigma_{pT} [GeV]", f"# events ({year})"),
       # Histogram(collection + category+"_leadingPt", "", False, True, default_norm, 20, 0,
-      #           500, 1e-2, 1e6, "#mu vertex leading p_{T} [GeV]", f"# events ({year})"),
+      #           500, 1e-2, 1e2, "#mu vertex leading p_{T} [GeV]", f"# events ({year})"),
+      # Histogram(collection + category+"_muonPt1", "", False, True, default_norm, 20, 0,
+      #           300, 1e-3, 1e5, "#mu_{1} p_{T} [GeV]", f"# events ({year})"),
+      # Histogram(collection + category+"_muonPt2", "", False, True, default_norm, 10, 0,
+      #           300, 1e-3, 1e5, "#mu_{2} p_{T} [GeV]", f"# events ({year})"),
+      # Histogram(collection + category+"_muonEta1", "", False, True, default_norm, 5, -
+      #           3.5, 3.5, 1e-3, 1e5, "#mu_{1} #eta", f"# events ({year})"),
+      # Histogram(collection + category+"_muonEta2", "", False, True, default_norm, 5, -
+      #           3.5, 3.5, 1e-3, 1e5, "#mu_{2} #eta", f"# events ({year})"),
 
-      # Histogram(collection + category+"_LxySignificance", "", False, True, default_norm, 1, 0,
-      #           20, 1e-4, 1e6, "Dimuon vertex L_{xy} / #sigma_{Lxy}", f"# events ({year})"),
-      # Histogram(collection + category+"_Lxy", "", False, True, default_norm, 400, 0,
-      #           500, 1e-4, 1e6, "Dimuon vertex L_{xy} [cm]", f"# events ({year})"),
-      # Histogram(collection + category+"_absDxyPVTraj1", "", False, True, default_norm, 100,
-      #           0, 100, 1e-4, 1e6, "Dimuon vertex |d_{xy}^{#mu1}|", f"# events ({year})"),
-      # Histogram(collection + category+"_absDxyPVTraj2", "", False, True, default_norm, 100,
-      #           0, 100, 1e-4, 1e6, "Dimuon vertex |d_{xy}^{#mu1}|", f"# events ({year})"),
-      # # Histogram(collection + category+"_dxyPVTrajSig1", "", False, True, default_norm, 1, 0, 30, 1e-4, 1e6, "Dimuon vertex d_{xy}^{#mu1} / #sigma_{dxy}^{#mu1}", f"# events ({year})"),
-      # # Histogram(collection + category+"_dxyPVTrajSig2", "", False, True, default_norm, 1, 0, 30, 1e-4, 1e6, "Dimuon vertex d_{xy}^{#mu2} / #sigma_{dxy}^{#mu2}", f"# events ({year})"),
-      # # Histogram(collection + category+"_LxySigma", "", False, True, default_norm, 200, 0, 100, 1e-5, 1e6, "#mu vertex #sigma_{Lxy} [cm]", f"# events ({year})"),
+      # # Histogram(collection + category+"_LxySignificance", "", False, True, default_norm, 10, 0,
+      # #           100, 1e-3, 1e5, "Dimuon vertex L_{xy} / #sigma_{Lxy}", f"# events ({year})"),
+      # Histogram(collection + category+"_Lxy", "", False, True, default_norm, 20, 0,
+      #           50, 1e-3, 1e5, "Dimuon vertex L_{xy} [cm]", f"# events ({year})"),
+      # Histogram(collection + category+"_absDxyPVTraj1", "", False, True, default_norm, 1,
+      #           0, 1, 1e-3, 1e5, "Dimuon vertex |d_{xy}^{#mu1}|", f"# events ({year})"),
+      # Histogram(collection + category+"_absDxyPVTraj2", "", False, True, default_norm, 1,
+      #           0, 1, 1e-3, 1e5, "Dimuon vertex |d_{xy}^{#mu2}|", f"# events ({year})"),
+      # Histogram(collection + category+"_dxyPVTrajSig1", "", False, True, default_norm, 1, 0, 30, 1e-4, 1e6, "Dimuon vertex d_{xy}^{#mu1} / #sigma_{dxy}^{#mu1}", f"# events ({year})"),
+      # Histogram(collection + category+"_dxyPVTrajSig2", "", False, True, default_norm, 1, 0, 30, 1e-4, 1e6, "Dimuon vertex d_{xy}^{#mu2} / #sigma_{dxy}^{#mu2}", f"# events ({year})"),
+      # # Histogram(collection + category+"_LxySigma", "", False, True, default_norm, 20, 0, 100, 1e-5, 1e6, "#mu vertex #sigma_{Lxy} [cm]", f"# events ({year})"),
+      # # Histogram(collection + category+"_vxySigma", "", False, True, default_norm, 20, 0, 100, 1e-5, 1e6, "#mu vertex #sigma_{Lxy} [cm]", f"# events ({year})"),
 
       # Histogram(collection + category+"_nSegments", "", False, True, default_norm,
       #           1, 0, 20, 1e-3, 1e8, "#mu vertex N(segments)", f"# events ({year})"),
 
       # Histogram(collection + category+"_dR", "", False, True, default_norm, 5,
-      #           0, 3.15, 1e-2, 1e6, "#mu vertex #Delta R", f"# events ({year})"),
-      # # Histogram(collection + category+"_proxDR", "", False, True, default_norm, 1, 0, 3.15, 1e-3, 1e6, "#mu vertex proximity #Delta R", f"# events ({year})"),
-      # Histogram(collection + category+"_outerDR", "", False, True, default_norm, 3, 0,
-      #           3.15, 1e-3, 1e7, "#mu vertex outer #Delta R", f"# events ({year})"),
-      # # Histogram(collection + category+"_logOuterDR", "", False, True, default_norm, 10, -2, 1, 1e-3, 1e7, "#mu vertex log outer #Delta R", f"# events ({year})"),
-      # # Histogram(collection + category+"_dEta", "", False, True, default_norm, 1, 0, 3.15, 1e-3, 1e6, "#mu vertex #Delta #eta", f"# events ({year})"),
-      # # Histogram(collection + category+"_dPhi", "", False, True, default_norm, 1, 0, 3.15, 1e-3, 1e6, "#mu vertex #Delta #phi", f"# events ({year})"),
+      #           0, 3.15, 1e-3, 1e5, "#mu vertex #Delta R", f"# events ({year})"),
+      # Histogram(collection + category+"_dRprox", "", False, True, norm_one, 2, 0, 1, 1e-3, 1e1, "#mu vertex proximity #Delta R", f"# events ({year})"),
+      # Histogram(collection + category+"_outerDR", "", False, True, norm_one, 5, 0,
+      #           3.15, 1e-4, 1e1, "#mu vertex outer #Delta R", f"# events ({year})"),
+      # Histogram(collection + category+"_logOuterDR", "", False, True, default_norm, 10, -2, 1, 1e-3, 1e7, "#mu vertex log outer #Delta R", f"# events ({year})"),
+      # # # Histogram(collection + category+"_dEta", "", False, True, default_norm, 1, 0, 3.15, 1e-3, 1e6, "#mu vertex #Delta #eta", f"# events ({year})"),
+      # # # Histogram(collection + category+"_dPhi", "", False, True, default_norm, 1, 0, 3.15, 1e-3, 1e6, "#mu vertex #Delta #phi", f"# events ({year})"),
 
       # Histogram(collection + category+"_displacedTrackIso03Dimuon1", "", False, True,
       #           default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.3}(#mu_{1})", f"# events ({year})"),
       # Histogram(collection + category+"_displacedTrackIso03Dimuon2", "", False, True,
       #           default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.3}(#mu_{2})", f"# events ({year})"),
-      # # Histogram(collection + category+"_displacedTrackIso04Dimuon1", "", False, True, default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.4}(#mu_{1})", f"# events ({year})"),
-      # # Histogram(collection + category+"_displacedTrackIso04Dimuon2", "", False, True, default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.4}(#mu_{2})", f"# events ({year})"),
-      # # Histogram(collection + category+"_displacedTrackIso03Muon1", "", False, True, default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.3}(#mu_{1})", f"# events ({year})"),
-      # # Histogram(collection + category+"_displacedTrackIso03Muon2", "", False, True, default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.3}(#mu_{2})", f"# events ({year})"),
-      # # Histogram(collection + category+"_displacedTrackIso04Muon1", "", False, True, default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.4}(#mu_{1})", f"# events ({year})"),
-      # # Histogram(collection + category+"_displacedTrackIso04Muon2", "", False, True, default_norm, 1, 0, 1, 1e-4, 1e7, "Iso_{0.4}(#mu_{2})", f"# events ({year})"),
+      # Histogram(collection + category+"_displacedTrackIso04Dimuon1", "", False, True, default_norm, 8, 0, 2, 1e-3, 1e7, "#mu_{1} Iso_{Trk}^{Rel}(#Delta R < 0.4)", f"# events ({year})"),
+      # Histogram(collection + category+"_displacedTrackIso04Dimuon2", "", False, True, default_norm, 8, 0, 2, 1e-3, 1e7, "#mu_{2} Iso_{Trk}^{Rel}(#Delta R < 0.4)", f"# events ({year})"),
+      # Histogram(collection + category+"_logDisplacedTrackIso04Dimuon1", "", False, True, default_norm, 10, -3, 2, 1e-3, 1e7, "log Iso_{Dipl.Trk}^{#mu_{1}}(0.4)", f"# events ({year})"),
+      # Histogram(collection + category+"_logDisplacedTrackIso04Dimuon2", "", False, True, default_norm, 10, -3, 2, 1e-3, 1e7, "log Iso_{Dipl.Trk}^{#mu_{2}}(0.4)", f"# events ({year})"),
+      # Histogram(collection + category+"_pfRelIso04all1", "", False, True, default_norm, 8, 0, 2, 1e-3, 1e7, "#mu_{1} I_{PF}^{rel} (#Delta R < 0.4)", f"# events ({year})"),
+      # Histogram(collection + category+"_pfRelIso04all2", "", False, True, default_norm, 8, 0, 2, 1e-3, 1e7, "#mu_{2} I_{PF}^{rel} (#Delta R < 0.4)", f"# events ({year})"),
+      # Histogram(collection + category+"_logPfRelIso04all1", "", False, True, default_norm, 10, -4, 3, 1e-3, 1e7, "#mu_{1} log I_{PF}^{rel} ( #Delta R < 0.4 )", f"# events ({year})"),
+      # Histogram(collection + category+"_logPfRelIso04all2", "", False, True, default_norm, 10, -4, 3, 1e-3, 1e7, "#mu_{2} log I_{PF}^{rel} ( #Delta R < 0.4 )", f"# events ({year})"),
+      
 
-      # Histogram(collection + category+"_normChi2", "", False, True, default_norm, 100,
-      #           0, 5, 1e-4, 1e5, "Dimuon vertex #chi^{2}/ndof", f"# events ({year})"),
-      # # Histogram(collection + category+"_maxHitsInFrontOfVert", "", False, True, default_norm, 1, 0, 35, 1e-4, 1e6, "Max N(hits before vertex)", f"# events ({year})"),
-      # Histogram(collection + category+"_sumHitsInFrontOfVert", "", False, True, default_norm,
-      #           1, 0, 35, 1e-4, 1e6, "Sum N(hits before vertex)", f"# events ({year})"),
+      # Histogram(collection + category+"_normChi2", "", False, True, default_norm, 200,
+      #           0, 5, 1e-3, 1e5, "Dimuon vertex #chi^{2}/ndof", f"# events ({year})"),
+      # # # Histogram(collection + category+"_maxHitsInFrontOfVert", "", False, True, default_norm, 1, 0, 35, 1e-4, 1e5, "Max N(hits before vertex)", f"# events ({year})"),
+      # # Histogram(collection + category+"_sumHitsInFrontOfVert", "", False, True, default_norm,
+      # #           1, 0, 35, 1e-4, 1e5, "Sum N(hits before vertex)", f"# events ({year})"),
       # Histogram(collection + category+"_dca", "", False, True, default_norm,
-      #           20, 0, 15, 1e-4, 1e5, "Dimuon DCA [cm]", f"# events ({year})"),
+      #           10, 0, 5, 1e-3, 1e5, "Dimuon DCA [cm]", f"# events ({year})"),
       # Histogram(collection + category+"_absCollinearityAngle", "", False, True, default_norm, 10,
-      #           0, 3.15, 1e-4, 1e6, "Dimuon vertex |#Delta #Phi_{coll}|", f"# events ({year})"),
-      # # Histogram(collection + category+"_3Dangle", "", False, True, default_norm, 5, 0, 3.15, 1e-3, 1e8, "#mu vertex 3Dangle", f"# events ({year})"),
-      # # Histogram(collection + category+"_cos3Dangle", "", False, True, default_norm, 5, -1, 1, 1e-3, 1e8, "#mu vertex cos 3Dangle", f"# events ({year})"),
-      # Histogram(collection + category+"_absPtLxyDPhi1", "", False, True, default_norm, 10,
-      #           0, 3.15, 1e-3, 1e6, "#mu vertex |#Delta #phi_{#mu1}|", f"# events ({year})"),
-      # Histogram(collection + category+"_absPtLxyDPhi2", "", False, True, default_norm, 10,
-      #           0, 3.15, 1e-3, 1e6, "#mu vertex |#Delta #phi_{#mu2}|", f"# events ({year})"),
-      # # Histogram(collection + category+"_pfRelIso04all1", "", False, True, default_norm, 4, 0, 10, 1e-3, 1e6, "#mu_{1} I_{PF}^{rel} ( #Delta R < 0.4 )", f"# events ({year})"),
-      # # Histogram(collection + category+"_pfRelIso04all2", "", False, True, default_norm, 4, 0, 10, 1e-3, 1e6, "#mu_{2} I_{PF}^{rel} ( #Delta R < 0.4 )", f"# events ({year})"),
+      #           0, 3.15, 1e-3, 1e5, "Dimuon vertex |#Delta #Phi_{coll}|", f"# events ({year})"),
+      # Histogram(collection + category+"_3Dangle", "", False, True, default_norm, 10, 0, 3.15, 1e-3, 1e5, "#mu vertex 3Dangle", f"# events ({year})"),
+      # # # Histogram(collection + category+"_cos3Dangle", "", False, True, default_norm, 5, -1, 1, 1e-3, 1e8, "#mu vertex cos 3Dangle", f"# events ({year})"),
+      # # Histogram(collection + category+"_absPtLxyDPhi1", "", False, True, default_norm, 10,
+      # #           0, 3.15, 1e-4, 1e5, "#mu vertex |#Delta #phi_{#mu1}|", f"# events ({year})"),
+      # # Histogram(collection + category+"_absPtLxyDPhi2", "", False, True, default_norm, 10,
+      # #           0, 3.15, 1e-4, 1e5, "#mu vertex |#Delta #phi_{#mu2}|", f"# events ({year})"),
+      
       # Histogram(collection + category+"_chargeProduct", "", False, True, default_norm,
-      #           1, -1, 2, 1e-1, 1e7, "Dimuon vertex charge", f"# events ({year})"),
+      #           1, -1, 2, 1e-3, 1e5, "Dimuon vertex charge", f"# events ({year})"),
+
   )
 
   muonQualityFlags = []

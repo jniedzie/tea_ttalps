@@ -1,7 +1,7 @@
 import re
 import ROOT
 import physics
-from math import pi, log10
+from math import pi, log10, floor, ceil
 import array
 
 from Logger import error, warn
@@ -17,6 +17,7 @@ class TTAlpsLimitsPlotterHelper:
     self.cross_sections = get_cross_sections(year)
     self.reference_coupling = 0.1
     self.target_coupling = 1.0
+    self.missing_points = []
 
   def __load_limits(self):
 
@@ -125,13 +126,19 @@ class TTAlpsLimitsPlotterHelper:
     self.graph_2d_exp.SetLineStyle(2)
     self.graph_2d_exp.SetMarkerStyle(20)
     self.graph_2d_exp.SetMarkerSize(0.5)
+    all_points = [log10(self.get_scale(m, ct) * values[3 if expected else 0])
+                  for (m, ct), values in self.data.items() if len(values) >= 3]
+    worst_point = max(all_points)
+    placeholder = worst_point + 0.5
 
     for (m, ct), values in self.data.items():
       if len(values) < 3:
-        point = -1e9
-        warn(f"Point ({m}, {ct}) is set to nan")
+          point = placeholder
+          warn(f"Point ({m}, {ct}) is missing, using placeholder {point}")
+          self.missing_points.append((m, ct))
       else:
-        point = log10(self.get_scale(m, ct) * values[3 if expected else 0])
+          point = log10(self.get_scale(m, ct) * values[3 if expected else 0])
+
       self.graph_2d_exp.SetPoint(
           self.graph_2d_exp.GetN(),
           log10(m),
@@ -141,11 +148,34 @@ class TTAlpsLimitsPlotterHelper:
 
     return self.graph_2d_exp
 
-  def draw_2d_graph(self, x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max):
+  def draw_2d_graph(self, x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis=False):
     self.graph_2d_exp.SetNpx(500)
     self.graph_2d_exp.SetNpy(500)
 
-    self.graph_2d_exp.DrawClone("COLZ")
+    self.graph_2d_exp.Draw("COLZ")
+
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetTitle(x_title)
+    self.graph_2d_exp.GetHistogram().GetYaxis().SetTitle(y_title)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetTitle(z_title)
+
+    log_x_min = ROOT.TMath.Log10(x_min)
+    log_x_max = ROOT.TMath.Log10(x_max)
+    log_y_min = ROOT.TMath.Log10(y_min)
+    log_y_max = ROOT.TMath.Log10(y_max)
+
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
+    self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
+    self.graph_2d_exp.GetHistogram().GetYaxis().SetRangeUser(y_min, y_max)
+    self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
+
+    if custom_axis:
+      self.graph_2d_exp.GetHistogram().GetXaxis().SetLabelSize(0)
+      self.graph_2d_exp.GetHistogram().GetYaxis().SetLabelSize(0)
+      self.graph_2d_exp.GetHistogram().GetXaxis().SetTickLength(0)
+      self.graph_2d_exp.GetHistogram().GetYaxis().SetTickLength(0)
+      self.graph_2d_exp.GetHistogram().GetZaxis().SetTickLength(0)
+      self.graph_2d_exp.GetHistogram().GetYaxis().SetTitleOffset(1.3)
+      self.graph_2d_exp.GetHistogram().GetZaxis().SetTitleOffset(1.3)
 
     # work in progress:
     # sigma_theory_0p1 = get_theory_cross_section(mass)
@@ -158,16 +188,6 @@ class TTAlpsLimitsPlotterHelper:
     # contour_0p2.SetContour(1)  # We need 2 levels: below and above 1.0
     # contour_0p2.SetContourLevel(0, log10(0.2))
 
-    self.graph_2d_exp.GetHistogram().GetXaxis().SetTitle(x_title)
-    self.graph_2d_exp.GetHistogram().GetYaxis().SetTitle(y_title)
-    self.graph_2d_exp.GetHistogram().GetZaxis().SetTitle(z_title)
-
-    self.graph_2d_exp.GetHistogram().GetXaxis().SetRangeUser(x_min, x_max)
-    self.graph_2d_exp.GetHistogram().GetYaxis().SetRangeUser(y_min, y_max)
-    self.graph_2d_exp.GetHistogram().GetZaxis().SetRangeUser(z_min, z_max)
-
-    self.graph_2d_exp.GetHistogram().DrawClone("COLZ")
-
     # work in progress:
     # Overlay the contour line
     # contour.SetLineColor(ROOT.kRed)
@@ -179,6 +199,20 @@ class TTAlpsLimitsPlotterHelper:
 
     # contour.DrawClone("CONT3 SAME")
     # contour_0p2.DrawClone("CONT3 SAME")
+
+  def draw_missing_points(self):
+    if len(self.missing_points) == 0:
+      return
+
+    missing_graph = ROOT.TGraph(len(self.missing_points))
+    for i, (m, ct) in enumerate(self.missing_points):
+      missing_graph.SetPoint(i, log10(m), log10(ct))
+
+    missing_graph.SetMarkerColor(ROOT.kRed)
+    missing_graph.SetMarkerSize(1.5)
+    missing_graph.SetMarkerStyle(5)
+
+    missing_graph.DrawClone("P SAME")
 
   def draw_pion_label(self):
     tex = ROOT.TLatex(0.60, 0.80, "tt+a, a #rightarrow #pi's")
@@ -198,7 +232,7 @@ class TTAlpsLimitsPlotterHelper:
     tex.SetLineWidth(2)
     tex.DrawClone()
 
-  def draw_lumi_label(self, luminosity_run2, luminosity_run3):
+  def draw_lumi_label(self, luminosity_run2, luminosity_run3, variable=""):
     lumi_text = ""
     lumi_text_xmin = 0.60
     if luminosity_run2 != 0 and luminosity_run3 == 0:
@@ -208,6 +242,8 @@ class TTAlpsLimitsPlotterHelper:
     else:
       lumi_text = f"#scale[0.8]{{{luminosity_run2/1000:.0f} fb^{{-1}} (13 TeV), {luminosity_run3/1000:.0f} fb^{{-1}} (13.6 TeV)}}"
       lumi_text_xmin = 0.48
+    if variable == "mass" or variable == "ctau":
+      lumi_text_xmin += 0.05
     tex = ROOT.TLatex(lumi_text_xmin, 0.92, lumi_text)
     tex.SetNDC()
     tex.SetTextFont(42)

@@ -12,6 +12,7 @@
 #include "Helpers.hpp"
 #include "PhysicsObject.hpp"
 #include "TTAlpsDimuonCuts.hpp"
+#include "TTAlpsObjectsManager.hpp"
 
 class TTAlpsCuts {
  public:
@@ -24,6 +25,7 @@ class TTAlpsCuts {
   bool PassesDimuonCuts(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
   void PrintDimuonCutFlow(std::shared_ptr<CutFlowManager> cutFlowManager);
   void SaveDimuonCutFlows(std::shared_ptr<CutFlowManager> cutFlowManager);
+  void UpdateBestDimuonCut(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
 
   bool PassesSingleMuonTrigger(const std::shared_ptr<Event> event);
   bool PassesDoubleMuonTrigger(const std::shared_ptr<Event> event);
