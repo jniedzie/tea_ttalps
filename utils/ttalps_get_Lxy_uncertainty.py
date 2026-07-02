@@ -9,7 +9,7 @@ categories = ["Pat", "PatDSA", "DSA"]
 
 Lxy_region = "SR_maxLxy_ANv3"
 
-output_path = f"../plots/n_events/{Lxy_region}_{year}"
+output_path = f"../plots/n_events/{Lxy_region}_{year}_thesis"
 if not os.path.exists(output_path):
     os.makedirs(output_path)
 
@@ -49,7 +49,7 @@ for category in categories:
 
     info(f"\n--- {category}:")
     # Open input files
-    f_base = ROOT.TFile.Open(f"../signal_lxy_uncertainty/input_root_files/n_signal_events_{category}_{year}_SR_ANv3.root")
+    f_base = ROOT.TFile.Open(f"../signal_lxy_uncertainty/input_root_files/n_signal_events_{category}_{year}_SR_ANv5.root")
     f_cut  = ROOT.TFile.Open(f"../signal_lxy_uncertainty/input_root_files/n_signal_events_{category}_{year}_{Lxy_region}.root")
 
     # Get histograms
@@ -103,6 +103,7 @@ for category in categories:
 
     c1 = ROOT.TCanvas("c1", "c1", 800, 600)
     h_eff.SetMinimum(1e-9)
+    h_eff.SetMaximum(100)
 
     h_eff.Draw("COLZ")
     h_eff.GetXaxis().SetLabelSize(0.04)
@@ -128,8 +129,8 @@ for category in categories:
     c1.SaveAs(f"{output_path}/n_signal_events_Lxy_efficiency_{category}_{year}.pdf")
 
     # Save to new ROOT file
-    out = ROOT.TFile(f"../signal_lxy_uncertainty/output_root_files/n_signal_events_efficiency_{category}_{year}.root", "RECREATE")
+    out = ROOT.TFile(f"../signal_lxy_uncertainty_thesis/output_root_files/n_signal_events_efficiency_{category}_{year}.root", "RECREATE")
     h_eff.Write()
     out.Close()
 
-    print(f"Efficiency histogram saved to signal_lxy_uncertainty/output_root_files/n_signal_events_efficiency_{category}_{year}.root")
+    print(f"Efficiency histogram saved to signal_lxy_uncertainty_thesis/output_root_files/n_signal_events_efficiency_{category}_{year}.root")

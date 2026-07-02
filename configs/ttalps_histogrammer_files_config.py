@@ -13,22 +13,32 @@ from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix,
 import os
 
 max_files = -1
-samples = dasBackgrounds2018.keys()
+samples = dasData2022postEE.keys()
 
 # Loose semimuonic skim
 # skim = ("skimmed_looseSemimuonic_v3_merged", "", "")
 # skim = ("skimmed_looseSemimuonic_v2", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
+
 # SR, J/Psi CR skim
+# skim = ("skimmed_loose  zzSemimuonic_v3_SR", "", "")
+
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsExclusive", "LooseNonLeadingMuonsVertexSegmentMatch")
 skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsHitsInFrontOfVertex", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsDPhiBetweenMuonpTAndLxy", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsMaxDxyDz", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsLooseDSADCA", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # skim = ("skimmed_looseSemimuonic_v3_SR_noBTag", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v3_SR_noBTag_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 # skim = ("skimmed_looseSemimuonic_v3_SR", "SSDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "DCADimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "Chi2Dimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+
+# skim = ("skimmed_looseSemimuonic_v3_SR", "HighIsoDimuons", "LooseNonLeadingPATMuonsVertex")
 
 # J/Psi CR PAT-DSA no association
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuonsPatDSA", "LooseNonLeadingMuonsVertex")
@@ -39,6 +49,11 @@ skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "LooseNonLeadingMuonsVerte
 # J/Psi CR DSA-DSA reverted association with DSA-DSA Dimuon selection
 # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "RevertedSegmentMatchedDSAMuonsVertex")
 
+# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiIsoDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiIsoDimuonsPatDSA", "LooseNonLeadingMuonsVertex")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiIsoDimuons", "LooseNonLeadingPATMuonsVertex")
+
+# skim = ("skimmed_looseSemimuonic_v3_SR_puppiMET", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # other CRs
 # skim = ("skimmed_3muCR_merged", "JPsiDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
@@ -46,7 +61,7 @@ skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "LooseNonLeadingMuonsVerte
 # skim = ("skimmed_looseSemimuonic_v2_ttbarLike1DSA", "", "")
 
 # Loose semimuonic skim with Dimuon triggers for LLP trigger study
-# skim = ("skimmed_looseSemimuonic_v2_SR_noTrigger", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
+# skim = ("skimmed_looseSemimuonic_v2_SR_noTrigger_merged", "SRDimuons", "LooseNonLeadingMuonsVertexSegmentMatch")
 
 # For leading tight muon study: do not use NonLeadingMuons:
 # skim = ("skimmed_looseSemimuonic_v2_SR_segmentMatch1p5", "SRDimuons", "LooseMuonsVertexSegmentMatch")
@@ -65,12 +80,17 @@ applyScaleFactors = {
     "dimuonEff_Pat": (True, True),
     "dimuonEff_PatDSA": (True, True),
     "dimuonEff_DSA": (True, True),
-    "jec": (False, True),
+    "jec": (True, True),
     "jer": (True, True),
     "metUnclEnergy": (False, True),
     "metXYcorrection": (True, False),
     "L1PreFiringWeight": (True, True),
 }
+
+# We only need to update the JEC for Run 3 Puppi Jets
+if year == "2016preVFP" or year == "2016postVFP" or year == "2017" or year == "2018":
+  _, variation = applyScaleFactors["jec"]
+  applyScaleFactors["jec"] = (False, variation)
 
 # We don't need the SF variations for uncertainties in CRs
 if "SRDimuons" not in skim[1]:
@@ -89,14 +109,18 @@ if "ttbarCR" not in skim[0]:
     applyScaleFactors["dimuonEff_DSA"][0] is False:
     hist_path += "_noDimuonEffSFs"
 
-# hist_path += "_ANv3"
+# hist_path += "_LLPtrigger_ANv6"
 # hist_path += "_jetMaps_ANv3"
-hist_path += "_ABCD_ANv3"
+hist_path += "_ABCD_ANv10_regionA"
+# hist_path += "_ABCD_ANv10_regionABCD"
+# hist_path += "_genALPs_ANv6"
+# hist_path += "_ABCD_ANv5_regionBCD"
+# hist_path += "_ABCD_ANv5_regionD_2"
 # hist_path += "_maxLxyCut_ABCD_ANv3"
-# hist_path += "_genInfo_ABCD_ANv3"
-# hist_path += "_nminus1_ANv3/"
-# hist_path += "_noMatching_ABCD_ANv3"
-# hist_path += "_revertedMatching_ABCD_ANv3"
+# hist_path += "_genInfo_ABCD_ANv5"
+# hist_path += "_nminus1_ANv5/"
+# hist_path += "_noMatching_ABCD_ANv6"
+# hist_path += "_revertedMatching_ABCD_ANv6"
 # hist_path += "_fakes/"
 # hist_path += "_noMatching/"
 
@@ -104,5 +128,7 @@ hist_path += "_ABCD_ANv3"
 sample_path = ""
 output_username = os.environ["USER"]
 input_directory = f"/data/dust/group/cms/ttALPs-desy/{sample_path}/{skim[0]}/"
+# input_directory = f"{base_path.format(output_username)}/{sample_path}/{skim[0]}/"
 
 output_hists_dir = f"{base_path.format(output_username)}/{sample_path}/{skim[0]}/{hist_path}/"
+

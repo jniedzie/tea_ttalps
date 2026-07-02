@@ -4,6 +4,8 @@ import os
 import math
 from array import array
 
+from ttalps_luminosities import get_luminosity
+
 topMargin = 0.06
 bottomMargin = 0.3
 leftMargin = 0.16
@@ -14,23 +16,71 @@ ROOT.gStyle.SetOptTitle(0)
 
 # Open the ROOT file (assuming all histograms are stored in the same file)
 # signal = ("tta_mAlp-2GeV_ctau-1e0mm", "m_{a} = 2 GeV, c#tau_{a} = 1 mm")
-signal = ("tta_mAlp-2GeV_ctau-1e1mm", "m_{a} = 2 GeV, c#tau_{a} = 1 cm")
-# signal = ("tta_mAlp-2GeV_ctau-1e2mm", "m_{a} = 2 GeV, c#tau_{a} = 10 cm")
+# signal = ("tta_mAlp-2GeV_ctau-1e1mm", "m_{a} = 2 GeV, c#tau_{a} = 1 cm")
+signal = ("tta_mAlp-2GeV_ctau-1e2mm", "m_{a} = 2 GeV, c#tau_{a} = 10 cm")
 
-skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
-hist_path = "histograms_dimuonEffSFs_SRDimuons_ABCD"
+# signal = ("tta_mAlp-12GeV_ctau-1e0mm", "m_{a} = 12 GeV, c#tau_{a} = 1 mm")
+# signal = ("tta_mAlp-12GeV_ctau-1e1mm", "m_{a} = 12 GeV, c#tau_{a} = 1 cm")
+# signal = ("tta_mAlp-12GeV_ctau-1e2mm", "m_{a} = 12 GeV, c#tau_{a} = 10 cm")
 
-filename=f"/data/dust/user/lrygaard/ttalps_cms/signals2018/{signal[0]}/{skim}/{hist_path}/histograms.root"
-file = ROOT.TFile.Open(filename)
+# skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5"
+skim = "skimmed_looseSemimuonic_v3_SR"
+# hist_path = "histograms_dimuonEffSFs_SRDimuons_ABCD"
+# hist_path = "histograms_SRDimuons_ABCD_ANv2"
+hist_path = "histograms_SRDimuons_ABCD_ANv5"
 
-# Retrieve histograms from the file
+years = ["2016preVFP","2016postVFP","2017","2018",]
+# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix",]
+year_str = ""
+Lxy_DSA = None
+Lxy_Pat = None
+Lxy_PatDSA = None
+Lxy_tot = None
 dimuonCollection = "BestPFIsoDimuonVertex"
-Lxy_DSA = file.Get(dimuonCollection+"_DSA_Lxy")
-Lxy_Pat = file.Get(dimuonCollection+"_Pat_Lxy")
-Lxy_PatDSA = file.Get(dimuonCollection+"_PatDSA_Lxy")
-Lxy_tot = file.Get(dimuonCollection+"_Lxy")
+include_run3 = False
 
-include_overflow = False
+for year in years:
+    year_str += year
+    if "2022" in year or "2023" in year:
+        include_run3 = True
+    filename=f"/data/dust/user/lrygaard/ttalps_cms/signals{year}/{signal[0]}/{skim}/{hist_path}/histograms.root"
+    file = ROOT.TFile.Open(filename)
+
+    h_DSA = file.Get(dimuonCollection+"_DSA_Lxy")
+    h_Pat = file.Get(dimuonCollection+"_Pat_Lxy")
+    h_PatDSA = file.Get(dimuonCollection+"_PatDSA_Lxy")
+    h_tot = file.Get(dimuonCollection+"_Lxy")
+
+    luminosity = get_luminosity(year)
+    h_cutflow = file.Get("cutFlow")
+    initial_weight = h_cutflow.GetBinContent(1)
+    h_DSA.Scale(luminosity / initial_weight)
+    h_Pat.Scale(luminosity / initial_weight)
+    h_PatDSA.Scale(luminosity / initial_weight)
+    h_tot.Scale(luminosity / initial_weight)
+    
+    if Lxy_tot is None:
+        Lxy_DSA = h_DSA.Clone(f"Lxy_DSA_{year}")
+        Lxy_DSA.SetDirectory(0)
+        Lxy_Pat = h_Pat.Clone(f"Lxy_Pat_{year}")
+        Lxy_Pat.SetDirectory(0)
+        Lxy_PatDSA = h_PatDSA.Clone(f"Lxy_PatDSA_{year}")
+        Lxy_PatDSA.SetDirectory(0)
+        Lxy_tot = h_tot.Clone(f"Lxy_tot_{year}")
+        Lxy_tot.SetDirectory(0)
+    else:
+        Lxy_DSA.Add(h_DSA)
+        Lxy_Pat.Add(h_Pat)
+        Lxy_PatDSA.Add(h_PatDSA)
+        Lxy_tot.Add(h_tot)
+    
+    file.Close()
+
+include_overflow = True
+paper = True
+thesis = False
+if thesis:
+    paper = True
 
 x_max = 300
 bin_edges = np.concatenate([
@@ -126,27 +176,46 @@ eff_DSA = weighted_efficiency(Lxy_DSA_rebinned, Lxy_tot_rebinned)
 eff_Pat = weighted_efficiency(Lxy_Pat_rebinned, Lxy_tot_rebinned)
 eff_PatDSA = weighted_efficiency(Lxy_PatDSA_rebinned, Lxy_tot_rebinned)
 
-eff_DSA.SetLineColor(ROOT.kBlue+1)
-eff_DSA.SetMarkerColor(ROOT.kBlue+1)
-# eff_DSA.SetLineColor(ROOT.kRed)
-# eff_DSA.SetMarkerColor(ROOT.kRed)
-eff_DSA.SetMarkerStyle(20)
+cms_red = ROOT.TColor.GetColor("#bd1f01")
+cms_green = ROOT.TColor.GetColor("#b9ac70")
+cms_yellow = ROOT.TColor.GetColor("#ffa90e")
+cms_blue = ROOT.TColor.GetColor("#3f90da")
 
-eff_Pat.SetLineColor(ROOT.kGreen+1)
-eff_Pat.SetMarkerColor(ROOT.kGreen+1)
-eff_Pat.SetMarkerStyle(20)
+# eff_DSA.SetLineColor(ROOT.kBlue+1)
+# eff_DSA.SetMarkerColor(ROOT.kBlue+1)
+# eff_DSA.SetLineColor(ROOT.kGreen+2)
+# eff_DSA.SetMarkerColor(ROOT.kGreen+2)
+# eff_DSA.SetLineColor(cms_red)
+# eff_DSA.SetMarkerColor(cms_red)
+# eff_DSA.SetMarkerStyle(20)
 
-# eff_PatDSA.SetLineColor(ROOT.kBlue)
-# eff_PatDSA.SetMarkerColor(ROOT.kBlue)
-eff_PatDSA.SetLineColor(ROOT.kOrange+1)
-eff_PatDSA.SetMarkerColor(ROOT.kOrange+1)
-eff_PatDSA.SetMarkerStyle(20)
+eff_DSA.SetLineColor(cms_blue)
+eff_DSA.SetMarkerColor(cms_blue)
+eff_DSA.SetMarkerStyle(22)
+
+# eff_Pat.SetLineColor(ROOT.kGreen+1)
+# eff_Pat.SetMarkerColor(ROOT.kGreen+1)
+# eff_Pat.SetLineColor(ROOT.kRed+1)
+# eff_Pat.SetMarkerColor(ROOT.kRed+1)
+eff_Pat.SetLineColor(cms_yellow)
+eff_Pat.SetMarkerColor(cms_yellow)
+eff_Pat.SetMarkerStyle(21)
+
+# eff_PatDSA.SetLineColor(ROOT.kOrange+1)
+# eff_PatDSA.SetMarkerColor(ROOT.kOrange+1)
+# eff_PatDSA.SetLineColor(ROOT.kAzure+7)
+# eff_PatDSA.SetMarkerColor(ROOT.kAzure+7)
+eff_PatDSA.SetLineColor(cms_blue)
+eff_PatDSA.SetMarkerColor(cms_blue)
+eff_PatDSA.SetMarkerStyle(22)
 
 hist0 = ROOT.TH1F("hist0", "hist0", n_bins, bin_edges)
 hist0.GetXaxis().SetTitle("L_{xy} [cm]")
 hist0.GetYaxis().SetTitle("Fraction of dimuons")
+hist0.GetYaxis().SetTitleSize(0.04)
 hist0.SetMaximum(1.5)
 hist0.GetXaxis().SetLimits(0, 300)
+hist0.GetXaxis().SetTitleSize(0.04)
 
 # Set up a canvas to draw the plots
 canvas = ROOT.TCanvas("canvas", "Efficiency Ratios", 800, 600)
@@ -154,23 +223,28 @@ canvas.SetLeftMargin(leftMargin)
 canvas.SetBottomMargin(bottomMargin)
 canvas.SetRightMargin(rightMargin)
 canvas.SetTopMargin(topMargin)
-canvas.SetTickx(0)
-canvas.SetTicky(0)
+canvas.SetTickx(1)
+canvas.SetTicky(1)
 canvas.SetBottomMargin(0.2)
 canvas.SetTopMargin(topMargin + 0.03)
 
 # Draw the TEfficiency objects on the same canvas
 hist0.Draw("hist")  # Draw the first hist0 with axis
-eff_PatDSA.Draw("P SAME") # Draw others on the same canvas
+# eff_PatDSA.Draw("P SAME") # Draw others on the same canvas
 eff_Pat.Draw("P SAME")  
 eff_DSA.Draw("P SAME")
 
 canvas.Update()
 
-legend = ROOT.TLegend(0.42, 0.76, 0.8, 0.9)
-legend.AddEntry(eff_Pat, "Fraction of PAT-PAT dimuons", "lep")
-legend.AddEntry(eff_PatDSA, "Fraction of PAT-DSA dimuons", "lep")
-legend.AddEntry(eff_DSA, "Fraction of DSA-DSA dimuons", "lep")
+legend = ROOT.TLegend(0.4, 0.74, 0.78, 0.88)
+if not paper or thesis:
+    legend.AddEntry(eff_Pat, "Fraction of PAT-PAT dimuons", "lep")
+    # legend.AddEntry(eff_PatDSA, "Fraction of PAT-DSA dimuons", "lep")
+    legend.AddEntry(eff_DSA, "Fraction of DSA-DSA dimuons", "lep")
+else:
+    legend.AddEntry(eff_Pat, "Fraction of TMS-TMS dimuons", "lep")
+    # legend.AddEntry(eff_PatDSA, "Fraction of TMS-STA dimuons", "lep")
+    legend.AddEntry(eff_DSA, "Fraction of STA-STA dimuons", "lep")
 legend.SetBorderSize(0)
 legend.SetTextFont(42)
 legend.SetTextSize(0.035)
@@ -186,13 +260,17 @@ top = canvas.GetTopMargin()
 right = canvas.GetRightMargin()
 latex.SetTextSize(0.4*top)
 lumi = f"{59830. / 1000.0:.1f} fb^{{-1}}"
-lumiText = lumi + " (13 TeV)"
+# lumiText = lumi + " (13 TeV)"
+lumiText = "(13 TeV)"
+if include_run3:
+    lumiText = "(13 TeV), (13.6 TeV)"
 latex.DrawLatex(1-right, 1-top+0.02, lumiText)
+
 
 left = canvas.GetLeftMargin()
 bottom = canvas.GetBottomMargin()
-posX_ = left + 0.045*(1-left-right) + 12
-posY_ = 1-top - 0.070*(1-bottom) + 0.61
+posX_ = left + 0.045*(1-left-right) + 13
+posY_ = 1-top - 0.070*(1-bottom) + 0.59
 latex = ROOT.TLatex()
 latex.SetTextFont(61)
 latex.SetTextSize(0.55*top)
@@ -204,14 +282,17 @@ latex.SetTextFont(52)
 latex.SetTextAlign(13)
 extraTextSize = 0.76 * 0.55*top
 latex.SetTextSize(0.76*0.55*top)
-latex.DrawLatex(posX_, posY_ - 0.1 , "Preliminary")
+# latex.DrawLatex(posX_, posY_ - 0.1 , "Simulation Preliminary")
+latex.DrawLatex(posX_, posY_ - 0.115 , "Simulation")
+latex.DrawLatex(posX_, posY_ - 0.2 , "Preliminary")
+# latex.DrawLatex(posX_, posY_ - 0.1 , "Internal")
 
 latex = ROOT.TLatex()
 latex.SetTextFont(42)
 latex.SetTextAlign(13)
 extraTextSize = 0.76 * 0.55*top
 latex.SetTextSize(0.76*0.55*top)
-latex.DrawLatex(135, 1.15, "m_{a} = 2 GeV, c#tau_{a} = 1 cm")
+latex.DrawLatex(146, 1.12, signal[1])
 
 # Update and save the canvas
 canvas.Update()
@@ -221,7 +302,14 @@ if not os.path.exists("../plots/dimuon_Lxy_ratio"):
 overflow_str = ""
 if include_overflow:
     overflow_str = "_overflow"
-canvas.SaveAs(f"../plots/dimuon_Lxy_ratio/dimuon_ratios_2018_{signal[0]}{overflow_str}.pdf")
+
+if thesis:
+    canvas.SaveAs(f"../plots/dimuon_Lxy_ratio/dimuon_ratios_thesis_noPatDSA_{year_str}_{signal[0]}{overflow_str}_petroff.pdf")
+elif paper:
+    # canvas.SaveAs(f"../plots/dimuon_Lxy_ratio/dimuon_ratios_paper_2018_{signal[0]}{overflow_str}.pdf")
+    canvas.SaveAs(f"../plots/dimuon_Lxy_ratio/dimuon_ratios_paper_noPatDSA_{year_str}_{signal[0]}{overflow_str}_petroff.pdf")
+else:
+    canvas.SaveAs(f"../plots/dimuon_Lxy_ratio/dimuon_ratios_AN_noPatDSA_{year_str}_{signal[0]}{overflow_str}.pdf")
 
 # Keep the canvas open in interactive mode
 canvas.Draw()

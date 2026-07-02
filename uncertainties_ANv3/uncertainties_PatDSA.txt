@@ -1,0 +1,122 @@
+
+2016
+statistical (background)      103,4  129,4  116,1
+ABCD uncertainty              67,0  72,1  69,6
+PAT-DSA Dimuon efficiency SF  12,1  29,0  19,5
+statistical (signal)          8,5  32,3  23,5
+PU                            11,0  15,5  14,2
+b-tagging                     3,0  11,3  7,3
+MET unclustered energy        1,6  6,2  6,2
+MET JER uncertainty           0,6  6,4  6,2
+DSA muon ID                   2,2  2,4  2,3
+DSA muon reco                 2,0  2,0  2,0
+MET JES uncertainty           0,3  3,3  2,1
+JEC scale                     0,5  2,9  1,9
+JEC resolution                0,8  2,6  1,8
+Lxy uncertainty               0,3  2,7  1,4
+PU jet ID efficiency          0,7  1,8  1,3
+L1 Pre-firing                 0,9  1,2  1,1
+PU jet ID efficiency          0,8  1,3  1,2
+luminosity                    0,0  1,2  0,5
+muon tight ID                 0,3  0,5  0,4
+muon loose Iso                0,1  0,5  0,3
+IsoMu trigger                 0,1  0,3  0,2
+muon reco                     0,1  0,3  0,2
+muon tight Iso                0,1  0,2  0,1
+muon loose ID                 0,0  0,1  0,0
+
+2017
+statistical (background)      62,4  62,4  62,4
+ABCD uncertainty              50,4  50,4  50,4
+statistical (signal)          5,9  34,3  20,5
+PU                            10,6  19,0  14,4
+PAT-DSA Dimuon efficiency SF  8,1  14,5  11,1
+b-tagging                     5,1  13,4  9,6
+DSA muon ID                   2,2  2,3  2,3
+DSA muon reco                 2,0  2,0  2,0
+JEC resolution                0,0  4,0  3,2
+MET unclustered energy        0,0  3,4  2,0
+Lxy uncertainty               0,0  2,7  1,1
+MET JER uncertainty           0,0  2,0  1,2
+PU jet ID efficiency          0,8  1,2  1,0
+L1 Pre-firing                 0,6  1,1  0,8
+luminosity                    0,6  0,6  0,6
+JEC scale                     0,0  0,6  0,3
+muon loose Iso                0,1  0,5  0,3
+MET JES uncertainty           0,0  0,4  0,3
+muon reco                     0,1  0,2  0,2
+IsoMu trigger                 0,1  0,2  0,2
+muon tight ID                 0,1  0,2  0,1
+muon tight Iso                0,1  0,2  0,2
+muon loose ID                 0,0  0,0  0,0
+
+2018
+statistical (background)      53,7  53,7  53,7
+ABCD uncertainty              35,8  35,8  35,8
+statistical (signal)          7,2  27,0  21,0
+PU                            11,9  17,0  13,8
+PAT-DSA Dimuon efficiency SF  9,2  15,4  12,0
+b-tagging                     3,3  14,7  8,5
+MET unclustered energy        0,5  6,8  4,4
+DSA muon ID                   2,0  2,2  2,1
+DSA muon reco                 2,0  2,0  2,0
+JEC resolution                0,0  3,7  2,2
+Lxy uncertainty               0,0  2,7  1,2
+PU jet ID efficiency          0,8  1,4  1,1
+MET JER uncertainty           0,0  1,7  0,9
+luminosity                    0,8  0,8  0,8
+JEC scale                     0,0  1,3  0,6
+muon loose Iso                0,1  0,5  0,3
+MET JES uncertainty           0,0  0,4  0,6
+L1 Pre-firing                 0,2  0,2  0,2
+IsoMu trigger                 0,1  0,2  0,2
+muon tight Iso                0,1  0,2  0,1
+muon tight ID                 0,1  0,1  0,1
+muon reco                     0,1  0,1  0,1
+muon loose ID                 0,0  0,0  0,0
+
+2022
+ABCD uncertainty              57,0  385,9  221,4
+statistical (background)      89,1  191,8  140,4
+statistical (signal)          10,4  41,8  26,6
+PU                            16,9  28,5  23,6
+PAT-DSA Dimuon efficiency SF  12,9  28,0  19,4
+b-tagging                     5,6  16,8  11,2
+MET unclustered energy        2,7  8,0  5,5
+MET unclustered energy        1,6  8,2  6,9
+JEC resolution                0,8  4,4  3,0
+MET JER uncertainty           0,8  3,9  2,2
+JEC scale                     0,7  3,9  2,6
+DSA muon ID                   2,0  2,1  2,1
+DSA muon reco                 2,0  2,0  2,0
+MET JES uncertainty           0,5  3,3  1,7
+Lxy uncertainty               0,3  2,7  1,4
+luminosity                    1,4  1,4  1,4
+IsoMu trigger                 0,2  0,5  0,4
+muon tight Iso                0,2  0,5  0,3
+muon loose Iso                0,1  0,4  0,2
+muon tight ID                 0,1  0,2  0,2
+muon loose ID                 0,0  0,1  0,0
+
+2023
+statistical (background)      105,4  216,0  159,6
+ABCD uncertainty              44,3  49,4  46,9
+statistical (signal)          10,8  43,5  27,7
+PAT-DSA Dimuon efficiency SF  11,1  39,4  23,2
+PU                            17,4  23,0  20,2
+b-tagging                     4,9  9,8  7,6
+MET unclustered energy        2,3  11,0  10,5
+MET unclustered energy        3,0  7,5  5,4
+MET JER uncertainty           0,8  5,6  3,7
+JEC scale                     0,5  4,7  2,7
+MET JES uncertainty           0,4  4,4  3,6
+JEC resolution                0,6  3,7  2,6
+DSA muon ID                   2,0  2,3  2,1
+DSA muon reco                 2,0  2,0  2,0
+Lxy uncertainty               0,3  2,8  1,5
+luminosity                    0,2  1,3  0,7
+IsoMu trigger                 0,3  0,6  0,5
+muon tight Iso                0,2  0,5  0,3
+muon tight ID                 0,2  0,4  0,3
+muon loose Iso                0,1  0,4  0,2
+muon loose ID                 0,0  0,1  0,1

@@ -15,15 +15,15 @@ from ttalps_samples_list import dasData2023postBPix, dasBackgrounds2023postBPix,
 max_files = -1
 
 
-samples = dasSignals2022postEE.keys()
+samples = dasData2023postBPix.keys()
 
 # Signal like skim: SR, J/Psi CR and Z CR with no isolation requirement on the loose muons
-# input_skim = "skimmed_looseSemimuonic_v3_merged"
-# output_skim = "skimmed_looseSemimuonic_v3_SR"
+input_skim = "skimmed_looseSemimuonic_v3_merged"
+output_skim = "skimmed_looseSemimuonic_v3_SR_puppiMET"
 
 # tt̄ (μ+jets) CR
-input_skim = "skimmed_looseSemimuonic_v3_merged"
-output_skim = "skimmed_looseSemimuonic_v3_ttbarCR"
+# input_skim = "skimmed_looseSemimuonic_v3_merged"
+# output_skim = "skimmed_looseSemimuonic_v3_ttbarCR"
 
 # tt̄ (μ+jets) + 1 DSA Muon CR
 # input_skim = "skimmed_looseSemimuonic_v2_merged"
@@ -44,7 +44,8 @@ elif "ttbarCR" in input_skim:
 else:
   input_user = "lrygaard"
 
-input_base_path = f"/data/dust/user/{input_user}/ttalps_cms"
+# input_base_path = f"/data/dust/user/{input_user}/ttalps_cms"
+input_base_path = f"/data/dust/group/cms/ttALPs-desy"
 output_base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 output_trees_dir = ""

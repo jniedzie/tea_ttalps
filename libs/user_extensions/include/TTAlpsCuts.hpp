@@ -29,6 +29,8 @@ class TTAlpsCuts {
 
   bool PassesDimuonMaxLxyCut(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
 
+  bool PassesDimuonABCDRegionCut(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+
   bool PassesSingleMuonTrigger(const std::shared_ptr<Event> event);
   bool PassesDoubleMuonTrigger(const std::shared_ptr<Event> event);
 
@@ -58,6 +60,15 @@ class TTAlpsCuts {
   std::map<std::string, float> muonMatchingParams;
   std::map<std::string, float> maxLxyCuts;
   std::pair<std::string, std::vector<std::string>> muonVertexCollection;
+
+  bool run_ABCD_region_A_only = false;
+  bool run_ABCD_region_B_only = false;
+  bool run_ABCD_region_C_only = false;
+  bool run_ABCD_region_D_only = false;
+  // bool hasAbcdRegionDCollections = true;
+  bool hasAbcdRegionsCollections = true;
+  // insertion_ordered_map<std::string, ExtraCollection> abcdRegionDCollectionsDescriptions;
+  insertion_ordered_map<std::string, ExtraCollection> abcdRegionsCollectionsDescriptions;
 
   std::vector<std::string> triggerWarningsPrinted;
 

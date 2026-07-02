@@ -72,6 +72,10 @@ int main(int argc, char **argv) {
     }
 
     auto nanoEvent = asNanoEvent(event);
+    nanoEventProcessor->ApplyJetEnergyScaleCorrections(nanoEvent);
+    nanoEventProcessor->ApplyPuppiMETEnergyScaleCorrections(nanoEvent, "Jet", "CorrT1METJet");
+    nanoEventProcessor->ApplyJetEnergyResolution(nanoEvent);
+    nanoEventProcessor->ApplyMETXYcorrections(nanoEvent);
     if (!nanoEventProcessor->PassesEventCuts(nanoEvent, cutFlowManager)) continue;
 
     eventWriter->AddCurrentEvent("Events");

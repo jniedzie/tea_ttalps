@@ -27,14 +27,14 @@ base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
 # comment out to use skim and samples from ttalps_histogrammer_files_config.pyCollapse commentComment on line L24kerstinlovisa commented on Nov 6, 2025 kerstinlovisaon Nov 6, 2025CollaboratorMore actionsPlease don't remove this, I need this to merge on other samples than what I'm running in the histogrammerReactWrite a replyResolve commentCode has comments. Press enter to view.
 
-# skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "ABCD")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "genInfo")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "nminus1")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsNoChi2", "genInfo")
-# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsMuonPt5", "ABCD")
+# # skim = ("skimmed_looseSemimuonic_v3_SR", "JPsiDimuons", "")
+# skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "ABCD_ANv3_regionD")
+# # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "genInfo")
+# # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuons", "nminus1")
+# # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsNoChi2", "genInfo")
+# # skim = ("skimmed_looseSemimuonic_v3_SR", "SRDimuonsMuonPt5", "ABCD")
 
-# samples = dasBackgrounds2018.keys()
+# samples = dasData2018.keys()
 
 # base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
 
@@ -125,7 +125,7 @@ def main():
     error      = ./error/$(ClusterId).$(ProcId).err
     log        = ./log/$(ClusterId).log
     request_cpus = 4
-    request_memory = 8000MB
+    request_memory = 1500MB
     max_materialize = 5000
     initialdir = .
     getenv = True

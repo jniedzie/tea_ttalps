@@ -28,6 +28,36 @@ TTAlpsCuts::TTAlpsCuts(){
   } catch (const Exception &e) {
     warn() << "Couldn't read maxLxyCuts from config file - no maxLxy cuts will be applied to event" << endl;
   }
+  try {
+    config.GetValue("run_ABCD_region_A_only", run_ABCD_region_A_only);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read run_ABCD_region_A_only from config file - no ABCD region D cuts will be applied to event" << endl;
+    run_ABCD_region_A_only = false;
+  }
+  try {
+    config.GetValue("run_ABCD_region_B_only", run_ABCD_region_B_only);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read run_ABCD_region_B_only from config file - no ABCD region D cuts will be applied to event" << endl;
+    run_ABCD_region_B_only = false;
+  }
+  try {
+    config.GetValue("run_ABCD_region_C_only", run_ABCD_region_C_only);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read run_ABCD_region_C_only from config file - no ABCD region D cuts will be applied to event" << endl;
+    run_ABCD_region_C_only = false;
+  }
+  try {
+    config.GetValue("run_ABCD_region_D_only", run_ABCD_region_D_only);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read run_ABCD_region_D_only from config file - no ABCD region D cuts will be applied to event" << endl;
+    run_ABCD_region_D_only = false;
+  }
+  try {
+    config.GetExtraEventCollections(abcdRegionsCollectionsDescriptions, "abcdRegionsCollections");
+    hasAbcdRegionsCollections = true;
+  } catch (const Exception& e) {
+    hasAbcdRegionsCollections = false;
+  }
 }
 
 void TTAlpsCuts::RegisterSignalLikeCuts(shared_ptr<CutFlowManager> cutFlowManager) {
@@ -54,6 +84,7 @@ void TTAlpsCuts::RegisterDimuonCuts(shared_ptr<CutFlowManager> cutFlowManager, s
     cutFlowManager->RegisterCut(cutName, collectionName);
   }
   cutFlowManager->RegisterCut("maxLxy", collectionName);
+  cutFlowManager->RegisterCut("abcdRegion", collectionName);
 }
 
 bool TTAlpsCuts::PassesDimuonCuts(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, string dimuonCategory) {
@@ -155,6 +186,65 @@ bool TTAlpsCuts::PassesDimuonMaxLxyCut(const shared_ptr<Event> event, shared_ptr
 
   cutFlowManager->UpdateCutFlow("maxLxy", collectionName+"_"+category);
   cutFlowManager->UpdateCutFlow("maxLxy", collectionName);
+
+  return true;
+}
+
+bool TTAlpsCuts::PassesDimuonABCDRegionCut(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (muonVertexCollection.first.empty() || muonVertexCollection.second.empty()) 
+    return true;
+
+  string collectionName = muonVertexCollection.first;
+  auto bestDimuon = event->GetCollection(collectionName);
+  if (!bestDimuon) return false;
+  if (bestDimuon->size() < 1) return false;
+
+  auto nanoDimuon = asNanoDimuonVertex(bestDimuon->at(0), event);
+  string category = nanoDimuon->GetVertexCategory();  
+
+  if ((!run_ABCD_region_A_only && !run_ABCD_region_B_only && !run_ABCD_region_C_only && !run_ABCD_region_D_only) || !hasAbcdRegionsCollections) {
+    warn() << "run_ABCD_region B, C and D are set to false or abcdRegionsCollection is not defined - will not apply abcd regions cuts." << endl;
+    cutFlowManager->UpdateCutFlow("abcdRegion", collectionName+"_"+category);
+    cutFlowManager->UpdateCutFlow("abcdRegion", collectionName);
+    return true;
+  }
+
+  map<string, bool> abcd_regions = {
+    {"regionA", run_ABCD_region_A_only},
+    {"regionB", run_ABCD_region_B_only},
+    {"regionC", run_ABCD_region_C_only},
+    {"regionD", run_ABCD_region_D_only},
+  };
+  
+  bool passes = false;
+  for (auto& [regionName, applyRegion] : abcd_regions) {
+    if (!applyRegion) continue;
+    string regionCollectionName = regionName + "_" + category;
+    if (abcdRegionsCollectionsDescriptions.find(regionCollectionName) == abcdRegionsCollectionsDescriptions.end())
+      continue;
+    
+    auto regionCollection = abcdRegionsCollectionsDescriptions[regionCollectionName];
+    auto variableCuts = regionCollection.allCuts;
+    passes = true;
+    for (auto& [variableName, cuts] : variableCuts) {
+      auto variable_ = nanoDimuon->GetABCDDimuonVariable(variableName);
+      if (!variable_.has_value())
+        continue;
+      float variable = variable_.value();
+
+      if (variable <= cuts.first || variable >= cuts.second) {
+        passes = false;
+        break;
+      }
+    }
+    if (passes)
+      break;
+  }
+
+  if (!passes) return false;
+
+  cutFlowManager->UpdateCutFlow("abcdRegion", collectionName+"_"+category);
+  cutFlowManager->UpdateCutFlow("abcdRegion", collectionName);
   return true;
 }
 
@@ -264,14 +354,14 @@ bool TTAlpsCuts::PassesDileptonCuts(const shared_ptr<Event> event) {
   uint nJets = event->Get("nJet");
   auto jets = event->GetCollection("Jet");
   for (int i = 0; i < nJets; i++) {
-    float jetPt = jets->at(i)->Get("pt");
+    float jetPt = asNanoJet(jets->at(i))->GetPt();
     float jet_eta = jets->at(i)->Get("eta");
     float jet_btagDeepB = jets->at(i)->Get("btagDeepB");
     if (jetPt > 30 && abs(jet_eta) < 2.4 && jet_btagDeepB > 0.5) jetsBtagged++;
   }
 
   if ((muonsPt30 + electronsPt30) < 2) return false;
-  float metPt = event->Get("MET_pt");
+  float metPt = event->GetMetPt();
   if (metPt <= 30) return false;
   if (jetsBtagged < 2) return false;
   return true;
@@ -284,7 +374,7 @@ bool TTAlpsCuts::PassesHadronCuts(const shared_ptr<Event> event) {
   uint nJets = event->Get("nJet");
   auto jets = event->GetCollection("Jet");
   for (int i = 0; i < nJets; i++) {
-    float jetPt = jets->at(i)->Get("pt");
+    float jetPt = asNanoJet(jets->at(i))->GetPt();
     float jetEta = jets->at(i)->Get("eta");
     float jetBtagDeepB = jets->at(i)->Get("btagDeepB");
     if (jetPt > 30 && abs(jetEta) < 2.4) {

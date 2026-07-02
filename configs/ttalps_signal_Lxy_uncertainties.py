@@ -211,3 +211,65 @@ def get_lxy_uncertainty_for_name(name, category):
     if category == "DSA" or category == "_DSA":
         return lxy_uncertainty_for_signal_name_DSA[name]
     error(f"Unknown category {category} for Lxy uncertainty")
+
+dxydzIso_uncertainty_for_signal_name_Pat = {
+    "tta_mAlp-0p35GeV_ctau-1e-5mm": 1.01,
+    "tta_mAlp-0p35GeV_ctau-1e0mm": 1.0,
+    "tta_mAlp-0p35GeV_ctau-1e1mm": 1.02,
+    "tta_mAlp-0p35GeV_ctau-1e2mm": 1.05,
+    "tta_mAlp-0p35GeV_ctau-1e3mm": 1.014,
+    "tta_mAlp-2GeV_ctau-1e-5mm": 1.0,
+    "tta_mAlp-2GeV_ctau-1e0mm": 1.02,
+    "tta_mAlp-2GeV_ctau-1e1mm": 1.11,
+    "tta_mAlp-2GeV_ctau-1e2mm": 1.21,
+    "tta_mAlp-2GeV_ctau-1e3mm": 1.137,
+    "tta_mAlp-12GeV_ctau-1e-5mm": 1.0,
+    "tta_mAlp-12GeV_ctau-1e0mm": 1.01,
+    "tta_mAlp-12GeV_ctau-1e1mm": 1.20,
+    "tta_mAlp-12GeV_ctau-1e2mm": 1.40,
+    "tta_mAlp-12GeV_ctau-1e3mm": 1.348,
+    "tta_mAlp-30GeV_ctau-1e-5mm": 1.01,
+    "tta_mAlp-30GeV_ctau-1e0mm": 1.01,
+    "tta_mAlp-30GeV_ctau-1e1mm": 1.21,
+    "tta_mAlp-30GeV_ctau-1e2mm": 1.38,
+    "tta_mAlp-30GeV_ctau-1e3mm": 1.432,
+    "tta_mAlp-60GeV_ctau-1e-5mm": 1.0,
+    "tta_mAlp-60GeV_ctau-1e0mm": 1.01,
+    "tta_mAlp-60GeV_ctau-1e1mm": 1.25,
+    "tta_mAlp-60GeV_ctau-1e2mm": 1.39,
+    "tta_mAlp-60GeV_ctau-1e3mm": 1.50,
+}
+dxydzIso_uncertainty_for_signal_name_PatDSA = {
+    "tta_mAlp-0p35GeV_ctau-1e-5mm": 1.01,
+    "tta_mAlp-0p35GeV_ctau-1e0mm": 1.07,
+    "tta_mAlp-0p35GeV_ctau-1e1mm": 1.15,
+    "tta_mAlp-0p35GeV_ctau-1e2mm": 1.19,
+    "tta_mAlp-0p35GeV_ctau-1e3mm": 1.13,
+    "tta_mAlp-2GeV_ctau-1e-5mm": 1.0,
+    "tta_mAlp-2GeV_ctau-1e0mm": 1.02,
+    "tta_mAlp-2GeV_ctau-1e1mm": 1.16,
+    "tta_mAlp-2GeV_ctau-1e2mm": 1.21,
+    "tta_mAlp-2GeV_ctau-1e3mm": 1.22,
+    "tta_mAlp-12GeV_ctau-1e-5mm": 1.02,
+    "tta_mAlp-12GeV_ctau-1e0mm": 1.0,
+    "tta_mAlp-12GeV_ctau-1e1mm": 1.21,
+    "tta_mAlp-12GeV_ctau-1e2mm": 1.44,
+    "tta_mAlp-12GeV_ctau-1e3mm": 1.40,
+    "tta_mAlp-30GeV_ctau-1e-5mm": 1.01,
+    "tta_mAlp-30GeV_ctau-1e0mm": 1.02,
+    "tta_mAlp-30GeV_ctau-1e1mm": 1.27,
+    "tta_mAlp-30GeV_ctau-1e2mm": 1.52,
+    "tta_mAlp-30GeV_ctau-1e3mm": 1.46,
+    "tta_mAlp-60GeV_ctau-1e-5mm": 1.0,
+    "tta_mAlp-60GeV_ctau-1e0mm": 1.02,
+    "tta_mAlp-60GeV_ctau-1e1mm": 1.22,
+    "tta_mAlp-60GeV_ctau-1e2mm": 1.56,
+    "tta_mAlp-60GeV_ctau-1e3mm": 1.49,
+}
+
+def get_dxydzIso_uncertainty_for_name(name, category):
+    if category == "Pat" or category == "_Pat":
+        return dxydzIso_uncertainty_for_signal_name_Pat[name]
+    if category == "PatDSA" or category == "_PatDSA":
+        return dxydzIso_uncertainty_for_signal_name_PatDSA[name]
+    error(f"Unknown category {category} for dxydzIso uncertainty")

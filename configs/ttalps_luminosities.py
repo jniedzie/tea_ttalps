@@ -1,4 +1,4 @@
-from Logger import error
+from Logger import error, warn
 
 luminosities = {
     "2016preVFP": 19493.,
@@ -62,6 +62,14 @@ luminosity_uncertainties = {
   }
 }
 
+luminosity_uncertainties_Run2_comb = {
+  "lumi_13TeV_15161718_l": 1.0073,
+}
+
+luminosity_uncertainties_Run3_comb = {
+  "lumi_2223_l": 1.0101,
+}
+
 def get_luminosity(year):
   if year in luminosities and luminosities[year] != 0:
     return luminosities[year]
@@ -89,6 +97,27 @@ def get_luminosity_uncertainty(year):
   else:
     error(f"Luminosity uncertainty for year {year} is not defined. Luminosity uncertainty set to 1.")
     return 1.
+
+def get_luminosity_uncertainty_for_years(years):
+  if len(years) == 1:
+    return get_luminosity_uncertainty(years[0])
+  
+  if len(years) == 2:
+    if {"2016preVFP", "2016postVFP"}.issubset(set(years)) or {"2022preEE", "2022postEE"}.issubset(set(years)) or {"2023preBPix", "2023postBPix"}.issubset(set(years)):
+        return get_luminosity_uncertainty(years[0])
+  
+  lumi_uncertainty_dict = {}
+  if {"2016preVFP", "2016postVFP", "2017", "2018"}.issubset(set(years)):
+    lumi_uncertainty_dict.update(luminosity_uncertainties_Run2_comb)
+  if {"2022preEE", "2022postEE", "2023preBPix", "2023postBPix"}.issubset(set(years)):  
+    lumi_uncertainty_dict.update(luminosity_uncertainties_Run3_comb)
+  
+  if not lumi_uncertainty_dict:
+    warn(f"No combined luminosity uncertainty found for years {years}. Returning individual luminosity uncertainties for each year.")
+    for year in years:
+      lumi_uncertainty_dict.update(get_luminosity_uncertainty(year))
+
+  return lumi_uncertainty_dict
 
 def get_luminosity_uncertainty_uncorrelated(year):
   if year in uncorrelated_luminosity_uncertainties and uncorrelated_luminosity_uncertainties[year] != 0:

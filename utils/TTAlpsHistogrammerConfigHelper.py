@@ -28,8 +28,12 @@ class TTAlpsHistogrammerConfigHelper:
 
     self.bestMuonVertexCollectionCuts = []
 
+    self.dimuonCategories = ("", "_PatDSA", "_DSA", "_Pat")
+    # if "Exclusive" in muonVertexCollection[1][-1]:
+    #   self.dimuonCategories = ("", "_DSA", "_Pat")
+
     if muonVertexCollection is not None:
-      for category in ("", "_PatDSA", "_DSA", "_Pat"):
+      for category in self.dimuonCategories:
         self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}{category}")
         if runRevertedMatching:
           self.bestMuonVertexCollections.append(f"{muonVertexCollection[0]}_revertedMatching{category}")
@@ -40,7 +44,7 @@ class TTAlpsHistogrammerConfigHelper:
 
     self.looseMuonVertexCollections = []
     if runLooseMuonsHistograms:
-      for category, matching in product(("", "_PatDSA", "_DSA", "_Pat"), muonMatchingParams):
+      for category, matching in product(self.dimuonCategories, muonMatchingParams):
         self.looseMuonVertexCollections.append(f"LooseMuonsVertex{matching}Match{category}")
         self.looseMuonVertexCollections.append(f"{muonVertexCollectionInput}{category}")
 
@@ -118,13 +122,8 @@ class TTAlpsHistogrammerConfigHelper:
         "logAbsCollinearityAngle": (160, -7, 1),
         "logLeadingPt": (125, -1, 4),
         "logDxyPVTraj1": (100, -5, 3),
+        "logDxyPVTraj2": (100, -5, 3),
         "logPt": (125, -1, 4),
-        "logInvMass": (100, -1, 2),
-        "logOuterDR": (100, -3, 3),
-        "logDxyPVTrajSig1": (100, -3, 4),
-        "logDxyPVTrajSig2": (100, -3, 4),
-        "logNormChi2": (100, -7, 2),
-        "logDca": (100, -4, 1),
     }
 
     self.singleMuon_ABCD_variables = {
@@ -179,12 +178,17 @@ class TTAlpsHistogrammerConfigHelper:
         # "_logPtgt1p4",
       ]
 
-  def get_default_params(self):
+  def get_default_params(self, metBranchName):
     return (
         #  collection             variable               bins    xmin    xmax    dir
-        ("Event", "MET_pt", 1000, 0, 1000, ""),
-        ("Event", "MET_pt_smeared", 1000, 0, 1000, ""),
-        ("Event", "MET_phi", 600, -3, 3, ""),
+        ("Event", metBranchName+"_pt", 1000, 0, 1000, ""),
+        ("Event", metBranchName+"_JES_pt", 1000, 0, 1000, ""),
+        ("Event", metBranchName+"_JES_smeared_pt", 1000, 0, 1000, ""),
+        ("Event", metBranchName+"_JES_smeared_XYcorr_pt", 1000, 0, 1000, ""),
+        ("Event", metBranchName+"_phi", 600, -3, 3, ""),
+        ("Event", metBranchName+"_JES_phi", 600, -3, 3, ""),
+        ("Event", metBranchName+"_JES_smeared_phi", 600, -3, 3, ""),
+        ("Event", metBranchName+"_JES_smeared_XYcorr_phi", 600, -3, 3, ""),
         ("Event", "PV_npvs", 300, 0, 300, ""),
         ("Event", "PV_npvsGood", 300, 0, 300, ""),
         ("Event", "PV_x", 2000, -100, 100, ""),
@@ -194,6 +198,7 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("Event", "nGoodJets", 20, 0, 20, ""),
         ("GoodJets", "pt", 1000, 0, 1000, ""),
+        ("GoodJets", "pt_JES", 1000, 0, 1000, ""),
         ("GoodJets", "pt_smeared", 1000, 0, 1000, ""),
         ("GoodJets", "pt_smeared_down", 1000, 0, 1000, ""),
         ("GoodJets", "pt_smeared_up", 1000, 0, 1000, ""),
@@ -208,6 +213,8 @@ class TTAlpsHistogrammerConfigHelper:
 
         ("Event", "nGoodMediumBtaggedJets", 20, 0, 20, ""),
         ("GoodMediumBtaggedJets", "pt", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "pt_JES", 1000, 0, 1000, ""),
+        ("GoodMediumBtaggedJets", "pt_smeared", 1000, 0, 1000, ""),
         ("GoodMediumBtaggedJets", "leadingPt", 1000, 0, 1000, ""),
         ("GoodMediumBtaggedJets", "subleadingPt", 1000, 0, 1000, ""),
         ("GoodMediumBtaggedJets", "eta", 300, -3, 3, ""),
@@ -321,14 +328,14 @@ class TTAlpsHistogrammerConfigHelper:
         for type in ["_fakes", "_nonFakes"]:
           self.__insert_irregular_MuonVertexHistograms(params, collection + type)
       
-      for collection in self.looseMuonVertexCollections:
-        names = (
-            self.__insert_into_name(collection, "FromALP"),
-            self.__insert_into_name(collection, "ResonancesNotFromALP"),
-            self.__insert_into_name(collection, "NonresonancesNotFromALP"),
-        )
-        for name in names:
-          self.__insert_irregular_MuonVertexHistograms(params, name)
+      # for collection in self.looseMuonVertexCollections:
+      names = (
+          self.__insert_into_name(collection, "FromALP"),
+          self.__insert_into_name(collection, "ResonancesNotFromALP"),
+          self.__insert_into_name(collection, "NonresonancesNotFromALP"),
+      )
+      for name in names:
+        self.__insert_irregular_MuonVertexHistograms(params, name)
 
     return tuple(params)
 
@@ -764,7 +771,7 @@ class TTAlpsHistogrammerConfigHelper:
       for variable_pair in variables:
         variable1 = f"{variable_pair[0]}_vs_{variable_pair[1]}"
         variable2 = f"{variable_pair[1]}_vs_{variable_pair[0]}"
-        for category in ("", "_PatDSA", "_DSA", "_Pat"):
+        for category in self.dimuonCategories:
           name1 = self.__insert_into_name(collection, f"_{variable1}{category}")
           name2 = self.__insert_into_name(collection, f"_{variable2}{category}")
           SF_variables.append(name1)
@@ -872,6 +879,7 @@ class TTAlpsHistogrammerConfigHelper:
   def __insert_irregular_MuonHistograms(self, params, name):
     params += (
         (name, "pt_irr", self.pt_irr_bins, ""),
+        (name, "eta_irr", self.eta_irr_bins, ""),
     )
   
   def __insert_irregular_MuonVertexHistograms(self, params, name):

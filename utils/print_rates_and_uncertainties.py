@@ -23,7 +23,7 @@ def load_uncertainties(config):
       break
     uncertainties[signal_sample.name] = {}
 
-    datacard_file_name = get_datacard_file_name(config, signal_sample)
+    datacard_file_name = get_datacard_file_name(config, signal_sample.name)
     datacard_path = os.path.join(config.datacards_output_path, f"{datacard_file_name}.txt")
 
     # Check if the datacard file exists
@@ -160,7 +160,7 @@ def get_min_max_uncertainty(uncertainties):
         uncertainties_per_type[unc_name] = []
       for v in unc_value:
         # if v != 0.0:
-        uncertainties_per_type[unc_name].append(v)
+        uncertainties_per_type[unc_name].append(abs(v))
 
   for unc_name, unc_values in uncertainties_per_type.items():
     min_uncertainty[unc_name] = min(unc_values)
@@ -201,7 +201,7 @@ def get_68percert_uncertainty_range(uncertainties):
                 uncertainties_per_type[unc_name] = []
             for v in unc_value:
                 # if v != 0.0:
-                uncertainties_per_type[unc_name].append(v)
+                uncertainties_per_type[unc_name].append(abs(v))
 
     for unc_name, unc_values in uncertainties_per_type.items():
         values = np.array(unc_values)
@@ -209,6 +209,8 @@ def get_68percert_uncertainty_range(uncertainties):
         low_68[unc_name] = low
         high_68[unc_name] = high
         mean[unc_name] = np.mean(values)
+        print(f"{unc_name}: {unc_values}")
+        print(f"low_68: {low_68[unc_name]}, high_68: {high_68[unc_name]}, mean: {mean[unc_name]}")
 
     return low_68, high_68, mean
 
@@ -224,6 +226,8 @@ def get_unc_category(unc_name):
     return "JEC_scale"
   if "CMS_res_j" in unc_name:
     return "JEC_res"
+  if "CMS_res_met" in unc_name:
+    return "CMS_res_met"
   if "CMS_scale_met_unclustered_energy" in unc_name:
     return "met_unclustered_energy"
   if "CMS_scale_met" in unc_name:
@@ -233,7 +237,29 @@ def get_unc_category(unc_name):
   if "lumi" in unc_name:
     return "lumi"
   if "CMS_eff_j_PUJetID" in unc_name:
-    return "PUJetID"
+    return "PUJetID"    
+  if "CMS_pileup" in unc_name:
+    return "CMS_pileup"
+  if "CMS_EXO25022_dimuonSFs_PatDSA" in unc_name:
+    return "CMS_EXO25022_dimuonSFs_PatDSA"
+  if "CMS_EXO25022_dimuonSFs_Pat" in unc_name:
+    return "CMS_EXO25022_dimuonSFs_Pat"
+  if "CMS_EXO25022_dimuonSFs_DSA" in unc_name:
+    return "CMS_EXO25022_dimuonSFs_DSA"
+  if "CMS_l1_prefiring" in unc_name:
+    return "CMS_l1_prefiring"
+  if "CMS_eff_m_iso_stat_tight" in unc_name:
+    return "CMS_eff_m_iso_stat_tight"
+  if "CMS_eff_m_iso_stat_loose" in unc_name:
+    return "CMS_eff_m_iso_stat_loose"
+  if "CMS_eff_m_trigger_stat" in unc_name:
+    return "CMS_eff_m_trigger_stat"
+  if "CMS_eff_m_id_stat_tight" in unc_name:
+    return "CMS_eff_m_id_stat_tight"
+  if "CMS_eff_m_id_stat_loose" in unc_name:
+    return "CMS_eff_m_id_stat_loose"
+  if "CMS_eff_m_reco_stat" in unc_name:
+    return "CMS_eff_m_reco_stat"
   if variation != "" and variation in unc_name:
     base_name = unc_name.replace(variation, "")
     return base_name
@@ -246,8 +272,9 @@ def get_nice_names(years):
       "CMS_EXO25022_abcd_bkg": "ABCD uncertainty",
       "CMS_EXO25022_abcd_sig": "ABCD uncertainty (signal)",
       "CMS_EXO25022_lxy": "Lxy uncertainty",
-      "CMS_EXO25022_lxy_bkg": "Lxy uncertainty",
+      "CMS_EXO25022_lxy_bkg": "Lxy uncertainty (background)",
       "CMS_EXO25022_lxy_sig": "Lxy uncertainty (signal)",
+      "CMS_EXO25022_dxydzIso": "dxydz iso uncertainty",
       "lumi": "luminosity",
       "lumi_sig": "luminosity",
       "lumi_bkg": "luminosity",
@@ -259,6 +286,7 @@ def get_nice_names(years):
       "CMS_scale_met" : "MET JES uncertainty",
       "CMS_res_met" : "MET JER uncertainty",
       "CMS_l1_muon_prefiring": "L1 Pre-firing",
+      "CMS_l1_prefiring": "L1 Pre-firing",
       "CMS_EXO25022_dimuonSFs_Pat": "PAT-PAT Dimuon efficiency SF",
       "CMS_EXO25022_dimuonSFs_PatDSA": "PAT-DSA Dimuon efficiency SF",
       "CMS_EXO25022_dimuonSFs_DSA": "DSA-DSA Dimuon efficiency SF",
@@ -268,12 +296,18 @@ def get_nice_names(years):
       "dimuonSFs_DSA": "DSA-DSA Dimuon efficiency SF",
       "CMS_eff_m_trigger_syst": "IsoMu trigger",
       "CMS_eff_m_reco_syst": "muon reco",
-      "CMS_eff_m_reco_syst_dsa": "DSA muon reco",
+      "CMS_eff_m_reco_dsa": "DSA muon reco",
       "CMS_eff_m_id_syst_loose": "muon loose ID",
       "CMS_eff_m_id_syst_tight": "muon tight ID",
       "CMS_eff_m_iso_syst_loose": "muon loose Iso",
       "CMS_eff_m_iso_syst_tight": "muon tight Iso",
-      "CMS_eff_m_id_syst_dsa": "DSA muon ID",
+      "CMS_eff_m_id_dsa": "DSA muon ID",
+      "CMS_eff_m_trigger_stat": "IsoMu trigger stat.",
+      "CMS_eff_m_reco_stat": "muon reco stat.",
+      "CMS_eff_m_id_stat_loose": "muon loose ID stat.",
+      "CMS_eff_m_id_stat_tight": "muon tight ID stat.",
+      "CMS_eff_m_iso_stat_loose": "muon loose Iso stat.",
+      "CMS_eff_m_iso_stat_tight": "muon tight Iso stat.",
       "CMS_eff_j_PUJetID_eff": "PU jet ID",
       "CMS_btag": "b-tagging",
       "bTaggingMedium": "b-tagging",
@@ -449,7 +483,7 @@ def main():
     min_uncertainty, max_uncertainty = get_min_max_uncertainty(uncertainties)
     min_68percert_uncertainty, max_68percert_uncertainty, mean_uncertainty = get_68percert_uncertainty_range(uncertainties)
 
-  info("\n\nMin/Max Uncertainties:\n")
+  info("\n\nMin/Max Uncertainties in %:\n")
   merged_uncertainties = {key: (min_uncertainty[key], max_uncertainty[key]) for key in min_uncertainty.keys()}
   merged_68percert_uncertainties = {key: (min_68percert_uncertainty[key], max_68percert_uncertainty[key], mean_uncertainty[key]) for key in min_68percert_uncertainty.keys()}
 
@@ -462,13 +496,13 @@ def main():
   nice_names = get_nice_names(config.years)
   max_len = max(len(nice_names[unc_name]) for unc_name in sorted_68percert_uncertainties)
   for unc_name, (min_val, max_val) in sorted_uncertainties.items():
-    info(f"{nice_names[unc_name]:<{max_len}}  {min_val:.>7.4f}. {max_val:.>7.4f}".replace(".", ","))
+    info(f"{nice_names[unc_name]:<{max_len}}  {min_val*100:.3f}. {max_val*100:.3f}".replace(".", ","))
 
   info("\n\nMin/Max/Mean Uncertainties in 68percert in %:\n")
   
   for unc_name, (min_val, max_val, mean_val) in sorted_68percert_uncertainties.items():
     info(f"{nice_names[unc_name]:<{max_len}}  "
-          f"{min_val*100:.1f}  {max_val*100:.1f}  {mean_val*100:.1f}".replace(".", ","))
+          f"{min_val*100:.3f}  {max_val*100:.3f}  {mean_val*100:.3f}".replace(".", ","))
 
 if __name__ == "__main__":
   main()

@@ -95,6 +95,8 @@ int main(int argc, char **argv) {
       ttAlpsCuts->UpdateBestDimuonCut(event,cutFlowManager);
       if (!ttAlpsCuts->PassesDimuonMaxLxyCut(event, cutFlowManager))
         continue;
+      if (!ttAlpsCuts->PassesDimuonABCDRegionCut(event, cutFlowManager))
+        continue;
     }
     if (runDefaultHistograms) {
       cutFlowManager->UpdateCutFlow("initial");

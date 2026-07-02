@@ -531,6 +531,7 @@ shared_ptr<PhysicsObject> TTAlpsObjectsManager::GetBestMuonVertex(const shared_p
   float minChi2 = 9999.0;
   for (auto vertex : *vertices) {
     if (bestVertexCut == "BestDimuonVertexPatDSA" && !asNanoDimuonVertex(vertex, event)->IsPatDSADimuon()) continue;
+    if (bestVertexCut == "BestDimuonVertexExclusive" && asNanoDimuonVertex(vertex, event)->IsPatDSADimuon()) continue;
     if ((float)asNanoDimuonVertex(vertex, event)->Get("normChi2") < minChi2) {
       bestVertex = vertex;
       minChi2 = (float)asNanoDimuonVertex(vertex, event)->Get("normChi2");

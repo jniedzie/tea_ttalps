@@ -1,5 +1,5 @@
 from ttalps_samples_list import *
-from ttalps_cross_sections import get_cross_sections
+from ttalps_cross_sections import get_cross_sections, get_expected_signal_cross_sections, get_theory_cross_sections
 from ttalps_luminosities import get_luminosity
 
 from Logger import error, info
@@ -13,7 +13,7 @@ import importlib
 class TTAlpsPlotterConfigHelper:
   def __init__(
       self, years, base_path, skim, hist_path, data_to_include,
-      signals_to_include, legend_pos_and_size, legend_text_size
+      signals_to_include, legend_pos_and_size, legend_text_size, data_skim=None, data_hist_path=None
   ):
 
     if len(skim) != 4:
@@ -31,6 +31,15 @@ class TTAlpsPlotterConfigHelper:
     self.base_path = base_path
     self.skim = skim[0]
     self.hist_path = hist_path
+    if not data_skim:
+      self.data_skim=skim[0]
+    else:
+      self.data_skim=data_skim[0]
+    if not data_hist_path:
+      self.data_hist_path = hist_path
+    else:
+      self.data_hist_path=data_hist_path
+    
     self.data_to_include = data_to_include
     self.signals_to_include = signals_to_include
     self.legend_pos_and_size = legend_pos_and_size
@@ -39,7 +48,7 @@ class TTAlpsPlotterConfigHelper:
     self.custom_stacks_order = []
     self.custom_stacks_order_reversed = False
 
-  def add_samples(self, sample_type, samples):
+  def add_samples(self, sample_type, samples, use_expected_xsec = False):
 
     if sample_type == SampleType.data:
       dataset = self.data_to_include
@@ -58,7 +67,7 @@ class TTAlpsPlotterConfigHelper:
         if "{}" in legend_description:
           legend_description = legend_description.format(year)
         
-        file_path = f"{self.base_path}/collision_data{year_str}/{sample_name}_{self.skim}_{self.hist_path}.root"
+        file_path = f"{self.base_path}/collision_data{year_str}/{sample_name}_{self.data_skim}_{self.data_hist_path}.root"
         info(f"Adding sample {short_name} of type {sample_type} with file path {file_path}")
     
         samples.append(
@@ -108,6 +117,12 @@ class TTAlpsPlotterConfigHelper:
         params = self.__get_params_for_sample(long_name)
         if params is None:
           continue
+
+        if sample_type == SampleType.signal:
+          if use_expected_xsec:
+            cross_sections = get_expected_signal_cross_sections()
+          else:
+            cross_sections = get_theory_cross_sections(year, coupling=1.0)
 
         file_path = f"{self.base_path}/{sample_name}/{self.skim}/{self.hist_path}/histograms.root"
 

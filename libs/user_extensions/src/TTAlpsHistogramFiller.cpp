@@ -124,8 +124,8 @@ void TTAlpsHistogramFiller::FillDataCheck(const shared_ptr<Event> event) {
 /// ----- flag: runMETxyHistograms ----- ///
 
 void TTAlpsHistogramFiller::FillMETPxyHistograms(const shared_ptr<Event> event) {
-  float met_pt = event->Get("MET_pt");
-  float met_phi = event->Get("MET_phi");
+  float met_pt = event->GetMetPt();
+  float met_phi = event->GetMetPhi();
   float met_px = met_pt * cos(met_phi);
   float met_py = met_pt * sin(met_phi);
   histogramsHandler->Fill("Event_MET_px", met_px);
@@ -590,8 +590,8 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
     histogramsHandler->Fill(name + variable_name, variable);
   }
   float logOuterDR = TMath::Log10(dimuon->GetOuterDeltaR());
-  float logDxyPVTrajSig1 = TMath::Log10(dimuon->Muon1()->GetAs<float>("dxyPVTraj") / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr"));
-  float logDxyPVTrajSig2 = TMath::Log10(dimuon->Muon2()->GetAs<float>("dxyPVTraj") / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr"));
+  float logDxyPVTrajSig1 = TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")) / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr"));
+  float logDxyPVTrajSig2 = TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")) / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr"));
   float logPt = TMath::Log10(dimuon->GetDimuonPt());
   map<string,bool> resonance_cuts = {
     {"_logDRlt-1_logDxySig2gt0", logOuterDR < -1.0 && logDxyPVTrajSig2 > 0.0},
@@ -1618,14 +1618,9 @@ void TTAlpsHistogramFiller::FillABCDHistograms(const shared_ptr<Event> event, bo
         {"logAbsCollinearityAngle", TMath::Log10(fabs(dimuon->GetCollinearityAngle()))},
         {"logLeadingPt", TMath::Log10(dimuon->GetLeadingMuonPt())},
         {"logDxyPVTraj1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")))},
+        {"logDxyPVTraj2", TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")))},
         {"logPt", TMath::Log10(dimuon->GetDimuonPt())},
-        {"logInvMass", log10(dimuon->GetInvariantMass())},
-        {"logDxyPVTrajSig1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj") / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr")))},
-        {"logDxyPVTrajSig2", TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj") / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr")))},
-        {"logOuterDR", TMath::Log10(dimuon->GetOuterDeltaR())},
-        {"logNormChi2", TMath::Log10(dimuon->GetAs<float>("normChi2"))},
-        {"logDca", TMath::Log10(dimuon->GetAs<float>("dca"))},
-      };
+    };
     map<string, double> irregular_variables = {
       {"pt_irr", dimuon->GetDimuonPt()},
       {"eta_irr", dimuon->GetDimuonEta()},

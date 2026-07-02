@@ -13,6 +13,7 @@ args = parser.parse_args()
 
 
 masses = ["0p35", "2", "12", "30", "60"]
+# ctaus = ["1e-5",]
 ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 
 # masses = ["0p35"]
@@ -24,7 +25,7 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 # card_pattern_DSA = "datacard_BestPFIsoDimuonVertex_logDxyPVTrajSig2_vs_logPt_DSA_signal_tta_mAlp-{}GeV_ctau-{}mm_ABCDpred.txt"
 
 card_pattern_Pat = "combined_datacard_{}_{}_Pat.txt"
-card_pattern_PatDSA = "combined_datacard_{}_{}_PatDSA.txt"
+# card_pattern_PatDSA = "combined_datacard_{}_{}_PatDSA.txt"
 card_pattern_DSA = "combined_datacard_{}_{}_DSA.txt"
 
 # card_pattern_Pat = "combined_datacard_{}_{}_Pat_signal_injection.txt"
@@ -73,17 +74,18 @@ def run_combine(config):
         combined_card_path += config.category
       if hasattr(config, "run_signal_injection") and config.run_signal_injection:
         combined_card_path += "signal_injection"
+      combined_card_path += "_noPatDSA"
       combined_card_path += ".txt"
 
       if not skip_cards_preparation:
         if combine_dimuon_categories:
           datacard_Pat = config.datacards_output_path + "/" + card_pattern_Pat.format(mass, ctau)
-          datacard_PatDSA = config.datacards_output_path + "/" + card_pattern_PatDSA.format(mass, ctau)
+          # datacard_PatDSA = config.datacards_output_path + "/" + card_pattern_PatDSA.format(mass, ctau)
           datacard_DSA = config.datacards_output_path + "/" + card_pattern_DSA.format(mass, ctau)
 
           datacards = {
             "Pat": datacard_Pat,
-            "PatDSA": datacard_PatDSA,
+            # "PatDSA": datacard_PatDSA,
             "DSA": datacard_DSA,
           }
           existing_cards = []
@@ -104,8 +106,8 @@ def run_combine(config):
           if len(years) > 1:
             info(f"combining datacards over years {years}")
             card_pattern = card_pattern_Pat
-            if config.category == "_PatDSA":
-              card_pattern = card_pattern_PatDSA
+            # if config.category == "_PatDSA":
+            #   card_pattern = card_pattern_PatDSA
             if config.category == "_DSA":
               card_pattern = card_pattern_DSA
 
@@ -149,7 +151,8 @@ def get_limits(config, combine_dimuon_categories):
 
   for mass in masses:
     for ctau in ctaus:
-      combine_output_path = f"combined_datacard_{mass}_{ctau}.log"
+      # combine_output_path = f"combined_datacard_{mass}_{ctau}.log"
+      combine_output_path = f"combined_datacard_{mass}_{ctau}_noPatDSA.log"
       if not combine_dimuon_categories:
         combine_output_path = f"combined_datacard_{mass}_{ctau}{config.category}.log"
 
@@ -168,7 +171,8 @@ def get_limits(config, combine_dimuon_categories):
 def save_limits(config, combine_dimuon_categories):
   limits_per_process = get_limits(config, combine_dimuon_categories)
 
-  file_path = "limits_combined.txt"
+  file_path = "limits_combined_noPatDSA.txt"
+  # file_path = "limits_combined.txt"
   if not combine_dimuon_categories:
     file_path = f"limits_combined{config.category}.txt"
   info(f"Saving limits to {file_path}")

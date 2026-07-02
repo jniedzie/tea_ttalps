@@ -6,7 +6,7 @@ parser.add_argument("--condor",action="store_true", help="Run on condor")
 args = parser.parse_args()
 
 # Default optimization flags:
-max_correlation = "1.0"
+max_correlation = "0.2"
 min_signals = "0"
 max_overlap = "0.3"
 max_error = "1.0"
@@ -23,11 +23,11 @@ if do_region == "SR_ANv2":
     max_closure = "100.0"
     ######### All years #########   
     # # # PAT-PAT: 616 events
-    # min_signals = "8"
-    # min_n_events = "40"
+    min_signals = "12"
+    min_n_events = "50"
     # # # PAT-DSA: ABCD 
-    min_signals = "7"
-    min_n_events = "15"
+    # min_signals = "7"
+    # min_n_events = "15"
     # # # DSA-DSA: ABCD
     # min_signals = "7"
     # min_n_events = "3"

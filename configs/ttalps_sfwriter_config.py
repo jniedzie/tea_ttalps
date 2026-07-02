@@ -9,8 +9,8 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from Sample import Sample, SampleType
 
-# years = ["2016postVFP",]
-years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
+years = ["2022preEE",]
+# years = ["2016preVFP", "2016postVFP", "2017", "2018", "2022preEE", "2022postEE", "2023preBPix", "2023postBPix",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 extrapolate_in_x = False
 extrapolate_in_y = False

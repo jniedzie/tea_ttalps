@@ -14,31 +14,51 @@ import shutil
 import argparse
 import glob
 from pathlib import Path
+import filecmp
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--dry", action="store_true", default=False, help="Dry run.")
 args = parser.parse_args()
 
-# samples = dasBackgrounds.keys()
-samples = dasSignals.keys()
+# samples = dasSignals.keys()
+samples = dasBackgrounds2023postBPix.keys()
+# samples = dasData.keys()
 
 compare_to_jalimena = False
 
 base_path = f"/data/dust/user/{os.environ['USER']}/ttalps_cms"
-base_path_jalimena = f"/data/dust/user/jalimena/ttalps_cms"
+# base_path_jalimena = f"/data/dust/user/jalimena/ttalps_cms"
+base_path_jalimena = f"/data/dust/user/lrygaard/ttalps_cms"
+# base_path_jalimena = f"/data/dust/group/cms/ttALPs-desy"
+skim_jalimena = "skimmed_looseSemimuonic_v3_SR"
 
-# skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
-skim = "skimmed_looseSemimuonic_v2_SR_segmentMatch1p5_beforeCorrections"
+# skim = "skimmed_looseSemimuonic_v3_SR_noBTag"
+skim = "skimmed_looseSemimuonic_v3_SR"
 
-hist_path = "" # Optional subdirectory
-# hist_path = "/histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_L1PreFiringWeightSFs_SRDimuons_LooseNonLeadingMuonsVertexSegmentMatch_genInfo"
+# hist_path = "" # Optional subdirectory
+hist_path = "/histograms_SRDimuons_ABCD_ANv10_regionA"
 
-root_path = "" # Optional subdirectory
+# root_path = "" # Optional subdirectory
 # root_path = "/*.root"
+root_path = "/output*"
 
-# destination = "" # Optional: if destination is given directory will be moved not deleted
-destination = f"{skim}/histograms_dimuonEffSFs_SRDimuons_genInfo"
+destination = "" # Optional: if destination is given directory will be moved not deleted
+# destination = f"{skim}/histograms_SRDimuons_ABCD_ANv5"
+# destination = f"skimmed_looseSemimuonic_v3_SR/histograms_SRDimuons_ABCD_ANv10_regionABCD"
 
+dust_destination = "" # Optional: if destination is given directory will be moved not deleted
+# dust_destination = "/data/dust/group/cms/ttALPs-desy/" 
+
+def dirs_are_identical(dir1, dir2):
+    comparison = filecmp.dircmp(dir1, dir2)
+
+    if comparison.left_only or comparison.right_only or comparison.diff_files:
+        return False
+
+    return all(
+        dirs_are_identical(f"{dir1}/{subdir}", f"{dir2}/{subdir}")
+        for subdir in comparison.common_dirs
+    )
 
 def get_dir_size(path):
     total = 0
@@ -59,7 +79,7 @@ total_size = 0
 
 for sample in samples:
     total_path = f"{base_path}/{sample}/{skim}{hist_path}"
-    total_path_jalimena = f"{base_path_jalimena}/{sample}/{skim}{hist_path}"
+    total_path_jalimena = f"{base_path_jalimena}/{sample}/{skim_jalimena}{hist_path}"
 
     if base_path == "" or sample == "" or skim == "":
         error(f"Error: cannot remove directory {total_path} as part of the path is missing")
@@ -100,6 +120,14 @@ for sample in samples:
             else:
                 if not args.dry:
                     shutil.rmtree(total_path)
+        elif (len(root_files_jalimena) == 0 and len(root_files) == 0):
+            if dirs_are_identical(total_path, total_path_jalimena):
+                info(f"directories are identical: {total_path} and {total_path_jalimena}")
+                if not args.dry:
+                    shutil.rmtree(total_path)
+            else:
+                error(f"directories are not identical: {total_path} and {total_path_jalimena}")
+
         else:
             error(f"not the same number of files in {total_path_jalimena}")
 
@@ -118,9 +146,46 @@ for sample in samples:
                 # If they share the same base path (except last directory) and filesystem → rename
                 same_base = total_path.parent == total_destination.parent
                 if same_fs and same_base:
-                    total_path.rename(total_destination)
+                    # total_path.rename(total_destination)
+                    shutil.copytree(total_path, total_destination, dirs_exist_ok=True)
                 else:
-                    shutil.move(total_path, destination)
+                    # shutil.move(total_path, total_destination)
+                    shutil.copytree(total_path, total_destination, dirs_exist_ok=True)
+
+    elif dust_destination != "":
+        total_destination = f"{dust_destination}/{sample}/{skim}{hist_path}"
+        # total_path = Path(total_path)
+        print(f"copying:")
+        print(total_path)
+        print("to:")
+        print(total_destination)
+        if not args.dry:
+            if not Path(total_destination).exists():
+                os.makedirs(total_destination)
+
+            if root_path == "":
+                # Check if both are on the same filesystem
+                same_fs = os.stat(total_path).st_dev == os.stat(Path(total_destination).parent).st_dev
+                src = Path(total_path)
+                dst = Path(total_destination)
+
+                for item in src.iterdir():
+                    target = dst / item.name
+                    if item.is_dir():
+                        shutil.copytree(item, target, dirs_exist_ok=True)
+                    else:
+                        shutil.copy2(item, target)
+
+            else: 
+                files_to_remove = glob.glob(f"{total_path}{root_path}")
+                for file in files_to_remove:
+                    dust_file = file.replace(total_path, total_destination)
+                    if Path(dust_file).exists():
+                        error(f"Error: File {dust_file} already exists!")
+                        continue
+                    info(f"Copying file: {file} to {dust_file}")
+
+                    shutil.copy(file,dust_file)
 
     elif root_path != "":
         files_to_remove = glob.glob(f"{total_path}{root_path}")

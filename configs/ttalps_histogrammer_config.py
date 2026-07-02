@@ -5,12 +5,14 @@ from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
 from ttalps_histogrammer_files_config import skim, applyScaleFactors, year, sample_path
 
+from ttalps_abcd_collections import get_abcd_regions_collections
+
 from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
 from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
 # defining eventCuts as the loose eventCuts and replacing MET pt from signal eventCuts
 eventCuts = {
     **looseEventCuts,
-    "MET_pt": signalEventCuts["MET_pt"],
+    "nano_MET_pt": signalEventCuts["nano_MET_pt"],
 
     # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
@@ -59,7 +61,7 @@ runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False
 
 # Create 2D histograms for ABCD background estimation
-runABCDHistograms = False
+runABCDHistograms = True
 
 # [MC only] Create ABCD histograms for gen-level mother information - only workd with runABCDHistograms = True
 # resonances: FromALP, Resonant, NonResonant, FalseResonant
@@ -95,6 +97,9 @@ eventIDBranchName = "event"  # for jer
 if "22" in year or "23" in year:
   rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 eventsTreeNames = ("Events",)
+metBranchName = "MET"
+if "2022" in year or "2023" in year or "2024" in year or "2025" in year:
+  metBranchName = "PuppiMET"
 
 specialBranchSizes = {
     "Proton_multiRP": "nProton_multiRP",
@@ -127,6 +132,13 @@ muonMatchingParams = {
 #   "DSA": 300,
 # }
 
+# Selecting ABCD regions for data, if more than one is set to true the event pass if the event is in any of the regions
+run_ABCD_region_A_only = True
+run_ABCD_region_B_only = False
+run_ABCD_region_C_only = False
+run_ABCD_region_D_only = False
+abcdRegionsCollections = get_abcd_regions_collections()
+
 muonVertexBaselineSelection = [
     "InvariantMassCut",
     "DeltaRCut",
@@ -147,13 +159,22 @@ if dimuonSelection == "":
 
 muonVertexCollections = {
     "SRDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    # BestDimuonVertexExclusive: excluding mix PAT-DSA category
+    "SRDimuonsExclusive": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertexExclusive"]),
+    "SRDimuonsLooseDSADCA": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "SRDimuonsMaxDxyDz": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["MaxDxyDzCut", "PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonsNoChi2": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonsNoPATIso": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonsDPhiBetweenMuonpTAndLxy": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["DPhiBetweenMuonpTAndLxyCut", "PFRelIsolationCut", "BestDimuonVertex"]),
     "SRDimuonsHitsInFrontOfVertex": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["HitsInFrontOfVertexCut", "PFRelIsolationCut", "BestDimuonVertex"]),
     "JPsiDimuons": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertex"]),
     "JPsiDimuonsPatDSA": ("BestDimuonVertex", muonVertexBaselineSelection + ["BestDimuonVertexPatDSA"]),
+    "JPsiIsoDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "JPsiIsoDimuonsPatDSA": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertexPatDSA"]),
     "SSDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "DCADimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "Chi2Dimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
+    "HighIsoDimuons": ("BestPFIsoDimuonVertex", muonVertexBaselineSelection + ["PFRelIsolationCut", "BestDimuonVertex"]),
 }
 muonVertexCollection = muonVertexCollections[dimuonSelection] if dimuonSelection is not None else None
 # input for muonVertexCollection, options are LooseMuonsVertexSegmentMatch, LooseNonLeadingMuonsVertexSegmentMatch, LooseNonTriggerMuonsVertexSegmentMatch
@@ -169,14 +190,14 @@ histParams2D = ()
 irregularHistParams = ()
 irregularHistParams2D = ()
 
-if runSingleMuonABCDHistograms:
+if runSingleMuonABCDHistograms or runGenMuonHistograms:
   runLooseMuonsHistograms = True  # to define the loose muon collection
 
 helper = TTAlpsHistogrammerConfigHelper(
     muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput, 
     runRevertedMatching, runLooseMuonsHistograms, runExtraDimuonCuts)
 
-defaultHistParams = helper.get_default_params()
+defaultHistParams = helper.get_default_params(metBranchName)
 histParams += helper.get_basic_params()
 
 if runJetEfficiencyMaps:

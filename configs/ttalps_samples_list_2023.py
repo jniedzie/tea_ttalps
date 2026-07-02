@@ -34,7 +34,8 @@ QCD_dasBackgrounds2023preBPix = {
     "backgrounds2023preBPix/QCD_PT-20To30": "/QCD_PT-20to30_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",
     "backgrounds2023preBPix/QCD_PT-30To50": "/QCD_PT-30to50_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",
     "backgrounds2023preBPix/QCD_PT-50To80": "/QCD_PT-50to80_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",
-    "backgrounds2023preBPix/QCD_PT-80To120": "/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",
+    # exclude QCD_PT-80To120 SR PAT-PAT
+    # "backgrounds2023preBPix/QCD_PT-80To120": "/QCD_PT-80to120_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",
     "backgrounds2023preBPix/QCD_PT-120To170": "/QCD_PT-120to170_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",
     "backgrounds2023preBPix/QCD_PT-170To300": "/QCD_PT-170to300_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",
     "backgrounds2023preBPix/QCD_PT-300To470": "/QCD_PT-300to470_MuEnrichedPt5_TuneCP5_13p6TeV_pythia8/jalimena-LLPnanoAODv1_Run3Summer23DRPremix-130X_mcRun3_2023_realistic_v14-v2-00000000000000000000000000000000/USER",

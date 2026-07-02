@@ -19,6 +19,9 @@ SRDimuonsCuts = {
     "minDR": [0.0, 0.05, 0.0],
     # No cuts:
     # "minCos3Dangle": [-0.8, -0.8, -0.8],
+    "minDCA": [0.0, 0.0, 0.0],
+    "minChi2": [0.0, 0.0, 0.0],
+    "minPFRelIso": [-9999.0, -9999.0, -9999.0],
     "maxDisplTrkIso": [9999.0, 9999.0, 9999.0],
     "minpsiMass": [9999.0, 9999.0, 9999.0],
     "maxpsiMass": [0.0, 0.0, 0.0],
@@ -31,7 +34,19 @@ SRDimuonsCuts = {
     "maxDPhi": [9999.0, 9999.0, 9999.0],
     "minLxy": [0.0, 0.0, 0.0],
     "maxDeltaPixelHits": [9999.0, 9999.0, 9999.0],
+    "maxDxy": [9999.0, 9999.0, 9999.0],
+    "maxDz": [9999.0, 9999.0, 9999.0],
 }
+
+SRDimuonsExclusiveCuts = copy.deepcopy(SRDimuonsCuts)
+
+# For isolation efficiency studies - applied to PAT muons only
+SRDimuonsMaxDxyDzCuts = copy.deepcopy(SRDimuonsCuts)
+SRDimuonsMaxDxyDzCuts["maxDxy"] = [0.2, 0.2, 9999.0]
+SRDimuonsMaxDxyDzCuts["maxDz"] = [0.5, 0.5, 9999.0]
+
+SRDimuonsLooseDSADCACuts = copy.deepcopy(SRDimuonsCuts)
+SRDimuonsLooseDSADCACuts["maxDCA"] = [2.0, 2.0, 4.0]
 
 # For N-2 plots
 SRDimuonsNoChi2Cuts = copy.deepcopy(SRDimuonsCuts)
@@ -62,6 +77,8 @@ JPsiDimuonsCuts = {
     "maxCollinearityAngle": [0.5, 0.5, 0.5],
     "applyChi2DCA": [0.0, 1.0, 1.0], # apply linear cut for logNormChi2 > 2logDCA - 1.5
     # No cuts:
+    "minDCA": [0.0, 0.0, 0.0],
+    "minChi2": [0.0, 0.0, 0.0],
     # "minCos3Dangle": [-0.8, -0.8, -0.8],
     "maxpTLxyDPhi": [9999.0, 9999.0, 9999.0],
     "maxHitsInFrontOfVertex": [9999.0, 9999.0, 9999.0],
@@ -83,6 +100,22 @@ JPsiDimuonsNoChi2Cuts["applyChi2DCA"] = [0.0, 0.0, 0.0]
 
 JPsiDimuonsPatDSACuts = copy.deepcopy(JPsiDimuonsCuts)
 
+JPsiIsoDimuonsCuts = copy.deepcopy(JPsiDimuonsCuts)
+JPsiIsoDimuonsCuts["maxPFRelIso"] = [0.25, 0.25, 9999.0]
+JPsiIsoDimuonsPatDSACuts = copy.deepcopy(JPsiIsoDimuonsCuts)
+
 SSDimuonsCuts = copy.deepcopy(SRDimuonsCuts)
 SSDimuonsCuts["maxChargeProduct"] = [9999.0, 9999.0, 9999.0]
 SSDimuonsCuts["minChargeProduct"] = [0.1, 0.1, 0.1]
+
+DCADimuonsCuts = copy.deepcopy(SRDimuonsCuts)
+DCADimuonsCuts["maxDCA"] = [15.0, 15.0, 15.0]
+DCADimuonsCuts["minDCA"] = [2.0, 2.0, 2.0]
+
+Chi2DimuonsCuts = copy.deepcopy(SRDimuonsCuts)
+Chi2DimuonsCuts["maxChi2"] = [6.0, 6.0, 6.0]
+Chi2DimuonsCuts["minChi2"] = [3.0, 3.0, 3.0]
+
+HighIsoDimuonsCuts = copy.deepcopy(SRDimuonsCuts)
+HighIsoDimuonsCuts["minPFRelIso"] = [0.25, 0.25, 0.0]
+HighIsoDimuonsCuts["maxPFRelIso"] = [9999.0, 9999.0, 9999.0]

@@ -16,8 +16,9 @@ variable_doubleMu = "DoubleMuonTriggerGenMuonFromALP_leadingPt"
 variable_singleOrDoubleMu = "SingleorDoubleMuonTriggerGenMuonFromALP_leadingPt"
 variable_notrigger = "NoExtraTriggerGenMuonFromALP_leadingPt"
 
-skim = "skimmed_looseSemimuonic_v2_SR_noTrigger"
-hist_path = "histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_SRDimuons_LooseNonLeadingMuonsVertexSegmentMatch"
+skim = "skimmed_looseSemimuonic_v2_SR_noTrigger_merged"
+# hist_path = "histograms_muonSFs_dsamuonSFs_muonTriggerSFs_pileupSFs_bTaggingSFs_PUjetIDSFs_dimuonEffSFs_jecSFs_SRDimuons_LooseNonLeadingMuonsVertexSegmentMatch"
+hist_path = "histograms_SRDimuons_LLPtrigger_ANv6"
 
 # Open the ROOT file (assuming all histograms are stored in the same file)
 # signal = ("tta_mAlp-2GeV_ctau-1e-5mm", "m_{a} = 2 GeV, c#tau_{a} = 10 nm")
@@ -29,6 +30,14 @@ filename=f"/data/dust/user/lrygaard/ttalps_cms/signals2018/{signal[0]}/{skim}/{h
 file = ROOT.TFile.Open(filename)
 
 x_max = 100
+
+color_palette_petroff_6 = ["#5790fc", "#f89c20", "#e42536", "#964a8b", "#9c9ca1", "#7a21dd"]
+color_palette_petroff_8 = ["#1845fb", "#ff5e02", "#c91f16", "#c849a9", "#adad7d", "#86c8dd", "#578dff", "#656364"]
+color_palette_petroff_10 = ["#3f90da", "#ffa90e", "#bd1f01", "#94a4a2", "#832db6", "#a96b59", "#e76300", "#b9ac70", "#717581", "#92dadd"]
+
+cms_colors = [ROOT.TColor.GetColor(color) for color in color_palette_petroff_10 + color_palette_petroff_8]
+cms_colors_8 = [ROOT.TColor.GetColor(color) for color in color_palette_petroff_8]
+cms_colors_10 = [ROOT.TColor.GetColor(color) for color in color_palette_petroff_10]
 
 def weighted_efficiency(num_hist, den_hist):
     """
@@ -150,18 +159,18 @@ ratio_hist_singleMu.GetYaxis().SetTitle("#epsilon_{trigger}")
 ratio_hist_singleMu.GetXaxis().SetTitleSize(0.04)
 ratio_hist_singleMu.GetXaxis().SetLabelSize(0.04)
 ratio_hist_singleMu.GetXaxis().SetTitleOffset(1.7)
-ratio_hist_singleMu.GetYaxis().SetTitleSize(0.03)
+ratio_hist_singleMu.GetYaxis().SetTitleSize(0.04)
 ratio_hist_singleMu.GetYaxis().SetLabelSize(0.06)
-ratio_hist_singleMu.GetYaxis().SetTitleOffset(2.0)
-ratio_hist_singleMu.SetLineColor(ROOT.kMagenta-7)
-ratio_hist_singleMu.SetMarkerColor(ROOT.kMagenta-7)
-ratio_hist_singleMu.SetMarkerStyle(20)
-ratio_hist_doubleMu.SetLineColor(ROOT.kOrange+1)
-ratio_hist_doubleMu.SetMarkerColor(ROOT.kOrange+1)
-ratio_hist_doubleMu.SetMarkerStyle(21)
-ratio_hist_singleOrDoubleMu.SetLineColor(ROOT.kGreen+1)
-ratio_hist_singleOrDoubleMu.SetMarkerColor(ROOT.kGreen+1)
-ratio_hist_singleOrDoubleMu.SetMarkerStyle(22)
+ratio_hist_singleMu.GetYaxis().SetTitleOffset(1.7)
+ratio_hist_singleMu.SetLineColor(cms_colors_10[1])
+ratio_hist_singleMu.SetMarkerColor(cms_colors_10[1])
+ratio_hist_singleMu.SetMarkerStyle(21)
+ratio_hist_doubleMu.SetLineColor(cms_colors_10[0])
+ratio_hist_doubleMu.SetMarkerColor(cms_colors_10[0])
+ratio_hist_doubleMu.SetMarkerStyle(22)
+ratio_hist_singleOrDoubleMu.SetLineColor(cms_colors_10[2])
+ratio_hist_singleOrDoubleMu.SetMarkerColor(cms_colors_10[2])
+ratio_hist_singleOrDoubleMu.SetMarkerStyle(20)
 
 # Set up a canvas to draw the plots
 canvas = ROOT.TCanvas("canvas", "Ratio histogram", 800, 600)
@@ -182,7 +191,7 @@ ratio_hist_singleOrDoubleMu.Draw("P same")
 canvas.Update()
 
 # Add a legend to describe the plots
-legend = ROOT.TLegend(0.4, 0.76, 0.82, 0.85)
+legend = ROOT.TLegend(0.4, 0.74, 0.82, 0.85)
 legend.AddEntry(ratio_hist_singleMu, "SingleMuon")
 legend.AddEntry(ratio_hist_doubleMu, "DoubleMuon")
 legend.AddEntry(ratio_hist_singleOrDoubleMu, "SingleORDoubleMuon")
@@ -201,7 +210,8 @@ top = canvas.GetTopMargin()
 right = canvas.GetRightMargin()
 latex.SetTextSize(0.4*top)
 lumi = f"{59830. / 1000.0:.1f} fb^{{-1}}"
-lumiText = lumi + " (13 TeV)"
+# lumiText = lumi + " (13 TeV)"
+lumiText = "(13 TeV)"
 latex.DrawLatex(1-right, 1-top+0.02, lumiText)
 
 left = canvas.GetLeftMargin()
@@ -219,7 +229,8 @@ latex.SetTextFont(52)
 latex.SetTextAlign(13)
 extraTextSize = 0.76 * 0.55*top
 latex.SetTextSize(0.76*0.55*top)
-latex.DrawLatex(posX_, posY_ - 0.1 , "Preliminary")
+latex.DrawLatex(posX_, posY_ - 0.11 , "Simulation")
+latex.DrawLatex(posX_, posY_ - 0.2 , "Work in Progress")
 
 latex = ROOT.TLatex()
 latex.SetTextFont(42)
@@ -231,9 +242,9 @@ latex.DrawLatex(posX_, posY_, signal[1])
 
 # Update and save the canvas
 canvas.Update()
-if not os.path.exists("../plots/trigger_ratios"):
-    os.makedirs("../plots/trigger_ratios")
-canvas.SaveAs(f"../plots/trigger_ratios/ratio_hist_trigger_{signal[0]}.pdf")
+if not os.path.exists("../plots/trigger_ratios_thesis"):
+    os.makedirs("../plots/trigger_ratios_thesis")
+canvas.SaveAs(f"../plots/trigger_ratios_thesis/ratio_hist_trigger_{signal[0]}.pdf")
 
 # Keep the canvas open in interactive mode
 canvas.Draw()

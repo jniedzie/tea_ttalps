@@ -5,39 +5,65 @@ from TTAlpsABCDConfigHelper import TTAlpsABCDConfigHelper
 from Histogram import Histogram2D
 from HistogramNormalizer import NormalizationType
 
-years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
-# years = ["2018",]
+# years = ["2016preVFP","2016postVFP",]
+# years = ["2016preVFP","2016postVFP","2017","2018"]
+# years = ["2022preEE","2022postEE","2023preBPix","2023postBPix"]
+# years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
+years = ["2016preVFP",]
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
 luminosity_sum = 0
+luminosity_sum_run2 = 0
+luminosity_sum_run3 = 0
 year = ""
 for year_ in years:
   luminosity_sum += get_luminosity(year_)
   year += year_
+  if "2016" in year_ or "2017" in year_ or "2018" in year_:
+    luminosity_sum_run2 += get_luminosity(year_)
+  else:
+    luminosity_sum_run3 += get_luminosity(year_)
 
 # ------------------------------------------
 # ABCD calculation and optimization settings
 # ------------------------------------------
 
-do_region = "SR_ANv3"
+# do_region = "SR_ANv3"
+# do_region = "SR_ANv5"
+# do_region = "SR_ANv6"
+# do_region = "SR_ANv6_regionBCD"
+do_region = "SR_ANv10_regionABCD"
+# do_region = "SR_ANv10_regionA"
+# do_region = "SR_ANv10_exclusive_regionBCD"
+# do_region = "SR_ANv5_regionD_2"
+# do_region = "SR_looseDCA_ANv5_regionD_2"
 # do_region = "SR_maxLxy_ANv3"
 # do_region = "SRDPhiBetweenMuonpTAndLxy"
 # do_region = "SRHitsInFrontOfVertex"
 # do_region = "JPsiCR_ANv2"
 # do_region = "JPsiCR_Sbins_ANv2"
+# do_region = "JPsiIsoCR"
 # do_region = "SSCR"
+# do_region = "DCACR"
+# do_region = "Chi2CR"
+# do_region = "HighIsoCR"
 
-do_data = False
+do_data = True
+blinded_region_A = False
 do_nonresonant_signal_as_background = False
 do_binning_uncertainty = True
 
-if "SR" in do_region:
-  do_data = False
+if "SR" in do_region: 
+  if "regionD" not in do_region and "regionB" not in do_region and "regionC" not in do_region and "regionBCD" not in do_region and "regionABCD" not in do_region and "regionA" not in do_region:
+    do_data = False
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 elif "JPsiCR" in do_region:
   background_collection = "BestDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
-elif "SS" in do_region:
+elif "JPsiIsoCR" in do_region:
+  background_collection = "BestPFIsoDimuonVertex"
+  signal_collection = "BestPFIsoDimuonVertex"
+elif "SS" in do_region or "DCA" in do_region or "Chi2" in do_region or "HighIso" in do_region:
   background_collection = "BestPFIsoDimuonVertex"
   signal_collection = "BestPFIsoDimuonVertex"
 
@@ -69,9 +95,48 @@ optimal_parameters = {
     ("_PatDSA", "SR_ANv2"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
     ("_DSA", "SR_ANv2"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
 
-    ("_Pat", "SR_ANv3"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
-    ("_PatDSA", "SR_ANv3"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
-    ("_DSA", "SR_ANv3"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+    # ("_Pat", "SR_ANv5"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    # ("_Pat", "SR_ANv5"): ("logAbsCollinearityAngle", "logPt", (16, 12), "D"),
+    ("_Pat", "SR_ANv5"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv5"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv5"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+    # ("_Pat", "SR_ANv5"): ("logAbsCollinearityAngle", "logLeadingPt", (17, 13), "D"),
+    # ("_Pat", "SR_ANv5"): ("logDxyPVTraj2", "logLeadingPt", (19, 13), "C"),
+    
+    ("_Pat", "SR_ANv6"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv6"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv6"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_ANv5_regionB"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv5_regionB"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv5_regionB"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_ANv5_regionC"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv5_regionC"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv5_regionC"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_ANv5_regionD"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv5_regionD"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv5_regionD"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_ANv6_regionBCD"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv6_regionBCD"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv6_regionBCD"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_ANv10_regionABCD"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv10_regionABCD"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv10_regionABCD"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+    
+    ("_Pat", "SR_ANv10_regionA"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv10_regionA"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv10_regionA"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_ANv5_regionD_2"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "SR_ANv5_regionD_2"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "SR_ANv5_regionD_2"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "SR_looseDCA_ANv5_regionD_2"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_DSA", "SR_looseDCA_ANv5_regionD_2"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
 
     ("_Pat", "SR_maxLxy_ANv3"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
     ("_PatDSA", "SR_maxLxy_ANv3"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
@@ -85,13 +150,31 @@ optimal_parameters = {
     ("_PatDSA", "SRHitsInFrontOfVertex"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
     ("_DSA", "SRHitsInFrontOfVertex"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
 
-    ("_Pat", "JPsiCR_Sbins_ANv2"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_Pat", "JPsiCR_Sbins_ANv2"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    # ("_Pat", "JPsiCR_Sbins_ANv2"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
     ("_PatDSA", "JPsiCR_Sbins_ANv2"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
     ("_DSA", "JPsiCR_Sbins_ANv2"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
 
-    ("_Pat", "SSCR"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_Pat", "JPsiIsoCR"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "JPsiIsoCR"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "JPsiIsoCR"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    # ("_Pat", "SSCR"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_Pat", "SSCR"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
     ("_PatDSA", "SSCR"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
     ("_DSA", "SSCR"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "DCACR"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "DCACR"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "DCACR"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "Chi2CR"): ("logDxyPVTraj2", "logPt", (17, 13), "C"),
+    ("_PatDSA", "Chi2CR"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "Chi2CR"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
+
+    ("_Pat", "HighIsoCR"): ("logAbsCollinearityAngle", "logPt", (16, 16), "D"),
+    ("_PatDSA", "HighIsoCR"): ("logDxyPVTraj1", "logAbsCollinearityAngle", (33, 11), "A"), 
+    ("_DSA", "HighIsoCR"): ("logAbsCollinearityAngle", "logPt", (18, 11), "D"),
 
     # ("_Pat", "JPsiCR_ANv2"): ("logAbsCollinearityAngle", "logDisplacedTrackIso04Dimuon2", (17, 12), "B"),
     ("_Pat", "JPsiCR_ANv2"): ("logAbsCollinearityAngle", "logDisplacedTrackIso03Dimuon2", (16, 14), "B"),
@@ -109,8 +192,8 @@ else:
   abcd_point = optimal_parameters[(category, "SR")][2]
   signal_bin = optimal_parameters[(category, "SR")][3]
 
-# optimization_param = None
-optimization_param = "significance"
+optimization_param = None
+# optimization_param = "significance"
 # optimization_param = "error"
 # optimization_param = "closure"
 
@@ -193,6 +276,7 @@ nice_names = {
     "logAbsCollinearityAngle": "log_{10}[|#Delta#Phi_{coll}|]",
     "logLeadingPt": "log_{10} Leading p_{T} [GeV]",
     "logDxyPVTraj1": "log_{10} d_{xy}^{#mu1} [cm]",
+    "logDxyPVTraj2": "log_{10} d_{xy}^{#mu2} [cm]",
     "logInvMass": "log_{10} m_{#mu#mu} [GeV]",
     "logPt": "log_{10} p_{T} [GeV]",
     "absCollinearityAngle": "|#Delta#Phi_{coll}|",
@@ -220,6 +304,46 @@ skims = {
     "SR_ANv3": (
         "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv3"
     ),
+    "SR_ANv5": (
+        "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"
+    ),
+    "SR_ANv6": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv6"),
+        # ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv6"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_noDimuonEffSFs_ABCD_ANv6"),
+    ),
+    "SR_ANv5_regionB": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5_regionB"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
+    "SR_ANv5_regionC": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5_regionC"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
+    "SR_ANv5_regionD": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5_regionD"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
+    "SR_ANv6_regionBCD": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv6_regionBCD"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv6_regionBCD"),
+    ),
+    "SR_ANv10_regionABCD": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv10_regionABCD"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv6_regionBCD"),
+    ),
+    "SR_ANv10_regionA": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv10_regionA"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv6_regionBCD"),
+    ),
+    "SR_ANv5_regionD_2": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5_regionD_2"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
+    "SR_looseDCA_ANv5_regionD_2": (
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuonsLooseDSADCA", "_ABCD_ANv5_regionD_2"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
     "SR_maxLxy_ANv3": (
         # "skimmed_looseSemimuonic_v3_SR", "_SRDimuonsMaxLxy", "_ABCD_ANv3"
         "skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_maxLxyCut_ABCD_ANv3"
@@ -236,25 +360,55 @@ skims = {
     ),
     "JPsiCR_Sbins_ANv2": (
         ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_ABCD_ANv2"),
-        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
+    "JPsiIsoCR": (
+        ("skimmed_looseSemimuonic_v3_SR", "_JPsiIsoDimuons", "_ABCD_ANv6"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
     ),
     "SSCR": (
+        # ("skimmed_looseSemimuonic_v3_SR", "_SSDimuons", "_ABCD_ANv5"),
         ("skimmed_looseSemimuonic_v3_SR", "_SSDimuons", "_ABCD_ANv3"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
+    "DCACR": (
+        ("skimmed_looseSemimuonic_v3_SR", "_DCADimuons", "_ABCD_ANv5"),
         ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv3"),
+    ),
+    "Chi2CR": (
+        ("skimmed_looseSemimuonic_v3_SR", "_Chi2Dimuons", "_ABCD_ANv5"),
+        ("skimmed_looseSemimuonic_v3_SR", "_Chi2Dimuons", "_ABCD_ANv5"),
+        # ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+    ),
+    "HighIsoCR": (
+        ("skimmed_looseSemimuonic_v3_SR", "_HighIsoDimuons", "_ABCD_ANv5"),
+        ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
     ),
 }
 
 if "JPsiCR" in do_region and category == "_PatDSA":
   skims[do_region] = (
     ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuonsPatDSA", "_noMatching_ABCD_ANv2"),
-    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
+    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
   )
 if "JPsiCR" in do_region and category == "_DSA":
   skims[do_region] = (
     ("skimmed_looseSemimuonic_v3_SR", "_JPsiDimuons", "_revertedMatching_ABCD_ANv2"),
-    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv2"),
+    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
   )
   background_collection = "BestDimuonVertex_revertedMatching"
+
+if "JPsiIsoCR" in do_region and category == "_PatDSA":
+  skims[do_region] = (
+    ("skimmed_looseSemimuonic_v3_SR", "_JPsiIsoDimuonsPatDSA", "_noMatching_ABCD_ANv6"),
+    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+  )
+if "JPsiIsoCR" in do_region and category == "_DSA":
+  skims[do_region] = (
+    ("skimmed_looseSemimuonic_v3_SR", "_JPsiIsoDimuons", "_revertedMatching_ABCD_ANv6"),
+    ("skimmed_looseSemimuonic_v3_SR", "_SRDimuons", "_ABCD_ANv5"),
+  )
+  background_collection = "BestPFIsoDimuonVertex_revertedMatching"
 
 if isinstance(skims[do_region][0], str):
   background_skim = skims[do_region]
@@ -283,6 +437,8 @@ output_path += category
 if optimization_param:
   output_path += "_"+optimization_param
 
+# output_path += "_signalscaled"
+
 hist_base_path = f"histograms"
 
 background_hist_path = (
@@ -303,6 +459,7 @@ data_paths = {
   "2023preBPix": f"collision_data2023preBPix/Muon12023_{background_skim[0]}_{background_hist_path}.root",
   "2023postBPix": f"collision_data2023postBPix/Muon12023_{background_skim[0]}_{background_hist_path}.root",
 }
+print(f"----- 2018 data path: {data_paths['2018']}")
 
 # signal points for which to run ABCD analysis
 masses = ["0p35", "2", "12", "30", "60"]
@@ -316,8 +473,8 @@ ctaus = ["1e-5", "1e0", "1e1", "1e2", "1e3"]
 run_signal_injection = False
 
 # used by ttalps_get_signal_events, uses theory cross section if set to -1
-signal_cross_section = 0.01
-# signal_cross_section = -1
+# signal_cross_section = 0.01
+signal_cross_section = -1
 
 config_helper = TTAlpsABCDConfigHelper(
     years,

@@ -31,10 +31,20 @@ TTAlpsEvent::TTAlpsEvent(std::shared_ptr<Event> event_) : event(event_) {
 
 map<string, float> TTAlpsEvent::GetEventWeights() {
   auto nanoEvent = asNanoEvent(event);
+
+  nanoEventProcessor->ApplyJetEnergyScaleCorrections(nanoEvent);
+  nanoEventProcessor->ApplyPuppiMETEnergyScaleCorrections(nanoEvent, "Jet", "CorrT1METJet");
+  pair<float,float> metPtCuts = GetEventCut("nano_MET_pt");
+  map<string, float> metJECSFs = nanoEventProcessor->GetMETEnergyScaleScaleFactors(nanoEvent, metPtCuts);
+  
   nanoEventProcessor->ApplyJetEnergyResolution(nanoEvent);
-  pair<float,float> metPtCuts = GetEventCut("MET_pt");
-  map<string, float> metXYcorrections = nanoEventProcessor->GetMETXYcorrections(nanoEvent, metPtCuts);
-  if (nanoEventProcessor->IsDataEvent(nanoEvent)) return {{"default", metXYcorrections["systematic"]}};
+  pair<float,float> goodJetCuts = GetEventCut("nGoodJets");
+  pair<float,float> goodBJetCuts = GetEventCut("nGoodMediumBtaggedJets");
+  auto [jerUnc, metJerUnc] = nanoEventProcessor->GetJetMETEnergyResolutionUncertainties(nanoEvent, "Jet", "GoodJets", "GoodMediumBtaggedJets", goodJetCuts, goodBJetCuts, metPtCuts);
+
+  nanoEventProcessor->ApplyMETXYcorrections(nanoEvent);
+  map<string, float> metXYcorrections = nanoEventProcessor->GetMETXYScaleFactors(nanoEvent, metPtCuts);
+  if (nanoEventProcessor->IsDataEvent(nanoEvent)) return {{"default", metXYcorrections["systematic"]*metJECSFs["systematic"]}};
 
   float genWeight = nanoEventProcessor->GetGenWeight(nanoEvent);
 
@@ -54,11 +64,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
   
   map<string, float> DSAEffSF = nanoEventProcessor->GetDSAMuonEfficiencyScaleFactors(muons);
 
-  pair<float,float> goodJetCuts = GetEventCut("nGoodJets");
-  pair<float,float> goodBJetCuts = GetEventCut("nGoodMediumBtaggedJets");
   auto [jecUnc, metJecUnc] = nanoEventProcessor->GetJetMETEnergyScaleUncertainties(nanoEvent, "Jet", "GoodJets", "GoodMediumBtaggedJets", goodJetCuts, goodBJetCuts, metPtCuts);
-
-  auto [jerUnc, metJerUnc] = nanoEventProcessor->GetJetMETEnergyResolutionUncertainties(nanoEvent, "Jet", "GoodJets", "GoodMediumBtaggedJets", goodJetCuts, goodBJetCuts, metPtCuts);
   
   map<string, float> metUnclEnergySFs = nanoEventProcessor->GetMETUnclusteredEnergyUncertainties(nanoEvent, metPtCuts);
   
@@ -66,7 +72,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
 
   map<string, float> scaleFactorMap;
   scaleFactorMap["default"] = genWeight * pileupSF["systematic"] * muonTriggerSF["systematic"] * L1PreFiringWeight["systematic"] * btagSF["systematic"] * PUjetIDSF["systematic"] *
-                              muonSF["systematic"] * dimuonEffSF["systematic"] * DSAEffSF["systematic"] * metXYcorrections["systematic"];
+                              muonSF["systematic"] * dimuonEffSF["systematic"] * DSAEffSF["systematic"] * metXYcorrections["systematic"] * metJECSFs["systematic"];
   vector<map<string, float> *> scaleFactorMaps = {&pileupSF, &muonTriggerSF, &L1PreFiringWeight, &btagSF, &PUjetIDSF, &muonSF, &dimuonEffSF, &DSAEffSF, &jecUnc, &jerUnc, &metJecUnc, &metJerUnc, &metUnclEnergySFs};
 
   for (auto scaleFactorMapPtr : scaleFactorMaps) {
@@ -74,7 +80,7 @@ map<string, float> TTAlpsEvent::GetEventWeights() {
     for (auto &[name, weight] : *scaleFactorMapPtr) {
       if (name == "systematic") continue;
 
-      scaleFactorMap[name] = genWeight * metXYcorrections["systematic"] * 
+      scaleFactorMap[name] = genWeight * metXYcorrections["systematic"] * metJECSFs["systematic"] *
                              (scaleFactorMapPtr == &pileupSF ? (*scaleFactorMapPtr)[name] : pileupSF["systematic"]) *
                              (scaleFactorMapPtr == &muonTriggerSF ? (*scaleFactorMapPtr)[name] : muonTriggerSF["systematic"]) *
                              (scaleFactorMapPtr == &L1PreFiringWeight ? (*scaleFactorMapPtr)[name] : L1PreFiringWeight["systematic"]) *

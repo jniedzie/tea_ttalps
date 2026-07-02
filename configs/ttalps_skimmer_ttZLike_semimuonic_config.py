@@ -12,7 +12,7 @@ weightsBranchName = "genWeight"
 eventsTreeName = "Events"
 
 eventCuts = {
-    "MET_pt": (50, 9999999),
+    "nano_MET_pt": (50, 9999999),
     "nTightMuons": (1, 9999999),
     "nLoosePATMuons": (3, 9999999),
     "nLooseElectrons": (0, 0),

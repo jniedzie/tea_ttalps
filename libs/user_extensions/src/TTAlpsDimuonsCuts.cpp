@@ -55,6 +55,7 @@ TTAlpsDimuonCuts::TTAlpsDimuonCuts(){
     {"LogLxyMinus2Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus2); }},
     {"LogLxyMinus3Cut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesLogLxyCut(v,&LogLxyMinus3); }},
     {"Chi2DCACut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesChi2DCACut(v); }},
+    {"MaxDxyDzCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesMaxDxyDzCut(v); }},
     {"DxyCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesDxyCut(v); }},
     {"MuonPtCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesMuonPtCut(v); }},
     {"Cos3DAngleCut", [this](std::shared_ptr<NanoDimuonVertex> v) { return PassesCos3DAngleCut(v); }},
@@ -113,8 +114,10 @@ bool TTAlpsDimuonCuts::PassesPFRelIsolationCut(shared_ptr<NanoDimuonVertex> dimu
   auto dimuonVertexCuts = GetDimuonCategoryMap(category);
   if(category == "DSA") return true;
   if((float)dimuonVertex->Muon1()->Get("pfRelIso04_all") > dimuonVertexCuts["maxPFRelIso"]) return false;
+  if((float)dimuonVertex->Muon1()->Get("pfRelIso04_all") <= dimuonVertexCuts["minPFRelIso"]) return false;
   if(category == "PatDSA") return true;
   if((float)dimuonVertex->Muon2()->Get("pfRelIso04_all") > dimuonVertexCuts["maxPFRelIso"]) return false;
+  if((float)dimuonVertex->Muon2()->Get("pfRelIso04_all") <= dimuonVertexCuts["minPFRelIso"]) return false;
   return true;
 }
 
@@ -148,12 +151,14 @@ bool TTAlpsDimuonCuts::PassesDPhiBetweenMuonpTAndLxyCut(shared_ptr<NanoDimuonVer
 bool TTAlpsDimuonCuts::PassesDCACut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if((float)dimuonVertex->Get("dca") > dimuonVertexCuts["maxDCA"]) return false;
+  if((float)dimuonVertex->Get("dca") <= dimuonVertexCuts["minDCA"]) return false;
   return true;
 }
 
 bool TTAlpsDimuonCuts::PassesChi2Cut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
   if((float)dimuonVertex->Get("normChi2") > dimuonVertexCuts["maxChi2"]) return false;
+  if((float)dimuonVertex->Get("normChi2") <= dimuonVertexCuts["minChi2"]) return false;
   return true;
 }
 
@@ -248,6 +253,21 @@ bool TTAlpsDimuonCuts::PassesDxyCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
   auto muon1dxy = fabs(dimuonVertex->Muon1()->GetAs<float>("dxyPVTraj"));
   auto muon2dxy = fabs(dimuonVertex->Muon2()->GetAs<float>("dxyPVTraj"));
   if (min(muon1dxy, muon2dxy) < dimuonVertexCuts["minAbsDxy"]) return false;
+  return true;
+}
+
+bool TTAlpsDimuonCuts::PassesMaxDxyDzCut(shared_ptr<NanoDimuonVertex> dimuonVertex) {
+  auto dimuonVertexCuts = GetDimuonCategoryMap(dimuonVertex->GetVertexCategory());
+  if (dimuonVertex->IsDSADimuon()) return true; // max dxy and dz cuts only applied to PAT muons
+
+  auto muon1dxy = fabs(dimuonVertex->Muon1()->GetAs<float>("dxyPVTraj"));
+  auto muon1dz = fabs(dimuonVertex->Muon1()->GetAs<float>("dzPV"));
+  if (muon1dxy > dimuonVertexCuts["maxDxy"] || muon1dz > dimuonVertexCuts["maxDz"]) return false;
+  if (dimuonVertex->IsPatDSADimuon()) return true; // max dxy and dz cuts only applied to PAT muons, so DSA muon in PatDSA pair not checked
+
+  auto muon2dxy = fabs(dimuonVertex->Muon2()->GetAs<float>("dxyPVTraj"));
+  auto muon2dz = fabs(dimuonVertex->Muon2()->GetAs<float>("dzPV"));
+  if (muon2dxy > dimuonVertexCuts["maxDxy"] || muon2dz > dimuonVertexCuts["maxDz"]) return false;
   return true;
 }
 

@@ -16,7 +16,7 @@ eventsTreeNames = ("Events",)
 muonMatchingParams = {"Segment": 2.0/3.0}
 
 eventCuts = {
-    "MET_pt": (50, 9999999),
+    "nano_MET_pt": (50, 9999999),
     "nTightMuons": (1, 1),  # This is against TOP recommendation, but we do it to keep it the same as SR
     "nLoosePATMuons": (1, 1),
     # "nLooseDSAMuons": (0, 0),

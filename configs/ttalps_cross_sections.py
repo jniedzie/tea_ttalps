@@ -31,6 +31,276 @@ def get_theory_cross_section(mass, year = None):
     return cross_section_for_mass_Run3[mass]
   error(f"Unknown year {year} for theory cross section")
 
+def get_cross_section_scales(mass,ctau):
+  cross_section_scales = {
+    # (mass [GeV], ctau [mm]):  scale, 
+    ( 0.35, 1.0e-13):  0.0000000001, # 1e-13mm
+    ( 0.35, 1.0e-09):  0.000001, # 1e-09mm
+    ( 0.35, 1.0e-05):  0.01, # 1e-05mm
+    ( 0.35, 1.0e+00):  10,
+    ( 0.35, 1.0e+01):  10,
+    ( 0.35, 1.0e+02):  10,
+    ( 0.35, 1.0e+03):  1000,
+    ( 2.00, 1.0e-13):  0.00000001, # 1e-13mm
+    ( 2.00, 1.0e-09):  0.0001, # 1e-09mm
+    ( 2.00, 1.0e-05):  10, # 1e-05mm
+    ( 2.00, 1.0e+00):  10,
+    ( 2.00, 1.0e+01):  10,
+    ( 2.00, 1.0e+02):  10000,
+    ( 2.00, 1.0e+03):  100000,
+    (12.00, 1.0e-13):  0.0001, # 1e-13mm
+    (12.00, 1.0e-09):  1, # 1e-09mm
+    (12.00, 1.0e-05):  1000, # 1e-05mm
+    (12.00, 1.0e+01):  1000000,
+    (12.00, 1.0e+00):  1000000,
+    (12.00, 1.0e+02):  10000000,
+    (12.00, 1.0e+03):  100000000000,
+    # (12.00, 1.0e+03):  10000000,
+    (30.00, 1.0e-13):  0.001, # 1e-13mm
+    (30.00, 1.0e-09):  10, # 1e-09mm
+    (30.00, 1.0e-05):  10000, # 1e-05mm
+    (30.00, 1.0e+00):  10000000,
+    (30.00, 1.0e+01):  10000000,
+    (30.00, 1.0e+02):  100000000,
+    (30.00, 1.0e+03):  100000000,
+    (60.00, 1.0e-13):  0.001, # 1e-13mm
+    (60.00, 1.0e-09):  10, # 1e-09mm
+    (60.00, 1.0e-05):  10000, # 1e-05mm
+    (60.00, 1.0e+00):  1000000000,
+    (60.00, 1.0e+01):  1000000000,
+    (60.00, 1.0e+02):  100000000,
+    (60.00, 1.0e+03):  10000000000,
+    # (60.00, 1.0e+03):  100000000,
+  }
+  return cross_section_scales[(mass, ctau)]
+
+def get_cross_section_for_theory_coupling(mass, ctau, year = None):
+
+  cross_section_for_mass_and_lifetime_Run2 = {
+    # (mass [GeV], ctau [mm]):  sigma [pb], 
+    # ( 0.35, 1.0e-05):  5.19231e+11, # ctt = 1.15208e+02  for ctau=1e-13mm
+    # ( 0.35, 1.0e-05):  5.19231e+07, # ctt = 1.15208e+02  for ctau=1e-9mm
+    ( 0.35, 1.0e-05):  5.19231e+03, # ctt = 1.15208e+02
+    ( 0.35, 1.0e+00):  5.19231e-02, # ctt = 3.64318e-01
+    ( 0.35, 1.0e+01):  5.19231e-03, # ctt = 1.15208e-01
+    ( 0.35, 1.0e+02):  5.19231e-04, # ctt = 3.64318e-02
+    ( 0.35, 1.0e+03):  5.19231e-05, # ctt = 1.15208e-02
+    # ( 2.00, 1.0e-05):  1.63141e+10, # ctt = 1.96317e+01  for ctau=1e-13mm
+    # ( 2.00, 1.0e-05):  1.63141e+06, # ctt = 1.96317e+01  for ctau=1e-9mm
+    ( 2.00, 1.0e-05):  1.63141e+02, # ctt = 1.96317e+01
+    ( 2.00, 1.0e+00):  1.63141e-03, # ctt = 6.20807e-02
+    ( 2.00, 1.0e+01):  1.63141e-04, # ctt = 1.96317e-02
+    ( 2.00, 1.0e+02):  1.63141e-05, # ctt = 6.20807e-03
+    ( 2.00, 1.0e+03):  1.63141e-06, # ctt = 1.96317e-03
+    # (12.00, 1.0e-05):  3.76066e+04, # ctt = 3.05896e-02  for ctau=1e-13mm
+    # (12.00, 1.0e-05):  3.76066e+00, # ctt = 3.05896e-02  for ctau=1e-9mm
+    (12.00, 1.0e-05):  3.76066e-04, # ctt = 3.05896e-02
+    (12.00, 1.0e+00):  3.76066e-09, # ctt = 9.67327e-05
+    (12.00, 1.0e+01):  3.76066e-10, # ctt = 3.05896e-05
+    (12.00, 1.0e+02):  3.76066e-11, # ctt = 9.67327e-06
+    (12.00, 1.0e+03):  3.76066e-12, # ctt = 3.05896e-06
+    # (30.00, 1.0e-05):  9.64833e+03, # ctt = 1.65937e-02  for ctau=1e-13mm
+    # (30.00, 1.0e-05):  9.64833e-01, # ctt = 1.65937e-02  for ctau=1e-9mm
+    (30.00, 1.0e-05):  9.64833e-05, # ctt = 1.65937e-02
+    (30.00, 1.0e+00):  9.64833e-10, # ctt = 5.24740e-05
+    (30.00, 1.0e+01):  9.64833e-11, # ctt = 1.65937e-05
+    (30.00, 1.0e+02):  9.64833e-12, # ctt = 5.24740e-06
+    (30.00, 1.0e+03):  9.64833e-13, # ctt = 1.65937e-06
+    # (60.00, 1.0e-05):  3.46190e+03, # ctt = 1.13677e-02  for ctau=1e-13mm
+    # (60.00, 1.0e-05):  3.46190e-01, # ctt = 1.13677e-02  for ctau=1e-9mm
+    (60.00, 1.0e-05):  3.46190e-05, # ctt = 1.13677e-02
+    (60.00, 1.0e+00):  3.46190e-10, # ctt = 3.59477e-05
+    (60.00, 1.0e+01):  3.46190e-11, # ctt = 1.13677e-05
+    (60.00, 1.0e+02):  3.46190e-12, # ctt = 3.59477e-06
+    (60.00, 1.0e+03):  3.46190e-13, # ctt = 1.13677e-06
+  }
+  cross_section_for_mass_and_lifetime_Run3 = {
+    # ( 0.35, 1.0e-05):  5.84002e+11, # ctt = 1.15208e+02  for ctau=1e-13mm
+    # ( 0.35, 1.0e-05):  5.84002e+07, # ctt = 1.15208e+02  for ctau=1e-9mm
+    ( 0.35, 1.0e-05):  5.84002e+03, # ctt = 1.15208e+02
+    ( 0.35, 1.0e+00):  5.84002e-02, # ctt = 3.64318e-01
+    ( 0.35, 1.0e+01):  5.84002e-03, # ctt = 1.15208e-01
+    ( 0.35, 1.0e+02):  5.84002e-04, # ctt = 3.64318e-02
+    ( 0.35, 1.0e+03):  5.84002e-05, # ctt = 1.15208e-02
+    # ( 2.00, 1.0e-05):  1.84993e+10, # ctt = 1.96317e+01  for ctau=1e-13mm
+    # ( 2.00, 1.0e-05):  1.84993e+06, # ctt = 1.96317e+01  for ctau=1e-9mm
+    ( 2.00, 1.0e-05):  1.84993e+02, # ctt = 1.96317e+01
+    ( 2.00, 1.0e+00):  1.84993e-03, # ctt = 6.20807e-02
+    ( 2.00, 1.0e+01):  1.84993e-04, # ctt = 1.96317e-02
+    ( 2.00, 1.0e+02):  1.84993e-05, # ctt = 6.20807e-03
+    ( 2.00, 1.0e+03):  1.84993e-06, # ctt = 1.96317e-03
+    # (12.00, 1.0e-05):  4.25753e+04, # ctt = 3.05896e-02  for ctau=1e-13mm
+    # (12.00, 1.0e-05):  4.25753e+00, # ctt = 3.05896e-02  for ctau=1e-9mm
+    (12.00, 1.0e-05):  4.25753e-04, # ctt = 3.05896e-02
+    (12.00, 1.0e+00):  4.25753e-09, # ctt = 9.67327e-05
+    (12.00, 1.0e+01):  4.25753e-10, # ctt = 3.05896e-05
+    (12.00, 1.0e+02):  4.25753e-11, # ctt = 9.67327e-06
+    (12.00, 1.0e+03):  4.25753e-12, # ctt = 3.05896e-06
+    # (30.00, 1.0e-05):  1.08764e+04, # ctt = 1.65937e-02  for ctau=1e-13mm
+    # (30.00, 1.0e-05):  1.08764e+00, # ctt = 1.65937e-02  for ctau=1e-9mm
+    (30.00, 1.0e-05):  1.08764e-04, # ctt = 1.65937e-02
+    (30.00, 1.0e+00):  1.08764e-09, # ctt = 5.24740e-05
+    (30.00, 1.0e+01):  1.08764e-10, # ctt = 1.65937e-05
+    (30.00, 1.0e+02):  1.08764e-11, # ctt = 5.24740e-06
+    (30.00, 1.0e+03):  1.08764e-12, # ctt = 1.65937e-06
+    # (60.00, 1.0e-05):  3.92840e+03, # ctt = 1.13677e-02  for ctau=1e-13mm
+    # (60.00, 1.0e-05):  3.92840e-01, # ctt = 1.13677e-02  for ctau=1e-9mm
+    (60.00, 1.0e-05):  3.92840e-05, # ctt = 1.13677e-02
+    (60.00, 1.0e+00):  3.92840e-10, # ctt = 3.59477e-05
+    (60.00, 1.0e+01):  3.92840e-11, # ctt = 1.13677e-05
+    (60.00, 1.0e+02):  3.92840e-12, # ctt = 3.59477e-06
+    (60.00, 1.0e+03):  3.92840e-13, # ctt = 1.13677e-06
+  }
+
+  if year == None:
+    error(f"Unknown year {year} for theory cross section")
+    return
+  if "2016" in year or "2017" in year or "2018" in year or "Run2" in year:
+    return cross_section_for_mass_and_lifetime_Run2[(mass, ctau)]
+  if "2022" in year or "2023" in year or "Run3" in year:
+    return cross_section_for_mass_and_lifetime_Run3[(mass, ctau)]
+  error(f"Unknown year {year} for theory cross section")
+
+def get_expected_signal_cross_section(mass, ctau):
+  cross_sections_all_years = {
+    (0.35, 1e-5):   4.15650,
+    (0.35, 1e0):    0.13371,
+    (0.35, 1e1):    0.14021,
+    (0.35, 1e2):    0.54248,
+    (0.35, 1e3):    3.37723,
+    (2, 1e-5):     18.45334,
+    (2, 1e0):       0.05376,
+    (2, 1e1):       0.09672,
+    (2, 1e2):       0.11903,
+    (2, 1e3):       0.58923,
+    (12, 1e-5):     8.76021,
+    (12, 1e0):      0.05104,
+    (12, 1e1):      0.04240,
+    (12, 1e2):      0.02378,
+    (12, 1e3):      0.01123,
+    (30, 1e-5):    10.07400,
+    (30, 1e0):      0.05014,
+    (30, 1e1):      0.02128,
+    (30, 1e2):      0.02833,
+    (30, 1e3):      0.00589,
+    (60, 1e-5):    14.73450,
+    (60, 1e0):      0.05781,
+    (60, 1e1):      0.02446,
+    (60, 1e2):      0.03903,
+    (60, 1e3):      0.00563,
+  }
+  return cross_sections_all_years[mass, ctau]
+
+def get_expected_signal_cross_sections():
+  # Updated for AN v6
+  cross_sections_all_years = {
+    "tta_mAlp-0p35GeV_ctau-1e-5mm":  4.15650,
+    "tta_mAlp-0p35GeV_ctau-1e0mm":    0.13371,
+    "tta_mAlp-0p35GeV_ctau-1e1mm":    0.14021,
+    "tta_mAlp-0p35GeV_ctau-1e2mm":    0.54248,
+    "tta_mAlp-0p35GeV_ctau-1e3mm":    3.37723,
+    "tta_mAlp-2GeV_ctau-1e-5mm":     18.45334,
+    "tta_mAlp-2GeV_ctau-1e0mm":       0.05376,
+    "tta_mAlp-2GeV_ctau-1e1mm":       0.09672,
+    "tta_mAlp-2GeV_ctau-1e2mm":       0.11903,
+    "tta_mAlp-2GeV_ctau-1e3mm":       0.58923,
+    "tta_mAlp-12GeV_ctau-1e-5mm":    8.76021,
+    "tta_mAlp-12GeV_ctau-1e0mm":      0.05104,
+    "tta_mAlp-12GeV_ctau-1e1mm":      0.04240,
+    "tta_mAlp-12GeV_ctau-1e2mm":      0.02378,
+    "tta_mAlp-12GeV_ctau-1e3mm":      0.01123,
+    "tta_mAlp-30GeV_ctau-1e-5mm":    10.07400,
+    "tta_mAlp-30GeV_ctau-1e0mm":      0.05014,
+    "tta_mAlp-30GeV_ctau-1e1mm":      0.02128,
+    "tta_mAlp-30GeV_ctau-1e2mm":      0.02833,
+    "tta_mAlp-30GeV_ctau-1e3mm":      0.00589,
+    "tta_mAlp-60GeV_ctau-1e-5mm":    14.73450,
+    "tta_mAlp-60GeV_ctau-1e0mm":      0.05781,
+    "tta_mAlp-60GeV_ctau-1e1mm":      0.02446,
+    "tta_mAlp-60GeV_ctau-1e2mm":      0.03903,
+    "tta_mAlp-60GeV_ctau-1e3mm":      0.00563,
+  }
+  return cross_sections_all_years
+
+def get_theory_cross_sections(year, coupling=0.1):
+
+  default_coupling = 0.1
+
+  # these are calculated at coupling 0.1 for Run 2
+  cross_sections_0p1_for_Run2 = {
+      "tta_mAlp-0p35GeV_ctau-1e-5mm": 0.003912,  # +- 2.935e-05 pb
+      "tta_mAlp-0p35GeV_ctau-1e0mm":  0.003912,  # +- 2.935e-05 pb
+      "tta_mAlp-0p35GeV_ctau-1e1mm":  0.003912,  # +- 2.935e-05 pb
+      "tta_mAlp-0p35GeV_ctau-1e2mm":  0.003912,  # +- 2.935e-05 pb
+      "tta_mAlp-0p35GeV_ctau-1e3mm":  0.003912,  # +- 2.935e-05 pb
+      "tta_mAlp-2GeV_ctau-1e-5mm":    0.004233,  # +- 3.199e-05 pb
+      "tta_mAlp-2GeV_ctau-1e0mm":     0.004233,  # +- 3.199e-05 pb
+      "tta_mAlp-2GeV_ctau-1e1mm":     0.004233,  # +- 3.199e-05 pb
+      "tta_mAlp-2GeV_ctau-1e2mm":     0.004233,  # +- 3.199e-05 pb
+      "tta_mAlp-2GeV_ctau-1e3mm":     0.004233,  # +- 3.199e-05 pb
+      "tta_mAlp-12GeV_ctau-1e-5mm":   0.004019,  # +- 3.065e-05 pb
+      "tta_mAlp-12GeV_ctau-1e0mm":    0.004019,  # +- 3.065e-05 pb
+      "tta_mAlp-12GeV_ctau-1e1mm":    0.004019,  # +- 3.065e-05 pb
+      "tta_mAlp-12GeV_ctau-1e2mm":    0.004019,  # +- 3.065e-05 pb
+      "tta_mAlp-12GeV_ctau-1e3mm":    0.004019,  # +- 3.065e-05 pb
+      "tta_mAlp-30GeV_ctau-1e-5mm":   0.003504,  # +- 2.162e-05 pb
+      "tta_mAlp-30GeV_ctau-1e0mm":    0.003504,  # +- 2.162e-05 pb
+      "tta_mAlp-30GeV_ctau-1e1mm":    0.003504,  # +- 2.162e-05 pb
+      "tta_mAlp-30GeV_ctau-1e2mm":    0.003504,  # +- 2.162e-05 pb
+      "tta_mAlp-30GeV_ctau-1e3mm":    0.003504,  # +- 2.162e-05 pb
+      "tta_mAlp-60GeV_ctau-1e-5mm":   0.002679,  # +- 1.323e-05 pb
+      "tta_mAlp-60GeV_ctau-1e0mm":    0.002679,  # +- 1.323e-05 pb
+      "tta_mAlp-60GeV_ctau-1e1mm":    0.002679,  # +- 1.323e-05 pb
+      "tta_mAlp-60GeV_ctau-1e2mm":    0.002679,  # +- 1.323e-05 pb
+      "tta_mAlp-60GeV_ctau-1e3mm":    0.002679,  # +- 1.323e-05 pb
+  }
+  cross_sections_0p1_for_Run3 = {
+      "tta_mAlp-0p35GeV_ctau-1e-5mm": 0.0044,   
+      "tta_mAlp-0p35GeV_ctau-1e0mm":  0.0044,   
+      "tta_mAlp-0p35GeV_ctau-1e1mm":  0.0044,   
+      "tta_mAlp-0p35GeV_ctau-1e2mm":  0.0044,   
+      "tta_mAlp-0p35GeV_ctau-1e3mm":  0.0044,   
+      "tta_mAlp-2GeV_ctau-1e-5mm":    0.00480,  
+      "tta_mAlp-2GeV_ctau-1e0mm":     0.00480,  
+      "tta_mAlp-2GeV_ctau-1e1mm":     0.00480,  
+      "tta_mAlp-2GeV_ctau-1e2mm":     0.00480,  
+      "tta_mAlp-2GeV_ctau-1e3mm":     0.00480,  
+      "tta_mAlp-12GeV_ctau-1e-5mm":   0.00455,  
+      "tta_mAlp-12GeV_ctau-1e0mm":    0.00455,  
+      "tta_mAlp-12GeV_ctau-1e1mm":    0.00455,  
+      "tta_mAlp-12GeV_ctau-1e2mm":    0.00455,  
+      "tta_mAlp-12GeV_ctau-1e3mm":    0.00455,  
+      "tta_mAlp-30GeV_ctau-1e-5mm":   0.00395,  
+      "tta_mAlp-30GeV_ctau-1e0mm":    0.00395,  
+      "tta_mAlp-30GeV_ctau-1e1mm":    0.00395,  
+      "tta_mAlp-30GeV_ctau-1e2mm":    0.00395,  
+      "tta_mAlp-30GeV_ctau-1e3mm":    0.00395,  
+      "tta_mAlp-60GeV_ctau-1e-5mm":   0.00304,  
+      "tta_mAlp-60GeV_ctau-1e0mm":    0.00304,  
+      "tta_mAlp-60GeV_ctau-1e1mm":    0.00304,  
+      "tta_mAlp-60GeV_ctau-1e2mm":    0.00304,  
+      "tta_mAlp-60GeV_ctau-1e3mm":    0.00304,  
+  }
+  input_cross_sections = {}
+  if year == "2016preVFP" or year == "2016postVFP" or year == "2017" or year == "2018":
+    input_cross_sections = cross_sections_0p1_for_Run2
+  elif year == "2022preEE" or year == "2022postEE" or year == "2023preBPix" or year == "2023postBPix":
+    input_cross_sections = cross_sections_0p1_for_Run3
+  else:
+    raise ValueError(f"Year {year} not supported.")
+    return
+  
+  if coupling == default_coupling:
+    return input_cross_sections
+  
+  cross_sections = {}
+  for sample, cross_section in input_cross_sections.items():
+    cross_sections[sample] = cross_section * (coupling/default_coupling)**2
+  return cross_sections
+
+def get_theory_cross_section_for_coupling(mass, ctau, year, coupling=0.1):
+  cross_sections = get_theory_cross_sections(year, coupling)
+  return cross_sections[f"tta_mAlp-{mass}GeV_ctau-{ctau}mm"]
 
 # Cross sections in (pb) from XSDB
 cross_sectionsRun2 = {
@@ -112,6 +382,7 @@ cross_sectionsRun2 = {
     "SingleMuon2017": 1.0,
     "SingleMuon2018": 1.0,
     "EGamma2018": 1.0,
+    "SingleMuon2016preVFP2016postVFP201720182022preEE2022postEE2023preBPix2023postBPix": 1.0,
 
     "tta_mAlp-0p35GeV_ctau-1e-5mm": 100*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
     "tta_mAlp-0p35GeV_ctau-1e0mm": 10*signal_xsec_scale * get_theory_cross_section(0.35, "Run2"),
@@ -234,3 +505,14 @@ def get_cross_sections(year):
     return cross_sectionsRun3
   else:
     raise ValueError(f"Year {year} not supported.")
+
+
+def get_signal_cross_sections_for_theory(year):
+  cross_sections = {}
+  for mass in [0.35, 2, 12, 30, 60]:
+    for ctau in [1e-5, 1e0, 1e1, 1e2, 1e3]:
+      scale = get_cross_section_scales(mass, ctau)
+      mass_str = f"{mass}".replace(".", "p")
+      ctau_str = f"{ctau:.0e}".replace("e-0", "e-").replace("e+0", "e").replace("e+", "e")
+      cross_sections[f"tta_mAlp-{mass_str}GeV_ctau-{ctau_str}mm"] = get_cross_section_for_theory_coupling(mass, ctau, year)*scale
+  return cross_sections
