@@ -185,6 +185,12 @@ def main():
     for mass in atlas_masses:
         print(f"altas mass {mass}: {find_lifetime_for_mass(mass, altas_coupling, False):12.3e}")
 
+    cms_dm_mass = 50
+    cms_dm_coupling1 = 1.0
+    print(f"cms dm mass {cms_dm_mass}: {find_lifetime_for_mass(cms_dm_mass, cms_dm_coupling1, False):12.3e}")
+    cms_dm_limit = 33.38
+    print(f"cms dm mass {cms_dm_mass}: {find_lifetime_for_mass(cms_dm_mass, cms_dm_limit, False):12.3e}")
+
 
 
 # ------------------------------------------------------------

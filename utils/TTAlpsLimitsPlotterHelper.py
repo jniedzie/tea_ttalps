@@ -7,6 +7,7 @@ import ctypes
 from collections import defaultdict
 from scipy.optimize import brentq
 import numpy as np
+from scipy.ndimage import uniform_filter1d
 
 from Logger import error, warn
 from ttalps_cross_sections import get_cross_sections, get_theory_cross_section, get_cross_section_scales, get_cross_section_for_theory_coupling
@@ -89,20 +90,113 @@ class TTAlpsLimitsPlotterHelper:
 
   def get_exo21018_graph(self):
     coupling_limits = {
-      15: 15.4,
-      20: 11.6,
-      25: 9.0,
-      30: 6.4,
-      40: 3.1,
-      50: 2.3,
-      60: 2.1,
+      15.0: 0.0037017,
+      15.5: 0.0035153,
+      16.0: 0.0051587,
+      16.5: 0.0025269,
+      17.0: 0.0025644,
+      17.5: 0.0029029,
+      18.0: 0.0030174,
+      18.5: 0.0038216,
+      19.0: 0.0042739,
+      19.5: 0.0037116,
+      20.0: 0.0030868,
+      20.5: 0.0046723,
+      21.0: 0.0041074,
+      21.5: 0.0017149,
+      22.0: 0.0024004,
+      22.5: 0.0042661,
+      23.0: 0.0053544,
+      23.5: 0.0072175,
+      24.0: 0.0059043,
+      24.5: 0.0036559,
+      25.0: 0.0028737,
+      25.5: 0.0020106,
+      26.0: 0.002358,
+      26.5: 0.0033718,
+      27.0: 0.0042617,
+      27.5: 0.0024807,
+      28.0: 0.0017901,
+      28.5: 0.0024166,
+      29.0: 0.0027431,
+      29.5: 0.0035219,
+      30.0: 0.0030153,
+      30.5: 0.0028974,
+      31.0: 0.0031295,
+      31.5: 0.003978,
+      32.0: 0.0042664,
+      32.5: 0.0029895,
+      33.0: 0.0030195,
+      33.5: 0.0022422,
+      34.0: 0.0022203,
+      34.5: 0.0024249,
+      35.0: 0.0024831,
+      35.5: 0.0031115,
+      36.0: 0.0028899,
+      36.5: 0.0024703,
+      37.0: 0.0022962,
+      37.5: 0.0018753,
+      38.0: 0.0019203,
+      38.5: 0.0017209,
+      39.0: 0.0020612,
+      39.5: 0.0021191,
+      40.0: 0.0019945,
+      40.5: 0.0018932,
+      41.0: 0.0020409,
+      41.5: 0.0022351,
+      42.0: 0.0019341,
+      42.5: 0.0025024,
+      43.0: 0.0025802,
+      43.5: 0.0023542,
+      44.0: 0.0024162,
+      44.5: 0.0022353,
+      45.0: 0.002275,
+      45.5: 0.0023348,
+      46.0: 0.0029825,
+      46.5: 0.0031132,
+      47.0: 0.0032038,
+      47.5: 0.0029442,
+      48.0: 0.0025693,
+      48.5: 0.0025039,
+      49.0: 0.0021604,
+      49.5: 0.0026547,
+      50.0: 0.0047564,
+      50.5: 0.0045926,
+      51.0: 0.0089459,
+      51.5: 0.0074443,
+      52.0: 0.0076749,
+      52.5: 0.0075276,
+      53.0: 0.00577,
+      53.5: 0.0069219,
+      54.0: 0.0050376,
+      54.5: 0.0057734,
+      55.0: 0.0050137,
+      55.5: 0.0046349,
+      56.0: 0.0039359,
+      56.5: 0.0041126,
+      57.0: 0.003878,
+      57.5: 0.004691,
+      58.0: 0.0053457,
+      58.5: 0.00627,
+      59.0: 0.0073927,
+      59.5: 0.0081154,
+      60.0: 0.0098574,
     }
+    # coupling_limits = {
+    #   15: 15.4,
+    #   20: 11.6,
+    #   25: 9.0,
+    #   30: 6.4,
+    #   40: 3.1,
+    #   50: 2.3,
+    #   60: 2.1,
+    # }
     graph = ROOT.TGraph()
     graph.SetLineColor(ROOT.kGreen+2)
     graph.SetLineWidth(2)
     graph.SetLineStyle(1)
     for i, (mass, coupling) in enumerate(coupling_limits.items()):
-      graph.SetPoint(i, mass, coupling**2)
+      graph.SetPoint(i, mass, coupling)
     return graph
 
   def draw_pion_mass_lifetime_2d_graphs(self, y_min = -5):
@@ -202,37 +296,8 @@ class TTAlpsLimitsPlotterHelper:
     self.etaprime_exclusion_2d_graph.SetLineColor(ROOT.kBlue)
     self.etaprime_exclusion_2d_graph.Draw("L SAME")
 
-
-    # exo21018_xsec_limits = [
-    #     # mass (GeV), cross section limit [pb], lifetime [mm], theoretical cross sections [pb]
-    #     (15,  1.42e-3,  6.453e-07),
-    #     (20,  1.16e-3,  4.405e-07),
-    #     (25,  1.19e-3,  3.382e-07),
-    #     (30,  1.10e-3,  2.752e-07),
-    #     (40,  6.45e-4,  2.007e-07),
-    #     (50,  1.30e-3,  1.575e-07),
-    #     (60,  2.27e-3,  1.292e-07),
-    # ]
-
   def get_pion_graphs(self):
-    # pion_cross_sections = {
-    #   0.5: 0.504,  # pb
-    #   0.75: 0.508,   # pb
-    #   0.85: 0.502,  # pb
-    #   1: 0.523,     # pb
-    #   1.331: 0.533,     # pb
-    #   1.5: 0.536,     # pb
-    #   2: 0.534,    # pb
-    #   2.5: 0.530,    # pb
-    #   3: 0.533,   # pb
-    #   4: 0.529,  # pb
-    # }
-    # pion_limits_points = [
-    #     # mass (GeV), coupling (g)
-    #     (0.5, 0.2262295081967213),
-    #     (2, 1.2721311475409836),
-    #     (4, 0.8950819672131147),
-    # ]
+    
     # eta BRs: 27%
     pion_limits_r_points_eta = [
         # mass (GeV), signal strengh, lifetime [mm], theoretical cross sections [pb]
@@ -255,9 +320,6 @@ class TTAlpsLimitsPlotterHelper:
         (4,    0.28,  1.566e-05,  0.529),
     ]
   
-    # pion_limits_cross_section_eta = [(m, mu*pion_cross_sections[m]) for (m, mu) in pion_limits_r_points_eta]
-    # pion_limits_cross_section_etaprime = [(m, mu*pion_cross_sections[m]) for (m, mu) in pion_limits_r_points_etaprime]
-
     graphs = []
     graph_eta = ROOT.TGraph()
     graph_eta.SetLineColor(ROOT.kRed)
@@ -281,7 +343,6 @@ class TTAlpsLimitsPlotterHelper:
     for (m, ct), values in self.data.items():
       if "mass" in variable and ct == scan_point:
         limits[m] = values
-      # if variable == "ctau" and m == scan_point:
       elif m == scan_point:
         limits[ct] = values
 
@@ -349,10 +410,7 @@ class TTAlpsLimitsPlotterHelper:
     if variable == "mass_coupling":
       sigma_theory_0p1 = get_theory_cross_section(mass, "Run2")
       scale = self.reference_coupling**2 * sigma_ref / sigma_theory_0p1
-    # scale = sigma_ref/sigma_theory_0p1 * self.reference_coupling / self.target_coupling
-    # scale = self.reference_coupling * sigma_ref
 
-    # for limit on cross_section:
     else:
       scale = sigma_ref
 
@@ -485,37 +543,8 @@ class TTAlpsLimitsPlotterHelper:
       self.graph_2d_exp.GetHistogram().GetXaxis().SetTickLength(0)
       self.graph_2d_exp.GetHistogram().GetYaxis().SetTickLength(0)
       self.graph_2d_exp.GetHistogram().GetZaxis().SetTickLength(0)
-      self.graph_2d_exp.GetHistogram().GetYaxis().SetTitleOffset(1.1)
-      self.graph_2d_exp.GetHistogram().GetZaxis().SetTitleOffset(1.1)
-
-    # Change the underflow color to gray
-    # gray_color = ROOT.TColor.GetColor(0.65, 0.65, 0.65)
-    # n_colors = ROOT.gStyle.GetNumberOfColors()
-    # colors = array.array('i', [ROOT.gStyle.GetColorPalette(i) for i in range(n_colors)])
-    # ROOT.gROOT.GetColor(colors[0]).SetRGB(0.65, 0.65, 0.65)
-
-    # work in progress:
-    # sigma_theory_0p1 = get_theory_cross_section(mass)
-
-    # contour = self.graph_2d_exp.GetHistogram().Clone("contour")
-    # contour.SetContour(1)  # We need 2 levels: below and above 1.0
-    # contour.SetContourLevel(0, log10(1.0))
-
-    # contour_0p2 = self.graph_2d_exp.GetHistogram().Clone("contour")
-    # contour_0p2.SetContour(1)  # We need 2 levels: below and above 1.0
-    # contour_0p2.SetContourLevel(0, log10(0.2))
-
-    # work in progress:
-    # Overlay the contour line
-    # contour.SetLineColor(ROOT.kRed)
-    # contour_0p2.SetLineColor(ROOT.kYellow+1)
-
-    # # fill contour with hashing
-    # contour.SetFillStyle(3013)
-    # contour.SetFillColorAlpha(ROOT.kRed, 0.5)
-
-    # contour.DrawClone("CONT3 SAME")
-    # contour_0p2.DrawClone("CONT3 SAME")
+      self.graph_2d_exp.GetHistogram().GetYaxis().SetTitleOffset(1.2)
+      self.graph_2d_exp.GetHistogram().GetZaxis().SetTitleOffset(1.15)
 
   def draw_missing_points(self, custom_axis=False):
     if len(self.missing_points) == 0:
@@ -671,10 +700,7 @@ class TTAlpsLimitsPlotterHelper:
     temp_canvas = ROOT.TCanvas("temp_contour", "", 800, 600)
 
     for i in range(0, n_values):
-      # if expected and i == 0:
-      #   continue
-      # if not expected and i > 0:
-      #   break
+      n_pts = self.graph_2d_data_theory_ratios[i].GetN()
       contour_color = ROOT.kBlack if i==0 else ROOT.kRed
 
       temp_canvas.cd()
@@ -696,6 +722,7 @@ class TTAlpsLimitsPlotterHelper:
           if not graph:
               continue
           graph_clone = graph.Clone(f"contour_graph_{i}_{j}")
+
           graph_clone.SetLineColor(contour_color)
           graph_clone.SetLineWidth(2)
           graph_clone.SetLineStyle(contour_line_styles[i])
@@ -737,11 +764,10 @@ class TTAlpsLimitsPlotterHelper:
 
   def draw_cms_label(self, subtext = "Preliminary", x = 0.11, subpad = False):
     tex = ROOT.TLatex(x, 0.92, f"#bf{{CMS}}#it{{ {subtext}}}")
-    textsize = 0.045
-    # tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS}")
+    textsize = 0.042
     if subpad:
       tex = ROOT.TLatex(0.15, 0.80, f"#bf{{CMS}}#it{{ {subtext}}}")
-      textsize = 0.2
+      textsize = 0.18
     tex.SetNDC()
     tex.SetTextFont(42)
     tex.SetTextSize(textsize)
@@ -757,11 +783,12 @@ class TTAlpsLimitsPlotterHelper:
       lumi_text = f"#scale[0.8]{{{luminosity_run3/1000:.0f} fb^{{-1}} (13.6 TeV)}}"
     else:
       lumi_text = f"#scale[0.8]{{{luminosity_run2/1000:.0f} fb^{{-1}} (13 TeV), {luminosity_run3/1000:.0f} fb^{{-1}} (13.6 TeV)}}"
-      lumi_text_xmin = 0.47
+      lumi_text_xmin = 0.49
+      # lumi_text_xmin = 0.42
     if variable == "mass" or variable == "ctau" or variable == "mass_coupling":
-      lumi_text_xmin += 0.05
+      lumi_text_xmin += 0.12
     tex = ROOT.TLatex(lumi_text_xmin, 0.92, lumi_text)
-    textsize = 0.045
+    textsize = 0.042
     if subpad:
       tex = ROOT.TLatex(lumi_text_xmin-0.01, 0.80, lumi_text)
       textsize = 0.2
@@ -774,10 +801,8 @@ class TTAlpsLimitsPlotterHelper:
   def draw_signal_label(self, variable, scan_point, x = 0.60, y = 0.85):
     if variable == "mass_signal_strength":
       return
-    # add a label describing which signal we're looking at
     if "mass" in variable:
       signal_label = f"#scale[0.8]{{c#tau_{{a}} = {self.get_ctau_label(scan_point)}}}"
-    # if variable == "ctau":
     else:
       signal_label = f"#scale[0.8]{{m_{{a}} = {scan_point:.2f} GeV}}"
 
@@ -959,53 +984,6 @@ class TTAlpsLimitsPlotterHelper:
             coupling2_limits[m].append(min(excluded_points))
     return coupling2_limits
 
-    # mass_splines = {}
-    # for m, ctau_vals in splines.items():
-    #   pairs = sorted(ctau_vals.items())
-    #   n = len(pairs[0][1])
-    #   mass_splines[m] = []
-    #   for i in range(n):
-    #     log_ctau = [log10(ct) for ct, _ in pairs]
-    #     log_sigma = [log10(vals[i]) for _, vals in pairs]
-    #     graph = ROOT.TGraph(len(pairs),
-    #                         array.array('d', log_ctau),
-    #                         array.array('d', log_sigma))
-    #     mass_splines[m].append(ROOT.TSpline3(f"spline_{m}_{i}", graph))
-    
-    # g_ref = 0.1
-    # g_values = [10**(i * 0.01) for i in range(-400, 200)]
-
-    # limits = {}
-    # for m, spline_list in mass_splines.items():
-    #     ctau_ref = self.find_lifetime_for_mass(m, boost=False, coupling=g_ref)
-    #     xsec_ref = get_theory_cross_section(m, "Run2")
-    #     ctau_min = min(splines[m].keys())
-    #     ctau_max = max(splines[m].keys())
-    #     limits[m] = []
-
-    #     for i, spline in enumerate(spline_list):
-    #         for g in g_values:
-    #             ctau_g = ctau_ref * (g_ref / g)**2
-    #             xsec_g = xsec_ref * (g / g_ref)**2
-
-    #             print(f"Mass {m}, g: {g:.4f}, ctau_g: {ctau_g:.2e} mm, xsec_g: {xsec_g:.2e} pb")
-
-    #             ctau_g_clamped = max(ctau_g, ctau_min)
-
-    #             if ctau_g > ctau_max:
-    #               continue
-
-    #             sigma_limit = 10**spline.Eval(log10(ctau_g_clamped))
-    #             print(f"sigma_limit: {sigma_limit:.2e} pb")
-
-    #             if xsec_g > sigma_limit:
-    #               limits[m].append(g)
-    #               break
-                  
-    # coupling2_limits = {m: [g**2 for g in g_list] for m, g_list in limits.items()}
-    # return coupling2_limits
-
-
   def get_limit_graph_scaled_to_run2(self, limits, luminosity_run2, luminosity_run3, variable, scan_point):
 
     run2_scale = sqrt((luminosity_run2 + luminosity_run3) / luminosity_run2) if luminosity_run2 != 0 else 1.0
@@ -1054,7 +1032,6 @@ class TTAlpsLimitsPlotterHelper:
         if (r1 - 1.0) * (r2 - 1.0) <= 0:
           x_cross = ct1 + (1.0 - r1) * (ct2 - ct1) / (r2 - r1)
           x_crosses.append(x_cross)
-          # x_crosses.append(10**x_cross)
           found = True
           break
 
@@ -1074,13 +1051,8 @@ class TTAlpsLimitsPlotterHelper:
         if r1 != r2:
           x_cross = ct1 + (1.0 - r1) * (ct2 - ct1) / (r2 - r1)
           x_crosses.append(x_cross)
-          # x_crosses.append(10 ** x_cross)
         else:
           x_crosses.append(ct2)
-          # x_crosses.append(10 ** ct2)
-        # if not found:
-        #   warn(f"No crossing of r=1 found, returning minimum ctau {min(expected_limits.keys())}")
-        #   x_crosses.append(min(expected_limits.keys()))
     
     return x_crosses
 
@@ -1105,16 +1077,6 @@ class TTAlpsLimitsPlotterHelper:
         r_hi = r_values[-1]
         
         # Case 1: r=1 is within the data range — interpolate as before
-        # if min(r_lo, r_hi) <= 1.0 <= max(r_lo, r_hi):
-        #     n = len(log_ctaus)
-        #     gr = ROOT.TGraph(n, log_ctaus, log_r)
-        #     spline = ROOT.TSpline3(f"spline_{mass_label}_{band_idx}", gr)
-        #     f_interp = ROOT.TF1(
-        #         f"f_interp_{mass_label}_{band_idx}",
-        #         lambda x, p, sp=spline: sp.Eval(x[0]),
-        #         log_ctaus[0], log_ctaus[-1], 0
-        #     )
-        #     log_ctau_cross = f_interp.GetX(0.0, log_ctaus[0], log_ctaus[-1])
         if min(r_lo, r_hi) <= 1.0 <= max(r_lo, r_hi):
           # Find the two bracketing points
           for i in range(len(log_ctaus) - 1):
@@ -1125,7 +1087,6 @@ class TTAlpsLimitsPlotterHelper:
                   log_ctau_cross = -intercept / slope
                   break
         
-        # Case 2: all r > 1, crossing is below ctau range — extrapolate leftward
         # Case 2: all r > 1, crossing is below ctau range — extrapolate leftward
         elif r_lo > 1.0:
             # Use all points for a log-log linear fit (more robust than 2-point slope)
@@ -1143,14 +1104,6 @@ class TTAlpsLimitsPlotterHelper:
             print(f"[EXTRAPOLATED LEFT] mass={mass_label}, {label}: "
                   f"global slope={slope:.3f}, intercept={intercept:.3f}")
         
-        # Case 2: all r > 1, crossing is below ctau range — return smallest ctau
-        # elif r_lo > 1.0:
-        #     ctau_at_r1 = ctaus[0]
-        #     print(f"[CLAMPED LEFT] mass={mass_label}, {label}: "
-        #           f"all r > 1, returning smallest ctau = {ctau_at_r1:.4e} mm")
-        #     ctau_crossings.append(ctau_at_r1)
-        #     continue
-        
         # Case 3: all r < 1, crossing is above ctau range — extrapolate rightward
         elif r_hi < 1.0:
             slope = (log_r[-1] - log_r[-2]) / (log_ctaus[-1] - log_ctaus[-2])
@@ -1165,78 +1118,79 @@ class TTAlpsLimitsPlotterHelper:
             continue
         
         ctau_at_r1 = 10**log_ctau_cross
-        print(f"mass={mass_label}, {label}: ctau(r=1) = {ctau_at_r1:.4e} mm")
         ctau_crossings.append(ctau_at_r1)
     
     return ctau_crossings
 
-  # def extract_limits_for_signal_strength1(self, expected_limits):
-  #   n_bands = 6
-  #   ctau_crosses = []
+  def extract_limits_for_signal_strength1(self, expected_limits):
+    n_bands = 6
+    ctau_crosses = []
 
-  #   points = sorted(expected_limits.items())
+    points = sorted(expected_limits.items())
 
-  #   ctaus = [p[0] for p in points]
-  #   ctau_min = min(ctaus)
-  #   ctau_max = max(ctaus)
+    ctaus = [p[0] for p in points]
+    ctau_min = min(ctaus)
+    ctau_max = max(ctaus)
 
-  #   for band in range(n_bands):
-  #     gr = ROOT.TGraph()
-  #     for i, (ctau, r_values) in enumerate(points):
-  #       gr.SetPoint(i, ctau, r_values[band])
+    for band in range(n_bands):
+      gr = ROOT.TGraph()
+      for i, (ctau, r_values) in enumerate(points):
+        gr.SetPoint(i, ctau, r_values[band])
 
-  #     spline = ROOT.TSpline3(f"spline_band_{band}", gr)
+      spline = ROOT.TSpline3(f"spline_band_{band}", gr)
 
-  #     def f(ctau):
-  #       return spline.Eval(ctau) - 1.0
+      def f(ctau):
+        return spline.Eval(ctau) - 1.0
 
-  #     found = False
-  #     for i in range(len(ctaus) - 1):
-  #       c1 = ctaus[i]
-  #       c2 = ctaus[i + 1]
+      found = False
+      for i in range(len(ctaus) - 1):
+        c1 = ctaus[i]
+        c2 = ctaus[i + 1]
 
-  #       f1 = f(c1)
-  #       f2 = f(c2)
+        f1 = f(c1)
+        f2 = f(c2)
 
-  #       if f1 * f2 <= 0:
-  #         ctau_cross = brentq(f, c1, c2)
-  #         ctau_crosses.append(ctau_cross)
-  #         found = True
-  #         break
+        if f1 * f2 <= 0:
+          ctau_cross = brentq(f, c1, c2)
+          ctau_crosses.append(ctau_cross)
+          found = True
+          break
 
-  #     if not found:
-  #       r_low = spline.Eval(ctau_min)
-  #       r_high = spline.Eval(ctau_max)
+      if not found:
+        r_low = spline.Eval(ctau_min)
+        r_high = spline.Eval(ctau_max)
 
-  #       if r_low > 1:
-  #           c1, c2 = ctaus[0], ctaus[1]
-  #       elif r_high < 1:
-  #           c1, c2 = ctaus[-2], ctaus[-1]
-  #       else:
-  #           print(f"Warning: band {band}: no crossing found")
-  #           ctau_crosses.append(None)
-  #           continue
+        if r_low > 1:
+            c1, c2 = ctaus[0], ctaus[1]
+        elif r_high < 1:
+            c1, c2 = ctaus[-2], ctaus[-1]
+        else:
+            print(f"Warning: band {band}: no crossing found")
+            ctau_crosses.append(None)
+            continue
 
-  #       r1 = spline.Eval(c1)
-  #       r2 = spline.Eval(c2)
-  #       if r1 != r2:
-  #         ctau_cross = c1 + (1 - r1) * (c2 - c1) / (r2 - r1)
-  #       else:
-  #         ctau_cross = c2
-  #       ctau_crosses.append(ctau_cross)
+        r1 = spline.Eval(c1)
+        r2 = spline.Eval(c2)
+        if r1 != r2:
+            log_c1, log_c2 = log10(c1), log10(c2)
+            log_cross = log_c1 + (1 - r1) * (log_c2 - log_c1) / (r2 - r1)
+            ctau_cross = 10 ** log_cross
+        else:
+            ctau_cross = c2
+        ctau_crosses.append(ctau_cross)
 
-  #   return ctau_crosses
+    return ctau_crosses
 
 
   def find_coupling_for_ctau(self, mass, boost, ctau_target,
-                           cmin=1e-7, cmax=1e10):
+                           cmin=1e-12, cmax=1e25):
     def f(c):
         return self.find_lifetime_for_mass(mass, boost, c) - ctau_target
     
     fmin = f(cmin)
     fmax = f(cmax)
     if fmin * fmax > 0:
-        raise ValueError("No root in coupling range — expand bounds")
+        raise ValueError(f"No root in coupling range — expand bounds fmin = {fmin}, fmax = {fmax}, ctau_target = {ctau_target}")
 
     return brentq(f, cmin, cmax)
 
@@ -1278,8 +1232,8 @@ class BrazilGraph:
     self.exp_graph_2sigma.SetMaximum(self.y_max)
 
   def draw_legend(self):
-    y_min = 0.70 if not self.show_obs else 0.66
-    legend = ROOT.TLegend(0.19, y_min, 0.39, 0.87)
+    y_min = 0.70 if not self.show_obs else 0.61
+    legend = ROOT.TLegend(0.19, y_min, 0.39, 0.82)
     legend.SetBorderSize(0)
     legend.SetFillStyle(0)
     legend.SetTextFont(42)

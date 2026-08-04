@@ -30,15 +30,17 @@ plot_abcd = False
 thesis = False
 
 # Taken from datacard so it's fraction on the yield
-bkg_syst_err = {
-    # "_Pat": 0.0278658154454774,
-    # "_PatDSA": 0.1944346951592415,
-    # "_DSA": 0.1154641409840682,
-    # "_Pat": 0.034420587797399,
-    # "_PatDSA": 0.4113183182760651,
-    # "_DSA": 0.342956618338063,
+bkg_abcd_syst_err = {
     "_Pat": 0.0326263547808,
     "_DSA": 0.342956618338063,
+}
+bkg_nonclosure_syst_err = {
+    "_Pat": 0.52,
+    "_DSA": 0.31,
+}
+bkg_syst_err = {
+    "_Pat": math.sqrt(bkg_abcd_syst_err["_Pat"]**2 + bkg_nonclosure_syst_err["_Pat"]**2),
+    "_DSA": math.sqrt(bkg_abcd_syst_err["_DSA"]**2 + bkg_nonclosure_syst_err["_DSA"]**2),
 }
 # Using simulation true A for now becasue I don't know what else to use
 bkg_obs = {

@@ -2,17 +2,15 @@ import ROOT
 from math import log10, floor, ceil, sqrt
 import os
 from collections import defaultdict
+from array import array
 
 from TTAlpsLimitsPlotterHelper import TTAlpsLimitsPlotterHelper, BrazilGraph, SimpleGraph
 from ttalps_cross_sections import get_theory_cross_section, get_cross_section_for_theory_coupling
 from ttalps_luminosities import get_luminosity
 
 # years = ["2018",]
-# years = ["2016preVFP","2016postVFP","2017","2018",]
 years = ["2016preVFP","2016postVFP","2017","2018","2022preEE","2022postEE","2023preBPix","2023postBPix"]
-
 # options for year is: 2016preVFP, 2016postVFP, 2017, 2018, 2022preEE, 2022postEE, 2023preBPix, 2023postBPix
-# cross_sections = get_cross_sections(year)
 luminosity_run2 = 0
 luminosity_run3 = 0
 year = years[0]
@@ -28,24 +26,12 @@ cms_sublabel = "Preliminary"
 # cms_sublabel = "Work in Progress"
 
 # extra_str = ""
-# extra_str = "_SR_ANv3"
 # extra_str = "_SR_ANv5"
 # extra_str = "_SR_ANv6_regionBCD"
 extra_str = "_SR_ANv10_regionABCD"
-# extra_str = "_theoryCrossSection_SR_ANv6_regionBCD"
-# extra_str = "_preapproval_SR_ANv6_regionBCD"
-# extra_str = "_years_combined_SR_ANv5"
-# extra_str = "_years_combined_dxydzIso_SR_ANv5"
-# extra_str = "_years_combined_noUnc_SR_ANv5"
-# extra_str = "_noUnc_SR_ANv5"
-# extra_str = "_Pat_test_SR_ANv5"
-# extra_str = "_SRDPhiBetweenMuonpTAndLxy"
-# extra_str = "_SRHitsInFrontOfVertex"
 
 # PAT-PAT
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_Pat_ABCDpred.txt"
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logLeadingPt_Pat_ABCDpred.txt"
-input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logDxyPVTraj2_vs_logPt_Pat_ABCDpred.txt"
+# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logDxyPVTraj2_vs_logPt_Pat_ABCDpred.txt"
 
 # PAT-DSA
 # input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logDxyPVTraj1_vs_logAbsCollinearityAngle_PatDSA_ABCDpred.txt"
@@ -54,9 +40,8 @@ input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDi
 # input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_BestPFIsoDimuonVertex_logAbsCollinearityAngle_vs_logPt_DSA_ABCDpred.txt"
 
 # Combined
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_noPatDSA.txt"
+input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_noPatDSA.txt"
 # input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined.txt"
-# input_path = f"../limits/limits_{year_str}/results{extra_str}/limits_combined_extended.txt"
 output_path = f"../limits/limits_{year_str}/plots{extra_str}/"
 
 # input_path = f"../limits/limits_{year_str}/results{extra_str}/signal_injection_minus/limits_combined.txt"
@@ -78,6 +63,7 @@ expected_limits = False
 # variable = "theory_ctau_signal_strength"
 # variable = "2d"
 variable = "2d_contours"
+# variable = "2d_contours_xsec"
 
 custom_axis = True
 
@@ -109,7 +95,7 @@ if variable == "mass":
   y_max = 1e8
   if len(years) > 1:
     y_min = 1e-3
-    y_max = 1e7
+    y_max = 1e8
 
   x_title = "m_{a} [GeV]"
   scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
@@ -127,7 +113,6 @@ if variable == "ctau":
   resonances_ranges = ()
 
 if variable == "mass_theory":
-  # do_boost = True
   do_boost = False
 
   x_min = 0.35
@@ -135,17 +120,12 @@ if variable == "mass_theory":
 
   y_min = 1e-2
   y_max = 1e7
-  # y_min = 1e-4
-  # y_max = 1e8
 
   x_title = "m_{a} [GeV]"
 
-# y_title = "95% CL lower limit on g_{#Psi}"
-# cross-section limit
-y_title = "95% CL upper limit on #kern[-1.0]{#sigma} [pb]"
+y_title = "#sigma(pp #kern[-0.5]{#rightarrow} t#bar{t}a) #kern[-0.5]{#times} #kern[-0.5]{#font[12]{B}}(a #kern[-0.5]{#rightarrow} #kern[-0.5]{#mu#mu}) [pb]"
 
 if variable == "mass_coupling":
-  # include_exo21018 = False
   include_exo21018 = True
   x_min = 0.35
   x_max = 60.0
@@ -155,7 +135,7 @@ if variable == "mass_coupling":
 
   scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
   x_title = "m_{a} [GeV]"
-  y_title = "95% CL lower limit on g_{#Psi}^{2}"
+  y_title = "95% CL lower limit on g_{#Psi}^{2} #kern[-0.5]{#times} #kern[-0.5]{#font[12]{B}}(a #kern[-0.5]{#rightarrow} #kern[-0.5]{#mu#mu})"
 
 if variable == "ctau_signal_strength":
   y_min = 1e-12
@@ -179,25 +159,26 @@ if variable == "mass_signal_strength":
 
   x_title = "m_{a} [GeV]"
   scan_points = [1e-5]
-  # scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
   y_title = "95% CL upper limit on #mu"
 
 if variable == "theory_ctau_signal_strength":
+
+  coupling_extr_case1 = True
+  
   x_min = 0.35
   x_max = 60.0
 
   y_min = 1e-2
   y_max = 1e8
   if len(years) > 1:
-    y_min = 1e-4
-    y_max = 1e4
+    y_min = 1e-3
+    y_max = 1e9
 
   x_title = "m_{a} [GeV]"
   scan_points = [0.35, 2.0, 12.0, 30.0, 60.0]
-  # scan_points = [1e-5, 1e0, 1e1, 1e2, 1e3]
-  y_title = "95% CL upper limit on g_{\Psi}^{2}"
+  y_title = "95% CL upper limit on g_{\Psi}^{2} #kern[-0.7]{#times} #kern[-0.6]{#font[12]{B}}(a #kern[-0.5]{#rightarrow} #kern[-0.5]{#mu#mu})"
 
-if variable == "2d" or variable == "2d_contours":
+if variable == "2d" or variable == "2d_contours" or variable == "2d_contours_xsec":
 
   include_pion_search = False
   run_coupling_limits = False
@@ -205,7 +186,9 @@ if variable == "2d" or variable == "2d_contours":
   x_min = log10(0.35)
   x_max = log10(60.0)
 
-  y_min = -5
+  # y_min = -5
+  y_min = -5 if variable == "2d" else -3
+  # y_max = 3 if variable == "2d" else 6
   y_max = 3 if variable == "2d" else 5
 
   z_min = -2.2
@@ -213,20 +196,15 @@ if variable == "2d" or variable == "2d_contours":
   if len(years) > 1:
     z_min = -2.4
     z_max = 4.2
-    # z_min = -2.6
-    # z_max = 3.2
 
   x_title = "log_{10}(m_{a} [GeV])"
   y_title = "log_{10}(c#tau_{a} [mm])"
   z_title = "log_{10}(95% CL upper limit on #sigma [pb])"
 
-  # z_title = "log_{10}(95% CL lower limit on signal strength r)"
   if custom_axis:
     x_title = "m_{a} [GeV]"
     y_title = "c#tau_{a} [mm]"
-    z_title = "95% CL upper limit on #kern[-1.0]{#sigma} [pb]"
-
-  # cross-section limit
+    z_title = "#sigma(pp #kern[-0.5]{#rightarrow} t#bar{t}a) #kern[-0.5]{#times} #kern[-0.5]{#font[12]{B}}(a #kern[-0.5]{#rightarrow} #kern[-0.5]{#mu#mu}) [pb]"
 
   scan_points = [0.35, 1.0, 2.0, 12.0, 30.0, 60.0]
 
@@ -337,16 +315,23 @@ def draw_custom_y_log_labels(y_min_ = None, y_max_ = None):
   # option 1
   if not y_max_:
     y_max_ = y_max
+  if not y_min_:
+    y_min_ = y_min
   tick_values = []
   max_array = [1, 10, 100]
   if y_max_ == 5:
     max_array = [1, 10, 100, 1000, 10000]
-  for denom in [100000, 10000, 1000, 100, 10]:
+  if y_max_ == 6:
+    max_array = [1, 10, 100, 1000, 10000, 100000]
+  min_array = [1000, 100, 10]
+  if y_min_ == -5:
+    min_array = [100000, 10000, 1000, 100, 10]
+  for denom in min_array:
     tick_values += [i/denom for i in range(2, 11)]
   for nom in max_array:
     tick_values += [i*nom for i in range(2, 11)]
   
-  label_values = [10**n for n in range(y_min, y_max_+1)]
+  label_values = [10**n for n in range(y_min_, y_max_+1)]
 
   return draw_axis_ticks_and_labels("y", tick_values, label_values)
 
@@ -458,9 +443,6 @@ def draw_brazil_plots():
       mass = x_value if "mass" in variable else scan_point
       ctau = scan_point if "mass" in variable else x_value
       scale = helper.get_scale(mass, ctau, variable)
-      # if variable == "ctau_signal_strength":
-      #   expected_limits[x_value] = [r*scale for r in r_value]
-      # else:
       graph.set_point(i, x_value, r_value, scale)
 
       sigma_0p1 = get_theory_cross_section(mass, "2018")
@@ -496,15 +478,6 @@ def draw_brazil_plots():
     if variable == "mass_signal_strength":
       pion_graphs = helper.get_pion_graphs()
       run2_lumi_graph = helper.get_limit_graph_scaled_to_run2(limits, luminosity_run2, luminosity_run3, variable, scan_point)
-
-    # if variable == "ctau_signal_strength":
-    #   ctau_r1_limits = helper.extract_limits_for_signal_strength1(expected_limits)
-    #   print(f"Extracted limits for signal strength = 1: {ctau_r1_limits}")
-    #   coupling_r1_limits = []
-    #   for ctau in ctau_r1_limits:
-    #     coupling_r1_limits.append(helper.find_coupling_for_ctau(mass, False, ctau))
-    #   print(f"Corresponding coupling limit: {coupling_r1_limits}")
-    #   graph.set_point(i, scan_point, coupling_r1_limits, 1.0)
 
     canvas = ROOT.TCanvas(f"canvas_{scan_point}", "", 800, 600)
     canvas.cd()
@@ -570,6 +543,12 @@ def draw_brazil_plots():
       draw_legend(graph_param, 0.70, 0.9, 0.52, 0.75)
 
     graph.draw_legend()
+    tex = ROOT.TLatex(0.20, 0.83, "95% CL upper limits")
+    tex.SetNDC()
+    tex.SetTextFont(42)
+    tex.SetTextSize(0.04)
+    tex.SetLineWidth(2)
+    tex.DrawClone()
     if include_mass_lifetime_cross_sections:
       draw_legend(legend_params, y_min=0.66, y_max=0.82, x_min=0.55, x_max=0.72)
       tex = ROOT.TLatex(0.55, 0.83, "13 TeV theory predictions:")
@@ -593,9 +572,10 @@ def draw_brazil_plots():
 
 def draw_brazil_plots_for_theory_coupling():
 
-  graph = BrazilGraph(input_path, year, x_title, y_title, x_min, x_max, y_min, y_max)
+  graph = BrazilGraph(input_path, year, x_title, y_title, x_min, x_max, y_min, y_max, True)
 
-  ctau_limits = {}
+  ctau_limits_case1 = {}
+  ctau_limits_case2 = {}
   coupling_over_mass_limits = {}
   over_lambda = True
   for i, scan_point in enumerate(scan_points):
@@ -614,15 +594,22 @@ def draw_brazil_plots_for_theory_coupling():
       scale = helper.get_scale(mass, ctau, variable)
       expected_limits[ctau] = [r*scale for r in r_value]
 
-    # ctau_limits = helper.extract_limits_for_signal_strength1(expected_limits)
-    ctau_limits = helper.find_ctau_at_r1(expected_limits)
-    coupling_limits = []
+    ctau_limits_case1 = helper.extract_limits_for_signal_strength1(expected_limits)
+    ctau_limits_case2 = helper.find_ctau_at_r1(expected_limits)
+    coupling_limits_case1 = []
+    coupling_limits_case2 = []
     if not over_lambda:
-      coupling_limits = [(helper.find_coupling_for_ctau(mass, False, ctau))**2 for ctau in ctau_limits]
+      coupling_limits_case1 = [(helper.find_coupling_for_ctau(mass, False, ctau))**2 for ctau in ctau_limits_case1]
+      coupling_limits_case2 = [(helper.find_coupling_for_ctau(mass, False, ctau))**2 for ctau in ctau_limits_case2]
     else: 
-      coupling_limits = [helper.find_coupling_for_ctau(mass, False, ctau) for ctau in ctau_limits]
-    graph.set_point(i, mass, coupling_limits, 1.0)
-    coupling_over_mass_limits[mass] = coupling_limits
+      coupling_limits_case1 = [helper.find_coupling_for_ctau(mass, False, ctau) for ctau in ctau_limits_case1]
+      coupling_limits_case2 = [helper.find_coupling_for_ctau(mass, False, ctau) for ctau in ctau_limits_case2]
+    if coupling_extr_case1:
+      graph.set_point(i, mass, coupling_limits_case1, 1.0)
+      coupling_over_mass_limits[mass] = coupling_limits_case1
+    else:
+      graph.set_point(i, mass, coupling_limits_case2, 1.0)
+      coupling_over_mass_limits[mass] = coupling_limits_case2
 
   canvas = ROOT.TCanvas(f"canvas_{scan_point}", "", 800, 600)
   canvas.cd()
@@ -633,13 +620,6 @@ def draw_brazil_plots_for_theory_coupling():
   ROOT.gPad.SetRightMargin(0.16)
 
   graph.draw()
-  # graph_ = ROOT.TGraph()
-  # graph_.SetLineColor(ROOT.kRed)
-  # graph_.SetLineWidth(2)
-  # graph_.SetLineStyle(1)
-  # for i, (mass, r_values) in enumerate(limits_.items()):
-  #   graph_.SetPoint(i, mass, r_values[3])
-  # graph_.DrawClone("Lsame")
 
   run2_scale = (luminosity_run2 + luminosity_run3) / luminosity_run2 if luminosity_run2 != 0 else 1.0
   run2_lumi_graph = ROOT.TGraph()
@@ -658,24 +638,24 @@ def draw_brazil_plots_for_theory_coupling():
   exo21018_graph.SetLineColor(ROOT.kBlue)
   exo21018_graph.DrawClone("L same")
   graph_params.append(
-    (exo21018_graph, "t#bar{t}#phi, #phi#rightarrow#mu#mu,#tau#tau (EXO-21-018)"),
+    (exo21018_graph, "t#bar{t}#phi, #phi#rightarrow#mu#mu (EXO-21-018)"),
   )
-  draw_legend(graph_params, y_min=0.77, y_max=0.9, x_min=0.50, x_max=0.75)
-  # draw_legend(graph_param, 0.70, 0.9, 0.52, 0.75)
+  draw_legend(graph_params, y_min=0.77, y_max=0.9, x_min=0.45, x_max=0.73)
 
 
   mask_resonances(resonances_ranges)
 
   legend_params = []
     
-  helper.draw_cms_label(cms_sublabel)
+  helper.draw_cms_label(cms_sublabel, 0.15)
   helper.draw_lumi_label(luminosity_run2, luminosity_run3, variable)
 
   graph.draw_legend()
   draw_legend(legend_params)
 
   canvas.Update()
-  canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_extr_ctau_signal_strength.pdf")
+  case_str = "case1" if coupling_extr_case1 else "case2"
+  canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_extr_ctau_signal_strength_{case_str}.pdf")
 
 
 def draw_brazil_plot_for_theory_lifetime():
@@ -689,10 +669,8 @@ def draw_brazil_plot_for_theory_lifetime():
       print(f"Invalid number of values for {x_value}: {r_value}")
       continue
 
-    # scale = cross_sections[name]  # TODO: implement cross section limits
     target_coupling = 1.0
     scale = (target_coupling / reference_coupling ) ** 2
-    # scale = 1
 
     graph.set_point(i, x_value, r_value, scale)
 
@@ -712,7 +690,6 @@ def draw_brazil_plot_for_theory_lifetime():
 
   for pion_graph in pion_graphs:
     pion_graph.DrawClone("same")
-    # helper.draw_pion_label()
   graph_param = [
     (pion_graphs[0], "t#bar{t}#omega, #omega#rightarrow#pi^{-}#pi^{+}#pi^{0}, #eta BRs"),
     (pion_graphs[1], "t#bar{t}#omega, #omega#rightarrow#pi^{-}#pi^{+}#pi^{0}, #eta' BRs"),]
@@ -752,23 +729,17 @@ def draw_brazil_plot_for_coupling():
 
 def draw_2d_plot():
 
-  # scale = cross_sections[name]  # TODO: implement cross section limits
-  # scale = reference_coupling
   helper.get_2d_graph(expected=expected_limits)
 
   plot_name = "2d_expected" if expected_limits else "2d_observed"
 
   canvas = ROOT.TCanvas(f"canvas_{plot_name}", "", 800, 600)
   canvas.cd()
-  # canvas.SetLogx()
-  # canvas.SetLogy()
-  # canvas.SetLogz()
   ROOT.gPad.SetLeftMargin(0.11)
   ROOT.gPad.SetBottomMargin(0.15) 
   ROOT.gPad.SetRightMargin(0.16)
 
   helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis)
-  helper.draw_missing_points(custom_axis)
 
   mask_resonances_2d(resonances_ranges)
 
@@ -800,21 +771,11 @@ def draw_2d_plot_with_contours():
 
   plot_name = "2d_contours_expected" if expected_limits else "2d_contours_observed"
 
-  canvas = ROOT.TCanvas(f"canvas_{plot_name}", "", 800, 600)
+  canvas = ROOT.TCanvas(f"canvas_{plot_name}", "", 800, 700)
   canvas.cd()
-  ROOT.gPad.SetLeftMargin(0.11)
+  ROOT.gPad.SetLeftMargin(0.12)
   ROOT.gPad.SetBottomMargin(0.15) 
-  ROOT.gPad.SetRightMargin(0.16)
-  # pad_plot = ROOT.TPad("pad_plot", "", 0.0, 0.0, 1.0, 0.80)
-  # Legend pad
-  # pad_leg = ROOT.TPad("pad_leg", "", 0.0, 0.80, 1.0, 1.0)
-  # pad_plot.Draw()
-  # pad_leg.Draw()
-  # pad_plot.cd()
-  # pad_plot.SetLeftMargin(0.15)
-  # pad_plot.SetBottomMargin(0.15) 
-  # pad_plot.SetRightMargin(0.15)
-  # pad_plot.SetTopMargin(0.02)
+  ROOT.gPad.SetRightMargin(0.17)
 
   helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis)
   helper.draw_missing_points(custom_axis)
@@ -830,7 +791,7 @@ def draw_2d_plot_with_contours():
   canvas.Update()
 
   theory_name = "2d_contours_theory"
-  canvas_theory = ROOT.TCanvas(f"canvas_{theory_name}", "", 800, 600)
+  canvas_theory = ROOT.TCanvas(f"canvas_{theory_name}", "", 800, 700)
   canvas_theory.cd()
   ROOT.gPad.SetLeftMargin(0.11)
   ROOT.gPad.SetBottomMargin(0.15) 
@@ -841,7 +802,7 @@ def draw_2d_plot_with_contours():
   ROOT.gPad.RedrawAxis()
   if custom_axis:
     draw_custom_x_log_labels()
-    draw_custom_y_log_labels(-5, 3)
+    draw_custom_y_log_labels(y_min, y_max)
   helper.draw_cms_label(cms_sublabel)
   helper.draw_lumi_label(luminosity_run2, luminosity_run3)
   canvas_theory.Update()
@@ -850,7 +811,7 @@ def draw_2d_plot_with_contours():
   canvas_theory.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_{theory_name}.pdf")
 
   ratio_name = "2d_contours_expected_theory_ratio"
-  canvas_ratios = ROOT.TCanvas(f"canvas_{ratio_name}", "", 800, 600)
+  canvas_ratios = ROOT.TCanvas(f"canvas_{ratio_name}", "", 800, 700)
   canvas_ratios.cd()
   ROOT.gPad.SetLeftMargin(0.11)
   ROOT.gPad.SetBottomMargin(0.15) 
@@ -861,7 +822,7 @@ def draw_2d_plot_with_contours():
   ROOT.gPad.RedrawAxis()
   if custom_axis:
     draw_custom_x_log_labels()
-    draw_custom_y_log_labels(-5, 3)
+    draw_custom_y_log_labels(y_min, y_max)
   helper.draw_cms_label(cms_sublabel)
   helper.draw_lumi_label(luminosity_run2, luminosity_run3)
   canvas_ratios.Update()
@@ -887,25 +848,29 @@ def draw_2d_plot_with_contours():
 
   if custom_axis:
     draw_custom_x_log_labels()
-    draw_custom_y_log_labels()
+    draw_custom_y_log_labels(y_min, y_max)
     
-  helper.draw_cms_label(cms_sublabel, subpad=False)
+  helper.draw_cms_label(cms_sublabel, 0.12, subpad=False)
   helper.draw_lumi_label(luminosity_run2, luminosity_run3, "2d", subpad=False)
   canvas.Modified()
   canvas.Update()
   leg_x_min = 0.17 if not include_pion_search else 0.14
   leg_x_max = 0.85 if not include_pion_search else 0.69
-  legend = ROOT.TLegend(leg_x_min, 0.75, leg_x_max, 0.87)
+  legend = ROOT.TLegend(leg_x_min, 0.71, leg_x_max, 0.83)
   legend.SetFillStyle(0)
   legend.SetBorderSize(0)
   legend.SetTextSize(0.04)
   legend.SetNColumns(2)
+
+  for idx, g in enumerate(helper.contour_graphs):
+    print(idx, g.GetName() if g else "None", g.GetN() if g else "N/A")
+
   legend.AddEntry(0, "", "")
   legend.AddEntry(helper.contour_graphs[3], "Expected", "l")
   legend.AddEntry(0, "", "")
-  legend.AddEntry(helper.contour_graphs[2], "Expected #kern[-0.5]{#pm} 1#sigma", "l")
+  legend.AddEntry(helper.contour_graphs[2], "Expected #kern[-0.5]{#pm} 1 s.d.", "l")
   legend.AddEntry(helper.contour_graphs[0], "Observed", "l")
-  legend.AddEntry(helper.contour_graphs[1], "Expected #kern[-0.5]{#pm} 2#sigma", "l")
+  legend.AddEntry(helper.contour_graphs[1], "Expected #kern[-0.5]{#pm} 2 s.d.", "l")
   legend.Draw()
 
   if include_pion_search:
@@ -924,6 +889,138 @@ def draw_2d_plot_with_contours():
     tex.SetLineWidth(2)
     tex.DrawClone()
 
+  
+  tex = ROOT.TLatex(leg_x_min+0.01, 0.84, "95% CL upper limits")
+  tex.SetNDC()
+  tex.SetTextFont(42)
+  tex.SetTextSize(0.04)
+  tex.SetLineWidth(2)
+  tex.DrawClone()
+  tex = ROOT.TLatex(leg_x_min+0.01, 0.80, "pp #kern[-0.5]{#rightarrow} t#bar{t}a, a #kern[-0.5]{#rightarrow} #kern[-0.5]{#mu#mu}")
+  tex.SetNDC()
+  tex.SetTextFont(42)
+  tex.SetTextSize(0.04)
+  tex.SetLineWidth(2)
+  tex.DrawClone()
+  tex = ROOT.TLatex(leg_x_min+0.01, 0.76, "#font[12]{B}(a #kern[-0.5]{#rightarrow} #kern[-0.5]{#mu#mu}) = 1")
+  tex.SetNDC()
+  tex.SetTextFont(42)
+  tex.SetTextSize(0.04)
+  tex.SetLineWidth(2)
+  tex.DrawClone()
+  line = ROOT.TLine(x_min, 3, x_max, 3)
+  line.SetLineColor(ROOT.kBlack)
+  line.SetLineWidth(1)
+  line.DrawClone("same")
+
+  canvas.Modified()
+  canvas.Update()
+  pion_name = "" if not include_pion_search else "_pion"
+  canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_{plot_name}{pion_name}.pdf")
+
+def draw_2d_plot_with_constant_xsec_contours():
+  helper.get_2d_graph(expected=expected_limits)
+  helper.get_theory_2d_graph()
+  helper.get_expected_theory_ratio_graph()
+
+  ROOT.gStyle.SetCanvasBorderMode(1)
+  ROOT.gStyle.SetPadBorderMode(1)
+  ROOT.gStyle.SetFrameBorderMode(1)
+
+  plot_name = "2d_contours_xsec_expected" if expected_limits else "2d_contours_xsec_observed"
+
+  canvas = ROOT.TCanvas(f"canvas_{plot_name}", "", 800, 600)
+  canvas.cd()
+  ROOT.gPad.SetLeftMargin(0.11)
+  ROOT.gPad.SetBottomMargin(0.15) 
+  ROOT.gPad.SetRightMargin(0.16)
+
+  helper.draw_2d_graph(x_title, y_title, z_title, x_min, x_max, y_min, y_max, z_min, z_max, custom_axis)
+  helper.draw_missing_points(custom_axis)
+  canvas.RedrawAxis()
+
+  canvas.Modified()
+  canvas.Update()
+
+  if custom_axis:
+    draw_custom_z_log_labels()
+  
+  canvas.Update()
+
+  hist_2d = helper.graph_2d_exp.GetHistogram()
+  hist_2d_contours = hist_2d.Clone("hist_2d_contours")
+
+  contour_levels = [log10(0.01), log10(0.1), log10(1.0), log10(10.0)]
+  labels = ["10 fb", "0.1 pb", "1 pb", "10 pb"]
+  
+  cms_red = ROOT.TColor.GetColor("#bd1f01")
+  cms_green = ROOT.TColor.GetColor("#2ca02c") 
+  cms_orange = ROOT.TColor.GetColor("#ffa90e")
+  cms_blue = ROOT.TColor.GetColor("#5790fc")
+  colors = [cms_green, cms_blue, cms_orange, cms_red]
+  was_batch = ROOT.gROOT.IsBatch()
+  ROOT.gROOT.SetBatch(True)
+
+  graphs_per_level = {}
+  _keepalive = []
+  for level, label, color in zip(contour_levels, labels, colors):
+      hist_clone = hist_2d.Clone(f"hist_2d_contour_{label.replace(' ', '_').replace('.', 'p')}")
+      hist_clone.SetContour(1, array('d', [level]))
+      _keepalive.append(hist_clone)
+
+      c_extract = ROOT.TCanvas("c_extract_tmp", "c_extract_tmp")
+      hist_clone.Draw("CONT Z LIST")
+      c_extract.Update()
+      _keepalive.append(c_extract)
+
+      contours = ROOT.gROOT.GetListOfSpecials().FindObject("contours")
+      level_list = contours.At(0)  # only one level now, always index 0
+      graphs = []
+      for j in range(level_list.GetSize()):
+        g_orig = level_list.At(j)
+        g_clone = g_orig.Clone()
+        _keepalive.append(g_clone)
+        graphs.append(g_clone)
+
+      graphs_per_level[label] = (graphs, color)
+
+  ROOT.gROOT.SetBatch(was_batch) 
+  canvas.cd()
+
+  legend = ROOT.TLegend(0.50, 0.75, 0.85, 0.87)
+  legend.SetFillStyle(0)
+  legend.SetBorderSize(0)
+  legend.SetTextSize(0.04)
+  for label, (graphs, color) in graphs_per_level.items():
+    for g in graphs:
+        g.SetLineColor(color)
+        g.SetLineWidth(2)
+        g.Draw("L SAME")
+    if len(graphs) > 0:
+        legend.AddEntry(graphs[0], f"#sigma = {label}", "l")
+
+  mask_resonances_2d(resonances_ranges)
+
+  box = ROOT.TBox(x_min, 3, x_max, y_max)
+  box.SetFillColor(ROOT.kWhite)
+  box.SetFillStyle(1001)
+  box.SetLineColor(ROOT.kBlack)
+  box.SetLineWidth(1)
+  box.DrawClone("same")
+
+  if custom_axis:
+    draw_custom_x_log_labels()
+    draw_custom_y_log_labels()
+    
+  helper.draw_cms_label(cms_sublabel, subpad=False)
+  helper.draw_lumi_label(luminosity_run2, luminosity_run3, "2d", subpad=False)
+
+  legend.Draw()
+  canvas.Modified()
+  canvas.Update()
+
+  leg_x_min = 0.17 if not include_pion_search else 0.14
+  leg_x_max = 0.85 if not include_pion_search else 0.69
   tex = ROOT.TLatex(leg_x_min+0.01, 0.84, "pp #kern[-0.5]{#rightarrow} t#bar{t}a, a #kern[-0.5]{#rightarrow} #kern[-0.5]{#mu#mu}")
   tex.SetNDC()
   tex.SetTextFont(42)
@@ -943,41 +1040,7 @@ def draw_2d_plot_with_contours():
 
   canvas.Modified()
   canvas.Update()
-  pion_name = "" if not include_pion_search else "_pion"
-  canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_{plot_name}{pion_name}.pdf")
-
-  # if run_coupling_limits:
-  #   graph = BrazilGraph(input_path, year, x_title, "95% CL lower limit on g_{#Psi}", x_min, x_max, -2, 2)
-
-  #   mass_to_couplings = defaultdict(list)
-  #   for points in helper.contour_coupling_points:
-  #     for m, ctt in points:
-  #       mass_to_couplings[m].append(ctt)
-    
-  #   for i, (m, couplings) in enumerate(sorted(mass_to_couplings.items())):
-  #     print(f"{m=}, {couplings=}")
-  #     graph.SetPoint(i, m, couplings)
-    
-  #   canvas_coupling = ROOT.TCanvas(f"canvas_couplings", "", 800, 600)
-  #   canvas_coupling.cd()
-  #   canvas_coupling.SetLogx()
-  #   canvas_coupling.SetLogy()
-  #   ROOT.gPad.SetLeftMargin(0.15)
-  #   ROOT.gPad.SetBottomMargin(0.15)
-
-  #   graph.draw()
-
-  #   mask_resonances(resonances_ranges)
-
-  #   helper.draw_cms_label()
-  #   helper.draw_lumi_label(luminosity_run2, luminosity_run3, variable)
-
-  #   graph.draw_legend()
-  #   # draw_legend(legend_params)
-
-  #   canvas_coupling.Update()
-  #   canvas_coupling.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_{plot_name}_coupling.pdf")
-    
+  canvas.SaveAs(f"{output_path}/{input_file_name.replace('.txt', '')}_{plot_name}.pdf")
 
 def main():
   ROOT.gROOT.SetBatch(True)
@@ -988,12 +1051,12 @@ def main():
     draw_brazil_plot_for_theory_lifetime()
   elif variable == "theory_ctau_signal_strength":
     draw_brazil_plots_for_theory_coupling()
-  # elif variable == "mass_coupling":
-  #   draw_brazil_plot_for_coupling()
   elif variable == "2d":
     draw_2d_plot()
   elif variable == "2d_contours":
     draw_2d_plot_with_contours()
+  elif variable == "2d_contours_xsec":
+    draw_2d_plot_with_constant_xsec_contours()
 
 
 if __name__ == "__main__":

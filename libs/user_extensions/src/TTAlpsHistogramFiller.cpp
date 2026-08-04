@@ -441,6 +441,7 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   histogramsHandler->Fill(name + "_sumHitsInFrontOfVert",
                           dimuon->GetAs<float>("hitsInFrontOfVert1") + dimuon->GetAs<float>("hitsInFrontOfVert2"));
   histogramsHandler->Fill(name + "_absCollinearityAngle", fabs(dimuon->GetCollinearityAngle()));
+  histogramsHandler->Fill(name + "_logAbsCollinearityAngle", TMath::Log10(fabs(dimuon->GetCollinearityAngle())));
   histogramsHandler->Fill(name + "_absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)));
   histogramsHandler->Fill(name + "_absPtLxyDPhi2", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)));
   histogramsHandler->Fill(name + "_logAbsPtLxyDPhi1", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))));
@@ -526,8 +527,10 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   histogramsHandler->Fill(name + "_muonEta2", dimuon->Muon2()->GetEta());
   histogramsHandler->Fill(name + "_dxyPVTraj1", dimuon->Muon1()->Get("dxyPVTraj"));
   histogramsHandler->Fill(name + "_absDxyPVTraj1", fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")));
+  histogramsHandler->Fill(name + "_logDxyPVTraj1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj"))));
   histogramsHandler->Fill(name + "_dxyPVTraj2", dimuon->Muon2()->Get("dxyPVTraj"));
   histogramsHandler->Fill(name + "_absDxyPVTraj2", fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")));
+  histogramsHandler->Fill(name + "_logDxyPVTraj2", TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj"))));
   histogramsHandler->Fill(name + "_dxyPVTrajSig2", dimuon->Muon2()->GetAs<float>("dxyPVTraj") / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr"));
   histogramsHandler->Fill(name + "_dxyPVTrajSig1", dimuon->Muon1()->GetAs<float>("dxyPVTraj") / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr"));
 

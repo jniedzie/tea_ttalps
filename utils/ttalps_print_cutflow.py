@@ -47,6 +47,7 @@ category = "_Pat"
 print_dimuon_cutflow = False
 
 cutFlow_name = "cutFlow"
+rawEventsCutFlow_name = "rawEventsCutFlow"
 dimuonCutFlow_name = f"dimuonCutFlow_BestPFIsoDimuonVertex"
 dimuonCutFlow_name_Pat = f"dimuonCutFlow_BestPFIsoDimuonVertex_Pat"
 dimuonCutFlow_name_PatDSA = f"dimuonCutFlow_BestPFIsoDimuonVertex_PatDSA"
@@ -113,6 +114,10 @@ cutFlow_hist = Histogram(
     name=cutFlow_name,
     title=cutFlow_name,
     norm_type=NormalizationType.to_lumi,
+)
+rawEventsCutFlow_hist = Histogram(
+    name=rawEventsCutFlow_name,
+    title=rawEventsCutFlow_name,
 )
 dimuonCutFlow_hist = Histogram(
     name=dimuonCutFlow_name,
@@ -244,6 +249,7 @@ def main():
     raw_cutFlows_PatDSA = {}
     raw_cutFlows_DSA = {}
 
+    initial_raw_events = {}
     for year, samples_ in samples.items():
         # config.years = [year,]
         for sample_name, sample in samples_.items():
@@ -256,6 +262,7 @@ def main():
                 continue
 
             cutFlow_hist.load(file)
+            rawEventsCutFlow_hist.load(file)
             dimuonCutFlow_hist.load(file)
             dimuonCutFlow_hist_Pat.load(file)
             dimuonCutFlow_hist_PatDSA.load(file)
@@ -269,6 +276,12 @@ def main():
             if initial_weight <= 0:
                 warn(f"Initial weight for sample {sample.name} is non-positive ({initial_weight}). Skipping.")
                 continue
+            
+            raw_initial_weight = rawEventsCutFlow_hist.hist.GetBinContent(1)
+            if sample.name not in initial_raw_events:
+                initial_raw_events[sample.name] = raw_initial_weight
+            else:
+                initial_raw_events[sample.name] += raw_initial_weight
 
             cross_section = sample.cross_section
             if sample.type == SampleType.signal:
@@ -410,6 +423,11 @@ def main():
         for cut in raw_cutFlows[signal_name].keys():
             print(f"{raw_cutFlows[signal_name][cut]:.0f} \t", end="")
         print()
+    print("Raw initial events for signals:")
+    for signal_name, signal_nice_name in signals_to_print.items():
+        if signal_name not in raw_cutFlows:
+            continue
+        print(f"{signal_name}: {initial_raw_events.get(signal_name, 0):.0f}")
 
     info("\\begin{table}[hbtp]")
     info("\t\centering\n\t\\topcaption{}\n\t\\begin{tabular}{l | r r r ", end="")
@@ -506,23 +524,3 @@ def main():
         
 if __name__ == "__main__":
     main()
-
-# Initial Events                & 4.0e+09 & 100   & 1.0e+02  & 1.5e+12 & 100   & 1.0e+02 & 830 & 100 & 100 & 830 & 100 & 100 & 830 & 100 & 100 \\
-# Golden JSON                   & 4.0e+09 & 100   & 1.0e+02  & 1.5e+12 & 100   & 1.0e+02 & 830 & 100 & 100 & 830 & 100 & 100 & 830 & 100 & 100 \\
-# Trigger                       & 2.5e+09 & 63    & 6.3e+01  & 2.2e+09 & 0.15  & 1.5e-01 & 600 & 72 & 72 & 460 & 56 & 56 & 120 & 15 & 15 \\
-# \ptmiss Filters               & 2.5e+09 & 100   & 6.3e+01  & 2.2e+09 & 100   & 1.5e-01 & 600 & 100 & 72 & 460 & 100 & 56 & 120 & 100 & 15 \\
-# $\ptmiss > 30\GeV$            & 1.7e+09 & 66    & 4.2e+01  & 1.4e+09 & 64    & 9.3e-02 & 460 & 78 & 56 & 360 & 79 & 44 & 110 & 92 & 14 \\
-# $\geq$ 1 Loose PAT Muon       & 1.6e+09 & 99    & 4.1e+01  & 1.4e+09 & 100   & 9.3e-02 & 460 & 100 & 56 & 360 & 100 & 44 & 110 & 100 & 14 \\
-# $\geq$ 4 Good Jets            & 1.8e+07 & 1.1   & 4.6e-01  & 1.8e+07 & 1.3   & 1.2e-03 & 280 & 59 & 33 & 200 & 55 & 24 & 48 & 42 & 5.7 \\
-# $\geq$ 1 Medium b-tagged Jets & 1.1e+07 & 61    & 2.8e-01  & 1.2e+07 & 67    & 8.3e-04 & 250 & 90 & 30 & 180 & 91 & 22 & 44 & 92 & 5.2 \\
-# HEM Veto                      & 1.1e+07 & 98    & 2.7e-01  & 1.2e+07 & 97    & 8.1e-04 & 240 & 97 & 29 & 180 & 97 & 21 & 43 & 97 & 5.1 \\
-# Jet Veto Maps                 & 1.1e+07 & 98    & 2.7e-01  & 1.2e+07 & 97    & 7.8e-04 & 230 & 96 & 28 & 170 & 96 & 20 & 41 & 97 & 4.9 \\
-# $\ptmiss > 50\GeV$            & 7.0e+06 & 66    & 1.8e-01  & 7.5e+06 & 65    & 5.1e-04 & 150 & 66 & 18 & 110 & 67 & 14 & 36 & 88 & 4.3 \\
-# $\geq$ 1 Tight PAT Muon       & 4.4e+06 & 62    & 1.1e-01  & 4.8e+06 & 64    & 3.2e-04 & 130 & 87 & 16 & 66 & 58 & 8 & 28 & 78 & 3.4 \\
-# $\geq$ 3 Loose Muons          & 1.8e+06 & 41    & 4.5e-02  & 2.1e+06 & 44    & 1.4e-04 & 130 & 95 & 15 & 62 & 94 & 7.4 & 18 & 65 & 2.2 \\
-# 0 Loose Electrons             & 1.7e+06 & 93    & 4.2e-02  & 1.9e+06 & 93    & 1.3e-04 & 100 & 80 & 12 & 51 & 83 & 6.2 & 17 & 92 & 2 \\
-# $\geq$ 1 Best Dimuon          & 6.9e+02 & 0.051 & 1.7e-05  & 8.1e+02 & 0.042 & 5.5e-08 & 2.2 & 2.2 & 0.27 & 4.6 & 9 & 0.55 & 1.2 & 7.1 & 0.14 \\
-# PAT-PAT Best Dimuon           & 6.6e+02 & 95    & 1.7e-05  & 6.2e+02 & 76    & 4.2e-08 & 2.0 & 91 & 0.24 & 4.3 & 93 & 0.52 & 0.21 & 18 & 0.026 \\
-# PAT-PAT SR bin A              & 8.6e+01 & 13    & 2.2e-06  & 3.9e+01 & 6.3   & 2.6e-09 & 0.12 & 6.0 & 0.014 & 3.7 & 86 & 0.45 & 0.17 & 81 & 0.020 \\ \hline
-# DSA-DSA Best Dimuon           & 3.2e+01 & 4.6   & 8.0e-07  & 2.2e+01 & 2.7   & 1.5e-09 & 0.011 & 0.51 & 0.0014 & 0.095 & 2 & 0.011 & 0.91 & 76 & 0.11 \\
-# DSA-DSA SR bin A              & 1.6e+01 & 50    & 4.0e-07  & 8.6e+00 & 20    & 5.7e-10 & 0.0053 & 48 & 0.00064 & 0.085 & 89 & 0.010 & 0.85 & 93 & 0.10
