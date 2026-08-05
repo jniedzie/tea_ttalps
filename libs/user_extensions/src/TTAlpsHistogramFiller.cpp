@@ -139,7 +139,7 @@ void TTAlpsHistogramFiller::FillMETPxyHistograms(const shared_ptr<Event> event) 
   histogramsHandler->Fill("Event_MET_absPx_vs_nPV", npv, fabs(met_px));
   histogramsHandler->Fill("Event_MET_absPy_vs_nPV", npv, fabs(met_py));
 
-  uint run = event->Get("run");
+  unsigned int run = event->GetAs<unsigned int>("run");
   bool isMC = !asNanoEvent(event)->IsData();
   pair<double,double> corrected_met = METXYCorr_Met_MetPhi(met_pt, met_phi, run, year, isMC, npv, true);
   float met_pt_corr = corrected_met.first;
@@ -177,7 +177,7 @@ void TTAlpsHistogramFiller::FillMETPxyHistograms(const shared_ptr<Event> event) 
   
 }
 
-/// --------- Jet Map Histograms for effiency --------- ///
+/// --------- Jet Map Histograms for efficiency --------- ///
 /// ----- flag: runJetEfficiencyMaps ----- ///
 
 void TTAlpsHistogramFiller::FillJetEfficiencyMaps(const shared_ptr<Event> event) {
@@ -191,7 +191,8 @@ void TTAlpsHistogramFiller::FillJetEfficiencyMaps(const shared_ptr<Event> event)
 
   for (auto jet : *goodJets) {
     int hadronFlavour_ = jet->GetAs<int>("hadronFlavour");
-    string flavour = hadronFlavours[hadronFlavour_];
+    auto it = hadronFlavours.find(hadronFlavour_);
+    string flavour = (it != hadronFlavours.end()) ? it->second : "Other";
     float pt = asNanoJet(jet)->GetPt();
     float eta = asNanoJet(jet)->GetEta();
     histogramsHandler->Fill("GoodJets_" + flavour + "_pt_eta", pt, eta);
@@ -201,7 +202,8 @@ void TTAlpsHistogramFiller::FillJetEfficiencyMaps(const shared_ptr<Event> event)
   }
   for (auto jet : *goodBJets) {
     int hadronFlavour_ = jet->GetAs<int>("hadronFlavour");
-    string flavour = hadronFlavours[hadronFlavour_];
+    auto it = hadronFlavours.find(hadronFlavour_);
+    string flavour = (it != hadronFlavours.end()) ? it->second : "Other";
     float pt = asNanoJet(jet)->GetPt();
     float eta = asNanoJet(jet)->GetEta();
     histogramsHandler->Fill("GoodMediumBtaggedJets_" + flavour + "_pt_eta", pt, eta);
@@ -435,13 +437,14 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   histogramsHandler->Fill(name + "_LxySigma", dimuon->GetLxySigmaFromPV());
   histogramsHandler->Fill(name + "_LxySignificance", dimuon->GetLxyFromPV() / dimuon->GetLxySigmaFromPV());
   histogramsHandler->Fill(name + "_outerDR", dimuon->GetOuterDeltaR());
-  histogramsHandler->Fill(name + "_logOuterDR", TMath::Log10(dimuon->GetOuterDeltaR()));
+  histogramsHandler->Fill(name + "_logOuterDR", TMath::Log10(fabs(dimuon->GetOuterDeltaR())));
   histogramsHandler->Fill(name + "_maxHitsInFrontOfVert",
                           max(dimuon->GetAs<float>("hitsInFrontOfVert1"), dimuon->GetAs<float>("hitsInFrontOfVert2")));
   histogramsHandler->Fill(name + "_sumHitsInFrontOfVert",
                           dimuon->GetAs<float>("hitsInFrontOfVert1") + dimuon->GetAs<float>("hitsInFrontOfVert2"));
-  histogramsHandler->Fill(name + "_absCollinearityAngle", fabs(dimuon->GetCollinearityAngle()));
-  histogramsHandler->Fill(name + "_logAbsCollinearityAngle", TMath::Log10(fabs(dimuon->GetCollinearityAngle())));
+  const double absColAngle = fabs(dimuon->GetCollinearityAngle());
+  histogramsHandler->Fill(name + "_absCollinearityAngle", absColAngle);
+  histogramsHandler->Fill(name + "_logAbsCollinearityAngle", absColAngle > 0 ? TMath::Log10(absColAngle) : -7);
   histogramsHandler->Fill(name + "_absPtLxyDPhi1", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1)));
   histogramsHandler->Fill(name + "_absPtLxyDPhi2", fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(2)));
   histogramsHandler->Fill(name + "_logAbsPtLxyDPhi1", TMath::Log10(fabs(dimuon->GetDPhiBetweenMuonpTAndLxy(1))));
@@ -527,10 +530,10 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   histogramsHandler->Fill(name + "_muonEta2", dimuon->Muon2()->GetEta());
   histogramsHandler->Fill(name + "_dxyPVTraj1", dimuon->Muon1()->Get("dxyPVTraj"));
   histogramsHandler->Fill(name + "_absDxyPVTraj1", fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")));
-  histogramsHandler->Fill(name + "_logDxyPVTraj1", TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj"))));
+  histogramsHandler->Fill(name + "_logDxyPVTraj1", fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")) > 0 ? TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj"))) : -6);
   histogramsHandler->Fill(name + "_dxyPVTraj2", dimuon->Muon2()->Get("dxyPVTraj"));
   histogramsHandler->Fill(name + "_absDxyPVTraj2", fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")));
-  histogramsHandler->Fill(name + "_logDxyPVTraj2", TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj"))));
+  histogramsHandler->Fill(name + "_logDxyPVTraj2", fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")) > 0 ? TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj"))) : -6);
   histogramsHandler->Fill(name + "_dxyPVTrajSig2", dimuon->Muon2()->GetAs<float>("dxyPVTraj") / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr"));
   histogramsHandler->Fill(name + "_dxyPVTrajSig1", dimuon->Muon1()->GetAs<float>("dxyPVTraj") / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr"));
 
@@ -592,9 +595,9 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
   for (auto &[variable_name, variable] : irregular_variables) {
     histogramsHandler->Fill(name + variable_name, variable);
   }
-  float logOuterDR = TMath::Log10(dimuon->GetOuterDeltaR());
-  float logDxyPVTrajSig1 = TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")) / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr"));
-  float logDxyPVTrajSig2 = TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")) / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr"));
+  float logOuterDR = TMath::Log10(fabs(dimuon->GetOuterDeltaR()));
+  float logDxyPVTrajSig1 = fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")) > 0 ? TMath::Log10(fabs(dimuon->Muon1()->GetAs<float>("dxyPVTraj")) / dimuon->Muon1()->GetAs<float>("dxyPVTrajErr")) : -6;
+  float logDxyPVTrajSig2 = fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")) > 0 ? TMath::Log10(fabs(dimuon->Muon2()->GetAs<float>("dxyPVTraj")) / dimuon->Muon2()->GetAs<float>("dxyPVTrajErr")) : -6;
   float logPt = TMath::Log10(dimuon->GetDimuonPt());
   map<string,bool> resonance_cuts = {
     {"_logDRlt-1_logDxySig2gt0", logOuterDR < -1.0 && logDxyPVTrajSig2 > 0.0},
@@ -624,9 +627,6 @@ void TTAlpsHistogramFiller::FillMuonVertexHistograms(const shared_ptr<Event> eve
       for (auto &[variable_name, variable] : irregular_variables) {
         histogramsHandler->Fill(name + variable_name + cut_name, variable);
       }
-    }
-    for (auto &[variable_name, variable] : irregular_variables) {
-      histogramsHandler->Fill(name + variable_name, variable);
     }
     if (runGenLevelResonances1D) {
       auto genMuonCollection = event->GetCollection("GenPart");
