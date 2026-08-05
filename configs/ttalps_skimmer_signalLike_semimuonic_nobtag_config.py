@@ -20,10 +20,13 @@ eventsTreeNames = ("Events",)
 triggerSelection = get_IsoMu_trigger(year)
 
 eventCuts = {
-    "nano_MET_pt": (30, 9999999),
+    "nano_MET_pt": (50, 9999999),
     "nLoosePATMuons": (1, 9999999),
     "nGoodJets": (4, 9999999),
-    "nGoodMediumBtaggedJets": (1, 9999999),
+
+    "nTightMuons": (1, 9999999),
+    "nLooseMuons": (3, 9999999),
+    "nLooseElectrons": (0, 0),
 
     # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
@@ -32,6 +35,7 @@ eventCuts = {
     # Only the first argument matters
     "nano_applyJetVetoMaps": (True, False),
 }
+
 
 requiredFlags = get_met_filters(year)
 

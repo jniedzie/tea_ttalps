@@ -26,18 +26,19 @@ int main(int argc, char **argv) {
   auto ttAlpsCuts = make_unique<TTAlpsCuts>();
   auto ttalpsObjectsManager = make_unique<TTAlpsObjectsManager>();
 
-  bool runDefaultHistograms, runLLPTriggerHistograms;
+  bool runDefaultHistograms, runLLPTriggerHistograms, runMETxyHistograms;
   bool runLooseMuonsHistograms, runDimuonVertexCollectionHistograms, runMuonMatchingHistograms;
   bool runGenMuonHistograms, runGenMuonVertexCollectionHistograms;
   bool runMuonTriggerObjectsHistograms;
   bool runABCDHistograms, runSingleMuonABCDHistograms, runABCDMothersHistograms, runFakesHistograms;
   bool ignoreDimuons, runNminus1Histograms;
-  bool runGenLevelResonancesABCD, runGenLevelMothersABCD, runRevertedMatching;
+  bool runGenLevelResonancesABCD, runGenLevelResonances1D, runGenLevelMothersABCD, runRevertedMatching, runJetEfficiencyMaps;
 
   auto &config = ConfigManager::GetInstance();
 
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runLLPTriggerHistograms", runLLPTriggerHistograms);
+  config.GetValue("runMETxyHistograms", runMETxyHistograms);
   config.GetValue("runLooseMuonsHistograms", runLooseMuonsHistograms);
   config.GetValue("runDimuonVertexCollectionHistograms", runDimuonVertexCollectionHistograms);
   config.GetValue("runMuonMatchingHistograms", runMuonMatchingHistograms);
@@ -51,8 +52,10 @@ int main(int argc, char **argv) {
   config.GetValue("ignoreDimuons", ignoreDimuons);
   config.GetValue("runNminus1Histograms", runNminus1Histograms);
   config.GetValue("runGenLevelResonancesABCD", runGenLevelResonancesABCD);
+  config.GetValue("runGenLevelResonances1D", runGenLevelResonances1D);
   config.GetValue("runGenLevelMothersABCD", runGenLevelMothersABCD);
   config.GetValue("runRevertedMatching", runRevertedMatching);
+  config.GetValue("runJetEfficiencyMaps", runJetEfficiencyMaps);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -97,11 +100,17 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillDataCheck(event);
       ttalpsHistogramsFiller->FillDefaultVariables(event);
     }
+    if (runMETxyHistograms) {
+      ttalpsHistogramsFiller->FillMETPxyHistograms(event);
+    }
+    if (runJetEfficiencyMaps) {
+      ttalpsHistogramsFiller->FillJetEfficiencyMaps(event);
+    }
     if (runLooseMuonsHistograms) 
       ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForLooseMuons(event, runRevertedMatching);
 
     if (runDimuonVertexCollectionHistograms && !ignoreDimuons) 
-        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event, runNminus1Histograms, runRevertedMatching);
+        ttalpsHistogramsFiller->FillCustomTTAlpsVariablesForMuonVertexCollections(event, runNminus1Histograms, runRevertedMatching, runGenLevelResonances1D);
 
     if (runMuonTriggerObjectsHistograms) {
       ttalpsHistogramsFiller->FillMuonTriggerObjectsHistograms(event);

@@ -28,7 +28,7 @@ muonMatchingParams = {
 }
 
 eventCuts = {
-    "MET_pt": (50, 9999999),
+    "nano_MET_pt": (50, 9999999),
     "nTightMuons": (1, 1),  # This is against TOP recommendation, but we do it to keep it the same as SR
     "nLooseDSAMuonsSegmentMatch": (1, 1),
     "nLoosePATMuonsSegmentMatch": (1, 1),

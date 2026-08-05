@@ -15,7 +15,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
   vector<string> requiredArgs = {"config"};
-  vector<string> optionalArgs = {"input_path", "output_trees_path"};
+  vector<string> optionalArgs = {"input_path", "output_trees_path", "output_hists_path"};
   auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
   ConfigManager::Initialize(args);
   
@@ -72,6 +72,10 @@ int main(int argc, char **argv) {
     }
 
     auto nanoEvent = asNanoEvent(event);
+    nanoEventProcessor->ApplyJetEnergyScaleCorrections(nanoEvent);
+    nanoEventProcessor->ApplyPuppiMETEnergyScaleCorrections(nanoEvent, "Jet", "CorrT1METJet");
+    nanoEventProcessor->ApplyJetEnergyResolution(nanoEvent);
+    nanoEventProcessor->ApplyMETXYcorrections(nanoEvent);
     if (!nanoEventProcessor->PassesEventCuts(nanoEvent, cutFlowManager)) continue;
 
     eventWriter->AddCurrentEvent("Events");
