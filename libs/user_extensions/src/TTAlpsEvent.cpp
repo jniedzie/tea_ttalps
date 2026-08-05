@@ -279,8 +279,8 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
 
   // Get empty SFs to initiate all possible variation names for the HistogamHandlers
-  vector<variant<int, double, string>> args_;
-  args_.push_back(5.0);
+  vector<CorrectionArgType> args_;
+  args_.push_back((double)5.0);
   map<string, float> dimuonEffSF_ = scaleFactorsManager.GetDimuonScaleFactors("dimuonEff_Pat", args_);
   for (auto& [name, weight] : dimuonEffSF_) {
     dimuonEffSF[name] = -1.0;
@@ -293,13 +293,13 @@ map<string, float> TTAlpsEvent::GetDimuonEfficiencyScaleFactors() {
       dimuonEffSF[name_] = -1.0;
     }
   }
-  vector<variant<int, double, string>> args;
+  vector<CorrectionArgType> args;
   if (dimuonCategory != "") {
     auto dimuonVertex = asNanoDimuonVertex(vertex->at(0), event);
     if (dimuonVertex->IsPatDSADimuon()) {
       auto genMuonCollection = event->GetCollection("GenPart");
       string resonanceCategory = dimuonVertex->GetGenMotherResonanceCategory(genMuonCollection, event);
-      float resonance = 0.0;
+      double resonance = 0.0;
       if (resonanceCategory == "FromALP" || resonanceCategory == "Resonant")
         resonance = 1.0;
       args.push_back(resonance);
