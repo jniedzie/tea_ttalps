@@ -184,9 +184,9 @@ void TTAlpsHistogramFiller::FillJetEfficiencyMaps(const shared_ptr<Event> event)
   auto goodJets = event->GetCollection("GoodJets");
   auto goodBJets = event->GetCollection("GoodMediumBtaggedJets");
   map<int, string> hadronFlavours = {
-    {0, "Q"},
-    {4, "C"},
-    {5, "B"},
+    {0, "q"},
+    {4, "c"},
+    {5, "b"},
   };
 
   for (auto jet : *goodJets) {
@@ -196,9 +196,7 @@ void TTAlpsHistogramFiller::FillJetEfficiencyMaps(const shared_ptr<Event> event)
     float pt = asNanoJet(jet)->GetPt();
     float eta = asNanoJet(jet)->GetEta();
     histogramsHandler->Fill("GoodJets_" + flavour + "_pt_eta", pt, eta);
-    histogramsHandler->Fill("GoodJets_" + flavour + "_pt_eta2", pt, eta);
     histogramsHandler->Fill("GoodJets_pt_eta", pt, eta);
-    histogramsHandler->Fill("GoodJets_pt_eta2", pt, eta);
   }
   for (auto jet : *goodBJets) {
     int hadronFlavour_ = jet->GetAs<int>("hadronFlavour");
@@ -207,9 +205,7 @@ void TTAlpsHistogramFiller::FillJetEfficiencyMaps(const shared_ptr<Event> event)
     float pt = asNanoJet(jet)->GetPt();
     float eta = asNanoJet(jet)->GetEta();
     histogramsHandler->Fill("GoodMediumBtaggedJets_" + flavour + "_pt_eta", pt, eta);
-    histogramsHandler->Fill("GoodMediumBtaggedJets_" + flavour + "_pt_eta2", pt, eta);
     histogramsHandler->Fill("GoodMediumBtaggedJets_pt_eta", pt, eta);
-    histogramsHandler->Fill("GoodMediumBtaggedJets_pt_eta2", pt, eta);
   }
 }
 

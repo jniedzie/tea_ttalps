@@ -284,11 +284,9 @@ class TTAlpsHistogrammerConfigHelper:
     params = []
     jet_pt_edges = [0, 20, 50, 100, 150, 200, 300, 600, 1000]
     jet_eta_edges = [-3, 3]
-    jet_eta_edges2 = [-3, -1, 0, 1, 3]
     for jetCollection in ["GoodJets", "GoodMediumBtaggedJets"]:
-      for flavour in ["", "_B", "_C", "_Q"]:
+      for flavour in ["", "_b", "_c", "_q"]:
         params.append((jetCollection + flavour + "_pt_eta", jet_pt_edges, jet_eta_edges, ""))
-        params.append((jetCollection + flavour + "_pt_eta2", jet_pt_edges, jet_eta_edges2, ""))
     return tuple(params)
 
   def get_llp_params(self):
