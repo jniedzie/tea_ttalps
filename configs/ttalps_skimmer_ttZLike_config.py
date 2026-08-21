@@ -7,6 +7,11 @@ applySignalLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
+metBranchName = "MET"
+rhoBranchName = "fixedGridRhoFastjetAll"  # for jec unc.
+if "2022" in year or "2023" in year or "2024" in year or "2025" in year:
+  metBranchName = "PuppiMET"
+  rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
@@ -46,7 +51,7 @@ extraEventCollections = {
 }
 
 eventCuts = {
-    "MET_pt": (30, 9999999),
+    "nano_MET_pt": (30, 9999999),
     "nGoodLeptons": (1, 9999999),
     "nAlmostGoodMuons": (2, 9999999),
     "nGoodJets": (4, 9999999),

@@ -15,13 +15,17 @@ class TTAlpsHistogramFiller {
 
   void FillDefaultVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariablesForLooseMuons(const std::shared_ptr<Event> event, bool runRevertedMatching);
-  void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event, bool runNminus1Histograms, bool runRevertedMatching);
+  void FillCustomTTAlpsVariablesForMuonVertexCollections(const std::shared_ptr<Event> event, bool runNminus1Histograms, bool runRevertedMatching, bool runGenLevelResonances1D = false);
   void FillCustomTTAlpsGenMuonVertexCollectionsVariables(const std::shared_ptr<Event> event, bool runRevertedMatching);
   void FillCustomTTAlpsGenMuonVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsMuonMatchingVariables(const std::shared_ptr<Event> event);
 
   void FillNormCheck();
   void FillDataCheck(const std::shared_ptr<Event> event);
+
+  void FillMETPxyHistograms(const std::shared_ptr<Event> event);
+
+  void FillJetEfficiencyMaps(const std::shared_ptr<Event> event);
 
   void FillDimuonCutFlows(const std::shared_ptr<CutFlowManager> cutFlowManager, std::string dimuonCategory = "");
 
@@ -60,9 +64,9 @@ class TTAlpsHistogramFiller {
   void FillLooseMuonsHistograms(const std::shared_ptr<NanoMuons> muons, const std::shared_ptr<NanoMuon> leadingTightMuon, std::string collectionName);
   void FillLooseMuonsHistograms(const std::shared_ptr<Event> event, std::string collectionName);
   
-  void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<PhysicsObjects> vertexCollection, std::string vertexName);
-  void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName);
-  void FillMuonVertexHistograms(const std::shared_ptr<NanoDimuonVertex> dimuon, std::string name, const std::shared_ptr<NanoMuon> leadingTightMuon = nullptr);
+  void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<PhysicsObjects> vertexCollection, std::string vertexName, bool runGenLevelResonances1D = false);
+  void FillMuonVertexHistograms(const std::shared_ptr<Event> event, std::string vertexName, bool runGenLevelResonances1D = false);
+  void FillMuonVertexHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<NanoDimuonVertex> dimuon, std::string name, const std::shared_ptr<NanoMuon> leadingTightMuon = nullptr, bool runGenLevelResonances1D = false);
 
   void FillMuonVertex2DHistograms(const std::shared_ptr<Event> event, std::string vertexName);
 

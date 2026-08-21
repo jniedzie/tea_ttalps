@@ -14,11 +14,16 @@ applyTTZLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
+metBranchName = "MET"
+rhoBranchName = "fixedGridRhoFastjetAll"  # for jec unc.
+if "2022" in year or "2023" in year or "2024" in year or "2025" in year:
+  metBranchName = "PuppiMET"
+  rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 
 triggerSelection = get_Ele_Tight_trigger(year)
 
 eventCuts = {
-    "MET_pt": (30, 9999999),
+    "nano_MET_pt": (30, 9999999),
     "nLooseElectrons": (1, 9999999),
     "nGoodJets": (4, 9999999),
     "nGoodMediumBtaggedJets": (1, 9999999),

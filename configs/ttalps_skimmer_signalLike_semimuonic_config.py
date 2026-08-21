@@ -13,9 +13,14 @@ applyTTZLikeSkimming = False
 
 weightsBranchName = "genWeight"
 eventsTreeNames = ("Events",)
+metBranchName = "MET"
+rhoBranchName = "fixedGridRhoFastjetAll"  # for jec unc.
+if "2022" in year or "2023" in year or "2024" in year or "2025" in year:
+  metBranchName = "PuppiMET"
+  rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 
 eventCuts = {
-    "MET_pt": (50, 9999999),
+    "nano_MET_pt": (50, 9999999),
     "nTightMuons": (1, 9999999),
     "nLooseMuons": (3, 9999999),
     "nLooseElectrons": (0, 0),

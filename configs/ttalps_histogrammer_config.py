@@ -3,14 +3,14 @@ from ttalps_extra_collections import get_extra_event_collections
 from ttalps_object_cuts import *
 from TTAlpsHistogrammerConfigHelper import TTAlpsHistogrammerConfigHelper
 
-from ttalps_histogrammer_files_config import skim, applyScaleFactors, year
+from ttalps_histogrammer_files_config import skim, applyScaleFactors, year, sample_path
 
 from ttalps_skimmer_looseSemimuonic_config import eventCuts as looseEventCuts
 from ttalps_skimmer_signalLike_semimuonic_config import eventCuts as signalEventCuts
 # defining eventCuts as the loose eventCuts and replacing MET pt from signal eventCuts
 eventCuts = {
     **looseEventCuts,
-    "MET_pt": signalEventCuts["MET_pt"],
+    "nano_MET_pt": signalEventCuts["nano_MET_pt"],
 
     # The first value is whether to apply the cut, the second is the fraction of events in data with run>=319077.
     # To measure the second number, you can use the `utils/count_hem_events.py` script.
@@ -23,6 +23,11 @@ eventCuts = {
 extraEventCollections = get_extra_event_collections(year)
 scaleFactors = get_scale_factors(year)
 
+# Dataset names for jet tagging efficiencies
+datasetName = sample_path.split("/")[-1]
+if "tta" in datasetName:
+  datasetName = "tta"
+
 nEvents = -1
 
 # Should dimuon checks be skipped? Used for tt̄ CR, where we don't have dimuons
@@ -31,6 +36,10 @@ ignoreDimuons = False
 runDefaultHistograms = True
 runLLPTriggerHistograms = False
 runPileupHistograms = False
+runMETxyHistograms = True
+
+# Jet hadron flavours 2D plots for tagging efficiency
+runJetEfficiencyMaps = False
 
 # runLooseMuonsHistograms:
 #  - muonMatchingParams loose muons
@@ -40,6 +49,7 @@ runLooseMuonsHistograms = False
 #  - Best Dimuon Vertex collections
 #  - tracker maps
 runDimuonVertexCollectionHistograms = True
+runGenLevelResonances1D = False
 
 # Histograms for Muon Trigger Objects
 runMuonTriggerObjectsHistograms = False
@@ -49,7 +59,7 @@ runGenMuonHistograms = False  # can only be run on signal samples
 runGenMuonVertexCollectionHistograms = False
 
 # Create 2D histograms for ABCD background estimation
-runABCDHistograms = False
+runABCDHistograms = True
 
 # [MC only] Create ABCD histograms for gen-level mother information - only workd with runABCDHistograms = True
 # resonances: FromALP, Resonant, NonResonant, FalseResonant
@@ -85,6 +95,9 @@ eventIDBranchName = "event"  # for jer
 if "22" in year or "23" in year:
   rhoBranchName = "Rho_fixedGridRhoFastjetAll"  # for jec unc. in 2022 and 2023
 eventsTreeNames = ("Events",)
+metBranchName = "MET"
+if "2022" in year or "2023" in year or "2024" in year or "2025" in year:
+  metBranchName = "PuppiMET"
 
 specialBranchSizes = {
     "Proton_multiRP": "nProton_multiRP",
@@ -152,19 +165,22 @@ histParams2D = ()
 irregularHistParams = ()
 irregularHistParams2D = ()
 
-if runSingleMuonABCDHistograms:
+if runSingleMuonABCDHistograms or runGenMuonHistograms:
   runLooseMuonsHistograms = True  # to define the loose muon collection
 
 helper = TTAlpsHistogrammerConfigHelper(
     muonMatchingParams, muonVertexCollection if muonVertexCollection is not None else None, muonVertexCollectionInput, 
     runRevertedMatching, runLooseMuonsHistograms, runExtraDimuonCuts)
 
-defaultHistParams = helper.get_default_params()
+defaultHistParams = helper.get_default_params(metBranchName)
 histParams += helper.get_basic_params()
+
+if runJetEfficiencyMaps:
+  irregularHistParams2D += helper.get_jet_2d_irregular_params()
 
 if runLooseMuonsHistograms or runDimuonVertexCollectionHistograms:
   histParams += helper.get_llp_params()
-  irregularHistParams += helper.get_llp_irregular_params(runRevertedMatching, runGenLevelResonancesABCD, runFakesHistograms)
+  irregularHistParams += helper.get_llp_irregular_params(runRevertedMatching, runGenLevelResonances1D, runFakesHistograms)
   histParams2D += helper.get_llp_2d_params()
 
 if runNminus1Histograms:
@@ -177,6 +193,10 @@ if runGenMuonHistograms:
   histParams += helper.get_gen_params()
   histParams += helper.get_gen_matched_params()
   irregularHistParams += helper.get_gen_matched_irregular_params()
+
+if runMETxyHistograms:
+  histParams += helper.get_met_xy_params()
+  histParams2D += helper.get_met_xy_2D_params()
 
 if runLLPTriggerHistograms:
   histParams += helper.get_trigger_params()
